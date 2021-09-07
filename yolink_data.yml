@@ -1,0 +1,10 @@
+#
+# Use a QR code scanner to get the serial number for each device.
+#
+DEVICE_SERIAL_NUMBERS:
+  # house valve
+  - 9957FD6097124EE99B5E6B61A847C67D
+  # irrigation valve
+  - 86788EB527034A78B9EA472323EE2433
+  # Pool temp
+  - 34E320948EF746AF98EF8AF6E72F2996

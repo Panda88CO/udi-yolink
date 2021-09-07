@@ -1,0 +1,109 @@
+<nodeDefs> 
+   <nodeDef id="controller" nls="nlscontroller">
+      <editors />
+      <sts>
+         <st id="GV1" editor="CTRL_1" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+   <nodeDef id="pwstatus" nls="nlspwstatus">
+      <editors />
+      <sts>
+         <st id="GV1" editor="PWSTATUS1" />
+         <st id="GV2" editor="PWSTATUS2" />
+         <st id="GV3" editor="PWSTATUS3" />
+         <st id="GV4" editor="PWSTATUS4" />
+         <st id="GV5" editor="PWSTATUS5" />
+         <st id="GV6" editor="PWSTATUS6" />
+         <st id="GV7" editor="PWSTATUS7" />
+         <st id="GV8" editor="PWSTATUS8" />
+         <st id="GV9" editor="PWSTATUS9" />
+         <st id="GV10" editor="PWSTATUS10" />
+         <st id="GV11" editor="PWSTATUS11" />
+         <st id="GV12" editor="PWSTATUS12" />
+         <st id="GV13" editor="PWSTATUS13" />
+         <st id="GV14" editor="PWSTATUS14" />
+         <st id="GV15" editor="PWSTATUS15" />
+         <st id="GV16" editor="PWSTATUS16" />
+         <st id="GV17" editor="PWSTATUS17" />
+         <st id="GV18" editor="PWSTATUS18" />
+         <st id="GV19" editor="PWSTATUS19" />
+         <st id="GV20" editor="PWSTATUS20" />
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+   <nodeDef id="pwsetup" nls="nlspwsetup">
+      <editors />
+      <sts>
+         <st id="GV1" editor="PWSETUP1" />
+         <st id="GV2" editor="PWSETUP2" />
+         <st id="GV3" editor="PWSETUP3" />
+         <st id="GV4" editor="PWSETUP4" />
+         <st id="GV5" editor="PWSETUP5" />
+         <st id="GV6" editor="PWSETUP6" />
+         <st id="GV7" editor="PWSETUP7" />
+         <st id="GV8" editor="PWSETUP8" />
+         <st id="GV9" editor="PWSETUP9" />
+         <st id="GV10" editor="PWSETUP10" />
+         <st id="GV11" editor="PWSETUP11" />
+         <st id="GV12" editor="PWSETUP12" />
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="BACKUP_PCT" > 
+               <p id="" editor="PWSETUP1" init="GV1" /> 
+            </cmd> 
+            <cmd id="OP_MODE" > 
+               <p id="" editor="PWSETUP2" init="GV2" /> 
+            </cmd> 
+            <cmd id="STORM_MODE" > 
+               <p id="" editor="PWSETUP3" init="GV3" /> 
+            </cmd> 
+            <cmd id="TOU_MODE" > 
+               <p id="" editor="PWSETUP4" init="GV4" /> 
+            </cmd> 
+            <cmd id="WE_O_PEAK_START" > 
+               <p id="" editor="PWSETUP5" init="GV5" /> 
+            </cmd> 
+            <cmd id="WE_O_PEAK_END" > 
+               <p id="" editor="PWSETUP6" init="GV6" /> 
+            </cmd> 
+            <cmd id="WE_PEAK_START" > 
+               <p id="" editor="PWSETUP7" init="GV7" /> 
+            </cmd> 
+            <cmd id="WE_PEAK_END" > 
+               <p id="" editor="PWSETUP8" init="GV8" /> 
+            </cmd> 
+            <cmd id="WK_O_PEAK_START" > 
+               <p id="" editor="PWSETUP9" init="GV9" /> 
+            </cmd> 
+            <cmd id="WK_O_PEAK_END" > 
+               <p id="" editor="PWSETUP10" init="GV10" /> 
+            </cmd> 
+            <cmd id="WK_PEAK_START" > 
+               <p id="" editor="PWSETUP11" init="GV11" /> 
+            </cmd> 
+            <cmd id="WK_PEAK_END" > 
+               <p id="" editor="PWSETUP12" init="GV12" /> 
+            </cmd> 
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+</nodeDefs> 

@@ -1,0 +1,101 @@
+<editors> 
+  <editor id = "CTRL_1" > 
+     <range  uom="25" subset="0-1" nls="CTRL_1" />
+</editor>
+  <editor id = "PWSTATUS1" > 
+     <range  uom="51" min="0" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS2" > 
+     <range  uom="25" subset="0-3" nls="PWSTATUS2" />
+</editor>
+  <editor id = "PWSTATUS3" > 
+     <range  uom="25" subset="0-3" nls="PWSTATUS3" />
+</editor>
+  <editor id = "PWSTATUS4" > 
+     <range  uom="25" subset="0-1" nls="PWSTATUS4" />
+</editor>
+  <editor id = "PWSTATUS5" > 
+     <range  uom="33" min="0" max="20" prec="2" />
+</editor>
+  <editor id = "PWSTATUS6" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS7" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS8" > 
+     <range  uom="33" min="-20" max="20" prec="2" />
+</editor>
+  <editor id = "PWSTATUS9" > 
+     <range  uom="33" min="-100" max="-100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS10" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS11" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS12" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS13" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS14" > 
+     <range  uom="33" min="-100" max="100" prec="1" />
+</editor>
+  <editor id = "PWSTATUS15" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS16" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS17" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS18" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS19" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS20" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSETUP1" > 
+     <range  uom="51" min="0" max="100" prec="1" />
+</editor>
+  <editor id = "PWSETUP2" > 
+     <range  uom="25" subset="0-3" nls="PWSETUP2" />
+</editor>
+  <editor id = "PWSETUP3" > 
+     <range  uom="25" subset="0-1" nls="PWSETUP3" />
+</editor>
+  <editor id = "PWSETUP4" > 
+     <range  uom="25" subset="0-1" nls="PWSETUP4" />
+</editor>
+  <editor id = "PWSETUP5" > 
+     <range  uom="58" min="0" max="86400" prec="0" />
+</editor>
+  <editor id = "PWSETUP6" > 
+     <range  uom="58" min="0" max="86400" prec="0" />
+</editor>
+  <editor id = "PWSETUP7" > 
+     <range  uom="58" min="0" max="86400" prec="0" />
+</editor>
+  <editor id = "PWSETUP8" > 
+     <range  uom="58" min="0" max="86400" prec="0" />
+</editor>
+  <editor id = "PWSETUP9" > 
+     <range  uom="58" min="0" max="86400" prec="0" />
+</editor>
+  <editor id = "PWSETUP10" > 
+     <range  uom="58" min="0" max="86400" prec="0" />
+</editor>
+  <editor id = "PWSETUP11" > 
+     <range  uom="58" min="0" max="86400" prec="0" />
+</editor>
+  <editor id = "PWSETUP12" > 
+     <range  uom="58" min="0" max="86400" prec="0" />
+</editor>
+</editors> 
