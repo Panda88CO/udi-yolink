@@ -77,3 +77,21 @@ class YoLinkDevice(object):
             print("Failed to enable API response!")
             print(response)
             sys.exit(2)
+
+
+    def getData(self, targetDevice):
+        self.data["method"] = targetDevice+ '.getState'
+        self.data["time"] = str(int(time.time())*1000)
+        #self.data["params"] = {'sn': self.serial_number}
+        self.data["targetDevice"] = targetDevice
+        self.data["token"]= self.token
+
+        self.header['Content-type'] = 'application/json'
+        self.header['ktt-ys-brand'] = 'yolink'
+        self.header['YS-CSID'] = self.csid
+
+        # MD5(data + csseckey)
+        self.header['ys-sec'] = str(hashlib.md5((json.dumps(self.data) +
+            self.csseckey).encode('utf-8')).hexdigest())
+
+        print("Header:{0} Data:{1}\n".format(self.header, self.data))

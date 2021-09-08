@@ -2,10 +2,11 @@ from sys import unraisablehook
 import time
 import json
 import requests
+import hashlib
 #import sys
 
 class yoLinkTempSensor (object):
-    def __init__ (self, targetDevice, token):
+    def __init__ (self, targetDevice):
         self.url = url
         self.csid = csid
         self.csseckey = csseckey
@@ -19,7 +20,7 @@ class yoLinkTempSensor (object):
 
         self.device_data = {}
 
-    def getData(self):
+    def getData(self, targetDevice):
         self.data["method"] = 'THSensor.getState'
         self.data["time"] = str(int(time.time())*1000)
         #self.data["params"] = {'sn': self.serial_number}
