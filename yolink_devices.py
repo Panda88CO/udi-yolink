@@ -4,8 +4,8 @@ import json
 import requests
 import sys
 
-from logger import getLogger
-log = getLogger(__name__)
+#from logger import getLogger
+#log = getLogger(__name__)
 
 """
 Object representatiaon for YoLink Device
@@ -54,26 +54,26 @@ class YoLinkDevice(object):
         self.header['ys-sec'] = str(hashlib.md5((json.dumps(self.data) +
             self.csseckey).encode('utf-8')).hexdigest())
 
-        log.debug("Header:{0} Data:{1}\n".format(self.header, self.data))
+        print("Header:{0} Data:{1}\n".format(self.header, self.data))
 
     def enable_device_api(self):
         """
         Send request to enable the device API
         """
         response = requests.post(self.url, data=json.dumps(self.data), headers=self.header)
-        #log.debug(response.status_code)
+        #print(response.status_code)
 
         response = json.loads(response.text)
-        #log.debug(response)
+        #print(response)
 
         self.device_data = response['data']
 
         if (response['code'] == '000000'):
-            log.info("Successfully enabled device API")
-            log.info("Name:{0} DeviceId:{1}".format(
+            print("Successfully enabled device API")
+            print("Name:{0} DeviceId:{1}".format(
                 self.device_data['name'],
                 self.device_data['deviceId']))
         else:
-            log.info("Failed to enable API response!")
-            log.info(response)
+            print("Failed to enable API response!")
+            print(response)
             sys.exit(2)

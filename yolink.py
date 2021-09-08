@@ -3,12 +3,12 @@
 import argparse
 import os
 import sys
-import pyyaml as yaml
+import yaml as yaml
 
-from logger import getLogger
+#from logger import getLogger
 from yolink_devices import YoLinkDevice
 from yolink_mqtt_client import YoLinkMQTTClient
-log = getLogger(__name__)
+#log = getLogger(__name__)
 
 def main(argv):
     '''
@@ -27,9 +27,14 @@ def main(argv):
     SVR_URL : https://api.yosmart.com 
     API Doc : http://www.yosmart.com/doc/lorahomeapi/#/YLAS/
     '''
-    yolinkURL =  'https://api.yosmart.com' 
+    yolinkURL =  'https://api.yosmart.com/openApi' 
+    mqttURL = 'api.yosmart.com'
     csid = '60dd7fa7960d177187c82039'
     csseckey = '3f68536b695a435d8a1a376fc8254e70'
+
+    topic = 'Panda88/report'
+    csName = 'Panda88'
+
     description = 'Enable Sensor APIs and subscribe to MQTT broker'
     '''
     parser = argparse.ArgumentParser(usage=usage, description=description)
@@ -42,10 +47,10 @@ def main(argv):
     parser.add_argument("-t", "--topic",     help="Broker Topic",      required=True)
         
     args = parser.parse_args()
-    log.debug("{0}\n".format(args))
+    print("{0}\n".format(args))
     '''
     device_hash = {}
-    device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9EA472323EE2433','34E320948EF746AF98EF8AF6E72F2996']
+    device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9EA472323EE2433','34E320948EF746AF98EF8AF6E72F2996', 'AAF5A97CF38B4AD4BE840F293CAA55BE']
     '''
     with open(os.path.abspath('yolink_data.yml'), 'r') as fp:
         data = yaml.safe_load(fp)
@@ -58,11 +63,16 @@ def main(argv):
 
         device_hash[yolink_device.get_id()] = yolink_device
 
-    #log.debug(device_hash)
+    print(device_hash)
 
-    yolink_client = YoLinkMQTTClient(csid, args.csseckey,
-            args.topic, args.mqtt_url, args.mqtt_port, device_hash)
-    yolink_client.connect_to_broker()
+
+
+
+
+
+
+    #yolink_client = YoLinkMQTTClient(csid, csseckey, topic, mqttURL, 8003, device_hash)
+    #yolink_client.connect_to_broker()
 
 if __name__ == '__main__':
     main(sys.argv)

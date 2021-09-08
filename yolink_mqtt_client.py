@@ -4,8 +4,8 @@ import os
 import sys
 
 import paho.mqtt.client as mqtt
-from logger import getLogger
-log = getLogger(__name__)
+#from logger import getLogger
+#log = getLogger(__name__)
 
 """
 Object representation for YoLink MQTT Client
@@ -20,9 +20,7 @@ class YoLinkMQTTClient(object):
         self.mqtt_port = int(mqtt_port)
         self.device_hash = device_hash
 
-        self.client = mqtt.Client(client_id=str(__name__ + str(client_id)),
-                clean_session=True, userdata=None,
-                protocol=mqtt.MQTTv311, transport="tcp")
+        self.client = mqtt.Client(client_id=str(__name__ + str(client_id)),  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         #self.client.tls_set()
@@ -31,11 +29,10 @@ class YoLinkMQTTClient(object):
         """
         Connect to MQTT broker
         """
-        log.info("Connecting to broker...")
+        print("Connecting to broker...")
 
-        log.debug(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
-        self.client.username_pw_set(username=self.csid,
-                password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
+        print(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
+        self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
 
         self.client.connect(self.mqtt_url, self.mqtt_port, 10)
         self.client.loop_forever()
@@ -44,28 +41,28 @@ class YoLinkMQTTClient(object):
         """
         Callback for broker published events
         """
-        log.debug(msg.topic, msg.payload)
+        print(msg.topic, msg.payload)
 
         payload = json.loads(msg.payload.decode("utf-8"))
-        log.debug(payload)
+        print(payload)
     
         event = payload['event']
         deviceId = payload['deviceId']
         state = payload['data']['state']
 
-        log.info("Event:{0} Device:{1} State:{2}".format(event,
+        print("Event:{0} Device:{1} State:{2}".format(event,
             self.device_hash[deviceId].get_name(), state))
     
     def on_connect(self, client, userdata, flags, rc):
         """
         Callback for connection to broker
         """
-        log.info("Connected with result code %s" % rc)
+        print("Connected with result code %s" % rc)
 
         if (rc == 0):
-            log.info("Successfully connected to broker %s" % self.mqtt_url)
+            print("Successfully connected to broker %s" % self.mqtt_url)
         else:
-            log.info("Connection with result code %s" % rc);
+            print("Connection with result code %s" % rc);
             sys.exit(2)
     
         self.client.subscribe(self.topic)

@@ -10,17 +10,17 @@ def getLogger(name, fname=FILE, maxBytes=FILE_MAXSIZE, backupCount=FILE_BACKUP_C
     """
     Configure Logger
     """
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)                                                                                  
+    #logger = logging.getLogger(name)
+    #logger.setLevel(logging.INFO)                                                                                  
 
     # String format log
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter('%(asctime)s:%(module)s:%(levelname)s - %(message)s',
-            "%Y-%m-%d %H:%M:%S")
-    handler.setFormatter(formatter)
+    #handler = logging.StreamHandler()
+    #formatter = logging.Formatter('%(asctime)s:%(module)s:%(levelname)s - %(message)s', "%Y-%m-%d %H:%M:%S")
+    #handler.setFormatter(formatter)
 
-    logger.addHandler(handler)
-    rotate_file_handler = RotatingFileHandler(fname, maxBytes, backupCount)
+    #logger.addHandler(handler)
+    #rotate_file_handler = RotatingFileHandler(fname, maxBytes, backupCount)
 
-    logger.addHandler(rotate_file_handler)
-    return logger
+    #logger.addHandler(rotate_file_handler)
+    print('logger')
+    return True
