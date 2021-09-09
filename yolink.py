@@ -71,8 +71,8 @@ def main(argv):
 
 
 
-    #yolink_client = YoLinkMQTTClient(csid, csseckey, topic, mqttURL, 8003, device_hash)
-    #yolink_client.connect_to_broker()
+    yolink_client = YoLinkMQTTClient(csid, csseckey, topic, mqttURL, 8003, device_hash)
+    yolink_client.connect_to_broker()
 
 if __name__ == '__main__':
     main(sys.argv)

@@ -50,8 +50,7 @@ class YoLinkMQTTClient(object):
         deviceId = payload['deviceId']
         state = payload['data']['state']
 
-        print("Event:{0} Device:{1} State:{2}".format(event,
-            self.device_hash[deviceId].get_name(), state))
+        print("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
     
     def on_connect(self, client, userdata, flags, rc):
         """
@@ -66,3 +65,8 @@ class YoLinkMQTTClient(object):
             sys.exit(2)
     
         self.client.subscribe(self.topic)
+
+    #def send_control ()
+    def requestData(self, device ):
+        
+        test = self.client.publish('Panda88/request')
