@@ -35,7 +35,8 @@ class YoLinkMQTTClient(object):
         self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
 
         self.client.connect(self.mqtt_url, self.mqtt_port, 10)
-        self.client.loop_forever()
+        self.client.loop_start()
+
 
     def on_message(self, client, userdata, msg):
         """
@@ -66,7 +67,9 @@ class YoLinkMQTTClient(object):
     
         self.client.subscribe(self.topic)
 
-    #def send_control ()
-    def requestData(self, device ):
-        
-        test = self.client.publish('Panda88/request')
+
+    def on_subscribe(self, client, userdata, mID, granted_QOS):
+        print('on_subscribe')
+
+    def on_publish(self, client, userdata, mID):
+        print('on_publish')
