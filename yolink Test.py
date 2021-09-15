@@ -72,6 +72,54 @@ for serial_num in device_serial_numbers:
     info = r.json()
 
 
+    if serial_num == '86788EB527034A78B9EA472323EE2433':
+        data = {}
+        data["method"] = 'Manipulator.setState'
+        data["time"] = str(int(time.time())*1000)
+        data["params"] = {'state':'close'}
+        data["targetDevice"] =  yolink_device.get_id()
+        data["token"]= yolink_device.get_token()
+        dataTemp = str(json.dumps(data))
+
+        headers1 = {}
+        headers1['Content-type'] = 'application/json'
+        headers1['ktt-ys-brand'] = 'yolink'
+        headers1['YS-CSID'] = csid
+        cskey =  dataTemp +  csseckey
+        cskeyUTF8 = cskey.encode('utf-8')
+        hash = hashlib.md5(cskeyUTF8)
+        hashKey = hash.hexdigest()
+        headers1['ys-sec'] = hashKey
+        headersTemp = json.dumps(headers1)
+
+        print("Header:{0} Data:{1}\n".format(headersTemp, dataTemp))
+        r = requests.post(yolinkURL, data=json.dumps(data), headers=headers1)        
+        info = r.json()
+
+        time.sleep(10)
+
+        data["method"] = 'Manipulator.setState'
+        data["time"] = str(int(time.time())*1000)
+        data["params"] = {'state':'open'}
+        data["targetDevice"] =  yolink_device.get_id()
+        data["token"]= yolink_device.get_token()
+        dataTemp = str(json.dumps(data))
+
+        headers1 = {}
+        headers1['Content-type'] = 'application/json'
+        headers1['ktt-ys-brand'] = 'yolink'
+        headers1['YS-CSID'] = csid
+        cskey =  dataTemp +  csseckey
+        cskeyUTF8 = cskey.encode('utf-8')
+        hash = hashlib.md5(cskeyUTF8)
+        hashKey = hash.hexdigest()
+        headers1['ys-sec'] = hashKey
+        headersTemp = json.dumps(headers1)
+
+        print("Header:{0} Data:{1}\n".format(headersTemp, dataTemp))
+        r = requests.post(yolinkURL, data=json.dumps(data), headers=headers1)        
+        info = r.json()
+
 #print("Header:{0} Data:{1}\n".format(headers1, data))
 
 yolink_client = YoLinkMQTTClient(csid, csseckey, topic, mqttURL, 8003, device_list)
