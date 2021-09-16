@@ -36,15 +36,17 @@ for serial_num in device_serial_numbers:
 
     
     print(yolink_device.get_name())
+    print(yolink_device.get_type())
     print(yolink_device.get_id())
     print(yolink_device.get_token())
 
+
     data = {}
-    if yolink_device.get_name() == 'Temperature Sensor':
+    if yolink_device.get_type() == 'THSensor':
         data["method"] = 'THSensor.getState'
-    elif yolink_device.get_name() == 'YoLink Valve':
+    elif yolink_device.get_type() == 'Manipulator':
         data["method"] = 'Manipulator.getState'
-    elif yolink_device.get_name() == 'YoLink Hub':
+    elif yolink_device.get_type() == 'Hub':
         data["method"] = 'Hub.getState'
 
     data["time"] = str(int(time.time())*1000)

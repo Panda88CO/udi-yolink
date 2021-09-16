@@ -64,7 +64,7 @@ class YoLinkDevice(object):
         #print(response.status_code)
 
         response = json.loads(response.text)
-        #print(response)
+        print(response)
 
         self.device_data = response['data']
 
