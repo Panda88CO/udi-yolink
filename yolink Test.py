@@ -73,7 +73,7 @@ for serial_num in device_serial_numbers:
     r = requests.post(yolinkURL, data=json.dumps(data), headers=headers1)        
     info = r.json()
 
-
+    '''
     if serial_num == '86788EB527034A78B9EA472323EE2433':
         data = {}
         data["method"] = 'Manipulator.setState'
@@ -121,6 +121,7 @@ for serial_num in device_serial_numbers:
         print("Header:{0} Data:{1}\n".format(headersTemp, dataTemp))
         r = requests.post(yolinkURL, data=json.dumps(data), headers=headers1)        
         info = r.json()
+        '''
 
 #print("Header:{0} Data:{1}\n".format(headers1, data))
 
