@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import sys
+import time
 
 import paho.mqtt.client as mqtt
 #from logger import getLogger
@@ -20,9 +21,10 @@ class YoLinkMQTTClient(object):
         self.mqtt_port = int(mqtt_port)
         self.device_hash = device_hash
 
-        self.client = mqtt.Client(client_id=str(__name__ + str(client_id)),  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+        self.client = mqtt.Client(client_id=str('__name__' + str(client_id)),  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
+        print(client_id)
         #self.client.tls_set()
 
     def connect_to_broker(self):
@@ -34,10 +36,11 @@ class YoLinkMQTTClient(object):
         print(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
         self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
 
-        self.client.connect(self.mqtt_url, self.mqtt_port, 10)
+        self.client.connect(self.mqtt_url, self.mqtt_port, 100)
+        print ('connect:')
         #self.client.loop_start()
         self.client.loop_forever()
-        print('loop started')
+        #print('loop started')
 
 
     def on_message(self, client, userdata, msg):
@@ -66,9 +69,9 @@ class YoLinkMQTTClient(object):
         else:
             print("Connection with result code %s" % rc);
             sys.exit(2)
-    
-        self.client.subscribe(self.topic)
-
+        
+        test = self.client.subscribe(self.topic)
+        print(test)
 
     def on_subscribe(self, client, userdata, mID, granted_QOS):
         print('on_subscribe')

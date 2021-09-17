@@ -43,7 +43,7 @@ class YoLinkDevice(object):
         Build header + payload to enable sensor API
         """
         self.data["method"] = 'Manage.addYoLinkDevice'
-        self.data["time"] = str(int(time.time()))
+        self.data["time"] = str(int(time.time()*1000))
         self.data["params"] = {'sn': self.serial_number}
 
         self.header['Content-type'] = 'application/json'
@@ -78,4 +78,41 @@ class YoLinkDevice(object):
             print(response)
             sys.exit(2)
 
+    def getMethods(self, type):
+        '''
+        Returs a list of supported methods for the given device type
+        '''
+        tempList = []
 
+      
+        if type == 'Hub':
+            tempList = ['getState', 'setWiFi']
+        elif type == 'Outlet':
+            tempList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getVersion', 'startUpgrade']
+        elif type == 'Switch':
+            tempList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getVersion', 'startUpgrade']
+        elif type == 'Manipulator':
+            tempList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getVersion', 'startUpgrade']            
+        elif type == 'Sprinkler':
+            tempList = ['getState', 'setState', 'setManualWater', 'getSchedules', 'setSchedules', 'getVersion', 'startUpgrade']
+        elif type == 'MultiOutlet':
+            tempList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getVerison', 'startUpgrade']
+        elif type == 'DoorSensor':
+            tempList = ['getState' ]            
+        elif type == 'LeakSensor':
+            tempList = ['getState']
+        elif type == 'MotionSensor':
+            tempList = ['getState']         
+        elif type == 'THSensor':
+            tempList = ['getState' ]
+        elif type == 'COSmokeSensor':
+            tempList = ['getState' ]       
+        elif type == 'Thermostat':
+            tempList = ['getState', 'setState', 'getSchedules', 'setSchedules','setTimeZone', 'setECO', 'getVerison', 'startUpgrade']     
+        elif type == 'GarageDoor':
+            tempList = ['toggle' ]
+        elif type == 'CSDevice':
+            tempList = ['sendCommand', 'downlink' ]
+        else:
+            print('Not Supported device type : ' + str(type))
+        return(tempList)

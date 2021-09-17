@@ -39,7 +39,7 @@ for serial_num in device_serial_numbers:
     print(yolink_device.get_type())
     print(yolink_device.get_id())
     print(yolink_device.get_token())
-
+    print(yolink_device.getMethods(str(yolink_device.get_type())))
 
     data = {}
     if yolink_device.get_type() == 'THSensor':
@@ -49,7 +49,7 @@ for serial_num in device_serial_numbers:
     elif yolink_device.get_type() == 'Hub':
         data["method"] = 'Hub.getState'
 
-    data["time"] = str(int(time.time())*1000)
+    data["time"] = str(int(time.time()*1000))
     data["params"] = {}
     data["targetDevice"] =  yolink_device.get_id()
     data["token"]= yolink_device.get_token()
