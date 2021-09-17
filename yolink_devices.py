@@ -116,3 +116,6 @@ class YoLinkDevice(object):
         else:
             print('Not Supported device type : ' + str(type))
         return(tempList)
+
+    def receiveData (self, id, type, method):
+        print(id, type, method)
