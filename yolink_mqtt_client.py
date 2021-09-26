@@ -21,9 +21,10 @@ class YoLinkMQTTClient(object):
         self.mqtt_port = int(mqtt_port)
         self.device_hash = device_hash
 
-        self.client = mqtt.Client(client_id=str('__name__' + str(client_id)),  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+        self.client = mqtt.Client(client_id=str('Panda88_' + str(client_id)),  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
+        self.client.on_subscribe = self.on_subscribe
         print(client_id)
         #self.client.tls_set()
 
@@ -35,8 +36,12 @@ class YoLinkMQTTClient(object):
 
         print(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
         self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
-
+        #time.sleep(5)
+        #test = self.client.subscribe(self.topic)
+        #print(test)
+        time.sleep(5)
         self.client.connect(self.mqtt_url, self.mqtt_port)
+        #time.sleep(5)
         print ('connect:')
         #self.client.loop_start()
         self.client.loop_forever()
@@ -63,15 +68,18 @@ class YoLinkMQTTClient(object):
         Callback for connection to broker
         """
         print("Connected with result code %s" % rc)
+        print( client,  userdata, flags)
 
         if (rc == 0):
             print("Successfully connected to broker %s" % self.mqtt_url)
+
         else:
             print("Connection with result code %s" % rc);
             sys.exit(2)
-        
+        #time.sleep(5)
+        print(self.topic)
         test = self.client.subscribe(self.topic)
-        print(test)
+        #print(test)
 
     def on_subscribe(self, client, userdata, mID, granted_QOS):
         print('on_subscribe')
