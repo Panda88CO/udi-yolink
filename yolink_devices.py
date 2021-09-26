@@ -43,7 +43,8 @@ class YoLinkDevice(object):
         Build header + payload to enable sensor API
         """
         self.data["method"] = 'Manage.addYoLinkDevice'
-        self.data["time"] = str(int(time.time())*1000)
+        #self.data["time"] = str(int(time.time())*1000)
+        self.data["time"] = str(int(time.time()))
         self.data["params"] = {'sn': self.serial_number}
 
         self.header['Content-type'] = 'application/json'
