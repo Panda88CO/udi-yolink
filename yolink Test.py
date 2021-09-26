@@ -26,7 +26,8 @@ csName = 'Panda88'
 description = 'Enable Sensor APIs and subscribe to MQTT broker'
 
 device_list = {}
-device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9EA472323EE2433','34E320948EF746AF98EF8AF6E72F2996', 'AAF5A97CF38B4AD4BE840F293CAA55BE']
+device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9EA472323EE2433','34E320948EF746AF98EF8AF6E72F2996', 'AAF5A97CF38B4AD4BE840F293CAA55BE'
+                        ,'668AD084C86A412FB5F9CAA652E99AAA', '5F167C2C61254FC1AB5472DC482016B3' ]
 
 for serial_num in device_serial_numbers:
     yolink_device = YoLinkDevice(yolinkURL, csid, csseckey, serial_num)
@@ -49,7 +50,8 @@ for serial_num in device_serial_numbers:
     elif yolink_device.get_type() == 'Hub':
         data["method"] = 'Hub.getState'
 
-    data["time"] = str(int(time.time()*1000))
+    #data["time"] = str(int(time.time()*1000))
+    data["time"] = str(int(time.time()))
     data["params"] = {}
     data["targetDevice"] =  yolink_device.get_id()
     data["token"]= yolink_device.get_token()
