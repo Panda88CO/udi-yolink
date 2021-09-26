@@ -28,14 +28,14 @@ description = 'Enable Sensor APIs and subscribe to MQTT broker'
 device_list = {}
 device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9EA472323EE2433','34E320948EF746AF98EF8AF6E72F2996', 'AAF5A97CF38B4AD4BE840F293CAA55BE'
                         ,'668AD084C86A412FB5F9CAA652E99AAA', '5F167C2C61254FC1AB5472DC482016B3' ]
-'''
+
 for serial_num in device_serial_numbers:
     yolink_device = YoLinkDevice(yolinkURL, csid, csseckey, serial_num)
     yolink_device.build_device_api_request_data()
     yolink_device.enable_device_api()
     device_list[yolink_device.get_id()] = yolink_device
 
-
+'''
     print(yolink_device.get_name())
     print(yolink_device.get_type())
     print(yolink_device.get_id())

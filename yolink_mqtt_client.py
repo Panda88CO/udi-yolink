@@ -82,7 +82,7 @@ class YoLinkMQTTClient(object):
         #print(test)
 
     def on_subscribe(self, client, userdata, mID, granted_QOS):
-        print('on_subscribe')
+        print('on_subscribe called')
 
     def on_publish(self, client, userdata, mID):
         print('on_publish')
