@@ -77,7 +77,7 @@ class YoLinkDevice(object):
         else:
             print("Failed to enable API response!")
             print(response)
-            sys.exit(2)
+            sys.exit()
 
     def getMethods(self, type):
         '''
