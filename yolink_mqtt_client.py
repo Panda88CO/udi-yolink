@@ -43,10 +43,13 @@ class YoLinkMQTTClient(object):
         self.client.connect(self.mqtt_url, self.mqtt_port)
         #time.sleep(5)
         print ('connect:')
-        #self.client.loop_start()
-        self.client.loop_forever()
-        #print('loop started')
+        self.client.loop_start()
+        #self.client.loop_forever()
+        print('loop started')
 
+
+        time.sleep(1)
+        self.client.loop_stop()
 
     def on_message(self, client, userdata, msg):
         """
@@ -86,3 +89,10 @@ class YoLinkMQTTClient(object):
 
     def on_publish(self, client, userdata, mID):
         print('on_publish')
+
+    def publish_data(self, csName, data):
+        topic1 = csName + '/1/request'
+        self.client.publish(topic1, data)
+        
+    def shurt_down(self):
+        self.client.loop_stop()

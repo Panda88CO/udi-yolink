@@ -3,7 +3,7 @@
 #import argparse
 #import os
 #import sys
-import yaml as yaml
+#import yaml as yaml
 import hashlib
 import time
 import json
@@ -27,7 +27,9 @@ description = 'Enable Sensor APIs and subscribe to MQTT broker'
 
 device_list = {}
 device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9EA472323EE2433','34E320948EF746AF98EF8AF6E72F2996', 'AAF5A97CF38B4AD4BE840F293CAA55BE'
-                        ,'668AD084C86A412FB5F9CAA652E99AAA', '5F167C2C61254FC1AB5472DC482016B3' ]
+                        ,'668AD084C86A412FB5F9CAA652E99AAA', '5F167C2C61254FC1AB5472DC482016B3' 
+                        ,'CED643F4AB7C46F6A180387BD1C756F6', '36D394CDEBF45BB91FAD12B5BC473A5'
+                        , ]
 
 for serial_num in device_serial_numbers:
     yolink_device = YoLinkDevice(yolinkURL, csid, csseckey, serial_num)
@@ -129,4 +131,16 @@ for serial_num in device_serial_numbers:
 print(COtopic)
 yolink_client = YoLinkMQTTClient(csid, csseckey, COtopic, mqttURL, 8003, device_list)
 yolink_client.connect_to_broker()
+data={}
+data["method"] = yolink_device.get_type()
+data["time"] = str(int(time.time()*1000))
+#data["time"] = str(int(time.time()))
+data["params"] = {}
+data["targetDevice"] =  yolink_device.get_id()
+data["token"]= yolink_device.get_token()
+dataTemp = str(json.dumps(data))
+
+
+yolink_client.publish(csName, dataTemp)
+yolink_client.shurt_down()
 
