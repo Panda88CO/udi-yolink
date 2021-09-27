@@ -25,6 +25,7 @@ class YoLinkMQTTClient(object):
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.on_subscribe = self.on_subscribe
+
         print(client_id)
         #self.client.tls_set()
 
@@ -85,6 +86,7 @@ class YoLinkMQTTClient(object):
         #print(test)
 
     def on_subscribe(self, client, userdata, mID, granted_QOS):
+        print()
         print('on_subscribe called')
 
     def on_publish(self, client, userdata, mID):
