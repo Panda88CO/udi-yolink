@@ -133,15 +133,16 @@ print(COtopic)
 yolink_client = YoLinkMQTTClient(csid, csseckey, COtopic, mqttURL, 8003, device_list)
 yolink_client.connect_to_broker()
 data={}
-data["method"] = yolink_device.get_type()
+data["method"] = yolink_device.get_type()+str('.getState')
 data["time"] = str(int(time.time()*1000))
 #data["time"] = str(int(time.time()))
 data["params"] = {}
 data["targetDevice"] =  yolink_device.get_id()
 data["token"]= yolink_device.get_token()
 dataTemp = str(json.dumps(data))
-
+print(dataTemp)
 
 yolink_client.publish_data(csName, dataTemp)
+
 yolink_client.shurt_down()
 

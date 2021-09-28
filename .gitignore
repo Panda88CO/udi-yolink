@@ -2,3 +2,4 @@
 get-pip.py
 __pycache__/yolink_devices.cpython-38.pyc
 __pycache__/yolink_mqtt_client.cpython-38.pyc
+__pycache__/yolink_mqtt_client.cpython-39.pyc
