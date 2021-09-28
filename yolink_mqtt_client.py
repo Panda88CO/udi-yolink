@@ -96,9 +96,12 @@ class YoLinkMQTTClient(object):
         print('mID = '+str(mID))
 
 
-    def publish_data(self, csName, data):
-        topic1 = csName + '/1/request'
+    def publish_data(self, topic1, data):
+        #topic1 = csName + '/1/request'
         self.client.publish(topic1, data, 0 )
         
     def shurt_down(self):
         self.client.loop_stop()
+
+    def subscribe_data(self, topic):
+        self.client.subscribe(topic)
