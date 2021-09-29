@@ -35,17 +35,17 @@ class YoLinkMQTTClient(object):
         """
         print("Connecting to broker...")
 
-        print(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
+        #print(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
         self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
         #time.sleep(5)
         #test = self.client.subscribe(self.topic)
         #print(test)
         #time.sleep(5)
         self.client.connect(self.mqtt_url, self.mqtt_port, 10)
-        #time.sleep(5)
+        time.sleep(5)
         print ('connect:')
-        self.client.loop_start()
-        #self.client.loop_forever()
+        #self.client.loop_start()
+        self.client.loop_forever()
         print('loop started')
 
 
@@ -56,6 +56,7 @@ class YoLinkMQTTClient(object):
         """
         Callback for broker published events
         """
+        print('on_message')
         print(msg.topic, msg.payload)
 
         payload = json.loads(msg.payload.decode("utf-8"))
@@ -80,10 +81,11 @@ class YoLinkMQTTClient(object):
         else:
             print("Connection with result code %s" % rc);
             sys.exit(2)
-        #time.sleep(5)
-        print(self.topic)
+        time.sleep(1)
+        print('Subsribe: '  + self.topic)
         test = self.client.subscribe(self.topic)
-        #print(test)
+        print(self.topic+ ' = ' +str(test))
+        
 
     def on_subscribe(self, client, userdata, mID, granted_QOS):
         print()
@@ -92,20 +94,25 @@ class YoLinkMQTTClient(object):
         print('userdata = ' + str(userdata))
         print('mID = '+str(mID))
         print('Granted QoS: ' +  str(granted_QOS))
+        print('\n')
 
     def on_publish(self, client, userdata, mID):
         print('on_publish')
         print('client = ' + str(client))
         print('userdata = ' + str(userdata))
         print('mID = '+str(mID))
+        print('\n')
 
 
-    def publish_data(self, topic1, data):
+    def publish_data(self, topic, data):
         #topic1 = csName + '/1/request'
-        self.client.publish(topic1, data, 0 )
+        print('Publish: '+ topic + ' ' + data)
+        self.client.publish(topic, data)
         
     def shurt_down(self):
         self.client.loop_stop()
 
     def subscribe_data(self, topic):
-        self.client.subscribe(topic)
+        print('Subscribe: ' + topic)
+        test = self.client.subscribe(topic)
+        print(topic +' = ' + str(test))

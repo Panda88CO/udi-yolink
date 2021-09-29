@@ -8,12 +8,30 @@ import hashlib
 import time
 import json
 import requests
+import threading
 #from logger import getLogger
 from yolink_devices import YoLinkDevice
 
 from yolink_mqtt_client import YoLinkMQTTClient
 #log = getLogger(__name__)
 
+def test_thread():
+    print ('starting thread')
+    time.sleep(20)
+    topic1 = csName + '/aaa/request'
+    topic2 = csName + '/aaa/response'
+    data={}
+    data["method"] = yolink_device.get_type()+str('.getState')
+    data["time"] = str(int(time.time()))
+    #data["time"] = str(int(time.time()))
+    data["targetDevice"] =  yolink_device.get_id()
+    data["token"]= yolink_device.get_token()
+    data["params"] = {}
+    dataTemp = str(json.dumps(data))
+    print(dataTemp)
+    yolink_client.subscribe_data(topic2)
+    time.sleep(5)
+    yolink_client.publish_data(topic1, dataTemp)
 
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
@@ -37,7 +55,7 @@ for serial_num in device_serial_numbers:
     yolink_device.enable_device_api()
     device_list[yolink_device.get_id()] = yolink_device
 
-'''
+
     print(yolink_device.get_name())
     print(yolink_device.get_type())
     print(yolink_device.get_id())
@@ -45,15 +63,21 @@ for serial_num in device_serial_numbers:
     print(yolink_device.getMethods(str(yolink_device.get_type())))
 
     data = {}
+    '''
     if yolink_device.get_type() == 'THSensor':
         data["method"] = 'THSensor.getState'
     elif yolink_device.get_type() == 'Manipulator':
         data["method"] = 'Manipulator.getState'
     elif yolink_device.get_type() == 'Hub':
         data["method"] = 'Hub.getState'
+    '''
+    type = yolink_device.get_type()
+    actions = yolink_device.getMethods(type)
+    getState = actions[0]
 
-    #data["time"] = str(int(time.time()*1000))
-    data["time"] = str(int(time.time()))
+    data["method"] = type+'.'+getState
+    data["time"] = str(int(time.time()*1000))
+    #data["time"] = str(int(time.time()))
     data["params"] = {}
     data["targetDevice"] =  yolink_device.get_id()
     data["token"]= yolink_device.get_token()
@@ -76,8 +100,8 @@ for serial_num in device_serial_numbers:
     print("Header:{0} Data:{1}\n".format(headersTemp, dataTemp))
     r = requests.post(yolinkURL, data=json.dumps(data), headers=headers1)        
     info = r.json()
-
-    
+    print(str(info)+'\n')
+    '''
     if serial_num == '86788EB527034A78B9EA472323EE2433':
         data = {}
         data["method"] = 'Manipulator.setState'
@@ -125,25 +149,23 @@ for serial_num in device_serial_numbers:
         print("Header:{0} Data:{1}\n".format(headersTemp, dataTemp))
         r = requests.post(yolinkURL, data=json.dumps(data), headers=headers1)        
         info = r.json()
-        
-'''
+    '''
+
 #print("Header:{0} Data:{1}\n".format(headers1, data))
 print(device_list)
 print(COtopic)
+x = threading.Thread(target = test_thread)
 yolink_client = YoLinkMQTTClient(csid, csseckey, COtopic, mqttURL, 8003, device_list)
+x.start()
 yolink_client.connect_to_broker()
-data={}
-data["method"] = yolink_device.get_type()+str('.getState')
-data["time"] = str(int(time.time()*1000))
-#data["time"] = str(int(time.time()))
-data["params"] = {}
-data["targetDevice"] =  yolink_device.get_id()
-data["token"]= yolink_device.get_token()
-dataTemp = str(json.dumps(data))
-print(dataTemp)
-topic1 = csName + '/request'
-yolink_client.subscribe_data(topic1)
-yolink_client.publish_data(topic1, dataTemp)
 
+
+
+'''
+yolink_client.subscribe_data(topic2)
+time.sleep(5)
+yolink_client.publish_data(topic1, dataTemp)
+'''
 yolink_client.shurt_down()
+
 
