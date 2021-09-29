@@ -141,9 +141,9 @@ data["targetDevice"] =  yolink_device.get_id()
 data["token"]= yolink_device.get_token()
 dataTemp = str(json.dumps(data))
 print(dataTemp)
-topic = csName + '/1/request'
-yolink_client.subscribe(topic)
-yolink_client.publish_data(topic, dataTemp)
+topic1 = csName + '/request'
+yolink_client.subscribe_data(topic1)
+yolink_client.publish_data(topic1, dataTemp)
 
 yolink_client.shurt_down()
 

@@ -88,6 +88,10 @@ class YoLinkMQTTClient(object):
     def on_subscribe(self, client, userdata, mID, granted_QOS):
         print()
         print('on_subscribe called')
+        print('client = ' + str(client))
+        print('userdata = ' + str(userdata))
+        print('mID = '+str(mID))
+        print('Granted QoS: ' +  str(granted_QOS))
 
     def on_publish(self, client, userdata, mID):
         print('on_publish')
