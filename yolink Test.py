@@ -15,6 +15,15 @@ from yolink_devices import YoLinkDevice
 from yolink_mqtt_client import YoLinkMQTTClient
 #log = getLogger(__name__)
 
+session = requests.Session()
+headers = {}
+data = {}
+authURL = 'https://api.yosmart.com/oauth/v2/authorization.htm'
+resp = session.get(authURL, headers=headers)
+print(resp)
+'''
+'''
+
 def test_thread():
     print ('starting thread')
     time.sleep(20)
