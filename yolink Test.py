@@ -18,15 +18,16 @@ from yolink_mqtt_client import YoLinkMQTTClient
 def test_thread():
     print ('starting thread')
     time.sleep(20)
-    topic1 = csName + '/aaa/request'
-    topic2 = csName + '/aaa/response'
+    topic1 = csName + '/aa/request'
+    topic2 = csName + '/aa/response'
     data={}
-    data["method"] = yolink_device.get_type()+str('.getState')
-    data["time"] = str(int(time.time()))
+    data["method"] = yolink_device.get_type()+str('.setState')
+    data["time"] = str(int(time.time())*1000)
     #data["time"] = str(int(time.time()))
     data["targetDevice"] =  yolink_device.get_id()
     data["token"]= yolink_device.get_token()
-    data["params"] = {}
+    data["params.chs"] =  0x03 
+    data["params.state"] = 'open'
     dataTemp = str(json.dumps(data))
     print(dataTemp)
     yolink_client.subscribe_data(topic2)
@@ -44,10 +45,14 @@ csName = 'Panda88'
 description = 'Enable Sensor APIs and subscribe to MQTT broker'
 
 device_list = {}
+'''
 device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9EA472323EE2433','34E320948EF746AF98EF8AF6E72F2996', 'AAF5A97CF38B4AD4BE840F293CAA55BE'
                         ,'668AD084C86A412FB5F9CAA652E99AAA', '5F167C2C61254FC1AB5472DC482016B3','CED643F4AB7C46F6A180387BD1C756F6', '636D394CDEBF45BB91FAD12B5BC473A5'
-                        ,'FEB3FC58AB2B4E5A88A5FE3381D3522D', 
+                        ,'FEB3FC58AB2B4E5A88A5FE3381D3522D',
                         ]
+
+'''
+device_serial_numbers = [ '636D394CDEBF45BB91FAD12B5BC473A5']
 
 for serial_num in device_serial_numbers:
     yolink_device = YoLinkDevice(yolinkURL, csid, csseckey, serial_num)

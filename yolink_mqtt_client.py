@@ -62,11 +62,11 @@ class YoLinkMQTTClient(object):
         payload = json.loads(msg.payload.decode("utf-8"))
         print(payload)
     
-        event = payload['event']
-        deviceId = payload['deviceId']
-        state = payload['data']['state']
+        #event = payload['event']
+        #deviceId = payload['deviceId']
+        #state = payload['data']['state']
 
-        print("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
+        #print("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
     
     def on_connect(self, client, userdata, flags, rc):
         """
@@ -85,7 +85,7 @@ class YoLinkMQTTClient(object):
         print('Subsribe: '  + self.topic)
         test = self.client.subscribe(self.topic)
         print(self.topic+ ' = ' +str(test))
-        
+
 
     def on_subscribe(self, client, userdata, mID, granted_QOS):
         print()
