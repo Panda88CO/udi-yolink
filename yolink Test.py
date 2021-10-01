@@ -26,6 +26,8 @@ print(resp)
 
 def test_thread():
     print ('starting thread')
+    topic1 = csName + '/aa/request'
+    topic2 = csName + '/aa/response'
     time.sleep(20)
 
     i = 0
@@ -37,25 +39,46 @@ def test_thread():
             state = 'open'
         else:
             state = 'closed'
-        topic1 = csName + '/aa/request'
-        topic2 = csName + '/aa/response'
-        data={}
+
+        data = {}
         data["method"] = yolink_device.get_type()+str('.setState')
         data["time"] = str(int(time.time())*1000)
         #data["time"] = str(int(time.time()))
         data["token"]= yolink_device.get_token()
-        data["params.chs"] =  0x02
-    
-        data["params.state"] = state
+        data["params"] =  {}
+        data["params"]["chs"] =  0x02
+        data["params"]["state"] = state
         data["targetDevice"] =  yolink_device.get_id()
-
         dataTemp = str(json.dumps(data))
         print(dataTemp)
+        '''
+
+        headers1['Content-type'] = 'application/json'
+        headers1['ktt-ys-brand'] = 'yolink'
+        headers1['YS-CSID'] = csid
+        cskey =  dataTemp +  csseckey
+        cskeyUTF8 = cskey.encode('utf-8')
+        hash = hashlib.md5(cskeyUTF8)
+        hashKey = hash.hexdigest()
+        headers1['ys-sec'] = hashKey
+        headersTemp = json.dumps(headers1)
+       
+
+        print("Header:{0} Data:{1}\n".format(headersTemp, dataTemp))
+        r = requests.post(yolinkURL, data=dataTemp, headers=headers1)      
+        #r = requests.post(yolinkURL, data=json.dumps(data), headers=headers1)        
+        info = r.json()
+        print (info)
         test = input() 
+        dataTemp = str(json.dumps(data))
+        print(dataTemp)
+        '''
         yolink_client.subscribe_data(topic2)
         time.sleep(1)
         yolink_client.publish_data(topic1, dataTemp)
-
+        test = input() 
+        
+      
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
 csid = '60dd7fa7960d177187c82039'
@@ -193,7 +216,7 @@ yolink_client.subscribe_data(topic2)
 time.sleep(2)
 yolink_client.publish_data(topic1, dataTemp)
 
-'''
-yolink_client.shurt_down()
 
+yolink_client.shurt_down()
+'''
 
