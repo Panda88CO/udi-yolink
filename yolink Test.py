@@ -14,34 +14,47 @@ from yolink_devices import YoLinkDevice
 
 from yolink_mqtt_client import YoLinkMQTTClient
 #log = getLogger(__name__)
-
+'''
 session = requests.Session()
 headers = {}
 data = {}
 authURL = 'https://api.yosmart.com/oauth/v2/authorization.htm'
 resp = session.get(authURL, headers=headers)
 print(resp)
-'''
+
 '''
 
 def test_thread():
     print ('starting thread')
     time.sleep(20)
-    topic1 = csName + '/aa/request'
-    topic2 = csName + '/aa/response'
-    data={}
-    data["method"] = yolink_device.get_type()+str('.setState')
-    data["time"] = str(int(time.time())*1000)
-    #data["time"] = str(int(time.time()))
-    data["targetDevice"] =  yolink_device.get_id()
-    data["token"]= yolink_device.get_token()
-    data["params.chs"] =  0x03 
-    data["params.state"] = 'open'
-    dataTemp = str(json.dumps(data))
-    print(dataTemp)
-    yolink_client.subscribe_data(topic2)
-    time.sleep(5)
-    yolink_client.publish_data(topic1, dataTemp)
+
+    i = 0
+    state = 'closed'
+    while i<5: 
+        i = i+1
+        print(i)
+        if state == 'closed':
+            state = 'open'
+        else:
+            state = 'closed'
+        topic1 = csName + '/aa/request'
+        topic2 = csName + '/aa/response'
+        data={}
+        data["method"] = yolink_device.get_type()+str('.setState')
+        data["time"] = str(int(time.time())*1000)
+        #data["time"] = str(int(time.time()))
+        data["token"]= yolink_device.get_token()
+        data["params.chs"] =  0x02
+    
+        data["params.state"] = state
+        data["targetDevice"] =  yolink_device.get_id()
+
+        dataTemp = str(json.dumps(data))
+        print(dataTemp)
+        test = input() 
+        yolink_client.subscribe_data(topic2)
+        time.sleep(1)
+        yolink_client.publish_data(topic1, dataTemp)
 
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
@@ -177,8 +190,9 @@ yolink_client.connect_to_broker()
 
 '''
 yolink_client.subscribe_data(topic2)
-time.sleep(5)
+time.sleep(2)
 yolink_client.publish_data(topic1, dataTemp)
+
 '''
 yolink_client.shurt_down()
 

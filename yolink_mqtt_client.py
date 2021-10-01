@@ -57,6 +57,7 @@ class YoLinkMQTTClient(object):
         Callback for broker published events
         """
         print('on_message')
+        print(msg)
         print(msg.topic, msg.payload)
 
         payload = json.loads(msg.payload.decode("utf-8"))
@@ -97,6 +98,7 @@ class YoLinkMQTTClient(object):
         print('\n')
 
     def on_publish(self, client, userdata, mID):
+
         print('on_publish')
         print('client = ' + str(client))
         print('userdata = ' + str(userdata))
@@ -107,7 +109,8 @@ class YoLinkMQTTClient(object):
     def publish_data(self, topic, data):
         #topic1 = csName + '/1/request'
         print('Publish: '+ topic + ' ' + data)
-        self.client.publish(topic, data)
+        test = self.client.publish(topic, data)
+        print(test)
         
     def shurt_down(self):
         self.client.loop_stop()
