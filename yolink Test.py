@@ -41,13 +41,13 @@ def test_thread():
             state = 'closed'
 
         data = {}
-        data["method"] = yolink_device.get_type()+str('.setState')
+        data["method"] = yolink_device.get_type()+str('.getSchedules')
         data["time"] = str(int(time.time())*1000)
         #data["time"] = str(int(time.time()))
         data["token"]= yolink_device.get_token()
-        data["params"] =  {}
-        data["params"]["chs"] =  0x02
-        data["params"]["state"] = state
+        #data["params"] =  {}
+        #data["params"]["chs"] =  0x02
+        #data["params"]["state"] = state
         data["targetDevice"] =  yolink_device.get_id()
         dataTemp = str(json.dumps(data))
         print(dataTemp)
