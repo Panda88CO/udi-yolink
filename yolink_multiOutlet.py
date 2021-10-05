@@ -4,6 +4,7 @@ import json
 import requests
 import sys
 from yolink_devices import YoLinkDevice
+from yolink_mqtt_client import YoLinkMQTTClient
 #from logger import getLogger
 #log = getLogger(__name__)
 
@@ -22,7 +23,7 @@ class MultiOutlet(YoLinkDevice):
         self.data = {}
         #self.header = {}
         self.device_data = {}
-
+        yolink_client = YoLinkMQTTClient(csid, csseckey,  mqttURL, 8003)
         yolink_client.subscribe_data(self.mqttResponseStr)
         yolink_client.subscribe_data(self.mqttReportStr)
         time.sleep(1)

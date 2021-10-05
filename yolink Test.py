@@ -91,7 +91,7 @@ mqttURL = 'api.yosmart.com'
 csid = '60dd7fa7960d177187c82039'
 csseckey = '3f68536b695a435d8a1a376fc8254e70'
 
-COtopic = 'Panda88/report'
+COtopic = 'Panda88/aa/report'
 csName = 'Panda88'
 
 description = 'Enable Sensor APIs and subscribe to MQTT broker'
