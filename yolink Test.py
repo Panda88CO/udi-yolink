@@ -216,12 +216,14 @@ print(COtopic)
 yolink_client = YoLinkMQTTClient(csid, csseckey, COtopic, mqttURL, 8003, device_list)
 
 x = threading.Thread(target = test_thread)
-y = threading.Thread(target = monitor_thread)
+#y = threading.Thread(target = monitor_thread)
 
-
-time.sleep(1)
 x.start()
-y.start()
+time.sleep(1)
+print ('starting Moitor thread')
+yolink_client.connect_to_broker()
+#y.start()
+
 '''
 yolink_client.subscribe_data(topic2)
 time.sleep(2)
