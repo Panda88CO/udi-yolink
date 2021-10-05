@@ -3,29 +3,64 @@ import time
 import json
 import requests
 import sys
-
+from yolink_devices import YoLinkDevice
 #from logger import getLogger
 #log = getLogger(__name__)
 
 """
 Object representatiaon for YoLink Device
 """
-class YoLinkDevice(object):
+class MultiOutlet(YoLinkDevice):
 
-    def __init__(self, url, csid, csseckey, serial_number):
-        self.url = url
+    def __init__(self, yolinkURL, csid, csseckey, serial_num, CSname, yolink_client, IDstring):
+        super().__init__(yolinkURL, csid, csseckey, serial_num)
+        self.url = yolinkURL
         self.csid = csid
         self.csseckey = csseckey
-        self.serial_number = serial_number
-        self.mqttID = serial_number[0:10]
+        self.serial_number = serial_num
+
         self.data = {}
-        self.header = {}
-
+        #self.header = {}
         self.device_data = {}
-        self.typeList = [ 'Hub','InfraredRemoter', 'Outlet', 'Switch','Manipulator','Sprinkler',  'MultiOutlet'
-                        ,'DoorSensor','LeakSensor', 'MotionSensor','THSensor', 'COSmokeSensor', 'Thermostat'
-                        , 'GarageDoor', 'CSDevice'  ]
 
+        yolink_client.subscribe_data(self.mqttResponseStr)
+        yolink_client.subscribe_data(self.mqttReportStr)
+        time.sleep(1)
+
+
+    def setState(self, portList, output):
+        print('setState')
+        data = {}
+        data["method"] = self.get_type()+str('.setState')
+        data["time"] = str(int(time.time())*1000)
+        data["token"]= self.get_token()
+        data["params"] =  {}
+        portCtrl = 0
+        for port in portList:
+            portCtrl = portCtrl + pow(2, port)
+        data["params"]["chs"] =  int(portCtrl)
+        if output.upper() == 'ON':
+            state = 'open'
+        else:
+            state = 'closed'
+        data["params"]["state"] = state
+        data["targetDevice"] =  self.get_id()
+        dataTemp = str(json.dumps(data))
+        self.yolink_client.publish_data(self.mqttRequestStr, dataTemp)
+
+
+
+    def getState(self):
+        print('getState')
+        data= {}
+        data["method"] = self.get_type()+str('.getStates')
+        data["time"] = str(int(time.time())*1000)
+        data["token"]= self.get_token()
+        data["targetDevice"] =  self.get_id()
+        dataTemp = str(json.dumps(data))
+        self.yolink_client.publish_data(self.mqttRequestStr, dataTemp)
+
+    '''
     def get_name(self):
         return str(self.device_data['name'])
 
@@ -81,7 +116,7 @@ class YoLinkDevice(object):
             print("Failed to enable API response!")
             print(response)
             sys.exit()
-
+    '''
    
 
     def getMethods(self, type):
@@ -123,14 +158,9 @@ class YoLinkDevice(object):
             print('Not Supported device type : ' + str(type))
         return(tempList)
 
-    def mqttRequestStr(self, CSname):
-        return(str(CSname+'/'+self.mqttID+'/request'))
-
-    def mqttResponseStr(self, CSname):
-        return(str(CSname+'/'+self.mqttID+'/response'))
-
-    def mqttReportStr(self, CSname):
-        return(str(CSname+'/'+self.mqttID+'/report'))
+    typeList = [ 'Hub','InfraredRemoter', 'Outlet', 'Switch','Manipulator','Sprinkler',  'MultiOutlet'
+                ,'DoorSensor','LeakSensor', 'MotionSensor','THSensor', 'COSmokeSensor', 'Thermostat'
+                , 'GarageDoor', 'CSDevice'  ]
 
     def UpData (self, id, type, method):
         print(id, type, method)

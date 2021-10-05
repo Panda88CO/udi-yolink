@@ -28,10 +28,11 @@ def test_thread():
     print ('starting thread')
     topic1 = csName + '/aa/request'
     topic2 = csName + '/aa/response'
-    time.sleep(20)
+    time.sleep(5)
 
     i = 0
     state = 'closed'
+    yolink_client.subscribe_data(topic2)
     while i<5: 
         i = i+1
         print(i)
@@ -43,7 +44,6 @@ def test_thread():
         data = {}
         data["method"] = yolink_device.get_type()+str('.getSchedules')
         data["time"] = str(int(time.time())*1000)
-        #data["time"] = str(int(time.time()))
         data["token"]= yolink_device.get_token()
         #data["params"] =  {}
         #data["params"]["chs"] =  0x02
@@ -73,12 +73,19 @@ def test_thread():
         dataTemp = str(json.dumps(data))
         print(dataTemp)
         '''
-        yolink_client.subscribe_data(topic2)
+        
         time.sleep(1)
         yolink_client.publish_data(topic1, dataTemp)
         test = input() 
+
         
       
+def monitor_thread():
+    print ('starting Moitor thread')
+    yolink_client.connect_to_broker()
+
+
+
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
 csid = '60dd7fa7960d177187c82039'
@@ -98,8 +105,10 @@ device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9
 
 '''
 device_serial_numbers = [ '636D394CDEBF45BB91FAD12B5BC473A5']
+print()
 
 for serial_num in device_serial_numbers:
+    print(serial_num[0:10])
     yolink_device = YoLinkDevice(yolinkURL, csid, csseckey, serial_num)
     yolink_device.build_device_api_request_data()
     yolink_device.enable_device_api()
@@ -204,19 +213,21 @@ for serial_num in device_serial_numbers:
 #print("Header:{0} Data:{1}\n".format(headers1, data))
 print(device_list)
 print(COtopic)
-x = threading.Thread(target = test_thread)
 yolink_client = YoLinkMQTTClient(csid, csseckey, COtopic, mqttURL, 8003, device_list)
+
+x = threading.Thread(target = test_thread)
+y = threading.Thread(target = monitor_thread)
+
+
+time.sleep(1)
 x.start()
-yolink_client.connect_to_broker()
-
-
-
+y.start()
 '''
 yolink_client.subscribe_data(topic2)
 time.sleep(2)
 yolink_client.publish_data(topic1, dataTemp)
-
-
-yolink_client.shurt_down()
 '''
+
+#yolink_client.shurt_down()
+
 

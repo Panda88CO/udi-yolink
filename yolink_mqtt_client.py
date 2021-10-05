@@ -37,15 +37,13 @@ class YoLinkMQTTClient(object):
 
         #print(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
         self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
-        #time.sleep(5)
-        #test = self.client.subscribe(self.topic)
-        #print(test)
-        #time.sleep(5)
+
         self.client.connect(self.mqtt_url, self.mqtt_port, 10)
-        time.sleep(5)
+        #time.sleep(5)
         print ('connect:')
-        #self.client.loop_start()
-        self.client.loop_forever()
+        self.client.loop_start()
+        #
+        # self.client.loop_forever()
         print('loop started')
 
 
