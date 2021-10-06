@@ -11,19 +11,75 @@ import requests
 import threading
 #from logger import getLogger
 from yolink_devices import YoLinkDevice
-
 from yolink_mqtt_client import YoLinkMQTTClient
+
+from oauthlib.oauth2 import BackendApplicationClient
+from requests.auth import HTTPBasicAuth
+#from rauth import OAuth2Service
+from requests_oauthlib import OAuth2Session
+#from requests_oauthlib import OAuth2Session
 #log = getLogger(__name__)
 '''
 session = requests.Session()
 headers = {}
 data = {}
 authURL = 'https://api.yosmart.com/oauth/v2/authorization.htm'
+tokenURL = 'https://api.yosmart.com/oauth/v2/getAccessToken.api'
+
+
 resp = session.get(authURL, headers=headers)
 print(resp)
-
 '''
 
+#client1 = BackendApplicationClient(client_id='60dd7fa7960d177187c82039')
+#oauth = OAuth2Session(client=client1)
+#token = oauth.fetch_token(token_url='https://api.yosmart.com/oauth/v2/getAccessToken.api', client_id='60dd7fa7960d177187c82039', client_secret='3f68536b695a435d8a1a376fc8254e70', verify= False)
+
+
+
+
+#token = OAuth2Session( client_id='60dd7fa7960d177187c82039',
+#client_secret='3f68536b695a435d8a1a376fc8254e70',
+#authorize_url='https://api.yosmart.com/oauth/v2/authorization.htm',
+#access_token_url='https://api.yosmart.com/oauth/v2/getAccessToken.api')
+
+
+#test = token.get_access_token()
+
+#client = BackendApplicationClient(client_id='60dd7fa7960d177187c82039')
+#oauth = OAuth2Session(client=client)
+#token = oauth.fetch_token(token_url='https://api.yosmart.com/oauth/v2/getAccessToken.api', client_id='60dd7fa7960d177187c82039', include_client_id=True,   client_secret='3f68536b695a435d8a1a376fc8254e70')
+'''
+class ExampleOAuth2Client:
+    def __init__(self, client_id, client_secret):
+        self.access_token = None
+
+
+
+        self.service = BackendApplicationClient(
+            name="foo",
+            client_id=client_id,
+            client_secret=client_secret,
+            access_token_url="https://api.yosmart.com/oauth/v2/authorization.htm",
+            authorize_url="https://api.yosmart.com/oauth/v2/getAccessToken.api'",
+            base_url="https://api.yosmart.com/",
+        )
+
+        self.get_access_token()
+
+    def get_access_token(self):
+        data = {'code': 'bar',
+                'grant_type': 'client_credentials',
+                'redirect_uri': 'https://api.yosmart.com/'}
+
+        session = self.service.get_auth_session(data=data, decoder=json.loads)
+
+        self.access_token = session.access_token
+
+
+
+test = ExampleOAuth2Client('60dd7fa7960d177187c82039','3f68536b695a435d8a1a376fc8254e70')
+'''
 def test_thread():
     print ('starting thread')
     topic1 = csName + '/aa/request'
@@ -97,6 +153,31 @@ csName = 'Panda88'
 description = 'Enable Sensor APIs and subscribe to MQTT broker'
 
 device_list = {}
+
+class ExampleOAuth2Client:
+    def __init__(self, client_id, client_secret):
+        self.access_token = None
+
+        self.service = OAuth2Service(
+            name="foo",
+            client_id=client_id,
+            client_secret=client_secret,
+            access_token_url="http://api.example.com/oauth/access_token",
+            authorize_url="http://api.example.com/oauth/access_token",
+            base_url="http://api.example.com/",
+        )
+
+        self.get_access_token()
+
+    def get_access_token(self):
+        data = {'code': 'bar',
+                'grant_type': 'client_credentials',
+                'redirect_uri': 'http://example.com/'}
+
+        session = self.service.get_auth_session(data=data, decoder=json.loads)
+
+        self.access_token = session.access_token
+
 '''
 device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9EA472323EE2433','34E320948EF746AF98EF8AF6E72F2996', 'AAF5A97CF38B4AD4BE840F293CAA55BE'
                         ,'668AD084C86A412FB5F9CAA652E99AAA', '5F167C2C61254FC1AB5472DC482016B3','CED643F4AB7C46F6A180387BD1C756F6', '636D394CDEBF45BB91FAD12B5BC473A5'
