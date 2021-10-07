@@ -73,7 +73,7 @@ for step in range (5):
 
     yolink_client.request_data()
     #y.start()
-    print('\n Next loop')
+    print('\n Next loop' + str(step+1))
 yolink_client.client.loop_stop()
 
 '''
