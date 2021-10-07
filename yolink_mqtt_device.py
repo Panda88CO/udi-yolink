@@ -31,6 +31,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.yolink_URL = yolink_URL
         self.mqtt_url = mqtt_URL
         self.mqtt_port = int(mqtt_port)
+        self.targetId = self.get_id()
 
         #self.device_hash = device_hash
         self.dataQueue = Queue()
@@ -54,6 +55,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
 
         self.client.connect(self.mqtt_url, self.mqtt_port, 30)
+        #self.dataQueue.
         #time.sleep(5)
         print ('connect:')
         self.client.loop_start()
@@ -68,13 +70,29 @@ class YoLinkMQTTDevice(YoLinkDevice):
         Callback for broker published events
         """
         print('on_message')
-        print(client)
-        print(userdata)
-        print(msg)
-        print(msg.topic, msg.payload)
-
-
+        #print(client)
+        #print(userdata)
+        #print(msg)
+        #print(msg.topic, msg.payload)
         payload = json.loads(msg.payload.decode("utf-8"))
+        if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
+            if payload['deviceId'] == self.targetId:
+                self.dataQueue.put(payload)
+            else:
+                print ('\n report on differnt device : ' + msg.topic)
+                print (payload)
+                print('\n')
+        elif msg.topic == self.topicResp:
+                self.dataQueue.put(payload)
+        elif msg.topic == self.topicReq:
+                print('publishing request')
+        else:
+            print(msg.topic,  self.topicReport, self.topicReportAll )
+        '''
+        
+        if payload['deviceId'] == self.targetId:
+            self.dataQueue.put(payload)
+
         print(payload)
         test = self.dataQueue.put(payload)
         print (test)
@@ -88,7 +106,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         #event = payload['event']
         #deviceId = payload['deviceId']
         #state = payload['data']['state']
-
+        '''
         #print("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
     
     def on_connect(self, client, userdata, flags, rc):
@@ -128,15 +146,15 @@ class YoLinkMQTTDevice(YoLinkDevice):
 
     def on_publish(self, client, userdata, mID):
         print('on_publish')
-        print('client = ' + str(client))
-        print('userdata = ' + str(userdata))
-        print('mID = '+str(mID))
-        print('\n')
+        #print('client = ' + str(client))
+        #print('userdata = ' + str(userdata))
+        #print('mID = '+str(mID))
+        #print('\n')
 
 
     def publish_data(self, data):
         #topic1 = csName + '/1/request'
-        print('Publish: '+ self.topicReq + ' ' + data)
+        #print('Publish: '+ self.topicReq + ' ' + data)
         test = self.client.publish(self.topicReq, data)
         print(test)
         

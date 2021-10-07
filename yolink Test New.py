@@ -45,19 +45,21 @@ device_serial_numbers = [ '636D394CDEBF45BB91FAD12B5BC473A5']
 print()
 
 #print("Header:{0} Data:{1}\n".format(headers1, data))
-print(device_list)
+#print(device_list)
 
 yolink_client = YoLinkMQTTDevice(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[0])
 yolink_client.connect_to_broker()
 
-for step in range (5):
-    
-    ports = step % 3
+ports = 0
+for step in range (6):
+    ports = ports +1
+    if ports == 4: 
+        ports = 1
     if step <3:
         state = 'open'
     else:
         state = 'closed'
-    
+    print ('ports, state: ', ports, state)
     data={}
     data["method"] = 'MultiOutlet.setState'
     data["time"] = str(int(time.time())*1000)
@@ -70,10 +72,30 @@ for step in range (5):
 
     yolink_client.publish_data(dataTemp)
     time.sleep(1)
+    if state == 'open':
+        resetP = 'closed'
+    else:
+        resetP = 'open'
+    data={}
+    data["method"] = 'MultiOutlet.setState'
+    data["time"] = str(int(time.time())*1000)
+    data["params"] = {}
+    data["params"]["chs"] =  0x3
+    data["params"]['state'] = resetP
+    data["targetDevice"] =  yolink_client.get_id()
+    data["token"]= yolink_client.get_token()
+    dataTemp = str(json.dumps(data))
+
+    yolink_client.publish_data(dataTemp)
+    time.sleep(5)
 
     yolink_client.request_data()
     #y.start()
-    print('\n Next loop' + str(step+1))
+    print('\n Completed loop: ' + str(step+1))
+
+
+
+
 yolink_client.client.loop_stop()
 
 '''
