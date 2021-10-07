@@ -74,6 +74,7 @@ for step in range (5):
     yolink_client.request_data()
     #y.start()
     print('\n Next loop')
+yolink_client.client.loop_stop()
 
 '''
 yolink_client.subscribe_data(topic2)
