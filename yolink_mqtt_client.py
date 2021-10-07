@@ -13,20 +13,20 @@ Object representation for YoLink MQTT Client
 """
 class YoLinkMQTTClient(object):
 
-    def __init__(self, csid, csseckey, mqtt_url, mqtt_port, device_hash, client_id=os.getpid()):
+    def __init__(self, csid, csseckey, mqtt_url, mqtt_port, clientId ):
         self.csid = csid
         self.csseckey = csseckey
-        self.topic = topic
+        #self.topic = topic
         self.mqtt_url = mqtt_url
         self.mqtt_port = int(mqtt_port)
-        self.device_hash = device_hash
-
-        self.client = mqtt.Client(client_id=str('Panda88_' + str(client_id)),  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+        #self.device_hash = device_hash
+        self.clientId = clientId
+        self.client = mqtt.Client(clientId,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.on_subscribe = self.on_subscribe
 
-        print(client_id)
+        print(self.clientId)
         #self.client.tls_set()
 
     def connect_to_broker(self):
