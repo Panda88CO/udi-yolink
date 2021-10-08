@@ -5,165 +5,133 @@ import sys
 import time
 
 import paho.mqtt.client as mqtt
-#from logger import getLogger
-#log = getLogger(__name__)
+import logging
+
 from queue import Queue
-from yolink_devices import YoLinkDevice
-from yolink_mqtt_client import YoLinkMQTTClient
+from yolink_mqtt_class import YoLinkMQTTDevice
+logging.basicConfig(level=logging.DEBUG)
+
+#from yolink_mqtt_client import YoLinkMQTTClient
 """
-Object representation for YoLink MQTT Client
+Object representation for YoLink MQTT device
 """
-class YoLinkMQTTDevice(YoLinkDevice):
+class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
-        super().__init__( yolink_URL, csid, csseckey, serial_num)
-        self.uniqueID = serial_num[0:10]
-        self.clientId = str(csName+'_'+ self.uniqueID )     
-        #YoLinkMQTTClient.__init__(self,  csid, csseckey, mqtt_URL, mqtt_port, self.clientId )
-        self.build_device_api_request_data()
-        self.enable_device_api()
-        self.csid = csid
-        self.csseckey = csseckey
-        self.topicReq = csName+'/'+ self.uniqueID +'/request'
-        self.topicResp = csName+'/'+ self.uniqueID +'/response'
-        self.topicReport = csName+'/'+ self.uniqueID +'/report'
-        self.topicReportAll = csName+'/report'
-        self.yolink_URL = yolink_URL
-        self.mqtt_url = mqtt_URL
-        self.mqtt_port = int(mqtt_port)
-        self.targetId = self.get_id()
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
+        self.connect_to_broker()
+        self.multiOutlet = { 'lastTime':int(time.time*1000)
+                            ,'state':{}
+                            ,'schedule':{}
+                            ,'delays':{}
+                            ,'status':{} 
+                            }
 
-        #self.device_hash = device_hash
-        self.dataQueue = Queue()
-        self.client = mqtt.Client(self.clientId,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
-        self.client.on_subscribe = self.on_subscribe
-        self.client.on_disconnect = self.on_disconnect
+        data = self.getOutletState()
+        data = self.getOutletSchedule()
+     
 
-        #print(client_id)
-        #self.client.tls_set()
+    def updateStatus(self, data):
+        logging.debug('updateStatus')
+        if 'method' in  data:
+            logging.debug('method')
+            if ( data['method'] == 'MultiOutlet.setState' or  data['method'] == 'MultiOutlet.getState') and data['code'] == '000000':
+                for port in range(len(data['data']['state'])):
+                    if data['data']['state'][port] == 'open':
+                        self.multiOutlet['state'][port] = 'ON'
+                    elif data['data']['state'][port] == 'closed':
+                        self.multiOutlet['state'][port] = 'OFF'
+                    else:
+                        self.multiOutlet['state'][port] = 'UNKNOWN'
 
-      
-    def connect_to_broker(self):
-        """
-        Connect to MQTT broker
-        """
-        print("Connecting to broker...")
-
-        #print(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
-        self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
-
-        self.client.connect(self.mqtt_url, self.mqtt_port, 30)
-        #self.dataQueue.
-        #time.sleep(5)
-        print ('connect:')
-        self.client.loop_start()
-        #
-        #self.client.loop_forever()
-        #print('loop started')
-        time.sleep(1)
-        #self.client.loop_stop()
-
-    def on_message(self, client, userdata, msg):
-        """
-        Callback for broker published events
-        """
-        print('on_message')
-        #print(client)
-        #print(userdata)
-        #print(msg)
-        #print(msg.topic, msg.payload)
-        payload = json.loads(msg.payload.decode("utf-8"))
-        if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
-            if payload['deviceId'] == self.targetId:
-                self.dataQueue.put(payload)
             else:
-                print ('\n report on differnt device : ' + msg.topic)
-                print (payload)
-                print('\n')
-        elif msg.topic == self.topicResp:
-                self.dataQueue.put(payload)
-        elif msg.topic == self.topicReq:
-                print('publishing request')
-        else:
-            print(msg.topic,  self.topicReport, self.topicReportAll )
-        '''
-        
-        if payload['deviceId'] == self.targetId:
-            self.dataQueue.put(payload)
+                #data['method'] == 'MultiOutlet.getState' and data['code'] == '000000':
+                logging.debug('Not supported yet' )
 
-        print(payload)
-        test = self.dataQueue.put(payload)
-        print (test)
-        res = self.dataQueue.get(payload)
-        print (res)
-        test = self.dataQueue.put(payload)
-        print (test)    
-        #print('data Queue' )
-        #print(self.dataQueue)
-
-        #event = payload['event']
-        #deviceId = payload['deviceId']
-        #state = payload['data']['state']
-        '''
-        #print("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
-    
-    def on_connect(self, client, userdata, flags, rc):
-        """
-        Callback for connection to broker
-        """
-        print("Connected with result code %s" % rc)
-        print( client,  userdata, flags)
-
-        if (rc == 0):
-            print("Successfully connected to broker %s" % self.mqtt_url)
+        elif 'event' in data:
+            logging.debug('StatusChange')
+            if data['event'] == 'MultiOutlet.StatusChange':
+                for port in range(len(data['data']['state'])):
+                    if data['data']['state'][port] == 'open':
+                        self.multiOutlet['state'][port] = 'ON'
+                    elif data['data']['state'][port] == 'closed':
+                        self.multiOutlet['state'][port] = 'OFF'
+                    else:
+                        self.multiOutlet['state'][port] = 'UNKNOWN'
 
         else:
-            print("Connection with result code %s" % rc);
-            sys.exit(2)
-        time.sleep(1)
-        print('Subsribe: ' + self.topicResp + ', '+self.topicReport+', '+ self.topicReportAll )
-        test1 = self.client.subscribe(self.topicResp)
-        print(test1)
-        test2 = self.client.subscribe(self.topicReport)
-        print(test2)
-        test3 = self.client.subscribe(self.topicReportAll)
-        print(test3)
+            logging.error('unsupported data')
 
-    def on_disconnect(self, client, userdata,rc=0):
-        print('Disconnect - stop loop')
-        self.client.loop_stop()
+    def getOutletState(self):
+        logging.debug('getOutletState')
+        data={}
+        data["method"] = 'MultiOutlet.getState'
+        data["time"] = str(int(time.time())*1000)
+        self.publish_data(data)
+        time.sleep(2)
+        rxdata = self.request_data()
+        messagetime = 0
+        dataOK = False
+        for result in range(len(rxdata)):
+            if 'code' in  rxdata[result]:
+                print(rxdata[result]['code'] == '000000' ,  rxdata[result]['method'] == data['method'])
+                if rxdata[result]['code'] == '000000' and rxdata[result]['method'] == data['method']:
+                    dataOK = True
+            if int(rxdata[result]['time']) > messagetime:
+                self.updateStatus(rxdata[result]) 
+                messagetime = rxdata[result]['time']
 
-    def on_subscribe(self, client, userdata, mID, granted_QOS):
-        print()
-        print('on_subscribe called')
-        print('client = ' + str(client))
-        print('userdata = ' + str(userdata))
-        print('mID = '+str(mID))
-        print('Granted QoS: ' +  str(granted_QOS))
-        print('\n')
+        return(dataOK)
 
-    def on_publish(self, client, userdata, mID):
-        print('on_publish')
-        #print('client = ' + str(client))
-        #print('userdata = ' + str(userdata))
-        #print('mID = '+str(mID))
-        #print('\n')
+    def setOutletState(self, portList, value):
+        # portlist a a listof ports being changed port range 0-7
+        # vaue is state that need to change 2 (ON/OFF)
+        port = 0
+        for i in portList:
+            port = port + pow(2, i)
+        if value.upper() == 'ON':
+            state = 'open'
+        elif value.upper() == 'OFF':
+            state = 'closed'
+        else:
+            logging.error('Unknows state passed')
+        data={}
+        data["method"] = 'MultiOutlet.setState'
+        data["time"] = str(int(time.time())*1000)
+        data["params"] = {}
+        data["params"]["chs"] =  port
+        data["params"]['state'] = state
 
+        self.publish_data(data)
+        time.sleep(2)
+        rxdata = self.request_data()
+        dataOK = False
+        messagetime = 0
+        for result in range(len(rxdata)):
+            if 'code' in  rxdata[result]:
+                if rxdata[result]['code'] == '000000' and  rxdata[result]['msgid']== data['time'] and rxdata[result]['method'] == data['method']:
+                    dataOK = True
+            if int(rxdata[result]['time']) > messagetime:
+                self.updateStatus(rxdata[result])
+                messagetime = rxdata[result]['time']
 
-    def publish_data(self, data):
-        #topic1 = csName + '/1/request'
-        #print('Publish: '+ self.topicReq + ' ' + data)
-        test = self.client.publish(self.topicReq, data)
-        print(test)
-        
-    def shurt_down(self):
-        self.client.loop_stop()
-
-    def request_data(self):
-        while not self.dataQueue.empty():
-            print('QUEUE data: \n')
-            print( self.dataQueue.get())
+        return(dataOK)
 
     
+    def getOutletSchedule(self):
+        print('getOutletSchedule')
+    
+    def setOutletSchedule(self):
+        print('setOutletSchedule')
+
+    def setOutletDelay(self):
+        print('setOutletDelay')
+
+    def getOutletVersion(self):
+        print('getOutletVersion')
+
+    def startUpgrade(self):
+        print('startUpgrade')
+
+    def checkStatusChanges(self):
+        print('checkStatusChanges')
