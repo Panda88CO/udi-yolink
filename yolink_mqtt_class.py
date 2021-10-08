@@ -164,13 +164,18 @@ class YoLinkMQTTDevice(YoLinkDevice):
 
     def request_data(self, messageId):
         
+        expirationTime = time.time*1000-60*60*1000 # 1 hour in milisec
         while not self.dataQueue.empty():
             temp = (self.dataQueue.get())
             msgId = temp['msgid']
-            self.data['msgid'] = temp
-        #scrape old data 
+            self.data[msgId] = temp
+        for id in self.data: # remove too old data
+            if expirationTime > id:
+                del self.data[id]
         if messageId in self.data:
-            return(self.data[messageId])
+            temp = self.data[messageId]
+            del self.data[messageId]
+            return(temp)
         else:
             return(None)
     
