@@ -208,3 +208,40 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
     def checkStatusChanges(self):
         logging.debug('checkStatusChanges')
 
+
+
+class YoLinkTHsensor(YoLinkMQTTDevice):
+
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
+        startTime = str(int(time.time()*1000))
+        self.THsensor = {
+                         'state':{'lastTime':startTime}
+                        ,'status':{'lastTime':startTime} 
+                        }
+
+        self.connect_to_broker()
+
+
+
+    def refreshTHsensor(self):
+        logging.debug('refreshTHsensor')
+        data={}
+        data['method'] = 'THSensor.getState'
+        data['time'] = str(int(time.time())*1000)
+        self.publish_data(data)
+        time.sleep(2)
+        rxdata = self.getData(data["time"])
+        if rxdata[0]:
+            for sensor in range(1,len(rxdata) ):
+                sensorData = rxdata[sensor]
+                if 'code' in  sensorData:
+                    if sensorData['code'] == '000000':
+                        self.updateStatus(sensorData) 
+        return(rxdata[0])
+
+    def updateStatus(self, data):
+        logging.debug('updateStatus')    
+
+    def checkStatusChanges(self):
+        logging.debug('checkStatusChanges')

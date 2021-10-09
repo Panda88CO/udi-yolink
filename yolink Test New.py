@@ -13,7 +13,7 @@ import threading
 from yolink_devices import YoLinkDevice
 #from yolink_mqtt_client import YoLinkMQTTClient
 from yolink_mqtt_device import YoLinkMultiOutlet
-
+from yolink_mqtt_device import YoLinkTHsensor
 #from oauthlib.oauth2 import BackendApplicationClient
 #from requests.auth import HTTPBasicAuth
 #from rauth import OAuth2Service
@@ -41,18 +41,23 @@ device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9
                         ]
 
 '''
-device_serial_numbers = [ '636D394CDEBF45BB91FAD12B5BC473A5']
+device_serial_numbers = [ '636D394CDEBF45BB91FAD12B5BC473A5', 'FEB3FC58AB2B4E5A88A5FE3381D3522D', '34E320948EF746AF98EF8AF6E72F2996']
 print()
 
 #print("Header:{0} Data:{1}\n".format(headers1, data))
 #print(device_list)
 
-MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[0])
+#MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[0])
+WineCellarTHsensor =  YoLinkTHsensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[1])
+PoolTHsensor =  YoLinkTHsensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[2])
+
 #MultiOutput.setOutletState([1, 0], 'ON')
 #MultiOutput.setOutletState([0], 'off')
-MultiOutput.refreshMultiOutletState()
-MultiOutput.refreshMultiOutletSchedule()
-MultiOutput.getMultiOutletVersion()
+#MultiOutput.refreshMultiOutletState()
+#MultiOutput.refreshMultiOutletSchedule()
+#MultiOutput.getMultiOutletVersion()
+WineCellarTHsensor.refreshTHsensor()
+PoolTHsensor.refreshTHsensor()
 
 #yolink_client.connect_to_broker()
 '''
