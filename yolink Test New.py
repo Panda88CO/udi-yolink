@@ -48,10 +48,10 @@ print()
 #print(device_list)
 
 MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[0])
-MultiOutput.setOutletState([1, 0], 'ON')
+#MultiOutput.setOutletState([1, 0], 'ON')
 #MultiOutput.setOutletState([0], 'off')
-MultiOutput.getOutletState()
-
+MultiOutput.refreshOutletState()
+MultiOutput.refreshOutletSchedule()
 
 #yolink_client.connect_to_broker()
 '''

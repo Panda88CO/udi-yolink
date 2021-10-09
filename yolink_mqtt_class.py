@@ -4,6 +4,9 @@ import os
 import sys
 import time
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 import paho.mqtt.client as mqtt
 #from logger import getLogger
 #log = getLogger(__name__)
@@ -19,7 +22,6 @@ class YoLinkMQTTDevice(YoLinkDevice):
         super().__init__( yolink_URL, csid, csseckey, serial_num)
         self.uniqueID = serial_num[0:10]
         self.clientId = str(csName+'_'+ self.uniqueID )     
-        #YoLinkMQTTClient.__init__(self,  csid, csseckey, mqtt_URL, mqtt_port, self.clientId )
         self.build_device_api_request_data()
         self.enable_device_api()
         self.csid = csid
@@ -37,6 +39,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.dataQueue = Queue()
         self.eventQueue = Queue()
         self.data= {}
+        #self.eventData = {}
         self.client = mqtt.Client(self.clientId,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
@@ -51,133 +54,141 @@ class YoLinkMQTTDevice(YoLinkDevice):
         """
         Connect to MQTT broker
         """
-        print("Connecting to broker...")
+        logging.info("Connecting to broker...")
         self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
         self.client.connect(self.mqtt_url, self.mqtt_port, 30)
-        print ('connect:')
+        logging.debug ('connect:')
         self.client.loop_start()
         #self.client.loop_forever()
-        #print('loop started')
+        #logging.debug('loop started')
         time.sleep(1)
      
     def on_message(self, client, userdata, msg):
         """
         Callback for broker published events
         """
-        print('on_message')
-        #print(client)
-        #print(userdata)
-        #print(msg)
-        #print(msg.topic, msg.payload)
+        logging.debug('on_message')
+        #logging.debug(client)
+        #logging.debug(userdata)
+        #logging.debug(msg)
+        #logging.debug(msg.topic, msg.payload)
         payload = json.loads(msg.payload.decode("utf-8"))
         if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
             if payload['deviceId'] == self.targetId:
                 self.eventQueue.put(payload)
             else:
-                print ('\n report on differnt device : ' + msg.topic)
-                print (payload)
-                print('\n')
+                logging.debug ('\n report on differnt device : ' + msg.topic)
+                logging.debug (payload)
+                logging.debug('\n')
         elif msg.topic == self.topicResp:
                 self.dataQueue.put(payload)
         elif msg.topic == self.topicReq:
-                print('publishing request' )
-                print (payload)
+                logging.debug('publishing request' )
+                logging.debug (payload)
         else:
-            print(msg.topic,  self.topicReport, self.topicReportAll )
+            logging.debug(msg.topic,  self.topicReport, self.topicReportAll )
         '''
         
         if payload['deviceId'] == self.targetId:
             self.dataQueue.put(payload)
 
-        print(payload)
+        logging.debug(payload)
         test = self.dataQueue.put(payload)
-        print (test)
+        logging.debug (test)
         res = self.dataQueue.get(payload)
-        print (res)
+        logging.debug (res)
         test = self.dataQueue.put(payload)
-        print (test)    
-        #print('data Queue' )
-        #print(self.dataQueue)
+        logging.debug (test)    
+        #logging.debug('data Queue' )
+        #logging.debug(self.dataQueue)
 
         #event = payload['event']
         #deviceId = payload['deviceId']
         #state = payload['data']['state']
         '''
-        #print("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
+        #logging.debug("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
     
     def on_connect(self, client, userdata, flags, rc):
         """
         Callback for connection to broker
         """
-        print("Connected with result code %s" % rc)
-        #print( client,  userdata, flags)
+        logging.debug("Connected with result code %s" % rc)
+        #logging.debug( client,  userdata, flags)
 
         if (rc == 0):
-            print("Successfully connected to broker %s" % self.mqtt_url)
+            logging.debug("Successfully connected to broker %s" % self.mqtt_url)
 
         else:
-            print("Connection with result code %s" % rc);
+            logging.debug("Connection with result code %s" % rc);
             sys.exit(2)
         time.sleep(1)
-        print('Subsribe: ' + self.topicResp + ', '+self.topicReport+', '+ self.topicReportAll )
+        logging.debug('Subsribe: ' + self.topicResp + ', '+self.topicReport+', '+ self.topicReportAll )
         test1 = self.client.subscribe(self.topicResp)
-        #print(test1)
+        #logging.debug(test1)
         test2 = self.client.subscribe(self.topicReport)
-        #print(test2)
+        #logging.debug(test2)
         test3 = self.client.subscribe(self.topicReportAll)
-        #print(test3)
+        #logging.debug(test3)
 
     def on_disconnect(self, client, userdata,rc=0):
-        print('Disconnect - stop loop')
+        logging.debug('Disconnect - stop loop')
         self.client.loop_stop()
 
     def on_subscribe(self, client, userdata, mID, granted_QOS):
-        print()
-        print('on_subscribe called')
-        print('client = ' + str(client))
-        print('userdata = ' + str(userdata))
-        print('mID = '+str(mID))
-        print('Granted QoS: ' +  str(granted_QOS))
-        print('\n')
+        logging.debug('on_subscribe')
+        logging.debug('on_subscribe called')
+        logging.debug('client = ' + str(client))
+        logging.debug('userdata = ' + str(userdata))
+        logging.debug('mID = '+str(mID))
+        logging.debug('Granted QoS: ' +  str(granted_QOS))
+        logging.debug('\n')
 
     def on_publish(self, client, userdata, mID):
-        print('on_publish')
-        #print('client = ' + str(client))
-        #print('userdata = ' + str(userdata))
-        print('mID = '+str(mID))
-        #print('\n')
+        logging.debug('on_publish')
+        #logging.debug('client = ' + str(client))
+        #logging.debug('userdata = ' + str(userdata))
+        logging.debug('mID = '+str(mID))
+        #logging.debug('\n')
 
 
     def publish_data(self, data):
         #topic1 = csName + '/1/request'
-        #print('Publish: '+ self.topicReq + ' ' + data)
+        #logging.debug('Publish: '+ self.topicReq + ' ' + data)
         data["targetDevice"] =  self.get_id()
         data["token"]= self.get_token()
         dataTemp = str(json.dumps(data))
 
 
         test = self.client.publish(self.topicReq, dataTemp)
-        print(test)
+        logging.debug(test)
         
     def shurt_down(self):
         self.client.loop_stop()
 
-    def request_data(self, messageId):
-        
-        expirationTime = time.time*1000-60*60*1000 # 1 hour in milisec
+    def getData(self, messageId):
+        expirationTime = time.time()*1000-60*60*1000 # 1 hour in milisec
         while not self.dataQueue.empty():
             temp = (self.dataQueue.get())
             msgId = temp['msgid']
             self.data[msgId] = temp
         for id in self.data: # remove too old data
-            if expirationTime > id:
+            if expirationTime > int(msgId):
                 del self.data[id]
         if messageId in self.data:
             temp = self.data[messageId]
             del self.data[messageId]
-            return(temp)
+            dataOK = (temp['code'] == '000000')
+            return(dataOK, temp)
         else:
             return(None)
     
     def eventMessagePending(self):
+        logging.debug('getEventData')
         return(not self.eventQueue.empty())
+
+    def getEventData(self):
+        logging.debug('getEventData')
+        temp = (self.eventQueue.get())
+        return(temp)
+
+    
