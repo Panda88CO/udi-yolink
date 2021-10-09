@@ -27,10 +27,12 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                             ,'delays':{'lastTime':startTime}
                             ,'status':{'lastTime':startTime} 
                             }
-        self.connect_to_broker()
-        dataOK = self.refreshOutletState() # needed to get number of ports on device
-        dataOK = self.refreshOutletSchedule()
         self.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+
+        self.connect_to_broker()
+        dataOK = self.refreshMultiOutletState() # needed to get number of ports on device
+        dataOK = self.refreshMultiOutletSchedule()
+     
 
     def updateStatus(self, data):
         logging.debug('updateStatus')
@@ -66,29 +68,36 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                                 self.multiOutlet['state'][port] = 'UNKNOWN'
                         self.multiOutlet['state']['lastTime'] = data['time']
                 if  data['method'] == 'MultiOutlet.getSchedules':
-                     if int(data['time']) > int(self.multiOutlet['schedule']['lastTime']):
-                         for scheduleNbr in data['data']:
-                             for index in data['data'][scheduleNbr]:
-                                if index not in  self.multiOutlet['schedule']:
+                    if int(data['time']) > int(self.multiOutlet['schedule']['lastTime']):
+                        for scheduleNbr in data['data']:
+                             for item in data['data'][scheduleNbr]:
+                                if scheduleNbr not in  self.multiOutlet['schedule']:
                                     self.multiOutlet['schedule'][scheduleNbr] = {}
-                                if index == 'isValid':
-                                     self.multiOutlet['schedule'][scheduleNbr]['Enabled']= data['data'][scheduleNbr][index]
-                                elif index == 'ch':
-                                     self.multiOutlet['schedule'][scheduleNbr]['port']= data['data'][scheduleNbr][index]
-                                elif index == 'week':
+                                if item == 'isValid':
+                                     self.multiOutlet['schedule'][scheduleNbr]['Enabled']= data['data'][scheduleNbr][item]
+                                elif item == 'ch':
+                                     self.multiOutlet['schedule'][scheduleNbr]['port']= data['data'][scheduleNbr][item]
+                                elif item == 'week':
                                     temp = []
                                     if 'days' not in self.multiOutlet['schedule'][scheduleNbr]:
                                         self.multiOutlet['schedule'][scheduleNbr]['days'] = []
                                     for i in range(0,6):
                                         mask = pow(2,i)
-                                        if (data['data'][scheduleNbr][index]  & mask) != 0 :
+                                        if (data['data'][scheduleNbr][item]  & mask) != 0 :
                                              self.multiOutlet['schedule'][scheduleNbr]['days'].append(self.daysOfWeek[i])
-                                elif index == 'index':
+                                elif item == 'index':
                                     continue # do nothing
                                 else:    
-                                    self.multiOutlet['schedule'][scheduleNbr][index]= data['data'][scheduleNbr][index]
+                                    self.multiOutlet['schedule'][scheduleNbr][item]= data['data'][scheduleNbr][item]
+                        self.multiOutlet['schedule']['lastTime'] = data['time']
+                if  data['method'] == 'MultiOutlet.getVersion':
+                    if int(data['time']) > int(self.multiOutlet['status']['lastTime']):
+                        
+                        #for item in data['data']:
 
-                
+
+                        self.multiOutlet['status']['version'] = data['version']                             
+                        self.multiOutlet['status']['lastTime'] = data['time']
             else:
                 #data['method'] == 'MultiOutlet.getState' and data['code'] == '000000':
                 logging.debug('Not supported yet' )
@@ -108,8 +117,8 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         else:
             logging.error('unsupported data')
 
-    def refreshOutletState(self):
-        logging.debug('getOutletState')
+    def refreshMultiOutletState(self):
+        logging.debug('refreshMultiOutletState')
         data={}
         data['method'] = 'MultiOutlet.getState'
         data['time'] = str(int(time.time())*1000)
@@ -124,7 +133,8 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
             self.updateStatus(rxdata) 
         return(dataOK)
 
-    def setOutletState(self, portList, value):
+    def setMultiOutletState(self, portList, value):
+        logging.debug('setMultiOutletState')
         # portlist a a listof ports being changed port range 0-7
         # vaue is state that need to change 2 (ON/OFF)
         port = 0
@@ -155,8 +165,8 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         return(dataOK)
 
     
-    def refreshOutletSchedule(self):
-        print('getOutletSchedule')
+    def refreshMultiOutletSchedule(self):
+        logging.debug('getMultiOutletSchedule')
         data={}
         data['method'] = 'MultiOutlet.getSchedules'
         data['time'] = str(int(time.time())*1000)
@@ -171,18 +181,30 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
             self.updateStatus(eventData)
         return(dataOK)
 
-    def setOutletSchedule(self):
-        print('setOutletSchedule')
+    def setMultiOutletSchedule(self):
+        logging.debug('setMultiOutletSchedule - not supported yet')
 
-    def setOutletDelay(self):
-        print('setOutletDelay')
+    def setMultiOutletDelay(self):
+        logging.debug('setMultiOutletDelay - not supported yet')
 
-    def getOutletVersion(self):
-        print('getOutletVersion')
-
+    def getMultiOutletVersion(self):
+        logging.debug('getMultiOutletVersion - not supported yet')
+        data={}
+        data['method'] = 'MultiOutlet.getVersion'
+        data['time'] = str(int(time.time())*1000)
+        self.publish_data(data)
+        time.sleep(2)
+       
+        dataOK,  rxdata = self.getData(data["time"])
+        if dataOK:
+            self.updateStatus(rxdata)
+        while self.eventMessagePending():
+            eventData = self.getEventData()
+            self.updateStatus(eventData)
+        return(dataOK)
     def startUpgrade(self):
-        print('startUpgrade')
+        logging.debug('startUpgrade')
 
     def checkStatusChanges(self):
-        print('checkStatusChanges')
+        logging.debug('checkStatusChanges')
 
