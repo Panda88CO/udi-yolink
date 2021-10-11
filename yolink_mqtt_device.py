@@ -3,7 +3,7 @@ import json
 import os
 import sys
 import time
-
+import threading
 import paho.mqtt.client as mqtt
 import logging
 
@@ -23,16 +23,32 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         self.multiOutlet = {
                              'nbrPorts': -1
                             ,'state':{'lastTime':startTime}
-                            ,'schedule':{'lastTime':startTime}
+                            ,'schedules':{'lastTime':startTime}
                             ,'delays':{'lastTime':startTime}
                             ,'status':{'lastTime':startTime} 
                             }
         self.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+        self.delayList = []
+        self.scheduleList = []
 
         self.connect_to_broker()
         dataOK = self.refreshMultiOutletState() # needed to get number of ports on device
         dataOK = self.refreshMultiOutletSchedule()
      
+    def getMultiOutLetState (self):
+        return(self.multiOutlet['state'])
+
+    def getMultiOutLetSchedules (self):
+        return(self.multiOutlet['schedules'])  
+
+    def getMultiOutLetDelays (self):
+        return(self.multiOutlet['delays'])  
+
+    def getMultiOutLetStatus (self):
+        return(self.multiOutlet['status'])
+
+    def getgetMultiOutLetAll(self):  
+        return(self.multiOutlet)
 
     def updateStatus(self, data):
         logging.debug('updateStatus')
@@ -68,28 +84,28 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                                 self.multiOutlet['state'][port] = 'UNKNOWN'
                         self.multiOutlet['state']['lastTime'] = data['time']
                 if  data['method'] == 'MultiOutlet.getSchedules':
-                    if int(data['time']) > int(self.multiOutlet['schedule']['lastTime']):
+                    if int(data['time']) > int(self.multiOutlet['schedules']['lastTime']):
                         for scheduleNbr in data['data']:
                              for item in data['data'][scheduleNbr]:
-                                if scheduleNbr not in  self.multiOutlet['schedule']:
-                                    self.multiOutlet['schedule'][scheduleNbr] = {}
+                                if scheduleNbr not in  self.multiOutlet['schedules']:
+                                    self.multiOutlet['schedules'][scheduleNbr] = {}
                                 if item == 'isValid':
-                                     self.multiOutlet['schedule'][scheduleNbr]['Enabled']= data['data'][scheduleNbr][item]
+                                     self.multiOutlet['schedules'][scheduleNbr]['Enabled']= data['data'][scheduleNbr][item]
                                 elif item == 'ch':
-                                     self.multiOutlet['schedule'][scheduleNbr]['port']= data['data'][scheduleNbr][item]
+                                     self.multiOutlet['schedules'][scheduleNbr]['port']= data['data'][scheduleNbr][item]
                                 elif item == 'week':
                                     temp = []
-                                    if 'days' not in self.multiOutlet['schedule'][scheduleNbr]:
-                                        self.multiOutlet['schedule'][scheduleNbr]['days'] = []
+                                    if 'days' not in self.multiOutlet['schedules'][scheduleNbr]:
+                                        self.multiOutlet['schedules'][scheduleNbr]['days'] = []
                                     for i in range(0,6):
                                         mask = pow(2,i)
                                         if (data['data'][scheduleNbr][item]  & mask) != 0 :
-                                             self.multiOutlet['schedule'][scheduleNbr]['days'].append(self.daysOfWeek[i])
+                                             self.multiOutlet['schedules'][scheduleNbr]['days'].append(self.daysOfWeek[i])
                                 elif item == 'index':
                                     continue # do nothing
                                 else:    
-                                    self.multiOutlet['schedule'][scheduleNbr][item]= data['data'][scheduleNbr][item]
-                        self.multiOutlet['schedule']['lastTime'] = data['time']
+                                    self.multiOutlet['schedules'][scheduleNbr][item]= data['data'][scheduleNbr][item]
+                        self.multiOutlet['schedules']['lastTime'] = data['time']
                 if  data['method'] == 'MultiOutlet.getVersion':
                     if int(data['time']) > int(self.multiOutlet['status']['lastTime']):
                         
@@ -158,13 +174,14 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         dataOK, rxdata = self.getData(data['time'])
         if dataOK:
             self.updateStatus(rxdata)
-            messagetime = rxdata['time']
+            #messagetime = rxdata['time']
         while self.eventMessagePending():
-            eventData = self.getEventData()
-            self.updateStatus(eventData)
+            msgId= self.getEventMsgId()
+            dataOK,  rxdata = self.getData(msgId)
+            if dataOK:
+                self.updateStatus(rxdata)
         return(dataOK)
-
-    
+   
     def refreshMultiOutletSchedule(self):
         logging.debug('getMultiOutletSchedule')
         data={}
@@ -177,18 +194,70 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         if dataOK:
             self.updateStatus(rxdata)
         while self.eventMessagePending():
-            eventData = self.getEventData()
-            self.updateStatus(eventData)
+            msgId= self.getEventMsgId()
+            dataOK,  rxdata = self.getData(msgId)
+            if dataOK:
+                self.updateStatus(rxdata)
         return(dataOK)
 
-    def setMultiOutletSchedule(self):
-        logging.debug('setMultiOutletSchedule - not supported yet')
+    def setMultiOutletSchedule(self, scheduleList):
+        logging.debug('setMultiOutletSchedule - not currently supported')
+        data={}
+        data["method"] = 'MultiOutlet.setSchedules'
+        data["time"] = str(int(time.time())*1000)
+        data["params"] = {}
+        #data["params"]["chs"] =  port
+        #data["params"]['state'] = state
 
-    def setMultiOutletDelay(self):
-        logging.debug('setMultiOutletDelay - not supported yet')
+        self.publish_data(data)
+        time.sleep(2)
+        dataOK, rxdata = self.getData(data['time'])
+        if dataOK:
+            self.updateStatus(rxdata)
+            #messagetime = rxdata['time']
+        while self.eventMessagePending():
+            msgId= self.getEventMsgId()
+            dataOK,  rxdata = self.getData(msgId)
+            if dataOK:
+                self.updateStatus(rxdata)
+        return(dataOK)
 
-    def getMultiOutletVersion(self):
-        logging.debug('getMultiOutletVersion - not supported yet')
+    def resetDelayList (self):
+        self.delayList = []
+
+    def appedMultiOutletDelay(self, delay):
+        nbrDelays = len(self.delayList)
+        self
+
+    def setMultiOutletDelay(self, delayList):
+        logging.debug('setMultiOutletDelay - not currently supported')
+        data={}
+        data["method"] = 'MultiOutlet.setDelay'
+        data["time"] = str(int(time.time())*1000)
+        data["params"] = []
+        nbrDelays = len(delayList)
+        data["params"]["delays"] = {}
+        if nbrDelays > 0:
+            for delayNbr in delayList:
+                data["params"]["delays"][delayNbr]={}
+                data["params"]["delays"][delayNbr]['ch'] = delayList[delayNbr]['port']
+                data["params"]['delays'][delayNbr]['on'] = delayList[delayNbr]['OnDelay']
+                data["params"]['delays'][delayNbr]['off'] = delayList[delayNbr]['OffDelay']
+        self.publish_data(data)
+        time.sleep(2)
+        dataOK, rxdata = self.getData(data['time'])
+        if dataOK:
+            self.updateStatus(rxdata)
+            #messagetime = rxdata['time']
+        while self.eventMessagePending():
+            msgId= self.getEventMsgId()
+            dataOK,  rxdata = self.getData(msgId)
+            if dataOK:
+                self.updateStatus(rxdata)
+        return(dataOK)
+
+    def refreshMultiOutletVersion(self):
+        logging.debug('getMultiOutletVersion - not currently supported ')
         data={}
         data['method'] = 'MultiOutlet.getVersion'
         data['time'] = str(int(time.time())*1000)
@@ -202,12 +271,14 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
             eventData = self.getEventData()
             self.updateStatus(eventData)
         return(dataOK)
-    def startUpgrade(self):
-        logging.debug('startUpgrade')
 
+
+    def startUpgrade(self):
+        logging.debug('startUpgrade - not currently supported')
+    '''
     def checkStatusChanges(self):
         logging.debug('checkStatusChanges')
-
+    '''
 
 
 class YoLinkTHsensor(YoLinkMQTTDevice):
@@ -215,13 +286,24 @@ class YoLinkTHsensor(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
-        self.THsensor = {
-                         'state':{'lastTime':startTime}
-                        ,'status':{'lastTime':startTime} 
-                        }
-
+        self.THSensor = {'lastTime':startTime}
+        
         self.connect_to_broker()
+        MonitorT = threading.Thread(target = self.eventMonitorThread)
+        self.mutex = threading.Lock()
+        self.forceStop = False
 
+    def eventMonitorThread (self, updateInterval = 3):
+        time.sleep(5)
+        while not self.forceStop:
+            while self.eventMessagePending():
+                msgId= self.getEventMsgId()
+                dataOK,  rxdata = self.getData(msgId)
+                if dataOK:
+                    self.mutex.acquire()
+                    self.updateStatus(rxdata)
+                    self.mutex.release()
+        time.sleep(updateInterval)    
 
 
     def refreshTHsensor(self):
@@ -233,15 +315,74 @@ class YoLinkTHsensor(YoLinkMQTTDevice):
         time.sleep(2)
         rxdata = self.getData(data["time"])
         if rxdata[0]:
-            for sensor in range(1,len(rxdata) ):
-                sensorData = rxdata[sensor]
-                if 'code' in  sensorData:
-                    if sensorData['code'] == '000000':
-                        self.updateStatus(sensorData) 
+             # data structure seems to indicate more than 1 sensor but even only returns 1 and no way to identify origen
+            self.mutex.acquire()
+            self.updateStatus(rxdata[1])
+            self.mutex.release()
         return(rxdata[0])
 
     def updateStatus(self, data):
-        logging.debug('updateStatus')    
+        logging.debug('updateStatus')  
+        if 'method' in  data:
+            if  (data['method'] == 'THSensor.getState' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.THSensor['lastTime']):
+                    self.THSensor['online'] = data['data']['online']
+                        
+                    self.THSensor['tempC'] = data['data']['state']['temperature']
+                    self.THSensor['tempCorrectionC'] = data['data']['state']['tempCorrection']
+                    self.THSensor['tempLimitMinC'] = data['data']['state']['tempLimit']['min']
+                    self.THSensor['tempLimitMaxC'] = data['data']['state']['tempLimit']['max']
 
+                    self.THSensor['humidity'] = data['data']['state']['humidity']
+                    self.THSensor['humidityCorrection'] = data['data']['state']['humidityCorrection']
+                    self.THSensor['humidityLimitMin'] = data['data']['state']['humidityLimit']['min']
+                    self.THSensor['humidityLimitMax'] = data['data']['state']['humidityLimit']['max']
+
+                    self.THSensor['alertInterval'] = data['data']['state']['interval']
+                    self.THSensor['battery'] = data['data']['state']['battery']
+                    self.THSensor['state'] = data['data']['state']['state']
+                    self.THSensor['FWvers'] = data['data']['state']['version']
+                    
+                    self.THSensor['alamrs'] = {}
+                    self.THSensor['alamrs']['battery'] =  data['data']['state']['alarm']['lowBattery']
+                    self.THSensor['alamrs']['lowTemp'] =  data['data']['state']['alarm']['lowTemp']
+                    self.THSensor['alamrs']['highTemp'] =  data['data']['state']['alarm']['highTemp']
+                    self.THSensor['alamrs']['lowHumidity'] =  data['data']['state']['alarm']['lowHumidity']
+                    self.THSensor['alamrs']['highHumidity'] =  data['data']['state']['alarm']['highHumidity']
+                    self.THSensor['lastTime'] = str(data['time'])
+        elif 'event' in data:
+            if int(data['time']) > int(self.THSensor['lastTime']):
+                self.THSensor['online'] = True
+                    
+                self.THSensor['tempC'] = data['data']['temperature']
+                self.THSensor['tempCorrectionC'] = data['data']['temperatureCorrection']
+                self.THSensor['tempLimitMinC'] = data['data']['tempLimit']['min']
+                self.THSensor['tempLimitMaxC'] = data['data']['tempLimit']['max']
+
+                self.THSensor['humidity'] = data['data']['humidity']
+                self.THSensor['humidityCorrection'] = data['data']['humidityCorrection']
+                self.THSensor['humidityLimitMin'] = data['data']['humidityLimit']['min']
+                self.THSensor['humidityLimitMax'] = data['data']['humidityLimit']['max']
+
+                self.THSensor['alertInterval'] = data['data']['interval']
+                self.THSensor['battery'] = data['data']['battery']
+                self.THSensor['state'] = data['data']['state']
+                self.THSensor['FWvers'] = data['data']['version']
+                
+                self.THSensor['alamrs'] = {}
+                self.THSensor['alamrs']['battery'] =  data['data']['alarm']['lowBattery']
+                self.THSensor['alamrs']['lowTemp'] =  data['data']['alarm']['lowTemp']
+                self.THSensor['alamrs']['highTemp'] =  data['data']['alarm']['highTemp']
+                self.THSensor['alamrs']['lowHumidity'] =  data['data']['alarm']['lowHumidity']
+                self.THSensor['alamrs']['highHumidity'] =  data['data']['alarm']['highHumidity']
+
+                self.THSensor['signaldB'] =  data['data']['loraInfo']['signal']           
+                self.THSensor['lastTime'] = str(data['time'])    
+        else:
+            logging.error('unsupported data')
+
+    '''
     def checkStatusChanges(self):
         logging.debug('checkStatusChanges')
+        return(self.eventMessagePending())
+    '''

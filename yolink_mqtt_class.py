@@ -75,7 +75,8 @@ class YoLinkMQTTDevice(YoLinkDevice):
         payload = json.loads(msg.payload.decode("utf-8"))
         if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
             if payload['deviceId'] == self.targetId:
-                self.eventQueue.put(payload)
+                self.eventQueue.put(payload['msgid'])
+                self.dataQueue.put(payload)
             else:
                 logging.debug ('\n report on differnt device : ' + msg.topic)
                 logging.debug (payload)
@@ -186,8 +187,8 @@ class YoLinkMQTTDevice(YoLinkDevice):
         logging.debug('getEventData')
         return(not self.eventQueue.empty())
 
-    def getEventData(self):
-        logging.debug('getEventData')
+    def getEventMsgId(self):
+        logging.debug('getEventMsgId')
         temp = (self.eventQueue.get())
         return(temp)
 

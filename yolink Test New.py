@@ -58,7 +58,10 @@ PoolTHsensor =  YoLinkTHsensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003
 #MultiOutput.getMultiOutletVersion()
 WineCellarTHsensor.refreshTHsensor()
 PoolTHsensor.refreshTHsensor()
+while True :
+    time.sleep(10)
 
+print('end')
 #yolink_client.connect_to_broker()
 '''
 
