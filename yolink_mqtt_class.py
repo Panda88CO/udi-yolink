@@ -167,7 +167,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.client.loop_stop()
 
     def getData(self, messageId):
-        expirationTime = time.time()*1000-60*60*1000 # 1 hour in milisec
+        expirationTime = int(time.time()*1000-60*60*1000) # 1 hour in milisec
         while not self.dataQueue.empty():
             temp = (self.dataQueue.get())
             msgId = temp['msgid']
@@ -178,7 +178,10 @@ class YoLinkMQTTDevice(YoLinkDevice):
         if messageId in self.data:
             temp = self.data[messageId]
             del self.data[messageId]
-            dataOK = (temp['code'] == '000000')
+            if 'event' in temp:
+                dataOK = True
+            if 'method' in temp:
+                dataOK = temp['code'] == '000000'
             return(dataOK, temp)
         else:
             return(None)

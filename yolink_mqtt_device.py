@@ -32,9 +32,29 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         self.scheduleList = []
 
         self.connect_to_broker()
+        MonitorMO = threading.Thread(target = self.eventMonitorThread)
+        MonitorMO.start()
+        self.mutex = threading.Lock()
+        self.forceStop = False
+
         dataOK = self.refreshMultiOutletState() # needed to get number of ports on device
         dataOK = self.refreshMultiOutletSchedule()
-     
+
+
+    def eventMonitorThread (self, updateInterval = 3):
+        time.sleep(5)
+        while not self.forceStop:
+            while self.eventMessagePending():
+                msgId= self.getEventMsgId()
+                dataOK,  rxdata = self.getData(msgId)
+                if dataOK:
+                    self.mutex.acquire()
+                    self.updateStatus(rxdata)
+                    self.mutex.release()
+            time.sleep(updateInterval) 
+            logging.debug('MultiOutput Check')  
+
+
     def getMultiOutLetState (self):
         return(self.multiOutlet['state'])
 
@@ -140,13 +160,11 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         data['time'] = str(int(time.time())*1000)
         self.publish_data(data)
         time.sleep(2)
-        rxdata = self.getData(data["time"])
-        dataOK = False
-
-        if 'code' in  rxdata:
-            if rxdata['code'] == '000000':
-                dataOK = True
-            self.updateStatus(rxdata) 
+        dataOK, rxdata = self.getData(data["time"])
+        if  dataOK:
+            self.mutex.acquire()
+            self.updateStatus(rxdata)
+            self.mutex.release()
         return(dataOK)
 
     def setMultiOutletState(self, portList, value):
@@ -173,13 +191,9 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         time.sleep(2)
         dataOK, rxdata = self.getData(data['time'])
         if dataOK:
+            self.mutex.acquire()
             self.updateStatus(rxdata)
-            #messagetime = rxdata['time']
-        while self.eventMessagePending():
-            msgId= self.getEventMsgId()
-            dataOK,  rxdata = self.getData(msgId)
-            if dataOK:
-                self.updateStatus(rxdata)
+            self.mutex.release()
         return(dataOK)
    
     def refreshMultiOutletSchedule(self):
@@ -192,12 +206,9 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
        
         dataOK,  rxdata = self.getData(data["time"])
         if dataOK:
+            self.mutex.acquire()
             self.updateStatus(rxdata)
-        while self.eventMessagePending():
-            msgId= self.getEventMsgId()
-            dataOK,  rxdata = self.getData(msgId)
-            if dataOK:
-                self.updateStatus(rxdata)
+            self.mutex.release()
         return(dataOK)
 
     def setMultiOutletSchedule(self, scheduleList):
@@ -213,13 +224,9 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         time.sleep(2)
         dataOK, rxdata = self.getData(data['time'])
         if dataOK:
+            self.mutex.acquire()
             self.updateStatus(rxdata)
-            #messagetime = rxdata['time']
-        while self.eventMessagePending():
-            msgId= self.getEventMsgId()
-            dataOK,  rxdata = self.getData(msgId)
-            if dataOK:
-                self.updateStatus(rxdata)
+            self.mutex.release()
         return(dataOK)
 
     def resetDelayList (self):
@@ -247,13 +254,9 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         time.sleep(2)
         dataOK, rxdata = self.getData(data['time'])
         if dataOK:
+            self.mutex.acquire()
             self.updateStatus(rxdata)
-            #messagetime = rxdata['time']
-        while self.eventMessagePending():
-            msgId= self.getEventMsgId()
-            dataOK,  rxdata = self.getData(msgId)
-            if dataOK:
-                self.updateStatus(rxdata)
+            self.mutex.release()
         return(dataOK)
 
     def refreshMultiOutletVersion(self):
@@ -263,13 +266,12 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         data['time'] = str(int(time.time())*1000)
         self.publish_data(data)
         time.sleep(2)
-       
-        dataOK,  rxdata = self.getData(data["time"])
+        self.mutex.acquire()
+        dataOK, rxdata = self.getData(data["time"])
         if dataOK:
+            
             self.updateStatus(rxdata)
-        while self.eventMessagePending():
-            eventData = self.getEventData()
-            self.updateStatus(eventData)
+        self.mutex.release()
         return(dataOK)
 
 
@@ -281,7 +283,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
     '''
 
 
-class YoLinkTHsensor(YoLinkMQTTDevice):
+class YoLinkTHSensor(YoLinkMQTTDevice):
 
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
@@ -290,8 +292,11 @@ class YoLinkTHsensor(YoLinkMQTTDevice):
         
         self.connect_to_broker()
         MonitorT = threading.Thread(target = self.eventMonitorThread)
+        MonitorT.start()
         self.mutex = threading.Lock()
         self.forceStop = False
+        self.refreshTHSensor()
+
 
     def eventMonitorThread (self, updateInterval = 3):
         time.sleep(5)
@@ -303,23 +308,24 @@ class YoLinkTHsensor(YoLinkMQTTDevice):
                     self.mutex.acquire()
                     self.updateStatus(rxdata)
                     self.mutex.release()
-        time.sleep(updateInterval)    
+            time.sleep(updateInterval) 
+            logging.debug('THsensor Check')  
 
 
-    def refreshTHsensor(self):
+    def refreshTHSensor(self):
         logging.debug('refreshTHsensor')
         data={}
         data['method'] = 'THSensor.getState'
         data['time'] = str(int(time.time())*1000)
         self.publish_data(data)
         time.sleep(2)
-        rxdata = self.getData(data["time"])
-        if rxdata[0]:
-             # data structure seems to indicate more than 1 sensor but even only returns 1 and no way to identify origen
-            self.mutex.acquire()
-            self.updateStatus(rxdata[1])
-            self.mutex.release()
-        return(rxdata[0])
+        self.mutex.acquire()
+        dataOK, rxdata = self.getData(data["time"])
+        if dataOK:
+            
+            self.updateStatus(rxdata)
+        self.mutex.release()
+        return(dataOK)
 
     def updateStatus(self, data):
         logging.debug('updateStatus')  
@@ -381,8 +387,101 @@ class YoLinkTHsensor(YoLinkMQTTDevice):
         else:
             logging.error('unsupported data')
 
+    def getTHSensorInfoAll(self):
+        return(self.THSensor)
+
+    def getTHSensorTemp(self):
+        return(self.THSensor['tempC'])
+
+    def getTHSensorHumidity(self):
+        return(self.THSensor['humidity'])
+
+    def getTHSensorState(self):
+        return(self.THSensor['state'])
     '''
     def checkStatusChanges(self):
         logging.debug('checkStatusChanges')
         return(self.eventMessagePending())
     '''
+class YoLinkWaterSensor(YoLinkMQTTDevice):
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
+        startTime = str(int(time.time()*1000))
+        self.WaterSensor = {'lastTime':startTime}
+        
+        self.connect_to_broker()
+        MonitorW = threading.Thread(target = self.eventMonitorThread)
+        MonitorW.start()
+        self.mutex = threading.Lock()
+        self.forceStop = False
+        self.refreshWaterSensor()
+
+    def eventMonitorThread (self, updateInterval = 5):
+        time.sleep(5)
+        while not self.forceStop:
+            while self.eventMessagePending():
+                msgId= self.getEventMsgId()
+                self.mutex.acquire()
+                dataOK,  rxdata = self.getData(msgId)
+                if dataOK:
+                    
+                    self.updateStatus(rxdata)
+                self.mutex.release()
+
+            time.sleep(updateInterval)    
+            logging.debug('Water checking')
+
+    def refreshWaterSensor(self):
+        logging.debug('refreshWaterSensor')
+        data={}
+        data['method'] = 'LeakSensor.getState'
+        data['time'] = str(int(time.time())*1000)
+        self.publish_data(data)
+        time.sleep(4)
+        dataOK, rxdata = self.getData(data["time"])
+        if dataOK:
+             # data structure seems to indicate more than 1 sensor but even only returns 1 and no way to identify origen
+            self.mutex.acquire()
+            self.updateStatus(rxdata)
+            self.mutex.release()
+        return(dataOK)
+
+    def updateStatus(self, data):
+        logging.debug('updateStatus')  
+        if 'method' in  data:
+            if  (data['method'] == 'LeakSensor.getState' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.WaterSensor['lastTime']):
+                    self.WaterSensor['online'] = data['data']['online']
+                    self.WaterSensor['state'] = data['data']['state']['state']
+                    self.WaterSensor['stateChangedAt'] = data['data']['state']['stateChangedAt']                    
+                    self.WaterSensor['sensorMode'] = data['data']['state']['sensorMode']
+                    self.WaterSensor['beep'] = data['data']['state']['beep']
+                    self.WaterSensor['alertInterval'] = data['data']['state']['interval']
+                    self.WaterSensor['battery'] = data['data']['state']['battery']
+                    self.WaterSensor['suppotChangeMode'] = data['data']['state']['supportChangeMode']
+                    self.WaterSensor['devTemp'] = data['data']['state']['devTemperature']                    
+                    self.WaterSensor['FWvers'] = data['data']['state']['version']
+                    self.WaterSensor['lastTime'] = str(data['time'])
+        elif 'event' in data:
+            if int(data['time']) > int(self.WaterSensor['lastTime']):
+                self.WaterSensor['online'] = True
+                self.WaterSensor['state'] = data['data']['state']
+                self.WaterSensor['stateChangedAt'] = data['data']['stateChangedAt']
+                self.WaterSensor['sensorMode'] = data['data']['sensorMode']
+                self.WaterSensor['beep'] = data['data']['beep']
+                self.WaterSensor['battery'] = data['data']['battery']
+                self.WaterSensor['devTemp'] = data['data']['devTemperature']                    
+                self.WaterSensor['signaldB'] =  data['data']['loraInfo']['signal']       
+                self.WaterSensor['lastTime'] = str(data['time'])
+
+        else:
+            logging.error('unsupported data')
+
+    def getWaterSensorState(self):
+        return(self.WaterSensor['state'])
+
+    def getWaterSensorInfoAll (self):
+        return(self.WaterSensor)
+
+    def getWaterSensorTimeSinceChange(self):
+        return(int(self.WaterSensor['lastTime'])-int(self.WaterSensor['stateChangedAt']))

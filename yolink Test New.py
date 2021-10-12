@@ -13,7 +13,8 @@ import threading
 from yolink_devices import YoLinkDevice
 #from yolink_mqtt_client import YoLinkMQTTClient
 from yolink_mqtt_device import YoLinkMultiOutlet
-from yolink_mqtt_device import YoLinkTHsensor
+from yolink_mqtt_device import YoLinkTHSensor
+from yolink_mqtt_device import YoLinkWaterSensor
 #from oauthlib.oauth2 import BackendApplicationClient
 #from requests.auth import HTTPBasicAuth
 #from rauth import OAuth2Service
@@ -41,23 +42,44 @@ device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9
                         ]
 
 '''
-device_serial_numbers = [ '636D394CDEBF45BB91FAD12B5BC473A5', 'FEB3FC58AB2B4E5A88A5FE3381D3522D', '34E320948EF746AF98EF8AF6E72F2996']
+device_serial_numbers = [ '636D394CDEBF45BB91FAD12B5BC473A5', 'FEB3FC58AB2B4E5A88A5FE3381D3522D', '34E320948EF746AF98EF8AF6E72F2996', 'CED643F4AB7C46F6A180387BD1C756F6']
 print()
 
 #print("Header:{0} Data:{1}\n".format(headers1, data))
 #print(device_list)
 
-#MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[0])
-WineCellarTHsensor =  YoLinkTHsensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[1])
-PoolTHsensor =  YoLinkTHsensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[2])
+MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[0])
+#WineCellarTHSensor =  YoLinkTHSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[1])
+PoolTHSensor =  YoLinkTHSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[2])
+WaterLevel = YoLinkWaterSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[3])
+print(MultiOutput.getMultiOutLetState())
+print(MultiOutput.getMultiOutLetSchedules())
+print(MultiOutput.getMultiOutLetDelays())
+print(MultiOutput.getMultiOutLetStatus())
+print(MultiOutput.getgetMultiOutLetAll())
+
+
+
 
 #MultiOutput.setOutletState([1, 0], 'ON')
 #MultiOutput.setOutletState([0], 'off')
 #MultiOutput.refreshMultiOutletState()
-#MultiOutput.refreshMultiOutletSchedule()
+MultiOutput.refreshMultiOutletSchedule()
+
+
 #MultiOutput.getMultiOutletVersion()
-WineCellarTHsensor.refreshTHsensor()
-PoolTHsensor.refreshTHsensor()
+#WineCellarTHSensor.refreshTHSensor()
+PoolTHSensor.refreshTHSensor()
+print(PoolTHSensor.getTHSensorInfoAll())
+print(PoolTHSensor.getTHSensorTemp())
+print(PoolTHSensor.getTHSensorHumidity())
+print(PoolTHSensor.getTHSensorState())
+
+
+WaterLevel.refreshWaterSensor()
+print(WaterLevel.getWaterSensorState())
+print(WaterLevel.getWaterSensorInfoAll())
+print(WaterLevel.getWaterSensorTimeSinceChange())
 while True :
     time.sleep(10)
 
