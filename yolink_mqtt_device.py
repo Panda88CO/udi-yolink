@@ -353,7 +353,10 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
         return(self.WaterSensor)
 
     def getTimeSinceChange(self):
-        time1 =  datetime.datetime.strptime(self.WaterSensor['stateChangedAt'], '%Y-%m-%dT%H::%M::%S.%fZ').timetuple()
+        time1 = datetime.datetime.strptime(self.WaterSensor['stateChangedAt'], '%Y-%m-%dT%H::%M::%S.%fZ')
+        time2 = time1.timetuple()
+        time3 = datetime.fromtimestamp(self.WaterSensor['lastTime'])
+
         return(int(self.WaterSensor['lastTime']), int(self.WaterSensor['stateChangedAt']), )
 
 class YoLinkManipulator(YoLinkMQTTDevice):
