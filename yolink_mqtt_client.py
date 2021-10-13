@@ -3,6 +3,7 @@ import json
 import os
 import sys
 import time
+import logging
 
 import paho.mqtt.client as mqtt
 #from logger import getLogger
@@ -26,25 +27,25 @@ class YoLinkMQTTClient(object):
         self.client.on_message = self.on_message
         self.client.on_subscribe = self.on_subscribe
 
-        print(self.clientId)
+        logging.debug(self.clientId)
         #self.client.tls_set()
 
     def connect_to_broker(self):
         """
         Connect to MQTT broker
         """
-        print("Connecting to broker...")
+        logging.debug("Connecting to broker...")
 
-        #print(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
+        #logging.debug(hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
         self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
 
         self.client.connect(self.mqtt_url, self.mqtt_port, 10)
         #time.sleep(5)
-        print ('connect:')
+        logging.debug ('connect:')
         self.client.loop_start()
         #
         # self.client.loop_forever()
-        print('loop started')
+        logging.debug('loop started')
 
 
         time.sleep(1)
@@ -54,68 +55,69 @@ class YoLinkMQTTClient(object):
         """
         Callback for broker published events
         """
-        print('on_message')
-        print(msg)
-        print(msg.topic, msg.payload)
+        logging.debug('on_message')
+        logging.debug(msg)
+        logging.debug(msg.topic, msg.payload)
 
         payload = json.loads(msg.payload.decode("utf-8"))
-        print(payload)
+        
+        logging.debug(payload)
     
         #event = payload['event']
         #deviceId = payload['deviceId']
         #state = payload['data']['state']
 
-        #print("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
+        #logging.debug("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
     
     def on_connect(self, client, userdata, flags, rc):
         """
         Callback for connection to broker
         """
-        print("Connected with result code %s" % rc)
-        print( client,  userdata, flags)
+        logging.debug("Connected with result code %s" % rc)
+        logging.debug( client,  userdata, flags)
 
         if (rc == 0):
-            print("Successfully connected to broker %s" % self.mqtt_url)
+            logging.debug("Successfully connected to broker %s" % self.mqtt_url)
 
         else:
-            print("Connection with result code %s" % rc);
+            logging.debug("Connection with result code %s" % rc);
             sys.exit(2)
         time.sleep(1)
-        print('Subsribe: '  + self.topic)
+        logging.debug('Subsribe: '  + self.topic)
         test1 = self.client.subscribe('Panda88/aa/report')
         test2 = self.client.subscribe('Panda88/report')
 
-        print('Panda88/aa/report= ' +str(test1))
-        print('Panda88/report= ' +str(test2))
+        logging.debug('Panda88/aa/report= ' +str(test1))
+        logging.debug('Panda88/report= ' +str(test2))
 
     def on_subscribe(self, client, userdata, mID, granted_QOS):
-        print()
-        print('on_subscribe called')
-        print('client = ' + str(client))
-        print('userdata = ' + str(userdata))
-        print('mID = '+str(mID))
-        print('Granted QoS: ' +  str(granted_QOS))
-        print('\n')
+        logging.debug()
+        logging.debug('on_subscribe called')
+        logging.debug('client = ' + str(client))
+        logging.debug('userdata = ' + str(userdata))
+        logging.debug('mID = '+str(mID))
+        logging.debug('Granted QoS: ' +  str(granted_QOS))
+        logging.debug('\n')
 
     def on_publish(self, client, userdata, mID):
 
-        print('on_publish')
-        print('client = ' + str(client))
-        print('userdata = ' + str(userdata))
-        print('mID = '+str(mID))
-        print('\n')
+        logging.debug('on_publish')
+        logging.debug('client = ' + str(client))
+        logging.debug('userdata = ' + str(userdata))
+        logging.debug('mID = '+str(mID))
+        logging.debug('\n')
 
 
     def publish_data(self, topic, data):
         #topic1 = csName + '/1/request'
-        print('Publish: '+ topic + ' ' + data)
+        logging.debug('Publish: '+ topic + ' ' + data)
         test = self.client.publish(topic, data)
-        print(test)
+        logging.debug(test)
         
     def shurt_down(self):
         self.client.loop_stop()
 
     def subscribe_data(self, topic):
-        print('Subscribe: ' + topic)
+        logging.debug('Subscribe: ' + topic)
         test = self.client.subscribe(topic)
-        print(topic +' = ' + str(test))
+        logging.debug(topic +' = ' + str(test))

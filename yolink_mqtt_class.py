@@ -3,7 +3,7 @@ import json
 import os
 import sys
 import time
-
+import threading
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
@@ -17,7 +17,6 @@ from yolink_devices import YoLinkDevice
 Object representation for YoLink MQTT Client
 """
 class YoLinkMQTTDevice(YoLinkDevice):
-
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
         super().__init__( yolink_URL, csid, csseckey, serial_num)
         self.uniqueID = serial_num[0:10]
@@ -35,17 +34,20 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.mqtt_port = int(mqtt_port)
         self.targetId = self.get_id()
 
+
+        self.forceStop = False
+
    
         self.dataQueue = Queue()
         self.eventQueue = Queue()
-        self.data= {}
+        #self.data= {}
         #self.eventData = {}
         self.client = mqtt.Client(self.clientId,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.on_subscribe = self.on_subscribe
         self.client.on_disconnect = self.on_disconnect
-
+        self.updateInterval = 3
         self.messagePending = False
 
 
@@ -72,10 +74,11 @@ class YoLinkMQTTDevice(YoLinkDevice):
         #logging.debug(userdata)
         #logging.debug(msg)
         #logging.debug(msg.topic, msg.payload)
+        
         payload = json.loads(msg.payload.decode("utf-8"))
         if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
             if payload['deviceId'] == self.targetId:
-                self.eventQueue.put(payload['msgid'])
+                #self.eventQueue.put(payload['msgid'])
                 self.dataQueue.put(payload)
             else:
                 logging.debug ('\n report on differnt device : ' + msg.topic)
@@ -88,25 +91,6 @@ class YoLinkMQTTDevice(YoLinkDevice):
                 logging.debug (payload)
         else:
             logging.debug(msg.topic,  self.topicReport, self.topicReportAll )
-        '''
-        
-        if payload['deviceId'] == self.targetId:
-            self.dataQueue.put(payload)
-
-        logging.debug(payload)
-        test = self.dataQueue.put(payload)
-        logging.debug (test)
-        res = self.dataQueue.get(payload)
-        logging.debug (res)
-        test = self.dataQueue.put(payload)
-        logging.debug (test)    
-        #logging.debug('data Queue' )
-        #logging.debug(self.dataQueue)
-
-        #event = payload['event']
-        #deviceId = payload['deviceId']
-        #state = payload['data']['state']
-        '''
         #logging.debug("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
     
     def on_connect(self, client, userdata, flags, rc):
@@ -152,39 +136,36 @@ class YoLinkMQTTDevice(YoLinkDevice):
         #logging.debug('\n')
 
 
-    def publish_data(self, data):
+    def publish_data(self, data, callback):
         #topic1 = csName + '/1/request'
         #logging.debug('Publish: '+ self.topicReq + ' ' + data)
         data["targetDevice"] =  self.get_id()
         data["token"]= self.get_token()
         dataTemp = str(json.dumps(data))
-
-
+        #self.mutex.acquire()
         test = self.client.publish(self.topicReq, dataTemp)
-        logging.debug(test)
+        #time.sleep(2)
+        #while not self.dataQueue.empty():   
+         #   dataOK, rxdata = self.getData()
+          #  if dataOK:
+           #     callback(rxdata)
+            #self.mutex.release()
         
+                
     def shurt_down(self):
         self.client.loop_stop()
 
-    def getData(self, messageId):
-        expirationTime = int(time.time()*1000-60*60*1000) # 1 hour in milisec
-        while not self.dataQueue.empty():
-            temp = (self.dataQueue.get())
-            msgId = temp['msgid']
-            self.data[msgId] = temp
-        for id in self.data: # remove too old data
-            if expirationTime > int(msgId):
-                del self.data[id]
-        if messageId in self.data:
-            temp = self.data[messageId]
-            del self.data[messageId]
+    def getData(self):
+        #expirationTime = int(time.time()*1000-60*60*1000) # 1 hour in milisec
+        if not(self.dataQueue.empty()):
+            temp = self.dataQueue.get()
             if 'event' in temp:
                 dataOK = True
             if 'method' in temp:
                 dataOK = temp['code'] == '000000'
             return(dataOK, temp)
         else:
-            return(None)
+            return(False, None)
     
     def eventMessagePending(self):
         logging.debug('getEventData')
@@ -195,4 +176,29 @@ class YoLinkMQTTDevice(YoLinkDevice):
         temp = (self.eventQueue.get())
         return(temp)
 
-    
+    def monitorLoop(self, callback, updateInterval):
+        Monitor = threading.Thread(target = self.eventMonitorThread, args = (callback, updateInterval ))
+        Monitor.start()
+        self.mutex = threading.Lock()
+
+    def eventMonitorThread (self, callback, updateInterval):
+        time.sleep(5)
+        while not self.forceStop:
+            while not self.dataQueue.empty():
+                dataOK,  rxdata = self.getData()
+                if dataOK:
+                    callback(rxdata)
+            time.sleep(updateInterval) 
+            logging.debug('THsensor Check')  
+
+
+    def refreshDevice(self, getStr, callback):
+        logging.debug(getStr)  
+        data = {}
+        data['method'] = getStr
+        data['time'] = str(int(time.time())*1000)
+        return(self.publish_data(data, callback))
+      
+            
+    def setDevice(self, setStr, data, callback):
+        self.publish_data( setStr, data, callback)
