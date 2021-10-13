@@ -7,6 +7,7 @@ import threading
 import paho.mqtt.client as mqtt
 import logging
 import datetime
+import pytz
 
 from queue import Queue
 from yolink_mqtt_class import YoLinkMQTTDevice
@@ -18,7 +19,7 @@ Object representation for YoLink MQTT device
 """
 class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
-    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec = 3):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
         self.multiOutlet = {
@@ -33,10 +34,13 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         self.scheduleList = []
 
         self.connect_to_broker()
+        self.loopTimeSec = updateTimeSec
+        self.monitorLoop(self.updateStatus, self.loopTimeSec  )
+        time.sleep(2)
 
-        dataOK = self.refreshState() # needed to get number of ports on device
-        dataOK = self.refreshSchedules()
-        dataOK = self.refreshFWversion()
+        self.refreshState() # needed to get number of ports on device
+        self.refreshSchedules()
+        self.refreshFWversion()
 
 
     def getState (self):
@@ -215,12 +219,16 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
 class YoLinkTHSensor(YoLinkMQTTDevice):
 
-    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec = 3):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
         self.THSensor = {'lastTime':startTime}
-        
+
+        self.loopTimeSec = updateTimeSec
         self.connect_to_broker()
+        self.loopTimeSec = updateTimeSec
+        self.monitorLoop(self.updateStatus, self.loopTimeSec  )
+        time.sleep(2)
         self.refreshSensor()
 
 
@@ -289,26 +297,32 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
         else:
             logging.error('unsupported data')
 
+    
+    
     def getInfoAll(self):
         return(self.THSensor)
 
     def getTemp(self):
-        return(self.THSensor['tempC'])
+        return(self.getValue(self.THSensor,'tempC' ))
+ 
 
     def getHumidity(self):
-        return(self.THSensor['humidity'])
+        return(self.getValue(self.THSensor,'humidity' ))
+
 
     def getState(self):
-        return(self.THSensor['state'])
+        return(self.getValue(self.THSensor,'state' ))
+
 
 class YoLinkWaterSensor(YoLinkMQTTDevice):
-    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
         self.WaterSensor = {'lastTime':startTime}
-        
+        self.loopTimesec = updateTimeSec
         self.connect_to_broker()
-        self.monitorLoop(self.updateStatus, 2 )
+        self.monitorLoop(self.updateStatus, self.loopTimesec  )
+        time.sleep(2)
         self.refreshSensor()
 
     def refreshSensor(self):
@@ -347,20 +361,20 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
             logging.error('unsupported data')
 
     def getState(self):
-        return(self.WaterSensor['state'])
+         return(self.getValue(self.WaterSensor,'state' ))
+
 
     def getInfoAll (self):
         return(self.WaterSensor)
 
-    def getTimeSinceChange(self):
-        time1 = datetime.datetime.strptime(self.WaterSensor['stateChangedAt'], '%Y-%m-%dT%H::%M::%S.%fZ')
-        time2 = time1.timetuple()
-        time3 = datetime.fromtimestamp(self.WaterSensor['lastTime'])
-
-        return(int(self.WaterSensor['lastTime']), int(self.WaterSensor['stateChangedAt']), )
+    def getTimeSinceUpdate(self):
+        time1 = self.getValue(self.WaterSensor,'stateChangedAt' )
+        time2 = int(self.getValue(self.WaterSensor,'lastTime' ))+self.timezoneOffsetSec*1000
+        time1a = datetime.datetime.strptime(time1, '%Y-%m-%dT%H:%M:%S.%fZ').timestamp()*1000
+        return(int(time2/1000-round(time1a/1000)))
 
 class YoLinkManipulator(YoLinkMQTTDevice):
-    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num):
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
         self.Manipulator = { 
@@ -373,6 +387,10 @@ class YoLinkManipulator(YoLinkMQTTDevice):
         self.delayList = []
         self.scheduleList = []
         self.connect_to_broker()
+        self.loopTimesec = updateTimeSec
+        self.monitorLoop(self.updateStatus, self.loopTimesec  )
+        time.sleep(2)
+        
         self.refreshState()
         self.refreshSchedules()
         self.refreshFWversion()
@@ -389,18 +407,19 @@ class YoLinkManipulator(YoLinkMQTTDevice):
         if 'method' in  data:
             if  (data['method'] == 'Manipulator.getState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.Manipulator['state']['lastTime']):
-                    self.Manipulator['state'] = data['data']['state']
-                    self.Manipulator['battery'] = data['data']['battery']               
-                    self.Manipulator['FWvers'] = data['data']['version']
-                    self.Manipulator['signaldB'] =  data['data']['loraInfo']['signal']    
-                    self.Manipulator['lastTime'] = str(data['time'])
+                    self.Manipulator['state']['state'] = data['data']['state']
+                    self.Manipulator['state']['lastTime'] = str(data['time'])
+                    self.Manipulator['status']['battery'] = data['data']['battery']               
+                    self.Manipulator['status']['FWvers'] = data['data']['version']
+                    self.Manipulator['status']['signaldB'] =  data['data']['loraInfo']['signal']    
+                    self.Manipulator['status']['lastTime'] = str(data['time'])
         elif 'event' in data:
             if int(data['time']) > int(self.Manipulator['lastTime']):
-                self.Manipulator['state'] = data['data']['state']
-                self.Manipulator['battery'] = data['data']['battery']             
-                self.Manipulator['signaldB'] =  data['data']['loraInfo']['signal']       
-                self.Manipulator['lastTime'] = str(data['time'])
-
+                self.Manipulator['state']['state'] = data['data']['state']
+                self.Manipulator['state']['lastTime'] = str(data['time'])
+                self.Manipulator['status']['battery'] = data['data']['battery']             
+                self.Manipulator['status']['signaldB'] =  data['data']['loraInfo']['signal']       
+                self.Manipulator['status']['lastTime'] = str(data['time'])
         else:
             logging.error('unsupported data')
 
@@ -423,3 +442,5 @@ class YoLinkManipulator(YoLinkMQTTDevice):
 
     def refreshFWversion(self):
         logging.debug('refreshManipulatorFWversion')
+
+    

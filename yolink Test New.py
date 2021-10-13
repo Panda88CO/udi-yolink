@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import time
+import pytz
 import json
 import requests
 import threading
@@ -40,15 +41,15 @@ device_serial_numbers = ['9957FD6097124EE99B5E6B61A847C67D', '86788EB527034A78B9
 '''
 device_serial_numbers = [ '636D394CDEBF45BB91FAD12B5BC473A5', 'FEB3FC58AB2B4E5A88A5FE3381D3522D', '34E320948EF746AF98EF8AF6E72F2996', 'CED643F4AB7C46F6A180387BD1C756F6','86788EB527034A78B9EA472323EE2433']
 print()
-
+print(pytz.utc)
 #print("Header:{0} Data:{1}\n".format(headers1, data))
 #print(device_list)
 
-#MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[0])
-#WineCellarTHSensor =  YoLinkTHSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[1])
-#PoolTemp =  YoLinkTHSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[2])
-WaterLevel = YoLinkWaterSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[3])
-IrrigationValve = YoLinkManipulator(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[4])
+#MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[0], 3)
+#WineCellarTHSensor =  YoLinkTHSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[1], 2)
+#PoolTemp =  YoLinkTHSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[2], 3)
+WaterLevel = YoLinkWaterSensor(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[3], 3)
+IrrigationValve = YoLinkManipulator(csName, csid, csseckey, yolinkURL,  mqttURL, 8003, device_serial_numbers[4], 5)
 
 
 
@@ -74,18 +75,18 @@ IrrigationValve = YoLinkManipulator(csName, csid, csseckey, yolinkURL,  mqttURL,
 #print(PoolTemp.getState())
 
 WaterLevel.refreshSensor()
-print(WaterLevel.getState())
-print(WaterLevel.getInfoAll())
-print(WaterLevel.getTimeSinceChange())
+print(WaterLevel.getState()+'\n')
+print(WaterLevel.getInfoAll()+'\n')
+print(WaterLevel.getTimeSinceUpdate()+'\n')
 
 IrrigationValve.refreshState()
 IrrigationValve.refreshSchedules()
 IrrigationValve.refreshFWversion()
 
 WaterLevel.refreshSensor()
-print(WaterLevel.getState())
-print(WaterLevel.getInfoAll())
-print(WaterLevel.getTimeSinceChange())
+print(WaterLevel.getState()+'\n')
+print(WaterLevel.getInfoAll()+'\n')
+print(WaterLevel.getTimeSinceUpdate()+'\n')
 
 
 

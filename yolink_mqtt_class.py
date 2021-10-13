@@ -5,6 +5,11 @@ import sys
 import time
 import threading
 import logging
+from  datetime import datetime
+from dateutil.tz import *
+
+
+
 logging.basicConfig(level=logging.DEBUG)
 
 import paho.mqtt.client as mqtt
@@ -35,13 +40,16 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.targetId = self.get_id()
 
 
+
         self.forceStop = False
 
    
         self.dataQueue = Queue()
         self.eventQueue = Queue()
-        #self.data= {}
-        #self.eventData = {}
+        self.mutex = threading.Lock()
+        self.timezoneOffsetSec = self.timezoneOffsetSec()
+       
+       
         self.client = mqtt.Client(self.clientId,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
@@ -50,8 +58,32 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.updateInterval = 3
         self.messagePending = False
 
+    def timezoneOffsetSec(self):
+        local = tzlocal()
+        tnow = datetime.now()
+        tnow = tnow.replace(tzinfo = local)
+        utctnow = tnow.astimezone(tzutc())
+        tnowStr = str(tnow)
+        
+        pos = tnowStr.rfind('+')
+        if pos > 0:
+            tnowStr = tnowStr[0:pos]
+        else:
+            pos = tnowStr.rfind('-')
+            tnowStr = tnowStr[0:pos]
+        utctnowStr = str(utctnow)
+        pos = utctnowStr.rfind('+')
+        if pos > 0:
+            utctnowStr = utctnowStr[0:pos]
+        else:
+            pos = utctnowStr.rfind('-')
+            utctnowStr = utctnowStr[0:pos]
 
-      
+        tnow = datetime.strptime(tnowStr,  '%Y-%m-%d %H:%M:%S.%f')
+        utctnow = datetime.strptime(utctnowStr,  '%Y-%m-%d %H:%M:%S.%f')
+        diff = utctnow - tnow
+        return (diff.total_seconds())
+
     def connect_to_broker(self):
         """
         Connect to MQTT broker
@@ -144,12 +176,9 @@ class YoLinkMQTTDevice(YoLinkDevice):
         dataTemp = str(json.dumps(data))
         #self.mutex.acquire()
         test = self.client.publish(self.topicReq, dataTemp)
-        #time.sleep(2)
-        #while not self.dataQueue.empty():   
-         #   dataOK, rxdata = self.getData()
-          #  if dataOK:
-           #     callback(rxdata)
-            #self.mutex.release()
+        if test.rc == 0:
+            time.sleep(2)
+            self.updateData(callback)
         
                 
     def shurt_down(self):
@@ -179,26 +208,40 @@ class YoLinkMQTTDevice(YoLinkDevice):
     def monitorLoop(self, callback, updateInterval):
         Monitor = threading.Thread(target = self.eventMonitorThread, args = (callback, updateInterval ))
         Monitor.start()
-        self.mutex = threading.Lock()
+        
 
     def eventMonitorThread (self, callback, updateInterval):
         time.sleep(5)
         while not self.forceStop:
             while not self.dataQueue.empty():
-                dataOK,  rxdata = self.getData()
-                if dataOK:
-                    callback(rxdata)
+                self.updateData(callback)
             time.sleep(updateInterval) 
             logging.debug('THsensor Check')  
 
+    def updateData(self, callback):
+        self.mutex.acquire()
+        dataOK,  rxdata = self.getData()
+        if dataOK:
+            callback(rxdata)
+        self.mutex.release()
 
     def refreshDevice(self, getStr, callback):
         logging.debug(getStr)  
         data = {}
         data['method'] = getStr
         data['time'] = str(int(time.time())*1000)
-        return(self.publish_data(data, callback))
+        self.publish_data(data, callback)
       
             
     def setDevice(self, setStr, data, callback):
         self.publish_data( setStr, data, callback)
+
+    def getValue(self, data, key):
+        attempts = 1
+        while key not in data and attempts <3:
+            time.sleep(1)
+            attempts = attempts + 1
+        if key in data:
+            return(data[key])
+        else:
+            return('NA')
