@@ -1,5 +1,0 @@
-argparse
-paho-mqtt
-pyyaml
-requests
-simplejson

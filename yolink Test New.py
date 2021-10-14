@@ -15,8 +15,8 @@ from yolink_mqtt_device import YoLinkManipulator
 #from oauthlib.oauth2 import BackendApplicationClient
 #from requests.auth import HTTPBasicAuth
 #from rauth import OAuth2Service
-#from requests_oauthlib import OAuth2Session
-#from requests_oauthlib import OAuth2Session
+from requests_oauthlib import OAuth2Session
+
 
 
 

@@ -384,7 +384,7 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                             ,'status':{'lastTime':startTime} 
                             }
         self.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-        self.delayList = []
+        #self.delayList = []
         self.scheduleList = []
         self.connect_to_broker()
         self.loopTimesec = updateTimeSec
@@ -429,12 +429,40 @@ class YoLinkManipulator(YoLinkMQTTDevice):
             logging.error('Unknows state passed')
             return(False)
         data = {}
+        data['params'] = {}
+        data['params']['state'] = state
         return(self.publish_data( 'Manipulator.setState', data, self.updateStatus))
 
     def setDelay(self,delayList):
         logging.debug('setManipulatorDelay')
+        data = {}
+        data['params'] = {} 
+        if 'delayOn' in delayList:
+            data['params']['delayOn'] = delayList['delayOn']
+        if 'delayOff' in delayList:
+            data['params']['delayOff'] = delayList['delayOff']   
+        return(self.publish_data( 'Manipulator.setDelay', data, self.updateStatus))
 
-    def setSchedules(self, ScheduleList):
+
+    def resetSchedules(self):
+        logging.debug('resetSchedules')
+        self.scheduleList = []
+
+    def activateSchedules(self, schduleIndex, Activated):
+        logging.debug('activateSchedules')
+
+
+    def addSchedule(self, schedule):
+        logging.debug('addSchedule')
+        scheduleOK = False
+        if len(self.scheduleLits) <5):
+            if 'days' and ('onTime' or 'offTime') and 'active' in schedule:
+                
+
+
+
+        
+    def setSchedules(self):
         logging.debug('setManipulatorSchedules')
 
     def refreshSchedules(self):
