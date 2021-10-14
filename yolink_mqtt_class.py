@@ -169,9 +169,10 @@ class YoLinkMQTTDevice(YoLinkDevice):
         #logging.debug('\n')
 
 
-    def publish_data(self, data, callback):
+    def publish_data(self, method, data, callback):
         #topic1 = csName + '/1/request'
         #logging.debug('Publish: '+ self.topicReq + ' ' + data)
+        data['method'] = method
         data["targetDevice"] =  self.get_id()
         data["token"]= self.get_token()
         dataTemp = str(json.dumps(data))

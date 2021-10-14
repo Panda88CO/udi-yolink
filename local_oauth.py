@@ -3,8 +3,8 @@
 import logging
 logging.basicConfig(level=logging.DEBUG)
 #creds
-client_id = '<id>'
-client_secret = '<secret>'
+client_id = '60dd7fa7960d177187c82039'
+client_secret = '3f68536b695a435d8a1a376fc8254e70'
 redirect_uri="https://127.0.0.1/yolink"
 
 #oauth endpoints
@@ -20,7 +20,6 @@ print ("go", authorization_url)
 
 #get
 redirect_response = input('Paste the full redirect URL here:')
-
 #fetch
 token = yolink.fetch_token(token_url, client_secret=client_secret, authorization_response=redirect_response)
 

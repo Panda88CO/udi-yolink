@@ -385,7 +385,7 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                             }
        
         #self.delayList = []
-        self.scheduleList = []
+        self.scheduleList ={}
         self.maxSchedules = 6
         self.connect_to_broker()
         self.loopTimesec = updateTimeSec
@@ -442,29 +442,64 @@ class YoLinkManipulator(YoLinkMQTTDevice):
             data['params']['delayOn'] = delayList['delayOn']
         if 'delayOff' in delayList:
             data['params']['delayOff'] = delayList['delayOff']   
-        return(self.publish_data( 'Manipulator.setDelay', data, self.updateStatus))
+        return(self.setDevice( 'Manipulator.setDelay', data, self.updateStatus))
 
 
     def resetSchedules(self):
         logging.debug('resetSchedules')
-        self.scheduleList = []
+        self.scheduleList = {}
 
-    def activateSchedules(self, schduleIndex, Activated):
+    def activateSchedules(self, index, Activated):
         logging.debug('activateSchedules')
+        if index in self. scheduleList:
+            if Activated:
+                self.scheduleList[index]['isValid'] = 'Enabled'
+            else:
+                self.scheduleList[index]['isValid'] = 'Disabled'
+            return(True)
+        else:
+            return(False)
 
 
     def addSchedule(self, schedule):
         logging.debug('addSchedule')
-        scheduleOK = False
-        nbrSchedules = len(self.scheduleList)
-        if nbrSchedules < self.maxSchedules :
-            if 'days' and ('onTime' or 'offTime') and 'isValid' in schedule:      
-                self.scheduleList.append(schedule)
+        if 'days' and ('onTime' or 'offTime') and 'isValid' in schedule:    
+            index = 0
+            while  index in self.scheduleList:
+                index=index+1
+            if index < self.maxSchedules:
+                self.scheduleList[index] = schedule
+                return(index)
+        return(-1)
             
+    def deleteSchedule(self, index):
+        logging.debug('addSchedule')       
+        if index in self.scheduleList:
+            self.scheduleList.pop(1)
+            return(True)
+        else:
+            return(False)
 
-        
-    def setSchedules(self):
+    def transferSchedules(self):
         logging.debug('setManipulatorSchedules')
+        data = {}
+        for index in self.scheduleList:
+            data[index] = {}
+            data[index]['index'] = index
+            data[index]['isValid'] = self.scheduleList[index]['isValid']
+            if 'onTime' in self.scheduleList[index]:
+                data[index]['onTime'] = self.scheduleList[index]['onTime']
+            if 'offTime' in self.scheduleList[index]:
+                data[index]['offTime'] = self.scheduleList[index]['offTime'] 
+            i = 0
+            daysValue = 0 
+            for days in self.daysOfWeek:
+                if days in self.scheduleList[index]['days']:
+                    daysValue = daysValue + pow(2,i)
+                i = i+1
+            data[index]['week'] = daysValue
+
+        return(self.setDevice( 'Manipulator.setSchedules', data, self.updateStatus))
 
     def refreshSchedules(self):
         logging.debug('refreshManiulatorSchdules')
