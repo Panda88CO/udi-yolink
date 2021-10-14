@@ -36,6 +36,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.topicReportAll = csName+'/report'
         self.yolink_URL = yolink_URL
         self.mqtt_url = mqtt_URL
+        self.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
         self.mqtt_port = int(mqtt_port)
         self.targetId = self.get_id()
 

@@ -29,7 +29,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                             ,'delays':{'lastTime':startTime}
                             ,'status':{'lastTime':startTime} 
                             }
-        self.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+       
         self.delayList = []
         self.scheduleList = []
 
@@ -383,9 +383,10 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                             ,'delays':{'lastTime':startTime}
                             ,'status':{'lastTime':startTime} 
                             }
-        self.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+       
         #self.delayList = []
         self.scheduleList = []
+        self.maxSchedules = 6
         self.connect_to_broker()
         self.loopTimesec = updateTimeSec
         self.monitorLoop(self.updateStatus, self.loopTimesec  )
@@ -455,11 +456,11 @@ class YoLinkManipulator(YoLinkMQTTDevice):
     def addSchedule(self, schedule):
         logging.debug('addSchedule')
         scheduleOK = False
-        if len(self.scheduleLits) <5):
-            if 'days' and ('onTime' or 'offTime') and 'active' in schedule:
-                
-
-
+        nbrSchedules = len(self.scheduleList)
+        if nbrSchedules < self.maxSchedules :
+            if 'days' and ('onTime' or 'offTime') and 'isValid' in schedule:      
+                self.scheduleList.append(schedule)
+            
 
         
     def setSchedules(self):
