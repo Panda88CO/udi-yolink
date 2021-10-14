@@ -22,11 +22,11 @@ from requests_oauthlib import OAuth2Session
 
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
-csid = '60dd7fa7960d177187c82039'
-csseckey = '3f68536b695a435d8a1a376fc8254e70'
+csid = 'XXXX'
+csseckey = 'XXX'
 
-COtopic = 'Panda88/aa/report'
-csName = 'Panda88'
+
+csName = 'XX'
 
 description = 'Enable Sensor APIs and subscribe to MQTT broker'
 
