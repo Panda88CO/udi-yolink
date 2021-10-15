@@ -252,3 +252,20 @@ class YoLinkMQTTDevice(YoLinkDevice):
             return(data[key])
         else:
             return('NA')
+
+    def daysToMask (self, dayList):
+        daysValue = 0 
+        i = 0
+        for day in self.daysOfWeek:
+            if day in dayList:
+                daysValue = daysValue + pow(2,i)
+            i = i+1
+        return(daysValue)
+
+    def maskToDays(self, daysValue):
+        daysList = []
+        for i in range(0,6):
+            mask = pow(2,i)
+            if (daysValue & mask) != 0 :
+                daysList.append(self.daysOfWeek[i])
+        return(daysList)

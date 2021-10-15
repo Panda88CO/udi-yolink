@@ -445,12 +445,8 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                         self.Manipulator['schedules'][index]['onTime'] = data['data'][index]['on']
                         self.Manipulator['schedules'][index]['offTime'] = data['data'][index]['off']
                         week =  data['data'][index]['week']
-                        self.Manipulator['schedules'][index]['days'] = []
-                        for i in range(0,6):
-                            mask = pow(2,i)
-                            if (week & mask) != 0 :
-                                self.Manipulator['schedules'][index]['days'].append(self.daysOfWeek[i])
-                        
+                        self.Manipulator['schedules'][index]['days'] = self.maskToDays(week)
+                                               
                         self.scheduleList[ self.Manipulator['schedules'][index]['index'] ]= {}
                         for key in self.Manipulator['schedules'][index]:
                             self.scheduleList[ self.Manipulator['schedules'][index]['index']] = self.Manipulator['schedules'][index][key]
@@ -546,13 +542,7 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                 data[index]['offTime'] = self.scheduleList[index]['offTime'] 
             else:
                 data[index]['offTime'] = '25:0'
-            i = 0
-            daysValue = 0 
-            for days in self.daysOfWeek:
-                if days in self.scheduleList[index]['days']:
-                    daysValue = daysValue + pow(2,i)
-                i = i+1
-            data[index]['week'] = daysValue
+            data[index]['week'] = self.daysToMask(self.scheduleList[index]['days'])
 
         return(self.setDevice( 'Manipulator.setSchedules', data, self.updateStatus))
 
