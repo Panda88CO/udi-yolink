@@ -349,7 +349,7 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
             if int(data['time']) > int(self.WaterSensor['lastTime']):
                 self.WaterSensor['online'] = True
                 self.WaterSensor['state'] = data['data']['state']
-                self.WaterSensor['stateChangedAt'] = data['data']['reportAt']
+                self.WaterSensor['stateChangedAt'] = data['data']['stateChangedAt']
                 self.WaterSensor['sensorMode'] = data['data']['sensorMode']
                 self.WaterSensor['beep'] = data['data']['beep']
                 self.WaterSensor['battery'] = data['data']['battery']
@@ -403,6 +403,14 @@ class YoLinkManipulator(YoLinkMQTTDevice):
         return(self.refreshDevice('Manipulator.getState', self.updateStatus))
 
 
+    def refreshSchedules(self):
+        logging.debug('refreshManiulatorSchedules')
+        return(self.refreshDevice('Manipulator.getSchedules', self.updateStatus))
+
+    def refreshFWversion(self):
+        logging.debug('refreshManipulatorFWversion - Not supported yet')
+        #return(self.refreshDevice('Manipulator.getVersion', self.updateStatus))
+
     def updateStatus(self, data):
         logging.debug('updateStatus') 
         if 'method' in  data:
@@ -413,9 +421,47 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                     self.Manipulator['status']['battery'] = data['data']['battery']               
                     self.Manipulator['status']['FWvers'] = data['data']['version']
                     self.Manipulator['status']['signaldB'] =  data['data']['loraInfo']['signal']    
+                    self.Manipulator['status']['timeZone']= data['data']['tz']
+                    self.Manipulator['status']['lastTime'] = str(data['time'])
+                    if 'delay' in data['data']:
+                        channel = data['data']['delay']['ch']
+                        self.Manipulator['delays'][channel]= {}
+                        if 'on' in data['data']['delay']:
+                            self.Manipulator['delays'][channel]= {'onTimeLeft':data['data']['delay']['on']}
+                        if 'off' in data['data']['delay']:
+                            self.Manipulator['delays'][channel]= {'offTimeLeft':data['data']['delay']['off']}
+
+                    else:
+                        self.Manipulator['delays']= {'lastTime':data['time']}
+
+            elif (data['method'] == 'Manipulator.getSchedules' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.Manipulator['schedules']['lastTime']):
+                    self.Manipulator['schedules']['lastTime'] = str(data['time'])
+                    self.scheduleList = {}
+                    for index in data['data']:
+                        self.Manipulator['schedules'][index] = {}
+                        self.Manipulator['schedules'][index]['isValid'] = data['data'][index]['isValid']
+                        self.Manipulator['schedules'][index]['index'] = data['data'][index]['index']
+                        self.Manipulator['schedules'][index]['onTime'] = data['data'][index]['on']
+                        self.Manipulator['schedules'][index]['offTime'] = data['data'][index]['off']
+                        week =  data['data'][index]['week']
+                        self.Manipulator['schedules'][index]['days'] = []
+                        for i in range(0,6):
+                            mask = pow(2,i)
+                            if (week & mask) != 0 :
+                                self.Manipulator['schedules'][index]['days'].append(self.daysOfWeek[i])
+                        
+                        self.scheduleList[ self.Manipulator['schedules'][index]['index'] ]= {}
+                        for key in self.Manipulator['schedules'][index]:
+                            self.scheduleList[ self.Manipulator['schedules'][index]['index']] = self.Manipulator['schedules'][index][key]
+
+                        
+
+            elif (data['method'] == 'Manipulator.getVersion' and  data['code'] == '000000'):  
+                 if int(data['time']) > int(self.Manipulator['status']['lastTime']):
                     self.Manipulator['status']['lastTime'] = str(data['time'])
         elif 'event' in data:
-            if int(data['time']) > int(self.Manipulator['lastTime']):
+            if int(data['time']) > int(self.Manipulator['state']['lastTime']):
                 self.Manipulator['state']['state'] = data['data']['state']
                 self.Manipulator['state']['lastTime'] = str(data['time'])
                 self.Manipulator['status']['battery'] = data['data']['battery']             
@@ -440,8 +486,12 @@ class YoLinkManipulator(YoLinkMQTTDevice):
         data['params'] = {} 
         if 'delayOn' in delayList:
             data['params']['delayOn'] = delayList['delayOn']
+        #else:
+        #    data['params']['delayOn'] = '25:0'
         if 'delayOff' in delayList:
             data['params']['delayOff'] = delayList['delayOff']   
+        #else:
+        #    data['params']['delayOff'] = '25:0'
         return(self.setDevice( 'Manipulator.setDelay', data, self.updateStatus))
 
 
@@ -481,16 +531,21 @@ class YoLinkManipulator(YoLinkMQTTDevice):
             return(False)
 
     def transferSchedules(self):
-        logging.debug('setManipulatorSchedules')
+        logging.debug('transferSchedules - does not seem to work yet')
         data = {}
+
         for index in self.scheduleList:
             data[index] = {}
             data[index]['index'] = index
             data[index]['isValid'] = self.scheduleList[index]['isValid']
             if 'onTime' in self.scheduleList[index]:
                 data[index]['onTime'] = self.scheduleList[index]['onTime']
+            else:
+                data[index]['onTime'] = '25:0'
             if 'offTime' in self.scheduleList[index]:
                 data[index]['offTime'] = self.scheduleList[index]['offTime'] 
+            else:
+                data[index]['offTime'] = '25:0'
             i = 0
             daysValue = 0 
             for days in self.daysOfWeek:
@@ -501,10 +556,6 @@ class YoLinkManipulator(YoLinkMQTTDevice):
 
         return(self.setDevice( 'Manipulator.setSchedules', data, self.updateStatus))
 
-    def refreshSchedules(self):
-        logging.debug('refreshManiulatorSchdules')
 
-    def refreshFWversion(self):
-        logging.debug('refreshManipulatorFWversion')
 
     

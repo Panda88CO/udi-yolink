@@ -169,14 +169,9 @@ class YoLinkMQTTDevice(YoLinkDevice):
         #logging.debug('\n')
 
 
-    def publish_data(self, method, data, callback):
-        #topic1 = csName + '/1/request'
-        #logging.debug('Publish: '+ self.topicReq + ' ' + data)
-        data['method'] = method
-        data["targetDevice"] =  self.get_id()
-        data["token"]= self.get_token()
+    def publish_data(self, data, callback):
+        logging.debug('publish_data: ' + data['method'])
         dataTemp = str(json.dumps(data))
-        #self.mutex.acquire()
         test = self.client.publish(self.topicReq, dataTemp)
         if test.rc == 0:
             time.sleep(2)
@@ -215,10 +210,12 @@ class YoLinkMQTTDevice(YoLinkDevice):
     def eventMonitorThread (self, callback, updateInterval):
         time.sleep(5)
         while not self.forceStop:
+            time.sleep(updateInterval) 
             while not self.dataQueue.empty():
                 self.updateData(callback)
-            time.sleep(updateInterval) 
-            logging.debug('THsensor Check')  
+                logging.debug('eventMonitorThread GET DATA')  
+            
+            logging.debug('eventMonitorThread')  
 
     def updateData(self, callback):
         self.mutex.acquire()
@@ -227,16 +224,24 @@ class YoLinkMQTTDevice(YoLinkDevice):
             callback(rxdata)
         self.mutex.release()
 
-    def refreshDevice(self, getStr, callback):
-        logging.debug(getStr)  
+    def refreshDevice(self, methodStr, callback):
+        logging.debug(methodStr)  
         data = {}
-        data['method'] = getStr
+
         data['time'] = str(int(time.time())*1000)
+        data['method'] = methodStr
+        data["targetDevice"] =  self.get_id()
+        data["token"]= self.get_token()
         self.publish_data(data, callback)
       
             
-    def setDevice(self, setStr, data, callback):
-        self.publish_data( setStr, data, callback)
+    def setDevice(self, methodStr, data, callback):
+        
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = methodStr
+        data["targetDevice"] =  self.get_id()
+        data["token"]= self.get_token()
+        self.publish_data(  data, callback)
 
     def getValue(self, data, key):
         attempts = 1
