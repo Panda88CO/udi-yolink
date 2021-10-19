@@ -228,7 +228,6 @@ class YoLinkMQTTDevice(YoLinkDevice):
     def refreshDevice(self, methodStr, callback):
         logging.debug(methodStr)  
         data = {}
-
         data['time'] = str(int(time.time())*1000)
         data['method'] = methodStr
         data["targetDevice"] =  self.get_id()
@@ -237,7 +236,6 @@ class YoLinkMQTTDevice(YoLinkDevice):
       
             
     def setDevice(self, methodStr, data, callback):
-        
         data['time'] = str(int(time.time())*1000)
         data['method'] = methodStr
         data["targetDevice"] =  self.get_id()
