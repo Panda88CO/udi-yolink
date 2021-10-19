@@ -185,6 +185,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         #expirationTime = int(time.time()*1000-60*60*1000) # 1 hour in milisec
         if not(self.dataQueue.empty()):
             temp = self.dataQueue.get()
+            dataOK = False
             if 'event' in temp:
                 dataOK = True
             if 'method' in temp:
