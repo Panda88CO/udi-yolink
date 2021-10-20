@@ -113,12 +113,14 @@ class YoLinkMQTTDevice(YoLinkDevice):
             if payload['deviceId'] == self.targetId:
                 #self.eventQueue.put(payload['msgid'])
                 self.dataQueue.put(payload)
+                logging.debug (payload)
             else:
                 logging.debug ('\n report on differnt device : ' + msg.topic)
                 logging.debug (payload)
                 logging.debug('\n')
         elif msg.topic == self.topicResp:
                 self.dataQueue.put(payload)
+                logging.debug (payload)
         elif msg.topic == self.topicReq:
                 logging.debug('publishing request' )
                 logging.debug (payload)
