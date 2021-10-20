@@ -398,6 +398,11 @@ class YoLinkManipulator(YoLinkMQTTDevice):
 
 
 
+    def getState(self):
+        logging.debug('getState')
+        return(self.Manipulator['state']['state'])
+
+
     def refreshState(self):
         logging.debug('refreshManipulator')
         return(self.refreshDevice('Manipulator.getState', self.updateStatus))
