@@ -22,6 +22,23 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec = 3):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
+        self.dataAPI = {
+                        'state'         : { 'lastTime':startTime
+                                            ,'method':{}
+                                            ,'event':{}
+                                            ,''
+                                        }
+                        ,'delays'        : { 'lastTime':startTime
+                                            ,'method':{}
+                                            ,'event':{}
+                                        }
+                        ,'schedules'    :{  'lastTime':startTime
+                                            ,'method':{}
+                                            ,'event':{}
+                                        } 
+                        }
+
+        
         self.multiOutlet = {
                              'nbrPorts': -1
                             ,'state':{'lastTime':startTime}
@@ -44,20 +61,63 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
 
     def getState (self):
-        return(self.multiOutlet['state'])
+        temp = self.dataAPI['state']['data']['state']
+        return(self.dataAPI['state']['data']['state'])
 
     def getSchedules (self):
-        return(self.multiOutlet['schedules'])  
+        return(self.dataAPI['schedules'])  
 
     def getDelays (self):
-        return(self.multiOutlet['delays'])  
+        return(self.dataAPI['delays'])  
 
     def getStatus (self):
-        return(self.multiOutlet['status'])
+        return(self.dataAPI['status'])
 
-    def getInfoAll(self):  
-        return(self.multiOutlet)
+    def getInfoAPI(self):  
+        return(self.dataAPI)
 
+    def updateStatus(self, data):
+        if 'method' in  data:
+            if  (data['method'] == 'MultiOutlet.getState' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
+                    self.dataAPI['state']['method'] = data
+                    self.dataAPI['state']['lastTime'] = data['time']
+            elif  (data['method'] == 'MultiOutlet.setState' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
+                    self.dataAPI['state']['method']['data'] ['state']= data['data']['state']
+                    self.dataAPI['state']['method']['data'] ['loraInfo']= data['data']['loraInfo']
+                    self.dataAPI['state']['lastTime'] = data['time']
+            elif  (data['method'] == 'MultiOutlet.setDelay' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI['delays']['lastTime']):
+                    self.dataAPI['delays']['method']['data'] ['delays']= data['data']['delays']
+                    self.dataAPI['delays']['method']['data'] ['loraInfo']= data['data']['loraInfo']
+                    self.dataAPI['delays']['lastTime'] = data['time']
+            elif  (data['method'] == 'MultiOutlet.setSchedule' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI['schedules']['lastTime']):
+                    self.dataAPI['schedules']['method']['data'] ['state']= data
+                    self.dataAPI['schedules']['lastTime'] = data['time']
+            elif  (data['method'] == 'MultiOutlet.getVersion' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI['schedules']['lastTime']):
+                    # Need to have it workign forst - not sure what return struture will look lik
+                    self.dataAPI['start']['method']['data'] ['state'].append( data['data'])
+                    self.dataAPI['state']['lastTime'] = data['time']
+            else:
+                logging.debug('Unsupported Method passed', data)
+        elif 'event' in data:
+            if (data['event'] == 'MultiOutlet.StatusChange' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI['schedules']['lastTime']):
+                    self.dataAPI['state']['method']['data'] ['state']= data['data']['state']
+                    self.dataAPI['state']['method']['data'] ['loraInfo']= data['data']['loraInfo']
+                    self.dataAPI['state']['lastTime'] = data['time']
+            else :
+                logging.debug('Unsupported Method passed', data)
+                                        
+
+
+       # elif 'event' in data:
+
+
+    '''
     def updateStatus(self, data):
         logging.debug('updateStatus')
         if 'method' in  data:
@@ -141,7 +201,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         else:
             logging.error('unsupported data')
 
-
+    '''
     def refreshState(self):
         return(self.refreshDevice('MultiOutlet.getState', self.updateStatus))
 
@@ -207,7 +267,8 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
 
     def refreshFWversion(self):
-        return(self.refreshDevice('MultiOutlet.getVersion'))
+        logging.debug('refreshFWversion - not currently supported')
+        #return(self.refreshDevice('MultiOutlet.getVersion',  self.updateStatus))
 
     def startUpgrade(self):
         logging.debug('startUpgrade - not currently supported')
@@ -222,6 +283,13 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec = 3):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
+
+        self.dataAPI=   {
+                        'state' :   {   'lastTime':startTime
+                                        ,'method':{}
+                                        ,'event':{}
+                                    }
+                        }
         self.THSensor = {'lastTime':startTime}
 
         self.loopTimeSec = updateTimeSec
@@ -237,6 +305,21 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
         logging.debug('refreshTHsensor')
         return(self.refreshDevice('THSensor.getState',  self.updateStatus, ))
 
+    def updateStatus(self, data):
+        logging.debug('updateStatus')  
+        if 'method' in  data:
+            if  (data['method'] == 'THSensor.getState' and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
+                    self.dataAPI['state']['method'] = data
+                    self.dataAPI['state']['lastTime'] = data['time']
+        elif 'event' in data:
+                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
+                    self.dataAPI['state']['event'] = data
+                    self.dataAPI['state']['lastTime'] = data['time']
+        else:
+            logging.error('unsupported data')
+    
+    '''
     def updateStatus(self, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
@@ -297,10 +380,10 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
         else:
             logging.error('unsupported data')
 
+        '''
     
-    
-    def getInfoAll(self):
-        return(self.THSensor)
+    def getInfoAPI(self):
+        return(self.dataRaw)
 
     def getTemp(self):
         return(self.getValue(self.THSensor,'tempC' ))
@@ -318,6 +401,14 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
+        self.dataRaw=   {
+                        'state' :   {   'lastTime':startTime
+                                        ,'method':{}
+                                        ,'event':{}
+                                    }
+                        }
+
+
         self.WaterSensor = {'lastTime':startTime}
         self.loopTimesec = updateTimeSec
         self.connect_to_broker()
@@ -364,8 +455,8 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
          return(self.getValue(self.WaterSensor,'state' ))
 
 
-    def getInfoAll (self):
-        return(self.WaterSensor)
+    def getInfoAPI (self):
+        return(self.dataRaw)
 
     def getTimeSinceUpdate(self):
         time1 = self.getValue(self.WaterSensor,'stateChangedAt' )
@@ -377,6 +468,22 @@ class YoLinkManipulator(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
+        self.dataRaw = {
+                        'state'         : { 'lastTime':startTime
+                                            ,'method':{}
+                                            ,'event':{}
+                                        }
+                        ,'delay'        : { 'lastTime':startTime
+                                            ,'method':{}
+                                            ,'event':{}
+                                        }
+                        ,'schedules'    :{  'lastTime':startTime
+                                            ,'method':{}
+                                            ,'event':{}
+                                        } 
+                        }
+        
+        
         self.Manipulator = { 
                              'state':{'lastTime':startTime}
                             ,'schedules':{'lastTime':startTime}
@@ -549,7 +656,7 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                 data[index]['offTime'] = '25:0'
             data[index]['week'] = self.daysToMask(self.scheduleList[index]['days'])
 
-        return(self.setDevice( 'Manipulator.setSchedules', data, self.updateStatus))
+        return(self.httpSend( 'Manipulator.setSchedules', data, self.updateStatus))
 
 
 
@@ -558,6 +665,14 @@ class YoLinkGarageDoorCtrl(YoLinkMQTTDevice):
         logging.debug('toggleGarageDoorCtrl Init') 
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
+        self.dataRaw=   {
+                        'info' :   {   'lastTime':startTime
+                                        ,'method':{}
+                                        ,'event':{}
+                                    }
+                        }
+
+
         self.GarageDoorCtrl = { 
                              'status':{'lastTime':startTime}
                             }
@@ -593,6 +708,12 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
         logging.debug('YoLinkGarageDoorSensor init') 
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
         startTime = str(int(time.time()*1000))
+        self.dataRaw=   {
+                        'state' :   {   'lastTime':startTime
+                                        ,'method':{}
+                                        ,'event':{}
+                                    }
+                        }
         self.GarageDoorSensor = { 
                                 'status':{'lastTime':startTime}
                                 }
@@ -610,24 +731,26 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
         logging.debug('updateStatus') 
         if 'method' in  data:
             if  (data['method'] == 'DoorSensor.getState' and  data['code'] == '000000'):
+                self.dataRaw['method'] = data
                 if int(data['time']) > int(self.GarageDoorSensor['status']['lastTime']):
-                    self.GarageDoorSensor['status']['online'] =  data['online'] 
-                    self.GarageDoorSensor['status']['battery'] =  data['data']['battery']
-                    self.GarageDoorSensor['status']['delay'] =  data['data']['delay']
-                    self.GarageDoorSensor['status']['state'] =  data['data']['state']
-                    self.GarageDoorSensor['status']['version'] =  data['data']['version']
-                    self.GarageDoorSensor['status']['alertType'] =  data['data']['alertType']
-                    self.GarageDoorSensor['status']['openRemindDelay'] =  data['data']['openRemindDelay']
+                    self.GarageDoorSensor['status']['online'] =  data['data']['online'] 
+                    self.GarageDoorSensor['status']['battery'] =  data['data']['state']['battery']
+                    self.GarageDoorSensor['status']['delay'] =  data['data']['state']['delay']
+                    self.GarageDoorSensor['status']['state'] =  data['data']['state']['state']
+                    self.GarageDoorSensor['status']['version'] =  data['data']['state']['version']
+                    self.GarageDoorSensor['status']['alertType'] =  data['data']['state']['alertType']
+                    self.GarageDoorSensor['status']['openRemindDelay'] =  data['data']['state']['openRemindDelay']
                     self.GarageDoorSensor['status']['lastTime'] = str(data['time'])
                     self.GarageDoorSensor['status']['reportAt'] = str(data['data']['reportAt'])
         elif 'event' in data: 
+            self.dataRaw['event'] = data
             if int(data['time']) > int(self.GarageDoorSensor['status']['lastTime']):        
-                    self.GarageDoorSensor['status']['battery'] =  data['data']['battery']
-                    self.GarageDoorSensor['status']['state'] =  data['data']['state']
-                    self.GarageDoorSensor['status']['version'] =  data['data']['version']
-                    self.GarageDoorSensor['status']['alertType'] =  data['data']['alertType']
-                    self.GarageDoorSensor['status']['signaldB'] =  data['data']['loraInfo']['signal']       
-                    self.GarageDoorSensor['status']['lastTime'] = str(data['time'])
+                self.GarageDoorSensor['status']['battery'] =  data['data']['battery']
+                self.GarageDoorSensor['status']['state'] =  data['data']['state']
+                self.GarageDoorSensor['status']['version'] =  data['data']['version']
+                self.GarageDoorSensor['status']['alertType'] =  data['data']['alertType']
+                self.GarageDoorSensor['status']['signaldB'] =  data['data']['loraInfo']['signal']       
+                self.GarageDoorSensor['status']['lastTime'] = str(data['time'])
         else:
             logging.error('unsupported data')
 
@@ -645,8 +768,8 @@ class YoLinkGarageDoor(YoLinkGarageDoorSensor, YoLinkGarageDoorCtrl):
 
         def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_numToggle,serial_numSensor,   updateTimeSec):
             logging.debug('YoLinkGarageDoor Init') 
-            YoLinkGarageDoorSensor.__init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_numSensor,   updateTimeSec):
-            YoLinkGarageDoorCtrl.__init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_numToggle,   updateTimeSec):
+            YoLinkGarageDoorSensor.__init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_numSensor,   updateTimeSec)
+            YoLinkGarageDoorCtrl.__init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_numToggle,   updateTimeSec)
             startTime = str(int(time.time()*1000))
 
         def refreshGarageDoorSensor(self):

@@ -22,9 +22,12 @@ class YoLinkDevice(object):
         self.header = {}
 
         self.device_data = {}
+        self.yolinkURL =  'https://api.yosmart.com/openApi' 
+        '''
         self.typeList = [ 'Hub','InfraredRemoter', 'Outlet', 'Switch','Manipulator','Sprinkler',  'MultiOutlet'
                         ,'DoorSensor','LeakSensor', 'MotionSensor','THSensor', 'COSmokeSensor', 'Thermostat'
                         , 'GarageDoor', 'CSDevice'  ]
+        '''
 
     def get_name(self):
         return str(self.device_data['name'])
@@ -82,7 +85,29 @@ class YoLinkDevice(object):
             print(response)
             sys.exit()
 
-   
+    def httpSend(self,methodStr, data, callBackDUpdateData):
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = methodStr
+        data["targetDevice"] =  self.get_id()
+        data["token"]= self.get_token()
+        dataTemp = str(json.dumps(data))
+
+        headers = {}
+        headers['Content-type'] = 'application/json'
+        headers['ktt-ys-brand'] = 'yolink'
+        headers['YS-CSID'] = self.csid
+
+        # MD5(data + csseckey)
+
+        cskey =  dataTemp +  self.csseckey
+        cskeyUTF8 = cskey.encode('utf-8')
+        hash = hashlib.md5(cskeyUTF8)
+        hashKey = hash.hexdigest()
+        headers['ys-sec'] = hashKey
+        headersTemp = json.dumps(headers)
+        r = requests.post(self.yolinkURL, data=dataTemp, headers=headers)        
+        info = r.json()
+
 
     def getMethods(self, type):
         '''
