@@ -270,3 +270,8 @@ class YoLinkMQTTDevice(YoLinkDevice):
             if (daysValue & mask) != 0 :
                 daysList.append(self.daysOfWeek[i])
         return(daysList)
+
+    def updateStatusData (self, datastruct, data):
+        
+        for key in data:
+            datastruct[key] = data[key]
