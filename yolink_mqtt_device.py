@@ -280,11 +280,7 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
             return(True,self.motionEventQueue.get() )
         else:
             return(False, None)
-        
-
-    def getState(self):
-        return(self.getValue(self.THSensor,'state' ))
-
+    
 
 
 class YoLinkTHSensor(YoLinkMQTTDevice):
