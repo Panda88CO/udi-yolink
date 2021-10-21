@@ -225,6 +225,8 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
         self.motionEventQueue =  Queue()
         self.loopTimeSec = updateTimeSec
 
+        self.eventName = 'MotionEvent'
+        self.eventTime = 'Time'
 
         self.connect_to_broker()
         self.loopTimeSec = updateTimeSec
@@ -240,16 +242,33 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
         if 'method' in  data:
             if  (data['method'] in self.methodList and  data['code'] == '000000'):
                 if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
-                     self.updateStatusData(self.dataAPI, self.deviceInfo, data)
+                     self.updateStatusData(data)
         elif 'event' in data:
             if data['event'] in self.eventList:
                 if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
-                    self.updateStatusData(self.dataAPI, self.deviceInfo, data)
-                    self.motionEventQueue.put([self.dataAPI['data']['state'], self.dataAPI['data']['reportAt']])
+                    self.updateStatusData(data)
+                    eventData = {}
+                    eventData[self.eventName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
+                    eventData[self.eventTime] = self.data[self.messageTime]
+                    self.motionEventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
 
-  
+
+    def updateStatusData (self, data):
+        if 'online' in data[self.deviceData]:
+            self.dataAPI[self.deviceOnline] = data[self.deviceData][self.deviceOnline]
+        else:
+            self.dataAPI[self.deviceOnline] = True
+        if 'method' in data:
+            for key in data[self.deviceData][self.deviceInfo]:
+                self.dataAPI[self.deviceData][self.deviceInfo][key] = data[self.deviceData][self.deviceInfo][key]
+        else: #event
+            for key in data[self.deviceData]:
+                self.dataAPI[self.deviceData][self.deviceInfo][key] = data[self.deviceData][key]
+
+        self.dataAPI[self.lastUpdate] = data[self.messageTime]
+        self.dataAPI[self.lastMessage] = data
     
     def getInfoAPI(self):
         return(self.dataAPI)
@@ -262,9 +281,9 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
 
     def motionEventPendig(self):
         if not self.motionEventQueue.empty():
-            return(True,self.motionEventQueue.get() )
+            return(self.motionEventQueue.get())
         else:
-            return(False, None)
+            return(None)
     
 
 
@@ -281,6 +300,11 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
                         ,'data':{ 'state':{} }
                         }
         self.THSensor = {'lastTime':startTime}
+
+        self.methodList = ['THSensor.getState' ]
+        self.eventList = ['MotionSensor.Alert' , 'MotionSensor.getState', 'MotionSensor.StatusChange']
+        self.motionEventQueue =  Queue()
+        self.loopTimeSec = updateTimeSec
 
         self.loopTimeSec = updateTimeSec
         self.connect_to_broker()

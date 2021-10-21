@@ -277,6 +277,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
                 daysList.append(self.daysOfWeek[i])
         return(daysList)
 
+    '''
     def updateStatusData (self, datastruct, index, data):
 
         if 'online' in data[self.deviceData]:
@@ -285,10 +286,11 @@ class YoLinkMQTTDevice(YoLinkDevice):
             self.dataAPI[self.deviceOnline] = True
         if index in data[self.deviceData]:
             for key in data[self.deviceData][index]:
-                datastruct[self.deviceData][index][key] = data[self.deviceData][key]
+                datastruct[self.deviceData][index][key] = data[self.deviceData][index][key]
         else:
             for key in data[self.deviceData]:
                 datastruct[self.deviceData][index][key] = data[self.deviceData][key]
 
         datastruct[self.lastUpdate] = data[self.messageTime]
         datastruct[self.lastMessage] = data
+    '''
