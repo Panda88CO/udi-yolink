@@ -75,9 +75,11 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         if 'method' in  data:
             if  (data['method'] == 'MultiOutlet.getState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.dataAPI['lastTime']):
+
                     self.dataAPI['lastMessage'] = data
                     self.dataAPI['lastTime'] = data['time']
                     self.dataAPI['nbrPorts'] = len(data['data']['delays'])
+
                     self.dataAPI['data']['state'] = data['data']
             elif  (data['method'] == 'MultiOutlet.setState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.dataAPI['lastTime']):
@@ -213,14 +215,17 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
         startTime = str(int(time.time()*1000))
 
         self.dataAPI = {
-                        'lastTime':startTime
-                        ,'lastMessage':{}
-                        ,'Online':None
-                        ,'data':{ 'state':{} }
+                        self.lastUpdate:startTime
+                        ,self.lastMessage:{}
+                        ,self.deviceOnline:None
+                        ,self.deviceData:{ self.deviceInfo:{} }
                         }
-
+        self.methodList = ['MotionSensor.getState' ]
+        self.eventList = ['MotionSensor.Alert' , 'MotionSensor.getState', 'MotionSensor.StatusChange']
         self.motionEventQueue =  Queue()
         self.loopTimeSec = updateTimeSec
+
+
         self.connect_to_broker()
         self.loopTimeSec = updateTimeSec
         self.monitorLoop(self.updateStatus, self.loopTimeSec  )
@@ -228,42 +233,22 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
         self.refreshSensor()
 
     def refreshSensor(self):
-        logging.debug('refresh MotionSensor')
         return(self.refreshDevice('MotionSensor.getState',  self.updateStatus, ))
 
     def updateStatus(self, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
-            if  (data['method'] == 'MotionSensor.getState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['online'] = data['data']['online']
-                    self.updateStatusData(self.dataAPI['data']['state'], data['data']['state'])
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+            if  (data['method'] in self.methodList and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                     self.updateStatusData(self.dataAPI, self.deviceInfo, data)
         elif 'event' in data:
-            if data['event'] == 'MotionSensor.Alert':
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['online'] = True 
-                    self.updateStatusData(self.dataAPI['data']['state'], data['data'])
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
-            elif data['event'] == 'MotionSensor.getState':
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['online'] = True 
-                    self.updateStatusData(self.dataAPI['data']['state'], data['data'])
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data                
-            elif data['event'] == 'MotionSensor.StatusChange':
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['online'] = True 
-                    self.updateStatusData(self.dataAPI['data']['state'], data['data'])
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data    
-
+            if data['event'] in self.eventList:
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                    self.updateStatusData(self.dataAPI, self.deviceInfo, data)
+                    self.motionEventQueue.put([self.dataAPI['data']['state'], self.dataAPI['data']['reportAt']])
         else:
             logging.error('unsupported data: ' + str(json(data)))
-        if self.dataAPI['data']['state'] == 'alert':
-            self.motionEventQueue.put(self.dataAPI['data']['reportAt'])
+
   
     
     def getInfoAPI(self):

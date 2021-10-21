@@ -40,8 +40,14 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.mqtt_port = int(mqtt_port)
         self.targetId = self.get_id()
 
-
-
+        self.lastUpdate = 'lastTime'
+        self.lastMessage = 'lastMessage'
+        self.deviceOnline = 'online'
+        self.deviceData = 'data'
+        self.deviceInfo = 'state'
+        self.deviceSchedule = 'schedules'
+        self.deviceDelays = 'delays' #may not be needed
+        self.messageTime = 'time'
         self.forceStop = False
 
    
@@ -271,7 +277,18 @@ class YoLinkMQTTDevice(YoLinkDevice):
                 daysList.append(self.daysOfWeek[i])
         return(daysList)
 
-    def updateStatusData (self, datastruct, data):
-        
-        for key in data:
-            datastruct[key] = data[key]
+    def updateStatusData (self, datastruct, index, data):
+
+        if 'online' in data[self.deviceData]:
+            self.dataAPI[self.deviceOnline] = data[self.deviceData][self.deviceOnline]
+        else:
+            self.dataAPI[self.deviceOnline] = True
+        if index in data[self.deviceData]:
+            for key in data[self.deviceData][index]:
+                datastruct[self.deviceData][index][key] = data[self.deviceData][key]
+        else:
+            for key in data[self.deviceData]:
+                datastruct[self.deviceData][index][key] = data[self.deviceData][key]
+
+        datastruct[self.lastUpdate] = data[self.messageTime]
+        datastruct[self.lastMessage] = data
