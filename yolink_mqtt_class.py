@@ -277,20 +277,26 @@ class YoLinkMQTTDevice(YoLinkDevice):
                 daysList.append(self.daysOfWeek[i])
         return(daysList)
 
-    '''
-    def updateStatusData (self, datastruct, index, data):
-
+    def updateStatusData (self, data):
         if 'online' in data[self.deviceData]:
             self.dataAPI[self.deviceOnline] = data[self.deviceData][self.deviceOnline]
         else:
             self.dataAPI[self.deviceOnline] = True
-        if index in data[self.deviceData]:
-            for key in data[self.deviceData][index]:
-                datastruct[self.deviceData][index][key] = data[self.deviceData][index][key]
-        else:
+        if 'method' in data:
+            for key in data[self.deviceData][self.deviceInfo]:
+                self.dataAPI[self.deviceData][self.deviceInfo][key] = data[self.deviceData][self.deviceInfo][key]
+        else: #event
             for key in data[self.deviceData]:
-                datastruct[self.deviceData][index][key] = data[self.deviceData][key]
+                self.dataAPI[self.deviceData][self.deviceInfo][key] = data[self.deviceData][key]
 
-        datastruct[self.lastUpdate] = data[self.messageTime]
-        datastruct[self.lastMessage] = data
-    '''
+        self.dataAPI[self.lastUpdate] = data[self.messageTime]
+        self.dataAPI[self.lastMessage] = data
+  
+    def getInfoAPI (self):
+        return(self.dataAPI)
+
+    def getState(self):
+        return(self.dataAPI[self.deviceData][self.deviceInfo]['state'])
+        
+    def sensorOnline(self):
+        return(self.dataAPI[self.deviceData][self.deviceInfo]['online'] )       

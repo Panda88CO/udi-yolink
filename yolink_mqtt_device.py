@@ -222,7 +222,7 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
                         }
         self.methodList = ['MotionSensor.getState' ]
         self.eventList = ['MotionSensor.Alert' , 'MotionSensor.getState', 'MotionSensor.StatusChange']
-        self.motionEventQueue =  Queue()
+        self.EventQueue =  Queue()
         self.loopTimeSec = updateTimeSec
 
         self.eventName = 'MotionEvent'
@@ -250,38 +250,20 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
                     eventData = {}
                     eventData[self.eventName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
                     eventData[self.eventTime] = self.data[self.messageTime]
-                    self.motionEventQueue.put(eventData)
+                    self.EventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
 
+    def motionState(self):
+        return(self.getState())
 
-    def updateStatusData (self, data):
-        if 'online' in data[self.deviceData]:
-            self.dataAPI[self.deviceOnline] = data[self.deviceData][self.deviceOnline]
-        else:
-            self.dataAPI[self.deviceOnline] = True
-        if 'method' in data:
-            for key in data[self.deviceData][self.deviceInfo]:
-                self.dataAPI[self.deviceData][self.deviceInfo][key] = data[self.deviceData][self.deviceInfo][key]
-        else: #event
-            for key in data[self.deviceData]:
-                self.dataAPI[self.deviceData][self.deviceInfo][key] = data[self.deviceData][key]
 
-        self.dataAPI[self.lastUpdate] = data[self.messageTime]
-        self.dataAPI[self.lastMessage] = data
-    
-    def getInfoAPI(self):
-        return(self.dataAPI)
-
-    def getMotionStatus(self):
-        return(self.dataAPI['data']['state'])
- 
     def getMotionData(self):
-        return(self.dataAPI['data'])
+        return(self.dataAPI[self.deviceData])         
 
     def motionEventPendig(self):
-        if not self.motionEventQueue.empty():
-            return(self.motionEventQueue.get())
+        if not self.EventQueue.empty():
+            return(self.EventQueue.get())
         else:
             return(None)
     
@@ -299,14 +281,17 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
                         ,'Online':None
                         ,'data':{ 'state':{} }
                         }
-        self.THSensor = {'lastTime':startTime}
-
+    
         self.methodList = ['THSensor.getState' ]
-        self.eventList = ['MotionSensor.Alert' , 'MotionSensor.getState', 'MotionSensor.StatusChange']
-        self.motionEventQueue =  Queue()
-        self.loopTimeSec = updateTimeSec
+        self.eventList = ['THSensor.Report']
+        self.EventQueue =  Queue()
+        self.tempName = 'THEvent'
+        self.temperature = 'Temperature'
+        self.humidity = 'Humidity'
+        self.eventTime = 'Time'
 
-        self.loopTimeSec = updateTimeSec
+
+
         self.connect_to_broker()
         self.loopTimeSec = updateTimeSec
         self.monitorLoop(self.updateStatus, self.loopTimeSec  )
@@ -322,36 +307,50 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
     def updateStatus(self, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
-            if  (data['method'] == 'THSensor.getState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['online'] = data['data']['online']
-                    self.dataAPI['data']['state'] = data['data']
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+            if  (data['method'] in self.methodList and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                     self.updateStatusData(data)
         elif 'event' in data:
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['online'] = True 
-                    self.dataAPI['data']['state'] = data['data']
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+            if data['event'] in self.eventList:
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                    self.updateStatusData(data)
+                    eventData = {}
+                    eventData[self.tempName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
+                    eventData[self.temperature] = self.dataAPI[self.deviceData][self.deviceInfo]['temperature']
+                    if self.dataAPI[self.deviceData][self.deviceInfo]['humidityLimit'] ['max'] > 0:
+                        eventData[self.humidity] = self.dataAPI[self.deviceData][self.deviceInfo]['humidity']
+                    else:
+                        eventData[self.humidity] = '-1'
+                    eventData[self.eventTime] = self.data[self.messageTime]
+                    self.EventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
-    
-  
-    
-    def getInfoAPI(self):
-        return(self.dataRaw)
+
 
     def getTempValue(self):
-        return(self.getValue(self.THSensor,'tempC' ))
+        return(self.dataAPI[self.deviceData][self.deviceInfo]['temperature'])
  
 
     def getHumidityValue(self):
-        return(self.getValue(self.THSensor,'humidity' ))
+        if self.dataAPI[self.deviceData][self.deviceInfo]['humidityLimit'] ['max'] > 0:
+            humidity = self.dataAPI[self.deviceData][self.deviceInfo]['humidity']
+        else:
+            humidity= '-1'
+        return(humidity)
 
 
-    def getState(self):
-        return(self.getValue(self.THSensor,'state' ))
+    def getAlarms(self):
+        return(self.dataAPI[self.deviceData][self.deviceInfo]['alarm'])
+
+    def thEventPendig(self):
+        if not self.EventQueue.empty():
+            return(self.EventQueue.get())
+        else:
+            return(None)        
+  
+
+    #def getState(self):
+    #    return(self.getValue(self.THSensor,'state' ))
 
 
 class YoLinkWaterSensor(YoLinkMQTTDevice):
@@ -364,9 +363,12 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
                         ,'online':None
                         ,'data':{ 'state':{} }
                         }
+        self.methodList = ['LeakSensor.getState' ]
+        self.eventList = ['LeakSensor.Report']
+        self.EventQueue =  Queue()
+        self.waterName = 'WaterEvent'
+        self.eventTime = 'Time'
 
-
-        self.WaterSensor = {'lastTime':startTime}
         self.loopTimesec = updateTimeSec
         self.connect_to_broker()
         self.monitorLoop(self.updateStatus, self.loopTimesec  )
@@ -381,67 +383,32 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
     def updateStatus(self, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
-            if  (data['method'] == 'LeakSensor.getState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
-                    self.dataAPI['online'] = data['data']['online']
-                    self.dataAPI['data']['state'] = data['data']
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+            if  (data['method'] in self.methodList and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                     self.updateStatusData(data)
         elif 'event' in data:
-                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
-                    self.dataAPI['online'] = True 
-                    self.dataAPI['data']['state'] = data['data']
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+            if data['event'] in self.eventList:
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                    self.updateStatusData(data)
+                    eventData = {}
+                    eventData[self.waterName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
+                    eventData[self.eventTime] = self.data[self.messageTime]
+                    self.EventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
 
+    
+    def probeState(self):
+         return(self.dataAPI[self.deviceData][self.deviceInfo]['state'] )
 
-
-
-    '''
-    def updateStatus(self, data):
-        logging.debug('updateStatus')  
-        if 'method' in  data:
-            if  (data['method'] == 'LeakSensor.getState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.WaterSensor['lastTime']):
-                    self.WaterSensor['online'] = data['data']['online']
-                    self.WaterSensor['state'] = data['data']['state']['state']
-                    self.WaterSensor['stateChangedAt'] = data['data']['reportAt']
-                    self.WaterSensor['beep'] = data['data']['state']['beep']
-                    self.WaterSensor['alertInterval'] = data['data']['state']['interval']
-                    self.WaterSensor['battery'] = data['data']['state']['battery']
-                    self.WaterSensor['suppotChangeMode'] = data['data']['state']['supportChangeMode']
-                    self.WaterSensor['devTemp'] = data['data']['state']['devTemperature']                    
-                    self.WaterSensor['FWvers'] = data['data']['state']['version']
-                    self.WaterSensor['lastTime'] = str(data['time'])
-        elif 'event' in data:
-            if int(data['time']) > int(self.WaterSensor['lastTime']):
-                self.WaterSensor['online'] = True
-                self.WaterSensor['state'] = data['data']['state']
-                self.WaterSensor['stateChangedAt'] = data['data']['stateChangedAt']
-                self.WaterSensor['sensorMode'] = data['data']['sensorMode']
-                self.WaterSensor['beep'] = data['data']['beep']
-                self.WaterSensor['battery'] = data['data']['battery']
-                self.WaterSensor['devTemp'] = data['data']['devTemperature']                    
-                self.WaterSensor['signaldB'] =  data['data']['loraInfo']['signal']       
-                self.WaterSensor['lastTime'] = str(data['time'])
-
+    
+    def waterEventPendig(self):
+        if not self.EventQueue.empty():
+            return(self.EventQueue.get())
         else:
-            logging.error('unsupported data')
-    '''
-    def getState(self):
-         return(self.getValue(self.WaterSensor,'state' ))
+            return(None)        
+  
 
-
-    def getInfoAPI (self):
-        return(self.dataRaw)
-
-    def getTimeSinceUpdate(self):
-        time1 = self.getValue(self.WaterSensor,'stateChangedAt' )
-        time2 = int(self.getValue(self.WaterSensor,'lastTime' ))+self.timezoneOffsetSec*1000
-        time1a = datetime.datetime.strptime(time1, '%Y-%m-%dT%H:%M:%S.%fZ').timestamp()*1000
-        return(int(time2/1000-round(time1a/1000)))
 
 class YoLinkManipulator(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec):
@@ -701,12 +668,13 @@ class YoLinkGarageDoorCtrl(YoLinkMQTTDevice):
                         ,'lastMessage':{}
                         ,'data':{ 'state':{} }
                         }
+        self.methodList = ['GarageDoor.toggle' ]
+        self.eventList = ['GarageDoor.Report']
+        self.ToggleEventQueue =  Queue()
+        self.ToggleName = 'GarageEvent'
+        self.eventTime = 'Time'
 
 
-        self.GarageDoorCtrl = { 
-                             'status':{'lastTime':startTime}
-                            }
-       
         self.connect_to_broker()
         self.loopTimesec = updateTimeSec
         self.monitorLoop(self.updateStatus, self.loopTimesec  )
@@ -719,40 +687,29 @@ class YoLinkGarageDoorCtrl(YoLinkMQTTDevice):
         return(self.setDevice( 'GarageDoor.toggle', data, self.updateStatus))
 
     def updateStatus(self, data):
-        logging.debug('updateStatus')  
+        logging.debug(' YoLinkGarageDoorCtrl updateStatus')  
+        #special case 
         if 'method' in  data:
-            if  (data['method'] == 'GarageDoor.toggle'and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
-                    self.dataAPI['online'] = data['data']['online']
-                    #self.dataAPI['data']['state'] = data['data']
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
-        elif 'event' in data:
-                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
-                    self.dataAPI['online'] = True 
-                    #self.dataAPI['data']['state'] = data['data']
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+            if  (data['method'] in self.methodList and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                    self.dataAPI[self.deviceData][self.deviceInfo] = data['data']
+                    self.dataAPI[self.lastUpdate] = data[self.messageTime]
+                    self.dataAPI[self.lastMessage] = data
+
+        elif 'event' in data: # not sure events exits
+            if data['event'] in self.eventList:
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                    self.updateStatusData(data)
+                    eventData = {}
+                    eventData[self.ToggleName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
+                    eventData[self.eventTime] = self.data[self.messageTime]
+                    self.ToggleEventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
 
 
-    '''
-    def updateStatus(self, data):
-        logging.debug('updateStatus') 
-        if 'method' in  data:
-            if  (data['method'] == 'GarageDoor.toggle' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.GarageDoorCtrl['status']['lastTime']):
-                    self.GarageDoorCtrl['status']['signaldB'] =  data['data']['loraInfo']['signal']      
-                    self.GarageDoorCtrl['status']['lastTime'] = str(data['time'])
-        elif 'event' in data: 
-            if int(data['time']) > int(self.GarageDoorCtrl['status']['lastTime']):        
-                self.GarageDoorCtrl['status']['signaldB'] =  data['data']['loraInfo']['signal']       
-                self.GarageDoorCtrl['status']['lastTime'] = str(data['time'])
-        else:
-            logging.error('unsupported data')
-    '''
-    
+
+
 class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num,  updateTimeSec):
         logging.debug('YoLinkGarageDoorSensor init') 
@@ -764,10 +721,12 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
                         ,'online':None
                         ,'data':{ 'state':{} }
                         }
+        self.methodList = ['DoorSensor.getState' ]
+        self.eventList = ['DoorSensor.Report']
+        self.EventQueue =  Queue()
+        self.GarageName = 'GarageEvent'
+        self.eventTime = 'Time'
 
-        self.GarageDoorSensor = { 
-                                'status':{'lastTime':startTime}
-                                }
         self.connect_to_broker()
         self.loopTimesec = updateTimeSec
         self.monitorLoop(self.updateStatus, self.loopTimesec  )
@@ -782,57 +741,36 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
     def updateStatus(self, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
-            if  (data['method'] == 'DoorSensor.getState'and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
-                    self.dataAPI['online'] = data['data']['online']
-                    self.dataAPI['data']['state'] = data['data']
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+            if  (data['method'] in self.methodList and  data['code'] == '000000'):
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                     self.updateStatusData(data)
         elif 'event' in data:
-                if int(data['time']) > int(self.dataAPI['state']['lastTime']):
-                    self.dataAPI['online'] = True 
-                    self.dataAPI['data']['state'] = data['data']
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+            if data['event'] in self.eventList:
+                if int(data['time']) > int(self.dataAPI[self.lastUpdate]):
+                    self.updateStatusData(data)
+                    eventData = {}
+                    eventData[self.GarageName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
+                    eventData[self.eventTime] = self.data[self.messageTime]
+                    self.EventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
-    '''
-    def updateStatus(self, data):
-        logging.debug('updateStatus') 
-        if 'method' in  data:
-            if  (data['method'] == 'DoorSensor.getState' and  data['code'] == '000000'):
-                self.dataRaw['method'] = data
-                if int(data['time']) > int(self.GarageDoorSensor['status']['lastTime']):
-                    self.GarageDoorSensor['status']['online'] =  data['data']['online'] 
-                    self.GarageDoorSensor['status']['battery'] =  data['data']['state']['battery']
-                    self.GarageDoorSensor['status']['delay'] =  data['data']['state']['delay']
-                    self.GarageDoorSensor['status']['state'] =  data['data']['state']['state']
-                    self.GarageDoorSensor['status']['version'] =  data['data']['state']['version']
-                    self.GarageDoorSensor['status']['alertType'] =  data['data']['state']['alertType']
-                    self.GarageDoorSensor['status']['openRemindDelay'] =  data['data']['state']['openRemindDelay']
-                    self.GarageDoorSensor['status']['lastTime'] = str(data['time'])
-                    self.GarageDoorSensor['status']['reportAt'] = str(data['data']['reportAt'])
-        elif 'event' in data: 
-            self.dataRaw['event'] = data
-            if int(data['time']) > int(self.GarageDoorSensor['status']['lastTime']):        
-                self.GarageDoorSensor['status']['battery'] =  data['data']['battery']
-                self.GarageDoorSensor['status']['state'] =  data['data']['state']
-                self.GarageDoorSensor['status']['version'] =  data['data']['version']
-                self.GarageDoorSensor['status']['alertType'] =  data['data']['alertType']
-                self.GarageDoorSensor['status']['signaldB'] =  data['data']['loraInfo']['signal']       
-                self.GarageDoorSensor['status']['lastTime'] = str(data['time'])
+
+    
+    def DoorState(self):
+         return(self.getState())
+    
+
+    def GarageEventPendig(self):
+        if not self.EventQueue.empty():
+            return(self.EventQueue.get())
         else:
-            logging.error('unsupported data')
+            return(None)        
+  
+    '''
+    def SensorOnline(self):
+        return(self.dataAPI[self.deviceData][self.deviceInfo]['online'] )
     '''
 
-    def getGarageDoorStaus(self):
-        return(self.GarageDoorSensor['status']['state'])
-
-    def GaragDoorSensorOnline(self):
-        return(self.GarageDoorSensor['status']['online'])
-
-    def getGarageSensorAll(self):
-        return(self.GarageDoorSensor)
 
 
 class YoLinkGarageDoor(YoLinkGarageDoorSensor, YoLinkGarageDoorCtrl):
