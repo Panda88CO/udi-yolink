@@ -299,4 +299,4 @@ class YoLinkMQTTDevice(YoLinkDevice):
         return(self.dataAPI[self.deviceData][self.deviceInfo]['state'])
         
     def sensorOnline(self):
-        return(self.dataAPI[self.deviceData][self.deviceInfo]['online'] )       
+        return(self.dataAPI['online'] )       
