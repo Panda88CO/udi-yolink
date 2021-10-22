@@ -67,10 +67,10 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         return(self.dataAPI['data']['state']['delays'])  
 
 
-
+    '''
     def getInfoAPI(self):  
         return(self.dataAPI)
-
+    '''
     def updateStatus(self, data):
         if 'method' in  data:
             if  (data['method'] == 'MultiOutlet.getState' and  data['code'] == '000000'):
@@ -222,7 +222,7 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
                         }
         self.methodList = ['MotionSensor.getState' ]
         self.eventList = ['MotionSensor.Alert' , 'MotionSensor.getState', 'MotionSensor.StatusChange']
-        self.EventQueue =  Queue()
+        #self.EventQueue =  Queue()
         self.loopTimeSec = updateTimeSec
 
         self.eventName = 'MotionEvent'
@@ -250,7 +250,7 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
                     eventData = {}
                     eventData[self.eventName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
                     eventData[self.eventTime] = self.data[self.messageTime]
-                    self.EventQueue.put(eventData)
+                    self.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
 
@@ -261,11 +261,6 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
     def getMotionData(self):
         return(self.dataAPI[self.deviceData])         
 
-    def motionEventPendig(self):
-        if not self.EventQueue.empty():
-            return(self.EventQueue.get())
-        else:
-            return(None)
     
 
 
@@ -273,18 +268,19 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
 
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec = 3):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
+      
+        '''
         startTime = str(int(time.time()*1000))
-
         self.dataAPI = {
                         'lastTime':startTime
                         ,'lastMessage':{}
                         ,'Online':None
                         ,'data':{ 'state':{} }
                         }
-    
+        self.EventQueue =  Queue()
+        '''
         self.methodList = ['THSensor.getState' ]
         self.eventList = ['THSensor.Report']
-        self.EventQueue =  Queue()
         self.tempName = 'THEvent'
         self.temperature = 'Temperature'
         self.humidity = 'Humidity'
@@ -322,7 +318,7 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
                     else:
                         eventData[self.humidity] = '-1'
                     eventData[self.eventTime] = self.data[self.messageTime]
-                    self.EventQueue.put(eventData)
+                    self.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
 
@@ -342,16 +338,7 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
     def getAlarms(self):
         return(self.dataAPI[self.deviceData][self.deviceInfo]['alarm'])
 
-    def thEventPendig(self):
-        if not self.EventQueue.empty():
-            return(self.EventQueue.get())
-        else:
-            return(None)        
   
-
-    #def getState(self):
-    #    return(self.getValue(self.THSensor,'state' ))
-
 
 class YoLinkWaterSensor(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, updateTimeSec):
@@ -365,7 +352,7 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
                         }
         self.methodList = ['LeakSensor.getState' ]
         self.eventList = ['LeakSensor.Report']
-        self.EventQueue =  Queue()
+        #self.EventQueue =  Queue()
         self.waterName = 'WaterEvent'
         self.eventTime = 'Time'
 
@@ -393,7 +380,7 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
                     eventData = {}
                     eventData[self.waterName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
                     eventData[self.eventTime] = self.data[self.messageTime]
-                    self.EventQueue.put(eventData)
+                    self.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
 
@@ -402,12 +389,6 @@ class YoLinkWaterSensor(YoLinkMQTTDevice):
          return(self.dataAPI[self.deviceData][self.deviceInfo]['state'] )
 
     
-    def waterEventPendig(self):
-        if not self.EventQueue.empty():
-            return(self.EventQueue.get())
-        else:
-            return(None)        
-  
 
 
 class YoLinkManipulator(YoLinkMQTTDevice):
@@ -723,7 +704,7 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
                         }
         self.methodList = ['DoorSensor.getState' ]
         self.eventList = ['DoorSensor.Report']
-        self.EventQueue =  Queue()
+        #self.EventQueue =  Queue()
         self.GarageName = 'GarageEvent'
         self.eventTime = 'Time'
 
@@ -751,7 +732,7 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
                     eventData = {}
                     eventData[self.GarageName] = self.dataAPI[self.deviceData][self.deviceInfo]['state']
                     eventData[self.eventTime] = self.data[self.messageTime]
-                    self.EventQueue.put(eventData)
+                    self.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
 
@@ -759,17 +740,6 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
     def DoorState(self):
          return(self.getState())
     
-
-    def GarageEventPendig(self):
-        if not self.EventQueue.empty():
-            return(self.EventQueue.get())
-        else:
-            return(None)        
-  
-    '''
-    def SensorOnline(self):
-        return(self.dataAPI[self.deviceData][self.deviceInfo]['online'] )
-    '''
 
 
 
