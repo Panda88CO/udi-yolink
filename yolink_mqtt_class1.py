@@ -17,7 +17,7 @@ import paho.mqtt.client as mqtt
 #log = getLogger(__name__)
 from queue import Queue
 from yolink_devices import YoLinkDevice
-#from yolink_mqtt_client import YoLinkMQTTClient
+from yolink_mqtt_client import YoLinkMQTTClient
 #from yolink_mqtt_device import YoLinkMQTTClient
 """
 Object representation for YoLink MQTT Client
@@ -25,23 +25,18 @@ Object representation for YoLink MQTT Client
 class YoLinkMQTTDevice(YoLinkDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num, callback):
         super().__init__( yolink_URL, csid, csseckey, serial_num)
-        self.callback = callback
-        self.uniqueID = serial_num[0:10]
-        self.uniqueID = str(csName+'_'+ self.uniqueID )     
+        #self.callback = callback
         self.build_device_api_request_data()
         self.enable_device_api()
-        self.csid = csid
-        self.csseckey = csseckey
-        self.topicReq = csName+'/'+ self.uniqueID +'/request'
-        self.topicResp = csName+'/'+ self.uniqueID +'/response'
-        self.topicReport = csName+'/'+ self.uniqueID +'/report'
-        self.topicReportAll = csName+'/report'
-        self.yolink_URL = yolink_URL
-        self.mqtt_url = mqtt_URL
-        self.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-        self.mqtt_port = int(mqtt_port)
         self.targetId = self.get_id()
 
+        self.yolinkMQTTclient = YoLinkMQTTClient(csName, csid, csseckey, mqtt_URL, mqtt_port,  self.targetId , callback )
+
+        self.yolink_URL = yolink_URL
+        self.mqtt_url = mqtt_URL
+
+        self.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+        
         self.lastUpdate = 'lastTime'
         self.lastMessage = 'lastMessage'
         self.deviceOnline = 'online'
@@ -63,17 +58,13 @@ class YoLinkMQTTDevice(YoLinkDevice):
         self.eventQueue = Queue()
         self.mutex = threading.Lock()
         self.timezoneOffsetSec = self.timezoneOffsetSec()
-       
-       
-        self.client = mqtt.Client(self.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
-        self.client.on_subscribe = self.on_subscribe
-        self.client.on_disconnect = self.on_disconnect
-        self.updateInterval = 3
+        self.yolinkMQTTclient.connect_to_broker()
+        #self.loopTimeSec = updateTimeSec
+    
+        #self.updateInterval = 3
         self.messagePending = False
 
-
+    '''
     
     def connect_to_broker(self):
         """
@@ -175,7 +166,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
                 
     def shurt_down(self):
         self.client.loop_stop()
-
+    '''
     def getData(self):
         #expirationTime = int(time.time()*1000-60*60*1000) # 1 hour in milisec
         if not(self.dataQueue.empty()):
@@ -197,7 +188,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         logging.debug('getEventMsgId')
         temp = (self.eventQueue.get())
         return(temp)
-    '''
+    
     def monitorLoop(self, callback, updateInterval):
         Monitor = threading.Thread(target = self.eventMonitorThread, args = (callback, updateInterval ))
         Monitor.start()
@@ -212,7 +203,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
                 logging.debug('eventMonitorThread GET DATA')  
             
             logging.debug('eventMonitorThread')  
-
+    '''
     def updateData(self, callback):
         self.mutex.acquire()
         dataOK,  rxdata = self.getData()
@@ -227,7 +218,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         data['method'] = methodStr
         data["targetDevice"] =  self.get_id()
         data["token"]= self.get_token()
-        self.publish_data(data, callback)
+        self.yolinkMQTTclient.publish_data(data, callback)
       
             
     def setDevice(self, methodStr, data, callback):
@@ -235,7 +226,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         data['method'] = methodStr
         data["targetDevice"] =  self.get_id()
         data["token"]= self.get_token()
-        self.publish_data(  data, callback)
+        self.yolinkMQTTclient.publish_data(  data, callback)
 
     def getValue(self, data, key):
         attempts = 1
@@ -318,9 +309,9 @@ class YoLinkMQTTDevice(YoLinkDevice):
         return(self.getInfoValue('humidity'))
 
     def getAlarms(self):
-        return(self.getInfoValue('humidity'))
+        return(self.getInfoValue('alarms'))
 
-
+    
     def timezoneOffsetSec(self):
         local = tzlocal()
         tnow = datetime.now()
