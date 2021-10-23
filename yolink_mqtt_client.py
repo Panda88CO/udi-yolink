@@ -72,7 +72,7 @@ class YoLinkMQTTClient(object):
         if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
             if payload['deviceId'] == self.deviceId :
                 #self.eventQueue.put(payload['msgid'])
-                self.dataQueue.put(payload)
+                #self.dataQueue.put(payload)
                 logging.debug (payload)
                 self.callback(payload)
             else:
@@ -80,7 +80,7 @@ class YoLinkMQTTClient(object):
                 logging.debug (payload)
                 logging.debug('\n')
         elif msg.topic == self.topicResp:
-                self.dataQueue.put(payload)
+                #self.dataQueue.put(payload)
                 logging.debug (payload)
                 self.callback(payload)
         elif msg.topic == self.topicReq:
