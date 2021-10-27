@@ -75,6 +75,7 @@ class YoLinkMQTTClient(object):
                 #self.dataQueue.put(payload)
                 logging.debug (payload)
                 self.callback(payload)
+                print(' device reporting')
             else:
                 logging.debug ('\n report on differnt device : ' + msg.topic)
                 logging.debug (payload)
@@ -83,10 +84,14 @@ class YoLinkMQTTClient(object):
                 #self.dataQueue.put(payload)
                 logging.debug (payload)
                 self.callback(payload)
+                print('Device respnse:')
+                print(payload)
         elif msg.topic == self.topicReq:
                 logging.debug('publishing request' )
                 logging.debug (payload)
                 self.callback(payload)
+                print('device publishing')
+                print(payload)
         else:
             logging.debug(msg.topic,  self.topicReport, self.topicReportAll )
         #logging.debug("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
@@ -133,13 +138,12 @@ class YoLinkMQTTClient(object):
         #logging.debug('mID = '+str(mID))
         #logging.debug('\n')
 
-    def publish_data(self, data, callback):
+    def publish_data(self, data):
         logging.debug('publish_data: ' + data['method'])
         dataTemp = str(json.dumps(data))
         test = self.client.publish(self.topicReq, dataTemp)
         if test.rc == 0:
-            time.sleep(2)
-            self.updateData(callback)
+            time.sleep(2) 
                     
     def shurt_down(self):
         self.client.loop_stop()

@@ -16,21 +16,24 @@ import paho.mqtt.client as mqtt
 #from logger import getLogger
 #log = getLogger(__name__)
 from queue import Queue
-from yolink_devices import YoLinkDevice
+#from yolink_devices import YoLinkDevice
 from yolink_mqtt_client import YoLinkMQTTClient
 #from yolink_mqtt_device import YoLinkMQTTClient
 """
 Object representation for YoLink MQTT Client
 """
-class YoLinkMQTTDevice(YoLinkDevice):
-    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceId, callback):
-        super().__init__( yolink_URL, csid, csseckey, deviceId)
+class YoLinkMQTTDevice(object):
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback):
+        #super().__init__( yolink_URL, csid, csseckey, deviceInfo)
         #self.callback = callback
         #self.build_device_api_request_data()
         #self.enable_device_api()
-        self.targetId = deviceId
+        #{"deviceId": "d88b4c1603007966", "deviceUDID": "75addd8e21394d769b85bc292c553275", "name": "YoLink Hub", "token": "118347ae-d7dc-49da-976b-16fae28d8444", "type": "Hub"}
+        self.deviceInfo = deviceInfo
+        self.deviceId = self.deviceInfo['deviceId']
+ 
 
-        self.yolinkMQTTclient = YoLinkMQTTClient(csName, csid, csseckey, mqtt_URL, mqtt_port,  self.targetId , callback )
+        self.yolinkMQTTclient = YoLinkMQTTClient(csName, csid, csseckey, mqtt_URL, mqtt_port,  self.deviceId , callback )
 
         self.yolink_URL = yolink_URL
         self.mqtt_url = mqtt_URL
@@ -39,11 +42,11 @@ class YoLinkMQTTDevice(YoLinkDevice):
         
         self.lastUpdate = 'lastTime'
         self.lastMessage = 'lastMessage'
-        self.deviceOnline = 'online'
-        self.deviceData = 'data'
-        self.deviceInfo = 'state'
-        self.deviceSchedule = 'schedules'
-        self.deviceDelays = 'delays' #may not be needed
+        self.dOnline = 'online'
+        self.dData = 'data'
+        self.dState= 'state'
+        self.dSchedule = 'schedules'
+        self.dDelays = 'delays' #may not be needed
         self.messageTime = 'time'
         self.forceStop = False
         
@@ -54,7 +57,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
                         ,'data':{ 'state':{} }
                         }
    
-        self.dataQueue = Queue()
+        #self.dataQueue = Queue()
         self.eventQueue = Queue()
         self.mutex = threading.Lock()
         self.timezoneOffsetSec = self.timezoneOffsetSec()
@@ -91,7 +94,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         
         payload = json.loads(msg.payload.decode("utf-8"))
         if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
-            if payload['deviceId'] == self.targetId:
+            if payload['deviceId'] == self.deviceId:
                 #self.eventQueue.put(payload['msgid'])
                 self.dataQueue.put(payload)
                 logging.debug (payload)
@@ -166,7 +169,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
                 
     def shurt_down(self):
         self.client.loop_stop()
-    '''
+    
     def getData(self):
         #expirationTime = int(time.time()*1000-60*60*1000) # 1 hour in milisec
         if not(self.dataQueue.empty()):
@@ -179,7 +182,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
             return(dataOK, temp)
         else:
             return(False, None)
-    '''
+    
     def eventMessagePending(self):
         logging.debug('getEventData')
         return(not self.eventQueue.empty())
@@ -203,7 +206,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
                 logging.debug('eventMonitorThread GET DATA')  
             
             logging.debug('eventMonitorThread')  
-    '''
+    
     def updateData(self, callback):
         self.mutex.acquire()
         dataOK,  rxdata = self.getData()
@@ -211,22 +214,25 @@ class YoLinkMQTTDevice(YoLinkDevice):
             callback(rxdata)
         self.mutex.release()
     #need to update to direct info
+    '''
     def refreshDevice(self, methodStr, callback):
         logging.debug(methodStr)  
         data = {}
         data['time'] = str(int(time.time())*1000)
         data['method'] = methodStr
-        data["targetDevice"] =  self.get_id()
-        data["token"]= self.get_token()
-        self.yolinkMQTTclient.publish_data(data, callback)
+        data["targetDevice"] =  self.deviceInfo['deviceId']
+        data["token"]= self.deviceInfo['token']
+        self.yolinkMQTTclient.publish_data(data)
+        #self.updateData(callback)
       
             
     def setDevice(self, methodStr, data, callback):
         data['time'] = str(int(time.time())*1000)
         data['method'] = methodStr
-        data["targetDevice"] =  self.get_id()
-        data["token"]= self.get_token()
-        self.yolinkMQTTclient.publish_data(  data, callback)
+        data["targetDevice"] =  self.deviceInfo['deviceId']
+        data["token"]= self.deviceInfo['token']
+        self.yolinkMQTTclient.publish_data( data)
+        #self.updateData(callback)
 
     def getValue(self, data, key):
         attempts = 1
@@ -256,35 +262,39 @@ class YoLinkMQTTDevice(YoLinkDevice):
         return(daysList)
 
     def updateStatusData (self, data):
-        if 'online' in data[self.deviceData]:
-            self.dataAPI[self.deviceOnline] = data[self.deviceData][self.deviceOnline]
+        if 'online' in data[self.dData]:
+            self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
         else:
-            self.dataAPI[self.deviceOnline] = True
+            self.dataAPI[self.dOnline] = True
         if 'method' in data:
-            for key in data[self.deviceData][self.deviceInfo]:
-                self.dataAPI[self.deviceData][self.deviceInfo][key] = data[self.deviceData][self.deviceInfo][key]
+            for key in data[self.dData][self.dState]:
+                self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
         else: #event
-            for key in data[self.deviceData]:
-                self.dataAPI[self.deviceData][self.deviceInfo][key] = data[self.deviceData][key]
+            for key in data[self.dData]:
+                self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
 
         self.dataAPI[self.lastUpdate] = data[self.messageTime]
         self.dataAPI[self.lastMessage] = data
   
     def eventPending(self):
+        return( not self.eventQueue.empty())
+    
+    def extractEventData(self):
         if not self.eventQueue.empty():
             return(self.eventQueue.get())
         else:
             return(None)
 
+            
     def getInfoAPI (self):
         return(self.dataAPI)
 
     def getState(self):
-        return(self.dataAPI[self.deviceData][self.deviceInfo]['state'])
+        return(self.dataAPI[self.dData][self.dState]['state'])
         
     def getInfoValue(self, key):
-        if key in self.dataAPI[self.deviceData][self.deviceInfo]:
-            return(self.dataAPI[self.deviceData][self.deviceInfo][key])
+        if key in self.dataAPI[self.dData][self.dState]:
+            return(self.dataAPI[self.dData][self.dState][key])
         else:
             return(None)
 
@@ -295,7 +305,7 @@ class YoLinkMQTTDevice(YoLinkDevice):
         return(self.dataAPI[self.lastUpdate])
     
     def updateGarageCtrlStatus(self, data):
-        self.dataAPI[self.deviceData][self.deviceInfo] = data['data']
+        self.dataAPI[self.dData][self.dState] = data['data']
         self.dataAPI[self.lastUpdate] = data[self.messageTime]
         self.dataAPI[self.lastMessage] = data
 
