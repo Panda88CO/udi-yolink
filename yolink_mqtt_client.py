@@ -34,12 +34,14 @@ class YoLinkMQTTClient(object):
       
         #self.device_hash = device_hash
         self.deviceId = deviceId
-        self.client = mqtt.Client(self.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
-        self.client.on_subscribe = self.on_subscribe
-        self.client.on_disconnect = self.on_disconnect
-        self.updateInterval = 3
+        try:
+            self.client = mqtt.Client(self.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+            self.client.on_connect = self.on_connect
+            self.client.on_message = self.on_message
+            self.client.on_subscribe = self.on_subscribe
+            self.client.on_disconnect = self.on_disconnect
+        except Exception as E:
+            logging.error('Exception  - -init-: ' + str(E))
         self.messagePending = False
         logging.debug(self.deviceId)
         #self.client.tls_set()
@@ -49,15 +51,19 @@ class YoLinkMQTTClient(object):
         """
         Connect to MQTT broker
         """
-        logging.info("Connecting to broker...")
-        self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
-        self.client.connect(self.mqtt_url, self.mqtt_port, 30)
-        logging.debug ('connect:')
-        self.client.loop_start()
-        #self.client.loop_forever()
-        #logging.debug('loop started')
-        time.sleep(1)
-     
+        try: 
+            logging.info("Connecting to broker...")
+            self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
+            self.client.connect(self.mqtt_url, self.mqtt_port, 30)
+            logging.debug ('connect:')
+            self.client.loop_start()
+            #self.client.loop_forever()
+            #logging.debug('loop started')
+            time.sleep(1)
+        except Exception as E:
+            logging.error('Exception  - connect_to_broker: ' + str(E))
+
+
     def on_message(self, client, userdata, msg):
         """
         Callback for broker published events
@@ -102,21 +108,24 @@ class YoLinkMQTTClient(object):
         """
         logging.debug("Connected with result code %s" % rc)
         #logging.debug( client,  userdata, flags)
+        try:
 
-        if (rc == 0):
-            logging.debug("Successfully connected to broker %s" % self.mqtt_url)
+            if (rc == 0):
+                logging.debug("Successfully connected to broker %s" % self.mqtt_url)
 
-        else:
-            logging.debug("Connection with result code %s" % rc);
-            sys.exit(2)
-        time.sleep(1)
-        logging.debug('Subsribe: ' + self.topicResp + ', '+self.topicReport+', '+ self.topicReportAll )
-        test1 = self.client.subscribe(self.topicResp)
-        #logging.debug(test1)
-        test2 = self.client.subscribe(self.topicReport)
-        #logging.debug(test2)
-        test3 = self.client.subscribe(self.topicReportAll)
-        #logging.debug(test3)
+            else:
+                logging.debug("Connection with result code %s" % rc);
+                sys.exit(2)
+            time.sleep(1)
+            logging.debug('Subsribe: ' + self.topicResp + ', '+self.topicReport+', '+ self.topicReportAll )
+            test1 = self.client.subscribe(self.topicResp)
+            #logging.debug(test1)
+            test2 = self.client.subscribe(self.topicReport)
+            #logging.debug(test2)
+            test3 = self.client.subscribe(self.topicReportAll)
+            #logging.debug(test3)
+         except Exception as E:
+            logging.error('Exception  -  on_connect: ' + str(E))       
     
     def on_disconnect(self, client, userdata,rc=0):
         logging.debug('Disconnect - stop loop')
@@ -140,11 +149,15 @@ class YoLinkMQTTClient(object):
 
     def publish_data(self, data):
         logging.debug('publish_data: ' + data['method'])
-        dataTemp = str(json.dumps(data))
-        test = self.client.publish(self.topicReq, dataTemp)
-        if test.rc == 0:
-            time.sleep(2) 
-                    
+        try:
+            dataTemp = str(json.dumps(data))
+            result = self.client.publish(self.topicReq, dataTemp)
+            if result.rc == 0:
+                time.sleep(2) 
+        except Exception as E:
+            logging.error('Exception  - publish_data: ' + str(E))
+
+
     def shurt_down(self):
         self.client.loop_stop()
     
