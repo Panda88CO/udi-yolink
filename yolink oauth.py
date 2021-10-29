@@ -21,8 +21,8 @@ yolinkURL =  'https://api.yosmart.com/openApi'
 import logging
 logging.basicConfig(level=logging.DEBUG)
 #creds
-client_id = '' #csID
-client_secret = ' # CSSseckey
+client_id = '60dd7fa7960d177187c82039' #csID
+client_secret = '3f68536b695a435d8a1a376fc8254e70'# CSSseckey
 redirect_uri="https://127.0.0.1/yolink"
 
 #oauth endpoints
