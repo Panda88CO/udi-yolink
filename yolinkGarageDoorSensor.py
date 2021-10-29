@@ -1,31 +1,19 @@
-import hashlib
 import json
-import os
-import sys
 import time
-import threading
-import paho.mqtt.client as mqtt
 import logging
-import datetime
-import pytz
 
-from queue import Queue
-from yolink_mqtt_class1 import YoLinkMQTTDevice
+from yolink_mqtt_class2 import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
-    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num,  updateTimeSec):
-        logging.debug('YoLinkGarageDoorSensor init') 
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, serial_num)
-
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
         self.methodList = ['DoorSensor.getState' ]
         self.eventList = ['DoorSensor.Report']
         self.GarageName = 'GarageEvent'
         self.eventTime = 'Time'
 
-        self.connect_to_broker()
-        self.loopTimesec = updateTimeSec
-        self.monitorLoop(self.updateStatus, self.loopTimesec  )
+
         time.sleep(2)
         self.refreshGarageDoorSensor()
   
