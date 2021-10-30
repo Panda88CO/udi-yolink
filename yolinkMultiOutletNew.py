@@ -50,52 +50,58 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                         self.updateStatusData(data)                        
                    
                    
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['data']['state']['state'] = data['data']['state']
-                    self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
+                    #self.dataAPI['lastMessage'] = data
+                    #self.dataAPI['lastTime'] = data['time']
+                    #self.dataAPI['data']['state']['state'] = data['data']['state']
+                    #self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
                    
             elif  (data['method'] == 'MultiOutlet.setDelay' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['nbrPorts'] = len(data['data']['delays'])
-                    self.dataAPI['data']['state']['delays']=data['data']['delays']
-                    self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateDelayStatus(data)
+                    #self.dataAPI['lastMessage'] = data
+                    #self.dataAPI['lastTime'] = data['time']
+                    #self.dataAPI['nbrPorts'] = len(data['data']['delays'])
+                    #self.dataAPI['data']['state']['delays']=data['data']['delays']
+                    #self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
 
             elif  (data['method'] == 'MultiOutlet.getSchedules' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):  
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['data']['schedules'] = data['data']
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateScheduleStatus(data)
+                    #self.dataAPI['lastTime'] = data['time']
+                    #self.dataAPI['lastMessage'] = data
+                    #self.dataAPI['data']['schedules'] = data['data']
 
             elif  (data['method'] == 'MultiOutlet.setSchedules' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):  
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['data']['schedules'] = data['data']
+                if int(data['time']) > int(self.getLastUpdate()): 
+                    self.updateScheduleStatus(data)
+                    #self.dataAPI['lastTime'] = data['time']
+                    #self.dataAPI['lastMessage'] = data
+                    #self.dataAPI['data']['schedules'] = data['data']
 
             elif  (data['method'] == 'MultiOutlet.getVersion' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateFWStatus(data)
                     # Need to have it workign forst - not sure what return struture will look lik
                     #self.dataAPI['data']['state']['state'].append( data['data'])
-                    self.dataAPI['state']['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+                    #self.dataAPI['state']['lastTime'] = data['time']
+                    #self.dataAPI['lastMessage'] = data
             else:
                 logging.debug('Unsupported Method passed' + str(json(data)))
         elif 'event' in data:
             if data['event'] == 'MultiOutlet.StatusChange':
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['data']['state']['state'] = data['data']['state']
-                    self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)    
+                    #self.dataAPI['lastMessage'] = data
+                    #self.dataAPI['lastTime'] = data['time']
+                    #self.dataAPI['data']['state']['state'] = data['data']['state']
+                    #self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
             elif data['event'] == 'MultiOutlet.Report':
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['nbrPorts'] = len(data['data']['delays'])
-                    self.dataAPI['data']['state'] = data['data']
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)  
+                    #self.dataAPI['lastMessage'] = data
+                    #self.dataAPI['lastTime'] = data['time']
+                    #self.dataAPI['nbrPorts'] = len(data['data']['delays'])
+                    #self.dataAPI['data']['state'] = data['data']
                     
             else :
                 logging.debug('Unsupported Event passed' + str(json(data)))
