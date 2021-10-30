@@ -2,7 +2,7 @@ import json
 import time
 import logging
 
-from yolink_mqtt_class1 import YoLinkMQTTDevice
+from yolink_mqtt_class2 import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -11,30 +11,17 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
         self.maxSchedules = 6
-        self.methodList = []
-        self.eventList = []
+        self.methodList = ['MultiOutlet.getState', 'MultiOutlet.setState', 'MultiOutlet.setDelay', 'MultiOutlet.getSchedules', 'MultiOutlet.setSchedules'   ]
+        self.eventList = ['MultiOutlet.StatusChange', 'MultiOutlet.Report']
         self.ManipulatorName = 'MultiOutletEvent'
         self.eventTime = 'Time'
-        time.sleep(1)
-      
+        time.sleep(3)
         self.refreshMultiOutput() # needed to get number of ports on device
+        self.nbrPorts  = self.getNbrPorts()  
         self.refreshSchedules()
         self.refreshFWversion()
 
-    '''
-    def getStateValue (self):
-        temp = self.dataAPI['data']['state']['state']
-        temp = temp[0:self.dataAPI['nbrPorts']]
-        for port in range(len(temp)):
-            if temp[port] == 'closed':
-                temp[port] = 'OFF'
-            elif temp[port] == 'open':
-                temp[port] = 'ON'
-            else:
-                temp[port] = '??'
-                
-        return(temp)
-    '''
+
     def getSchedules (self):
         return(self.dataAPI['data']['schedules'])  
 
@@ -50,14 +37,19 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         if 'method' in  data:
             if  (data['method'] == 'MultiOutlet.getState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.dataAPI['lastTime']):
-
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['nbrPorts'] = len(data['data']['delays'])
-
-                    self.dataAPI['data']['state'] = data['data']
+                    #self.nbrPorts  = self.updateNbrPorts(data)
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateStatusData(data)             
+                    #self.dataAPI['lastMessage'] = data
+                    #self.dataAPI['lastTime'] = data['time']
+                    #self.dataAPI['nbrPorts'] = len(data['data']['delays'])
+                    #self.dataAPI['data']['state'] = data['data']
             elif  (data['method'] == 'MultiOutlet.setState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.dataAPI['lastTime']):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateStatusData(data)                        
+                   
+                   
                     self.dataAPI['lastMessage'] = data
                     self.dataAPI['lastTime'] = data['time']
                     self.dataAPI['data']['state']['state'] = data['data']['state']
@@ -76,6 +68,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                     self.dataAPI['lastTime'] = data['time']
                     self.dataAPI['lastMessage'] = data
                     self.dataAPI['data']['schedules'] = data['data']
+
             elif  (data['method'] == 'MultiOutlet.setSchedules' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.dataAPI['lastTime']):  
                     self.dataAPI['lastTime'] = data['time']

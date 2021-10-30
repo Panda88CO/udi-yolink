@@ -108,12 +108,25 @@ class YoLinkMQTTDevice(object):
                 daysList.append(self.daysOfWeek[i])
         return(daysList)
 
+    def updateNbrPorts(self, data):
+        if 'delays' in data['data']:
+            self.dataAPI['nbrPorts'] = len(data['data']['delays'])  
+        return(self.dataAPI['nbrPorts'])
+
+    def getNbrPorts(self):
+        if 'nbrPorts' in self.dataAPI:
+            return(self.dataAPI['nbrPorts'] )
+        else:
+            return (0)
+
     def updateStatusData (self, data):
         if 'online' in data[self.dData]:
             self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
         else:
             self.dataAPI[self.dOnline] = True
         if 'method' in data:
+            if 'delays' in data['data']:
+                self.dataAPI['nbrPorts'] = len(data['data']['delays'])
             for key in data[self.dData][self.dState]:
                 self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
         else: #event
@@ -122,7 +135,23 @@ class YoLinkMQTTDevice(object):
 
         self.dataAPI[self.lastUpdate] = data[self.messageTime]
         self.dataAPI[self.lastMessage] = data
-  
+        '''
+        def updateStatusData (self, data):
+            if 'online' in data[self.dData]:
+                self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
+            else:
+                self.dataAPI[self.dOnline] = True
+            if 'method' in data:
+                
+                for key in data[self.dData][self.dState]:
+                    self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
+            else: #event
+                for key in data[self.dData]:
+                    self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+
+            self.dataAPI[self.lastUpdate] = data[self.messageTime]
+            self.dataAPI[self.lastMessage] = data
+        '''
     def eventPending(self):
         return( not self.eventQueue.empty())
     
