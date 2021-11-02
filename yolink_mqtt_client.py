@@ -124,7 +124,7 @@ class YoLinkMQTTClient(object):
             #logging.debug(test2)
             test3 = self.client.subscribe(self.topicReportAll)
             #logging.debug(test3)
-         except Exception as E:
+        except Exception as E:
             logging.error('Exception  -  on_connect: ' + str(E))       
     
     def on_disconnect(self, client, userdata,rc=0):

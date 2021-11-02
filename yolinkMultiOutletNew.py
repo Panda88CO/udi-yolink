@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
-    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo):
+    def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
         self.maxSchedules = 6
         self.methodList = ['MultiOutlet.getState', 'MultiOutlet.setState', 'MultiOutlet.setDelay', 'MultiOutlet.getSchedules', 'MultiOutlet.setSchedules'   ]
@@ -39,15 +39,11 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                 if int(data['time']) > int(self.dataAPI['lastTime']):
                     #self.nbrPorts  = self.updateNbrPorts(data)
                     if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)             
-                    #self.dataAPI['lastMessage'] = data
-                    #self.dataAPI['lastTime'] = data['time']
-                    #self.dataAPI['nbrPorts'] = len(data['data']['delays'])
-                    #self.dataAPI['data']['state'] = data['data']
+                        self.updateMultiIOStatusData(data)             
             elif  (data['method'] == 'MultiOutlet.setState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.dataAPI['lastTime']):
                     if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)                        
+                        self.updateMultiIOStatusData(data)                        
                    
                    
                     #self.dataAPI['lastMessage'] = data
@@ -90,14 +86,14 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         elif 'event' in data:
             if data['event'] == 'MultiOutlet.StatusChange':
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateStatusData(data)    
+                    self.updateMultiIOStatusData(data)    
                     #self.dataAPI['lastMessage'] = data
                     #self.dataAPI['lastTime'] = data['time']
                     #self.dataAPI['data']['state']['state'] = data['data']['state']
                     #self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
             elif data['event'] == 'MultiOutlet.Report':
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateStatusData(data)  
+                    self.updateMultiIOStatusData(data)  
                     #self.dataAPI['lastMessage'] = data
                     #self.dataAPI['lastTime'] = data['time']
                     #self.dataAPI['nbrPorts'] = len(data['data']['delays'])
