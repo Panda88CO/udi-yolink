@@ -134,26 +134,31 @@ class YoLinkMQTTDevice(object):
                 self.dataAPI['nbrPorts'] = -1 # to handle case where event happens before first poll - will be updated right after this
 
     def updateLoraInfo(self, data):
-        self.dataAPI[self.dData][self.dState]['loraInfo']= data[self.dData]['loraInfo']
+        if self.dState in data[self.dData]:
+            if 'loraInfo' in data[self.dData][self.dState]:
+                self.dataAPI[self.dData][self.dState]['loraInfo']= data[self.dData]['loraInfo']
 
     def updateMessageInfo(self, data):
         self.dataAPI[self.lastUpdate] = data[self.messageTime]
         self.dataAPI[self.lastMessage] = data
 
-    def updateMultiIOStatusData (self, data):
+    def updateMultiStatusData (self, data):
         self.setOnline(data)
         self.setNbrPorts(data)
         self.updateLoraInfo(data)
         if 'method' in data:
-            for key in range(0, self.nbrPorts):
-                self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
-                if 'delays'in data[self.dData]:
-                    self.dataAPI[self.dData][self.dDelays]=[]
-                    test = data[self.dData][self.dDelays][key]
-                    self.dataAPI[self.dData][self.dDelays][key] = test
+            #for key in range(0, self.nbrPorts):
+            self.dataAPI[self.dData][self.dState] = data[self.dData][self.dState][0:self.nbrPorts]
+                
+            if 'delays'in data[self.dData]:
+                self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
+                    #self.dataAPI[self.dData][self.dDelays]=[]
+                    #test = data[self.dData][self.dDelays][key]
+                    #self.dataAPI[self.dData][self.dDelays][key] = test
         else: #event
-            for key in range(0, self.nbrPorts):
-                    self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
+            self.dataAPI[self.dData][self.dState] = data[self.dData][self.dState][0:self.nbrPorts]
+            if 'delays'in data[self.dData]:
+                self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]                 
         self.updateMessageInfo(data)
 
 
@@ -165,7 +170,6 @@ class YoLinkMQTTDevice(object):
         else:
             self.dataAPI[self.dOnline] = True
         if 'method' in data:
-            
             for key in data[self.dData][self.dState]:
                 self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
         else: #event
@@ -178,25 +182,18 @@ class YoLinkMQTTDevice(object):
         self.setOnline(data)
         self.setNbrPorts(data)
         self.updateLoraInfo(data)
-
         self.dataAPI[self.dData][self.dSchedule] = data[self.dData]
-        self.updateMessageInfo(data)
+        self.dataAPI[self.lastMessage] = data
 
     def updateDelayStatus(self, data):
         self.setOnline(data)
         self.setNbrPorts(data)
         self.updateLoraInfo(data)
-
-        for key in range(0, self.nbrPorts):
-            self.dataAPI[self.dData][self.dDelays]=[]
-            if 'delays'in data[self.dData]:
-                self.dataAPI[self.dData][self.dDelays][key] = data[self.dData][self.dDelays][key]
+        if 'delays'in data[self.dData]:
+            self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
  
         self.updateMessageInfo(data)
 
-
-
-        
 
     def updateFWStatus(self, data):
         # Need to have it workign forst - not sure what return struture will look lik

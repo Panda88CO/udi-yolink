@@ -16,7 +16,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         self.ManipulatorName = 'MultiOutletEvent'
         self.eventTime = 'Time'
         time.sleep(3)
-        self.refreshMultiOutput() # needed to get number of ports on device
+        self.refreshMultiOutlet() # needed to get number of ports on device
         self.nbrPorts  = self.getNbrPorts()  
         self.refreshSchedules()
         self.refreshFWversion()
@@ -26,7 +26,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         return(self.dataAPI['data']['schedules'])  
 
     def getDelays (self):
-        return(self.dataAPI['data']['state']['delays'])  
+        return(self.dataAPI['data']['delays'])  
 
 
     '''
@@ -39,97 +39,77 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                 if int(data['time']) > int(self.dataAPI['lastTime']):
                     #self.nbrPorts  = self.updateNbrPorts(data)
                     if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateMultiIOStatusData(data)             
+                        self.updateMultiStatusData(data)             
             elif  (data['method'] == 'MultiOutlet.setState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.dataAPI['lastTime']):
                     if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateMultiIOStatusData(data)                        
-                   
-                   
-                    #self.dataAPI['lastMessage'] = data
-                    #self.dataAPI['lastTime'] = data['time']
-                    #self.dataAPI['data']['state']['state'] = data['data']['state']
-                    #self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
+                        self.updateMultiStatusData(data)                        
                    
             elif  (data['method'] == 'MultiOutlet.setDelay' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateDelayStatus(data)
-                    #self.dataAPI['lastMessage'] = data
-                    #self.dataAPI['lastTime'] = data['time']
-                    #self.dataAPI['nbrPorts'] = len(data['data']['delays'])
-                    #self.dataAPI['data']['state']['delays']=data['data']['delays']
-                    #self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
 
             elif  (data['method'] == 'MultiOutlet.getSchedules' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateScheduleStatus(data)
-                    #self.dataAPI['lastTime'] = data['time']
-                    #self.dataAPI['lastMessage'] = data
-                    #self.dataAPI['data']['schedules'] = data['data']
 
             elif  (data['method'] == 'MultiOutlet.setSchedules' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()): 
                     self.updateScheduleStatus(data)
-                    #self.dataAPI['lastTime'] = data['time']
-                    #self.dataAPI['lastMessage'] = data
-                    #self.dataAPI['data']['schedules'] = data['data']
 
             elif  (data['method'] == 'MultiOutlet.getVersion' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateFWStatus(data)
-                    # Need to have it workign forst - not sure what return struture will look lik
-                    #self.dataAPI['data']['state']['state'].append( data['data'])
-                    #self.dataAPI['state']['lastTime'] = data['time']
-                    #self.dataAPI['lastMessage'] = data
+
             else:
                 logging.debug('Unsupported Method passed' + str(json(data)))
         elif 'event' in data:
             if data['event'] == 'MultiOutlet.StatusChange':
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateMultiIOStatusData(data)    
-                    #self.dataAPI['lastMessage'] = data
-                    #self.dataAPI['lastTime'] = data['time']
-                    #self.dataAPI['data']['state']['state'] = data['data']['state']
-                    #self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
+                    self.updateMultiStatusData(data)    
+
             elif data['event'] == 'MultiOutlet.Report':
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateMultiIOStatusData(data)  
-                    #self.dataAPI['lastMessage'] = data
-                    #self.dataAPI['lastTime'] = data['time']
-                    #self.dataAPI['nbrPorts'] = len(data['data']['delays'])
-                    #self.dataAPI['data']['state'] = data['data']
-                    
+                    self.updateMultiStatusData(data)  
+
             else :
                 logging.debug('Unsupported Event passed' + str(json(data)))
                                         
 
-    def refreshMultiOutput(self):
+    def refreshMultiOutlet(self):
         return(self.refreshDevice('MultiOutlet.getState', self.updateStatus))
 
 
-    def setState(self, portList, value):
+    def setMultiOutletState(self, portList, value ):
         logging.debug('setMultiOutletState')
         # portlist a a listof ports being changed port range 0-7
         # vaue is state that need to change 2 (ON/OFF)
+        status = True
         port = 0
         for i in portList:
-            port = port + pow(2, i)
-        if value.upper() == 'ON':
+            if i <= self.nbrPorts and i >= 0 :
+                port = port + pow(2, i)
+            else:
+                logging.error('wrong port number (range 0- '+str(self.nbrPorts)+'): ' + str(i))
+                status = False
+        if value.upper() == 'ON' or value.upper() == 'OPEN':
             state = 'open'
-        elif value.upper() == 'OFF':
+        elif value.upper() == 'OFF' or value.upper() == 'CLOSED' :
             state = 'closed'
         else:
             logging.error('Unknows state passed')
-        data={}
-        data["params"] = {}
-        data["params"]["chs"] =  port
-        data["params"]['state'] = state
-
-        return(self.setDevice( 'MultiOutlet.setState', data, self.updateStatus))
+            status = False
+        if status:
+            data={}
+            data["params"] = {}
+            data["params"]["chs"] =  port
+            data["params"]['state'] = state
+            self.setDevice( 'MultiOutlet.setState', data, self.updateStatus)
+        return(status)
 
 
     def refreshSchedules(self):
-        return(self.refreshDevice('MultiOutlet.getSchedules', self.updateStatus))
+        return(self.refreshDevice('MultiOutlet.getSchedules', self.updateScheduleStatus))
  
     
     def resetScheduleList(self):
@@ -142,15 +122,30 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         data["params"] = {}
         data["params"]["chs"] =  scheduleList
         #data["params"]['state'] = state
-        return(self.setDevice('MultiOutlet.setSchedules', data, self.updateStatus))
+        return(self.setDevice('MultiOutlet.setSchedules', data, self.updateScheduleStatus))
+
+
+    def getMultiOutletState(self):
+        self.refreshMultiOutlet()
+        temp = self.getInfoAPI()
+        states= {}
+        for port in range(0,self.nbrPorts):
+            if 'delays' in temp['data']:
+                delay = None
+                for ch in  temp['data']['delays']:
+                    if ch['ch'] == port:
+                        delay = ch
+                states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':delay}
+        #print(states)
+        return(states)
 
 
     def resetDelayList (self):
         self.delayList = []
 
-    def appedDelay(self, delay):
+    def appendDelay(self, delay):
         nbrDelays = len(self.delayList)
-        self
+        #self
 
     def setDelay(self, delayList):
         logging.debug('setMultiOutletDelay - not currently supported')
