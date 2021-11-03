@@ -25,7 +25,7 @@ class YoLinkMQTTDevice(object):
         #{"deviceId": "d88b4c1603007966", "deviceUDID": "75addd8e21394d769b85bc292c553275", "name": "YoLink Hub", "token": "118347ae-d7dc-49da-976b-16fae28d8444", "type": "Hub"}
         self.deviceInfo = deviceInfo
         self.deviceId = self.deviceInfo['deviceId']
- 
+        self.delayList = []
 
         self.yolinkMQTTclient = YoLinkMQTTClient(csName, csid, csseckey, mqtt_URL, mqtt_port,  self.deviceId , callback )
 
@@ -161,9 +161,47 @@ class YoLinkMQTTDevice(object):
                 self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]                 
         self.updateMessageInfo(data)
 
+    def resetDelayList (self):
+        self.delayList = []
 
+    def appendDelay(self, delay):
+        # to remove a delay program it to 0 
+        try:
+            invalid = False
+            if 'port' in delay  and 'OnDelay' in delay and 'OffDelay' in delay:
+                if delay['port'] <0 and delay['port'] >= self.nbrPorts:
+                    invalid = True
+                if 'OnDelay' in delay:
+                    if delay['OnDelay'] < 0:
+                        invalid = True
+                if 'OffDelay' in delay:
+                    if delay['OffDelay'] < 0:
+                        invalid = True
+            if not invalid:
+                self.delayList.append(delay)
+            return(invalid)
+        except logging.exception as E:
+            logging.debug('Exception appendDelay : ' + str(E))
 
-        
+    def prepareDelayData(self):
+        data={}
+        data['params'] = {}
+        nbrDelays = len(self.delayList)
+        data["params"]["delays"] = []
+        if nbrDelays > 0:
+            for delayNbr in range (0,nbrDelays):
+                #temp = self.delayList[delayNbr]
+                temp = {}
+                temp['ch'] = self.delayList[delayNbr]['port']
+                temp['on'] = self.delayList[delayNbr]['OnDelay']
+                temp['off'] = self.delayList[delayNbr]['OffDelay']
+                
+                data["params"]["delays"].append(temp)
+                #temp['on'] = tmp['OnDelay']
+                #temp['off'] = tmp['OffDelay']
+                #data["params"]["delays"].append(temp)
+        return(data)
+
     def updateStatusData  (self, data):
         if 'online' in data[self.dData]:
             self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
