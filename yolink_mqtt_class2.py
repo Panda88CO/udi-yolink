@@ -208,13 +208,45 @@ class YoLinkMQTTDevice(object):
         else:
             self.dataAPI[self.dOnline] = True
         if 'method' in data:
-            for key in data[self.dData][self.dState]:
-                self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
+            if self.dState in data[self.dData]:
+                if type(data[self.dData][self.dState]) is dict:
+                    for key in data[self.dData][self.dState]:
+                        if key == 'delays':
+                             self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
+                        else:
+                            self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
+                elif  type(data[self.dData][self.dState]) == list:
+                    self.dataAPI[self.dData][self.dState] = data[self.dData][self.dState][0:self.nbrPorts]
+                    if 'delays'in data[self.dData]:
+                        self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
+                else:
+                    for key in data[self.dData]:
+                         self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
         else: #event
             for key in data[self.dData]:
                 self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
+    '''    
+    def updateStatusData  (self, data):
+        if 'online' in data[self.dData]:
+            self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
+        else:
+            self.dataAPI[self.dOnline] = True
+        if 'method' in data:
+            for key in data[self.dData][self.dState]:
+                self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
+            if 'delays'in data[self.dData]:
+                self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
+
+        else: #event
+            for key in data[self.dData]:
+                self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+        self.updateLoraInfo(data)
+        self.updateMessageInfo(data)
+    '''
+
+
 
     def updateScheduleStatus(self, data):
         self.setOnline(data)

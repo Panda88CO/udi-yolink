@@ -32,27 +32,20 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
     def updateStatus(self, data):
         if 'method' in  data:
             if  (data['method'] == 'MultiOutlet.getState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    #self.nbrPorts  = self.updateNbrPorts(data)
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateMultiStatusData(data)             
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateMultiStatusData(data)             
             elif  (data['method'] == 'MultiOutlet.setState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateMultiStatusData(data)                        
-                   
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateMultiStatusData(data)                                       
             elif  (data['method'] == 'MultiOutlet.setDelay' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateDelayStatus(data)
-
             elif  (data['method'] == 'MultiOutlet.getSchedules' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateScheduleStatus(data)
-
             elif  (data['method'] == 'MultiOutlet.setSchedules' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()): 
                     self.updateScheduleStatus(data)
-
             elif  (data['method'] == 'MultiOutlet.getVersion' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateFWStatus(data)

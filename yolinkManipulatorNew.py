@@ -2,7 +2,7 @@ import json
 import time
 import logging
 
-from yolink_mqtt_class1 import YoLinkMQTTDevice
+from yolink_mqtt_class2 import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -20,7 +20,7 @@ class YoLinkManipulator(YoLinkMQTTDevice):
         self.refreshSchedules()
         self.refreshFWversion()
 
-    '''
+    
     def getState(self):
         logging.debug('getState')
         return(self.Manipulator['state']['state'])
@@ -39,125 +39,39 @@ class YoLinkManipulator(YoLinkMQTTDevice):
         logging.debug('refreshManipulatorFWversion - Not supported yet')
         #return(self.refreshDevice('Manipulator.getVersion', self.updateStatus))
 
-    '''
+    
     
     def updateStatus(self, data):
         if 'method' in  data:
             if  (data['method'] == 'Manipulator.getState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['nbrPorts'] = len(data['data']['delay'])
-                    self.dataAPI['data']['state'] = data['data']
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)       
             elif  (data['method'] == 'Manipulator.setState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['data']['state']['state'] = data['data']['state']
-                    self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
-                   
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)                          
             elif  (data['method'] == 'Manipulator.setDelay' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['nbrPorts'] = len(data['data']['delays'])
-                    self.dataAPI['data']['state']['delay']=data['data']['delay']
-                    self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
-
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)       
             elif  (data['method'] == 'Manipulator.getSchedules' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):  
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['data']['schedules'] = data['data']
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateScheduleStatus(data)
             elif  (data['method'] == 'Manipulator.setSchedules' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):  
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['data']['schedules'] = data['data']
-
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateScheduleStatus(data)
             elif  (data['method'] == 'Manipulator.getVersion' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    # Need to have it workign forst - not sure what return struture will look lik
-                    #self.dataAPI['data']['state']['state'].append( data['data'])
-                    self.dataAPI['state']['lastTime'] = data['time']
-                    self.dataAPI['lastMessage'] = data
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateFWStatus(data)
             else:
                 logging.debug('Unsupported Method passed' + str(json(data)))
         elif 'event' in data:
             if data['event'] == 'Manipulator.StatusChange':
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['data']['state']['state'] = data['data']['state']
-                    self.dataAPI['data']['state']['loraInfo']= data['data']['loraInfo']
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)              
             elif data['event'] == 'Manipulator.Report':
-                if int(data['time']) > int(self.dataAPI['lastTime']):
-                    self.dataAPI['lastMessage'] = data
-                    self.dataAPI['lastTime'] = data['time']
-                    self.dataAPI['nbrPorts'] = len(data['data']['delays'])
-                    self.dataAPI['data']['state'] = data['data']
-                    
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)                      
             else :
                 logging.debug('Unsupported Event passed' + str(json(data)))
-
-
-
-    '''
-    def updateStatus(self, data):
-        logging.debug('updateStatus') 
-        if 'method' in  data:
-            if  (data['method'] == 'Manipulator.getState' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.Manipulator['state']['lastTime']):
-                    self.Manipulator['state']['state'] = data['data']['state']
-                    self.Manipulator['state']['lastTime'] = str(data['time'])
-                    self.Manipulator['status']['battery'] = data['data']['battery']               
-                    self.Manipulator['status']['FWvers'] = data['data']['version']
-                    self.Manipulator['status']['signaldB'] =  data['data']['loraInfo']['signal']    
-                    self.Manipulator['status']['timeZone']= data['data']['tz']
-                    self.Manipulator['status']['lastTime'] = str(data['time'])
-                    if 'delay' in data['data']:
-                        channel = data['data']['delay']['ch']
-                        self.Manipulator['delays'][channel]= {}
-                        if 'on' in data['data']['delay']:
-                            self.Manipulator['delays'][channel]= {'onTimeLeft':data['data']['delay']['on']}
-                        if 'off' in data['data']['delay']:
-                            self.Manipulator['delays'][channel]= {'offTimeLeft':data['data']['delay']['off']}
-
-                    else:
-                        self.Manipulator['delays']= {'lastTime':data['time']}
-
-            elif (data['method'] == 'Manipulator.getSchedules' and  data['code'] == '000000'):
-                if int(data['time']) > int(self.Manipulator['schedules']['lastTime']):
-                    self.Manipulator['schedules']['lastTime'] = str(data['time'])
-                    self.scheduleList = {}
-                    for index in data['data']:
-                        self.Manipulator['schedules'][index] = {}
-                        self.Manipulator['schedules'][index]['isValid'] = data['data'][index]['isValid']
-                        self.Manipulator['schedules'][index]['index'] = data['data'][index]['index']
-                        self.Manipulator['schedules'][index]['onTime'] = data['data'][index]['on']
-                        self.Manipulator['schedules'][index]['offTime'] = data['data'][index]['off']
-                        week =  data['data'][index]['week']
-                        self.Manipulator['schedules'][index]['days'] = self.maskToDays(week)
-                                               
-                        self.scheduleList[ self.Manipulator['schedules'][index]['index'] ]= {}
-                        for key in self.Manipulator['schedules'][index]:
-                            self.scheduleList[ self.Manipulator['schedules'][index]['index']] = self.Manipulator['schedules'][index][key]
-
-                        
-
-            elif (data['method'] == 'Manipulator.getVersion' and  data['code'] == '000000'):  
-                 if int(data['time']) > int(self.Manipulator['status']['lastTime']):
-                    self.Manipulator['status']['lastTime'] = str(data['time'])
-        elif 'event' in data:
-            if int(data['time']) > int(self.Manipulator['state']['lastTime']):
-                self.Manipulator['state']['state'] = data['data']['state']
-                self.Manipulator['state']['lastTime'] = str(data['time'])
-                self.Manipulator['status']['battery'] = data['data']['battery']             
-                self.Manipulator['status']['signaldB'] =  data['data']['loraInfo']['signal']       
-                self.Manipulator['status']['lastTime'] = str(data['time'])
-        else:
-            logging.error('unsupported data')
-    '''
 
     def setState(self, state):
         logging.debug('setManipulatorState')
