@@ -11,8 +11,9 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
         self.maxSchedules = 6
-        self.methodList = ['MultiOutlet.getState', 'MultiOutlet.setState', 'MultiOutlet.setDelay', 'MultiOutlet.getSchedules', 'MultiOutlet.setSchedules'   ]
-        self.eventList = ['MultiOutlet.StatusChange', 'MultiOutlet.Report']
+        self.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdates'   ]
+        self.eventList = ['StatusChange', 'Report']
+        self.type = 'MultiOutlet'
         self.ManipulatorName = 'MultiOutletEvent'
         self.eventTime = 'Time'
         time.sleep(3)
@@ -51,7 +52,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                     self.updateFWStatus(data)
 
             else:
-                logging.debug('Unsupported Method passed' + str(json(data)))
+                logging.debug('Unsupported Method passed' + str(json.dumps(data)))
         elif 'event' in data:
             if data['event'] == 'MultiOutlet.StatusChange':
                 if int(data['time']) > int(self.getLastUpdate()):
@@ -150,3 +151,53 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
     '''
 
 
+    def resetDelayList (self):
+        self.delayList = []
+
+    def appendDelay(self, delay):
+        # to remove a delay program it to 0 
+        try:
+            invalid = False
+            if 'port' in delay  and 'OnDelay' in delay and 'OffDelay' in delay:
+                if delay['port'] <0 and delay['port'] >= self.nbrPorts:
+                    invalid = True
+                if 'OnDelay' in delay:
+                    if delay['OnDelay'] < 0:
+                        invalid = True
+                if 'OffDelay' in delay:
+                    if delay['OffDelay'] < 0:
+                        invalid = True
+            elif  'OnDelay' in delay and 'OffDelay' in delay:
+                if 'OnDelay' in delay:
+                    if delay['OnDelay'] < 0:
+                        invalid = True
+                if 'OffDelay' in delay:
+                    if delay['OffDelay'] < 0:
+                        invalid = True
+                delay['port'] = 1 #use channel 1 for non-multi port devices
+            else:
+                logging.debug('Missing or wrong input parameters: ' + str(delay))
+            if not invalid:
+                self.delayList.append(delay)
+            return(invalid)
+        except logging.exception as E:
+            logging.debug('Exception appendDelay : ' + str(E))
+
+    def prepareDelayData(self):
+        data={}
+        data['params'] = {}
+        nbrDelays = len(self.delayList)
+        data["params"]["delays"] = []
+        if nbrDelays > 0:
+            for delayNbr in range (0,nbrDelays):
+                #temp = self.delayList[delayNbr]
+                temp = {}
+                temp['ch'] = self.delayList[delayNbr]['port']
+                temp['on'] = self.delayList[delayNbr]['OnDelay']
+                temp['off'] = self.delayList[delayNbr]['OffDelay']
+                
+                data["params"]["delays"].append(temp)
+                #temp['on'] = tmp['OnDelay']
+                #temp['off'] = tmp['OffDelay']
+                #data["params"]["delays"].append(temp)
+        return(data)

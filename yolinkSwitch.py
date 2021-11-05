@@ -6,35 +6,23 @@ from yolink_mqtt_class2 import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 
-class YoLinkManipulator(YoLinkMQTTDevice):
+class YoLinkSwitch(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
-        self.maxSchedules = 6
+        
         self.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
         self.eventList = ['StatusChange', 'Report']
+        self.stateList = ['open', 'closed', 'on', 'off']
         self.ManipulatorName = 'ManipulatorEvent'
         self.eventTime = 'Time'
-        self.type = 'Manipulator'
+        self.type = 'Switch'
         time.sleep(1)
         
         self.refreshState()
         self.refreshSchedules()
-        self.refreshFWversion()
+        #self.refreshFWversion()
 
 
-    def refreshDelays(self):
-        logging.debug('refreshManipulator')
-        self.refreshDevice()
-        return(self.getDelays())
-
-
-    def refreshSchedules(self):
-        logging.debug('Manipulator - refreshSchedules')
-        return(self.refreshDevice('Manipulator.getSchedules', self.updateStatus))
-
-    def refreshFWversion(self):
-        logging.debug('Manipulator - refreshFWversion - Not supported yet')
-        #return(self.refreshDevice('Manipulator.getVersion', self.updateStatus))
 
     def updateStatusData(self, data): 
         if 'online' in data[self.dData]:
@@ -90,16 +78,27 @@ class YoLinkManipulator(YoLinkMQTTDevice):
             self.deviceError(data)
 
     def setState(self, state):
-        logging.debug('setManipulatorState')
-        if state != 'open' and  state != 'closed':
-            logging.error('Unknows state passed')
+        logging.debug(self.type+' - setState')
+        if 'setState'  in self.methodList:          
+            if state.lower() not in self.stateList:
+                logging.error('Unknows state passed')
+                return(False)
+            if state.lower == 'on':
+                state = 'open'
+            if state.lower == 'off':
+                state = 'closed'
+            data = {}
+            data['params'] = {}
+            data['params']['state'] = state.lower()
+            return(self.setDevice( data))
+        else:
             return(False)
-        data = {}
-        data['params'] = {}
-        data['params']['state'] = state
-        return(self.setDevice( data))
-
     
 
-
-
+    def getState(self):
+        logging.debug(self.type+' - setState')
+        if  self.dataAPI[self.dState] == 'open':
+            return('ON')
+        else:
+            return('OFF')
+ 
