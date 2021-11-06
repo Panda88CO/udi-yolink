@@ -77,13 +77,14 @@ class YoLinkMQTTDevice(object):
         logging.debug(self.type+' - refreshDevice')
         if 'getState' in self.methodList:
             methodStr = self.type+'.getState'
-            logging.debug(methodStr)  
+            #logging.debug(methodStr)  
             data = {}
             data['time'] = str(int(time.time())*1000)
             data['method'] = methodStr
             data["targetDevice"] =  self.deviceInfo['deviceId']
             data["token"]= self.deviceInfo['token']
             self.yolinkMQTTclient.publish_data(data)
+            #time.sleep(2)
               
     def setDevice(self,  data):
         logging.debug(self.type+' - setDevice')
@@ -93,7 +94,7 @@ class YoLinkMQTTDevice(object):
             data['method'] = methodStr
             data["targetDevice"] =  self.deviceInfo['deviceId']
             data["token"]= self.deviceInfo['token']
-            self.yolinkMQTTclient.publish_data( data)
+            self.yolinkMQTTclient.publish_data(data)
             return(True)
         else:
             return(False)
@@ -122,16 +123,23 @@ class YoLinkMQTTDevice(object):
         if len(delayList) == 0:  
             data['params']['delayOn'] = 0
             data['params']['delayOff'] = 0
-        elif len(delayList) == 0:
-            for key in delayList:
-                if key.lower() == 'delayon':
-                    data['params']['delayOn'] = delayList[key]
-                elif key.lower() == 'delayoff':
-                    data['params']['delayOff'] = delayList[key] 
+        elif len(delayList) == 1:
+            for key in delayList[0]:
+                if key.lower() == 'delayon' or key.lower() == 'on' :
+                    data['params']['delayOn'] = delayList[0][key]
+                elif key.lower() == 'delayoff'or key.lower() == 'off' :
+                    data['params']['delayOff'] = delayList[0][key] 
                 else:
                     logging.debug('Wrong parameter passed - must be overwritten to support multi devices  : ' + str(key))
         else:
             logging.debug('Must overwrite to support multi devices for now')
+            return(False)
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = self.type+'.setDelay'
+        data["targetDevice"] =  self.deviceInfo['deviceId']
+        data["token"]= self.deviceInfo['token'] 
+        self.yolinkMQTTclient.publish_data( data)
+        return(True)
 
 
     def refreshSchedules(self):
@@ -144,11 +152,24 @@ class YoLinkMQTTDevice(object):
             data["targetDevice"] =  self.deviceInfo['deviceId']
             data["token"]= self.deviceInfo['token']
             self.yolinkMQTTclient.publish_data( data)
-            time.sleep(2)
-            #self.getSchedules()
-            return(self.getSchedules())
-        else:
-            return(None)
+            time.sleep(1)
+ 
+    def getSchedules(self):
+        nbrSchedules  = len(self.dataAPI[self.dData][self.dSchedule])
+        temp = {}
+        for schedule in range(0,nbrSchedules):
+            temp[schedule] = {}
+            for key in self.dataAPI[self.dData][self.dSchedule][str(schedule)]:
+                if key == 'week':
+                    days = self.maskToDays(self.dataAPI[self.dData][self.dSchedule][str(schedule)][key])
+                    temp[schedule][key]= days
+                elif key == 'isValid':
+                     temp[schedule]['isActive']=self.dataAPI[self.dData][self.dSchedule][str(schedule)][key]
+                elif self.dataAPI[self.dData][self.dSchedule][str(schedule)][key] == '25:0':
+                    temp[schedule][key] = 'DISABLED'
+                else:
+                     temp[schedule][key] = self.dataAPI[self.dData][self.dSchedule][str(schedule)][key]
+        return(temp)
 
     def refreshFWversion(self):
         logging.debug(self.type+' - refreshFWversion - Not supported yet')
@@ -185,7 +206,7 @@ class YoLinkMQTTDevice(object):
 
     def maskToDays(self, daysValue):
         daysList = []
-        for i in range(0,6):
+        for i in range(0,7):
             mask = pow(2,i)
             if (daysValue & mask) != 0 :
                 daysList.append(self.daysOfWeek[i])
@@ -316,10 +337,9 @@ class YoLinkMQTTDevice(object):
 
     def refreshState(self):
         logging.debug(str(self.type)+ ' - refreshState')
-        devStr = str(self.type)+'.getSate'
-        self.refreshDevice(devStr, self.updateStatus)
-        time.sleep(2)
-        return(self.getState())
+        #devStr = str(self.type)+'.getSate'
+        self.refreshDevice()
+        #time.sleep(2)
    
     def getState(self):
         logging.debug('Manituplator - getState')
@@ -368,21 +388,22 @@ class YoLinkMQTTDevice(object):
         utctnow = datetime.strptime(utctnowStr,  '%Y-%m-%d %H:%M:%S.%f')
         diff = utctnow - tnow
         return (diff.total_seconds())
-
+    '''
     def setDelay(self, delayList):
 
         logging.debug('setManipulatorDelay')
         data = {}
         data['params'] = {} 
-        if 'delayOn' in delayList:
+        if 'delayOn' in delayList or 'ON' in delayList:
             data['params']['delayOn'] = delayList['delayOn']
-        #else:
-        #    data['params']['delayOn'] = '25:0'
-        if 'delayOff' in delayList:
+        else:
+            data['params']['delayOn'] = 0
+        if 'delayOff' in delayList  or 'OFF' in delayList:
             data['params']['delayOff'] = delayList['delayOff']   
-        #else:
-        #    data['params']['delayOff'] = '25:0'
+        else:
+            data['params']['delayOff'] = 0
         return(self.setDevice( data ))
+    '''
 
     def resetSchedules(self):
         logging.debug('resetSchedules')

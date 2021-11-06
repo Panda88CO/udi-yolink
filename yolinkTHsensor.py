@@ -37,7 +37,7 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
                     eventData[self.tempName] = self.getState()
                     eventData[self.temperature] = self.getTempValueC()
                     eventData[self.humidity] = self.getHumidityValue()
-                    eventData[self.eventTime] = self.data[self.messageTime]
+                    eventData[self.eventTime] = data[self.messageTime]
                     self.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))

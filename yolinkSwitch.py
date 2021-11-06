@@ -11,14 +11,15 @@ class YoLinkSwitch(YoLinkMQTTDevice):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
         
         self.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
-        self.eventList = ['StatusChange', 'Report']
+        self.eventList = ['StatusChange', 'Report', 'getState']
         self.stateList = ['open', 'closed', 'on', 'off']
         self.ManipulatorName = 'ManipulatorEvent'
         self.eventTime = 'Time'
         self.type = 'Switch'
-        time.sleep(1)
+        time.sleep(2)
         
         self.refreshState()
+        #input()
         self.refreshSchedules()
         #self.refreshFWversion()
 
@@ -43,47 +44,55 @@ class YoLinkSwitch(YoLinkMQTTDevice):
 
     
     def updateStatus(self, data):
-        if data['code'] == '000000':
-            if 'method' in  data:
-                if  (data['method'] == 'Manipulator.getState' and  data['code'] == '000000'):
+        logging.debug(self.type+' - updateStatus')
+        if 'method' in  data:
+            if data['code'] == '000000':
+                if  (data['method'] == self.type +'.getState' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateStatusData(data)       
-                elif  (data['method'] == 'Manipulator.setState' and  data['code'] == '000000'):
+                elif  (data['method'] == self.type +'.setState' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateStatusData(data)                          
-                elif  (data['method'] == 'Manipulator.setDelay' and  data['code'] == '000000'):
+                elif  (data['method'] == self.type +'.setDelay' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateStatusData(data)       
-                elif  (data['method'] == 'Manipulator.getSchedules' and  data['code'] == '000000'):
+                elif  (data['method'] == self.type +'.getSchedules' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateScheduleStatus(data)
-                elif  (data['method'] == 'Manipulator.setSchedules' and  data['code'] == '000000'):
+                elif  (data['method'] == self.type +'.setSchedules' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateScheduleStatus(data)
-                elif  (data['method'] == 'Manipulator.getVersion' and  data['code'] == '000000'):
+                elif  (data['method'] == self.type +'.getVersion' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateFWStatus(data)
                 else:
-                    logging.debug('Unsupported Method passed' + json.dumps(data))                      
-            elif 'event' in data:
-                if data['event'] == 'Manipulator.StatusChange':
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)              
-                elif data['event'] == 'Manipulator.Report':
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)                      
-                else :
-                    logging.debug('Unsupported Event passed' + str(json(data)))
+                    logging.debug('Unsupported Method passed' + json.dumps(data))     
+            else:
+                self.deviceError(data)
+        elif 'event' in data:
+            if data['event'] == self.type +'.StatusChange' :
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)              
+            elif data['event'] == self.type +'.Report':
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)   
+            elif data['event'] == self.type +'.getState':
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)                                         
+            else :
+                logging.debug('Unsupported Event passed' + str(json(data)))
         else:
-            self.deviceError(data)
+            logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+
 
     def setState(self, state):
         logging.debug(self.type+' - setState')
+
         if 'setState'  in self.methodList:          
             if state.lower() not in self.stateList:
                 logging.error('Unknows state passed')
                 return(False)
-            if state.lower == 'on':
+            if state.lower() == 'on':
                 state = 'open'
             if state.lower == 'off':
                 state = 'closed'
@@ -96,9 +105,21 @@ class YoLinkSwitch(YoLinkMQTTDevice):
     
 
     def getState(self):
-        logging.debug(self.type+' - setState')
-        if  self.dataAPI[self.dState] == 'open':
-            return('ON')
+        logging.debug(self.type+' - getState')
+        attempts = 0
+        while self.dataAPI[self.dData][self.dState]  == {} and attempts < 5:
+            time.sleep(1)
+            attempts = attempts + 1
+        if attempts <= 5:
+            if  self.dataAPI[self.dData][self.dState]['state'] == 'open':
+                return('ON')
+            elif self.dataAPI[self.dData][self.dState]['state'] == 'closed':
+                return('OFF')
+            else:
+                return('Unkown')
         else:
-            return('OFF')
+            return('Unkown')
  
+    def getEnergy(self):
+        logging.debug(self.type+' - getEnergy')
+        return({'power':self.dataAPI[self.dData][self.dState]['power'], 'watt':self.dataAPI[self.dData][self.dState]['power']})

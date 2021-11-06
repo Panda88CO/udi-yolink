@@ -67,7 +67,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                                         
 
     def refreshMultiOutlet(self):
-        return(self.refreshDevice('MultiOutlet.getState', self.updateStatus))
+        return(self.refreshDevice())
 
 
     def setMultiOutletState(self, portList, value ):
@@ -99,7 +99,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
 
     def refreshSchedules(self):
-        return(self.refreshDevice('MultiOutlet.getSchedules', self.updateScheduleStatus))
+        return(self.refreshDevice())
  
     
     def resetScheduleList(self):

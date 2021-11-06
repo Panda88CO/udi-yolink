@@ -90,7 +90,7 @@ class YoLinkMQTTClient(object):
                 #self.dataQueue.put(payload)
                 logging.debug (payload)
                 self.callback(payload)
-                print('Device respnse:')
+                print('Device response:')
                 print(payload)
         elif msg.topic == self.topicReq:
                 logging.debug('publishing request' )
