@@ -88,12 +88,18 @@ class YoLinkMQTTDevice(object):
               
     def setDevice(self,  data):
         logging.debug(self.type+' - setDevice')
+        worked = False
         if 'setState' in self.methodList:
             methodStr = self.type+'.setState'
-            data['time'] = str(int(time.time())*1000)
-            data['method'] = methodStr
-            data["targetDevice"] =  self.deviceInfo['deviceId']
-            data["token"]= self.deviceInfo['token']
+            worked = True
+        elif 'toggle' in self.methodList:
+            methodStr = self.type+'.toggle'
+            worked = True
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = methodStr
+        data["targetDevice"] =  self.deviceInfo['deviceId']
+        data["token"]= self.deviceInfo['token']
+        if worked:
             self.yolinkMQTTclient.publish_data(data)
             return(True)
         else:
@@ -141,58 +147,159 @@ class YoLinkMQTTDevice(object):
         self.yolinkMQTTclient.publish_data( data)
         return(True)
 
+    def resetScheduleList(self):
+        self.scheduleList = []
 
+
+    def prepareScheduleData(self):
+        logging.debug(self.type + '- prepareScheduleData')
+        nbrSchedules = len(self.scheduleList)
+        if nbrSchedules <= self.maxSchedules:
+            tmpData = {}
+            for schedule in range (0, nbrSchedules):
+                tmpData[schedule] = {}
+
+                tmpData[schedule]['isValid'] = self.scheduleList[schedule]['isValid']
+                tmpData[schedule]['index'] = self.scheduleList[schedule]['index']
+                if 'on' in self.scheduleList[schedule]:
+                    tmpData[schedule]['on'] = self.scheduleList[schedule]['on']
+                else:
+                    tmpData[schedule]['on'] = '25:0'
+                if 'off' in self.scheduleList[schedule]:
+                    tmpData[schedule]['off'] = self.scheduleList[schedule]['off']
+                else:
+                    tmpData[schedule]['off'] = '25:0'
+                tmpData[schedule]['week'] = self.daysToMask(self.scheduleList[schedule]['week'])
+            return(tmpData)
+        else:
+            logging.error('More than '+str(self.maxSchedules)+' defined')
+            return(None)
+        
     def refreshSchedules(self):
-        logging.debug(self.type+' - refreshSchedules')
+        logging.debug(self.type + '- refreshSchedules')
+
         if 'getSchedules' in self.methodList:
-            data= {}
             methodStr = self.type+'.getSchedules'
+            #logging.debug(methodStr)  
+            data = {}
             data['time'] = str(int(time.time())*1000)
             data['method'] = methodStr
             data["targetDevice"] =  self.deviceInfo['deviceId']
             data["token"]= self.deviceInfo['token']
-            self.yolinkMQTTclient.publish_data( data)
-            time.sleep(1)
- 
+            self.yolinkMQTTclient.publish_data(data)
+            
+
     def getSchedules(self):
+        logging.debug(self.type + '- getSchedules')
+        self.refreshSchedules()
         nbrSchedules  = len(self.dataAPI[self.dData][self.dSchedule])
         temp = {}
+        self.scheduleList = []
         for schedule in range(0,nbrSchedules):
             temp[schedule] = {}
             for key in self.dataAPI[self.dData][self.dSchedule][str(schedule)]:
                 if key == 'week':
                     days = self.maskToDays(self.dataAPI[self.dData][self.dSchedule][str(schedule)][key])
                     temp[schedule][key]= days
-                elif key == 'isValid':
-                     temp[schedule]['isActive']=self.dataAPI[self.dData][self.dSchedule][str(schedule)][key]
                 elif self.dataAPI[self.dData][self.dSchedule][str(schedule)][key] == '25:0':
-                    temp[schedule][key] = 'DISABLED'
+                    #temp[schedule].pop(key)
+                    pass
                 else:
-                     temp[schedule][key] = self.dataAPI[self.dData][self.dSchedule][str(schedule)][key]
+                    temp[schedule][key] = self.dataAPI[self.dData][self.dSchedule][str(schedule)][key]
+            temp[schedule]['index'] = schedule   
+            self.scheduleList.append(temp[schedule])
         return(temp)
 
+
+
+    def setSchedules(self):
+        logging.debug(self.type + '- setSchedule')
+        data = self.prepareScheduleData()        
+        
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = self.type+'.setSchedules'
+        data["targetDevice"] =  self.deviceInfo['deviceId']
+        data["token"]= self.deviceInfo['token']
+        self.yolinkMQTTclient.publish_data(data)
+        time.sleep(1)
+
+    
+    def activateSchedules(self, index, Activate):
+        logging.debug(self.type + 'activateSchedules')
+        for schedule  in self.scheduleList:
+            if schedule['index'] == index:        
+                self.scheduleList[index]['isValid'] = Activate
+                return(True)
+        else:
+            return(False)
+
+
+    def addSchedule(self, schedule):
+        logging.debug(self.type + 'addSchedule')
+        tmp = schedule
+        if 'week' and ('on' or 'off') and 'isValid' in schedule:    
+            indexList = []
+            for sch in self.scheduleList:
+                indexList.append(sch['index'])
+            index = 0
+            while index in indexList and index <self.maxSchedules:
+                index = index+ 1
+            if index < self.maxSchedules:
+                tmp['index'] = index
+                self.scheduleList.append(tmp)
+            return(index)
+        return(-1)
+            
+    def deleteSchedule(self, index):
+        logging.debug(self.type + 'addSchedule')       
+        sch = 0 
+       
+        while sch < len(self.scheduleList):
+            if self.scheduleList[sch]['index'] == index:
+                self.scheduleList.pop(sch)
+                return(True)
+            else:
+                sch = sch + 1
+        return(False)
+
+    
+    def resetSchedules(self):
+        logging.debug(self.type + 'resetSchedules')
+        self.scheduleList = {}
+
+
+    '''
+    def transferSchedules(self):
+        logging.debug(self.type + 'transferSchedules - does not seem to work yet')
+        data = {}
+
+        for index in self.scheduleList:
+            data[index] = {}
+            data[index]['index'] = index
+            if self.scheduleList[index]['isValid'] == 'Enabled':
+                data[index]['isValid'] = True
+            else:
+                data[index]['isValid'] = False
+            if 'onTime' in self.scheduleList[index]:
+                data[index]['on'] = self.scheduleList[index]['onTime']
+            else:
+                data[index]['on'] = '25:0'
+            if 'offTime' in self.scheduleList[index]:
+                data[index]['off'] = self.scheduleList[index]['offTime'] 
+            else:
+                data[index]['off'] = '25:0'
+            data[index]['week'] = self.daysToMask(self.scheduleList[index]['days'])
+
+        return(self.setDevice( 'Manipulator.setSchedules', data, self.updateStatus))
+    '''
+
+    '''
+ 
     def refreshFWversion(self):
         logging.debug(self.type+' - refreshFWversion - Not supported yet')
         #return(self.refreshDevice('Manipulator.getVersion', self.updateStatus))
 
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   '''
 
 
     def daysToMask (self, dayList):
@@ -245,7 +352,7 @@ class YoLinkMQTTDevice(object):
     def updateMessageInfo(self, data):
         self.dataAPI[self.lastUpdate] = data[self.messageTime]
         self.dataAPI[self.lastMessage] = data
-
+    '''
     def updateMultiStatusData (self, data):
         self.setOnline(data)
         self.setNbrPorts(data)
@@ -264,9 +371,10 @@ class YoLinkMQTTDevice(object):
             if 'delays'in data[self.dData]:
                 self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]                 
         self.updateMessageInfo(data)
-
+    '''
 
     def updateStatusData  (self, data):
+        logging.debug(self.type + 'updateStatusData')
         if 'online' in data[self.dData]:
             self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
         else:
@@ -294,8 +402,9 @@ class YoLinkMQTTDevice(object):
                 self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
-
+    
     def updateScheduleStatus(self, data):
+        logging.debug(self.type + 'updateScheduleStatus')
         self.setOnline(data)
         self.setNbrPorts(data)
         self.updateLoraInfo(data)
@@ -303,6 +412,7 @@ class YoLinkMQTTDevice(object):
         self.dataAPI[self.lastMessage] = data
 
     def updateDelayStatus(self, data):
+        logging.debug(self.type + 'updateDelayStatus')
         self.setOnline(data)
         self.setNbrPorts(data)
         self.updateLoraInfo(data)
@@ -311,12 +421,14 @@ class YoLinkMQTTDevice(object):
  
         self.updateMessageInfo(data)
 
+
     def updateFWStatus(self, data):
+        logging.debug(self.type + 'updateFWStatus - not working ??')
         # Need to have it workign forst - not sure what return struture will look lik
         #self.dataAPI['data']['state']['state'].append( data['data'])
         self.dataAPI['state']['lastTime'] = data['time']
         self.dataAPI['lastMessage'] = data      
-
+    
     def eventPending(self):
         return( not self.eventQueue.empty())
     
@@ -356,7 +468,6 @@ class YoLinkMQTTDevice(object):
 
 
 
-        return(self.dataAPI[self.dData][self.dDelays])
 
     def updateGarageCtrlStatus(self, data):
         self.dataAPI[self.dData][self.dState] = data['data']
@@ -388,56 +499,11 @@ class YoLinkMQTTDevice(object):
         utctnow = datetime.strptime(utctnowStr,  '%Y-%m-%d %H:%M:%S.%f')
         diff = utctnow - tnow
         return (diff.total_seconds())
-    '''
-    def setDelay(self, delayList):
 
-        logging.debug('setManipulatorDelay')
-        data = {}
-        data['params'] = {} 
-        if 'delayOn' in delayList or 'ON' in delayList:
-            data['params']['delayOn'] = delayList['delayOn']
-        else:
-            data['params']['delayOn'] = 0
-        if 'delayOff' in delayList  or 'OFF' in delayList:
-            data['params']['delayOff'] = delayList['delayOff']   
-        else:
-            data['params']['delayOff'] = 0
-        return(self.setDevice( data ))
-    '''
 
-    def resetSchedules(self):
-        logging.debug('resetSchedules')
-        self.scheduleList = {}
-
-    def activateSchedules(self, index, Activated):
-        logging.debug('activateSchedules')
-        if index in self. scheduleList:
-            if Activated:
-                self.scheduleList[index]['isValid'] = 'Enabled'
-            else:
-                self.scheduleList[index]['isValid'] = 'Disabled'
-            return(True)
-        else:
-            return(False)
-
-    def addSchedule(self, schedule):
-        logging.debug('addSchedule')
-        if 'days' and ('onTime' or 'offTime') and 'isValid' in schedule:    
-            index = 0
-            while  index in self.scheduleList:
-                index=index+1
-            if index < self.maxSchedules:
-                self.scheduleList[index] = schedule
-                return(index)
-        return(-1)
+           
             
-    def deleteSchedule(self, index):
-        logging.debug('addSchedule')       
-        if index in self.scheduleList:
-            self.scheduleList.pop(1)
-            return(True)
-        else:
-            return(False)
+            
 
     def transferSchedules(self):
         logging.debug('transferSchedules - does not seem to work yet')

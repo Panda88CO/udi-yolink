@@ -79,8 +79,21 @@ class YoLinkSwitch(YoLinkMQTTDevice):
             elif data['event'] == self.type +'.getState':
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateStatusData(data)                                         
-            else :
-                logging.debug('Unsupported Event passed' + str(json(data)))
+            elif data['event'] == self.type +'.getSchedules':
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateScheduleStatus(data)              
+            else:
+                logging.debug('Unsupported Event passed - trying anyway' + str(json(data)))
+                try:
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        if data['event'].find('chedule') >= 0 :
+                            self.updateScheduleStatus(data)    
+                        elif data['event'].find('ersion') >= 0 :
+                            self.updateFWStatus(data)
+                        else:
+                            self.updateStatusData(data)   
+                except logging.exception as E:
+                    logging.debug('Unsupported event detected: ' + str(E))
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
 
