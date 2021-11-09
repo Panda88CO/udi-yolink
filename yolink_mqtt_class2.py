@@ -397,6 +397,8 @@ class YoLinkMQTTDevice(object):
                              self.dataAPI[self.dData][self.dDelays] = data[self.dData][key]
                         else:
                              self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+            else:
+                pass # no data and state         
         else: #event
             for key in data[self.dData]:
                 self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
