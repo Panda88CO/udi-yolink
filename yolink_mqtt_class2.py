@@ -470,12 +470,14 @@ class YoLinkMQTTDevice(object):
 
 
 
-
+    '''
     def updateGarageCtrlStatus(self, data):
         self.dataAPI[self.dData][self.dState] = data['data']
         self.dataAPI[self.lastUpdate] = data[self.messageTime]
         self.dataAPI[self.lastMessage] = data
-  
+    '''
+
+    
     def timezoneOffsetSec(self):
         local = tzlocal()
         tnow = datetime.now()
