@@ -23,9 +23,9 @@ class YoLinkGarageDoorToggle(YoLinkMQTTDevice):
         return(self.setDevice(data))
 
 
-
+    
     def updateStatus(self, data):
-        logging.debug(' YoLinkGarageDoorCtrl updateStatus')  
+        logging.debug(' YoLinkGarageDoorCtrl - updateStatus')  
         #special case 
         if 'method' in  data:
             if  data['method'] == 'GarageDoor.toggle' and  data['code'] == '000000':

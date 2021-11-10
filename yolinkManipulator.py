@@ -19,9 +19,9 @@ class YoLinkManipulator(YoLinkMQTTDevice):
         
         self.refreshState()
         self.refreshSchedules()
-        self.refreshFWversion()
+        #self.refreshFWversion()
 
-
+    '''
     def refreshDelays(self):
         logging.debug('refreshManipulator')
         self.refreshDevice()
@@ -35,7 +35,8 @@ class YoLinkManipulator(YoLinkMQTTDevice):
     def refreshFWversion(self):
         logging.debug('Manipulator - refreshFWversion - Not supported yet')
         #return(self.refreshDevice('Manipulator.getVersion', self.updateStatus))
-
+    '''
+    '''
     def updateStatusData(self, data): 
         if 'online' in data[self.dData]:
             self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
@@ -52,9 +53,11 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                 self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
+    '''
 
-    
+    '''
     def updateStatus(self, data):
+        logging.debug(self.type + ' - updateStatus')
         if data['code'] == '000000':
             if 'method' in  data:
                 if  (data['method'] == 'Manipulator.getState' and  data['code'] == '000000'):
@@ -85,21 +88,52 @@ class YoLinkManipulator(YoLinkMQTTDevice):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateStatusData(data)                      
                 else :
-                    logging.debug('Unsupported Event passed' + str(json(data)))
+    
+                    logging.debug('Unsupported Event passed - trying anyway' + str(json(data)))
+                try:
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        if data['event'].find('chedule') >= 0 :
+                            self.updateScheduleStatus(data)    
+                        elif data['event'].find('ersion') >= 0 :
+                            self.updateFWStatus(data)
+                        else:
+                            self.updateStatusData(data)   
+                except logging.exception as E:
+                    logging.debug('Unsupported event detected: ' + str(E))
+        else:
+            logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
         else:
             self.deviceError(data)
+    '''
 
     def setState(self, state):
-        logging.debug('setManipulatorState')
-        if state != 'open' and  state != 'closed':
+        logging.debug(self.type+' - setState')  
+        if state.lower() != 'open' and  state.lower() != 'closed':
             logging.error('Unknows state passed')
             return(False)
         data = {}
         data['params'] = {}
-        data['params']['state'] = state
+        data['params']['state'] = state.lower()
         return(self.setDevice( data))
 
-    
 
+    def getState(self):
+        logging.debug(self.type+' - getState')
+        attempts = 0
+        while self.dataAPI[self.dData][self.dState]  == {} and attempts < 5:
+            time.sleep(1)
+            attempts = attempts + 1
+        if attempts <= 5:
+            if  self.dataAPI[self.dData][self.dState]['state'] == 'open':
+                return('open')
+            elif self.dataAPI[self.dData][self.dState]['state'] == 'closed':
+                return('closed')
+            else:
+                return('Unkown')
+        else:
+            return('Unkown')
+    
+    def getData(self):
+        return(self.getData())
 
 

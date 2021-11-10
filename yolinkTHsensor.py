@@ -15,14 +15,15 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
         self.temperature = 'Temperature'
         self.humidity = 'Humidity'
         self.eventTime = 'Time'
+        self.type = 'THSensor'
 
         time.sleep(2)
         self.refreshSensor()
         
     def refreshSensor(self):
-        logging.debug('refreshTHsensor')
-        return(self.refreshDevice('THSensor.getState',  self.updateStatus, ))
-
+        logging.debug(self.type+ ' - refreshSensor')
+        return(self.refreshDevice( ))
+    '''
     def updateStatus(self, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
@@ -41,7 +42,7 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
                     self.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
-
+    '''
 
     def getTempValueF(self):
         return(self.getInfoValue('temperature')*9/5+32)
@@ -54,3 +55,9 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
 
     def getAlarms(self):
         return(self.getInfoValue('alarms'))
+
+    def probeState(self):
+         return(self.getState() )
+
+    def probeData(self):
+        return(self.getData() )

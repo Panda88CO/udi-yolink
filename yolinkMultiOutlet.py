@@ -18,26 +18,27 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         self.eventTime = 'Time'
         time.sleep(3)
         self.refreshMultiOutlet() # needed to get number of ports on device
-        self.nbrPorts  = self.getNbrPorts()  
         self.refreshSchedules()
-        self.refreshFWversion()
+        #self.refreshFWversion()
 
-
+    '''
     def getSchedules (self):
         return(self.dataAPI['data']['schedules'])  
 
     def getDelays (self):
         return(self.dataAPI['data']['delays'])  
+    '''
 
-
+    '''
     def updateStatus(self, data):
+        logging.debug(self.type+' - updateStatus')
         if 'method' in  data:
             if  (data['method'] == 'MultiOutlet.getState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateMultiStatusData(data)             
+                    self.updateStatusData(data)             
             elif  (data['method'] == 'MultiOutlet.setState' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateMultiStatusData(data)                                       
+                    self.updateStatusData(data)                                       
             elif  (data['method'] == 'MultiOutlet.setDelay' and  data['code'] == '000000'):
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateDelayStatus(data)
@@ -64,14 +65,14 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
             else :
                 logging.debug('Unsupported Event passed' + str(json(data)))
-                                        
+    '''                                    
 
     def refreshMultiOutlet(self):
         return(self.refreshDevice())
-
+    
 
     def setMultiOutletState(self, portList, value ):
-        logging.debug('setMultiOutletState')
+        logging.debug( self.type+'- setMultiOutletState')
         # portlist a a listof ports being changed port range 0-7
         # vaue is state that need to change 2 (ON/OFF)
         status = True
@@ -96,26 +97,12 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
             data["params"]['state'] = state
             self.setDevice( 'MultiOutlet.setState', data, self.updateStatus)
         return(status)
-
-
-    def refreshSchedules(self):
-        return(self.refreshDevice())
- 
     
-    def resetScheduleList(self):
-        self.scheduleList = []
 
-    def setSchedule(self, scheduleList):
-        logging.debug('setMultiOutletSchedule - not currently supported')
-       
-        data = {}
-        data["params"] = {}
-        data["params"]["chs"] =  scheduleList
-        #data["params"]['state'] = state
-        #return(self.setDevice('MultiOutlet.setSchedules', data, self.updateScheduleStatus))
-
+   
 
     def getMultiOutletState(self):
+        logging.debug(self.type+' - getMultiOutletState')
         self.refreshMultiOutlet()
         temp = self.getInfoAPI()
         states= {}
@@ -129,28 +116,22 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         #print(states)
         return(states)
 
-
-    #def removeDelay(self, delay):
-
-    
-    def setDelay(self):
-        logging.debug('setMultiOutletDelay ')
-        data = self.prepareDelayData()
-        return(self.setDevice('MultiOutlet.setDelay', data, self.updateStatus))
-
-
+    def getMultiOutletData(self):
+        logging.debug(self.type+' - getMultiOutletState')
+  
+    '''
     def refreshFWversion(self):
         logging.debug('refreshFWversion - not currently supported')
         #return(self.refreshDevice('MultiOutlet.getVersion',  self.updateStatus))
 
     def startUpgrade(self):
         logging.debug('startUpgrade - not currently supported')
-    '''
+    
     def checkStatusChanges(self):
         logging.debug('checkStatusChanges')
     '''
 
-
+    '''
     def resetDelayList (self):
         self.delayList = []
 
@@ -201,3 +182,4 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                 #temp['off'] = tmp['OffDelay']
                 #data["params"]["delays"].append(temp)
         return(data)
+    '''

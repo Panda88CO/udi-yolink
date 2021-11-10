@@ -24,7 +24,7 @@ class YoLinkSwitch(YoLinkMQTTDevice):
         #self.refreshFWversion()
 
 
-
+    '''
     def updateStatusData(self, data): 
         if 'online' in data[self.dData]:
             self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
@@ -94,9 +94,10 @@ class YoLinkSwitch(YoLinkMQTTDevice):
                             self.updateStatusData(data)   
                 except logging.exception as E:
                     logging.debug('Unsupported event detected: ' + str(E))
+            self.eventPending
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
-
+    '''
 
     def setState(self, state):
         logging.debug(self.type+' - setState')
@@ -107,7 +108,7 @@ class YoLinkSwitch(YoLinkMQTTDevice):
                 return(False)
             if state.lower() == 'on':
                 state = 'open'
-            if state.lower == 'off':
+            if state.lower() == 'off':
                 state = 'closed'
             data = {}
             data['params'] = {}

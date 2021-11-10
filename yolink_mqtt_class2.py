@@ -1,5 +1,6 @@
 
 import time
+import json
 import threading
 import logging
 from  datetime import datetime
@@ -121,6 +122,82 @@ class YoLinkMQTTDevice(object):
         self.refreshDevice()
         return(self.getDelays())
 
+    def updateStatusData(self, data): 
+        if 'online' in data[self.dData]:
+            self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
+        else:
+            self.dataAPI[self.dOnline] = True
+        if 'method' in data:
+            for key in data[self.dData]:
+                if key == 'delay':
+                        self.dataAPI[self.dData][self.dDelays] = data[self.dData][key]
+                else:
+                        self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+        else: #event
+            for key in data[self.dData]:
+                self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+        self.updateLoraInfo(data)
+        self.updateMessageInfo(data)
+
+    def updateStatus(self, data):
+        logging.debug(self.type+' - updateStatus')
+        if 'method' in  data:
+            if data['code'] == '000000':
+                if  (data['method'] == self.type +'.getState' and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateStatusData(data)       
+                elif  (data['method'] == self.type +'.setState' and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateStatusData(data)                          
+                elif  (data['method'] == self.type +'.setDelay' and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateStatusData(data)       
+                elif  (data['method'] == self.type +'.getSchedules' and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateScheduleStatus(data)
+                elif  (data['method'] == self.type +'.setSchedules' and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateScheduleStatus(data)
+                elif  (data['method'] == self.type +'.getVersion' and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateFWStatus(data)
+                else:
+                    logging.debug('Unsupported Method passed' + str(json.dumps(data)))     
+            else:
+                self.deviceError(data)
+        elif 'event' in data:
+            if data['event'] == self.type +'.StatusChange' :
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)              
+            elif data['event'] == self.type +'.Report':
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)   
+            elif data['event'] == self.type +'.getState':
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)                                         
+            elif data['event'] == self.type +'.getSchedules':
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateScheduleStatus(data)   
+            elif data['event'] == self.type +'.Alert':         
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateScheduleStatus(data)  
+            else:
+                logging.debug('Unsupported Event passed - trying anyway' + str(json(data)))
+                try:
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        if data['event'].find('chedule') >= 0 :
+                            self.updateScheduleStatus(data)    
+                        elif data['event'].find('ersion') >= 0 :
+                            self.updateFWStatus(data)
+                        else:
+                            self.updateStatusData(data)   
+                except logging.exception as E:
+                    logging.debug('Unsupported event detected: ' + str(E))
+            self.eventQueue.put(data)  # is this thee right one to pass 
+        else:
+            logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+
+
 
     def setDelay(self, delayList):
         logging.debug(self.type+' - setDelay')
@@ -232,7 +309,6 @@ class YoLinkMQTTDevice(object):
                 return(True)
         else:
             return(False)
-
 
     def addSchedule(self, schedule):
         logging.debug(self.type + 'addSchedule')
@@ -388,9 +464,14 @@ class YoLinkMQTTDevice(object):
                         else:
                             self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
                 elif  type(data[self.dData][self.dState]) == list:
-                    self.dataAPI[self.dData][self.dState] = data[self.dData][self.dState][0:self.nbrPorts]
+                  
                     if 'delays'in data[self.dData]:
                         self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
+                        self.nbrPorts = len( self.dataAPI[self.dData][self.dDelays])
+                    else:
+                        self.nbrPorts = 1
+                    self.dataAPI['nbrPorts'] = self.nbrPorts     
+                    self.dataAPI[self.dData][self.dState] = data[self.dData][self.dState][0:self.nbrPorts]
                 else:
                     for key in data[self.dData]:
                         if key == 'delay':
@@ -400,8 +481,28 @@ class YoLinkMQTTDevice(object):
             else:
                 pass # no data and state         
         else: #event
+            '''
+             if type(data[self.dData][self.dState]) is dict:
+                    for key in data[self.dData][self.dState]:
+                        if key == 'delay':
+                             self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dState][self.dDelays]
+                        else:
+                            self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
+                elif  type(data[self.dData][self.dState]) == list:
+                  
+                    if 'delays'in data[self.dData]:
+                        self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
+                        self.nbrPorts = len( self.dataAPI[self.dData][self.dDelays])
+                    else:
+                        self.nbrPorts = 1
+                    self.dataAPI['nbrPorts'] = self.nbrPorts     
+                    self.dataAPI[self.dData][self.dState] = data[self.dData][self.dState][0:self.nbrPorts]
+            '''
             for key in data[self.dData]:
                 self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+
+
+                
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
     
@@ -456,8 +557,12 @@ class YoLinkMQTTDevice(object):
         #time.sleep(2)
    
     def getState(self):
-        logging.debug('Manituplator - getState')
+        logging.debug(self.type +' - getState')
         return(self.dataAPI[self.dData][self.dState][self.dState])
+
+    def getData(self):
+        logging.debug(self.type +' - getDAta')
+        return(self.dataAPI[self.dData][self.dState])
 
     def getDelays(self):
         logging.debug(str(self.type)+ ' - getDelays')
@@ -504,10 +609,6 @@ class YoLinkMQTTDevice(object):
         diff = utctnow - tnow
         return (diff.total_seconds())
 
-
-           
-            
-            
 
     def transferSchedules(self):
         logging.debug('transferSchedules - does not seem to work yet')

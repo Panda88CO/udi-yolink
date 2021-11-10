@@ -12,16 +12,16 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
         self.eventList = ['DoorSensor.Report']
         self.GarageName = 'GarageEvent'
         self.eventTime = 'Time'
-
+        self.type = 'DoorSensor'
 
         time.sleep(2)
         self.refreshGarageDoorSensor()
   
     def refreshGarageDoorSensor(self):
         logging.debug('refreshGarageDoorSensor') 
-        return(self.refreshDevice( 'DoorSensor.getState', self.updateStatus))
+        return(self.refreshDevice( ))
 
-
+    '''
     def updateStatus(self, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
@@ -38,10 +38,13 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
                     self.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
-
+    '''
     
-    def DoorState(self):
-         return(self.getState())
+    def doorState(self):
+        return(self.getState())
+
+    def doorData(self):
+        return(self.getData())
     
 
 

@@ -18,18 +18,19 @@ logging.basicConfig(level=logging.DEBUG)
 class YoLinkMotionSensor(YoLinkMQTTDevice):
     def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
-        self.methodList = ['MotionSensor.getState' ]
-        self.eventList = ['MotionSensor.Alert' , 'MotionSensor.getState', 'MotionSensor.StatusChange']
+        self.methodList = ['getState' ]
+        self.eventList = ['Alert' , 'getState', 'StatusChange']
 
 
         self.eventName = 'MotionEvent'
         self.eventTime = 'Time'
+        self.type = 'MotionSensor'
         time.sleep(2)
-        self.refreshSensor()
+        self.refreshDevice()
 
     def refreshSensor(self):
-        return(self.refreshDevice('MotionSensor.getState',  self.updateStatus, ))
-
+        self.refreshDevice()
+    '''
     def updateStatus(self, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
@@ -46,11 +47,11 @@ class YoLinkMotionSensor(YoLinkMQTTDevice):
                     self.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
-
+    '''
     def motionState(self):
         return(self.getState())
+    
 
-
-    def getMotionData(self):
-        return(self.getState())         
+    def motionData(self):
+        return(self.getData())         
 
