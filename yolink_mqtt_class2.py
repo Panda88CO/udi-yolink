@@ -193,7 +193,7 @@ class YoLinkMQTTDevice(object):
                             self.updateStatusData(data)   
                 except logging.exception as E:
                     logging.debug('Unsupported event detected: ' + str(E))
-            self.eventQueue.put(data)  # is this thee right one to pass 
+            self.eventQueue.put(data['event']) 
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
 
@@ -481,28 +481,21 @@ class YoLinkMQTTDevice(object):
             else:
                 pass # no data and state         
         else: #event
-            '''
-             if type(data[self.dData][self.dState]) is dict:
-                    for key in data[self.dData][self.dState]:
-                        if key == 'delay':
-                             self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dState][self.dDelays]
-                        else:
-                            self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
-                elif  type(data[self.dData][self.dState]) == list:
-                  
-                    if 'delays'in data[self.dData]:
-                        self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
-                        self.nbrPorts = len( self.dataAPI[self.dData][self.dDelays])
+            if type(data[self.dData][self.dState]) is dict:
+                for key in data[self.dData][self.dState]:
+                    if key == 'delay':
+                            self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dState][self.dDelays]
                     else:
-                        self.nbrPorts = 1
-                    self.dataAPI['nbrPorts'] = self.nbrPorts     
-                    self.dataAPI[self.dData][self.dState] = data[self.dData][self.dState][0:self.nbrPorts]
-            '''
-            for key in data[self.dData]:
-                self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
-
-
-                
+                        self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
+            elif  type(data[self.dData][self.dState]) == list:           
+                if 'delays'in data[self.dData]:
+                    self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dDelays]
+                else:
+                    self.dataAPI[self.dData][self.dDelays] = None
+                self.dataAPI[self.dData][self.dState] = data[self.dData][self.dState][0:self.nbrPorts]
+            else:
+                for key in data[self.dData]:
+                    self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
     
@@ -535,7 +528,7 @@ class YoLinkMQTTDevice(object):
     def eventPending(self):
         return( not self.eventQueue.empty())
     
-    def extractEventData(self):
+    def getEvent(self):
         if not self.eventQueue.empty():
             return(self.eventQueue.get())
         else:
@@ -572,16 +565,6 @@ class YoLinkMQTTDevice(object):
             return(self.dataAPI[self.dDelays])
         else:
             return(None)
-
-
-
-    '''
-    def updateGarageCtrlStatus(self, data):
-        self.dataAPI[self.dData][self.dState] = data['data']
-        self.dataAPI[self.lastUpdate] = data[self.messageTime]
-        self.dataAPI[self.lastMessage] = data
-    '''
-
     
     def timezoneOffsetSec(self):
         local = tzlocal()
