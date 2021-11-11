@@ -6,44 +6,44 @@ from yolink_mqtt_class2 import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 class YoLinkLeakSensor(YoLinkMQTTDevice):
-    def __init__(self, csName, csid, csseckey,  deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
-        self.methodList = ['getState' ]
-        self.eventList = ['Report','Alert']
-        self.waterName = 'WaterEvent'
-        self.eventTime = 'Time'
-        self.type = 'LeakSensor'
+    def __init__(yolink, csName, csid, csseckey,  deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
+        yolink.methodList = ['getState' ]
+        yolink.eventList = ['Report','Alert']
+        yolink.waterName = 'WaterEvent'
+        yolink.eventTime = 'Time'
+        yolink.type = 'LeakSensor'
         time.sleep(1)
-        self.refreshSensor()
+        yolink.refreshSensor()
 
-    def refreshSensor(self):
+    def refreshSensor(yolink):
         logging.debug('refreshWaterSensor')
-        return(self.refreshDevice())
+        return(yolink.refreshDevice())
 
     '''
-    def updateStatus(self, data):
+    def updateStatus(yolink, data):
         logging.debug('updateStatus')  
         if 'method' in  data:
-            if  (data['method'] in self.methodList and  data['code'] == '000000'):
-                if int(data['time']) > int(self.getLastUpdate()):
-                     self.updateStatusData(data)
+            if  (data['method'] in yolink.methodList and  data['code'] == '000000'):
+                if int(data['time']) > int(yolink.getLastUpdate()):
+                     yolink.updateStatusData(data)
         elif 'event' in data:
-            if data['event'] in self.eventList:
-                if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateStatusData(data)
+            if data['event'] in yolink.eventList:
+                if int(data['time']) > int(yolink.getLastUpdate()):
+                    yolink.updateStatusData(data)
                     eventData = {}
-                    eventData[self.waterName] = self.getState()
-                    eventData[self.eventTime] = self.data[self.messageTime]
-                    self.eventQueue.put(eventData)
+                    eventData[yolink.waterName] = yolink.getState()
+                    eventData[yolink.eventTime] = yolink.data[yolink.messageTime]
+                    yolink.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
     '''
     
-    def probeState(self):
-         return(self.getState() )
+    def probeState(yolink):
+         return(yolink.getState() )
 
-    def probeData(self):
-        return(self.getData() )
+    def probeData(yolink):
+        return(yolink.getData() )
 
     
 

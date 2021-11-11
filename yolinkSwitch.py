@@ -7,29 +7,29 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class YoLinkSwitch(YoLinkMQTTDevice):
-    def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
         
-        self.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
-        self.eventList = ['StatusChange', 'Report', 'getState']
-        self.stateList = ['open', 'closed', 'on', 'off']
-        self.ManipulatorName = 'ManipulatorEvent'
-        self.eventTime = 'Time'
-        self.type = 'Switch'
+        yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
+        yolink.eventList = ['StatusChange', 'Report', 'getState']
+        yolink.stateList = ['open', 'closed', 'on', 'off']
+        yolink.ManipulatorName = 'ManipulatorEvent'
+        yolink.eventTime = 'Time'
+        yolink.type = 'Switch'
         time.sleep(2)
         
-        self.refreshState()
+        yolink.refreshState()
         #input()
-        self.refreshSchedules()
-        #self.refreshFWversion()
+        yolink.refreshSchedules()
+        #yolink.refreshFWversion()
 
 
  
-    def setState(self, state):
-        logging.debug(self.type+' - setState')
+    def setState(yolink, state):
+        logging.debug(yolink.type+' - setState')
 
-        if 'setState'  in self.methodList:          
-            if state.lower() not in self.stateList:
+        if 'setState'  in yolink.methodList:          
+            if state.lower() not in yolink.stateList:
                 logging.error('Unknows state passed')
                 return(False)
             if state.lower() == 'on':
@@ -39,27 +39,27 @@ class YoLinkSwitch(YoLinkMQTTDevice):
             data = {}
             data['params'] = {}
             data['params']['state'] = state.lower()
-            return(self.setDevice( data))
+            return(yolink.setDevice( data))
         else:
             return(False)
     
 
-    def getState(self):
-        logging.debug(self.type+' - getState')
+    def getState(yolink):
+        logging.debug(yolink.type+' - getState')
         attempts = 0
-        while self.dataAPI[self.dData][self.dState]  == {} and attempts < 5:
+        while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
             time.sleep(1)
             attempts = attempts + 1
         if attempts <= 5:
-            if  self.dataAPI[self.dData][self.dState]['state'] == 'open':
+            if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                 return('ON')
-            elif self.dataAPI[self.dData][self.dState]['state'] == 'closed':
+            elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
                 return('OFF')
             else:
                 return('Unkown')
         else:
             return('Unkown')
  
-    def getEnergy(self):
-        logging.debug(self.type+' - getEnergy')
-        return({'power':self.dataAPI[self.dData][self.dState]['power'], 'watt':self.dataAPI[self.dData][self.dState]['power']})
+    def getEnergy(yolink):
+        logging.debug(yolink.type+' - getEnergy')
+        return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})

@@ -7,133 +7,133 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class YoLinkManipulator(YoLinkMQTTDevice):
-    def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
-        self.maxSchedules = 6
-        self.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
-        self.eventList = ['StatusChange', 'Report']
-        self.ManipulatorName = 'ManipulatorEvent'
-        self.eventTime = 'Time'
-        self.type = 'Manipulator'
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
+        yolink.maxSchedules = 6
+        yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
+        yolink.eventList = ['StatusChange', 'Report']
+        yolink.ManipulatorName = 'ManipulatorEvent'
+        yolink.eventTime = 'Time'
+        yolink.type = 'Manipulator'
         time.sleep(1)
         
-        self.refreshState()
-        self.refreshSchedules()
-        #self.refreshFWversion()
+        yolink.refreshState()
+        yolink.refreshSchedules()
+        #yolink.refreshFWversion()
 
     '''
-    def refreshDelays(self):
+    def refreshDelays(yolink):
         logging.debug('refreshManipulator')
-        self.refreshDevice()
-        return(self.getDelays())
+        yolink.refreshDevice()
+        return(yolink.getDelays())
 
 
-    def refreshSchedules(self):
+    def refreshSchedules(yolink):
         logging.debug('Manipulator - refreshSchedules')
-        return(self.refreshDevice('Manipulator.getSchedules', self.updateStatus))
+        return(yolink.refreshDevice('Manipulator.getSchedules', yolink.updateStatus))
 
-    def refreshFWversion(self):
+    def refreshFWversion(yolink):
         logging.debug('Manipulator - refreshFWversion - Not supported yet')
-        #return(self.refreshDevice('Manipulator.getVersion', self.updateStatus))
+        #return(yolink.refreshDevice('Manipulator.getVersion', yolink.updateStatus))
     '''
     '''
-    def updateStatusData(self, data): 
-        if 'online' in data[self.dData]:
-            self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
+    def updateStatusData(yolink, data): 
+        if 'online' in data[yolink.dData]:
+            yolink.dataAPI[yolink.dOnline] = data[yolink.dData][yolink.dOnline]
         else:
-            self.dataAPI[self.dOnline] = True
+            yolink.dataAPI[yolink.dOnline] = True
         if 'method' in data:
-            for key in data[self.dData]:
+            for key in data[yolink.dData]:
                 if key == 'delay':
-                        self.dataAPI[self.dData][self.dDelays] = data[self.dData][key]
+                        yolink.dataAPI[yolink.dData][yolink.dDelays] = data[yolink.dData][key]
                 else:
-                        self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+                        yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
         else: #event
-            for key in data[self.dData]:
-                self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
-        self.updateLoraInfo(data)
-        self.updateMessageInfo(data)
+            for key in data[yolink.dData]:
+                yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
+        yolink.updateLoraInfo(data)
+        yolink.updateMessageInfo(data)
     '''
 
     '''
-    def updateStatus(self, data):
-        logging.debug(self.type + ' - updateStatus')
+    def updateStatus(yolink, data):
+        logging.debug(yolink.type + ' - updateStatus')
         if data['code'] == '000000':
             if 'method' in  data:
                 if  (data['method'] == 'Manipulator.getState' and  data['code'] == '000000'):
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)       
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)       
                 elif  (data['method'] == 'Manipulator.setState' and  data['code'] == '000000'):
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)                          
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)                          
                 elif  (data['method'] == 'Manipulator.setDelay' and  data['code'] == '000000'):
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)       
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)       
                 elif  (data['method'] == 'Manipulator.getSchedules' and  data['code'] == '000000'):
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateScheduleStatus(data)
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateScheduleStatus(data)
                 elif  (data['method'] == 'Manipulator.setSchedules' and  data['code'] == '000000'):
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateScheduleStatus(data)
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateScheduleStatus(data)
                 elif  (data['method'] == 'Manipulator.getVersion' and  data['code'] == '000000'):
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateFWStatus(data)
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateFWStatus(data)
                 else:
                     logging.debug('Unsupported Method passed' + json.dumps(data))                      
             elif 'event' in data:
                 if data['event'] == 'Manipulator.StatusChange':
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)              
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)              
                 elif data['event'] == 'Manipulator.Report':
-                    if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)                      
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)                      
                 else :
     
                     logging.debug('Unsupported Event passed - trying anyway' + str(json(data)))
                 try:
-                    if int(data['time']) > int(self.getLastUpdate()):
+                    if int(data['time']) > int(yolink.getLastUpdate()):
                         if data['event'].find('chedule') >= 0 :
-                            self.updateScheduleStatus(data)    
+                            yolink.updateScheduleStatus(data)    
                         elif data['event'].find('ersion') >= 0 :
-                            self.updateFWStatus(data)
+                            yolink.updateFWStatus(data)
                         else:
-                            self.updateStatusData(data)   
+                            yolink.updateStatusData(data)   
                 except logging.exception as E:
                     logging.debug('Unsupported event detected: ' + str(E))
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
         else:
-            self.deviceError(data)
+            yolink.deviceError(data)
     '''
 
-    def setState(self, state):
-        logging.debug(self.type+' - setState')  
+    def setState(yolink, state):
+        logging.debug(yolink.type+' - setState')  
         if state.lower() != 'open' and  state.lower() != 'closed':
             logging.error('Unknows state passed')
             return(False)
         data = {}
         data['params'] = {}
         data['params']['state'] = state.lower()
-        return(self.setDevice( data))
+        return(yolink.setDevice( data))
 
 
-    def getState(self):
-        logging.debug(self.type+' - getState')
+    def getState(yolink):
+        logging.debug(yolink.type+' - getState')
         attempts = 0
-        while self.dataAPI[self.dData][self.dState]  == {} and attempts < 5:
+        while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
             time.sleep(1)
             attempts = attempts + 1
         if attempts <= 5:
-            if  self.dataAPI[self.dData][self.dState]['state'] == 'open':
+            if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                 return('open')
-            elif self.dataAPI[self.dData][self.dState]['state'] == 'closed':
+            elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
                 return('closed')
             else:
                 return('Unkown')
         else:
             return('Unkown')
     
-    def getData(self):
-        return(self.getData())
+    def getData(yolink):
+        return(yolink.getData())
 
 

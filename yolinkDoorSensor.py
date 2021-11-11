@@ -5,7 +5,7 @@ import logging
 from yolink_mqtt_class2 import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
-class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
+class YoLinkDoorSensor(YoLinkMQTTDevice):
     def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
         yolink.methodList = ['DoorSensor.getState' ]
@@ -15,10 +15,10 @@ class YoLinkGarageDoorSensor(YoLinkMQTTDevice):
         yolink.type = 'DoorSensor'
 
         time.sleep(2)
-        yolink.refreshGarageDoorSensor()
+        yolink.refreshDoorSensor()
   
-    def refreshGarageDoorSensor(yolink):
-        logging.debug('refreshGarageDoorSensor') 
+    def refreshDoorSensor(yolink):
+        logging.debug(yolink.type+ ' - refreshDoorSensor') 
         return(yolink.refreshDevice( ))
 
     '''
