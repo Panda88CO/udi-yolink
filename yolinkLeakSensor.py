@@ -2,7 +2,7 @@ import json
 import time
 import logging
 
-from yolink_mqtt_class2 import YoLinkMQTTDevice
+from yolink_mqtt_class import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 class YoLinkLeakSensor(YoLinkMQTTDevice):
