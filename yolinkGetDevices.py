@@ -4,19 +4,9 @@ import hashlib
 import time
 import json
 import requests
-import threading
-#from logger import getLogger
-from yolink_devices import YoLinkDevice
-from yolink_mqtt_client import YoLinkMQTTClient
 from cryptography.fernet import Fernet
-#from oauthlib.oauth2 import BackendApplicationClient
-#from requests.auth import HTTPBasicAuth
-#from rauth import OAuth2Service
 from requests_oauthlib import OAuth2Session
-#from requests_oauthlib import OAuth2Session
-#log = getLogger(__name__)
 import logging
-#session = requests.Session()
 headers = {}
 data = {}
 authURL = 'https://api.yosmart.com/oauth/v2/authorization.htm'
@@ -72,8 +62,11 @@ headersTemp = json.dumps(headers1)
 #print("Header:{0} Data:{1}\n".format(headersTemp, dataTemp))
 r = requests.post(yolinkURL, data=json.dumps(data), headers=headers1) 
 info = r.json()
+
+
+infoList = str(info).encode('utf-8')
 jsonStr  = json.dumps(info, sort_keys=True, indent=4, separators=(',', ': '))
-info = str(info).encode('utf-8')
+
 print(jsonStr+'\n')
 
 '''
@@ -96,7 +89,7 @@ with open('test.txt', 'rb') as f:
     file = f.read()
 '''    
 # encrypt the file
-encrypt_file = fernet.encrypt(info)
+encrypt_file = fernet.encrypt(infoList)
 # open the file and wite the encryption data
 with open('yolinkDeviceList.txt', 'wb') as encrypted_file:
     encrypted_file.write(encrypt_file)
