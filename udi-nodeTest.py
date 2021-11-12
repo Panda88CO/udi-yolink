@@ -10,7 +10,7 @@ import udi_interface
 import sys
 import time
 from yolinkSwitch import YoLinkSwitch
-logging = udi_interface.logging
+logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
 polyglot = None
 Parameters = None
@@ -23,24 +23,28 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class TestYoLinkNode(udi_interface.Node, YoLinkSwitch):
-    def  __init__(self, polyglot, primary, address, name,  csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        #super().__init__(  polyglot, primary, address, name,  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
-        udi_interface.__init__(self, polyglot, primary, address, name)
-        YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
-        csid = '60dd7fa7960d177187c82039'
-        csseckey = '3f68536b695a435d8a1a376fc8254e70'
-        csName = 'Panda88'
-        devInfo = {  "deviceId": "d88b4c0100034906",
+class TestYoLinkNode(udi_interface.Node):
+    def  __init__(self, polyglot, primary, address, name
+        super().__init__( polyglot, primary, address, name)    
+        self.csid = '60dd7fa7960d177187c82039'
+        self.csseckey = '3f68536b695a435d8a1a376fc8254e70'
+        self.csName = 'Panda88'
+        self.devInfo = {  "deviceId": "d88b4c0100034906",
                     "deviceUDID": "e091320786e5447099c8b1c93ce47a60",
                     "name": "S Playground Switch",
                     "token": "7f43fbce-dece-4477-9660-97804b278190",
                     "type": "Switch"
                     }
-        self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, devInfo)
+        mqtt_URL= 'api.yosmart.com'
+        mqtt_port = 8003
+        yolink_URL ='https://api.yosmart.com/openApi'
+        self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, self.devInfo)
+        YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, self.devInfo, self.updateStatus)
+        time.sleep(3)
         self.switchState = self.yolinkDev.getState()
         self.switchPower = self.yolinkDev.getEnergy()
-
+        #udi_interface.__init__(self, polyglot, primary, address, name)
+        
         self.poly = polyglot
         self.count = 0
         self.n_queue = []
@@ -183,7 +187,7 @@ if __name__ == "__main__":
         based on what we find.  Here, we simply create our node and wait
         for the add to complete.
         '''
-        node = TestYoLinkNode(polyglot, 'my_address', 'my_address', 'Counter')
+        node = TestYoLinkNode(polyglot, 'my_address', 'my_address', 'yolinkSwitch' )
         polyglot.addNode(node)
         wait_for_node_event()
 
