@@ -1,22 +1,22 @@
 {
-    "name": "TeslaPWControl",
-    "docs": "https://github.com/Panda88CO/udi-TeslaPowerWall",
+    "name": "Test Node for YoLink",
+    "docs": "https://github.com/Panda88CO/udi-yolink",
     "type": "python3",
-    "executable": "TeslaPWController.py",
+    "executable": "udi-nodeTest.py",
     "install": "install.sh",
     "description": "Nodeserver to allow integration of Tesla Power Wall Control. Currenty only supporting local access due to changse in clould login methods critical data and  heartbeat.",
     "notice": "Uses APIs from https://github.com/jrester/tesla_powerwall and https://tesla-api.timdorr.com/ - not official Tesla APIs.",
     "shortPoll": "60",
     "longPoll": "180",
-    "profile_version": "0.7.4",
+    "profile_version": "0.0.1",
     "credits": [
         {
-            "title": "A NodeServer to integrate Tesla Power Wall Controll system",
+            "title": "A NodeServer to test integration og YoLink devices ",
             "author": "Panda88CO",
-            "version": "0.7.4",
-            "date": "Sept 4,  2021",
-            "source": "https://github.com/Panda88CO/udi-TeslaPowerWall",
-            "license": "https://github.com/Panda88CO/udi-TeslaPowerWall/blob/main/license"
+            "version": "0.0.1",
+            "date": "Nov 14,  2021",
+            "source": "https://github.com/Panda88CO/udi-yolink",
+            "license": "https://github.com/Panda88CO/udi-yolink/blob/main/license"
         }
     ]
 }

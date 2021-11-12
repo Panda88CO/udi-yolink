@@ -1,7 +1,4 @@
-tesla_powerwall
 requests_oauth2
-polyinterface
-
-#svglib
-#reportlab
+udi_interface>=3.0.18
+paho
 requests>=2.22.0

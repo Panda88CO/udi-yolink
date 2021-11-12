@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Polyglot v3 node server Example 1
-Copyright (C) 2021 Robert Paauwe
+Polyglot TEST v3 node server 
+
 
 MIT License
 """
+from os import truncate
 import udi_interface
 import sys
 import time
@@ -21,19 +22,12 @@ TestNode is the device class.  Our simple counter device
 holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
-class udiYoLinkSwitch(YoLinkSwitch):
-    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
-        yolink.yolinkDev = YoLinkSwitch(csName, csid, csseckey, deviceInfo)
-    
-    def updateStatus(yolink):
-        yolink.yolinkDev.updateStatus()
-        state =  yolink.yolinkDev.getState()
-        energy =  yolink.yolinkDev.getEnergy()
 
 class TestYoLinkNode(udi_interface.Node, YoLinkSwitch):
     def  __init__(self, polyglot, primary, address, name,  csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  polyglot, primary, address, name,  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
+        #super().__init__(  polyglot, primary, address, name,  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
+        udi_interface.__init__(self, polyglot, primary, address, name)
+        YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, self.updateStatus)
         csid = '60dd7fa7960d177187c82039'
         csseckey = '3f68536b695a435d8a1a376fc8254e70'
         csName = 'Panda88'
@@ -47,7 +41,24 @@ class TestYoLinkNode(udi_interface.Node, YoLinkSwitch):
         self.switchState = self.yolinkDev.getState()
         self.switchPower = self.yolinkDev.getEnergy()
 
+        self.poly = polyglot
+        self.count = 0
+        self.n_queue = []
+
+        self.Parameters = Custom(polyglot, 'customparams')
+
+        # subscribe to the events we want
+        polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
+        #polyglot.subscribe(polyglot.POLL, self.poll)
+        #polyglot.subscribe(polyglot.START, self.start, address)
+        # start processing events and create add our controller node
+        polyglot.ready()
+        self.poly.addNode(self)
+
+
     def updateStatus(self, data):
+        logging.debug('updateStatus - TestYoLinkNode')
+        #super
         self.yolinkDev.updateStatus(data)
         node = polyglot.getNode('my_address')
         if node is not None:
@@ -58,14 +69,30 @@ class TestYoLinkNode(udi_interface.Node, YoLinkSwitch):
             else:
                 node.setDriver('GV0', 0, True, True)
             tmp =  self.yolinkDev.getEnergy()
+
             power = tmp['power']
             watt = tmp['watt']
             node.setDriver('GV1', power, True, True)
             node.setDriver('GV2', watt, True, True)
-            delays =  self.yolinkDev.getDelays()
+            self.pollDelays()
 
-            # be fancy and display a notice on the polyglot dashboard
-        #polyglot.Notices['count'] = 'Current count is {}'.format(count)
+    def pollDelays(self):
+        delays =  self.yolinkDev.getDelays()
+        while True:
+            delayActve = False
+            if 'on' in delays:
+                if delays['on'] != 0:
+                    delayActve = True
+                node.setDriver('GV3', delays['on'], True, True)
+            if 'off' in delays:
+                if delays['off'] != 0:
+                    delayActve = True
+                node.setDriver('GV4', delays['off'], True, True)               
+            if not delayActve:
+                break
+            time.sleep(30) # shortPoll???
+
+    
 
     id = 'test'
     drivers = [
@@ -116,20 +143,10 @@ def poll(polltype):
     global Parameters
 
     if 'shortPoll' in polltype:
-        if Parameters['multiplier'] is not None:
-            mult = int(Parameters['multiplier'])
-        else:
-            mult = 1
+       # self.yolinkDev.refreshDevice()
 
-        node = polyglot.getNode('my_address')
-        if node is not None:
-            count += 1
-
-            node.setDriver('GV0', count, True, True)
-            node.setDriver('GV1', (count * mult), True, True)
-
-            # be fancy and display a notice on the polyglot dashboard
-            polyglot.Notices['count'] = 'Current count is {}'.format(count)
+        # be fancy and display a notice on the polyglot dashboard
+        polyglot.Notices['count'] = 'Current count is {}'.format(count)
 
 
 '''
