@@ -10,7 +10,7 @@ import datetime
 import pytz
 
 from queue import Queue
-from yolink_mqtt_class1 import YoLinkMQTTDevice
+from yolink_mqtt_class import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 #from yolink_mqtt_client import YoLinkMQTTClient
