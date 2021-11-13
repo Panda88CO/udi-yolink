@@ -9,7 +9,7 @@ from os import truncate
 import udi_interface
 import sys
 import time
-from yolinkSwitch import YoLinkSwitch
+from yolinkSwitch import YoLinkSW
 logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
 polyglot = None
@@ -23,10 +23,11 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class TestYoLinkNode(udi_interface.Node, YoLinkSwitch):
+class TestYoLinkNode(udi_interface.Node, YoLinkSW):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    def  __init__(self, polyglot, primary, address, name):
-        super().__init__( polyglot, primary, address, name)   
+    def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo,):
+        super(udi_interface.Node, self).__init__( polyglot, primary, address, name)   
+        super(YoLinkSW, self).__init__( csName, csid, csseckey, self.updateStatus, yolink_URL, mqtt_URL, mqtt_port, devInfo)
         #  
         csid = '60dd7fa7960d177187c82039'
         csseckey = '3f68536b695a435d8a1a376fc8254e70'
@@ -41,8 +42,8 @@ class TestYoLinkNode(udi_interface.Node, YoLinkSwitch):
         mqtt_port = 8003
         yolink_URL ='https://api.yosmart.com/openApi'
         #self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, devInfo)
-        YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
-        super(YoLinkSwitch, self).__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
+        #YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
+        #super(YoLinkSwitch, self).__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
         time.sleep(3)
         self.switchState = self.yolinkDev.getState()
         self.switchPower = self.yolinkDev.getEnergy()
@@ -66,7 +67,7 @@ class TestYoLinkNode(udi_interface.Node, YoLinkSwitch):
     def updateStatus(self, data):
         logging.debug('updateStatus - TestYoLinkNode')
         #super
-        self.yolinkDev.updateStatus(data)
+        self.updateCallbackStatus(data)
         node = polyglot.getNode('my_address')
         if node is not None:
             state =  self.yolinkDev.getState()

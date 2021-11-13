@@ -6,9 +6,11 @@ from yolink_mqtt_class import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 
-class YoLinkSwitch(YoLinkMQTTDevice):
-    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
+
+
+class YoLinkSW(YoLinkMQTTDevice):
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback)
         
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
         yolink.eventList = ['StatusChange', 'Report', 'getState']
@@ -23,7 +25,8 @@ class YoLinkSwitch(YoLinkMQTTDevice):
         yolink.refreshSchedules()
         #yolink.refreshFWversion()
 
-
+    def updataStatus(yolink, data):
+        yolink.updateCallbackStatus(data)
  
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState')
@@ -63,3 +66,18 @@ class YoLinkSwitch(YoLinkMQTTDevice):
     def getEnergy(yolink):
         logging.debug(yolink.type+' - getEnergy')
         return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
+
+
+class YoLinkSwitch(YoLinkSW):
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey,  deviceInfo, yolink.updateStatus, yolink_URL, mqtt_URL, mqtt_port)
+
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data)
+
+class YoLinkSwitchCB(YoLinkSW):
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey,  deviceInfo, callback, yolink_URL, mqtt_URL, mqtt_port)
+
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data)

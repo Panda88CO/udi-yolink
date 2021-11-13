@@ -18,7 +18,7 @@ from yolink_mqtt_client import YoLinkMQTTClient
 Object representation for YoLink MQTT Client
 """
 class YoLinkMQTTDevice(object):
-    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback):
+    def __init__(self, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback ):
         #super().__init__( yolink_URL, csid, csseckey, deviceInfo)
         #self.callback = callback
         #self.build_device_api_request_data()
@@ -139,7 +139,10 @@ class YoLinkMQTTDevice(object):
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
 
-    def updateStatus(self, data):
+
+
+
+    def updateCallbackStatus(self, data):
         logging.debug(self.type+' - updateStatus')
         if 'method' in  data:
             if data['code'] == '000000':
