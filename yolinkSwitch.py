@@ -75,9 +75,10 @@ class YoLinkSwitch(YoLinkSW):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data)
 
-class YoLinkSwitchCB(YoLinkSW):
+'''class YoLinkSwitchCB(YoLinkSW):
     def __init__(yolink, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey,  deviceInfo, callback, yolink_URL, mqtt_URL, mqtt_port)
 
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data)
+'''
