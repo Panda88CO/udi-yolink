@@ -23,12 +23,13 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class TestYoLinkNode(udi_interface.Node, YoLinkSW):
+class TestYoLinkNode(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo,):
-        super(udi_interface.Node, self).__init__( polyglot, primary, address, name)   
-        super(YoLinkSW, self).__init__( csName, csid, csseckey, self.updateStatus, yolink_URL, mqtt_URL, mqtt_port, devInfo)
+    def  __init__(self, polyglot, primary, address, name):
+        super().__init__( polyglot, primary, address, name)   
+        #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
+        logging.debug('TestYoLinkNode INIT')
         csid = '60dd7fa7960d177187c82039'
         csseckey = '3f68536b695a435d8a1a376fc8254e70'
         csName = 'Panda88'
@@ -41,13 +42,7 @@ class TestYoLinkNode(udi_interface.Node, YoLinkSW):
         mqtt_URL= 'api.yosmart.com'
         mqtt_port = 8003
         yolink_URL ='https://api.yosmart.com/openApi'
-        #self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, devInfo)
-        #YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
-        #super(YoLinkSwitch, self).__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
-        time.sleep(3)
-        self.switchState = self.yolinkDev.getState()
-        self.switchPower = self.yolinkDev.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
+
         
         self.poly = polyglot
         self.count = 0
@@ -63,20 +58,29 @@ class TestYoLinkNode(udi_interface.Node, YoLinkSW):
         polyglot.ready()
         self.poly.addNode(self)
 
+        self.yoSwitch  = YoLinkSW(csName, csid, csseckey, devInfo, self.updateStatus)
+        #self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, devInfo)
+        #YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
+        #super(YoLinkSwitch, self).__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
+
+        time.sleep(13)
+        #self.switchState = self.yoSwitch.getState()
+        #self.switchPower = self.yoSwitch.getEnergy()
+        #udi_interface.__init__(self, polyglot, primary, address, name)
+
 
     def updateStatus(self, data):
         logging.debug('updateStatus - TestYoLinkNode')
-        #super
-        self.updateCallbackStatus(data)
+        self.yoSwitch.updateCallbackStatus(data)
         node = polyglot.getNode('my_address')
         if node is not None:
-            state =  self.yolinkDev.getState()
+            state =  self.yoSwitch.getState()
 
             if state.upper() == 'ON':
                 node.setDriver('GV0', 1, True, True)
             else:
                 node.setDriver('GV0', 0, True, True)
-            tmp =  self.yolinkDev.getEnergy()
+            tmp =  self.yoSwith.getEnergy()
 
             power = tmp['power']
             watt = tmp['watt']
@@ -85,7 +89,7 @@ class TestYoLinkNode(udi_interface.Node, YoLinkSW):
             self.pollDelays()
 
     def pollDelays(self):
-        delays =  self.yolinkDev.getDelays()
+        delays =  self.yoSwitch.getDelays()
         while True:
             delayActve = False
             if 'on' in delays:
@@ -205,7 +209,7 @@ if __name__ == "__main__":
         yolink_URL ='https://api.yosmart.com/openApi'
 
 
-        #node = TestYoLinkNode(polyglot, 'my_address', 'my_address', 'yolinkSwitch', csName , csid, csseckey, devInfo, )
+        #node = TestYoLinkNode(polyglot, 'my_address', 'my_address', 'yolinkSwitch', csName , csid, csseckey, devInfo )
         node = TestYoLinkNode(polyglot, 'my_address', 'my_address', 'yolinkSwitch')
         polyglot.addNode(node)
         wait_for_node_event()
