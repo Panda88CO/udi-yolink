@@ -26,7 +26,7 @@ multiplier. These get updated at every shortPoll interval
 class TestYoLinkNode(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     def  __init__(self, polyglot, primary, address, name):
-        super().__init__( polyglot, primary, address, name)   
+        super(TestYoLinkNode, self).__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('TestYoLinkNode INIT')
@@ -51,7 +51,7 @@ class TestYoLinkNode(udi_interface.Node):
         self.Parameters = Custom(polyglot, 'customparams')
 
         # subscribe to the events we want
-        polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
+        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         #polyglot.subscribe(polyglot.POLL, self.poll)
         #polyglot.subscribe(polyglot.START, self.start, address)
         # start processing events and create add our controller node
@@ -59,11 +59,14 @@ class TestYoLinkNode(udi_interface.Node):
         self.poly.addNode(self)
 
         self.yoSwitch  = YoLinkSW(csName, csid, csseckey, devInfo, self.updateStatus)
+        self.yoSwitch.refreshState()
+        self.yoSwitch.refreshSchedules()
+
         #self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, devInfo)
         #YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
         #super(YoLinkSwitch, self).__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
 
-        time.sleep(13)
+        time.sleep(3)
         #self.switchState = self.yoSwitch.getState()
         #self.switchPower = self.yoSwitch.getEnergy()
         #udi_interface.__init__(self, polyglot, primary, address, name)
@@ -72,25 +75,28 @@ class TestYoLinkNode(udi_interface.Node):
     def updateStatus(self, data):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoSwitch.updateCallbackStatus(data)
+        print(data)
         node = polyglot.getNode('my_address')
         if node is not None:
             state =  self.yoSwitch.getState()
-
+            print(state)
             if state.upper() == 'ON':
                 node.setDriver('GV0', 1, True, True)
             else:
                 node.setDriver('GV0', 0, True, True)
-            tmp =  self.yoSwith.getEnergy()
-
+            tmp =  self.yoSwitch.getEnergy()
+            print(tmp)
             power = tmp['power']
             watt = tmp['watt']
+            print ('power ' + str(power) + ', watt ' +str(watt))
             node.setDriver('GV1', power, True, True)
             node.setDriver('GV2', watt, True, True)
             self.pollDelays()
 
     def pollDelays(self):
         delays =  self.yoSwitch.getDelays()
-        while True:
+        print(delays)
+        while True and delays != None:
             delayActve = False
             if 'on' in delays:
                 if delays['on'] != 0:
@@ -181,8 +187,8 @@ if __name__ == "__main__":
         # subscribe to the events we want
         polyglot.subscribe(polyglot.CUSTOMPARAMS, parameterHandler)
         polyglot.subscribe(polyglot.ADDNODEDONE, node_queue)
-        polyglot.subscribe(polyglot.STOP, stop)
-        polyglot.subscribe(polyglot.POLL, poll)
+        #polyglot.subscribe(polyglot.STOP, stop)
+        #polyglot.subscribe(polyglot.POLL, poll)
 
         # Start running
         polyglot.ready()

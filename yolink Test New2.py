@@ -12,8 +12,8 @@ from yolinkMultiOutlet import YoLinkMultiOutlet
 from yolinkTHsensor import YoLinkTHSensor
 from yolinkLeakSensor import YoLinkLeakSensor
 from yolinkManipulator import YoLinkManipulator
-from yolinkSwitch import YoLinkSwitchSA
-from yolinkSwitch import YoLinkSwitchCB
+from yolinkSwitch import YoLinkSwitch
+from yolinkSwitch import YoLinkSW
 from yolinkGarageDoorToggle import YoLinkGarageDoorToggle
 from yolinkGarageDoorSensor import YoLinkGarageDoorSensor
 from yolinkMotionSensor import YoLinkMotionSensor
@@ -95,8 +95,12 @@ MotionSensor1 = DeviceList[3]
 Irrigation = DeviceList[2]
 HouseValve = DeviceList[1]
 FishTank = DeviceList[0]
-def test(self):
-    print('testing 123 ')
+
+def test(data):
+    print(data)
+    print('123 TEST')
+
+    #PlaygroundLight.updateCallbackStatus(data)
 
 #FishMultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, FishTank)
 #MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, MultiOUtlet2)
@@ -110,7 +114,7 @@ def test(self):
 #HouseValve = YoLinkManipulator(csName, csid, csseckey, HouseValve )
 #DeckLight = YoLinkMultiOutlet(csName, csid, csseckey, DeckLight)
 #PlaygroundGardenLight = YoLinkSwitch(csName, csid, csseckey, GardenPlayground)
-PlaygroundLight = YoLinkSwitchCB(csName, csid, csseckey, Playground, test)
+PlaygroundLight = YoLinkSW(csName, csid, csseckey, Playground, test)
 #USB_Outlet = YoLinkOutlet(csName, csid, csseckey, USB_Outlet)
 #doorSensor = YoLinkDoorSensor(csName, csid, csseckey, DoorSensor)
 #outdoorTemp = YoLinkTHSensor(csName, csid, csseckey, OutdoorTemp)

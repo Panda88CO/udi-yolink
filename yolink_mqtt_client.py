@@ -35,11 +35,13 @@ class YoLinkMQTTClient(object):
         #self.device_hash = device_hash
         self.deviceId = deviceId
         try:
+            print('initialize MQTT' )
             self.client = mqtt.Client(self.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
             self.client.on_connect = self.on_connect
             self.client.on_message = self.on_message
             self.client.on_subscribe = self.on_subscribe
             self.client.on_disconnect = self.on_disconnect
+            print('finish subscribing ')
         except Exception as E:
             logging.error('Exception  - -init-: ' + str(E))
         self.messagePending = False
@@ -90,8 +92,8 @@ class YoLinkMQTTClient(object):
                 #self.dataQueue.put(payload)
                 logging.debug (payload)
                 self.callback(payload)
-                print('Device response:')
-                print(payload)
+                #print('Device response:')
+                #print(payload)
         elif msg.topic == self.topicReq:
                 logging.debug('publishing request' )
                 logging.debug (payload)

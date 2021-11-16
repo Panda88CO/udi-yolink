@@ -84,6 +84,8 @@ class YoLinkMQTTDevice(object):
             data['method'] = methodStr
             data["targetDevice"] =  self.deviceInfo['deviceId']
             data["token"]= self.deviceInfo['token']
+            print ('refreshDevice')
+            print(data)
             self.yolinkMQTTclient.publish_data(data)
             #time.sleep(2)
               
@@ -143,7 +145,8 @@ class YoLinkMQTTDevice(object):
 
 
     def updateCallbackStatus(self, data):
-        logging.debug(self.type+' - updateStatus')
+        print(self.type+' - updateCallbackStatus')
+        logging.debug(self.type+' - updateCallbackStatus')
         if 'method' in  data:
             if data['code'] == '000000':
                 if  (data['method'] == self.type +'.getState' and  data['code'] == '000000'):
@@ -177,7 +180,10 @@ class YoLinkMQTTDevice(object):
                     self.updateStatusData(data)   
             elif data['event'] == self.type +'.getState':
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateStatusData(data)                                         
+                    self.updateStatusData(data)  
+            elif data['event'] == self.type +'.setState':
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)                      
             elif data['event'] == self.type +'.getSchedules':
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateScheduleStatus(data)   
@@ -185,7 +191,9 @@ class YoLinkMQTTDevice(object):
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateScheduleStatus(data)  
             else:
-                logging.debug('Unsupported Event passed - trying anyway' + str(json(data)))
+                logging.debug('Unsupported Event passed - trying anyway' )
+                print(data)
+                logging.debug(data)
                 try:
                     if int(data['time']) > int(self.getLastUpdate()):
                         if data['event'].find('chedule') >= 0 :
@@ -432,7 +440,7 @@ class YoLinkMQTTDevice(object):
         self.dataAPI[self.lastUpdate] = data[self.messageTime]
         self.dataAPI[self.lastMessage] = data
     '''
-    def updateMultiStatusData (yolink, data):
+    def updateMultiStatusData (self, data):
         self.setOnline(data)
         self.setNbrPorts(data)
         self.updateLoraInfo(data)
