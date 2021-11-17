@@ -51,27 +51,19 @@ class TestYoLinkNode(udi_interface.Node):
         self.Parameters = Custom(polyglot, 'customparams')
 
         # subscribe to the events we want
-        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
-        #polyglot.subscribe(polyglot.POLL, self.poll)
-        #polyglot.subscribe(polyglot.START, self.start, address)
+        polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
+        polyglot.subscribe(polyglot.POLL, self.poll)
+        polyglot.subscribe(polyglot.START, self.start, address)
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
 
-        self.yoSwitch  = YoLinkSW(csName, csid, csseckey, devInfo, self.updateStatus)
-        self.yoSwitch.refreshState()
-        self.yoSwitch.refreshSchedules()
 
-        #self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, devInfo)
-        #YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
-        #super(YoLinkSwitch, self).__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
-
-        time.sleep(3)
         #self.switchState = self.yoSwitch.getState()
         #self.switchPower = self.yoSwitch.getEnergy()
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
-
+    
     def updateStatus(self, data):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoSwitch.updateCallbackStatus(data)
@@ -110,7 +102,23 @@ class TestYoLinkNode(udi_interface.Node):
                 break
             time.sleep(30) # shortPoll???
 
-    
+    def poll(self, polltype):
+        logging.debug(polltype)
+        if 'longPoll' in polltype:
+            self.yoSwitch.refreshState()
+            self.yoSwitch.refreshSchedules()
+
+    def start(self):
+        self.yoSwitch  = YoLinkSW(csName, csid, csseckey, devInfo, self.updateStatus)
+        self.yoSwitch.refreshState()
+        self.yoSwitch.refreshSchedules()
+
+        #self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, devInfo)
+        #YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
+        #super(YoLinkSwitch, self).__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
+
+        time.sleep(3)
+
 
     id = 'test'
     drivers = [
@@ -160,11 +168,13 @@ def poll(polltype):
     global count
     global Parameters
 
-    if 'shortPoll' in polltype:
+    if 'longPoll' in polltype:
        # self.yolinkDev.refreshDevice()
+        self.yoSwitch.refreshState()
+        self.yoSwitch.refreshSchedules()
 
         # be fancy and display a notice on the polyglot dashboard
-        polyglot.Notices['count'] = 'Current count is {}'.format(count)
+        polyglot.Notices['count'] = 'Polling data '
 
 
 '''
@@ -182,13 +192,14 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
         polyglot.start()
 
-        Parameters = Custom(polyglot, 'customparams')
+        #Parameters = Custom(polyglot, 'customparams')
 
         # subscribe to the events we want
-        polyglot.subscribe(polyglot.CUSTOMPARAMS, parameterHandler)
+        #polyglot.subscribe(polyglot.CUSTOMPARAMS, parameterHandler)
         polyglot.subscribe(polyglot.ADDNODEDONE, node_queue)
-        #polyglot.subscribe(polyglot.STOP, stop)
-        #polyglot.subscribe(polyglot.POLL, poll)
+        polyglot.subscribe(polyglot.STOP, stop)
+        polyglot.subscribe(polyglot.POLL, poll)
+        polyglot.subscribe(polyglot.START, start)
 
         # Start running
         polyglot.ready()
