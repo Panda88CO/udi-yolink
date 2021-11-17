@@ -25,28 +25,44 @@ multiplier. These get updated at every shortPoll interval
 
 class TestYoLinkNode(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
+    id = 'test'
+    drivers = [
+            {'driver': 'ST', 'value': 1, 'uom': 2},
+            {'driver': 'GV0', 'value': 0, 'uom': 25},
+            {'driver': 'GV1', 'value': 0, 'uom': 30}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 33}, 
+            {'driver': 'GV3', 'value': 0, 'uom': 44},
+            {'driver': 'GV4', 'value': 0, 'uom': 44},
+            ]
+
+ 
+
+
+
+
+
     def  __init__(self, polyglot, primary, address, name):
         super(TestYoLinkNode, self).__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('TestYoLinkNode INIT')
-        csid = '60dd7fa7960d177187c82039'
-        csseckey = '3f68536b695a435d8a1a376fc8254e70'
-        csName = 'Panda88'
-        devInfo = { "deviceId": "d88b4c0100034906",
+        self.csid = '60dd7fa7960d177187c82039'
+        self.csseckey = '3f68536b695a435d8a1a376fc8254e70'
+        self.csName = 'Panda88'
+        self.devInfo = { "deviceId": "d88b4c0100034906",
                     "deviceUDID": "e091320786e5447099c8b1c93ce47a60",
                     "name": "S Playground Switch",
                     "token": "7f43fbce-dece-4477-9660-97804b278190",
                     "type": "Switch"
                     }
-        mqtt_URL= 'api.yosmart.com'
-        mqtt_port = 8003
-        yolink_URL ='https://api.yosmart.com/openApi'
+        self.mqtt_URL= 'api.yosmart.com'
+        self.mqtt_port = 8003
+        self.yolink_URL ='https://api.yosmart.com/openApi'
 
         
-        self.poly = polyglot
-        self.count = 0
-        self.n_queue = []
+        #self.poly = polyglot
+        #self.count = 0
+        #self.n_queue = []
 
         self.Parameters = Custom(polyglot, 'customparams')
 
@@ -63,84 +79,81 @@ class TestYoLinkNode(udi_interface.Node):
         #self.switchPower = self.yoSwitch.getEnergy()
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
+    def start(self):
+        print('start - YoLinkSw')
+        self.yoSwitch  = YoLinkSW(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        print('Start - RefreshState')
+        self.yoSwitch.refreshState()
+        print('Start - Refresh Schedules')
+        self.yoSwitch.refreshSchedules()
+        time.sleep(3)
     
     def updateStatus(self, data):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoSwitch.updateCallbackStatus(data)
         print(data)
-        node = polyglot.getNode('my_address')
-        if node is not None:
+        self.node = polyglot.getNode('my_switch')
+        if self.node is not None:
             state =  self.yoSwitch.getState()
             print(state)
             if state.upper() == 'ON':
-                node.setDriver('GV0', 1, True, True)
+                self.node.setDriver('GV0', 1, True, True)
             else:
-                node.setDriver('GV0', 0, True, True)
+                self.node.setDriver('GV0', 0, True, True)
             tmp =  self.yoSwitch.getEnergy()
             print(tmp)
             power = tmp['power']
             watt = tmp['watt']
             print ('power ' + str(power) + ', watt ' +str(watt))
-            node.setDriver('GV1', power, True, True)
-            node.setDriver('GV2', watt, True, True)
-            self.pollDelays()
+            self.node.setDriver('GV1', power, True, True)
+            self.node.setDriver('GV2', watt, True, True)
+            #self.pollDelays()
 
     def pollDelays(self):
         delays =  self.yoSwitch.getDelays()
-        print(delays)
-        while True and delays != None:
+        print('delays: ' + str(delays))
+        while  delays != None:
+            delays =  self.yoSwitch.getDelays()
             delayActve = False
             if 'on' in delays:
                 if delays['on'] != 0:
                     delayActve = True
-                node.setDriver('GV3', delays['on'], True, True)
+                self.node.setDriver('GV3', delays['on'], True, True)
             if 'off' in delays:
                 if delays['off'] != 0:
                     delayActve = True
-                node.setDriver('GV4', delays['off'], True, True)               
+                self.node.setDriver('GV4', delays['off'], True, True)               
             if not delayActve:
                 break
             time.sleep(30) # shortPoll???
 
     def poll(self, polltype):
+        print('poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
             self.yoSwitch.refreshState()
             self.yoSwitch.refreshSchedules()
 
-    def start(self):
-        self.yoSwitch  = YoLinkSW(csName, csid, csseckey, devInfo, self.updateStatus)
-        self.yoSwitch.refreshState()
-        self.yoSwitch.refreshSchedules()
 
-        #self.yolinkDev = YoLinkSwitch(csName, csid, csseckey, devInfo)
-        #YoLinkSwitch.__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
-        #super(YoLinkSwitch, self).__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, devInfo, self.updateStatus)
+        
+    def parameterHandler(self, params):
+        self.Parameters.load(params)
 
-        time.sleep(3)
-
-
-    id = 'test'
-    drivers = [
-            {'driver': 'ST', 'value': 1, 'uom': 2},
-            {'driver': 'GV0', 'value': 0, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 30}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 33}, 
-            {'driver': 'GV3', 'value': 0, 'uom': 44},
-            {'driver': 'GV4', 'value': 0, 'uom': 44},
-            ]
+    def stop (self):
+        logging.info('Stop not implemented')
 
     def noop(self):
         logging.info('Discover not implemented')
 
     commands = {'DISCOVER': noop}
 
+
 '''
 node_queue() and wait_for_node_event() create a simple way to wait
 for a node to be created.  The nodeAdd() API call is asynchronous and
 will return before the node is fully created. Using this, we can wait
 until it is fully created before we try to use it.
-'''
+
 def node_queue(data):
     n_queue.append(data['address'])
 
@@ -149,21 +162,20 @@ def wait_for_node_event():
         time.sleep(0.1)
     n_queue.pop()
 
-'''
 Read the user entered custom parameters. In this case, it is just
 the 'multiplier' value.  Save the parameters in the global 'Parameters'
-'''
+
 def parameterHandler(params):
     global Parameters
 
     Parameters.load(params)
 
 
-'''
+
 This is where the real work happens.  When we get a shortPoll, increment the
 count, report the current count in GV0 and the current count multiplied by
 the user defined value in GV1. Then display a notice on the dashboard.
-'''
+
 def poll(polltype):
     global count
     global Parameters
@@ -177,16 +189,16 @@ def poll(polltype):
         polyglot.Notices['count'] = 'Polling data '
 
 
-'''
+
 When we are told to stop, we update the node's status to False.  Since
 we don't have a 'controller', we have to do this ourselves.
-'''
+
 def stop():
     nodes = polyglot.getNodes()
     for n in nodes:
         nodes[n].setDriver('ST', 0, True, True)
     polyglot.stop()
-
+'''
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
@@ -196,15 +208,15 @@ if __name__ == "__main__":
 
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, parameterHandler)
-        polyglot.subscribe(polyglot.ADDNODEDONE, node_queue)
-        polyglot.subscribe(polyglot.STOP, stop)
-        polyglot.subscribe(polyglot.POLL, poll)
-        polyglot.subscribe(polyglot.START, start)
+        #polyglot.subscribe(polyglot.ADDNODEDONE, node_queue)
+        #polyglot.subscribe(polyglot.STOP, stop)
+        #polyglot.subscribe(polyglot.POLL, poll)
+        #polyglot.subscribe(polyglot.START, start)
 
         # Start running
-        polyglot.ready()
-        polyglot.setCustomParamsDoc()
-        polyglot.updateProfile()
+        #polyglot.ready()
+        #polyglot.setCustomParamsDoc()
+        #polyglot.updateProfile()
 
         '''
         Here we create the device node.  In a real node server we may
@@ -212,24 +224,12 @@ if __name__ == "__main__":
         based on what we find.  Here, we simply create our node and wait
         for the add to complete.
         '''
-        csid = '60dd7fa7960d177187c82039'
-        csseckey = '3f68536b695a435d8a1a376fc8254e70'
-        csName = 'Panda88'
-        devInfo = { "deviceId": "d88b4c0100034906",
-                    "deviceUDID": "e091320786e5447099c8b1c93ce47a60",
-                    "name": "S Playground Switch",
-                    "token": "7f43fbce-dece-4477-9660-97804b278190",
-                    "type": "Switch"
-                    }
-        mqtt_URL= 'api.yosmart.com'
-        mqtt_port = 8003
-        yolink_URL ='https://api.yosmart.com/openApi'
 
 
         #node = TestYoLinkNode(polyglot, 'my_address', 'my_address', 'yolinkSwitch', csName , csid, csseckey, devInfo )
-        node = TestYoLinkNode(polyglot, 'my_address', 'my_address', 'yolinkSwitch')
-        polyglot.addNode(node)
-        wait_for_node_event()
+        TestYoLinkNode(polyglot, 'my_switch', 'my_switch', 'yolinkSwitch')
+        #polyglot.addNode(node)
+        #wait_for_node_event()
 
         # Just sit and wait for events
         polyglot.runForever()

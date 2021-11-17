@@ -87,7 +87,7 @@ class YoLinkMQTTDevice(object):
             print ('refreshDevice')
             print(data)
             self.yolinkMQTTclient.publish_data(data)
-            #time.sleep(2)
+            time.sleep(2)
               
     def setDevice(self,  data):
         logging.debug(self.type+' - setDevice')
@@ -570,9 +570,10 @@ class YoLinkMQTTDevice(object):
 
     def getDelays(self):
         logging.debug(str(self.type)+ ' - getDelays')
-        self.refreshDevice()
-        time.sleep(2)
+        #self.refreshDevice()
+        #time.sleep(2)
         if self.dDelays in self.dataAPI:
+            #Needs update 
             return(self.dataAPI[self.dDelays])
         else:
             return(None)
