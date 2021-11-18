@@ -1,6 +1,6 @@
 <editors> 
   <editor id = "STATUS" > 
-     <range  uom="25" subset="0-1" nls="Status" />
+     <range  uom="25" subset="0-1" nls="STATUS" />
 </editor>
   <editor id = "SWSTATE" > 
      <range  uom="25" subset="0-1" nls="SWSTATE" />
