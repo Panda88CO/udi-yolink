@@ -11,10 +11,7 @@
   <editor id = "energy" > 
      <range  uom="33" min="0" max="2000" prec="2"/>
 </editor>
-  <editor id = "ondelay" > 
+  <editor id = "delay" > 
      <range  uom="44"  min="0" max="1440" prec="0" />
 </editor>
-  <editor id = "offdelay" > 
-     <range  uom="44" min="0" max="1440" prec="0" />
-</editor>     
 </editors> 

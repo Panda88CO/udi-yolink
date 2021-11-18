@@ -6,8 +6,8 @@
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="watt" />
          <st id="GV2" editor="energy" />
-         <st id="GV3" editor="ondelay" />
-         <st id="GV4" editor="offdelay" />
+         <st id="GV3" editor="delay" />
+         <st id="GV4" editor="delay" />
       </sts>
       <cmds>
          <sends>
@@ -16,12 +16,15 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="SWCTRL" /> 
+            <cmd id="SWCTRL" > 
                <p id="" editor="swstate" init="GV0" /> 
-            <cmd id="ONDELAY" /> 
-               <p id="" editor="ondelay" init="GV3" /> 
-            <cmd id="OFFDELAY" /> 
-               <p id="" editor="offdelay" init="GV4" /> 
+            </cmd >
+            <cmd id="ONDELAY" > 
+               <p id="" editor="delay" init="GV3" /> 
+             </cmd >   
+            <cmd id="OFFDELAY" > 
+               <p id="" editor="delay" init="GV4" /> 
+             </cmd >
          </accepts>
       </cmds>
    </nodeDef> 

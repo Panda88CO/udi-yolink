@@ -142,28 +142,25 @@ class TestYoLinkNode(udi_interface.Node):
 
     def switchControl(self, command):
         logging.info('switchControl')
-        #state = cmd['value']
+        state = int(command.get('value'))
         print(command)
-        '''
+        
         if state == 1:
             self.yoSwitch.setState('ON')
         else:
             self.yoSwitch.setState('OFF')
-        '''
+        
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
-        #delay = command.get('value')
-        #delay = cmd['value']
-        print(command)
-        #print(command)
-        #self.yoSwitch.setDelay([{'delayOn':int(delay)}])
+        delay =int(command.get('value'))
+        self.yoSwitch.setDelay([{'delayOn':int(delay)}])
 
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
-        #delay = cmd['value']
+        delay =int(command.get('value'))
         print(command)
-        #self.yoSwitch.setDelay([{'delayOff':int(delay)}])
+        self.yoSwitch.setDelay([{'delayOff':int(delay)}])
 
 
     def parameterHandler(self, params):
