@@ -111,6 +111,8 @@ class TestYoLinkNode(udi_interface.Node):
             self.node.setDriver('GV1', power, True, True)
             self.node.setDriver('GV2', watt, True, True)
             #self.pollDelays()
+
+            
     # Need to use shortPoll
     def pollDelays(self):
         delays =  self.yoSwitch.getDelays()
