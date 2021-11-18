@@ -169,7 +169,7 @@ class TestYoLinkNode(udi_interface.Node):
         logging.info('Stop not implemented')
         self.yoSwitch.shut_down()
 
-    def update(self):
+    def update(self, command = None):
         logging.info('Update')
         self.yoSwitch.refreshState()
         self.yoSwitch.refreshSchedules()     
