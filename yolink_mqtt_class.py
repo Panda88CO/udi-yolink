@@ -138,12 +138,27 @@ class YoLinkMQTTDevice(object):
                         self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
         else: #event
             for key in data[self.dData]:
-                self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+                    self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
 
-
-
+    def udateDelayData(self, data):
+        if 'online' in data[self.dData]:
+            self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
+        else:
+            self.dataAPI[self.dOnline] = True
+        if 'event' in data:
+            tmp =  {}
+            for key in data[self.dData]:
+                if key == 'delayOn':
+                    tmp['on'] = data[self.dData][key]
+                elif key == 'delayOff':
+                    tmp['off'] = data[self.dData][key] 
+                else:
+                    tmp[key] =  data[self.dData][key] 
+            self.dataAPI[self.dData][self.dDelays]= tmp
+        self.updateLoraInfo(data)
+        self.updateMessageInfo(data)
 
     def updateCallbackStatus(self, data):
         print(self.type+' - updateCallbackStatus')
@@ -191,6 +206,9 @@ class YoLinkMQTTDevice(object):
             elif data['event'] == self.type +'.Alert':         
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateScheduleStatus(data)  
+            elif data['event'] == self.type +'.setDelay':         
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.udateDelayData(data)                    
             else:
                 logging.debug('Unsupported Event passed - trying anyway' )
                 print(data)

@@ -3,7 +3,7 @@
      <range  uom="2" subset="0-1" nls="Status" />
 </editor>
   <editor id = "SWSTATE" > 
-     <range  uom="52" subset="0-1" nls="SWSTATE" />
+     <range  uom="25" subset="0-1" nls="SWSTATE" />
 </editor>
   <editor id = "WATT" > 
      <range  uom="30" min="0" max="2000" prec="2" />
