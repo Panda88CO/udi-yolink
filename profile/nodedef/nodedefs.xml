@@ -4,10 +4,11 @@
       <sts>
          <st id="ST"  editor="status" />
          <st id="GV0" editor="swstate" />
-         <st id="GV1" editor="watt" />
-         <st id="GV2" editor="energy" />
          <st id="GV3" editor="delay" />
          <st id="GV4" editor="delay" />
+         <st id="GV1" editor="watt" />
+         <st id="GV2" editor="energy" />
+
       </sts>
       <cmds>
          <sends>

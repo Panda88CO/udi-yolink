@@ -90,8 +90,6 @@ class TestYoLinkNode(udi_interface.Node):
             self.hb = 0
 
     def updateStatus(self, data):
-        #while not self.yoSwitch:
-        #    time.sleep(2)
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoSwitch.updateCallbackStatus(data)
         print(data)
@@ -104,13 +102,13 @@ class TestYoLinkNode(udi_interface.Node):
             else:
                 self.node.setDriver('GV0', 0, True, True)
             tmp =  self.yoSwitch.getEnergy()
-            print(tmp)
             power = tmp['power']
             watt = tmp['watt']
             print ('power ' + str(power) + ', watt ' +str(watt))
             self.node.setDriver('GV1', power, True, True)
             self.node.setDriver('GV2', watt, True, True)
-            #self.pollDelays()
+        while self.yoSwitch.eventPending():
+            print(self.yoSwitch.getEvent())
 
 
     # Need to use shortPoll
@@ -143,7 +141,7 @@ class TestYoLinkNode(udi_interface.Node):
     def switchControl(self, command):
         logging.info('switchControl')
         state = int(command.get('value'))
-        print(command)
+        print(command, state)
         
         if state == 1:
             self.yoSwitch.setState('ON')
@@ -153,14 +151,14 @@ class TestYoLinkNode(udi_interface.Node):
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
-        self.yoSwitch.setDelay([{'delayOn':int(delay)}])
-
+        self.yoSwitch.setDelay([{'delayOn':delay}])
+        self.node.setDriver('GV3', delay, True, True)
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
-        print(command)
-        self.yoSwitch.setDelay([{'delayOff':int(delay)}])
+        self.yoSwitch.setDelay([{'delayOff':delay}])
+        self.node.setDriver('GV4', delay, True, True)
 
 
     def parameterHandler(self, params):

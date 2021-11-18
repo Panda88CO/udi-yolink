@@ -86,7 +86,6 @@ class YoLinkMQTTDevice(object):
             data["targetDevice"] =  self.deviceInfo['deviceId']
             data["token"]= self.deviceInfo['token']
             print ('refreshDevice')
-            print(data)
             self.yolinkMQTTclient.publish_data(data)
             time.sleep(2)
               
@@ -142,7 +141,7 @@ class YoLinkMQTTDevice(object):
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
 
-    def udateDelayData(self, data):
+    def updateDelayData(self, data):
         if 'online' in data[self.dData]:
             self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
         else:
@@ -173,7 +172,7 @@ class YoLinkMQTTDevice(object):
                         self.updateStatusData(data)                          
                 elif  (data['method'] == self.type +'.setDelay' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
-                        self.updateStatusData(data)       
+                        self.updateDelayData(data)       
                 elif  (data['method'] == self.type +'.getSchedules' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateScheduleStatus(data)
@@ -193,7 +192,7 @@ class YoLinkMQTTDevice(object):
                     self.updateStatusData(data)              
             elif data['event'] == self.type +'.Report':
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.updateStatusData(data)   
+                    self.updateStatusData(data)  
             elif data['event'] == self.type +'.getState':
                 if int(data['time']) > int(self.getLastUpdate()):
                     self.updateStatusData(data)  
@@ -208,7 +207,7 @@ class YoLinkMQTTDevice(object):
                     self.updateScheduleStatus(data)  
             elif data['event'] == self.type +'.setDelay':         
                 if int(data['time']) > int(self.getLastUpdate()):
-                    self.udateDelayData(data)                    
+                    self.updateDelayData(data)                    
             else:
                 logging.debug('Unsupported Event passed - trying anyway' )
                 print(data)
