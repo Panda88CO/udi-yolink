@@ -104,9 +104,8 @@ class TestYoLinkNode(udi_interface.Node):
             tmp =  self.yoSwitch.getEnergy()
             power = tmp['power']
             watt = tmp['watt']
-            print ('power ' + str(power) + ', watt ' +str(watt))
-            self.node.setDriver('GV1', power, True, True)
-            self.node.setDriver('GV2', watt, True, True)
+            self.node.setDriver('GV3', power, True, True)
+            self.node.setDriver('GV4', watt, True, True)
         while self.yoSwitch.eventPending():
             print(self.yoSwitch.getEvent())
 
@@ -121,12 +120,12 @@ class TestYoLinkNode(udi_interface.Node):
             if delays['on'] != 0 or delays['off'] !=0:
                 delays =  self.yoSwitch.refreshDelays() # should be able to calculate without polling 
                 if 'on' in delays:
-                    self.node.setDriver('GV3', delays['on'], True, True)
+                    self.node.setDriver('GV1', delays['on'], True, True)
                 if 'off' in delays:
-                    self.node.setDriver('GV4', delays['off'], True, True)               
+                    self.node.setDriver('GV2', delays['off'], True, True)               
         else:
-            self.node.setDriver('GV4', 0, True, True)     
-            self.node.setDriver('GV3', 0, True, True)     
+            self.node.setDriver('GV1', 0, True, True)     
+            self.node.setDriver('GV2', 0, True, True)     
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
@@ -140,9 +139,7 @@ class TestYoLinkNode(udi_interface.Node):
 
     def switchControl(self, command):
         logging.info('switchControl')
-        state = int(command.get('value'))
-        print(command, state)
-        
+        state = int(command.get('value'))     
         if state == 1:
             self.yoSwitch.setState('ON')
         else:
@@ -152,13 +149,13 @@ class TestYoLinkNode(udi_interface.Node):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
         self.yoSwitch.setDelay([{'delayOn':delay}])
-        self.node.setDriver('GV3', delay, True, True)
+        self.node.setDriver('GV1', delay, True, True)
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
         self.yoSwitch.setDelay([{'delayOff':delay}])
-        self.node.setDriver('GV4', delay, True, True)
+        self.node.setDriver('GV2', delay, True, True)
 
 
     def parameterHandler(self, params):
