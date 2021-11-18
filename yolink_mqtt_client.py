@@ -83,7 +83,7 @@ class YoLinkMQTTClient(object):
                 #self.dataQueue.put(payload)
                 logging.debug (payload)
                 self.callback(payload)
-                print(' device reporting')
+                logging.debug(' device reporting')
             else:
                 logging.debug ('\n report on differnt device : ' + msg.topic)
                 logging.debug (payload)
@@ -98,8 +98,8 @@ class YoLinkMQTTClient(object):
                 logging.debug('publishing request' )
                 logging.debug (payload)
                 #self.callback(payload)
-                print('device publishing')
-                print(payload)
+                logging.debug('device publishing')
+                logging.debug(payload)
         else:
             logging.debug(msg.topic,  self.topicReport, self.topicReportAll )
         

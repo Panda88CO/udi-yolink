@@ -49,7 +49,7 @@ class YoLinkMQTTDevice(object):
         self.dDelays = 'delays' 
         self.messageTime = 'time'
         self.forceStop = False
-
+        self.eventSupport = False # Support adding to EventQueue
 
         
         self.dataAPI = {
@@ -222,7 +222,8 @@ class YoLinkMQTTDevice(object):
                             self.updateStatusData(data)   
                 except logging.exception as E:
                     logging.debug('Unsupported event detected: ' + str(E))
-            self.eventQueue.put(data['event']) 
+            if self.eventSupport:
+                self.eventQueue.put(data['event']) 
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
 

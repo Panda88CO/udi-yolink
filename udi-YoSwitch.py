@@ -41,6 +41,7 @@ class TestYoLinkNode(udi_interface.Node):
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('TestYoLinkNode INIT')
+
         self.csid = '60dd7fa7960d177187c82039'
         self.csseckey = '3f68536b695a435d8a1a376fc8254e70'
         self.csName = 'Panda88'
@@ -188,7 +189,7 @@ if __name__ == "__main__":
 
        
         TestYoLinkNode(polyglot, 'yoswitch', 'yoswitch', 'Yolink Switch')
-        TestYoLinkNode(polyglot, 'yoswitch1', 'yoswitch1', 'Yolink Switch1')
+        #TestYoLinkNode(polyglot, 'yoswitch1', 'yoswitch1', 'Yolink Switch1')   
 
         # Just sit and wait for events
         polyglot.runForever()
