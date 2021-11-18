@@ -27,7 +27,7 @@ class TestYoLinkNode(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     id = 'yoswitch'
     drivers = [
-            {'driver': 'ST', 'value': 1, 'uom': 2},
+            {'driver': 'ST',  'value': 1, 'uom': 25},
             {'driver': 'GV0', 'value': 0, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 30}, 
             {'driver': 'GV2', 'value': 0, 'uom': 33}, 
@@ -140,28 +140,29 @@ class TestYoLinkNode(udi_interface.Node):
             self.pollDelays()
             #update Delays calculated
 
-    def switchControl(self, cmd):
+    def switchControl(self, command):
         logging.info('switchControl')
         #state = cmd['value']
-        print(cmd)
+        print(command)
         '''
         if state == 1:
             self.yoSwitch.setState('ON')
         else:
             self.yoSwitch.setState('OFF')
         '''
-    def setOnDelay(self, cmd ):
+    def setOnDelay(self, command ):
         logging.info('setOnDelay')
         #delay = command.get('value')
         #delay = cmd['value']
-        print(cmd)
+        print(command)
+        #print(command)
         #self.yoSwitch.setDelay([{'delayOn':int(delay)}])
 
 
-    def setOffDelay(self, cmd):
+    def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         #delay = cmd['value']
-        print(cmd)
+        print(command)
         #self.yoSwitch.setDelay([{'delayOff':int(delay)}])
 
 
@@ -178,7 +179,8 @@ class TestYoLinkNode(udi_interface.Node):
         self.yoSwitch.refreshSchedules()     
 
 
-    commands = {'UPDATE': update,
+    commands = {
+                'UPDATE': update,
                 'SWCTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 
