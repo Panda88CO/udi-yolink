@@ -1,14 +1,16 @@
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = GenericCtrl
-CMD-nlsyoswitch-UPDATE-NAME = Update System Data
-ST-nlsyoswitch-ST-NAME = Nodeserver Up
-ST-nlsyoswitch-GV0-NAME = Switch State
+
+ST-nlsswitch-ST-NAME = Nodeserver Up
+ST-nlsswitch-GV0-NAME = Switch State
 SWSTATE-0 = Off
 SWSTATE-1 = On
-ST-nlsyoswitch-GV1-NAME = Watt
-ST-nlsyoswitch-GV2-NAME = Energy
-ST-nlsyoswitch-GV3-NAME = On Delay (min)
-ST-nlsyoswitch-GV4-NAME = Off Delay (min)
-CMD-nlsyoswitch-STATE-NAME =  Switch
-CMD-nlsyoswitch-ONDELAY-NAME =  Set On Delay (min)
-CMD-nlsyoswitch-OFFDELAY-NAME =  Set Off Delay (min)
+
+ST-nlsswitch-GV1-NAME = Watt
+ST-nlsswitch-GV2-NAME = Energy
+ST-nlsswitch-GV3-NAME = On Delay (min)
+ST-nlsswitch-GV4-NAME = Off Delay (min)
+CMD-nlsswitch-UPDATE-NAME = Update System Data
+CMD-nlsswitch-SWCTRL-NAME =  Switch control
+CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
+CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)

@@ -1,5 +1,5 @@
 <nodeDefs> 
-   <nodeDef id="yoswitch" nls="nlsyoswitch">
+   <nodeDef id="yoswitch" nls="nlsswitch">
       <editors />
       <sts>
          <st id="ST"  editor="STATUS" />
@@ -16,7 +16,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="STATE" /> 
+            <cmd id="SWCTRL" /> 
                <p id="" editor="SWSTATE" init="GV0" /> 
             <cmd id="ONDELAY" /> 
                <p id="" editor="ONDELAY" init="GV3" /> 

@@ -25,7 +25,7 @@ multiplier. These get updated at every shortPoll interval
 
 class TestYoLinkNode(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yo_switch'
+    id = 'yoswitch'
     drivers = [
             {'driver': 'ST', 'value': 1, 'uom': 2},
             {'driver': 'GV0', 'value': 0, 'uom': 25},
@@ -95,7 +95,7 @@ class TestYoLinkNode(udi_interface.Node):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoSwitch.updateCallbackStatus(data)
         print(data)
-        self.node = polyglot.getNode('yo_switch')
+        self.node = polyglot.getNode('yoswitch')
         if self.node is not None:
             state =  self.yoSwitch.getState()
             print(state)
@@ -145,15 +145,26 @@ class TestYoLinkNode(udi_interface.Node):
             self.yoSwitch.refreshState()
             self.yoSwitch.refreshSchedules()
 
-    def switchControl(self, state):
+    def switchControl(self, command):
         logging.info('switchControl')
+        state = int(command.get('value'))
         if state == 1:
             self.yoSwitch.setState('ON')
         else:
             self.yoSwitch.setState('OFF')
 
-    def setDelay(self, DelayList):
-        logging.info('setDelay - not implemented yet')
+    def setOnDelay(self, command):
+        logging.info('setOnDelay')
+        delay = int(command.get('value'))
+        self.yoSwitch.setDelays([{'delayOn':int(delay)}])
+
+        
+
+    def setOffDelay(self, command):
+        logging.info('setOnDelay')
+        delay = int(command.get('value'))
+        self.yoSwitch.setDelays([{'delayOff':int(delay)}])
+
 
     def parameterHandler(self, params):
         self.Parameters.load(params)
@@ -169,9 +180,9 @@ class TestYoLinkNode(udi_interface.Node):
 
 
     commands = {'UPDATE': update,
-                'STATE': switchControl, 
-                'ONDELAY' : setDelay,
-                'OFFDELAY' : setDelay 
+                'SWCTRL': switchControl, 
+                'ONDELAY' : setOnDelay,
+                'OFFDELAY' : setOffDelay 
                 }
 
 
@@ -182,7 +193,7 @@ if __name__ == "__main__":
         polyglot.start()
 
        
-        TestYoLinkNode(polyglot, 'yo_switch', 'yo_switch', 'Yolink Switch')
+        TestYoLinkNode(polyglot, 'yoswitch', 'yoswitch', 'Yolink Switch')
 
 
         # Just sit and wait for events
