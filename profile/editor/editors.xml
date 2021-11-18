@@ -1,20 +1,20 @@
 <editors> 
-  <editor id = "STATUS" > 
-     <range  uom="25" subset="0-1" nls="STATUS" />
+  <editor id = "status" > 
+     <range  uom="25" subset="0-1" nls="status" />
 </editor>
-  <editor id = "SWSTATE" > 
-     <range  uom="25" subset="0-1" nls="SWSTATE" />
+  <editor id = "swstate" > 
+     <range  uom="25" subset="0-1" nls="swstate" />
 </editor>
-  <editor id = "WATT" > 
+  <editor id = "watt" > 
      <range  uom="30" min="0" max="2000" prec="2" />
 </editor>
-  <editor id = "ENERGY" > 
+  <editor id = "energy" > 
      <range  uom="33" min="0" max="2000" prec="2"/>
 </editor>
-  <editor id = "ONDELAY" > 
+  <editor id = "ondelay" > 
      <range  uom="44"  min="0" max="1440" prec="0" />
 </editor>
-  <editor id = "OFFDELAY" > 
+  <editor id = "offdelay" > 
      <range  uom="44" min="0" max="1440" prec="0" />
 </editor>     
 </editors> 

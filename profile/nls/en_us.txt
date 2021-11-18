@@ -2,12 +2,12 @@ ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = GenericCtrl
 
 ST-nlsswitch-ST-NAME = Nodeserver Status
-STATUS-0 = Down
-STATUS-1 = Up
+status-0 = Down
+status-1 = Up
 
 ST-nlsswitch-GV0-NAME = Switch State
-SWSTATE-0 = Off
-SWSTATE-1 = On
+swstate-0 = Off
+swstate-1 = On
 
 ST-nlsswitch-GV1-NAME = Watt
 ST-nlsswitch-GV2-NAME = Energy

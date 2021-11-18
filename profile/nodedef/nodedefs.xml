@@ -2,12 +2,12 @@
    <nodeDef id="yoswitch" nls="nlsswitch">
       <editors />
       <sts>
-         <st id="ST"  editor="STATUS" />
-         <st id="GV0" editor="SWSTATE" />
-         <st id="GV1" editor="WATT" />
-         <st id="GV2" editor="ENERGY" />
-         <st id="GV3" editor="ONDELAY" />
-         <st id="GV4" editor="OFFDELAY" />
+         <st id="ST"  editor="status" />
+         <st id="GV0" editor="swstate" />
+         <st id="GV1" editor="watt" />
+         <st id="GV2" editor="energy" />
+         <st id="GV3" editor="ondelay" />
+         <st id="GV4" editor="offdelay" />
       </sts>
       <cmds>
          <sends>
@@ -17,11 +17,11 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" /> 
-               <p id="" editor="SWSTATE" init="GV0" /> 
+               <p id="" editor="swstate" init="GV0" /> 
             <cmd id="ONDELAY" /> 
-               <p id="" editor="ONDELAY" init="GV3" /> 
+               <p id="" editor="ondelay" init="GV3" /> 
             <cmd id="OFFDELAY" /> 
-               <p id="" editor="OFFDELAY" init="GV4" /> 
+               <p id="" editor="offdelay" init="GV4" /> 
          </accepts>
       </cmds>
    </nodeDef> 
