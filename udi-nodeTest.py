@@ -25,7 +25,7 @@ multiplier. These get updated at every shortPoll interval
 
 class TestYoLinkNode(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'test'
+    id = 'yo_switch'
     drivers = [
             {'driver': 'ST', 'value': 1, 'uom': 2},
             {'driver': 'GV0', 'value': 0, 'uom': 25},
@@ -34,11 +34,6 @@ class TestYoLinkNode(udi_interface.Node):
             {'driver': 'GV3', 'value': 0, 'uom': 44},
             {'driver': 'GV4', 'value': 0, 'uom': 44},
             ]
-
- 
-
-
-
 
 
     def  __init__(self, polyglot, primary, address, name):
@@ -58,7 +53,7 @@ class TestYoLinkNode(udi_interface.Node):
         self.mqtt_URL= 'api.yosmart.com'
         self.mqtt_port = 8003
         self.yolink_URL ='https://api.yosmart.com/openApi'
-
+        self.yoSwitch = None
         
         #self.poly = polyglot
         #self.count = 0
@@ -82,17 +77,25 @@ class TestYoLinkNode(udi_interface.Node):
     def start(self):
         print('start - YoLinkSw')
         self.yoSwitch  = YoLinkSW(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
-        print('Start - RefreshState')
-        self.yoSwitch.refreshState()
-        print('Start - Refresh Schedules')
-        self.yoSwitch.refreshSchedules()
-        time.sleep(3)
+        self.yoSwitch.initNode()
+        #time.sleep(3)
     
+    def heartbeat(self):
+        #LOGGER.debug('heartbeat: hb={}'.format(self.hb))
+        if self.hb == 0:
+            self.reportCmd('DON',2)
+            self.hb = 1
+        else:
+            self.reportCmd('DOF',2)
+            self.hb = 0
+
     def updateStatus(self, data):
+        #while not self.yoSwitch:
+        #    time.sleep(2)
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoSwitch.updateCallbackStatus(data)
         print(data)
-        self.node = polyglot.getNode('my_switch')
+        self.node = polyglot.getNode('yo_switch')
         if self.node is not None:
             state =  self.yoSwitch.getState()
             print(state)
@@ -107,129 +110,80 @@ class TestYoLinkNode(udi_interface.Node):
             print ('power ' + str(power) + ', watt ' +str(watt))
             self.node.setDriver('GV1', power, True, True)
             self.node.setDriver('GV2', watt, True, True)
-            #self.pollDelays()
+            self.pollDelays()
 
     def pollDelays(self):
         delays =  self.yoSwitch.getDelays()
-        print('delays: ' + str(delays))
-        while  delays != None:
-            delays =  self.yoSwitch.getDelays()
-            delayActve = False
-            if 'on' in delays:
-                if delays['on'] != 0:
-                    delayActve = True
-                self.node.setDriver('GV3', delays['on'], True, True)
-            if 'off' in delays:
-                if delays['off'] != 0:
-                    delayActve = True
-                self.node.setDriver('GV4', delays['off'], True, True)               
-            if not delayActve:
-                break
-            time.sleep(30) # shortPoll???
+        #logging.debug('delays: ' + str(delays))
+        #print('on delay: ' + str(delays['on']))
+        #print('off delay: '+ str(delays['off']))
+        if delays != None:
+            while delays['on'] != 0 or delays['off'] !=0:
+                delays =  self.yoSwitch.refreshDelays() # should be able to calculate without polling 
+                delayActve = False
+                if 'on' in delays:
+                    if delays['on'] != 0:
+                        delayActve = True
+                    self.node.setDriver('GV3', delays['on'], True, True)
+                if 'off' in delays:
+                    if delays['off'] != 0:
+                        delayActve = True
+                    self.node.setDriver('GV4', delays['off'], True, True)               
+                if not delayActve:
+                    break
+                time.sleep(30) # shortPoll???
+            self.node.setDriver('GV4', delays['off'], True, True)     
+            self.node.setDriver('GV3', delays['on'], True, True)
+        else:
+            self.node.setDriver('GV4', 0, True, True)     
+            self.node.setDriver('GV3', 0, True, True)     
 
     def poll(self, polltype):
-        print('poll ')
+        logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
             self.yoSwitch.refreshState()
             self.yoSwitch.refreshSchedules()
 
+    def switchControl(self, state):
+        logging.info('switchControl')
+        if state == 1:
+            self.yoSwitch.setState('ON')
+        else:
+            self.yoSwitch.setState('OFF')
 
-        
+    def setDelay(self, DelayList):
+        logging.info('setDelay - not implemented yet')
+
     def parameterHandler(self, params):
         self.Parameters.load(params)
 
     def stop (self):
         logging.info('Stop not implemented')
+        self.yoSwitch.shut_down()
 
-    def noop(self):
-        logging.info('Discover not implemented')
-
-    commands = {'DISCOVER': noop}
-
-
-'''
-node_queue() and wait_for_node_event() create a simple way to wait
-for a node to be created.  The nodeAdd() API call is asynchronous and
-will return before the node is fully created. Using this, we can wait
-until it is fully created before we try to use it.
-
-def node_queue(data):
-    n_queue.append(data['address'])
-
-def wait_for_node_event():
-    while len(n_queue) == 0:
-        time.sleep(0.1)
-    n_queue.pop()
-
-Read the user entered custom parameters. In this case, it is just
-the 'multiplier' value.  Save the parameters in the global 'Parameters'
-
-def parameterHandler(params):
-    global Parameters
-
-    Parameters.load(params)
-
-
-
-This is where the real work happens.  When we get a shortPoll, increment the
-count, report the current count in GV0 and the current count multiplied by
-the user defined value in GV1. Then display a notice on the dashboard.
-
-def poll(polltype):
-    global count
-    global Parameters
-
-    if 'longPoll' in polltype:
-       # self.yolinkDev.refreshDevice()
+    def update(self):
+        logging.info('Update')
         self.yoSwitch.refreshState()
-        self.yoSwitch.refreshSchedules()
-
-        # be fancy and display a notice on the polyglot dashboard
-        polyglot.Notices['count'] = 'Polling data '
+        self.yoSwitch.refreshSchedules()     
 
 
+    commands = {'UPDATE': update,
+                'STATE': switchControl, 
+                'ONDELAY' : setDelay,
+                'OFFDELAY' : setDelay 
+                }
 
-When we are told to stop, we update the node's status to False.  Since
-we don't have a 'controller', we have to do this ourselves.
 
-def stop():
-    nodes = polyglot.getNodes()
-    for n in nodes:
-        nodes[n].setDriver('ST', 0, True, True)
-    polyglot.stop()
-'''
+
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
         polyglot.start()
 
-        #Parameters = Custom(polyglot, 'customparams')
+       
+        TestYoLinkNode(polyglot, 'yo_switch', 'yo_switch', 'Yolink Switch')
 
-        # subscribe to the events we want
-        #polyglot.subscribe(polyglot.CUSTOMPARAMS, parameterHandler)
-        #polyglot.subscribe(polyglot.ADDNODEDONE, node_queue)
-        #polyglot.subscribe(polyglot.STOP, stop)
-        #polyglot.subscribe(polyglot.POLL, poll)
-        #polyglot.subscribe(polyglot.START, start)
-
-        # Start running
-        #polyglot.ready()
-        #polyglot.setCustomParamsDoc()
-        #polyglot.updateProfile()
-
-        '''
-        Here we create the device node.  In a real node server we may
-        want to try and discover the device or devices and create nodes
-        based on what we find.  Here, we simply create our node and wait
-        for the add to complete.
-        '''
-
-
-        #node = TestYoLinkNode(polyglot, 'my_address', 'my_address', 'yolinkSwitch', csName , csid, csseckey, devInfo )
-        TestYoLinkNode(polyglot, 'my_switch', 'my_switch', 'yolinkSwitch')
-        #polyglot.addNode(node)
-        #wait_for_node_event()
 
         # Just sit and wait for events
         polyglot.runForever()

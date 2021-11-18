@@ -16,6 +16,5 @@
 </editor>
   <editor id = "OFFDELAY" > 
      <range  uom="44" min="0" max="1440" prec="0" />
-</editor>
-
+</editor>     
 </editors> 

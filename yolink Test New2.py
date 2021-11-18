@@ -115,6 +115,10 @@ def test(data):
 #DeckLight = YoLinkMultiOutlet(csName, csid, csseckey, DeckLight)
 #PlaygroundGardenLight = YoLinkSwitch(csName, csid, csseckey, GardenPlayground)
 PlaygroundLight = YoLinkSW(csName, csid, csseckey, Playground, test)
+#print('self.refreshState')
+PlaygroundLight.refreshState()
+PlaygroundLight.refreshSchedules()
+#self.refreshFWversion()
 #USB_Outlet = YoLinkOutlet(csName, csid, csseckey, USB_Outlet)
 #doorSensor = YoLinkDoorSensor(csName, csid, csseckey, DoorSensor)
 #outdoorTemp = YoLinkTHSensor(csName, csid, csseckey, OutdoorTemp)
@@ -194,6 +198,7 @@ while True :
     swTest1 = PlaygroundLight.refreshState()
     #input('press enter')
     swTest2 = PlaygroundLight.getState()
+    sw3 = PlaygroundLight.getDelays()
     while PlaygroundLight.eventPending():
         print('PlaygroundLight event: ' + PlaygroundLight.getEvent())
     #input('press enter')

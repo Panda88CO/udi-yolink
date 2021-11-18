@@ -67,7 +67,8 @@ class YoLinkMQTTDevice(object):
     
         #self.updateInterval = 3
         self.messagePending = False
-
+    def shut_down(self):
+        self.yolinkMQTTclient.shut_down()
    
     def deviceError(self, data):
         logging.debug(self.type+' - deviceError')
@@ -568,13 +569,16 @@ class YoLinkMQTTDevice(object):
         logging.debug(self.type +' - getDAta')
         return(self.dataAPI[self.dData][self.dState])
 
+    def refreshDelays(self):
+        logging.debug(str(self.type)+ ' - refreshDelays')
+        self.refreshDevice()
+        time.sleep(2)
+        return(self.getDelays())
+
     def getDelays(self):
         logging.debug(str(self.type)+ ' - getDelays')
-        #self.refreshDevice()
-        #time.sleep(2)
-        if self.dDelays in self.dataAPI:
-            #Needs update 
-            return(self.dataAPI[self.dDelays])
+        if self.dDelays in self.dataAPI[self.dData]:
+            return(self.dataAPI[self.dData][self.dDelays])
         else:
             return(None)
     

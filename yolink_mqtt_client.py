@@ -97,7 +97,7 @@ class YoLinkMQTTClient(object):
         elif msg.topic == self.topicReq:
                 logging.debug('publishing request' )
                 logging.debug (payload)
-                self.callback(payload)
+                #self.callback(payload)
                 print('device publishing')
                 print(payload)
         else:
@@ -125,18 +125,19 @@ class YoLinkMQTTClient(object):
 
             if (rc == 0):
                 logging.debug("Successfully connected to broker %s" % self.mqtt_url)
+                test1 = self.client.subscribe(self.topicResp)
+                #logging.debug(test1)
+                test2 = self.client.subscribe(self.topicReport)
+                #logging.debug(test2)
+                test3 = self.client.subscribe(self.topicReportAll)
+                #logging.debug(test3)
 
             else:
                 logging.debug("Connection with result code %s" % rc);
                 sys.exit(2)
             time.sleep(1)
             logging.debug('Subsribe: ' + self.topicResp + ', '+self.topicReport+', '+ self.topicReportAll )
-            test1 = self.client.subscribe(self.topicResp)
-            #logging.debug(test1)
-            test2 = self.client.subscribe(self.topicReport)
-            #logging.debug(test2)
-            test3 = self.client.subscribe(self.topicReportAll)
-            #logging.debug(test3)
+
         except Exception as E:
             logging.error('Exception  -  on_connect: ' + str(E))       
     
@@ -155,10 +156,10 @@ class YoLinkMQTTClient(object):
 
     def on_publish(self, client, userdata, mID):
         logging.debug('on_publish')
-        logging.debug('client = ' + str(client))
-        logging.debug('userdata = ' + str(userdata))
-        logging.debug('mID = '+str(mID))
-        logging.debug('\n')
+        #logging.debug('client = ' + str(client))
+        #logging.debug('userdata = ' + str(userdata))
+        #logging.debug('mID = '+str(mID))
+        #logging.debug('\n')
 
     def publish_data(self, data):
         logging.debug('publish_data: ' + data['method'])
@@ -171,6 +172,6 @@ class YoLinkMQTTClient(object):
             logging.error('Exception  - publish_data: ' + str(E))
 
 
-    def shurt_down(self):
+    def shut_down(self):
         self.client.loop_stop()
     

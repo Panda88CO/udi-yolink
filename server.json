@@ -4,14 +4,14 @@
     "type": "python3",
     "executable": "udi-nodeTest.py",
     "install": "install.sh",
-    "description": "Nodeserver to allow integration of Tesla Power Wall Control. Currenty only supporting local access due to changse in clould login methods critical data and  heartbeat.",
-    "notice": "Uses APIs from https://github.com/jrester/tesla_powerwall and https://tesla-api.timdorr.com/ - not official Tesla APIs.",
+    "description": "Nodeserver to allow integration ofYolink devices",
+    "notice": "Uses MQTT comminication",
     "shortPoll": "60",
     "longPoll": "180",
     "profile_version": "0.0.1",
     "credits": [
         {
-            "title": "A NodeServer to test integration og YoLink devices ",
+            "title": "A NodeServer to test integration of YoLink devices ",
             "author": "Panda88CO",
             "version": "0.0.1",
             "date": "Nov 14,  2021",

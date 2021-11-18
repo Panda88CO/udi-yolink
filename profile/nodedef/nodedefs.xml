@@ -1,8 +1,8 @@
 <nodeDefs> 
-   <nodeDef id="test" nls="nlsTest">
+   <nodeDef id="yoswitch" nls="nlsyoswitch">
       <editors />
       <sts>
-         <st id="ST"  editor="STATUS" 
+         <st id="ST"  editor="STATUS" />
          <st id="GV0" editor="SWSTATE" />
          <st id="GV1" editor="WATT" />
          <st id="GV2" editor="ENERGY" />
@@ -16,6 +16,12 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="STATE" /> 
+               <p id="" editor="SWSTATE" init="GV0" /> 
+            <cmd id="ONDELAY" /> 
+               <p id="" editor="ONDELAY" init="GV3" /> 
+            <cmd id="OFFDELAY" /> 
+               <p id="" editor="OFFDELAY" init="GV4" /> 
          </accepts>
       </cmds>
    </nodeDef> 
