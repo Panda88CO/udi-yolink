@@ -18,3 +18,26 @@ CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
+
+ND-yothsensor-NAME = YoLink THsensor
+ND-yoswitch-ICON = TempSensor
+
+ST-nlsthsensor-CLITEMP-NAME = Current Temp (C)
+ST-nlsthsensor-GV1-NAME = Low Temp Alarm
+ST-nlsthsensor-GV2-NAME = High Temp Alarm
+ST-nlsthsensor-CLIHUM-NAME = Current Rel Humidity (%)
+ST-nlsthsensor-GV4-NAME = Low Humidity Alarm
+ST-nlsthsensor-GV5-NAME = High Humidity Alarm
+alarm-0 = Normal
+alarm-1 = Alarm
+ST-lsthsensor-BATLVL-NAME = Battery Level
+batlevel-0 = Low 
+batlevel-1 = Medium Low
+batlevel-2 = Medium
+batlevel-3 =  Medium High
+batlevel-4 = High
+ST-nlsthsensor-GV7-NAME = Battery Alarm
+ST-nlsthsensor-GV8-NAME = online
+online-0 = Offline
+online-1 = Online
+CMD-nlsthsensor-UPDATE-NAME = Update Status

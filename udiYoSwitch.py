@@ -33,7 +33,16 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV3', 'value': 0, 'uom': 44},
             {'driver': 'GV4', 'value': 0, 'uom': 44},
             ]
+    '''
+       drivers = [
+            'GV0' =  switch State
+            'GV1' = OnDelay
+            'GV2' = OffDelay
+            'GV3' = POwer
+            'GV4' = Energy
+            ]
 
+    ''' 
 
     def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__( polyglot, primary, address, name)   

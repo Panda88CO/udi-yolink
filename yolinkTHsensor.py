@@ -5,9 +5,9 @@ import logging
 from yolink_mqtt_class import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
-class YoLinkTHSensor(YoLinkMQTTDevice):
-    def __init__(yolink, csName, csid, csseckey,  deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)    
+class YoLinkTHSen(YoLinkMQTTDevice):
+    def __init__(yolink, csName, csid, csseckey,  deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback)    
         yolink.methodList = ['getState' ]
         yolink.eventList = ['Report']
         yolink.tempName = 'THEvent'
@@ -15,13 +15,19 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
         yolink.humidity = 'Humidity'
         yolink.eventTime = 'Time'
         yolink.type = 'THSensor'
-
         time.sleep(2)
-        yolink.refreshSensor()
+
         
+    def initNode(yolink):
+        yolink.refreshSensor()
+    
+    def updataStatus(self, data):
+        self.updateCallbackStatus(data, False)
+
     def refreshSensor(yolink):
         logging.debug(yolink.type+ ' - refreshSensor')
         return(yolink.refreshDevice( ))
+
 
     def getTempValueF(yolink):
         return(yolink.getInfoValue('temperature')*9/5+32)
@@ -40,3 +46,16 @@ class YoLinkTHSensor(YoLinkMQTTDevice):
 
     def probeData(yolink):
         return(yolink.getData() )
+
+'''
+Stand-Alone Operation of THsensor (no call back to live update data - pooling data in upper APP)
+''' 
+
+class YoLinkTHSensor(YoLinkTHSen):
+    def __init__(yolink, csName, csid, csseckey,  deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)    
+        yolink.initNode()
+
+    # Enable Event Support (True below)
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, True)

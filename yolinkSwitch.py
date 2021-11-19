@@ -24,8 +24,9 @@ class YoLinkSW(YoLinkMQTTDevice):
         #self.refreshFWversion()
         #print(' YoLinkSW - finished initailizing')
 
+    ''' Assume no event support needed if using MQTT'''
     def updataStatus(self, data):
-        self.updateCallbackStatus(data)
+        self.updateCallbackStatus(data, False)
 
     def initNode(self):
         self.refreshState()
@@ -81,12 +82,5 @@ class YoLinkSwitch(YoLinkSW):
 
 
     def updateStatus(self, data):
-        self.updateCallbackStatus(data)
+        self.updateCallbackStatus(data, True)
 
-'''class YoLinkSwitchCB(YoLinkSW):
-    def __init__(self, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey,  deviceInfo, callback, yolink_URL, mqtt_URL, mqtt_port)
-
-    def updateStatus(self, data):
-        self.updateCallbackStatus(data)
-'''

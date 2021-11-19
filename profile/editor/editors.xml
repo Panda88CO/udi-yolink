@@ -14,4 +14,20 @@
   <editor id = "delay" > 
      <range  uom="44"  min="0" max="1440" prec="0" />
 </editor>
+  <editor id = "tempC" > 
+     <range  uom="4"  min="-40" max="140" prec="1" />
+</editor>
+  <editor id = "alarm" > 
+     <range  uom="25" subset="0-1" nls="alarm" />
+</editor>
+  <editor id = "humidity" > 
+     <range  uom="51"  min="0" max="100" prec="1" />
+</editor>
+  <editor id = "batlevel" > 
+     <range  uom="25" subset="0-4" nls="batlevel" />
+</editor>
+  <editor id = "onlin" > 
+     <range  uom="25" subset="0-1" nls="online" />
+</editor>
+
 </editors> 

@@ -28,5 +28,30 @@
          </accepts>
       </cmds>
    </nodeDef> 
+   <nodeDef id="yothsensor" nls="nlsthsensor">
+      <editors />
+      <sts>
+         <st id="CLITEMP" editor="tempC" />
+         <st id="GV1" editor="alarm" />
+         <st id="GV2" editor="alarm" />
+         <st id="CLIHUM" editor="humidity" />
+         <st id="GV4" editor="alarm" />
+         <st id="GV5" editor="alarm" />
+         <st id="BATLVL" editor="batlevel" />
+         <st id="GV7" editor="alarm" />
+         <st id="GV8" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
 
 </nodeDefs> 

@@ -9,7 +9,7 @@ import sys
 import time
 
 from udiYoSwitch import udiYoSwitch
-
+from udiYoTHsensor import udiYoTHsensor 
 
 logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
@@ -34,7 +34,13 @@ devInfo2 =  {
             "token": "4a9744d4-4c8e-4b01-a8bb-e84b639d0591",
             "type": "Switch"
             }
-
+devTHsensor =  {
+                "deviceId": "d88b4c010003598f",
+                "deviceUDID": "bf9c17dadffd460d8edb233dfc3d7d8f",
+                "name": "Temp Humidity Sensor",
+                "token": "233cfde3-4282-4356-94f1-af3319b48afb",
+                "type": "THSensor"
+            }
 
 
 mqtt_URL= 'api.yosmart.com'
@@ -70,6 +76,7 @@ class YoLinkSetup (udi_interface.Node):
                     }
         udiYoSwitch(polyglot, 'yoswitch', 'yoswitch', 'Yolink Switch', csName, csid, csseckey, devInfo )
         udiYoSwitch(polyglot, 'yoswitch2', 'yoswitch2', 'Yolink Switch2', csName, csid, csseckey, devInfo2 )
+        udiYoTHsensor(polyglot, 'yoTemp', 'yoTemp', 'Yolink TH sensor', csName, csid, csseckey, devTHsensor )
 
 
         mqtt_URL= 'api.yosmart.com'

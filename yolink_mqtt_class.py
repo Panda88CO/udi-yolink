@@ -159,7 +159,7 @@ class YoLinkMQTTDevice(object):
         self.updateLoraInfo(data)
         self.updateMessageInfo(data)
 
-    def updateCallbackStatus(self, data):
+    def updateCallbackStatus(self, data, eventSupport = False):
         print(self.type+' - updateCallbackStatus')
         logging.debug(self.type+' - updateCallbackStatus')
         if 'method' in  data:
@@ -222,7 +222,7 @@ class YoLinkMQTTDevice(object):
                             self.updateStatusData(data)   
                 except logging.exception as E:
                     logging.debug('Unsupported event detected: ' + str(E))
-            if self.eventSupport:
+            if eventSupport:
                 self.eventQueue.put(data['event']) 
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
