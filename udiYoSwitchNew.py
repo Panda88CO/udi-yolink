@@ -36,32 +36,37 @@ class udiYoSwitch(udi_interface.Node):
 
 
     def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super(udiYoSwitch, self).__init__( polyglot, primary, address, name)   
+        super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('TestYoLinkNode INIT')
-        self.csid = '60dd7fa7960d177187c82039'
-        self.csseckey = '3f68536b695a435d8a1a376fc8254e70'
-        self.csName = 'Panda88'
-        self.devInfo = { "deviceId": "d88b4c0100034906",
-                    "deviceUDID": "e091320786e5447099c8b1c93ce47a60",
-                    "name": "S Playground Switch",
-                    "token": "7f43fbce-dece-4477-9660-97804b278190",
-                    "type": "Switch"
-                    }
-        self.mqtt_URL= 'api.yosmart.com'
-        self.mqtt_port = 8003
-        self.yolink_URL ='https://api.yosmart.com/openApi'
+        #self.csid = '60dd7fa7960d177187c82039'
+        self.csid = csid
+        #self.csseckey = '3f68536b695a435d8a1a376fc8254e70'
+        self.csseckey = csseckey
+        #self.csName = 'Panda88'
+        self.csName = csName
+        #self.devInfo = { "deviceId": "d88b4c0100034906",
+        #           "deviceUDID": "e091320786e5447099c8b1c93ce47a60",
+        #            "name": "S Playground Switch",
+        #            "token": "7f43fbce-dece-4477-9660-97804b278190",
+        #            "type": "Switch"
+        #            }
+  
+        self.mqtt_URL= mqtt_URL
+        self.mqtt_port = mqtt_port
+        self.yolink_URL = yolink_URL
+
+        self.devInfo =  deviceInfo   
         self.yoSwitch = None
         #self.address = address
         #self.poly = polyglot
         #self.count = 0
         #self.n_queue = []
 
-        self.Parameters = Custom(polyglot, 'customparams')
-
+        #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
-        polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
+        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         # start processing events and create add our controller node
@@ -88,12 +93,19 @@ class udiYoSwitch(udi_interface.Node):
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
+    '''
+    def parameterHandler(self, params):
+        self.Parameters.load(params)
+    '''
+    def stop (self):
+        logging.info('Stop not implemented')
+        self.yoSwitch.shut_down()
+
 
     def updateStatus(self, data):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoSwitch.updateCallbackStatus(data)
         print(data)
-        self.node = polyglot.getNode(self.address)
         if self.node is not None:
             state =  self.yoSwitch.getState()
             print(state)
@@ -159,12 +171,6 @@ class udiYoSwitch(udi_interface.Node):
         self.node.setDriver('GV2', delay, True, True)
 
 
-    def parameterHandler(self, params):
-        self.Parameters.load(params)
-
-    def stop (self):
-        logging.info('Stop not implemented')
-        self.yoSwitch.shut_down()
 
     def update(self, command = None):
         logging.info('Update Status Executed')
