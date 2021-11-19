@@ -32,6 +32,7 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 33}, 
             {'driver': 'GV3', 'value': 0, 'uom': 44},
             {'driver': 'GV4', 'value': 0, 'uom': 44},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
        drivers = [
@@ -82,7 +83,7 @@ class udiYoSwitch(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.node = polyglot.getNode(address)
-
+        self.node.setDriver('ST', 1, True, True)
 
         #self.switchState = self.yoSwitch.getState()
         #self.switchPower = self.yoSwitch.getEnergy()
@@ -92,6 +93,7 @@ class udiYoSwitch(udi_interface.Node):
         print('start - YoLinkSw')
         self.yoSwitch  = YoLinkSW(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
         self.yoSwitch.initNode()
+        self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
     def heartbeat(self):
@@ -108,6 +110,7 @@ class udiYoSwitch(udi_interface.Node):
     '''
     def stop (self):
         logging.info('Stop not implemented')
+        self.node.setDriver('ST', 0, True, True)
         self.yoSwitch.shut_down()
 
 

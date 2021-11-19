@@ -41,3 +41,4 @@ ST-nlsthsensor-GV8-NAME = online
 online-0 = Offline
 online-1 = Online
 CMD-nlsthsensor-UPDATE-NAME = Update Status
+ST-nlsthsensor-ST-NAME = Nodeserver Status

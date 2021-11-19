@@ -52,6 +52,7 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'BATLVL', 'value': 0, 'uom': 25},
             {'driver': 'GV7', 'value': 0, 'uom': 25},
             {'driver': 'GV8', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -83,7 +84,7 @@ class udiYoTHsensor(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.node = polyglot.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        
 
         #self.switchState = self.yoSwitch.getState()
         #self.switchPower = self.yoSwitch.getEnergy()
@@ -93,6 +94,7 @@ class udiYoTHsensor(udi_interface.Node):
         print('start - YoLinkThsensor')
         self.yoTHsensor  = YoLinkTHSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
         self.yoTHsensor.initNode()
+        self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
     def heartbeat(self):
@@ -107,6 +109,10 @@ class udiYoTHsensor(udi_interface.Node):
     def parameterHandler(self, params):
         self.Parameters.load(params)
     '''
+    def initNode(self):
+        self.yoTHsensor.refreshSensor()
+
+    
     def stop (self):
         logging.info('Stop not implemented')
         self.node.setDriver('ST', 0, True, True)
@@ -137,7 +143,7 @@ class udiYoTHsensor(udi_interface.Node):
         logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
-            self.yoTHsensor.refreshState()
+            self.yoTHsensor.refreshSensor()
 
 
 
