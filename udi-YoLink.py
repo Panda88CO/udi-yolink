@@ -34,7 +34,7 @@ devInfo2 =  {
             "name": "S Matias Garden",
             "token": "4a9744d4-4c8e-4b01-a8bb-e84b639d0591",
             "type": "Switch"
-            },
+            }
 
 
 
@@ -58,8 +58,8 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
         polyglot.start()
        
-        udiYoSwitch(polyglot, 'yoswitch', 'yoswitch', 'Yolink Switch', csName, csid, devInfo )
-        udiYoSwitch(polyglot, 'yoswitch2', 'yoswitch2', 'Yolink Switch2', csName, csid, devInfo2 )
+        udiYoSwitch(polyglot, 'yoswitch', 'yoswitch', 'Yolink Switch', csName, csid,csseckey, devInfo )
+        udiYoSwitch(polyglot, 'yoswitch2', 'yoswitch2', 'Yolink Switch2', csName, csid, csseckey, devInfo2 )
 
         # Just sit and wait for events
         polyglot.runForever()
