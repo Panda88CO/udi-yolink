@@ -23,22 +23,20 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class TestYoLinkNode(udi_interface.Node):
+class udiYoSwitch(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     id = 'yoswitch'
     drivers = [
-
             {'driver': 'GV0', 'value': 0, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 30}, 
             {'driver': 'GV2', 'value': 0, 'uom': 33}, 
             {'driver': 'GV3', 'value': 0, 'uom': 44},
             {'driver': 'GV4', 'value': 0, 'uom': 44},
-            {'driver': 'ST',  'value': 1, 'uom': 25},
             ]
 
 
-    def  __init__(self, polyglot, primary, address, name):
-        super(TestYoLinkNode, self).__init__( polyglot, primary, address, name)   
+    def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super(udiYoSwitch, self).__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('TestYoLinkNode INIT')
@@ -183,18 +181,4 @@ class TestYoLinkNode(udi_interface.Node):
 
 
 
-if __name__ == "__main__":
-    try:
-        polyglot = udi_interface.Interface([])
-        polyglot.start()
-
-       
-        TestYoLinkNode(polyglot, 'yoswitch', 'yoswitch', 'Yolink Switch')
-        #TestYoLinkNode(polyglot, 'yoswitch1', 'yoswitch1', 'Yolink Switch1')
-
-        # Just sit and wait for events
-        polyglot.runForever()
-    except (KeyboardInterrupt, SystemExit):
-        sys.exit(0)
-        
 

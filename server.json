@@ -2,7 +2,7 @@
     "name": "Test Node for YoLink",
     "docs": "https://github.com/Panda88CO/udi-yolink",
     "type": "python3",
-    "executable": "udi-nodeTest.py",
+    "executable": "udi-YoLink.py",
     "install": "install.sh",
     "description": "Nodeserver to allow integration ofYolink devices",
     "notice": "Uses MQTT comminication",
