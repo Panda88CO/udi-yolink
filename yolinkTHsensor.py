@@ -30,16 +30,21 @@ class YoLinkTHSen(YoLinkMQTTDevice):
 
 
     def getTempValueF(yolink):
-        return(yolink.getInfoValue('temperature')*9/5+32)
+        return(yolink.getStateValue('temperature')*9/5+32)
     
     def getTempValueC(yolink):
-        return(yolink.getInfoValue('temperature'))
+        return(yolink.getStateValue('temperature'))
 
     def getHumidityValue(yolink):
-        return(yolink.getInfoValue('humidity'))
+        return(yolink.getStateValue('humidity'))
 
     def getAlarms(yolink):
-        return(yolink.getInfoValue('alarms'))
+        return(yolink.getStateValue('alarm'))
+
+    def getBattery(yolink):
+        return(yolink.getStateValue('battery'))
+    
+    
 
     def probeState(yolink):
          return(yolink.getState() )

@@ -72,8 +72,6 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor  = None
         #self.address = address
         #self.poly = polyglot
-        #self.count = 0
-        #self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
