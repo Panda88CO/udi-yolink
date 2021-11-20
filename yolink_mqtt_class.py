@@ -391,6 +391,11 @@ class YoLinkMQTTDevice(object):
         logging.debug(self.type + 'resetSchedules')
         self.scheduleList = {}
 
+    def bool2Nbr(self, bool):
+        if bool:
+            return(1)
+        else:
+            return(0)
 
     '''
     def transferSchedules(yolink):

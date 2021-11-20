@@ -1,19 +1,30 @@
-ND-yoswitch-NAME = YoLink Switch
-ND-yoswitch-ICON = GenericCtrl
 
-
-ST-nlsswitch-GV0-NAME = Switch State
 swstate-0 = Off
 swstate-1 = On
+
+status-0 = Down
+status-1 = Up
+
+alarm-0 = Normal
+alarm-1 = Alarm
+
+batlevel-0 = Low 
+batlevel-1 = Medium Low
+batlevel-2 = Medium
+batlevel-3 =  Medium High
+batlevel-4 = High
+
+online-0 = Offline
+online-1 = Online
+
+ND-yoswitch-NAME = YoLink Switch
+ND-yoswitch-ICON = GenericCtrl
+ST-nlsswitch-GV0-NAME = Switch State
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
 ST-nlsswitch-GV3-NAME = Watt
 ST-nlsswitch-GV4-NAME = Energy
 ST-nlsswitch-ST-NAME = Nodeserver Status
-status-0 = Down
-status-1 = Up
-
-
 CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
@@ -27,17 +38,8 @@ ST-nlsthsensor-GV2-NAME = High Temp Alarm
 ST-nlsthsensor-CLIHUM-NAME = Current Rel Humidity (%)
 ST-nlsthsensor-GV4-NAME = Low Humidity Alarm
 ST-nlsthsensor-GV5-NAME = High Humidity Alarm
-alarm-0 = Normal
-alarm-1 = Alarm
 ST-lsthsensor-BATLVL-NAME = Battery Level
-batlevel-0 = Low 
-batlevel-1 = Medium Low
-batlevel-2 = Medium
-batlevel-3 =  Medium High
-batlevel-4 = High
 ST-nlsthsensor-GV7-NAME = Battery Alarm
 ST-nlsthsensor-GV8-NAME = online
-online-0 = Offline
-online-1 = Online
 CMD-nlsthsensor-UPDATE-NAME = Update Status
 ST-nlsthsensor-ST-NAME = Nodeserver Status

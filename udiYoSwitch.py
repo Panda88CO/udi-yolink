@@ -32,6 +32,7 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 33}, 
             {'driver': 'GV3', 'value': 0, 'uom': 44},
             {'driver': 'GV4', 'value': 0, 'uom': 44},
+            {'driver': 'GV5', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
@@ -39,8 +40,9 @@ class udiYoSwitch(udi_interface.Node):
             'GV0' =  switch State
             'GV1' = OnDelay
             'GV2' = OffDelay
-            'GV3' = POwer
+            'GV3' = Power
             'GV4' = Energy
+            'GV5' = Online
             ]
 
     ''' 
@@ -130,6 +132,7 @@ class udiYoSwitch(udi_interface.Node):
             watt = tmp['watt']
             self.node.setDriver('GV3', power, True, True)
             self.node.setDriver('GV4', watt, True, True)
+            self.node.self.node.setDriver('GV4', self.yoSwitch.bool2Nbr(self.yoSwitch.getOnlineStatus()) watt, True, True)
         
         #while self.yoSwitch.eventPending():
         #    print(self.yoSwitch.getEvent())

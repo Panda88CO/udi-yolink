@@ -116,11 +116,13 @@ class udiYoTHsensor(udi_interface.Node):
         self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor.shut_down()
 
-    def bool2Nbr(self, bool):
+    '''
+    def yoTHsensor.bool2Nbr(self, bool):
         if bool:
             return(1)
         else:
             return(0)
+    '''
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
@@ -129,14 +131,14 @@ class udiYoTHsensor(udi_interface.Node):
         alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
             self.node.setDriver('CLITEMP', self.yoTHsensor.getTempValueC(), True, True)
-            self.node.setDriver('GV1', self.bool2Nbr(alarms['lowTemp']), True, True)
-            self.node.setDriver('GV2', self.bool2Nbr(alarms['highTemp']), True, True)
+            self.node.setDriver('GV1', self.yoTHsensor.bool2Nbr(alarms['lowTemp']), True, True)
+            self.node.setDriver('GV2', self.yoTHsensor.bool2Nbr(alarms['highTemp']), True, True)
             self.node.setDriver('CLIHUM', self.yoTHsensor.getHumidityValue(), True, True)
-            self.node.setDriver('GV4', self.bool2Nbr(alarms['lowHumidity']), True, True)
-            self.node.setDriver('GV5', self.bool2Nbr(alarms['highHumidity']), True, True)
+            self.node.setDriver('GV4', self.yoTHsensor.bool2Nbr(alarms['lowHumidity']), True, True)
+            self.node.setDriver('GV5', self.yoTHsensor.bool2Nbr(alarms['highHumidity']), True, True)
             self.node.setDriver('BATLVL', self.yoTHsensor.getBattery(), True, True)
-            self.node.setDriver('GV7', self.bool2Nbr(alarms['lowBattery']), True, True)
-            self.node.setDriver('GV8', self.bool2Nbr(self.yoTHsensor.getOnlineStatus()), True, True)
+            self.node.setDriver('GV7', self.yoTHsensor.bool2Nbr(alarms['lowBattery']), True, True)
+            self.node.setDriver('GV8', self.yoTHsensor.bool2Nbr(self.yoTHsensor.getOnlineStatus()), True, True)
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
