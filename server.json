@@ -4,17 +4,17 @@
     "type": "python3",
     "executable": "udi-YoLink.py",
     "install": "install.sh",
-    "description": "Nodeserver to allow integration ofYolink devices",
+    "description": "Nodeserver to allow integration of Yolink devices",
     "notice": "Uses MQTT comminication",
     "shortPoll": "60",
     "longPoll": "180",
-    "profile_version": "0.0.1",
+    "profile_version": "0.0.2",
     "credits": [
         {
             "title": "A NodeServer to test integration of YoLink devices ",
             "author": "Panda88CO",
-            "version": "0.0.1",
-            "date": "Nov 14,  2021",
+            "version": "0.0.2",
+            "date": "Nov 20,  2021",
             "source": "https://github.com/Panda88CO/udi-yolink",
             "license": "https://github.com/Panda88CO/udi-yolink/blob/main/license"
         }
