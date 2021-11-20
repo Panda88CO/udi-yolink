@@ -132,7 +132,7 @@ class udiYoSwitch(udi_interface.Node):
             watt = tmp['watt']
             self.node.setDriver('GV3', power, True, True)
             self.node.setDriver('GV4', watt, True, True)
-            self.node.self.node.setDriver('GV4', self.yoSwitch.bool2Nbr(self.yoSwitch.getOnlineStatus()), True, True)
+            self.node.setDriver('GV5', self.yoSwitch.bool2Nbr(self.yoSwitch.getOnlineStatus()), True, True)
         
         #while self.yoSwitch.eventPending():
         #    print(self.yoSwitch.getEvent())
