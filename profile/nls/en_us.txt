@@ -20,7 +20,7 @@ CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
 
 ND-yothsensor-NAME = YoLink THsensor
-ND-yoswitch-ICON = TempSensor
+ND-yothsensor-ICON = TempSensor
 ST-nlsthsensor-CLITEMP-NAME = Current Temp (C)
 ST-nlsthsensor-GV1-NAME = Low Temp Alarm
 ST-nlsthsensor-GV2-NAME = High Temp Alarm

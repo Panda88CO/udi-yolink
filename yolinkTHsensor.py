@@ -44,7 +44,6 @@ class YoLinkTHSen(YoLinkMQTTDevice):
     def getBattery(yolink):
         return(yolink.getStateValue('battery'))
     
-    
 
     def probeState(yolink):
          return(yolink.getState() )
