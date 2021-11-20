@@ -118,26 +118,27 @@ class udiYoTHsensor(udi_interface.Node):
         self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor.shut_down()
 
+    def bool2Nbr(self, bool):
+        if bool:
+            return(1)
+        else:
+            return(0)
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - yoLink')
+        logging.debug('updateStatus - yoTHsensor')
         self.yoTHsensor.updateCallbackStatus(data)
-        print(data)
+        logging.debug(data)
+        alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
-            self.node.setDriver('CLITEMP', 20, True, True)
-            self.node.setDriver('GV1', 0, True, True)
-            self.node.setDriver('GV2', 1, True, True)
-            self.node.setDriver('CLIHUM', 75, True, True)
-            self.node.setDriver('GV4', 1, True, True)
-            self.node.setDriver('GV5', 0, True, True)
-            self.node.setDriver('BATLVL', 3, True, True)
-            self.node.setDriver('GV7', 0, True, True)
-            self.node.setDriver('GV8', 1, True, True)
-        
-        #while self.yoSwitch.eventPending():
-        #    print(self.yoSwitch.getEvent())
-
-
+            self.node.setDriver('CLITEMP', self.yoTHsensor.getTempValueC(), True, True)
+            self.node.setDriver('GV1', self.bool2Nbr(alarms['lowTemp']), True, True)
+            self.node.setDriver('GV2', self.bool2Nbr(alarms['highTemp']), True, True)
+            self.node.setDriver('CLIHUM', self.yoTHsensor.getHumidityValue(), True, True)
+            self.node.setDriver('GV4', self.bool2Nbr(alarms['lowHumidity']), True, True)
+            self.node.setDriver('GV5', self.bool2Nbr(alarms['highHumidity']), True, True)
+            self.node.setDriver('BATLVL', self.yoTHsensor.getBattery(), True, True)
+            self.node.setDriver('GV7', self.bool2Nbr(alarms['lowBattery']), True, True)
+            self.node.setDriver('GV8', self.bool2Nbr(self.yoTHsensor.getOnlineStatus()), True, True)
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
@@ -145,13 +146,10 @@ class udiYoTHsensor(udi_interface.Node):
         if 'longPoll' in polltype:
             self.yoTHsensor.refreshSensor()
 
-
-
     def update(self, command = None):
         logging.info('THsensor Update Status Executed')
         self.yoTHsensor.refreshState()
        
-
 
     commands = {
                 'UPDATE': update,

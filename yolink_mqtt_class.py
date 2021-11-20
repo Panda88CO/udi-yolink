@@ -108,8 +108,8 @@ class YoLinkMQTTDevice(object):
         else:
             return(False)
 
-    def getValue(self, key):
-        logging.debug(self.type+' - getValue')
+    def getValue(self,key): 
+        logging.debug(self.type+' -     def getValue(self,key): ')
         attempts = 1
         while key not in self.dataAPI[self.dData] and attempts <3:
             time.sleep(1)
@@ -118,6 +118,24 @@ class YoLinkMQTTDevice(object):
             return(self.dataAPI[self.dData][key])
         else:
             return('NA')
+
+    def getStateValue(self, key):
+        logging.debug(self.type+' - getStateValue')
+        attempts = 1
+        while key not in self.dataAPI[self.dData][self.dState] and attempts <3:
+            time.sleep(1)
+            attempts = attempts + 1
+        if key in self.dataAPI[self.dData][self.dState]:
+            return(self.dataAPI[self.dData][self.dState][key])
+        else:
+            return('NA')
+
+    def getOnlineStatus(self):
+        logging.debug(self.type+' - getOnlineStatus')
+        if 'online' in self.dataAPI:
+            return(self.dataAPI['online'])
+        else:
+            return(False)
 
     def refreshDelays(self):
         logging.debug(self.type+' - refreshDelays')
