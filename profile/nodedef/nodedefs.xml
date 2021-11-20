@@ -7,6 +7,7 @@
          <st id="GV2" editor="delay" />
          <st id="GV3" editor="watt" />
          <st id="GV4" editor="energy" />
+         <st id="GV5" editor="online" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
