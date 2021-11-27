@@ -36,13 +36,18 @@ SecID = ''
 
 token = get_access_token(tokenURL, UaID, SecID)
 data= {}
-data['method'] = 'Manage.syncAccountDevice'
+data['method'] = 'Home.getDeviceList '
 data['time'] = str(int(time.time()*1000))
-data['params'] = {'accessToken': token['access_token']}
+#data['params'] = {'accessToken': token['access_token']}
+data['params']={'Authorization': token['access_token']}
+#data['params'] = {'bearerToken': token['access_token']}
+#data['Authorization'] = token['access_token']
 dataTemp = str(json.dumps(data))
 
 headers1 = {}
 headers1['Content-type'] = 'application/json'
+headers1['Authorization'] = token['access_token']
+headers1['token_type'] = 'bearer'
 headers1['ktt-ys-brand'] = 'yolink'
 headers1['YS-CSID'] = client_id
 
