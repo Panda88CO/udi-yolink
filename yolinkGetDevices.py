@@ -7,6 +7,8 @@ import requests
 from cryptography.fernet import Fernet
 from requests_oauthlib import OAuth2Session
 import logging
+
+
 headers = {}
 data = {}
 authURL = 'https://api.yosmart.com/oauth/v2/authorization.htm'
@@ -69,8 +71,11 @@ jsonStr  = json.dumps(info, sort_keys=True, indent=4, separators=(',', ': '))
 
 print(jsonStr+'\n')
 
+
+
+
 '''
-f = open('devices.json', 'w')
+f = open('devicesV2.json', 'w')
 json.dump(info, f)
 f.close()
 '''

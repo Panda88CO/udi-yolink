@@ -57,7 +57,7 @@ Stand-Alone Operation of THsensor (no call back to live update data - pooling da
 
 class YoLinkTHSensor(YoLinkTHSen):
     def __init__(yolink, csName, csid, csseckey,  deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)    
+        super().__init__(  csName, csid, csseckey, deviceInfo, yolink.updateStatus, yolink_URL, mqtt_URL, mqtt_port)    
         yolink.initNode()
 
     # Enable Event Support (True below)
