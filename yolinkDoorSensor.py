@@ -26,6 +26,7 @@ class YoLinkDoorSensor(YoLinkMQTTDevice):
 
     def doorData(yolink):
         return(yolink.getData())
+        
     
 
 

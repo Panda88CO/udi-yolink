@@ -29,6 +29,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
    <nodeDef id="yothsensor" nls="nlsthsensor">
       <editors />
       <sts>
@@ -53,6 +54,25 @@
          </accepts>
       </cmds>
    </nodeDef> 
+   <nodeDef id="yogaragedoor" nls="nlsgaragedoor">
+      <editors />
+      <sts>
+         <st id="GV0" editor="doorState" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV8" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="TOGGLE" > 
+         </accepts>
+      </cmds>
 
+   </nodeDef> 
 
 </nodeDefs> 

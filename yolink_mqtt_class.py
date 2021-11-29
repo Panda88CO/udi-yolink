@@ -593,6 +593,12 @@ class YoLinkMQTTDevice(object):
     def sensorOnline(self):
         return(self.dataAPI['online'] )       
 
+    def getAlarms(yolink):
+        return(yolink.getStateValue('alarm'))
+
+    def getBattery(yolink):
+        return(yolink.getStateValue('battery'))
+
     def getLastUpdate (self):
         return(self.dataAPI[self.lastUpdate])
 

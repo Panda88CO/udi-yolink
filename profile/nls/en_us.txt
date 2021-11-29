@@ -54,3 +54,25 @@ CMD-nlsthsensor-UPDATE-NAME = Update Status
 ST-nlsthsensor-ST-NAME = Nodeserver Status
 status-0 = Down
 status-1 = Up
+
+
+ND-yogaragedoor-NAME = YoLink Switch
+ND-yogaragedoor-ICON = GenericCtrl
+ST-nlsgaragedoor-GV0-NAME = Garage Door State
+swstate-0 = closed
+swstate-1 = openRemind
+ST-nlsgaragedoor-GV1-NAME = Sensor Battery Level
+batlevel-0 = Low 
+batlevel-1 = Medium Low
+batlevel-2 = Medium
+batlevel-3 =  Medium High
+batlevel-4 = High
+
+ST-nlsgaragedoor-GV8-NAME = online
+online-0 = Offline
+online-1 = Online
+ST-nlsgaragedoor-ST-NAME = Nodeserver Status
+status-0 = Down
+status-1 = Up
+
+CMD-nlsswitch-UPDATE-NAME = Update Status
