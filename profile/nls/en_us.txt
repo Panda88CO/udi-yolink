@@ -1,78 +1,73 @@
-
-
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = GenericCtrl
+
 ST-nlsswitch-GV0-NAME = Switch State
-swstate-0 = Off
-swstate-1 = On
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
 ST-nlsswitch-GV3-NAME = Watt
 ST-nlsswitch-GV4-NAME = Energy
 ST-nlsswitch-GV5-NAME = online
-online-0 = Offline
-online-1 = Online
 ST-nlsswitch-ST-NAME = Nodeserver Status
-status-0 = Down
-status-1 = Up
 
 CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
 
+
 ND-yothsensor-NAME = YoLink THsensor
 ND-yothsensor-ICON = TempSensor
+
 ST-nlsthsensor-CLITEMP-NAME = Current Temp (C)
 ST-nlsthsensor-GV1-NAME = Low Temp Alarm
-alarm-0 = Normal
-alarm-1 = Alarm
 ST-nlsthsensor-GV2-NAME = High Temp Alarm
-alarm-0 = Normal
-alarm-1 = Alarm
 ST-nlsthsensor-CLIHUM-NAME = Current Rel Humidity (%)
 ST-nlsthsensor-GV4-NAME = Low Humidity Alarm
-alarm-0 = Normal
-alarm-1 = Alarm
 ST-nlsthsensor-GV5-NAME = High Humidity Alarm
-alarm-0 = Normal
-alarm-1 = Alarm
 ST-lsthsensor-BATLVL-NAME = Battery Level
-batlevel-0 = Low 
-batlevel-1 = Medium Low
-batlevel-2 = Medium
-batlevel-3 =  Medium High
-batlevel-4 = High
 ST-nlsthsensor-GV7-NAME = Battery Alarm
-alarm-0 = Normal
-alarm-1 = Alarm
 ST-nlsthsensor-GV8-NAME = online
-online-0 = Offline
-online-1 = Online
+ST-nlsthsensor-ST-NAME = Nodeserver Status
 
 CMD-nlsthsensor-UPDATE-NAME = Update Status
-ST-nlsthsensor-ST-NAME = Nodeserver Status
-status-0 = Down
-status-1 = Up
 
 
 ND-yogaragedoor-NAME = YoLink Switch
 ND-yogaragedoor-ICON = GenericCtrl
+
 ST-nlsgaragedoor-GV0-NAME = Garage Door State
-swstate-0 = closed
-swstate-1 = openRemind
 ST-nlsgaragedoor-GV1-NAME = Sensor Battery Level
+ST-nlsgaragedoor-GV8-NAME = online
+ST-nlsgaragedoor-ST-NAME = Nodeserver Status
+
+CMD-nlsgaragedoor-UPDATE-NAME = Update Door Status
+CMD-nlsgaragedoor-TOGGLE-NAME = Toggle Door
+
+
+ND-yomotionsensor-NAME = YoLink Switch
+ND-yomotionsensor-ICON = GenericCtrl
+
+ST-nlsmotonsensor-GV0-NAME = Garage Door State
+ST-nlsmotonsensor-GV1-NAME = Sensor Battery Level
+ST-nlsmotonsensor-GV8-NAME = online
+ST-nlsmotonsensor-ST-NAME = Nodeserver Status
+
+CMD-nlsmotonsensor-UPDATE-NAME = Update Motion Status
+
+swstate-0 = Off
+swstate-1 = On
 batlevel-0 = Low 
 batlevel-1 = Medium Low
 batlevel-2 = Medium
 batlevel-3 =  Medium High
 batlevel-4 = High
-
-ST-nlsgaragedoor-GV8-NAME = online
+alarm-0 = Normal
+alarm-1 = Alarm
 online-0 = Offline
 online-1 = Online
-ST-nlsgaragedoor-ST-NAME = Nodeserver Status
 status-0 = Down
 status-1 = Up
-
-CMD-nlsswitch-UPDATE-NAME = Update Status
+doorstate-0 = closed
+doorstate-1 = open
+motionstate-0 = No Motin
+motionstate-1 = Motion Detected

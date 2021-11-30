@@ -6,7 +6,7 @@ from yolink_mqtt_class import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
 
-class YoLinkGarageDoorToggle(YoLinkMQTTDevice):
+class YoLinkGarageDoorCtrl(YoLinkMQTTDevice):
     def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
         yolink.methodList = ['toggle' ]
@@ -21,6 +21,9 @@ class YoLinkGarageDoorToggle(YoLinkMQTTDevice):
         data={}
         return(yolink.setDevice(data))
 
+    def updataStatus(yolink, data):
+        yolink.updateCallbackStatus(data, False)
+    '''
     def updateStatus(yolink, data):
         logging.debug(' YoLinkGarageDoorCtrl - updateStatus')  
         #special case 
@@ -40,5 +43,14 @@ class YoLinkGarageDoorToggle(YoLinkMQTTDevice):
                     yolink.eventQueue.put(eventData)
         else:
             logging.error('unsupported data: ' + str(json(data)))
-
+    '''
     
+class YoLinkGarageDoorToggle(YoLinkGarageDoorCtrl):
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
+        #yolink.initNode()
+
+
+    # Enable Event Support (True below)
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, True)

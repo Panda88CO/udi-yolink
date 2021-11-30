@@ -9,10 +9,7 @@ from os import truncate
 import udi_interface
 import sys
 import time
-from yolinkGarageDoorToggle import YoLinkGarageDoorCtrl
-from yolinkGarageDoorSensor import YoLinkGarageDoorSen
-
-
+from yolinkMotionSensor import YoLinkMotionSen
 logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
 polyglot = None
@@ -26,14 +23,14 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class udiYoGarageDoor(udi_interface.Node):
+class udiYoWaterSensor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yogaragedoor'
+    id = 'yomotionsensor'
     
     '''
        drivers = [
-            'GV0' = DoorState
-            'GV1' = Batery
+            'GV0' = Motin Alert
+            'GV1' = Battery Level
             'GV8' = Online
             ]
 
@@ -80,11 +77,9 @@ class udiYoGarageDoor(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkThsensor')
-        self.yoDoorSensor  = YoLinkGarageDoorSen(self.csName, self.csid, self.csseckey, self.devInfo[0], self.updateStatus)
-        self.yoDoorControl = YoLinkGarageDoorCtrl(self.csName, self.csid, self.csseckey, self.devInfo[1], self.updateStatus)
-        self.yoDoorSensor.initNode()
-        self.yoDoorControl.initNode()
+        print('start - YoLinkMotionSensor')
+        self.yoWaterSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoWaterSensor.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
@@ -101,43 +96,53 @@ class udiYoGarageDoor(udi_interface.Node):
         self.Parameters.load(params)
     '''
     def initNode(self):
-        self.yoDoorSensor.refreshSensor()
+        self.yoWaterSensor.refreshSensor()
 
     
     def stop (self):
-        logging.info('Stop ')
+        logging.info('Stop not implemented')
         self.node.setDriver('ST', 0, True, True)
-        self.yoDoorSensor.shut_down()
-        self.yoDoorControl.shut_down()
+        self.yoWaterSensor.shut_down()
+
+    '''
+    def yoTHsensor.bool2Nbr(self, bool):
+        if bool:
+            return(1)
+        else:
+            return(0)
+    '''
+    
+    def MotionState(self):
+        if  self.yoWaterSensor.motionState() == 'normal':
+            return(0)
+        else:
+            return(1)
 
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
-        self.yoTHsensor.updateCallbackStatus(data)
+        self.yoWaterSensor.updateCallbackStatus(data)
+        motionState = self.yoWaterSensor.getMootion()
+
         logging.debug(data)
-        alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
-            self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
-            self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
-            self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoTHsensor.getOnlineStatus()), True, True)
+            self.node.setDriver('GV1', self.yoWaterSensor.getMootion(), True, True)
+            self.node.setDriver('GV2', self.yoWaterSensor.getBattery(), True, True)
+            self.node.setDriver('GV8', self.yoWaterSensor.bool2Nbr(self.yoWaterSensor.getOnlineStatus()), True, True)
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
-            self.yoDoorSensor.refreshSensor()
+            self.yoWaterSensor.refreshSensor()
 
     def update(self, command = None):
-        logging.info('GarageDoor Update Status Executed')
-        self.yoDoorSensor.refreshState()
+        logging.info('THsensor Update Status Executed')
+        self.yoWaterSensor.refreshState()
        
-    def toggleDoor(self, command = None):
-        logging.info('GarageDoor Toggle Door')
-        self.yoDoorControl.toggleDevice()
 
     commands = {
                 'UPDATE': update,
-                'TOGGLE': toggleDoor
                 }
 
 

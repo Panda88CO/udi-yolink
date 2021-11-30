@@ -26,14 +26,16 @@
   <editor id = "batlevel" > 
      <range  uom="25" subset="0-4" nls="batlevel" />
 </editor>
-  <editor id = "doorState" > 
-     <range  uom="25" subset="0-1" nls="doorState" />
+  <editor id = "doorstate" > 
+     <range  uom="25" subset="0-1" nls="doorstate" />
 </editor>
 
   <editor id = "online" > 
      <range  uom="25" subset="0-1" nls="online" />
 </editor>
-
+  <editor id = "motionstate" > 
+     <range  uom="25" subset="0-1" nls="motionstate" />
+</editor>
 
 
 </editors> 
