@@ -126,7 +126,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
         logging.debug(data)
         if self.node is not None:
-            self.node.setDriver('GV1', self.yoMotonsSensor.getMootion(), True, True)
+            self.node.setDriver('GV1', self.MotionState(), True, True)
             self.node.setDriver('GV2', self.yoMotonsSensor.getBattery(), True, True)
             self.node.setDriver('GV8', self.yoMotonsSensor.bool2Nbr(self.yoMotonsSensor.getOnlineStatus()), True, True)
 

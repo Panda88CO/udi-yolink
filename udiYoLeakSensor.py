@@ -9,7 +9,7 @@ from os import truncate
 import udi_interface
 import sys
 import time
-from yolinkMotionSensor import YoLinkMotionSen
+from yolinkLeakSensor import YoLinkLeakSen
 logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
 polyglot = None
@@ -23,13 +23,13 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class udiYoWaterSensor(udi_interface.Node):
+class udiYoLeakSen(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     id = 'yomotionsensor'
     
     '''
        drivers = [
-            'GV0' = Motin Alert
+            'GV0' = Water Alert
             'GV1' = Battery Level
             'GV8' = Online
             ]
@@ -77,9 +77,9 @@ class udiYoWaterSensor(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkMotionSensor')
-        self.yoWaterSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
-        self.yoWaterSensor.initNode()
+        print('start - YoLinkLeakSensor')
+        self.yoLeakSensor  = YoLinkLeakSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoLeakSensor.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
@@ -96,13 +96,13 @@ class udiYoWaterSensor(udi_interface.Node):
         self.Parameters.load(params)
     '''
     def initNode(self):
-        self.yoWaterSensor.refreshSensor()
+        self.yoLeakSensor.refreshSensor()
 
     
     def stop (self):
         logging.info('Stop not implemented')
         self.node.setDriver('ST', 0, True, True)
-        self.yoWaterSensor.shut_down()
+        self.yoLeakSensor.shut_down()
 
     '''
     def yoTHsensor.bool2Nbr(self, bool):
@@ -112,8 +112,8 @@ class udiYoWaterSensor(udi_interface.Node):
             return(0)
     '''
     
-    def MotionState(self):
-        if  self.yoWaterSensor.motionState() == 'normal':
+    def waterState(self):
+        if  self.yoLeakSensor.motionState() == 'normal':
             return(0)
         else:
             return(1)
@@ -121,24 +121,24 @@ class udiYoWaterSensor(udi_interface.Node):
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
-        self.yoWaterSensor.updateCallbackStatus(data)
-        motionState = self.yoWaterSensor.getMootion()
+        self.yoLeakSensor.updateCallbackStatus(data)
+        motionState = self.yoLeakSensor.getMootion()
 
         logging.debug(data)
         if self.node is not None:
-            self.node.setDriver('GV1', self.yoWaterSensor.getMootion(), True, True)
-            self.node.setDriver('GV2', self.yoWaterSensor.getBattery(), True, True)
-            self.node.setDriver('GV8', self.yoWaterSensor.bool2Nbr(self.yoWaterSensor.getOnlineStatus()), True, True)
+            self.node.setDriver('GV1', self.waterState(), True, True)
+            self.node.setDriver('GV2', self.yoLeakSensor.getBattery(), True, True)
+            self.node.setDriver('GV8', self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus()), True, True)
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
-            self.yoWaterSensor.refreshSensor()
+            self.yoLeakSensor.refreshSensor()
 
     def update(self, command = None):
         logging.info('THsensor Update Status Executed')
-        self.yoWaterSensor.refreshState()
+        self.yoLeakSensor.refreshState()
        
 
     commands = {

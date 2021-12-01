@@ -12,7 +12,7 @@ from udiYoSwitch import udiYoSwitch
 from udiYoTHsensor import udiYoTHsensor 
 from udiYoGarageDoor import udiYoGarageDoor
 from udiYoMotionSensor import udiYoMotionSensor
-from udiYoWaterSensor import udiYoWaterSensor
+from udiYoLeakSensor import udiYoWaterSensor
 
 
 logging = udi_interface.LOGGER

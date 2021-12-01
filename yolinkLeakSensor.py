@@ -5,9 +5,9 @@ import logging
 from yolink_mqtt_class import YoLinkMQTTDevice
 logging.basicConfig(level=logging.DEBUG)
 
-class YoLinkLeakSensor(YoLinkMQTTDevice):
-    def __init__(yolink, csName, csid, csseckey,  deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
+class YoLinkLeakSen(YoLinkMQTTDevice):
+    def __init__(yolink, csName, csid, csseckey,  deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback)
         yolink.methodList = ['getState' ]
         yolink.eventList = ['Report','Alert']
         yolink.waterName = 'WaterEvent'
@@ -19,6 +19,9 @@ class YoLinkLeakSensor(YoLinkMQTTDevice):
     def refreshSensor(yolink):
         logging.debug('refreshWaterSensor')
         return(yolink.refreshDevice())
+
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, False)
 
     '''
     def updateStatus(yolink, data):
@@ -38,6 +41,8 @@ class YoLinkLeakSensor(YoLinkMQTTDevice):
         else:
             logging.error('unsupported data: ' + str(json(data)))
     '''
+    def initNode(yolink):
+        yolink.refreshDevice()
     
     def probeState(yolink):
          return(yolink.getState() )
@@ -45,5 +50,12 @@ class YoLinkLeakSensor(YoLinkMQTTDevice):
     def probeData(yolink):
         return(yolink.getData() )
 
+class YoLinkLeakSensor(YoLinkLeakSen):
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, deviceInfo, yolink.updateStatus, yolink_URL, mqtt_URL, mqtt_port)
+        yolink.initNode()
+
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, True)
     
 
