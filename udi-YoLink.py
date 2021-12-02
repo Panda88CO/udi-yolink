@@ -12,14 +12,23 @@ from udiYoSwitch import udiYoSwitch
 from udiYoTHsensor import udiYoTHsensor 
 from udiYoGarageDoor import udiYoGarageDoor
 from udiYoMotionSensor import udiYoMotionSensor
-from udiYoLeakSensor import udiYoWaterSensor
+from udiYoLeakSensor import udiYoLeakSensor
 
+from yoLinkPACOauth import YoLinkDevices
 
-logging = udi_interface.LOGGER
+logging = udi_interface.logging
 Custom = udi_interface.Custom
 polyglot = None
 Parameters = None
 
+client_id = '60dd7fa7960d177187c82039'
+client_secret = '3f68536b695a435d8a1a376fc8254e70'
+yolinkURL =  'https://api.yosmart.com/openApi' 
+yolinkV2URL =  'https://api.yosmart.com/open/yolink/v2/api' 
+tokenURL = "https://api.yosmart.com/open/yolink/token"
+UaID = "ua_D78FFCACB1A8465ABE5279E68E201E7B"
+SecID = "sec_v1_Tuqy3L7UqL/t/R3P5xpcBQ=="
+tokenURL = "https://api.yosmart.com/open/yolink/token"
 
 
 
@@ -32,9 +41,16 @@ multiplier. These get updated at every shortPoll interval
 class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
         super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  
+        
+        
+        UaID = "ua_D78FFCACB1A8465ABE5279E68E201E7B"
+        SecID = "sec_v1_Tuqy3L7UqL/t/R3P5xpcBQ=="
         csid = '60dd7fa7960d177187c82039'
         csseckey = '3f68536b695a435d8a1a376fc8254e70'
         csName = 'Panda88'
+
+
+
         devInfo = { "deviceId": "d88b4c0100034906",
                     "deviceUDID": "e091320786e5447099c8b1c93ce47a60",
                     "name": "S Playground Switch",
@@ -156,6 +172,32 @@ class YoLinkSetup (udi_interface.Node):
 
 
         '''
+        self.poly.subscribe(self.poly.START, self.start, address)
+        self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
+        self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
+        self.poly.subscribe(self.poly.POLL, self.systemPoll)
+
+        self.Parameters = Custom(polyglot, 'customparams')
+        self.Notices = Custom(polyglot, 'notices')
+       
+        logging.debug('self.address : ' + str(self.address))
+        logging.debug('self.name :' + str(self.name))
+        self.hb = 0
+        #if not(PG_CLOUD_ONLY):
+        
+        self.nodeDefineDone = False
+        self.longPollCountMissed = 0
+
+        logging.debug('Controller init DONE')
+        
+        self.poly.ready()
+        self.poly.addNode(self)
+
+
+        self.yoDevices = YoLinkDevices(UaID, SecID)
+        self.deviceList = self.yoDevices.getDeviceList()
+        self.Parameters[self.deviceList[0]['devideId']] =  self.deviceList[0]['name']       
+
         #rememebr names must be small letters
         udiYoTHsensor(polyglot, 'yotemp', 'yotemp', 'Yolink Wine Twmp', csName, csid, csseckey, winecooler)
         udiYoSwitch(polyglot, 'yoswitch', 'yoswitch', 'Playground', csName, csid, csseckey, devInfo )
@@ -164,14 +206,122 @@ class YoLinkSetup (udi_interface.Node):
         udiYoTHsensor(polyglot, 'yotemp2', 'yotemp2', 'Yolink Pool Temp', csName, csid, csseckey, outdoorTemp )
         udiYoGarageDoor(polyglot, 'yogarage1', 'yogarage1', 'Yolink Grage Door', csName, csid, csseckey, garageDoor )
         udiYoMotionSensor(polyglot, 'yomotion1', 'yomotion1', 'Yolink Motions Sensor', csName, csid, csseckey, motion )
-        udiYoWaterSensor(polyglot, 'yowater1', 'yowater1', 'Yolink Motions Sensor', csName, csid, csseckey, waterSensor )
+        udiYoLeakSensor(polyglot, 'yowater1', 'yowater1', 'Yolink Leak Sensor', csName, csid, csseckey, waterSensor )
 
         mqtt_URL= 'api.yosmart.com'
         mqtt_port = 8003
         yolink_URL ='https://api.yosmart.com/openApi'
 
 
+    def handleLevelChange(self, level):
+        logging.info('New log level: {}'.format(level))
 
+    def handleParams (self, userParam ):
+        logging.debug('handleParams')
+        self.Parameters.load(userParam)
+        self.poly.Notices.clear()
+        csid = '60dd7fa7960d177187c82039'
+        csseckey = '3f68536b695a435d8a1a376fc8254e70'
+        csName = 'Panda88'
+        '''
+        if 'USER_EMAIL' in userParam:
+            email = userParam['LOCAL_USER_EMAIL']
+        else:
+            self.poly.Notices['ue'] = 'Missing User Email parameter'
+            email = ''
+
+        if 'USER_PASSWORD' in userParam:
+            password = userParam['LOCAL_USER_PASSWORD']
+        else:
+            self.poly.Notices['up'] = 'Missing User Password parameter'
+            password = ''
+        '''
+        if 'CSID' in userParam:
+            self.csid = userParam['CSID']
+        else:
+            self.poly.Notices['csid'] = 'Missing csid parameter'
+            self.csid = ''
+
+        if 'CSSSECKEY' in userParam:
+            self.cssseckey = userParam['CSSSECKEY']
+        else:
+            self.poly.Notices['cu'] = 'Missing cssSecKey parameter'
+            self.csseckey = ''
+
+        if 'CSNAME' in userParam:
+            self.csname = userParam['CSNAME']
+        else:
+            self.poly.Notices['cp'] = 'Missing csName parameter'
+            self.csname = ''
+
+        if 'CSNAME' in userParam:
+            self.csname = userParam['CSNAME']
+        else:
+            self.poly.Notices['cp'] = 'Missing csName parameter'
+            self.csname = ''
+
+        if 'CSNAME' in userParam:
+            self.csname = userParam['CSNAME']
+        else:
+            self.poly.Notices['cp'] = 'Missing csName parameter'
+            self.csname = ''
+
+    
+        if 'UAID' in userParam:
+            self.uaid = userParam['UAID']
+        else:
+            self.poly.Notices['cp'] = 'Missing UAID parameter'
+            self.uaid = ''
+
+        if 'SECRET_KEY' in userParam:
+            self.secretKey = userParam['SECRET_KEY']
+        else:
+            self.poly.Notices['cp'] = 'Missing SECRET_KEY parameter'
+            self.secretKEy = ''
+            
+        '''
+        if local_email != '' or local_password != '' or local_ip != '':
+            logging.debug('local access true, cfg = {} {} {}'.format(local_email, local_password, local_ip))
+            local_valid = True
+            if local_email == '':
+                self.poly.Notices['lu'] = 'Please enter the local user name'
+                local_valid = False
+            if local_password == '':
+                self.poly.Notices['lp'] = 'Please enter the local user password'
+                local_valid = False
+            if local_ip == '':
+                self.poly.Notices['ip'] = 'Please enter the local IP address'
+                local_valid = False
+
+
+        if cloud_email != '' or cloud_password != '' or cloud_token != '':
+            logging.debug('cloud access true, cfg = {} {} {}'.format(cloud_email, cloud_password, cloud_token))
+            cloud_valid = True
+            if cloud_email == '':
+                self.poly.Notices['cu'] = 'Please enter the cloud user name'
+                cloud_valid = False
+            if cloud_password == '':
+                self.poly.Notices['cp'] = 'Please enter the cloud user password'
+                cloud_valid = False
+            if cloud_token == '':
+                self.poly.Notices['ct'] = 'Please enter the Tesla Refresh Token - see readme for futher info '
+                cloud_valid = False
+
+        if local_valid:
+            logging.debug('Local access is valid, configure....')
+            self.localAccess = True
+
+        if cloud_valid:
+            logging.debug('Cloud access is valid, configure....')
+            self.cloudAccess = True
+
+        if cloud_valid or local_valid:
+            self.tesla_initialize(local_email, local_password, local_ip, cloud_email, cloud_password)
+
+        if not cloud_valid and not local_valid:
+            self.poly.Notices['cfg'] = 'Tesla PowerWall NS needs configuration.'
+        '''
+        logging.debug('done with parameter processing')
 
 
 if __name__ == "__main__":

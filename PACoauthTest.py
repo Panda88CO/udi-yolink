@@ -16,8 +16,6 @@ UaID = "ua_D78FFCACB1A8465ABE5279E68E201E7B"
 SecID = "sec_v1_Tuqy3L7UqL/t/R3P5xpcBQ=="
 
 
-
-
 def get_access_token(url, client_id, client_secret):
     response = requests.post(
         url,

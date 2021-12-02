@@ -23,7 +23,7 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class udiYoLeakSen(udi_interface.Node):
+class udiYoLeakSensor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     id = 'yomotionsensor'
     
@@ -144,6 +144,7 @@ class udiYoLeakSen(udi_interface.Node):
     commands = {
                 'UPDATE': update,
                 }
+
 
 
 
