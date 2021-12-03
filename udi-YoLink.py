@@ -26,9 +26,7 @@ client_secret = '3f68536b695a435d8a1a376fc8254e70'
 yolinkURL =  'https://api.yosmart.com/openApi' 
 yolinkV2URL =  'https://api.yosmart.com/open/yolink/v2/api' 
 tokenURL = "https://api.yosmart.com/open/yolink/token"
-UaID = "ua_D78FFCACB1A8465ABE5279E68E201E7B"
-SecID = "sec_v1_Tuqy3L7UqL/t/R3P5xpcBQ=="
-tokenURL = "https://api.yosmart.com/open/yolink/token"
+
 
 
 
@@ -183,7 +181,7 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('self.address : ' + str(self.address))
         logging.debug('self.name :' + str(self.name))
         self.hb = 0
-        #if not(PG_CLOUD_ONLY):
+      
         
         self.nodeDefineDone = False
         self.longPollCountMissed = 0
@@ -196,17 +194,20 @@ class YoLinkSetup (udi_interface.Node):
 
         self.yoDevices = YoLinkDevices(UaID, SecID)
         self.deviceList = self.yoDevices.getDeviceList()
-        self.Parameters[self.deviceList[0]['devideId']] =  self.deviceList[0]['name']       
+        logging.debug('{} devices detected'.format(len(self.deviceList)))
+        for dev in range(0,len(self.deviceList))
+            self.Parameters[self.deviceList[dev]['devideId']] =  self.deviceList[0]['name']
+
 
         #rememebr names must be small letters
-        udiYoTHsensor(polyglot, 'yotemp', 'yotemp', 'Yolink Wine Twmp', csName, csid, csseckey, winecooler)
-        udiYoSwitch(polyglot, 'yoswitch', 'yoswitch', 'Playground', csName, csid, csseckey, devInfo )
-        udiYoSwitch(polyglot, 'yoswitch2', 'yoswitch2', 'Matias Garden', csName, csid, csseckey, devInfo2 )
-        udiYoTHsensor(polyglot, 'yotemp1', 'yotemp1', 'Yolink Pool Temp', csName, csid, csseckey, poolTemp )
-        udiYoTHsensor(polyglot, 'yotemp2', 'yotemp2', 'Yolink Pool Temp', csName, csid, csseckey, outdoorTemp )
-        udiYoGarageDoor(polyglot, 'yogarage1', 'yogarage1', 'Yolink Grage Door', csName, csid, csseckey, garageDoor )
-        udiYoMotionSensor(polyglot, 'yomotion1', 'yomotion1', 'Yolink Motions Sensor', csName, csid, csseckey, motion )
-        udiYoLeakSensor(polyglot, 'yowater1', 'yowater1', 'Yolink Leak Sensor', csName, csid, csseckey, waterSensor )
+        udiYoTHsensor(polyglot, 'yotemp', 'yotemp', 'Yolink Wine Twmp', csName, csid, csseckey, winecooler, self.yolinkURL,self.mqttURL, self.mqttPort)
+        udiYoSwitch(polyglot, 'yoswitch', 'yoswitch', 'Playground', csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+        udiYoSwitch(polyglot, 'yoswitch2', 'yoswitch2', 'Matias Garden', csName, csid, csseckey, devInfo2, self.yolinkURL,self.mqttURL, self.mqttPort )
+        udiYoTHsensor(polyglot, 'yotemp1', 'yotemp1', 'Yolink Pool Temp', csName, csid, csseckey, poolTemp, self.yolinkURL,self.mqttURL, self.mqttPort )
+        udiYoTHsensor(polyglot, 'yotemp2', 'yotemp2', 'Yolink Pool Temp', csName, csid, csseckey, outdoorTemp, self.yolinkURL,self.mqttURL, self.mqttPort )
+        udiYoGarageDoor(polyglot, 'yogarage1', 'yogarage1', 'Yolink Grage Door', csName, csid, csseckey, garageDoor, self.yolinkURL,self.mqttURL, self.mqttPort )
+        udiYoMotionSensor(polyglot, 'yomotion1', 'yomotion1', 'Yolink Motions Sensor', csName, csid, csseckey, motion, self.yolinkURL,self.mqttURL, self.mqttPort )
+        udiYoLeakSensor(polyglot, 'yowater1', 'yowater1', 'Yolink Leak Sensor', csName, csid, csseckey, waterSensor, self.yolinkURL,self.mqttURL, self.mqttPort )
 
         mqtt_URL= 'api.yosmart.com'
         mqtt_port = 8003
@@ -223,7 +224,7 @@ class YoLinkSetup (udi_interface.Node):
         csid = '60dd7fa7960d177187c82039'
         csseckey = '3f68536b695a435d8a1a376fc8254e70'
         csName = 'Panda88'
-        '''
+        
         if 'USER_EMAIL' in userParam:
             email = userParam['LOCAL_USER_EMAIL']
         else:
@@ -235,7 +236,7 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.poly.Notices['up'] = 'Missing User Password parameter'
             password = ''
-        '''
+        
         if 'CSID' in userParam:
             self.csid = userParam['CSID']
         else:
@@ -253,19 +254,6 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.poly.Notices['cp'] = 'Missing csName parameter'
             self.csname = ''
-
-        if 'CSNAME' in userParam:
-            self.csname = userParam['CSNAME']
-        else:
-            self.poly.Notices['cp'] = 'Missing csName parameter'
-            self.csname = ''
-
-        if 'CSNAME' in userParam:
-            self.csname = userParam['CSNAME']
-        else:
-            self.poly.Notices['cp'] = 'Missing csName parameter'
-            self.csname = ''
-
     
         if 'UAID' in userParam:
             self.uaid = userParam['UAID']
@@ -278,7 +266,37 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.poly.Notices['cp'] = 'Missing SECRET_KEY parameter'
             self.secretKEy = ''
-            
+    
+        if 'YOLINK_URL' in userParam:
+            self.yolinkURL = userParam['YOLINK_URL']
+        else:
+            self.poly.Notices['cp'] = 'Missing YOLINK_URL parameter'
+            self.yolinkURL = ''
+
+        if 'YOLINKV2_URL' in userParam:
+            self.yolinkV2URL = userParam['YOLINKV2_URL']
+        else:
+            self.poly.Notices['cp'] = 'Missing YOLINKV2_URL parameter'
+            self.yolinkV2URL = ''
+
+        if 'TOKEN_URL' in userParam:
+            self.tokenURL = userParam['TOKEN_URL']
+        else:
+            self.poly.Notices['cp'] = 'Missing TOKEN_URL parameter'
+            self.tokenURL = ''
+
+        if 'MQTT_URL' in userParam:
+            self.mqttURL = userParam['MQTT_URL']
+        else:
+            self.poly.Notices['cp'] = 'Missing MQTT_URL parameter'
+            self.mqttURL = ''
+
+        if 'MQTT_PORT' in userParam:
+            self.mqttPort = userParam['MQTT_PORT']
+        else:
+            self.poly.Notices['cp'] = 'Missing MQTT_PORT parameter'
+            self.mqttPort = 0
+
         '''
         if local_email != '' or local_password != '' or local_ip != '':
             logging.debug('local access true, cfg = {} {} {}'.format(local_email, local_password, local_ip))
