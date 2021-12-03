@@ -16,7 +16,7 @@ from udiYoLeakSensor import udiYoLeakSensor
 
 from yoLinkPACOauth import YoLinkDevices
 
-logging = udi_interface.logging
+logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
 polyglot = None
 Parameters = None
@@ -174,6 +174,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
+        self.poly.subscribe(self.poly.STOP, self.stop)
 
         self.Parameters = Custom(polyglot, 'customparams')
         self.Notices = Custom(polyglot, 'notices')
@@ -191,14 +192,18 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.ready()
         self.poly.addNode(self)
 
-
+        self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         self.yoDevices = YoLinkDevices(UaID, SecID)
         self.deviceList = self.yoDevices.getDeviceList()
+        logging.debug( self.deviceList)
         logging.debug('{} devices detected'.format(len(self.deviceList)))
-        for dev in range(0,len(self.deviceList))
-            self.Parameters[self.deviceList[dev]['devideId']] =  self.deviceList[0]['name']
+        for dev in range(0,len(self.deviceList)):
+            self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+            logging.debug(self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['name'])
 
+        
 
+        '''
         #rememebr names must be small letters
         udiYoTHsensor(polyglot, 'yotemp', 'yotemp', 'Yolink Wine Twmp', csName, csid, csseckey, winecooler, self.yolinkURL,self.mqttURL, self.mqttPort)
         udiYoSwitch(polyglot, 'yoswitch', 'yoswitch', 'Playground', csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
@@ -208,10 +213,18 @@ class YoLinkSetup (udi_interface.Node):
         udiYoGarageDoor(polyglot, 'yogarage1', 'yogarage1', 'Yolink Grage Door', csName, csid, csseckey, garageDoor, self.yolinkURL,self.mqttURL, self.mqttPort )
         udiYoMotionSensor(polyglot, 'yomotion1', 'yomotion1', 'Yolink Motions Sensor', csName, csid, csseckey, motion, self.yolinkURL,self.mqttURL, self.mqttPort )
         udiYoLeakSensor(polyglot, 'yowater1', 'yowater1', 'Yolink Leak Sensor', csName, csid, csseckey, waterSensor, self.yolinkURL,self.mqttURL, self.mqttPort )
-
+        '''
         mqtt_URL= 'api.yosmart.com'
         mqtt_port = 8003
         yolink_URL ='https://api.yosmart.com/openApi'
+
+
+    def stop(self):
+        logging.info('Stop Called:')
+        exit()
+
+    def systemPoll (self, type):
+        logging.info('System Poll executing')
 
 
     def handleLevelChange(self, level):
@@ -226,13 +239,13 @@ class YoLinkSetup (udi_interface.Node):
         csName = 'Panda88'
         
         if 'USER_EMAIL' in userParam:
-            email = userParam['LOCAL_USER_EMAIL']
+            email = userParam['USER_EMAIL']
         else:
             self.poly.Notices['ue'] = 'Missing User Email parameter'
             email = ''
 
         if 'USER_PASSWORD' in userParam:
-            password = userParam['LOCAL_USER_PASSWORD']
+            password = userParam['USER_PASSWORD']
         else:
             self.poly.Notices['up'] = 'Missing User Password parameter'
             password = ''
@@ -246,55 +259,55 @@ class YoLinkSetup (udi_interface.Node):
         if 'CSSSECKEY' in userParam:
             self.cssseckey = userParam['CSSSECKEY']
         else:
-            self.poly.Notices['cu'] = 'Missing cssSecKey parameter'
+            self.poly.Notices['csssec'] = 'Missing cssSecKey parameter'
             self.csseckey = ''
 
         if 'CSNAME' in userParam:
             self.csname = userParam['CSNAME']
         else:
-            self.poly.Notices['cp'] = 'Missing csName parameter'
+            self.poly.Notices['csname'] = 'Missing csName parameter'
             self.csname = ''
     
         if 'UAID' in userParam:
             self.uaid = userParam['UAID']
         else:
-            self.poly.Notices['cp'] = 'Missing UAID parameter'
+            self.poly.Notices['uaid'] = 'Missing UAID parameter'
             self.uaid = ''
 
         if 'SECRET_KEY' in userParam:
             self.secretKey = userParam['SECRET_KEY']
         else:
-            self.poly.Notices['cp'] = 'Missing SECRET_KEY parameter'
+            self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
             self.secretKEy = ''
     
         if 'YOLINK_URL' in userParam:
             self.yolinkURL = userParam['YOLINK_URL']
         else:
-            self.poly.Notices['cp'] = 'Missing YOLINK_URL parameter'
+            self.poly.Notices['ylurl'] = 'Missing YOLINK_URL parameter'
             self.yolinkURL = ''
 
         if 'YOLINKV2_URL' in userParam:
             self.yolinkV2URL = userParam['YOLINKV2_URL']
         else:
-            self.poly.Notices['cp'] = 'Missing YOLINKV2_URL parameter'
+            self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
             self.yolinkV2URL = ''
 
         if 'TOKEN_URL' in userParam:
             self.tokenURL = userParam['TOKEN_URL']
         else:
-            self.poly.Notices['cp'] = 'Missing TOKEN_URL parameter'
+            self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
             self.tokenURL = ''
 
         if 'MQTT_URL' in userParam:
             self.mqttURL = userParam['MQTT_URL']
         else:
-            self.poly.Notices['cp'] = 'Missing MQTT_URL parameter'
+            self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
             self.mqttURL = ''
 
         if 'MQTT_PORT' in userParam:
             self.mqttPort = userParam['MQTT_PORT']
         else:
-            self.poly.Notices['cp'] = 'Missing MQTT_PORT parameter'
+            self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
             self.mqttPort = 0
 
         '''

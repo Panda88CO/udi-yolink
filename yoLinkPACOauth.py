@@ -20,7 +20,8 @@ class YoLinkDevices(object):
         headers1['Authorization'] = 'Bearer '+ yolink.token['access_token']
         r = requests.post(pacURL, data=json.dumps(data), headers=headers1) 
         info = r.json()
-        yolink.deviceList = info['data']['list']
+        print(str(info))
+        yolink.deviceList = info['data']['devices']
         
 
     def get_access_token(yolink, uaId, secret_key, url="https://api.yosmart.com/open/yolink/token"):
