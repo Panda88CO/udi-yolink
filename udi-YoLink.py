@@ -197,12 +197,59 @@ class YoLinkSetup (udi_interface.Node):
         self.deviceList = self.yoDevices.getDeviceList()
         logging.debug( self.deviceList)
         logging.debug('{} devices detected'.format(len(self.deviceList)))
+        isyNbr = 0
+        isyName = 'yolink'
         for dev in range(0,len(self.deviceList)):
-            self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-            logging.debug(self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['name'])
+            if self.deviceList[dev]['type'] in self.supportedYoTypes:
+                self.deviceList[dev]['name'] += 1
+                if self.deviceList[dev]['deviceId'] not in self.Parameters:
+                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['name'])
+                    
+                if self.deviceList[dev]['type'] == 'switch':
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    udiYoSwitch(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
 
-        
+                elif self.deviceList[dev]['type'] == 'THsensor':
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
 
+                elif self.deviceList[dev]['type'] == 'MultiOutlet':
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    #udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+
+                elif self.deviceList[dev]['type'] == 'DoorSensor':
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    #udiYoDoorSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+
+                elif self.deviceList[dev]['type'] == 'Manipulator':
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    #udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+
+                elif self.deviceList[dev]['type'] == 'MotionSensor':     
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    udiYoMotionSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+
+                elif self.deviceList[dev]['type'] == 'Outlet':     
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    #udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+
+                elif self.deviceList[dev]['type'] == 'GarageDoor': 
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    udiYoGarageDoor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+
+                elif self.deviceList[dev]['type'] == 'LeakSensor': 
+                    logging.info('Adding device {}').format( self.deviceList[dev]['name'])
+                    udiYoLeakSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+
+                elif self.deviceList[dev]['type'] == 'Hub':     
+                    logging.info('Hub not added')    
+                    isyNbr -= 1  
+                    #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
+                         
+                    #if self.deviceList[dev]['type'] == 'MotionSensor':                     
+                else:
+                    logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         '''
         #rememebr names must be small letters
         udiYoTHsensor(polyglot, 'yotemp', 'yotemp', 'Yolink Wine Twmp', csName, csid, csseckey, winecooler, self.yolinkURL,self.mqttURL, self.mqttPort)
