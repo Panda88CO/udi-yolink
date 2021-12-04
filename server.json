@@ -21,7 +21,8 @@
         "USER_EMAIL":"",
         "USER_PASSWORD":"",
         "MQTT_URL":"api.yosmart.com",
-        "MQTT_PORT":8003      
+        "MQTT_PORT":8003 ,
+        "REDIRECT_URL" : ""
 	    },
     "credits": [
         {

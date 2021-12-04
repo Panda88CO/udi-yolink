@@ -78,8 +78,8 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def start(self):
         print('start - YoLinkMotionSensor')
-        self.yoMotonsSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
-        self.yoMotonsSensor.initNode()
+        self.yoMotionsSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoMotionsSensor.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
@@ -96,13 +96,13 @@ class udiYoMotionSensor(udi_interface.Node):
         self.Parameters.load(params)
     '''
     def initNode(self):
-        self.yoMotonsSensor.refreshSensor()
+        self.yoMotionsSensor.refreshSensor()
 
     
     def stop (self):
         logging.info('Stop not implemented')
         self.node.setDriver('ST', 0, True, True)
-        self.yoMotonsSensor.shut_down()
+        self.yoMotionsSensor.shut_down()
 
     '''
     def yoTHsensor.bool2Nbr(self, bool):

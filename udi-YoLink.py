@@ -14,8 +14,8 @@ from udiYoGarageDoor import udiYoGarageDoor
 from udiYoMotionSensor import udiYoMotionSensor
 from udiYoLeakSensor import udiYoLeakSensor
 
-from yoLinkPACOauth import YoLinkDevicesPAC
-from yolinkOauth import YoLinkDevicesPAC
+from yoLinkPacOauth import YoLinkDevicesPAC
+from yoLinkOauth import YoLinkDevices
 
 logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
@@ -197,11 +197,30 @@ class YoLinkSetup (udi_interface.Node):
         self.node.setDriver('ST', 1, True, True)
 
 
-    def start (self):
+    def getDeviceList1(self):
+        logging.debug ('getDeviceList1')
+        self.yoDevices = YoLinkDevices(self.csid, self.csseckey)
+        webLink = self.yoDevices.getAuthURL()
+        self.poly.Notices['url'] = 'Copy this address to browser: ' + str(webLink) 
+        self.poly.Notices['url'] = 'Input redirected address to REDIRECR address field'         
+        while self.redirect_URL == "":
+            time.sleep(2)
+        token = self.yoDevices.getToken(self.csseckey, self.redirect_URL)
+
+        return( self.yoDevices(token, self.csid, self.csseckey))
+
+    def getDeviceList2(self):
         logging.debug('Start executing')
         self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         self.yoDevices = YoLinkDevicesPAC(self.uaid, self.secretKey)
-        self.deviceList = self.yoDevices.getDeviceList()
+        return(self.yoDevices.getDeviceList())
+
+    def start (self):
+        logging.debug('Start executing')
+        self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
+        self.deviceList = self.getDeviceList1()
+        #self.deviceList = self.getDeviceList2()
+
         logging.debug( self.deviceList)
         logging.debug('{} devices detected'.format(len(self.deviceList)))
         isyNbr = 0
@@ -363,6 +382,12 @@ class YoLinkSetup (udi_interface.Node):
             self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
             self.mqttPort = 0
 
+        if 'REDIRECT_URL' in userParam:
+            self.redirect_URL = userParam['REDIRECT_URL']
+        else:
+            self.poly.Notices['redirect'] = 'Missing REDIRECT_URL parameter'
+            self.redirectURL = ""        
+        
         '''
         if local_email != '' or local_password != '' or local_ip != '':
             logging.debug('local access true, cfg = {} {} {}'.format(local_email, local_password, local_ip))
