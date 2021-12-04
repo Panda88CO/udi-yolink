@@ -122,7 +122,7 @@ class udiYoMotionSensor(udi_interface.Node):
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
         self.yoMotonsSensor.updateCallbackStatus(data)
-        motionState = self.yoMotonsSensor.getMootion()
+        #motionState = self.yoMotonsSensor.getMotion()
 
         logging.debug(data)
         if self.node is not None:

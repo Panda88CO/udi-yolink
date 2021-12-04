@@ -84,7 +84,7 @@ class udiYoGarageDoor(udi_interface.Node):
         self.yoDoorSensor  = YoLinkGarageDoorSen(self.csName, self.csid, self.csseckey, self.devInfo[0], self.updateStatus)
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.csName, self.csid, self.csseckey, self.devInfo[1], self.updateStatus)
         self.yoDoorSensor.initNode()
-        self.yoDoorControl.initNode()
+       
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
