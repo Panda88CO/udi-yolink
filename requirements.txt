@@ -1,4 +1,5 @@
 requests_oauth2
+requests_oauthlib
 udi_interface>=3.0.24
 paho-mqtt
 requests>=2.22.0

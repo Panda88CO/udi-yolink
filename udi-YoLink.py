@@ -14,7 +14,7 @@ from udiYoGarageDoor import udiYoGarageDoor
 from udiYoMotionSensor import udiYoMotionSensor
 from udiYoLeakSensor import udiYoLeakSensor
 
-from yoLinkPacOauth import YoLinkDevicesPAC
+from yoLinkPACOauth import YoLinkDevicesPAC
 from yoLinkOauth import YoLinkDevices
 
 logging = udi_interface.LOGGER

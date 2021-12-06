@@ -22,7 +22,6 @@ class YoLinkDevices(object):
         yolink.client_secret = client_secKey
         yolink.yolinkOauth = OAuth2Session(yolink.client_id, redirect_uri=yolink.redirect_uri,scope=["create"])
         #authorization_url, state = self.yolinkOauth.authorization_url(authorization_base_url)
-       
         #token = yolink.yolinkOauth.fetch_token(yolink.token_url, client_secret=yolink.client_secret, authorization_response=yolink.redirect_response)
        
      
@@ -70,5 +69,7 @@ class YoLinkDevices(object):
         #print("Header:{0} Data:{1}\n".format(headersTemp, dataTemp))
         r = requests.post(yolink.yolinkURL, data=json.dumps(data), headers=headers1) 
         info = r.json()
-
+        f = open('devices.json', 'w')
+        json.dump(info, f)  
+        f.close()       
         return(info)
