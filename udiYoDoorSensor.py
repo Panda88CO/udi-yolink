@@ -9,7 +9,6 @@ from os import truncate
 import udi_interface
 import sys
 import time
-from yolinkGarageDoorToggle import YoLinkGarageDoorCtrl
 from yolinkGarageDoorSensor import YoLinkGarageDoorSen
 
 

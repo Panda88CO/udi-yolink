@@ -10,7 +10,7 @@ import udi_interface
 import sys
 import time
 from yolinkGarageDoorToggle import YoLinkGarageDoorCtrl
-from yolinkGarageDoorSensor import YoLinkGarageDoorSen
+
 
 
 logging = udi_interface.LOGGER
@@ -40,8 +40,6 @@ class udiYoGarageDoor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 0, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]

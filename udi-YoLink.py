@@ -12,7 +12,7 @@ import time
 
 from udiYoSwitch import udiYoSwitch
 from udiYoTHsensor import udiYoTHsensor 
-from udiYoGarageDoor import udiYoGarageDoor
+from udiYoGarageDoorCtrl import udiYoGarageDoor
 from udiYoMotionSensor import udiYoMotionSensor
 from udiYoLeakSensor import udiYoLeakSensor
 
@@ -43,7 +43,7 @@ class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
         super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  
         
-        
+        '''
         UaID = "ua_D78FFCACB1A8465ABE5279E68E201E7B"
         SecID = "sec_v1_Tuqy3L7UqL/t/R3P5xpcBQ=="
         csid = '60dd7fa7960d177187c82039'
@@ -118,7 +118,7 @@ class YoLinkSetup (udi_interface.Node):
                 "type": "LeakSensor"
                 }
 
-        '''
+        
             {
                 "deviceId": "d88b4c010002e621",
                 "deviceUDID": "5c4a0f90dd3e48cf91c597bc0aba6e7d",
@@ -171,69 +171,43 @@ class YoLinkSetup (udi_interface.Node):
                 "type": "Outlet"
             },
 
-
         '''
+        self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
-        self.poly.subscribe(self.poly.STOP, self.stop)
+
 
         self.Parameters = Custom(polyglot, 'customparams')
         self.Notices = Custom(polyglot, 'notices')
        
         logging.debug('self.address : ' + str(self.address))
-        logging.debug('self.name :' + str(self.name))
-        self.hb = 0
-      
+        logging.debug('self.name :' + str(self.name))   
         
         self.nodeDefineDone = False
         self.longPollCountMissed = 0
 
-        logging.debug('Controller init DONE')
-        
         self.poly.ready()
-        self.poly.addNode(self)
+        #self.poly.addNode(self)
 
-        self.node = polyglot.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node = polyglot.getNode(address)
+        #self.node.setDriver('ST', 1, True, True)
+        logging.debug('Controller init DONE')
 
-
-    def getDeviceList1(self):
-        logging.debug ('getDeviceList1')
-    
-        self.yoDevices = YoLinkDevices(self.csid, self.csseckey)
-        webLink = self.yoDevices.getAuthURL()
-        #self.Parameters['REDIRECT_URL'] = ''
-        self.poly.Notices['url'] = 'Copy this address to browser. Follow screen to long. After screen refreshes copy resulting  redirect URL (address bar) into config REDICRECT_URL: ' + str(webLink) 
-
-
-
-    def getDeviceList2(self):
-        logging.debug('Start executing getDeviceList2')
-        self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
-        self.yoDevices = YoLinkDevicesPAC(self.uaid, self.secretKey)
-        return(self.yoDevices.getDeviceList())
-
-    def getDeviceList3(self):
-        if (os.path.exists('./devices.json')):
-            dataFile = open('./devices.json', 'r')
-            tmpJson = json.load(dataFile)
-            dataFile.close()
-            self.deviceList = tmpJson['data']['list']
 
     def start (self):
-        self.redirectURL = "" 
         logging.debug('Start executing start')
+        self.redirectURL = "" 
         self.tokenObtined = False
         self.deviceList = None
         self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
 
         self.getDeviceList3()
-
-        #while self.deviceList == None:
-        #    time.sleep(2)
-        #    logging.info('Waiting to retrieve devise list')
+                
+        while self.deviceList == None:
+            time.sleep(2)
+            logging.info('Waiting to retrieve devise list')
         #self.deviceList = self.getDeviceList2()
 
         logging.debug( self.deviceList)
@@ -311,6 +285,31 @@ class YoLinkSetup (udi_interface.Node):
         self.node.setDriver('ST', 0, True, True)
         exit()
 
+    def getDeviceList1(self):
+        logging.debug ('getDeviceList1')
+    
+        self.yoDevices = YoLinkDevices(self.csid, self.csseckey)
+        webLink = self.yoDevices.getAuthURL()
+        #self.Parameters['REDIRECT_URL'] = ''
+        self.poly.Notices['url'] = 'Copy this address to browser. Follow screen to long. After screen refreshes copy resulting  redirect URL (address bar) into config REDICRECT_URL: ' + str(webLink) 
+
+
+    def getDeviceList2(self):
+        logging.debug('Start executing getDeviceList2')
+        self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
+        self.yoDevices = YoLinkDevicesPAC(self.uaid, self.secretKey)
+        self.deviceList = self.yoDevices.getDeviceList()
+
+    def getDeviceList3(self):
+        logging.debug('reading /devices.json')
+        if (os.path.exists('./devices.json')):
+            logging.debug('reading /devices.json')
+            dataFile = open('./devices.json', 'r')
+            tmp= json.load(dataFile)
+            dataFile.close()
+            self.deviceList = tmp['data']['list']
+
+
     def systemPoll (self, type):
         logging.info('System Poll executing')
 
@@ -321,9 +320,6 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('handleParams')
         self.Parameters.load(userParam)
         self.poly.Notices.clear()
-        csid = '60dd7fa7960d177187c82039'
-        csseckey = '3f68536b695a435d8a1a376fc8254e70'
-        csName = 'Panda88'
         
         if 'USER_EMAIL' in userParam:
             email = userParam['USER_EMAIL']
@@ -401,7 +397,7 @@ class YoLinkSetup (udi_interface.Node):
             self.redirect_URL = userParam['REDIRECT_URL']
         else:
             self.poly.Notices['redirect'] = 'Missing REDIRECT_URL parameter'
-            self.redirectURL = ""        
+            self.redirectURL = ''       
         
 
         '''
@@ -460,10 +456,10 @@ class YoLinkSetup (udi_interface.Node):
         '''
         logging.debug('done with parameter processing')
  
-    id = 'setup'
-    drivers = [
-            {'driver': 'ST', 'value':0, 'uom':2},
-            ]
+    #id = 'setup'
+    #drivers = [
+    #       {'driver': 'ST', 'value':0, 'uom':25},
+    #       ]
 
 if __name__ == "__main__":
     try:

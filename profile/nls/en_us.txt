@@ -1,3 +1,9 @@
+
+ND-setup-NAME = YoLink Switch
+ND-setup-ICON = GenericCtrl
+ST-nlsetup-ST-NAME = Nodeserver Status
+
+
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = GenericCtrl
 

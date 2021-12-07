@@ -1,4 +1,17 @@
 <nodeDefs> 
+ <nodeDef id="setup" nls="nlssetup">
+      <editors />
+      <sts>
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
    <nodeDef id="yoswitch" nls="nlsswitch">
       <editors />
       <sts>
