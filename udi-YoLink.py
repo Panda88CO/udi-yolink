@@ -22,7 +22,7 @@ from yoLinkOauth import YoLinkDevices
 logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
 polyglot = None
-Parameters = None
+#Parameters = None
 
 client_id = '60dd7fa7960d177187c82039'
 client_secret = '3f68536b695a435d8a1a376fc8254e70'
@@ -189,10 +189,11 @@ class YoLinkSetup (udi_interface.Node):
         self.longPollCountMissed = 0
 
         self.poly.ready()
-        #self.poly.addNode(self)
+        self.poly.addNode(self)
 
-        #self.node = polyglot.getNode(address)
-        #self.node.setDriver('ST', 1, True, True)
+        self.node = polyglot.getNode(address)
+        self.node.setDriver('ST', 1, True, True)
+        self.devicesReady = False
         logging.debug('Controller init DONE')
 
 
@@ -202,10 +203,10 @@ class YoLinkSetup (udi_interface.Node):
         self.tokenObtined = False
         self.deviceList = None
         self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
-
+        logging.info('getDeviceList3')
         self.getDeviceList3()
                 
-        while self.deviceList == None:
+        while not self.devicesReady:
             time.sleep(2)
             logging.info('Waiting to retrieve devise list')
         #self.deviceList = self.getDeviceList2()
@@ -265,20 +266,7 @@ class YoLinkSetup (udi_interface.Node):
                     #if self.deviceList[dev]['type'] == 'MotionSensor':                     
                 else:
                     logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
-        '''
-        #rememebr names must be small letters
-        udiYoTHsensor(polyglot, 'yotemp', 'yotemp', 'Yolink Wine Twmp', csName, csid, csseckey, winecooler, self.yolinkURL,self.mqttURL, self.mqttPort)
-        udiYoSwitch(polyglot, 'yoswitch', 'yoswitch', 'Playground', csName, csid, csseckey, devInfo, self.yolinkURL,self.mqttURL, self.mqttPort )
-        udiYoSwitch(polyglot, 'yoswitch2', 'yoswitch2', 'Matias Garden', csName, csid, csseckey, devInfo2, self.yolinkURL,self.mqttURL, self.mqttPort )
-        udiYoTHsensor(polyglot, 'yotemp1', 'yotemp1', 'Yolink Pool Temp', csName, csid, csseckey, poolTemp, self.yolinkURL,self.mqttURL, self.mqttPort )
-        udiYoTHsensor(polyglot, 'yotemp2', 'yotemp2', 'Yolink Pool Temp', csName, csid, csseckey, outdoorTemp, self.yolinkURL,self.mqttURL, self.mqttPort )
-        udiYoGarageDoor(polyglot, 'yogarage1', 'yogarage1', 'Yolink Grage Door', csName, csid, csseckey, garageDoor, self.yolinkURL,self.mqttURL, self.mqttPort )
-        udiYoMotionSensor(polyglot, 'yomotion1', 'yomotion1', 'Yolink Motions Sensor', csName, csid, csseckey, motion, self.yolinkURL,self.mqttURL, self.mqttPort )
-        udiYoLeakSensor(polyglot, 'yowater1', 'yowater1', 'Yolink Leak Sensor', csName, csid, csseckey, waterSensor, self.yolinkURL,self.mqttURL, self.mqttPort )
-        '''
-        mqtt_URL= 'api.yosmart.com'
-        mqtt_port = 8003
-        yolink_URL ='https://api.yosmart.com/openApi'
+
 
     def stop(self):
         logging.info('Stop Called:')
@@ -302,12 +290,18 @@ class YoLinkSetup (udi_interface.Node):
 
     def getDeviceList3(self):
         logging.debug('reading /devices.json')
+        logging.debug(os.getcwd())
         if (os.path.exists('./devices.json')):
             logging.debug('reading /devices.json')
             dataFile = open('./devices.json', 'r')
             tmp= json.load(dataFile)
+            logging.debug(tmp)
             dataFile.close()
             self.deviceList = tmp['data']['list']
+            logging.debug(self.deviceList)
+            self.devicesReady = True
+        else:
+             logging.debug('devices.json does not exist')
 
 
     def systemPoll (self, type):
@@ -456,10 +450,10 @@ class YoLinkSetup (udi_interface.Node):
         '''
         logging.debug('done with parameter processing')
  
-    #id = 'setup'
-    #drivers = [
-    #       {'driver': 'ST', 'value':0, 'uom':25},
-    #       ]
+    id = 'setup'
+    drivers = [
+           {'driver': 'ST', 'value':0, 'uom':25},
+           ]
 
 if __name__ == "__main__":
     try:
