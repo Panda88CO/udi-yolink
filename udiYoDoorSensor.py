@@ -9,7 +9,10 @@ from os import truncate
 import udi_interface
 import sys
 import time
-from yolinkMotionSensor import YoLinkMotionSen
+from yolinkGarageDoorToggle import YoLinkGarageDoorCtrl
+from yolinkGarageDoorSensor import YoLinkGarageDoorSen
+
+
 logging = udi_interface.LOGGER
 Custom = udi_interface.Custom
 polyglot = None
@@ -23,14 +26,14 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class udiYoMotionSensor(udi_interface.Node):
+class udiYoGarageDoor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yomotionsensor'
+    id = 'yogaragedoor'
     
     '''
        drivers = [
-            'GV0' = Motin Alert
-            'GV1' = Battery Level
+            'GV0' = DoorState
+            'GV1' = Batery
             'GV8' = Online
             ]
 
@@ -77,9 +80,11 @@ class udiYoMotionSensor(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkMotionSensor')
-        self.yoMotionsSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
-        self.yoMotionsSensor.initNode()
+        print('start - YoLinkThsensor')
+        self.yoDoorSensor  = YoLinkGarageDoorSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+       
+        self.yoDoorSensor.initNode()
+       
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
@@ -96,53 +101,43 @@ class udiYoMotionSensor(udi_interface.Node):
         self.Parameters.load(params)
     '''
     def initNode(self):
-        self.yoMotionsSensor.refreshSensor()
+        self.yoDoorSensor.refreshSensor()
 
     
     def stop (self):
-        logging.info('Stop not implemented')
+        logging.info('Stop ')
         self.node.setDriver('ST', 0, True, True)
-        self.yoMotionsSensor.shut_down()
-
-    '''
-    def yoTHsensor.bool2Nbr(self, bool):
-        if bool:
-            return(1)
-        else:
-            return(0)
-    '''
-    
-    def MotionState(self):
-        if  self.yoMotionsSensor.motionState() == 'normal':
-            return(0)
-        else:
-            return(1)
+        self.yoDoorSensor.shut_down()
+        self.yoDoorControl.shut_down()
 
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
-        self.yoMotionsSensor.updateCallbackStatus(data)
-        #motionState = self.yoMotonsSensor.getMotion()
-
+        self.yoTHsensor.updateCallbackStatus(data)
         logging.debug(data)
+        alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
-            self.node.setDriver('GV1', self.MotionState(), True, True)
-            self.node.setDriver('GV2', self.yoMotionsSensor.getBattery(), True, True)
-            self.node.setDriver('GV8', self.yoMotionsSensor.bool2Nbr(self.yoMotionsSensor.getOnlineStatus()), True, True)
+            self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
+            self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
+            self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoTHsensor.getOnlineStatus()), True, True)
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
-            self.yoMotionsSensor.refreshSensor()
+            self.yoDoorSensor.refreshSensor()
 
     def update(self, command = None):
-        logging.info('THsensor Update Status Executed')
-        self.yoMotionsSensor.refreshState()
+        logging.info('GarageDoor Update Status Executed')
+        self.yoDoorSensor.refreshState()
        
+    def toggleDoor(self, command = None):
+        logging.info('GarageDoor Toggle Door')
+        self.yoDoorControl.toggleDevice()
 
     commands = {
                 'UPDATE': update,
+                'TOGGLE': toggleDoor
                 }
 
 

@@ -6,6 +6,8 @@ MIT License
 from os import truncate
 import udi_interface
 import sys
+import os
+import json
 import time
 
 from udiYoSwitch import udiYoSwitch
@@ -199,26 +201,39 @@ class YoLinkSetup (udi_interface.Node):
 
     def getDeviceList1(self):
         logging.debug ('getDeviceList1')
+    
         self.yoDevices = YoLinkDevices(self.csid, self.csseckey)
         webLink = self.yoDevices.getAuthURL()
-        self.poly.Notices['url'] = 'Copy this address to browser: ' + str(webLink) 
-        self.poly.Notices['url'] = 'Input redirected address to REDIRECR address field'         
-        while self.redirect_URL == "":
-            time.sleep(2)
-        token = self.yoDevices.getToken(self.csseckey, self.redirect_URL)
+        #self.Parameters['REDIRECT_URL'] = ''
+        self.poly.Notices['url'] = 'Copy this address to browser. Follow screen to long. After screen refreshes copy resulting  redirect URL (address bar) into config REDICRECT_URL: ' + str(webLink) 
 
-        return( self.yoDevices(token, self.csid, self.csseckey))
+
 
     def getDeviceList2(self):
-        logging.debug('Start executing')
+        logging.debug('Start executing getDeviceList2')
         self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         self.yoDevices = YoLinkDevicesPAC(self.uaid, self.secretKey)
         return(self.yoDevices.getDeviceList())
 
+    def getDeviceList3(self):
+        if (os.path.exists('./devices.json')):
+            dataFile = open('./devices.json', 'r')
+            tmpJson = json.load(dataFile)
+            dataFile.close()
+            self.deviceList = tmpJson['data']['list']
+
     def start (self):
-        logging.debug('Start executing')
+        self.redirectURL = "" 
+        logging.debug('Start executing start')
+        self.tokenObtined = False
+        self.deviceList = None
         self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
-        self.deviceList = self.getDeviceList1()
+
+        self.getDeviceList3()
+
+        #while self.deviceList == None:
+        #    time.sleep(2)
+        #    logging.info('Waiting to retrieve devise list')
         #self.deviceList = self.getDeviceList2()
 
         logging.debug( self.deviceList)
@@ -388,6 +403,19 @@ class YoLinkSetup (udi_interface.Node):
             self.poly.Notices['redirect'] = 'Missing REDIRECT_URL parameter'
             self.redirectURL = ""        
         
+
+        '''
+        if self.redirectURL != "" :
+            #self.poly.Notices['url'] = 'Input redirected address to REDIRECR address field'       
+            logging.debug(self.redirect_URL)
+            logging.debug('getting token ')  
+            self.token = self.yoDevices.getToken(self.csseckey, self.redirect_URL)
+            logging.debug(self.token)
+            temp = self.yoDevices.getDeviceList(self.token, self.csid, self.csseckey)
+            logging.debug(temp)
+            self.deviceList = temp['data']['list']
+            logging.debug( self.deviceList)
+        '''
         '''
         if local_email != '' or local_password != '' or local_ip != '':
             logging.debug('local access true, cfg = {} {} {}'.format(local_email, local_password, local_ip))
@@ -431,7 +459,11 @@ class YoLinkSetup (udi_interface.Node):
             self.poly.Notices['cfg'] = 'Tesla PowerWall NS needs configuration.'
         '''
         logging.debug('done with parameter processing')
-
+ 
+    id = 'setup'
+    drivers = [
+            {'driver': 'ST', 'value':0, 'uom':2},
+            ]
 
 if __name__ == "__main__":
     try:

@@ -33,7 +33,9 @@ class YoLinkDevices(object):
         return(authorization_url)
        
     def getToken(yolink, client_Sec, redirectResp) :   
-        return(yolink.yolinkOauth.fetch_token(yolink.token_url, client_secret=client_Sec, authorization_response=redirectResp))
+        # can considr if there is a use for refreshToken???
+        yolink.token = yolink.yolinkOauth.fetch_token(yolink.token_url, client_secret=client_Sec, authorization_response=redirectResp)
+        return(yolink.token)
 
     '''
     def get_access_token(yolink, uaId, secret_key, url="https://api.yosmart.com/open/yolink/token"):
