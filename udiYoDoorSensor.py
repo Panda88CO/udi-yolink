@@ -6,14 +6,18 @@ Polyglot TEST v3 node server
 MIT License
 """
 from os import truncate
-import udi_interface
+
 import sys
 import time
 from yolinkGarageDoorSensor import YoLinkGarageDoorSen
 
-
-logging = udi_interface.LOGGER
-Custom = udi_interface.Custom
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
 polyglot = None
 Parameters = None
 n_queue = []

@@ -3,7 +3,13 @@ import json
 import os
 import sys
 import time
-import logging
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
 
 import paho.mqtt.client as mqtt
 #from logger import getLogger

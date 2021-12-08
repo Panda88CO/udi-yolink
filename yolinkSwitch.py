@@ -1,9 +1,15 @@
 import json
 import time
-import logging
+
 
 from yolink_mqtt_class import YoLinkMQTTDevice
-logging.basicConfig(level=logging.DEBUG)
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
 
 
 

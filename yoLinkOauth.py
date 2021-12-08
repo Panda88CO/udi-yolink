@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-
-
 import requests
 import time
 import json
 from requests_oauthlib import OAuth2Session
 import hashlib
-
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
 
 class YoLinkDevices(object):
     def __init__(yolink, clientId, client_secKey, tokenURL='https://api.yosmart.com/open/yolink/token', pacURL = 'https://api.yosmart.com/open/yolink/v2/api' ):

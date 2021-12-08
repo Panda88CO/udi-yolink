@@ -6,12 +6,16 @@ Polyglot TEST v3 node server
 MIT License
 """
 from os import truncate
-import udi_interface
-import sys
-import time
+
 from yolinkLeakSensor import YoLinkLeakSen
-logging = udi_interface.LOGGER
-Custom = udi_interface.Custom
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+    
 polyglot = None
 Parameters = None
 n_queue = []
@@ -48,7 +52,7 @@ class udiYoLeakSensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('TestYoLinkNode INIT')
+        logging.debug('udiYoLeakSensor  INIT')
         self.csid = csid
         self.csseckey = csseckey
         self.csName = csName
@@ -79,8 +83,11 @@ class udiYoLeakSensor(udi_interface.Node):
     def start(self):
         print('start - YoLinkLeakSensor')
         self.yoLeakSensor  = YoLinkLeakSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
-        self.yoLeakSensor.initNode()
-        self.node.setDriver('ST', 1, True, True)
+        if self.yoLeakSensor:
+            self.yoLeakSensor.initNode()
+            self.node.setDriver('ST', 1, True, True)
+        else:
+            logging.error('Not able to connect leakSensor')
         #time.sleep(3)
     
     def heartbeat(self):

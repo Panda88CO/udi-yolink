@@ -5,13 +5,21 @@ Polyglot TEST v3 node server
 
 MIT License
 """
+
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+
 from os import truncate
-import udi_interface
+#import udi_interface
 import sys
 import time
 from yolinkSwitch import YoLinkSW
-logging = udi_interface.LOGGER
-Custom = udi_interface.Custom
+
 polyglot = None
 Parameters = None
 n_queue = []

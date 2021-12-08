@@ -1,17 +1,18 @@
-import hashlib
 import json
-import os
-import sys
 import time
-import threading
-import paho.mqtt.client as mqtt
-import logging
-import datetime
-import pytz
 
-from queue import Queue
+
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+
+
 from yolink_mqtt_class import YoLinkMQTTDevice
-logging.basicConfig(level=logging.DEBUG)
+
 
 #from yolink_mqtt_client import YoLinkMQTTClient
 """

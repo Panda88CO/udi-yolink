@@ -1,9 +1,15 @@
 import json
 import time
-import logging
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
 
 from yolink_mqtt_class import YoLinkMQTTDevice
-logging.basicConfig(level=logging.DEBUG)
+
 
 class YoLinkDoorSensor(YoLinkMQTTDevice):
     def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):

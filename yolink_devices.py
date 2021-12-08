@@ -3,7 +3,13 @@ import time
 import json
 import requests
 import sys
-
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
 #from logger import getLogger
 #log = getLogger(__name__)
 

@@ -6,7 +6,13 @@ import json
 import requests
 from cryptography.fernet import Fernet
 from requests_oauthlib import OAuth2Session
-import logging
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
 
 
 headers = {}

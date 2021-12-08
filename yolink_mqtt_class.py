@@ -2,13 +2,19 @@
 import time
 import json
 import threading
-import logging
+
 from  datetime import datetime
 from dateutil.tz import *
 
+try:
+    import udi_interface
+    logging = udi_interface.LOGGER
+    Custom = udi_interface.Custom
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+import logging
 
-
-logging.basicConfig(level=logging.DEBUG)
 
 import paho.mqtt.client as mqtt
 from queue import Queue
@@ -121,14 +127,19 @@ class YoLinkMQTTDevice(object):
 
     def getStateValue(self, key):
         logging.debug(self.type+' - getStateValue')
-        attempts = 1
-        while key not in self.dataAPI[self.dData][self.dState] and attempts <3:
-            time.sleep(1)
-            attempts = attempts + 1
-        if key in self.dataAPI[self.dData][self.dState]:
-            return(self.dataAPI[self.dData][self.dState][key])
-        else:
-            return('NA')
+        try:
+            attempts = 1
+            while key not in self.dataAPI[self.dData][self.dState] and attempts <3:
+                time.sleep(1)
+                attempts = attempts + 1
+            if key in self.dataAPI[self.dData][self.dState]:
+                return(self.dataAPI[self.dData][self.dState][key])
+            else:
+                return('NA')
+        except Exception as e:
+            logging.debug('getData exceptiom: {}'.format(e) )
+            return(None)
+  
 
     def getOnlineStatus(self):
         logging.debug(self.type+' - getOnlineStatus')
@@ -609,12 +620,22 @@ class YoLinkMQTTDevice(object):
         #time.sleep(2)
    
     def getState(self):
-        logging.debug(self.type +' - getState')
-        return(self.dataAPI[self.dData][self.dState][self.dState])
+        try:
+            logging.debug(self.type +' - getState')
+            return(self.dataAPI[self.dData][self.dState][self.dState])
+        except Exception as e:
+            logging.debug('getState exceptiom: {}'.format(e) )
+            return(None)
 
     def getData(self):
-        logging.debug(self.type +' - getDAta')
-        return(self.dataAPI[self.dData][self.dState])
+        try:
+            logging.debug(self.type +' - getDAta')
+            return(self.dataAPI[self.dData][self.dState])
+        except Exception as e:
+            logging.debug('getData exceptiom: {}'.format(e) )
+            return(None)
+
+
 
     def refreshDelays(self):
         logging.debug(str(self.type)+ ' - refreshDelays')
