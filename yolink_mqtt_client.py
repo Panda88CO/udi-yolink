@@ -1,6 +1,5 @@
 import hashlib
 import json
-import os
 import sys
 import time
 try:
@@ -83,6 +82,7 @@ class YoLinkMQTTClient(object):
         #logging.debug(msg.topic, msg.payload)
         
         payload = json.loads(msg.payload.decode("utf-8"))
+        logging.debug(payload)
         if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
             if payload['deviceId'] == self.deviceId :
                 #self.eventQueue.put(payload['msgid'])
