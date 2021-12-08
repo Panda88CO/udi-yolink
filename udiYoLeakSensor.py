@@ -15,7 +15,7 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
-    
+
 polyglot = None
 Parameters = None
 n_queue = []
@@ -129,7 +129,7 @@ class udiYoLeakSensor(udi_interface.Node):
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
         self.yoLeakSensor.updateCallbackStatus(data)
-        motionState = self.yoLeakSensor.getMootion()
+        #motionState = self.yoLeakSensor.getMootion()
 
         logging.debug(data)
         if self.node is not None:

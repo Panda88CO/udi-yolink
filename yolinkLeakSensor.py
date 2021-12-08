@@ -1,6 +1,8 @@
 
 
 import time
+from yolink_mqtt_class import YoLinkMQTTDevice
+
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -9,7 +11,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-from yolink_mqtt_class import YoLinkMQTTDevice
+
 
 
 class YoLinkLeakSen(YoLinkMQTTDevice):
