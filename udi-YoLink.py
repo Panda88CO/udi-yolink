@@ -262,8 +262,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Hub not added')    
                     isyNbr -= 1  
                     #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                         
-                    #if self.deviceList[dev]['type'] == 'MotionSensor':                     
+                                         
                 else:
                     logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
 
