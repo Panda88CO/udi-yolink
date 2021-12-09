@@ -67,7 +67,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
-   <nodeDef id="yogaragedoor" nls="nlsgaragedoor">
+   <nodeDef id="yodoorsensor" nls="nlsdoorsensor">
       <editors />
       <sts>
          <st id="GV0" editor="doorState" />
@@ -82,10 +82,23 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   <nodeDef id="yogaragectrl" nls="nlsgaragctrl">
+      <editors />
+      <sts>
+         <st id="GV8" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+         </sends>
+         <accepts>
             <cmd id="TOGGLE" > 
          </accepts>
       </cmds>
-
    </nodeDef> 
       <nodeDef id="yomotionsensor" nls="nlsmotionsensor">
       <editors />
@@ -108,7 +121,7 @@
    </nodeDef> 
 
       </nodeDef> 
-      <nodeDef id="yoleaksensor" nls="nlsleaksensor">
+      <nodeDef id="yoleaksensor" nls="nlssensor">
       <editors />
       <sts>
          <st id="GV0" editor="waterstate" />

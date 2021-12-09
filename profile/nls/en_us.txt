@@ -3,10 +3,8 @@ ND-setup-NAME = YoLink Switch
 ND-setup-ICON = GenericCtrl
 ST-nlsetup-ST-NAME = Nodeserver Status
 
-
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = GenericCtrl
-
 ST-nlsswitch-GV0-NAME = Switch State
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
@@ -14,16 +12,15 @@ ST-nlsswitch-GV3-NAME = Watt
 ST-nlsswitch-GV4-NAME = Energy
 ST-nlsswitch-GV5-NAME = online
 ST-nlsswitch-ST-NAME = Nodeserver Status
-
 CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
 
 
+
 ND-yothsensor-NAME = YoLink THsensor
 ND-yothsensor-ICON = TempSensor
-
 ST-nlsthsensor-CLITEMP-NAME = Current Temp (C)
 ST-nlsthsensor-GV1-NAME = Low Temp Alarm
 ST-nlsthsensor-GV2-NAME = High Temp Alarm
@@ -34,40 +31,39 @@ ST-lsthsensor-BATLVL-NAME = Battery Level
 ST-nlsthsensor-GV7-NAME = Battery Alarm
 ST-nlsthsensor-GV8-NAME = online
 ST-nlsthsensor-ST-NAME = Nodeserver Status
-
 CMD-nlsthsensor-UPDATE-NAME = Update Status
 
 
-ND-yogaragedoor-NAME = YoLink Switch
+ND-yogaragectrl-NAME = YoLink GAragre Controller
+ND-yogaragectrl-ICON = GenericCtrl
+ST-nlsgaragctrl-GV8-NAME = online
+ST-nlsgaragctrl-ST-NAME = Nodeserver Status
+CMD-nlsgaragctrl-TOGGLE-NAME = Toggle Door
+
+
+ND-yodoorsensor-NAME = YoLink Door Sensor
 ND-yogaragedoor-ICON = GenericCtrl
-
-ST-nlsgaragedoor-GV0-NAME = Garage Door State
-ST-nlsgaragedoor-GV1-NAME = Sensor Battery Level
-ST-nlsgaragedoor-GV8-NAME = online
-ST-nlsgaragedoor-ST-NAME = Nodeserver Status
-
+ST-nlsdoorsensor-GV0-NAME = Garage Door State
+ST-nlsdoorsensor-GV1-NAME = Sensor Battery Level
+ST-nlsdoorsensor-GV8-NAME = online
+ST-nlsdoorsensor-ST-NAME = Nodeserver Status
 CMD-nlsgaragedoor-UPDATE-NAME = Update Door Status
-CMD-nlsgaragedoor-TOGGLE-NAME = Toggle Door
 
 
 ND-yomotionsensor-NAME = YoLink Motion Sensor
 ND-yomotionsensor-ICON = GenericCtrl
-
 ST-nlsmotionsensor-GV0-NAME = Motoion State
 ST-nlsmotionsensor-GV1-NAME = Sensor Battery Level
 ST-nlsmotionsensor-GV8-NAME = online
 ST-nlsmotionsensor-ST-NAME = Nodeserver Status
-
 CMD-nlsmotionsensor-UPDATE-NAME = Update Motion Status
 
 ND-yoleaksensor-NAME = YoLink Water Sensor
 ND-yoleaksensor-ICON = GenericCtrl
-
 ST-nlsleaksensor-GV0-NAME = Water Sensor
 ST-nlsleaksensor-GV1-NAME = Sensor Battery Level
 ST-nlsleaksensor-GV8-NAME = online
 ST-nlsleaksensor-ST-NAME = Nodeserver Status
-
 CMD-nlsleaksensor-UPDATE-NAME = Update Motion Status
 
 
