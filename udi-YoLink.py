@@ -206,7 +206,7 @@ class YoLinkSetup (udi_interface.Node):
         self.redirectURL = "" 
         self.tokenObtined = False
         self.deviceList = None
-        self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
+        self.supportedYoTypes = ['Switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         logging.info('getDeviceList3')
         self.getDeviceList3()
                 
@@ -220,52 +220,53 @@ class YoLinkSetup (udi_interface.Node):
         isyNbr = 0
         isyName = 'yolink'  # has to be lower case and less than 13 chars
         for dev in range(0,len(self.deviceList)):
+            logging.debug('adding/checking device : {}'.format(self.deviceList[dev]['type']))
             if self.deviceList[dev]['type'] in self.supportedYoTypes:
                 isyNbr += 1
                 if self.deviceList[dev]['deviceId'] not in self.Parameters:
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['name'])
+                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['type']
+                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
 
-                if self.deviceList[dev]['type'] == 'switch':
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    udiYoSwitch(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                if self.deviceList[dev]['type'] == 'Switch':
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    udiYoSwitch(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'THsensor':
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'MultiOutlet':
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    #udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    #udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'DoorSensor':
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    #udiYoDoorSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    #udiYoDoorSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'Manipulator':
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    #udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    #udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'MotionSensor':     
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    udiYoMotionSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    udiYoMotionSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'Outlet':     
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    #udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    #udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'GarageDoor': 
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    udiYoGarageDoor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    udiYoGarageDoor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'LeakSensor': 
-                    logging.info('Adding device {}'.format( self.deviceList[dev]['name']))
-                    udiYoLeakSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
+                    udiYoLeakSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
 
                 elif self.deviceList[dev]['type'] == 'Hub':     
                     logging.info('Hub not added')    
                     isyNbr -= 1  
-                    #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['type'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
                                          
                 else:
                     logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))

@@ -62,6 +62,7 @@ class YoLinkMQTTClient(object):
             logging.info("Connecting to broker...")
             self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
             self.client.connect(self.mqtt_url, self.mqtt_port, 30)
+            #time.sleep(3)
             logging.debug ('connect:')
             self.client.loop_start()
             #self.client.loop_forever()
@@ -82,6 +83,7 @@ class YoLinkMQTTClient(object):
         #logging.debug(msg.topic, msg.payload)
         
         payload = json.loads(msg.payload.decode("utf-8"))
+        logging.debug('on_message')
         logging.debug(payload)
         if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
             if payload['deviceId'] == self.deviceId :
@@ -168,7 +170,8 @@ class YoLinkMQTTClient(object):
         #logging.debug('\n')
 
     def publish_data(self, data):
-        logging.debug('publish_data: ' + data['method'])
+        logging.debug('publish_data: ')
+        logging.debug(data)
         try:
             dataTemp = str(json.dumps(data))
             result = self.client.publish(self.topicReq, dataTemp)

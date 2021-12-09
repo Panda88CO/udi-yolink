@@ -23,7 +23,7 @@ class YoLinkLeakSen(YoLinkMQTTDevice):
         yolink.eventTime = 'Time'
         yolink.type = 'LeakSensor'
         time.sleep(1)
-        yolink.refreshSensor()
+        #yolink.refreshSensor()
 
     def refreshSensor(yolink):
         logging.debug('refreshWaterSensor')

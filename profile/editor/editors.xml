@@ -36,6 +36,9 @@
   <editor id = "motionstate" > 
      <range  uom="25" subset="0-1" nls="motionstate" />
 </editor>
-
+</editor>
+  <editor id = "waterstate" > 
+     <range  uom="25" subset="0-1" nls="waterstate" />
+</editor>
 
 </editors> 

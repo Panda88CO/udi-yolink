@@ -29,7 +29,7 @@ multiplier. These get updated at every shortPoll interval
 
 class udiYoLeakSensor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yomotionsensor'
+    id = 'yoleaksensor'
     
     '''
        drivers = [
@@ -120,7 +120,7 @@ class udiYoLeakSensor(udi_interface.Node):
     '''
     
     def waterState(self):
-        if  self.yoLeakSensor.motionState() == 'normal':
+        if  self.yoLeakSensor.probeState() == 'normal':
             return(0)
         else:
             return(1)

@@ -65,8 +65,8 @@ class YoLinkMQTTDevice(object):
                         ,'data':{ 'state':{} }
                         }
    
-        self.eventQueue = Queue()
-        self.mutex = threading.Lock()
+        #self.eventQueue = Queue()
+        #self.mutex = threading.Lock()
         self.timezoneOffsetSec = self.timezoneOffsetSec()
         self.yolinkMQTTclient.connect_to_broker()
         #self.loopTimeSec = updateTimeSec

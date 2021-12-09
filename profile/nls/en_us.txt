@@ -50,15 +50,26 @@ CMD-nlsgaragedoor-UPDATE-NAME = Update Door Status
 CMD-nlsgaragedoor-TOGGLE-NAME = Toggle Door
 
 
-ND-yomotionsensor-NAME = YoLink Switch
+ND-yomotionsensor-NAME = YoLink Motion Sensor
 ND-yomotionsensor-ICON = GenericCtrl
 
-ST-nlsmotonsensor-GV0-NAME = Garage Door State
-ST-nlsmotonsensor-GV1-NAME = Sensor Battery Level
-ST-nlsmotonsensor-GV8-NAME = online
-ST-nlsmotonsensor-ST-NAME = Nodeserver Status
+ST-nlsmotionsensor-GV0-NAME = Motoion State
+ST-nlsmotionsensor-GV1-NAME = Sensor Battery Level
+ST-nlsmotionsensor-GV8-NAME = online
+ST-nlsmotionsensor-ST-NAME = Nodeserver Status
 
-CMD-nlsmotonsensor-UPDATE-NAME = Update Motion Status
+CMD-nlsmotionsensor-UPDATE-NAME = Update Motion Status
+
+ND-yoleaksensor-NAME = YoLink Water Sensor
+ND-yoleaksensor-ICON = GenericCtrl
+
+ST-nlsleaksensor-GV0-NAME = Water Sensor
+ST-nlsleaksensor-GV1-NAME = Sensor Battery Level
+ST-nlsleaksensor-GV8-NAME = online
+ST-nlsleaksensor-ST-NAME = Nodeserver Status
+
+CMD-nlsleaksensor-UPDATE-NAME = Update Motion Status
+
 
 swstate-0 = Off
 swstate-1 = On
@@ -75,5 +86,7 @@ status-0 = Down
 status-1 = Up
 doorstate-0 = closed
 doorstate-1 = open
-motionstate-0 = No Motin
+motionstate-0 = No Motion
 motionstate-1 = Motion Detected
+waterstate-0 = Dry
+waterstate-1 = Wet

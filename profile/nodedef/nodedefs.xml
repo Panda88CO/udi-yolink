@@ -87,10 +87,31 @@
       </cmds>
 
    </nodeDef> 
-      <nodeDef id="yomotionsensor" nls="nlsmotonsensor">
+      <nodeDef id="yomotionsensor" nls="nlsmotionsensor">
       <editors />
       <sts>
          <st id="GV0" editor="motionstate" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV8" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+
+   </nodeDef> 
+
+      </nodeDef> 
+      <nodeDef id="yoleaksensor" nls="nlsleaksensor">
+      <editors />
+      <sts>
+         <st id="GV0" editor="waterstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV8" editor="online" />
          <st id="ST"  editor="status" />
