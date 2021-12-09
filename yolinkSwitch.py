@@ -75,11 +75,11 @@ class YoLinkSW(YoLinkMQTTDevice):
                 return('Unkown')
         else:
             return('Unkown')
- 
+    '''
     def getEnergy(self):
         logging.debug(self.type+' - getEnergy')
         return({'power':self.dataAPI[self.dData][self.dState]['power'], 'watt':self.dataAPI[self.dData][self.dState]['power']})
-
+    '''
 
 class YoLinkSwitch(YoLinkSW):
     def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):

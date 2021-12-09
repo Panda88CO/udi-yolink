@@ -18,7 +18,7 @@ from os import truncate
 #import udi_interface
 import sys
 import time
-from yolinkSwitch import YoLinkSW
+from yolinkOutlet import YoLinkOutl
 
 polyglot = None
 Parameters = None
@@ -31,29 +31,29 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class udiYoSwitch(udi_interface.Node):
+class udiYoOutlet(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yoswitch'
-    drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 30}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 33}, 
-            #{'driver': 'GV3', 'value': 0, 'uom': 44},
-            #{'driver': 'GV4', 'value': 0, 'uom': 44},
-            {'driver': 'GV5', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            ]
+    id = 'yooutlet'
     '''
        drivers = [
-            'GV0' =  switch State
+            'GV0' = Outlet State
             'GV1' = OnDelay
             'GV2' = OffDelay
             'GV3' = Power
             'GV4' = Energy
             'GV5' = Online
             ]
-
     ''' 
+    drivers = [
+            {'driver': 'GV0', 'value': 0, 'uom': 25},
+            {'driver': 'GV1', 'value': 0, 'uom': 30}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 33}, 
+            {'driver': 'GV3', 'value': 0, 'uom': 44},
+            {'driver': 'GV4', 'value': 0, 'uom': 44},
+            {'driver': 'GV5', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
+            ]
+
 
     def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__( polyglot, primary, address, name)   
@@ -101,7 +101,7 @@ class udiYoSwitch(udi_interface.Node):
 
     def start(self):
         print('start - YoLinkSw')
-        self.yoSwitch  = YoLinkSW(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoSwitch  = YoLinkOutl(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
         self.yoSwitch.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
@@ -136,10 +136,10 @@ class udiYoSwitch(udi_interface.Node):
             else:
                 self.node.setDriver('GV0', 0, True, True)
             tmp =  self.yoSwitch.getEnergy()
-            #power = tmp['power']
-            #watt = tmp['watt']
-            #self.node.setDriver('GV3', power, True, True)
-            #self.node.setDriver('GV4', watt, True, True)
+            power = tmp['power']
+            watt = tmp['watt']
+            self.node.setDriver('GV3', power, True, True)
+            self.node.setDriver('GV4', watt, True, True)
             self.node.setDriver('GV5', self.yoSwitch.bool2Nbr(self.yoSwitch.getOnlineStatus()), True, True)
         
         #while self.yoSwitch.eventPending():

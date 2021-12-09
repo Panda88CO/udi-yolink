@@ -15,13 +15,11 @@ class YoLinkMotionSen(YoLinkMQTTDevice):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback)
         yolink.methodList = ['getState' ]
         yolink.eventList = ['Alert' , 'getState', 'StatusChange']
-
-
         yolink.eventName = 'MotionEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'MotionSensor'
         time.sleep(2)
-        #yolink.refreshDevice()
+       
 
     def initNode(yolink):
         yolink.refreshDevice()

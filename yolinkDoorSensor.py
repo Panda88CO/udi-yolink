@@ -11,7 +11,7 @@ except ImportError:
 from yolink_mqtt_class import YoLinkMQTTDevice
 
 
-class YoLinkDoorSensor(YoLinkMQTTDevice):
+class YoLinkDoorSens(YoLinkMQTTDevice):
     def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
         yolink.methodList = ['getState' ]
@@ -19,9 +19,8 @@ class YoLinkDoorSensor(YoLinkMQTTDevice):
         yolink.GarageName = 'GarageEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'DoorSensor'
-
         time.sleep(2)
-        yolink.refreshDoorSensor()
+       
   
     def refreshDoorSensor(yolink):
         logging.debug(yolink.type+ ' - refreshDoorSensor') 
@@ -33,6 +32,21 @@ class YoLinkDoorSensor(YoLinkMQTTDevice):
     def doorData(yolink):
         return(yolink.getData())
         
+    def initNode(yolink):
+        yolink.refreshDevice()
     
+    def refreshSensor(yolink):
+        yolink.refreshDevice()
+
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, False)
 
 
+
+class YoLinkDoorSensor(YoLinkDoorSens):
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, deviceInfo, yolink.updateStatus, yolink_URL, mqtt_URL, mqtt_port)
+        yolink.initNode()
+
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, True)

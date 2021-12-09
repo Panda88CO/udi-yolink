@@ -11,24 +11,29 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 
 
-class YoLinkOutlet(YoLinkMQTTDevice):
+class YoLinkOutl(YoLinkMQTTDevice):
     def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
         
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
         yolink.eventList = ['StatusChange', 'Report', 'getState']
         yolink.stateList = ['open', 'closed', 'on', 'off']
-        yolink.ManipulatorName = 'ManipulatorEvent'
+        yolink.ManipulatorName = 'OutletrEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'Outlet'
         time.sleep(2)
         
-        yolink.refreshState()
+        #yolink.refreshState()
         #input()
-        yolink.refreshSchedules()
+        #yolink.refreshSchedules()
         #yolink.refreshFWversion()
 
 
+    def initNode(self):
+        self.refreshState()
+        self.refreshSchedules()
+        #self.refreshFWversion()
+        #print(' YoLinkSW - finished intializing')
  
     def setState(yolink, state):
         logging.debug(yolink.type + ' - setState')
@@ -64,8 +69,17 @@ class YoLinkOutlet(YoLinkMQTTDevice):
                 return('Unkown')
         else:
             return('Unkown')
-    '''
+    
     def getEnergy(yolink):
         logging.debug(yolink.type+' - getEnergy')
         return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
-    '''
+    
+    
+class YoLinkOutlet(YoLinkOutl):
+    def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey,  deviceInfo, self.updateStatus, yolink_URL, mqtt_URL, mqtt_port)
+        self.initNode()
+
+
+    def updateStatus(self, data):
+        self.updateCallbackStatus(data, True)

@@ -9,7 +9,7 @@ from os import truncate
 
 import sys
 import time
-from yolinkGarageDoorSensor import YoLinkGarageDoorSen
+from yolinkDoorSensor import YoLinkDoorSens
 
 try:
     import udi_interface
@@ -29,9 +29,9 @@ holds two values, the count and the count multiplied by a user defined
 multiplier. These get updated at every shortPoll interval
 '''
 
-class udiYoGarageDoor(udi_interface.Node):
+class udiYoDoorSensor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yogaragedoor'
+    id = 'yodoorsens'
     
     '''
        drivers = [
@@ -84,7 +84,7 @@ class udiYoGarageDoor(udi_interface.Node):
 
     def start(self):
         print('start - YoLinkThsensor')
-        self.yoDoorSensor  = YoLinkGarageDoorSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoDoorSensor  = YoLinkDoorSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
        
         self.yoDoorSensor.initNode()
        
