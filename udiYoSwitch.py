@@ -59,19 +59,11 @@ class udiYoSwitch(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('TestYoLinkNode INIT')
-        #self.csid = '60dd7fa7960d177187c82039'
+
         self.csid = csid
-        #self.csseckey = '3f68536b695a435d8a1a376fc8254e70'
         self.csseckey = csseckey
-        #self.csName = 'Panda88'
         self.csName = csName
-        #self.devInfo = { "deviceId": "d88b4c0100034906",
-        #           "deviceUDID": "e091320786e5447099c8b1c93ce47a60",
-        #            "name": "S Playground Switch",
-        #            "token": "7f43fbce-dece-4477-9660-97804b278190",
-        #            "type": "Switch"
-        #            }
+
   
         self.mqtt_URL= mqtt_URL
         self.mqtt_port = mqtt_port

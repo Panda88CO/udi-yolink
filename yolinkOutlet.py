@@ -29,9 +29,9 @@ class YoLinkOutl(YoLinkMQTTDevice):
         #yolink.refreshFWversion()
 
 
-    def initNode(self):
-        self.refreshState()
-        self.refreshSchedules()
+    def initNode(yolink):
+        yolink.refreshState()
+        yolink.refreshSchedules()
         #self.refreshFWversion()
         #print(' YoLinkSW - finished intializing')
  

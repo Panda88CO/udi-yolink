@@ -29,6 +29,19 @@ CMD-nlsoutlet-SWCTRL-NAME =  Switch control
 CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
 
+ND-yomanipulator-NAME = YoLink Manipulator
+ND-yomanipulator-ICON = GenericCtrl
+ST-nlsmanipulator-GV0-NAME = Manipulator State
+ST-nlsmanipulator-GV1-NAME = On Delay (min)
+ST-nlsmanipulator-GV2-NAME = Off Delay (min)
+ST-nlsmanipulator-GV5-NAME = Online
+ST-nlsmanipulator-ST-NAME = Nodeserver Status
+CMD-nlsmanipulator-UPDATE-NAME = Update Status
+CMD-nlsmanipulator-MACTRL-NAME =  Switch control
+CMD-nlsmanipulator-ONDELAY-NAME =  Set On Delay (min)
+CMD-nlsmanipulator-OFFDELAY-NAME =  Set Off Delay (min)
+
+
 ND-yothsensor-NAME = YoLink THsensor
 ND-yothsensor-ICON = TempSensor
 ST-nlsthsensor-CLITEMP-NAME = Current Temp (C)
@@ -96,3 +109,5 @@ motionstate-0 = No Motion
 motionstate-1 = Motion Detected
 waterstate-0 = Dry
 waterstate-1 = Wet
+mastate-0 = Closed
+mastate-1 = Open

@@ -72,6 +72,35 @@
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yomanipulator" nls="nlsmanipulator">
+      <editors />
+      <sts>
+         <st id="GV0" editor="mastate" />
+         <st id="GV1" editor="delay" />
+         <st id="GV2" editor="delay" />
+
+         <st id="GV5" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="MACTRL" > 
+               <p id="" editor="mastate" init="GV0" /> 
+            </cmd >
+            <cmd id="ONDELAY" > 
+               <p id="" editor="delay" init="GV1" /> 
+             </cmd >   
+            <cmd id="OFFDELAY" > 
+               <p id="" editor="delay" init="GV2" /> 
+             </cmd >
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
    <nodeDef id="yothsensor" nls="nlsthsensor">
       <editors />
@@ -114,6 +143,9 @@
             <cmd id="UPDATE" /> 
          </accepts>
       </cmds>
+
+
+
    <nodeDef id="yogaragectrl" nls="nlsgaragctrl">
       <editors />
       <sts>

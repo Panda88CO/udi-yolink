@@ -25,22 +25,16 @@ Parameters = None
 n_queue = []
 count = 0
 
-'''
-TestNode is the device class.  Our simple counter device
-holds two values, the count and the count multiplied by a user defined
-multiplier. These get updated at every shortPoll interval
-'''
 
-class udiYoOutlet(udi_interface.Node):
+
+class udiYoManipulator(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yooutlet'
+    id = 'yomanipulator'
     '''
        drivers = [
-            'GV0' = Outlet State
+            'GV0' = Manipulator State
             'GV1' = OnDelay
             'GV2' = OffDelay
-            'GV3' = Power
-            'GV4' = Energy
             'GV5' = Online
             ]
     ''' 
@@ -48,8 +42,6 @@ class udiYoOutlet(udi_interface.Node):
             {'driver': 'GV0', 'value': 0, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 30}, 
             {'driver': 'GV2', 'value': 0, 'uom': 33}, 
-            {'driver': 'GV3', 'value': 0, 'uom': 44},
-            {'driver': 'GV4', 'value': 0, 'uom': 44},
             {'driver': 'GV5', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -57,29 +49,19 @@ class udiYoOutlet(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__( polyglot, primary, address, name)   
-        #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
-        #  
-        logging.debug('TestYoLinkNode INIT')
- 
-        
+        logging.debug('udiYoManipulator INIT')
+   
+        self.mqtt_URL= mqtt_URL
+        self.mqtt_port = mqtt_port
+        self.yolink_URL = yolink_URL
         self.csid = csid
         self.csseckey = csseckey
         self.csName = csName
 
-        self.mqtt_URL= mqtt_URL
-        self.mqtt_port = mqtt_port
-        self.yolink_URL = yolink_URL
-
         self.devInfo =  deviceInfo   
         self.yoOutlet = None
-        #self.address = address
-        #self.poly = polyglot
-        #self.count = 0
-        #self.n_queue = []
 
-        #self.Parameters = Custom(polyglot, 'customparams')
-        # subscribe to the events we want
-        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
+
         polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         # start processing events and create add our controller node
@@ -93,7 +75,7 @@ class udiYoOutlet(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkSw')
+        print('start - udiYoManipulator')
         self.yoOutlet  = YoLinkOutl(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
         self.yoOutlet.initNode()
         self.node.setDriver('ST', 1, True, True)
@@ -112,13 +94,13 @@ class udiYoOutlet(udi_interface.Node):
         self.Parameters.load(params)
     '''
     def stop (self):
-        logging.info('Stop not implemented')
+        logging.info('Stop ')
         self.node.setDriver('ST', 0, True, True)
         self.yoOutlet.shut_down()
 
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - TestYoLinkNode')
+        logging.debug('updateStatus - udiYoManipulator')
         self.yoOutlet.updateCallbackStatus(data)
         print(data)
         if self.node is not None:
@@ -128,11 +110,7 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV0', 1, True, True)
             else:
                 self.node.setDriver('GV0', 0, True, True)
-            tmp =  self.yoOutlet.getEnergy()
-            power = tmp['power']
-            watt = tmp['watt']
-            self.node.setDriver('GV3', power, True, True)
-            self.node.setDriver('GV4', watt, True, True)
+       
             self.node.setDriver('GV5', self.yoOutlet.bool2Nbr(self.yoOutlet.getOnlineStatus()), True, True)
         
         #while self.yoOutlet.eventPending():
@@ -162,8 +140,8 @@ class udiYoOutlet(udi_interface.Node):
         if 'longPoll' in polltype:
             self.yoOutlet.refreshState()
             self.yoOutlet.refreshSchedules()
-        if 'shortPoll' in polltype:
-            self.pollDelays()
+        #if 'shortPoll' in polltype:
+            #self.pollDelays()
             #update Delays calculated
 
     def switchControl(self, command):
@@ -196,7 +174,7 @@ class udiYoOutlet(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'SWCTRL': switchControl, 
+                'MACTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 
                 }

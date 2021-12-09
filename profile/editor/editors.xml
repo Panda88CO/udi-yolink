@@ -40,5 +40,7 @@
   <editor id = "waterstate" > 
      <range  uom="25" subset="0-1" nls="waterstate" />
 </editor>
-
+  <editor id = "mastate" > 
+     <range  uom="25" subset="0-1" nls="mastate" />
+</editor>
 </editors> 
