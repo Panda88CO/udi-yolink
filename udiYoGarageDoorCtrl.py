@@ -68,7 +68,7 @@ class udiYoGarageDoor(udi_interface.Node):
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
-        polyglot.subscribe(polyglot.POLL, self.poll)
+        #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         # start processing events and create add our controller node
         polyglot.ready()
@@ -100,43 +100,37 @@ class udiYoGarageDoor(udi_interface.Node):
         self.Parameters.load(params)
     '''
     def initNode(self):
-        self.yoDoorSensor.refreshSensor()
+        logging.debug('Nothing to init')
 
     
     def stop (self):
         logging.info('Stop ')
         self.node.setDriver('ST', 0, True, True)
-        self.yoDoorSensor.shut_down()
         self.yoDoorControl.shut_down()
 
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
-        self.yoTHsensor.updateCallbackStatus(data)
+        self.yoDoorControl.updateCallbackStatus(data)
         logging.debug(data)
-        alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
             self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
             self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
             self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoTHsensor.getOnlineStatus()), True, True)
 
+    '''
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
-        if 'longPoll' in polltype:
-            self.yoDoorSensor.refreshSensor()
+    '''
 
-    def update(self, command = None):
-        logging.info('GarageDoor Update Status Executed')
-        self.yoDoorSensor.refreshState()
-       
+
     def toggleDoor(self, command = None):
         logging.info('GarageDoor Toggle Door')
         self.yoDoorControl.toggleDevice()
 
     commands = {
-                'UPDATE': update,
-                'TOGGLE': toggleDoor
+                    'TOGGLE': toggleDoor
                 }
 
 

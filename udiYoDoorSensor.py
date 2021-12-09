@@ -84,7 +84,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
     def start(self):
         print('start - YoLinkThsensor')
-        self.yoDoorSensor  = YoLinkDoorSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoDoorSensor  = YoLinkDoorSens(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
        
         self.yoDoorSensor.initNode()
        
@@ -111,14 +111,14 @@ class udiYoDoorSensor(udi_interface.Node):
         logging.info('Stop ')
         self.node.setDriver('ST', 0, True, True)
         self.yoDoorSensor.shut_down()
-        self.yoDoorControl.shut_down()
+       
 
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
-        self.yoTHsensor.updateCallbackStatus(data)
+        self.yoDoorSensor.updateCallbackStatus(data)
         logging.debug(data)
-        alarms = self.yoTHsensor.getAlarms()
+        alarms = self.yoDoorSensor.getAlarms()
         if self.node is not None:
             self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
             self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
@@ -134,13 +134,11 @@ class udiYoDoorSensor(udi_interface.Node):
         logging.info('GarageDoor Update Status Executed')
         self.yoDoorSensor.refreshState()
        
-    def toggleDoor(self, command = None):
-        logging.info('GarageDoor Toggle Door')
-        self.yoDoorControl.toggleDevice()
+
 
     commands = {
                 'UPDATE': update,
-                'TOGGLE': toggleDoor
+
                 }
 
 

@@ -35,6 +35,9 @@ class YoLinkOutl(YoLinkMQTTDevice):
         #self.refreshFWversion()
         #print(' YoLinkSW - finished intializing')
  
+    def updateStatus(self, data):
+        self.updateCallbackStatus(data, False)
+
     def setState(yolink, state):
         logging.debug(yolink.type + ' - setState')
 
@@ -53,6 +56,9 @@ class YoLinkOutl(YoLinkMQTTDevice):
         else:
             return(False)
     
+    def getDelays(self):
+        return super().getDelays()
+
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')

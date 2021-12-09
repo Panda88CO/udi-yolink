@@ -52,7 +52,8 @@ class YoLinkMQTTDevice(object):
         self.dData = 'data'
         self.dState= 'state'
         self.dSchedule = 'schedules'
-        self.dDelays = 'delays' 
+        self.dDelays = 'delays'
+        self.dDelay = 'delay'
         self.messageTime = 'time'
         self.forceStop = False
         self.eventSupport = False # Support adding to EventQueue
@@ -524,7 +525,7 @@ class YoLinkMQTTDevice(object):
                 if type(data[self.dData][self.dState]) is dict:
                     for key in data[self.dData][self.dState]:
                         if key == 'delay':
-                             self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dState][self.dDelays]
+                             self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dState][self.dDelay]
                         else:
                             self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
                 elif  type(data[self.dData][self.dState]) == list:
@@ -548,7 +549,7 @@ class YoLinkMQTTDevice(object):
             if type(data[self.dData][self.dState]) is dict:
                 for key in data[self.dData][self.dState]:
                     if key == 'delay':
-                            self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dState][self.dDelays]
+                            self.dataAPI[self.dData][self.dDelays] = data[self.dData][self.dState][self.dDelay]
                     else:
                         self.dataAPI[self.dData][self.dState][key] = data[self.dData][self.dState][key]
             elif  type(data[self.dData][self.dState]) == list:           

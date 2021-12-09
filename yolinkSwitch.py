@@ -40,6 +40,12 @@ class YoLinkSW(YoLinkMQTTDevice):
         #self.refreshFWversion()
         #print(' YoLinkSW - finished intializing')
  
+    def updateStatus(self, data):
+        self.updateCallbackStatus(data, False)
+
+    def getDelays(self):
+        return super().getDelays()
+
     def setState(self, state):
         logging.debug(self.type+' - setState')
 

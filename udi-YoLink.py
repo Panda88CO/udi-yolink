@@ -14,7 +14,7 @@ from udiYoTHsensor import udiYoTHsensor
 from udiYoGarageDoorCtrl import udiYoGarageDoor
 from udiYoMotionSensor import udiYoMotionSensor
 from udiYoLeakSensor import udiYoLeakSensor
-from udiYoDoorSensor import udiYoDoorSensor
+from udiYoDoorSensor import Parameters, udiYoDoorSensor
 from udiYoOutlet import udiYoOutlet
 from yoLinkPACOauth import YoLinkDevicesPAC
 from yoLinkOauth import YoLinkDevices
@@ -302,7 +302,7 @@ class YoLinkSetup (udi_interface.Node):
 
                 else:
                     logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
-
+        logging.debug(self.Parameters)
 
     def stop(self):
         logging.info('Stop Called:')

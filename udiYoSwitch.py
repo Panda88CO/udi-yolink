@@ -135,7 +135,7 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('GV0', 1, True, True)
             else:
                 self.node.setDriver('GV0', 0, True, True)
-            tmp =  self.yoSwitch.getEnergy()
+            #tmp =  self.yoSwitch.getEnergy()
             #power = tmp['power']
             #watt = tmp['watt']
             #self.node.setDriver('GV3', power, True, True)
