@@ -306,6 +306,10 @@ class YoLinkSetup (udi_interface.Node):
 
     def stop(self):
         logging.info('Stop Called:')
+        nodes = self.poly.getNodes()
+        for node in nodes:
+            if node != 'setup':   # but not the controller node
+                nodes[node].setDriver('ST', 0, True, True)
         self.node.setDriver('ST', 0, True, True)
         exit()
 
