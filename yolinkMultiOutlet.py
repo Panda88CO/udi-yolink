@@ -71,7 +71,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     
     def getMultiOutletState(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
-        yolink.refreshMultiOutlet()
+        #yolink.refreshMultiOutlet()
         temp = yolink.getInfoAPI()
         states= {}
         for port in range(0,yolink.nbrPorts):

@@ -13,7 +13,7 @@ except ImportError:
 
 import sys
 import time
-from yolinkMultiOutlet import YoLinkOutl
+from yolinkMultiOutlet import YoLinkMultiOut
 
 polyglot = None
 Parameters = None
@@ -71,9 +71,9 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.debug('udiYoSubOutlet - stop')
         self.node.setDriver('ST', 0, True, True)
 
-    def updateNode(self, outeletStata, onDelay, offDelay):
+    def updateNode(self, outeletState, onDelay, offDelay):
         logging.debug('udiYoSubOutlet - updateNode')
-        self.node.setDriver('GV0', outeletStata, True, True)
+        self.node.setDriver('GV0', outeletState, True, True)
         self.node.setDriver('GV1', onDelay, True, False)
         self.node.setDriver('GV2', offDelay, True, False)
         self.node.setDriver('GV4', self.port+1, False, False)
@@ -203,7 +203,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yolink_URL = yolink_URL
 
         self.devInfo =  deviceInfo   
-        self.yoOutlet = None
+        self.yoMulteOutlet = None
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -217,30 +217,30 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
 
-        #self.switchState = self.yoOutlet.getState()
-        #self.switchPower = self.yoOutlet.getEnergy()
+        #self.switchState = self.yoMulteOutlet.getState()
+        #self.switchPower = self.yoMulteOutlet.getEnergy()
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
         logging.debug('start - udiYoMultiOutlet')
-        self.yoOutlet  = YoLinkOutl(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
-        self.yoOutlet.initNode()
-        nbrOutlets = self.yoOutlet.getNbrPorts()
-        states = self.yoOutlet.getMultiOutletState()
-        delays = self.yoOutlet.getDelays()
+        self.yoMulteOutlet  = YoLinkMultiOut(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoMulteOutlet.initNode()
+        self.nbrOutlets = self.yoMulteOutlet.getNbrPorts()
+        states = self.yoMulteOutlet.getMultiOutletState()
+        delays = self.yoMulteOutlet.getDelays()
 
         self.subnode = []
-        for port in range(0,nbrOutlets):
+        for port in range(0,self.nbrOutlets):
             try:
                 self.subnode[port] = udiYoSubOutlet(self.poly, self.address, self.address+str(port+1), 'SubOutlet'+str(port+1), port, self.subOutletUpdates)
                 self.poly.addNode(self.subnode[port])
                 self.wait_for_node_done()
             except Exception as e:
                 logging.error('Failed to create {}: {}'.format(e))
-        if nbrOutlets == 4: #controllable USB included
+        if self.nbrOutlets == 4: #controllable USB included
             try:
-                self.subnode[nbrOutlets] = udiYoSubUSB(self.poly, self.address, self.address+str(nbrOutlets+1), 'UsbOutput', self.usbUpdates)
-                self.poly.addNode(self.subnode[nbrOutlets])
+                self.subnode[self.nbrOutlets] = udiYoSubUSB(self.poly, self.address, self.address+str(self.nbrOutlets+1), 'UsbOutput', self.usbUpdates)
+                self.poly.addNode(self.subnode[self.nbrOutlets])
                 self.wait_for_node_done()
             except Exception as e:
                 logging.error('Failed to create {}: {}'.format(e))
@@ -250,12 +250,16 @@ class udiYoMultiOutlet(udi_interface.Node):
 
     def subOutletUpdates(self, port, data):
         logging.info('subOutletUpdates not implemented')
-        
+        portList = []
+        portList.append(port)
+        self.yoMulteOutlet.setMultiOutletState(portList, data)
 
 
     def usbUpdates(self,  data):
         logging.info('usbUpdates not implemented')
-
+        portList = []
+        portList.append(4) #USB is port 4 (5th port)
+        self.yoMulteOutlet.setMultiOutletState(portList, data)
 
 
     '''
@@ -274,40 +278,55 @@ class udiYoMultiOutlet(udi_interface.Node):
     def stop (self):
         logging.info('Stop not implemented')
         self.node.setDriver('ST', 0, True, True)
-        self.yoOutlet.shut_down()
+        self.yoMulteOutlet.shut_down()
 
 
     def updateStatus(self, data):
+        #outletNbr = [0:'port1', 1:'port2', 'port3':2, 'port4':3]
         logging.debug('updateStatus - TestYoLinkNode')
-        self.yoOutlet.updateCallbackStatus(data)
-        print(data)
+        self.yoMulteOutlet.updateCallbackStatus(data)
+        logging.debug(data)
+        outletStates =  self.yoMulteOutlet.getMultiOutletData()
+        for port in outletStates:
+            port = outletStates[port]['delays']['ch']
+            node = self.subnode[port]
+            State = outletStates[port]['state']
+            onDelay = outletStates[port]['delays']['on']
+            offDelay = outletStates[port]['delays']['off']
+            node.updateNode(State, onDelay,offDelay )
+        if self.nbrOutlets == 4:
+            logging.debug('need to add USB port support in data extraction ')
+        #Need to update USB port states 
+
+
         if self.node is not None:
-            state =  self.yoOutlet.getState()
+            state =  self.yoMulteOutlet.getState()
             print(state)
             if state.upper() == 'ON':
                 self.node.setDriver('GV0', 1, True, True)
             else:
                 self.node.setDriver('GV0', 0, True, True)
-            #tmp =  self.yoOutlet.getEnergy()
+            #tmp =  self.yoMulteOutlet.getEnergy()
             #power = tmp['power']
             #watt = tmp['watt']
             #self.node.setDriver('GV3', power, True, True)
             #self.node.setDriver('GV4', watt, True, True)
-            self.node.setDriver('GV5', self.yoOutlet.bool2Nbr(self.yoOutlet.getOnlineStatus()), True, True)
+            self.node.setDriver('GV5', self.yoMulteOutlet.bool2Nbr(self.yoMulteOutlet.getOnlineStatus()), True, True)
         
-        #while self.yoOutlet.eventPending():
-        #    print(self.yoOutlet.getEvent())
+        #while self.yoMulteOutlet.eventPending():
+        #    print(self.yoMulteOutlet.getEvent())
 
 
     # Need to use shortPoll
     def pollDelays(self):
-        delays =  self.yoOutlet.getDelays()
+        delays =  self.yoMulteOutlet.getDelays()
         logging.debug('delays: ' + str(delays))
+       
         #print('on delay: ' + str(delays['on']))
         #print('off delay: '+ str(delays['off']))
         if delays != None:
             if delays['on'] != 0 or delays['off'] !=0:
-                delays =  self.yoOutlet.refreshDelays() # should be able to calculate without polling 
+                delays =  self.yoMulteOutlet.refreshDelays() # should be able to calculate without polling 
                 if 'on' in delays:
                     self.node.setDriver('GV1', delays['on'], True, True)
                 if 'off' in delays:
@@ -320,8 +339,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
-            self.yoOutlet.refreshState()
-            self.yoOutlet.refreshSchedules()
+            self.yoMulteOutlet.refreshMultiOutlet()()
+            #self.yoMulteOutlet.refreshSchedules()
         if 'shortPoll' in polltype:
             self.pollDelays()
             #update Delays calculated
@@ -330,8 +349,8 @@ class udiYoMultiOutlet(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('Update Status Executed')
-        self.yoOutlet.refreshState()
-        #self.yoOutlet.refreshSchedules()     
+        self.yoMulteOutlet.refreshState()
+        #self.yoMulteOutlet.refreshSchedules()     
 
 
     commands = {
