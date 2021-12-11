@@ -15,6 +15,7 @@ CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
 
+
 ND-yooutlet-NAME = YoLink Outlet
 ND-yooutlet-ICON = Switch
 ST-nlsoutlet-GV0-NAME = Outlet State
@@ -25,9 +26,31 @@ ST-nlsoutlet-GV4-NAME = Energy
 ST-nlsoutlet-GV5-NAME = Online
 ST-nlsoutlet-ST-NAME = Nodeserver Status
 CMD-nlsoutlet-UPDATE-NAME = Update Status
-CMD-nlsoutlet-SWCTRL-NAME =  Switch control
+CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
 CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
+
+ND-yosubout-NAME = YoLink subOutlet
+ND-yosubout-ICON = Switch
+ST-nlsubout-GV0-NAME = Outlet State
+ST-nlsubout-GV1-NAME = On Delay (min)
+ST-nlsubout-GV2-NAME = Off Delay (min)
+ST-nlsubout-GV3-NAME = Outlet number
+ST-nlsubout-GV5-NAME = Online
+ST-nlsubout-ST-NAME = Nodeserver Status
+CMD-nlsubout-UPDATE-NAME = Update Status
+CMD-nlsubout-SWCTRL-NAME =  Outlet control
+CMD-nlsubout-ONDELAY-NAME =  Set On Delay (min)
+CMD-nlsubout-OFFDELAY-NAME =  Set Off Delay (min)
+
+ND-yousbout-NAME = YoLink USB Ports
+ND-yousbout-ICON = Switch
+ST-nlsusbout-GV0-NAME = USB Ports
+ST-nlsusbout-GV5-NAME = Online
+ST-nlsusbout-ST-NAME = Nodeserver Status
+CMD-nlsoutlet-UPDATE-NAME = Update Status
+CMD-nlsusbout-USBCTRL-NAME =  USB Port Control
+
 
 ND-yomanipulator-NAME = YoLink Manipulator
 ND-yomanipulator-ICON = GenericCtrl
@@ -109,5 +132,7 @@ motionstate-0 = No Motion
 motionstate-1 = Motion Detected
 waterstate-0 = Dry
 waterstate-1 = Wet
-mastate-0 = Closed
-mastate-1 = Open
+manstate-0 = Closed
+manstate-1 = Open
+usbstate-0 = Disabled
+usbstate-1 = Enabled

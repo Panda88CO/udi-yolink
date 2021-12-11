@@ -66,7 +66,7 @@ class YoLinkMQTTDevice(object):
                         ,'data':{ 'state':{} }
                         }
    
-        #self.eventQueue = Queue()
+        self.eventQueue = Queue()
         #self.mutex = threading.Lock()
         self.timezoneOffsetSec = self.timezoneOffsetSec()
         self.yolinkMQTTclient.connect_to_broker()
@@ -623,14 +623,14 @@ class YoLinkMQTTDevice(object):
     def getState(self):
         try:
             logging.debug(self.type +' - getState')
-            return(self.dataAPI[self.dData][self.dState][self.dState])
+            return(self.dataAPI[self.dData][self.dState])
         except Exception as e:
             logging.debug('getState exceptiom: {}'.format(e) )
             return(None)
 
     def getData(self):
         try:
-            logging.debug(self.type +' - getDAta')
+            logging.debug(self.type +' - getData')
             return(self.dataAPI[self.dData][self.dState])
         except Exception as e:
             logging.debug('getData exceptiom: {}'.format(e) )

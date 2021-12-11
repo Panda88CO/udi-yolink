@@ -105,7 +105,7 @@ class YoLinkMQTTClient(object):
         elif msg.topic == self.topicReq:
                 logging.debug('publishing request' )
                 logging.debug (payload)
-                #self.callback(payload)
+                self.callback(payload) # is this needed????
                 logging.debug('device publishing')
                 logging.debug(payload)
         else:

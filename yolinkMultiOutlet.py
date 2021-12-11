@@ -11,19 +11,21 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-class YoLinkMultiOutlet(YoLinkMQTTDevice):
-
-    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
+class YoLinkMultiOut(YoLinkMQTTDevice):
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback)
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdates'   ]
         yolink.eventList = ['StatusChange', 'Report']
         yolink.type = 'MultiOutlet'
         yolink.ManipulatorName = 'MultiOutletEvent'
         yolink.eventTime = 'Time'
-        time.sleep(3)
+        time.sleep(2)
+
+
+    def initNode(yolink):
         yolink.refreshMultiOutlet() # needed to get number of ports on device
-        yolink.refreshSchedules()
+        #yolink.refreshSchedules()
         #yolink.refreshFWversion()
 
     '''
@@ -34,43 +36,7 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
         return(yolink.dataAPI['data']['delays'])  
     '''
 
-    '''
-    def updateStatus(yolink, data):
-        logging.debug(yolink.type+' - updateStatus')
-        if 'method' in  data:
-            if  (data['method'] == 'MultiOutlet.getState' and  data['code'] == '000000'):
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateStatusData(data)             
-            elif  (data['method'] == 'MultiOutlet.setState' and  data['code'] == '000000'):
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateStatusData(data)                                       
-            elif  (data['method'] == 'MultiOutlet.setDelay' and  data['code'] == '000000'):
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateDelayStatus(data)
-            elif  (data['method'] == 'MultiOutlet.getSchedules' and  data['code'] == '000000'):
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateScheduleStatus(data)
-            elif  (data['method'] == 'MultiOutlet.setSchedules' and  data['code'] == '000000'):
-                if int(data['time']) > int(yolink.getLastUpdate()): 
-                    yolink.updateScheduleStatus(data)
-            elif  (data['method'] == 'MultiOutlet.getVersion' and  data['code'] == '000000'):
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateFWStatus(data)
-
-            else:
-                logging.debug('Unsupported Method passed' + str(json.dumps(data)))
-        elif 'event' in data:
-            if data['event'] == 'MultiOutlet.StatusChange':
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateMultiStatusData(data)    
-
-            elif data['event'] == 'MultiOutlet.Report':
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateMultiStatusData(data)  
-
-            else :
-                logging.debug('Unsupported Event passed' + str(json(data)))
-    '''                                    
+                                
 
     def refreshMultiOutlet(yolink):
         return(yolink.refreshDevice())
@@ -103,9 +69,6 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
             yolink.setDevice( 'MultiOutlet.setState', data, yolink.updateStatus)
         return(status)
     
-
-   
-
     def getMultiOutletState(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
         yolink.refreshMultiOutlet()
@@ -123,6 +86,9 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
 
     def getMultiOutletData(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
+
+    def updateStatus(self, data):
+        self.updateCallbackStatus(data, False)
   
     '''
     def refreshFWversion(yolink):
@@ -188,3 +154,12 @@ class YoLinkMultiOutlet(YoLinkMQTTDevice):
                 #data["params"]["delays"].append(temp)
         return(data)
     '''
+
+class YoLinkMultiOutlet(YoLinkMultiOut):
+
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey, deviceInfo, yolink.updateStatus, yolink_URL, mqtt_URL, mqtt_port)
+        yolink.initNode()
+
+    def updateStatus(self, data):
+        self.updateCallbackStatus(data, True)

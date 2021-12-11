@@ -6,6 +6,8 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
          </sends>
          <accepts>
          </accepts>
@@ -23,8 +25,6 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -54,8 +54,6 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -72,10 +70,73 @@
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yomultiout" nls="nlsmultiout">
+      <editors />
+      <sts>
+         <st id="GV8" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+             </cmd >
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+
+   <nodeDef id="yosubout" nls="nlsubout">
+      <editors />
+      <sts>
+         <st id="GV0" editor="swstate" />
+         <st id="GV1" editor="delay" />
+         <st id="GV2" editor="delay" />
+         <st id="GV4" editor="outletnbr" />
+
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="SWCTRL" > 
+               <p id="" editor="swstate" init="GV0" /> 
+            </cmd >
+            <cmd id="ONDELAY" > 
+               <p id="" editor="delay" init="GV1" /> 
+             </cmd >   
+            <cmd id="OFFDELAY" > 
+               <p id="" editor="delay" init="GV2" /> 
+             </cmd >
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+   <nodeDef id="yousbout" nls="nlsusbout">
+      <editors />
+      <sts>
+         <st id="GV0" editor="usbstate" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="USBCTRL" > 
+               <p id="" editor="swstate" init="GV0" /> 
+            </cmd >
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
    <nodeDef id="yomanipulator" nls="nlsmanipulator">
       <editors />
       <sts>
-         <st id="GV0" editor="mastate" />
+         <st id="GV0" editor="manstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
 
@@ -84,13 +145,11 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="MACTRL" > 
-               <p id="" editor="mastate" init="GV0" /> 
+               <p id="" editor="manstate" init="GV0" /> 
             </cmd >
             <cmd id="ONDELAY" > 
                <p id="" editor="delay" init="GV1" /> 
@@ -118,8 +177,6 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -136,8 +193,6 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -154,8 +209,6 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
          </sends>
          <accepts>
             <cmd id="TOGGLE" > 
@@ -172,8 +225,6 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -193,8 +244,6 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
