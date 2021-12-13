@@ -155,39 +155,50 @@ class YoLinkMQTTDevice(object):
         return(self.getDelays())
 
     def updateStatusData(self, data): 
-        if 'online' in data[self.dData]:
+        if not data[self.dData]: # No data returned
+            self.dataAPI[self.dOnline] = False
+        elif 'online' in data[self.dData]:
             self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
         else:
             self.dataAPI[self.dOnline] = True
         if 'method' in data:
-            for key in data[self.dData]:
-                if key == 'delay':
-                        self.dataAPI[self.dData][self.dDelays] = data[self.dData][key]
-                else:
-                        self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+            if  self.dataAPI[self.dOnline]:
+                for key in data[self.dData]:
+                    if key == 'delay':
+                            self.dataAPI[self.dData][self.dDelays] = data[self.dData][key]
+                    else:
+                            self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+                self.updateLoraInfo(data)
+                self.updateMessageInfo(data)
+       
         else: #event
-            for key in data[self.dData]:
-                    self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
-        self.updateLoraInfo(data)
-        self.updateMessageInfo(data)
+            if  self.dataAPI[self.dOnline]:
+                for key in data[self.dData]:
+                        self.dataAPI[self.dData][self.dState][key] = data[self.dData][key]
+                self.updateLoraInfo(data)
+                self.updateMessageInfo(data)
 
     def updateDelayData(self, data):
-        if 'online' in data[self.dData]:
+        if not data[self.dData]: # No data returned
+            self.dataAPI[self.dOnline] = False
+        elif 'online' in data[self.dData]:
             self.dataAPI[self.dOnline] = data[self.dData][self.dOnline]
         else:
             self.dataAPI[self.dOnline] = True
+        
         if 'event' in data:
-            tmp =  {}
-            for key in data[self.dData]:
-                if key == 'delayOn':
-                    tmp['on'] = data[self.dData][key]
-                elif key == 'delayOff':
-                    tmp['off'] = data[self.dData][key] 
-                else:
-                    tmp[key] =  data[self.dData][key] 
-            self.dataAPI[self.dData][self.dDelays]= tmp
-        self.updateLoraInfo(data)
-        self.updateMessageInfo(data)
+            if  self.dataAPI[self.dOnline]:
+                tmp =  {}
+                for key in data[self.dData]:
+                    if key == 'delayOn':
+                        tmp['on'] = data[self.dData][key]
+                    elif key == 'delayOff':
+                        tmp['off'] = data[self.dData][key] 
+                    else:
+                        tmp[key] =  data[self.dData][key] 
+                self.dataAPI[self.dData][self.dDelays]= tmp
+            self.updateLoraInfo(data)
+            self.updateMessageInfo(data)
 
     def updateCallbackStatus(self, data, eventSupport = False):
         logging.debug(self.type+' - updateCallbackStatus')
