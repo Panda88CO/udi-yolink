@@ -211,6 +211,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
+        polyglot.subscribe(polyglot.ADDNODEDONE, self.node_queue)
+
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
@@ -247,7 +249,14 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 
+    def node_queue(self, data):
+        self.n_queue.append(data['address'])
 
+    def wait_for_node_done(self):
+        while len(self.n_queue) == 0:
+            time.sleep(0.1)
+        self.n_queue.pop()
+        
     def subOutletUpdates(self, port, data):
         logging.info('subOutletUpdates not implemented')
         portList = []

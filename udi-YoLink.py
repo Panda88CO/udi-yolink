@@ -14,8 +14,11 @@ from udiYoTHsensor import udiYoTHsensor
 from udiYoGarageDoorCtrl import udiYoGarageDoor
 from udiYoMotionSensor import udiYoMotionSensor
 from udiYoLeakSensor import udiYoLeakSensor
-from udiYoDoorSensor import Parameters, udiYoDoorSensor
+from udiYoDoorSensor import udiYoDoorSensor
 from udiYoOutlet import udiYoOutlet
+from udiYoMultiOutlet import udiYoMultiOutlet
+from udiYoManipulator import udiYoManipulator
+
 from yoLinkPACOauth import YoLinkDevicesPAC
 from yoLinkOauth import YoLinkDevices
 
@@ -112,10 +115,10 @@ class YoLinkSetup (udi_interface.Node):
                 elif self.deviceList[dev]['type'] == 'MultiOutlet':
                     logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
                     isyNbr -= 1  
-                    #udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    #if self.deviceList[dev]['deviceId'] not in self.Parameters:
-                    #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                    udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    if self.deviceList[dev]['deviceId'] not in self.Parameters:
+                        self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                        logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
 
                 elif self.deviceList[dev]['type'] == 'DoorSensor':
                     logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
@@ -128,10 +131,10 @@ class YoLinkSetup (udi_interface.Node):
                 elif self.deviceList[dev]['type'] == 'Manipulator':
                     logging.info('Not supported yet - Adding device {}'.format( self.deviceList[dev]['type']))
                     isyNbr -= 1  
-                    #udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    #if self.deviceList[dev]['deviceId'] not in self.Parameters:
-                    #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                    udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
+                    if self.deviceList[dev]['deviceId'] not in self.Parameters:
+                        self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                        logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
 
                 elif self.deviceList[dev]['type'] == 'MotionSensor':     
                     logging.info('Adding device {}'.format( self.deviceList[dev]['type']))
