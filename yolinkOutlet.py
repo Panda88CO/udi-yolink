@@ -66,7 +66,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
         while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
             time.sleep(1)
             attempts = attempts + 1
-        if attempts <= 5:
+        if attempts <= 5 and yolink.dataAPI[yolink.dData][yolink.dState]:
             if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                 return('ON')
             elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':

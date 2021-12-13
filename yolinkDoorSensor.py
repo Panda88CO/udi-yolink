@@ -41,7 +41,9 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
-
+    def getOnlineStatus(yolink):
+        logging.debug(yolink.type+ ' - refreshSensor')
+        return(yolink.getOnlineStatus( ))
 
 class YoLinkDoorSensor(YoLinkDoorSens):
     def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):

@@ -34,6 +34,9 @@ class YoLinkTHSen(YoLinkMQTTDevice):
         logging.debug(yolink.type+ ' - refreshSensor')
         return(yolink.refreshDevice( ))
 
+    def getOnlineStatus(yolink):
+        logging.debug(yolink.type+ ' - refreshSensor')
+        return(yolink.getOnlineStatus( ))
 
     def getTempValueF(yolink):
         return(yolink.getStateValue('temperature')*9/5+32)
