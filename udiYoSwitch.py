@@ -36,10 +36,10 @@ class udiYoSwitch(udi_interface.Node):
     id = 'yoswitch'
     drivers = [
             {'driver': 'GV0', 'value': 0, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 30}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 33}, 
-            #{'driver': 'GV3', 'value': 0, 'uom': 44},
-            #{'driver': 'GV4', 'value': 0, 'uom': 44},
+            {'driver': 'GV1', 'value': 0, 'uom': 44}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 44}, 
+            #{'driver': 'GV3', 'value': 0, 'uom': 30},
+            #{'driver': 'GV4', 'value': 0, 'uom': 33},
             {'driver': 'GV5', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]

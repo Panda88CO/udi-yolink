@@ -12,13 +12,13 @@ except ImportError:
 
 
 class YoLinkOutl(YoLinkMQTTDevice):
-    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, yolink.updateStatus)
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__( csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback)
         
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
         yolink.eventList = ['StatusChange', 'Report', 'getState']
         yolink.stateList = ['open', 'closed', 'on', 'off']
-        yolink.ManipulatorName = 'OutletrEvent'
+        yolink.ManipulatorName = 'OutletEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'Outlet'
         time.sleep(2)
@@ -66,7 +66,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
         while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
             time.sleep(1)
             attempts = attempts + 1
-        if attempts <= 5:
+        if attempts <= 5 and yolink.dataAPI[yolink.dData][yolink.dState]:
             if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                 return('ON')
             elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
