@@ -205,6 +205,75 @@ class YoLinkMQTTDevice(object):
         logging.debug(data)
         if 'method' in  data:
             if data['code'] == '000000':
+                if  ('.getState' in data['method'] and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateStatusData(data)       
+                elif  ('.setState' in data['method'] and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateStatusData(data)                          
+                elif  ('.setDelay'  in data['method'] and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateDelayData(data)       
+                elif  ('.getSchedules'  in data['method'] and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateScheduleStatus(data)
+                elif  ('.setSchedules' in data['method'] and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateScheduleStatus(data)
+                elif  ('.getVersion' in data['method'] and  data['code'] == '000000'):
+                    if int(data['time']) > int(self.getLastUpdate()):
+                        self.updateFWStatus(data)
+                else:
+                    logging.debug('Unsupported Method passed' + str(json.dumps(data)))     
+            else:
+                self.deviceError(data)
+        elif 'event' in data:
+            if '.StatusChange' in data['event']:
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)              
+            elif '.Report' in data['event']:
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)  
+            elif '.getState' in data['event']:
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)  
+            elif '.setState' in data['event']:
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)                      
+            elif '.getSchedules' in data['event']:
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateScheduleStatus(data)   
+            elif '.Alert' in data['event']:         
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateScheduleStatus(data)  
+            elif '.setDelay' in data['event']:         
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateDelayData(data)                    
+            else:
+                logging.debug('Unsupported Event passed - trying anyway' )
+                logging.debug(data)
+                if int(data['time']) > int(self.getLastUpdate()):
+                    self.updateStatusData(data)  
+                    try:
+                        if int(data['time']) > int(self.getLastUpdate()):
+                            if data['event'].find('chedule') >= 0 :
+                                self.updateScheduleStatus(data)    
+                            elif data['event'].find('ersion') >= 0 :
+                                self.updateFWStatus(data)
+                            else:
+                                self.updateStatusData(data)   
+                    except logging.exception as E:
+                        logging.debug('Unsupported event detected: ' + str(E))
+            if eventSupport:
+                self.eventQueue.put(data['event']) 
+        else:
+            logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+    '''
+    def updateCallbackStatus(self, data, eventSupport = False):
+        logging.debug(self.type+' - updateCallbackStatus')
+        logging.debug(data)
+        if 'method' in  data:
+            if data['code'] == '000000':
                 if  (data['method'] == self.type +'.getState' and  data['code'] == '000000'):
                     if int(data['time']) > int(self.getLastUpdate()):
                         self.updateStatusData(data)       
@@ -267,8 +336,7 @@ class YoLinkMQTTDevice(object):
                 self.eventQueue.put(data['event']) 
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
-
-
+    '''    
 
     def setDelay(self, delayList):
         logging.debug(self.type+' - setDelay')

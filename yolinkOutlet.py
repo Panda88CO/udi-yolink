@@ -18,7 +18,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
         yolink.eventList = ['StatusChange', 'Report', 'getState']
         yolink.stateList = ['open', 'closed', 'on', 'off']
-        yolink.ManipulatorName = 'OutletrEvent'
+        yolink.ManipulatorName = 'OutletEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'Outlet'
         time.sleep(2)
