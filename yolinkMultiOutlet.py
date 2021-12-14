@@ -25,6 +25,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
     def initNode(yolink):
         yolink.refreshMultiOutlet() # needed to get number of ports on device
+        logging.debug('MultiOutlt init - Nbr ports: []'.format(yolink.nbrPorts))
         #yolink.refreshSchedules()
         #yolink.refreshFWversion()
 

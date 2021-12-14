@@ -201,9 +201,12 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.mqtt_URL= mqtt_URL
         self.mqtt_port = mqtt_port
         self.yolink_URL = yolink_URL
+        self.delaysActive = False
+
 
         self.devInfo =  deviceInfo   
         self.yoMulteOutlet = None
+        self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -218,6 +221,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.poly.addNode(self)
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
+
+        
 
         #self.switchState = self.yoMulteOutlet.getState()
         #self.switchPower = self.yoMulteOutlet.getEnergy()
@@ -256,7 +261,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         while len(self.n_queue) == 0:
             time.sleep(0.1)
         self.n_queue.pop()
-        
+
     def subOutletUpdates(self, port, data):
         logging.info('subOutletUpdates not implemented')
         portList = []
@@ -295,19 +300,26 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoMulteOutlet.updateCallbackStatus(data)
         logging.debug(data)
+        self.delaysActive = False
         outletStates =  self.yoMulteOutlet.getMultiOutletData()
-        for port in outletStates:
+        if not self.nbrOutlets:
+            self.nbrOutlets = self.yoMulteOutlet.getNbrPorts()
+        for port in range(0,self.nbrOutlets):
             port = outletStates[port]['delays']['ch']
             node = self.subnode[port]
             State = outletStates[port]['state']
             onDelay = outletStates[port]['delays']['on']
             offDelay = outletStates[port]['delays']['off']
+            if onDelay != 0 or offDelay != 0:
+                self.delaysActive = True
             node.updateNode(State, onDelay,offDelay )
         if self.nbrOutlets == 4:
             logging.debug('need to add USB port support in data extraction ')
+            USBport = outletStates[4]['state']
+            self.subnode[4].updateNode(USBport)
         #Need to update USB port states 
 
-
+        '''
         if self.node is not None:
             state =  self.yoMulteOutlet.getState()
             print(state)
@@ -324,31 +336,47 @@ class udiYoMultiOutlet(udi_interface.Node):
         
         #while self.yoMulteOutlet.eventPending():
         #    print(self.yoMulteOutlet.getEvent())
-
+        '''
 
     # Need to use shortPoll
     def pollDelays(self):
-        delays =  self.yoMulteOutlet.getDelays()
-        logging.debug('delays: ' + str(delays))
-       
-        #print('on delay: ' + str(delays['on']))
-        #print('off delay: '+ str(delays['off']))
-        if delays != None:
-            if delays['on'] != 0 or delays['off'] !=0:
-                delays =  self.yoMulteOutlet.refreshDelays() # should be able to calculate without polling 
-                if 'on' in delays:
-                    self.node.setDriver('GV1', delays['on'], True, True)
-                if 'off' in delays:
-                    self.node.setDriver('GV2', delays['off'], True, True)               
-        else:
-            self.node.setDriver('GV1', 0, True, True)     
-            self.node.setDriver('GV2', 0, True, True)     
+        if self.delaysActive: 
+            delays =  self.yoMulteOutlet.getDelays()
+            logging.debug('delays: ' + str(delays))
+            delayActive = False
+            #outletStates =  self.yoMulteOutlet.getMultiOutletData()
+            for port in range(0,self.nbrOutlets):
+                port = delays[port]['delays']['ch']
+                node = self.subnode[port]
+                State = delays[port]['state']
+                onDelay = delays[port]['delays']['on']
+                offDelay = delays[port]['delays']['off']
+                node.updateNode(State, onDelay,offDelay )
+                if onDelay != 0 or offDelay != 0:
+                    delayActive = True
+            #print('on delay: ' + str(delays['on']))
+            #print('off delay: '+ str(delays['off']))
+            self.delaysActive = delayActive
+        
+        
+            '''
+            if delays != None:
+                if delays['on'] != 0 or delays['off'] !=0:
+                    delays =  self.yoMulteOutlet.refreshDelays() # should be able to calculate without polling 
+                    if 'on' in delays:
+                        self.node.setDriver('GV1', delays['on'], True, True)
+                    if 'off' in delays:
+                        self.node.setDriver('GV2', delays['off'], True, True)               
+            else:
+                self.node.setDriver('GV1', 0, True, True)     
+                self.node.setDriver('GV2', 0, True, True)     
+            '''
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
-            self.yoMulteOutlet.refreshMultiOutlet()()
+            self.yoMulteOutlet.refreshMultiOutlet()
             #self.yoMulteOutlet.refreshSchedules()
         if 'shortPoll' in polltype:
             self.pollDelays()
