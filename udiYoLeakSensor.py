@@ -90,19 +90,7 @@ class udiYoLeakSensor(udi_interface.Node):
             logging.error('Not able to connect leakSensor')
         #time.sleep(3)
     
-    '''
-    def heartbeat(self):
-        #LOGGER.debug('heartbeat: hb={}'.format(self.hb))
-        if self.hb == 0:
-            self.reportCmd('DON',2)
-            self.hb = 1
-        else:
-            self.reportCmd('DOF',2)
-            self.hb = 0
-    
-    def parameterHandler(self, params):
-        self.Parameters.load(params)
-    '''
+
     def initNode(self):
         self.yoLeakSensor.refreshSensor()
 
