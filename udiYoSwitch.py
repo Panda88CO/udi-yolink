@@ -35,12 +35,12 @@ class udiYoSwitch(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     id = 'yoswitch'
     drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 25},
+            {'driver': 'GV0', 'value': 2, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 44}, 
             {'driver': 'GV2', 'value': 0, 'uom': 44}, 
             #{'driver': 'GV3', 'value': 0, 'uom': 30},
             #{'driver': 'GV4', 'value': 0, 'uom': 33},
-            {'driver': 'GV5', 'value': 0, 'uom': 25},
+            {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
@@ -97,7 +97,7 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSwitch.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
-    
+    '''
     def heartbeat(self):
         #LOGGER.debug('heartbeat: hb={}'.format(self.hb))
         if self.hb == 0:
@@ -106,7 +106,6 @@ class udiYoSwitch(udi_interface.Node):
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
-    '''
     def parameterHandler(self, params):
         self.Parameters.load(params)
     '''
@@ -132,7 +131,7 @@ class udiYoSwitch(udi_interface.Node):
             #watt = tmp['watt']
             #self.node.setDriver('GV3', power, True, True)
             #self.node.setDriver('GV4', watt, True, True)
-            self.node.setDriver('GV5', self.yoSwitch.bool2Nbr(self.yoSwitch.getOnlineStatus()), True, True)
+            self.node.setDriver('GV8', self.yoSwitch.bool2Nbr(self.yoSwitch.getOnlineStatus()), True, True)
         
         #while self.yoSwitch.eventPending():
         #    print(self.yoSwitch.getEvent())

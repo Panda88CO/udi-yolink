@@ -37,7 +37,7 @@ class udiYoSubOutlet(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 25},
+            {'driver': 'GV0', 'value': 2, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 30}, 
             {'driver': 'GV2', 'value': 0, 'uom': 33}, 
             {'driver': 'GV4', 'value': 0, 'uom': 33},           
@@ -122,7 +122,7 @@ class udiYoSubUSB(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 25},
+            {'driver': 'GV0', 'value': 2, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -232,25 +232,29 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('start - udiYoMultiOutlet')
         self.yoMulteOutlet  = YoLinkMultiOut(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
         self.yoMulteOutlet.initNode()
+        time.sleep(2)
         self.nbrOutlets = self.yoMulteOutlet.getNbrPorts()
         states = self.yoMulteOutlet.getMultiOutletState()
         delays = self.yoMulteOutlet.getDelays()
+        logging.debug('init data {}, {}, {}'.format(self.nbrOutlets, states, delays))
 
-        self.subnode = []
+        self.subnode = {}
         for port in range(0,self.nbrOutlets):
             try:
-                self.subnode[port] = udiYoSubOutlet(self.poly, self.address, self.address+str(port+1), 'SubOutlet'+str(port+1), port, self.subOutletUpdates)
-                self.poly.addNode(self.subnode[port])
+                self.subnode[port] = self.address+'s'+str(port+1),
+                node = udiYoSubOutlet(self.poly, self.address, self.subnode[port], 'SubOutlet-'+str(port+1), port, self.subOutletUpdates)
+                self.poly.addNode(node)
                 self.wait_for_node_done()
             except Exception as e:
-                logging.error('Failed to create {}: {}'.format(e))
+                logging.error('Failed to create {}: {}'.format(self.subnode[port], e))
         if self.nbrOutlets == 4: #controllable USB included
             try:
-                self.subnode[self.nbrOutlets] = udiYoSubUSB(self.poly, self.address, self.address+str(self.nbrOutlets+1), 'UsbOutput', self.usbUpdates)
-                self.poly.addNode(self.subnode[self.nbrOutlets])
+                self.subnode[4] = self.address+'u'+str(port+1)
+                node = udiYoSubUSB(self.poly, self.address,self.subnode[4] , 'USB Ports', self.usbUpdates)
+                self.poly.addNode(node)
                 self.wait_for_node_done()
             except Exception as e:
-                logging.error('Failed to create {}: {}'.format(e))
+                logging.error('Failed to create {}: {}'.format(self.subnode[4], e))
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 

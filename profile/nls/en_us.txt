@@ -8,7 +8,7 @@ ND-yoswitch-ICON = Switch
 ST-nlsswitch-GV0-NAME = Switch State
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
-ST-nlsswitch-GV5-NAME = Online
+ST-nlsswitch-GV8-NAME = Online
 ST-nlsswitch-ST-NAME = Nodeserver Status
 CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
@@ -23,7 +23,7 @@ ST-nlsoutlet-GV1-NAME = On Delay (min)
 ST-nlsoutlet-GV2-NAME = Off Delay (min)
 ST-nlsoutlet-GV3-NAME = Watt
 ST-nlsoutlet-GV4-NAME = Energy
-ST-nlsoutlet-GV5-NAME = Online
+ST-nlsoutlet-GV8-NAME = Online
 ST-nlsoutlet-ST-NAME = Nodeserver Status
 CMD-nlsoutlet-UPDATE-NAME = Update Status
 CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
@@ -36,7 +36,7 @@ ST-nlsubout-GV0-NAME = Outlet State
 ST-nlsubout-GV1-NAME = On Delay (min)
 ST-nlsubout-GV2-NAME = Off Delay (min)
 ST-nlsubout-GV3-NAME = Outlet number
-ST-nlsubout-GV5-NAME = Online
+ST-nlsubout-GV8-NAME = Online
 ST-nlsubout-ST-NAME = Nodeserver Status
 CMD-nlsubout-UPDATE-NAME = Update Status
 CMD-nlsubout-SWCTRL-NAME =  Outlet control
@@ -57,7 +57,7 @@ ND-yomanipulator-ICON = GenericCtrl
 ST-nlsmanipulator-GV0-NAME = Manipulator State
 ST-nlsmanipulator-GV1-NAME = On Delay (min)
 ST-nlsmanipulator-GV2-NAME = Off Delay (min)
-ST-nlsmanipulator-GV5-NAME = Online
+ST-nlsmanipulator-GV8-NAME = Online
 ST-nlsmanipulator-ST-NAME = Nodeserver Status
 CMD-nlsmanipulator-UPDATE-NAME = Update Status
 CMD-nlsmanipulator-MACTRL-NAME =  Switch control
@@ -115,24 +115,41 @@ CMD-nlsleaksensor-UPDATE-NAME = Update Motion Status
 
 swstate-0 = Off
 swstate-1 = On
+swstate-2 = Unknown
+
 batlevel-0 = Low 
 batlevel-1 = Medium Low
 batlevel-2 = Medium
 batlevel-3 =  Medium High
 batlevel-4 = High
+batlevel-5 = Unknown
+
 alarm-0 = Normal
 alarm-1 = Alarm
+alarm-2 = Unknown 
+
 online-0 = Offline
 online-1 = Online
+
 status-0 = Down
 status-1 = Up
+
 doorstate-0 = closed
 doorstate-1 = open
+doorstate-2 = Unknown 
+
 motionstate-0 = No Motion
 motionstate-1 = Motion Detected
+motionstate-2 = Unknown 
+
 waterstate-0 = Dry
 waterstate-1 = Wet
+waterstate-2 = Unknown 
+
 manstate-0 = Closed
 manstate-1 = Open
+manstate-2 = Unknown 
+
 usbstate-0 = Disabled
 usbstate-1 = Enabled
+usbstate-2 = Unknown 

@@ -43,8 +43,8 @@ class udiYoDoorSensor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 0, 'uom': 25}, 
+            {'driver': 'GV0', 'value': 2, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 5, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -90,7 +90,7 @@ class udiYoDoorSensor(udi_interface.Node):
        
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
-    
+    '''
     def heartbeat(self):
         #LOGGER.debug('heartbeat: hb={}'.format(self.hb))
         if self.hb == 0:
@@ -99,7 +99,7 @@ class udiYoDoorSensor(udi_interface.Node):
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
-    '''
+
     def parameterHandler(self, params):
         self.Parameters.load(params)
     '''

@@ -39,10 +39,10 @@ class udiYoManipulator(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 25},
+            {'driver': 'GV0', 'value': 2, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 44}, 
             {'driver': 'GV2', 'value': 0, 'uom': 44}, 
-            {'driver': 'GV5', 'value': 0, 'uom': 25},
+            {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -80,7 +80,7 @@ class udiYoManipulator(udi_interface.Node):
         self.yoOutlet.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
-    
+    '''   
     def heartbeat(self):
         #LOGGER.debug('heartbeat: hb={}'.format(self.hb))
         if self.hb == 0:
@@ -89,7 +89,7 @@ class udiYoManipulator(udi_interface.Node):
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
-    '''
+
     def parameterHandler(self, params):
         self.Parameters.load(params)
     '''
@@ -111,7 +111,7 @@ class udiYoManipulator(udi_interface.Node):
             else:
                 self.node.setDriver('GV0', 0, True, True)
        
-            self.node.setDriver('GV5', self.yoOutlet.bool2Nbr(self.yoOutlet.getOnlineStatus()), True, True)
+            self.node.setDriver('GV8', self.yoOutlet.bool2Nbr(self.yoOutlet.getOnlineStatus()), True, True)
         
         #while self.yoOutlet.eventPending():
         #    print(self.yoOutlet.getEvent())

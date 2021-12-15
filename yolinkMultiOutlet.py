@@ -25,6 +25,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
     def initNode(yolink):
         yolink.refreshMultiOutlet() # needed to get number of ports on device
+        time.sleep(2)
+        yolink.nbrPorts = yolink.getNbrPorts()
         logging.debug('MultiOutlt init - Nbr ports: []'.format(yolink.nbrPorts))
         #yolink.refreshSchedules()
         #yolink.refreshFWversion()
@@ -90,7 +92,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
     def updateStatus(self, data):
         self.updateCallbackStatus(data, False)
-  
+        # add sub node updates 
     '''
     def refreshFWversion(yolink):
         logging.debug('refreshFWversion - not currently supported')

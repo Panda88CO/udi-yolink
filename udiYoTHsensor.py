@@ -49,13 +49,13 @@ class udiYoTHsensor(udi_interface.Node):
         
     drivers = [
             {'driver': 'CLITEMP', 'value': 0, 'uom': 4},
-            {'driver': 'GV1', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 2, 'uom': 25}, 
+            {'driver': 'GV2', 'value': 2, 'uom': 25}, 
             {'driver': 'CLIHUM', 'value': 0, 'uom': 51},
-            {'driver': 'GV4', 'value': 0, 'uom': 25},
-            {'driver': 'GV5', 'value': 0, 'uom': 25},
-            {'driver': 'BATLVL', 'value': 0, 'uom': 25},
-            {'driver': 'GV7', 'value': 0, 'uom': 25},
+            {'driver': 'GV4', 'value': 2, 'uom': 25},
+            {'driver': 'GV5', 'value': 2, 'uom': 25},
+            {'driver': 'BATLVL', 'value': 5, 'uom': 25},
+            {'driver': 'GV7', 'value': 2, 'uom': 25},
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -99,7 +99,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
-    
+    '''
     def heartbeat(self):
         #LOGGER.debug('heartbeat: hb={}'.format(self.hb))
         if self.hb == 0:
@@ -108,7 +108,7 @@ class udiYoTHsensor(udi_interface.Node):
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
-    '''
+    
     def parameterHandler(self, params):
         self.Parameters.load(params)
     '''
