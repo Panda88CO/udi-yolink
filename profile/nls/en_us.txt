@@ -115,14 +115,14 @@ CMD-nlsleaksensor-UPDATE-NAME = Update Motion Status
 
 swstate-0 = Off
 swstate-1 = On
-swstate-2 = Unknown
+swstate--1 = Unknown
 
 batlevel-0 = Low 
 batlevel-1 = Medium Low
 batlevel-2 = Medium
 batlevel-3 =  Medium High
 batlevel-4 = High
-batlevel-5 = Unknown
+batlevel--1 = Unknown
 
 alarm-0 = Normal
 alarm-1 = Alarm
@@ -140,16 +140,16 @@ doorstate-2 = Unknown
 
 motionstate-0 = No Motion
 motionstate-1 = Motion Detected
-motionstate-2 = Unknown 
+motionstate--1 = Unknown 
 
 waterstate-0 = Dry
 waterstate-1 = Wet
-waterstate-2 = Unknown 
+waterstate--1 = Unknown 
 
 manstate-0 = Closed
 manstate-1 = Open
-manstate-2 = Unknown 
+manstate--1 = Unknown 
 
 usbstate-0 = Disabled
 usbstate-1 = Enabled
-usbstate-2 = Unknown 
+usbstate--1 = Unknown 

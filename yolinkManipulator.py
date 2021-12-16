@@ -25,7 +25,11 @@ class YoLinkManipul(YoLinkMQTTDevice):
 
     def initNode(yolink):
         yolink.refreshState()
-        yolink.refreshSchedules()    
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:
+            yolink.refreshSchedules()
+        else:
+            logging.error('Manipulator device not online')
 
         #yolink.refreshFW
         

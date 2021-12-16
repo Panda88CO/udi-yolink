@@ -90,14 +90,16 @@ class udiYoManipulator(udi_interface.Node):
     def updateStatus(self, data):
         logging.debug('updateStatus - udiYoManipulator')
         self.yoOutlet.updateCallbackStatus(data)
-        print(data)
+        
         if self.node is not None:
-            state =  self.yoOutlet.getState()
-            print(state)
-            if state.upper() == 'ON':
-                self.node.setDriver('GV0', 1, True, True)
-            else:
-                self.node.setDriver('GV0', 0, True, True)
+            state, self.online =  self.yoOutlet.getState()
+            if self.online:
+                if state.upper() == 'ON':
+                    self.node.setDriver('GV0', 1, True, True)
+                elif state.upper() == 'OFF':
+                    self.node.setDriver('GV0', 0, True, True)
+                else:
+                    self.node.setDriver('GV0', -1, True, True)
        
             self.node.setDriver('GV8', self.yoOutlet.bool2Nbr(self.yoOutlet.getOnlineStatus()), True, True)
         

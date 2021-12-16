@@ -29,7 +29,10 @@ class YoLinkGarageDoorSen(YoLinkMQTTDevice):
 
     def initNode(yolink):
         yolink.refreshDevice()
-    
+        yolink.online = yolink.getOnlineStatus()
+        if not yolink.online:
+            logging.error('Door Sensor not online')
+
     def updataStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 

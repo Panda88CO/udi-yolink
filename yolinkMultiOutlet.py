@@ -24,10 +24,16 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
 
     def initNode(yolink):
+        logging.debug('MultiOutlet initNode')
         yolink.refreshMultiOutlet() # needed to get number of ports on device
+        
         time.sleep(2)
-        yolink.nbrPorts = yolink.getNbrPorts()
-        logging.debug('MultiOutlt init - Nbr ports: []'.format(yolink.nbrPorts))
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:
+            yolink.nbrPorts = yolink.getNbrPorts()
+            logging.debug('MultiOutlt init - Nbr ports: {}'.format(yolink.nbrPorts))
+        else:
+            logging.error ('MultiOutlet not online')
         #yolink.refreshSchedules()
         #yolink.refreshFWversion()
 
@@ -70,26 +76,27 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             data["params"]["chs"] =  port
             data["params"]['state'] = state
             yolink.setDevice( 'MultiOutlet.setState', data, yolink.updateStatus)
-        return(status)
+        return(status, yolink.dataAPI[yolink.dOnline])
     
     def getMultiOutletState(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
         temp = yolink.getInfoAPI()
         states= {}
+        logging.debug('getMultiOutletState - temp = {}'.format(temp))
         for port in range(0,yolink.nbrPorts):
             if 'delays' in temp['data']:
                 delay = None
                 for ch in  temp['data']['delays']:
-                    if ch['ch'] == port:
+                    if ch['ch'] == port+1:
                         delay = ch
                 states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':delay}
         #print(states)
-        return(states)
-
+        return(states,  yolink.dataAPI[yolink.dOnline])
+    '''
     def getMultiOutletData(yolink):
-        logging.debug(yolink.type+' - getMultiOutletState')
-
+        logging.debug(yolink.type+' - getMultiOutletData')
+    '''
     def updateStatus(self, data):
         self.updateCallbackStatus(data, False)
         # add sub node updates 

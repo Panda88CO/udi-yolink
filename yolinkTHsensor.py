@@ -26,7 +26,10 @@ class YoLinkTHSen(YoLinkMQTTDevice):
         
     def initNode(yolink):
         yolink.refreshSensor()
-    
+        yolink.online = yolink.getOnlineStatus()
+        if not yolink.online:
+            logging.error('THsensor not online')
+
     def updataStatus(self, data):
         self.updateCallbackStatus(data, False)
 

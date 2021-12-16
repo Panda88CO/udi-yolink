@@ -60,7 +60,7 @@ class udiYoOutlet(udi_interface.Node):
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('TestYoLinkNode INIT')
- 
+
         
         self.csid = csid
         self.csseckey = csseckey
@@ -72,6 +72,7 @@ class udiYoOutlet(udi_interface.Node):
 
         self.devInfo =  deviceInfo   
         self.yoOutlet = None
+        self.outletStates = {'ON':1, 'OFF':0, 'UNKNOWN':2}
         #self.address = address
         #self.poly = polyglot
         #self.count = 0
@@ -108,21 +109,23 @@ class udiYoOutlet(udi_interface.Node):
     def updateStatus(self, data):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoOutlet.updateCallbackStatus(data)
-        print(data)
-        if self.node is not None:
-            state =  self.yoOutlet.getState()
-            print(state)
-            if state.upper() == 'ON':
-                self.node.setDriver('GV0', 1, True, True)
+
+        if self.node is not None and self.online:
+            state, self.online =  self.yoOutlet.getState()
+            state = str(state).upper()
+      
+            if state in self.outletStates:
+                self.node.setDriver('GV0',self.outletStates[state] , True, True)
             else:
-                self.node.setDriver('GV0', 0, True, True)
-            tmp =  self.yoOutlet.getEnergy()
+                self.node.setDriver('GV0', -1, True, True)
+            tmp, self.online =  self.yoOutlet.getEnergy()
             power = tmp['power']
             watt = tmp['watt']
             self.node.setDriver('GV3', power, True, True)
             self.node.setDriver('GV4', watt, True, True)
             self.node.setDriver('GV8', self.yoOutlet.bool2Nbr(self.yoOutlet.getOnlineStatus()), True, True)
-        
+        elif not self.online:
+            logging.info('Outlet not online')
         #while self.yoOutlet.eventPending():
         #    print(self.yoOutlet.getEvent())
 
@@ -147,7 +150,7 @@ class udiYoOutlet(udi_interface.Node):
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
-        if self.yoOutlet.OntlineStatus():
+        if self.yoOutlet.getOnlineStatus():
             if 'longPoll' in polltype:
                 self.yoOutlet.refreshState()
                 self.yoOutlet.refreshSchedules()

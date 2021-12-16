@@ -30,27 +30,7 @@ class YoLinkGarageDoorCtrl(YoLinkMQTTDevice):
 
     def updataStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
-    '''
-    def updateStatus(yolink, data):
-        logging.debug(' YoLinkGarageDoorCtrl - updateStatus')  
-        #special case 
-        if 'method' in  data:
-            if  data['method'] == 'GarageDoor.toggle' and  data['code'] == '000000':
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateStatusData(data)
-                    #yolink.updateGarageCtrlStatus(data)
 
-        elif 'event' in data: # not sure events exits
-            if data['event'] in yolink.eventList:
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateStatusData(data)
-                    eventData = {}
-                    eventData[yolink.ToggleName] = yolink.getState()
-                    eventData[yolink.eventTime] = yolink.data[yolink.messageTime]
-                    yolink.eventQueue.put(eventData)
-        else:
-            logging.error('unsupported data: ' + str(json(data)))
-    '''
     
 class YoLinkGarageDoorToggle(YoLinkGarageDoorCtrl):
     def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):

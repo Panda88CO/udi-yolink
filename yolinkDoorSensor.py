@@ -34,6 +34,9 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
         
     def initNode(yolink):
         yolink.refreshDevice()
+        yolink.online = yolink.getOnlineStatus()
+        if not yolink.online:
+            logging.error('Door Sensor not online')
     
     def refreshSensor(yolink):
         yolink.refreshDevice()

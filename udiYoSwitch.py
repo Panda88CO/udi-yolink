@@ -107,14 +107,16 @@ class udiYoSwitch(udi_interface.Node):
     def updateStatus(self, data):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoSwitch.updateCallbackStatus(data)
-        print(data)
+
         if self.node is not None:
-            state =  self.yoSwitch.getState()
-            print(state)
-            if state.upper() == 'ON':
-                self.node.setDriver('GV0', 1, True, True)
+            state, self.online =  self.yoSwitch.getState()
+            if self.online:
+                if state.upper() == 'ON':
+                    self.node.setDriver('GV0', 1, True, True)
+                else:
+                    self.node.setDriver('GV0', 0, True, True)
             else:
-                self.node.setDriver('GV0', 0, True, True)
+                self.node.setDriver('GV0', -1, True, True)
             #tmp =  self.yoSwitch.getEnergy()
             #power = tmp['power']
             #watt = tmp['watt']

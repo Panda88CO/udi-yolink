@@ -32,26 +32,11 @@ class YoLinkLeakSen(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
-    '''
-    def updateStatus(yolink, data):
-        logging.debug('updateStatus')  
-        if 'method' in  data:
-            if  (data['method'] in yolink.methodList and  data['code'] == '000000'):
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                     yolink.updateStatusData(data)
-        elif 'event' in data:
-            if data['event'] in yolink.eventList:
-                if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateStatusData(data)
-                    eventData = {}
-                    eventData[yolink.waterName] = yolink.getState()
-                    eventData[yolink.eventTime] = yolink.data[yolink.messageTime]
-                    yolink.eventQueue.put(eventData)
-        else:
-            logging.error('unsupported data: ' + str(json(data)))
-    '''
     def initNode(yolink):
         yolink.refreshDevice()
+        yolink.online = yolink.getOnlineStatus()
+        if not yolink.online:
+            logging.error('Leak Sensor not online')
     
     def probeState(yolink):
          return(yolink.getState() )

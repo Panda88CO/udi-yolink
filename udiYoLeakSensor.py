@@ -109,11 +109,13 @@ class udiYoLeakSensor(udi_interface.Node):
     '''
     
     def waterState(self):
-        if  self.yoLeakSensor.probeState() == 'normal':
-            return(0)
+        if self.online:
+            if  self.yoLeakSensor.probeState() == 'normal':
+                return(0)
+            else:
+                return(1)
         else:
-            return(1)
-
+            return(-1)
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoLeakSensor')
@@ -123,7 +125,8 @@ class udiYoLeakSensor(udi_interface.Node):
         logging.debug(data)
         if self.node is not None:
             logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(self.waterState(),self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus())  ))
-            self.node.setDriver('GV0', self.waterState(), True, True)
+            waterState, self.online =   self.waterState()          
+            self.node.setDriver('GV0', waterState, True, True)
             self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
             self.node.setDriver('GV8', self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus()), True, True)
 

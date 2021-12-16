@@ -15,44 +15,49 @@ except ImportError:
 
 
 class YoLinkSW(YoLinkMQTTDevice):
-    def __init__(self, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
         super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback)
         
-        self.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
-        self.eventList = ['StatusChange', 'Report', 'getState']
-        self.stateList = ['open', 'closed', 'on', 'off']
-        self.eventTime = 'Time'
-        self.type = 'Switch'
+        yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
+        yolink.eventList = ['StatusChange', 'Report', 'getState']
+        yolink.stateList = ['open', 'closed', 'on', 'off']
+        yolink.eventTime = 'Time'
+        yolink.type = 'Switch'
         time.sleep(3)
-        #print('self.refreshState')
-        #self.refreshState()
-        #self.refreshSchedules()
-        #self.refreshFWversion()
+        #print('yolink.refreshState')
+        #yolink.refreshState()
+        #yolink.refreshSchedules()
+        #yolink.refreshFWversion()
         #print(' YoLinkSW - finished initailizing')
 
     ''' Assume no event support needed if using MQTT'''
-    def updataStatus(self, data):
-        self.updateCallbackStatus(data, False)
+    def updataStatus(yolink, data):
+        yolink.updateCallbackStatus(data, False)
 
-    def initNode(self):
-        self.refreshState()
-        self.refreshSchedules()
-        #self.refreshFWversion()
+    def initNode(yolink):
+
+        yolink.refreshState()
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:
+            yolink.refreshSchedules()
+        else:
+            logging.error('Switch not online')
+        #yolink.refreshFWversion()
         #print(' YoLinkSW - finished intializing')
  
-    def updateStatus(self, data):
-        self.updateCallbackStatus(data, False)
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, False)
 
-    def getDelays(self):
+    def getDelays(yolink):
         return super().getDelays()
 
-    def setState(self, state):
-        logging.debug(self.type+' - setState')
+    def setState(yolink, state):
+        logging.debug(yolink.type+' - setState')
 
-        if 'setState'  in self.methodList:          
-            if state.lower() not in self.stateList:
+        if 'setState'  in yolink.methodList:          
+            if state.lower() not in yolink.stateList:
                 logging.error('Unknows state passed')
-                return(False)
+                return(False, yolink.dataAPI[yolink.dOnline])
             if state.lower() == 'on':
                 state = 'open'
             if state.lower() == 'off':
@@ -60,39 +65,39 @@ class YoLinkSW(YoLinkMQTTDevice):
             data = {}
             data['params'] = {}
             data['params']['state'] = state.lower()
-            return(self.setDevice( data))
+            return(yolink.setDevice( data), yolink.dataAPI[yolink.dOnline])
         else:
-            return(False)
+            return(False, yolink.dataAPI[yolink.dOnline])
     
 
-    def getState(self):
-        logging.debug(self.type+' - getState')
+    def getState(yolink):
+        logging.debug(yolink.type+' - getState')
         attempts = 0
 
-        while self.dState not in self.dataAPI[self.dData] and attempts < 5:
+        while yolink.dState not in yolink.dataAPI[yolink.dData] and attempts < 5:
             time.sleep(1)
             attempts = attempts + 1
-        if attempts < 5 and 'state' in self.dataAPI[self.dData][self.dState]:
-            if  self.dataAPI[self.dData][self.dState]['state'] == 'open':
+        if attempts < 5 and 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
+            if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                 return('ON')
-            elif self.dataAPI[self.dData][self.dState]['state'] == 'closed':
+            elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
                 return('OFF')
             else:
                 return('Unkown')
         else:
             return('Unkown')
     '''
-    def getEnergy(self):
-        logging.debug(self.type+' - getEnergy')
-        return({'power':self.dataAPI[self.dData][self.dState]['power'], 'watt':self.dataAPI[self.dData][self.dState]['power']})
+    def getEnergy(yolink):
+        logging.debug(yolink.type+' - getEnergy')
+        return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
     '''
 
 class YoLinkSwitch(YoLinkSW):
-    def __init__(self, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey,  deviceInfo, self.updateStatus, yolink_URL, mqtt_URL, mqtt_port)
-        self.initNode()
+    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+        super().__init__(  csName, csid, csseckey,  deviceInfo, yolink.updateStatus, yolink_URL, mqtt_URL, mqtt_port)
+        yolink.initNode()
 
 
-    def updateStatus(self, data):
-        self.updateCallbackStatus(data, True)
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, True)
 
