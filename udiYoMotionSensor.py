@@ -122,9 +122,14 @@ class udiYoMotionSensor(udi_interface.Node):
 
         logging.debug(data)
         if self.node is not None:
-            self.node.setDriver('GV0', self.MotionState(), True, True)
-            self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
-            self.node.setDriver('GV8', self.yoMotionsSensor.bool2Nbr(self.yoMotionsSensor.getOnlineStatus()), True, True)
+            if self.yoMotionsSensor.online:
+                self.node.setDriver('GV0', self.MotionState(), True, True)
+                self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
+                self.node.setDriver('GV8', 1, True, True)
+            else:
+                self.node.setDriver('GV0', 99, True, True)
+                self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('GV8', 1, True, True)
 
     def poll(self, polltype):
         logging.debug('ISY poll ')

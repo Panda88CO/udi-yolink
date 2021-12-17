@@ -43,8 +43,8 @@ class udiYoDoorSensor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 5, 'uom': 25}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -108,9 +108,15 @@ class udiYoDoorSensor(udi_interface.Node):
         logging.debug(data)
         alarms = self.yoDoorSensor.getAlarms()
         if self.node is not None:
-            self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
-            self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
-            self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoDoorSensor.getOnlineStatus()), True, True)
+            if self.yoDoorSensor.online:
+                self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
+                self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
+                self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoDoorSensor.getOnlineStatus()), True, True)
+            else:
+                self.node.setDriver('GV0', 99, True, True)
+                self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('GV8', 0, True, True)
+
 
     def poll(self, polltype):
         logging.debug('ISY poll ')

@@ -16,6 +16,8 @@ CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
 
 
+
+
 ND-yooutlet-NAME = YoLink Outlet
 ND-yooutlet-ICON = Switch
 ST-nlsoutlet-GV0-NAME = Outlet State
@@ -29,6 +31,13 @@ CMD-nlsoutlet-UPDATE-NAME = Update Status
 CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
 CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
+
+ND-yomultiout-NAME = YoLink Outlet
+ND-yomultiout-ICON = Switch
+ST-nlsmultiout-GV9-NAME = Online
+ST-nlsmultiout-ST-NAME = Nodeserver Status
+CMD-nlsmultiout-UPDATE-NAME = Update Status
+
 
 ND-yosubout-NAME = YoLink subOutlet
 ND-yosubout-ICON = Switch
@@ -80,7 +89,7 @@ ST-nlsthsensor-ST-NAME = Nodeserver Status
 CMD-nlsthsensor-UPDATE-NAME = Update Status
 
 
-ND-yogaragectrl-NAME = YoLink GAragre Controller
+ND-yogaragectrl-NAME = YoLink Garagre Controller
 ND-yogaragectrl-ICON = Switch
 ST-nlsgaragctrl-GV8-NAME = online
 ST-nlsgaragctrl-ST-NAME = Nodeserver Status
@@ -93,7 +102,7 @@ ST-nlsdoorsensor-GV0-NAME = Garage Door State
 ST-nlsdoorsensor-GV1-NAME = Sensor Battery Level
 ST-nlsdoorsensor-GV8-NAME = Online
 ST-nlsdoorsensor-ST-NAME = Nodeserver Status
-CMD-nlsgaragedoor-UPDATE-NAME = Update Door Status
+CMD-nlsdoorsensor-UPDATE-NAME = Update Door Status
 
 
 ND-yomotionsensor-NAME = YoLink Motion Sensor
@@ -115,18 +124,18 @@ CMD-nlsleaksensor-UPDATE-NAME = Update Motion Status
 
 swstate-0 = Off
 swstate-1 = On
-swstate--1 = Unknown
+swstate-99 = Unknown
 
 batlevel-0 = Low 
 batlevel-1 = Medium Low
 batlevel-2 = Medium
 batlevel-3 =  Medium High
 batlevel-4 = High
-batlevel--1 = Unknown
+batlevel-99 = Unknown
 
 alarm-0 = Normal
 alarm-1 = Alarm
-alarm-2 = Unknown 
+alarm-99 = Unknown 
 
 online-0 = Offline
 online-1 = Online
@@ -136,20 +145,20 @@ status-1 = Up
 
 doorstate-0 = closed
 doorstate-1 = open
-doorstate-2 = Unknown 
+doorstate-99 = Unknown 
 
 motionstate-0 = No Motion
 motionstate-1 = Motion Detected
-motionstate--1 = Unknown 
+motionstate-99 = Unknown 
 
 waterstate-0 = Dry
 waterstate-1 = Wet
-waterstate--1 = Unknown 
+waterstate-99 = Unknown 
 
 manstate-0 = Closed
 manstate-1 = Open
-manstate--1 = Unknown 
+manstate-99 = Unknown 
 
 usbstate-0 = Disabled
 usbstate-1 = Enabled
-usbstate--1 = Unknown 
+usbstate-99 = Unknown 

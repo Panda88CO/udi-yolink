@@ -105,27 +105,23 @@ class udiYoSwitch(udi_interface.Node):
 
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - TestYoLinkNode')
+        logging.debug('updateStatus - Switch')
         self.yoSwitch.updateCallbackStatus(data)
 
         if self.node is not None:
-            state =  self.yoSwitch.getState()
+            state =  self.yoSwitch.getState().upper()
             if self.yoSwitch.online:
-                if state.upper() == 'ON':
+                if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
-                else:
+                elif  state == 'OFF':
                     self.node.setDriver('GV0', 0, True, True)
+                else:
+                    self.node.setDriver('GV0', 99, True, True)
+                self.node.setDriver('GV8', 1, True, True)
             else:
-                self.node.setDriver('GV0', -1, True, True)
-            #tmp =  self.yoSwitch.getEnergy()
-            #power = tmp['power']
-            #watt = tmp['watt']
-            #self.node.setDriver('GV3', power, True, True)
-            #self.node.setDriver('GV4', watt, True, True)
-            self.node.setDriver('GV8', self.yoSwitch.bool2Nbr(self.yoSwitch.getOnlineStatus()), True, True)
-        
-        #while self.yoSwitch.eventPending():
-        #    print(self.yoSwitch.getEvent())
+                self.node.setDriver('GV8', 0, True, True)
+            a=self.pollDelays()
+           
 
 
     # Need to use shortPoll

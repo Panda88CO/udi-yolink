@@ -72,7 +72,7 @@ class udiYoOutlet(udi_interface.Node):
 
         self.devInfo =  deviceInfo   
         self.yoOutlet = None
-        self.outletStates = {'ON':1, 'OFF':0, 'UNKNOWN':2}
+        #self.outletStates = {'ON':1, 'OFF':0, 'UNKNOWN':2}
         #self.address = address
         #self.poly = polyglot
         #self.count = 0
@@ -111,25 +111,28 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.updateCallbackStatus(data)
 
         if self.node is not None:
-            
-            state = str(self.yoOutlet.getState()).upper()
-      
-            if state in self.outletStates:
-                self.node.setDriver('GV0',self.outletStates[state] , True, True)
+            if  self.yoOutlet.online:
+                state = str(self.yoOutlet.getState()).upper()
+                if state == 'ON':
+                    self.node.setDriver('GV0',1 , True, True)
+                elif state == 'OFF' :
+                    self.node.setDriver('GV0', 0, True, True)
+                else:
+                    self.node.setDriver('GV0', 99, True, True)
+                self.node.setDriver('GV8',1, True, True)
             else:
-                self.node.setDriver('GV0', -1, True, True)
+                self.node.setDriver('GV0', 99, True, True)
+                self.node.setDriver('GV3', -1, True, True)
+                self.node.setDriver('GV4', -1, True, True)
+                self.node.setDriver('GV8',0, True, True)
+            
+            self.pollDelays
             tmp =  self.yoOutlet.getEnergy()
             power = tmp['power']
             watt = tmp['watt']
             self.node.setDriver('GV3', power, True, True)
             self.node.setDriver('GV4', watt, True, True)
-            self.node.setDriver('GV8', self.yoOutlet.bool2Nbr(self.yoOutlet.getOnlineStatus()), True, True)
-        elif not  self.yoOutlet.online:
-            logging.info('Outlet not online')
-        #while self.yoOutlet.eventPending():
-        #    print(self.yoOutlet.getEvent())
-
-
+            
     # Need to use shortPoll
     def pollDelays(self):
         delays =  self.yoOutlet.getDelays()

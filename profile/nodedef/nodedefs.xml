@@ -215,7 +215,9 @@
          </accepts>
       </cmds>
    </nodeDef> 
-      <nodeDef id="yomotionsensor" nls="nlsmotionsensor">
+
+
+   <nodeDef id="yomotionsensor" nls="nlsmotionsensor">
       <editors />
       <sts>
          <st id="GV0" editor="motionstate" />
@@ -230,7 +232,6 @@
             <cmd id="UPDATE" /> 
          </accepts>
       </cmds>
-
    </nodeDef> 
 
       </nodeDef> 

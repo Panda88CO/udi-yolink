@@ -39,7 +39,7 @@ class udiYoManipulator(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 2, 'uom': 25},
+            {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 44}, 
             {'driver': 'GV2', 'value': 0, 'uom': 44}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
@@ -97,10 +97,16 @@ class udiYoManipulator(udi_interface.Node):
                 elif state.upper() == 'OFF':
                     self.node.setDriver('GV0', 0, True, True)
                 else:
-                    self.node.setDriver('GV0', -1, True, True)
-       
-            self.node.setDriver('GV8', self.yoManipulator.bool2Nbr(self.yoManipulator.getOnlineStatus()), True, True)
-        
+                    self.node.setDriver('GV0', 99, True, True)
+                
+                self.node.setDriver('GV8', 1, True, True)
+                self.pollDelays()
+            else:
+                self.node.setDriver('GV0', 99, True, True)
+                self.node.setDriver('GV1', 0, True, True)     
+                self.node.setDriver('GV2', 0, True, True)   
+                self.node.setDriver('GV8', 0, True, True)   
+                
 
 
 

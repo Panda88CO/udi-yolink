@@ -1,9 +1,9 @@
 <editors> 
   <editor id = "status" > 
-     <range  uom="25" subset="0-1" nls="status" />
+     <range  uom="25" subset="0-1, 99" nls="status" />
 </editor>
   <editor id = "swstate" > 
-     <range  uom="25" subset="-1-1" nls="swstate" />
+     <range  uom="25" subset="0-1,99" nls="swstate" />
 </editor>
   <editor id = "watt" > 
      <range  uom="30" min="-1" max="2000" prec="2" />
@@ -18,34 +18,34 @@
      <range  uom="4"  min="-40" max="140" prec="1" />
 </editor>
   <editor id = "alarm" > 
-     <range  uom="25" subset="-1-1" nls="alarm" />
+     <range  uom="25" subset="0-1,99" nls="alarm" />
 </editor>
   <editor id = "humidity" > 
      <range  uom="51"  min="0" max="100" prec="1" />
 </editor>
   <editor id = "batlevel" > 
-     <range  uom="25" subset="-1-4" nls="batlevel" />
+     <range  uom="25" subset="0-4,99" nls="batlevel" />
 </editor>
   <editor id = "doorstate" > 
-     <range  uom="25" subset="-1-1" nls="doorstate" />
+     <range  uom="25" subset="0-1,99" nls="doorstate" />
 </editor>
 
   <editor id = "online" > 
      <range  uom="25" subset="0-1" nls="online" />
 </editor>
   <editor id = "motionstate" > 
-     <range  uom="25" subset="-1-1" nls="motionstate" />
+     <range  uom="25" subset="0-1,99" nls="motionstate" />
 </editor>
 </editor>
   <editor id = "waterstate" > 
-     <range  uom="25" subset="-1-1" nls="waterstate" />
+     <range  uom="25" subset="0-1,99" nls="waterstate" />
 </editor>
   <editor id = "manstate" > 
-     <range  uom="25" subset="-1-1" nls="mastate" />
+     <range  uom="25" subset="0-1,99" nls="mastate" />
 </editor>
 </editor>
   <editor id = "usbstate" > 
-     <range  uom="25" subset="-1-1" nls="usbstate" />
+     <range  uom="25" subset="0-1,99" nls="usbstate" />
 </editor>
   <editor id = "outletnbr" > 
      <range  uom="107" min="1" max="4" prec="0"/> />

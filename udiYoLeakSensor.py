@@ -41,8 +41,8 @@ class udiYoLeakSensor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 5, 'uom': 25}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -124,11 +124,17 @@ class udiYoLeakSensor(udi_interface.Node):
 
         logging.debug(data)
         if self.node is not None:
-            logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(self.waterState(),self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus())  ))
-            waterState =   self.waterState()          
-            self.node.setDriver('GV0', waterState, True, True)
-            self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
-            self.node.setDriver('GV8', self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus()), True, True)
+            if self.yoLeakSensor.online:
+                logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(self.waterState(),self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus())  ))
+                waterState =   self.waterState()          
+                self.node.setDriver('GV0', waterState, True, True)
+                self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
+                self.node.setDriver('GV8', 1, True, True)
+            else:
+                self.node.setDriver('GV0', 99, True, True)
+                self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('GV8', 0, True, True)
+
 
     def poll(self, polltype):
         logging.debug('ISY poll ')

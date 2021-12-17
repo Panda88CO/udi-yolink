@@ -101,9 +101,8 @@ class udiYoGarageDoor(udi_interface.Node):
         self.yoDoorControl.updateCallbackStatus(data)
         logging.debug(data)
         if self.node is not None:
-            self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
-            self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
-            self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoTHsensor.getOnlineStatus()), True, True)
+            self.node.setDriver('GV8', self.yoDoorControl.bool2Nbr(self.yoDoorControl.online), True, True)
+
 
     '''
     def poll(self, polltype):
