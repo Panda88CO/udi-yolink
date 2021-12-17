@@ -107,7 +107,7 @@ class udiYoMotionSensor(udi_interface.Node):
     '''
     
     def MotionState(self):
-        if self.online:
+        if self.yoMotionsSensor.online:
             if  self.yoMotionsSensor.motionState() == 'normal':
                 return(0)
             else:

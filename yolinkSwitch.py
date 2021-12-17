@@ -48,12 +48,13 @@ class YoLinkSW(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
+    '''
     def getDelays(yolink):
         return super().getDelays()
+    '''
 
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState')
-
         if 'setState'  in yolink.methodList:          
             if state.lower() not in yolink.stateList:
                 logging.error('Unknows state passed')
@@ -65,9 +66,9 @@ class YoLinkSW(YoLinkMQTTDevice):
             data = {}
             data['params'] = {}
             data['params']['state'] = state.lower()
-            return(yolink.setDevice( data), yolink.dataAPI[yolink.dOnline])
+            return(yolink.setDevice( data))
         else:
-            return(False, yolink.dataAPI[yolink.dOnline])
+            return(False)
     
 
     def getState(yolink):

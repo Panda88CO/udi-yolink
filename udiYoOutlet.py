@@ -110,21 +110,21 @@ class udiYoOutlet(udi_interface.Node):
         logging.debug('updateStatus - TestYoLinkNode')
         self.yoOutlet.updateCallbackStatus(data)
 
-        if self.node is not None and self.online:
-            state, self.online =  self.yoOutlet.getState()
-            state = str(state).upper()
+        if self.node is not None:
+            
+            state = str(self.yoOutlet.getState()).upper()
       
             if state in self.outletStates:
                 self.node.setDriver('GV0',self.outletStates[state] , True, True)
             else:
                 self.node.setDriver('GV0', -1, True, True)
-            tmp, self.online =  self.yoOutlet.getEnergy()
+            tmp =  self.yoOutlet.getEnergy()
             power = tmp['power']
             watt = tmp['watt']
             self.node.setDriver('GV3', power, True, True)
             self.node.setDriver('GV4', watt, True, True)
             self.node.setDriver('GV8', self.yoOutlet.bool2Nbr(self.yoOutlet.getOnlineStatus()), True, True)
-        elif not self.online:
+        elif not  self.yoOutlet.online:
             logging.info('Outlet not online')
         #while self.yoOutlet.eventPending():
         #    print(self.yoOutlet.getEvent())
@@ -136,7 +136,7 @@ class udiYoOutlet(udi_interface.Node):
         logging.debug('delays: ' + str(delays))
         #print('on delay: ' + str(delays['on']))
         #print('off delay: '+ str(delays['off']))
-        if delays != None:
+        if delays != None and  self.yoOutlet.online:
             if delays['on'] != 0 or delays['off'] !=0:
                 delays =  self.yoOutlet.refreshDelays() # should be able to calculate without polling 
                 if 'on' in delays:

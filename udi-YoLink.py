@@ -50,7 +50,7 @@ multiplier. These get updated at every shortPoll interval
 class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
         super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  
-        
+        logging.setLevel(20)
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
@@ -94,6 +94,7 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('{} devices detected'.format(len(self.deviceList)))
         isyNbr = 0
         isyName = 'yolink'  # has to be lower case and less than 13 chars
+        logging.setLevel(10)
         for dev in range(0,len(self.deviceList)):
             logging.debug('adding/checking device : {}'.format(self.deviceList[dev]['type']))
             if self.deviceList[dev]['type'] in self.supportedYoTypes:
@@ -215,6 +216,7 @@ class YoLinkSetup (udi_interface.Node):
 
     def handleParams (self, userParam ):
         logging.debug('handleParams')
+        logging.setLevel(20)
         self.Parameters.load(userParam)
         self.poly.Notices.clear()
         
@@ -351,6 +353,7 @@ class YoLinkSetup (udi_interface.Node):
         if not cloud_valid and not local_valid:
             self.poly.Notices['cfg'] = 'Tesla PowerWall NS needs configuration.'
         '''
+        logging.setLevel(10)
         logging.debug('done with parameter processing')
  
     id = 'setup'

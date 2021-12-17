@@ -27,7 +27,9 @@ class YoLinkLeakSen(YoLinkMQTTDevice):
 
     def refreshSensor(yolink):
         logging.debug('refreshWaterSensor')
-        return(yolink.refreshDevice())
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            return(yolink.refreshDevice())
 
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)

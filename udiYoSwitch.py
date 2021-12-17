@@ -109,8 +109,8 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSwitch.updateCallbackStatus(data)
 
         if self.node is not None:
-            state, self.online =  self.yoSwitch.getState()
-            if self.online:
+            state =  self.yoSwitch.getState()
+            if self.yoSwitch.online:
                 if state.upper() == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                 else:

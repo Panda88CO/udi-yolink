@@ -39,34 +39,40 @@ class YoLinkManipul(YoLinkMQTTDevice):
         self.updateCallbackStatus(data, False)
 
     def setState(yolink, state):
-        logging.debug(yolink.type+' - setState')  
-        if state.lower() != 'open' and  state.lower() != 'closed':
-            logging.error('Unknows state passed')
-            return(False)
-        data = {}
-        data['params'] = {}
-        data['params']['state'] = state.lower()
-        return(yolink.setDevice( data))
+        logging.debug(yolink.type+' - setState')
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            if state.lower() != 'open' and  state.lower() != 'closed':
+                logging.error('Unknows state passed')
+                return(False)
+            data = {}
+            data['params'] = {}
+            data['params']['state'] = state.lower()
+            return(yolink.setDevice( data))
 
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
-        attempts = 0
-        while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
-            time.sleep(1)
-            attempts = attempts + 1
-        if attempts <= 5:
-            if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
-                return('open')
-            elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
-                return('closed')
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            attempts = 0
+            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
+                time.sleep(1)
+                attempts = attempts + 1
+            if attempts <= 5:
+                if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
+                    return('open')
+                elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
+                    return('closed')
+                else:
+                    return('Unkown')
             else:
                 return('Unkown')
-        else:
-            return('Unkown')
     
     def getData(yolink):
-        return(yolink.getData())
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            return(yolink.getData())
 
 
 class YoLinkManipulator(YoLinkManipul):

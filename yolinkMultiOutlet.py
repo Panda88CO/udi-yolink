@@ -76,12 +76,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             data["params"]["chs"] =  port
             data["params"]['state'] = state
             yolink.setDevice( 'MultiOutlet.setState', data, yolink.updateStatus)
-        return(status, yolink.dataAPI[yolink.dOnline])
+        return(status)
     
     def getMultiOutletState(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
         temp = yolink.getInfoAPI()
+        #yolink.nbrPorts, yolink.online = yolink.getNbrPorts()
         states= {}
         logging.debug('getMultiOutletState - temp = {}'.format(temp))
         for port in range(0,yolink.nbrPorts):
@@ -92,7 +93,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                         delay = ch
                 states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':delay}
         #print(states)
-        return(states,  yolink.dataAPI[yolink.dOnline])
+        return(states)
     '''
     def getMultiOutletData(yolink):
         logging.debug(yolink.type+' - getMultiOutletData')

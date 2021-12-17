@@ -46,7 +46,8 @@ class YoLinkOutl(YoLinkMQTTDevice):
     def setState(yolink, state):
         logging.debug(yolink.type + ' - setState')
         outlet = str(state)
-        if yolink.getOnlineStatus():
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:
             if 'setState'  in yolink.methodList:          
                 if outlet.lower() not in yolink.stateList:
                     logging.error('Unknows state passed')
@@ -58,40 +59,44 @@ class YoLinkOutl(YoLinkMQTTDevice):
                 data = {}
                 data['params'] = {}
                 data['params']['state'] = state.lower()
-                return(yolink.setDevice( data), yolink.dataAPI[yolink.dOnline])
+                return(yolink.setDevice( data))
         else:
-            return(False, yolink.dataAPI[yolink.dOnline])
+            return(False)
     
     def getDelays(yolink):
-        if yolink.getOnlineStatus():
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online :
             return super().getDelays()
 
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
-        if yolink.getOnlineStatus():       
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:       
             attempts = 0
             while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
                 time.sleep(1)
                 attempts = attempts + 1
             if attempts <= 5 and yolink.dataAPI[yolink.dData][yolink.dState]:
                 if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
-                    return('ON', yolink.dataAPI[yolink.dOnline])
+                    return('ON')
                 elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
-                    return('OFF', yolink.dataAPI[yolink.dOnline])
+                    return('OFF')
                 else:
-                    return('Unkown', yolink.dataAPI[yolink.dOnline])
+                    return('Unkown')
             else:
-                return('Unkown', yolink.dataAPI[yolink.dOnline])
+                return('Unkown')
         else:
-            return('Unkown', yolink.dataAPI[yolink.dOnline])
+            return('Unkown')
 
     def getEnergy(yolink):
         logging.debug(yolink.type+' - getEnergy')
-        if yolink.getOnlineStatus():
+
+        yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
             return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
         else:
-            return({'power': -1, 'watt':-1}, yolink.dataAPI[yolink.dOnline])
+            return({'power': -1, 'watt':-1})
     
     
 class YoLinkOutlet(YoLinkOutl):
