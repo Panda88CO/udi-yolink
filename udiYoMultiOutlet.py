@@ -253,7 +253,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                     logging.error('Failed to create {}: {}'.format(self.subnodeName[port], e))
             if self.nbrOutlets == 4: #controllable USB included
                 try:
-                    self.subnodeName[4] = self.address+'u'+str(port+1)
+                    self.subnodeName[4] = self.address+'u'+str(5)
                     node = udiYoSubUSB(self.poly, self.address,self.subnodeName[4] , 'USB Ports', self.usbUpdates)
                     self.poly.addNode(node)
                     self.wait_for_node_done()
