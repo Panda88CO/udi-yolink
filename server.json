@@ -1,5 +1,5 @@
 {
-    "name": "Test Node for YoLink",
+    "name": "YoLink Integration",
     "docs": "https://github.com/Panda88CO/udi-yolink",
     "type": "python3",
     "executable": "udi-YoLink.py",
@@ -8,7 +8,7 @@
     "notice": "Uses MQTT comminication",
     "shortPoll": "60",
     "longPoll": "180",
-    "profile_version": "0.0.2",
+    "profile_version": "0.0.3",
     "customParams": {
         "YOLINK_URL" : "https://api.yosmart.com/openApi",   
         "YOLINKV2_URL": "https://api.yosmart.com/open/yolink/v2/api", 
@@ -26,10 +26,10 @@
 	    },
     "credits": [
         {
-            "title": "A NodeServer to test integration of YoLink devices ",
+            "title": "A NodeServer to allow integration of YoLink devices ",
             "author": "Panda88CO",
-            "version": "0.0.2",
-            "date": "Nov 20,  2021",
+            "version": "0.0.3",
+            "date": "Dec 18,  2021",
             "source": "https://github.com/Panda88CO/udi-yolink",
             "license": "https://github.com/Panda88CO/udi-yolink/blob/main/license"
         }
