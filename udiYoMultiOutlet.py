@@ -62,7 +62,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
         self.node.setDriver('GV4', self.port+1, True, True)
-        self.yolink.
+        
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
@@ -247,13 +247,14 @@ class udiYoMultiOutlet(udi_interface.Node):
 
         self.subnodeName = {}
         if self.yoMulteOutlet.online:
+            self.node.setDriver('GV8', 1, True, True)
             for port in range(0,self.nbrOutlets):
                 try:
                     self.subnodeName[port] = self.address+'s'+str(port+1)
                     node = udiYoSubOutlet(self.poly, self.address, self.subnodeName[port], 'SubOutlet-'+str(port+1),self.yoMulteOutlet, port)
                     self.poly.addNode(node)
                     self.wait_for_node_done()
-                    
+                                       
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subnodeName[port], e))
             if self.nbrOutlets == 4: #controllable USB included
@@ -268,15 +269,15 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.node.setDriver('ST', 1, True, True)
             self.subNodesReady = True
             self.createdNodes = self.poly.getNodes()
-            logging.info('udiYoMultiOutlet - creating sub nodes')
+            logging.info('udiYoMultiOutlet - finished creating sub nodes')
             #logging.debug(self.subnodeName)
             #logging.debug(self.createdNodes)
-            
-            
         else:
             logging.info('MultiOulet is not online')
    
         self.yoMulteOutlet.refreshMultiOutlet()
+        logging.debug('Finished  MultiOutlet start')
+
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
