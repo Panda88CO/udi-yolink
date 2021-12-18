@@ -92,15 +92,15 @@ class udiYoManipulator(udi_interface.Node):
         if self.node is not None:
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
-                if state.upper() == 'ON':
+                if state.upper() == 'OPEN':
                     self.node.setDriver('GV0', 1, True, True)
-                elif state.upper() == 'OFF':
+                elif state.upper() == 'CLOSED':
                     self.node.setDriver('GV0', 0, True, True)
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 
                 self.node.setDriver('GV8', 1, True, True)
-                self.pollDelays()
+                self.updateDelays()
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 0, True, True)     
@@ -108,6 +108,19 @@ class udiYoManipulator(udi_interface.Node):
                 self.node.setDriver('GV8', 0, True, True)   
                 
 
+    def updateDelays(self):
+        delays =  self.yoManipulator.getDelays()
+        logging.debug('delays: ' + str(delays))
+        #print('on delay: ' + str(delays['on']))
+        #print('off delay: '+ str(delays['off']))
+        if delays != None:
+            if 'on' in delays:
+                self.node.setDriver('GV1', delays['on'], True, True)
+            if 'off' in delays:
+                self.node.setDriver('GV2', delays['off'], True, True)               
+        else:
+            self.node.setDriver('GV1', 0, True, True)     
+            self.node.setDriver('GV2', 0, True, True)     
 
 
     # Need to use shortPoll
@@ -117,12 +130,11 @@ class udiYoManipulator(udi_interface.Node):
         #print('on delay: ' + str(delays['on']))
         #print('off delay: '+ str(delays['off']))
         if delays != None:
-            if delays['on'] != 0 or delays['off'] !=0:
-                delays =  self.yoManipulator.refreshDelays() # should be able to calculate without polling 
-                if 'on' in delays:
-                    self.node.setDriver('GV1', delays['on'], True, True)
-                if 'off' in delays:
-                    self.node.setDriver('GV2', delays['off'], True, True)               
+            delays =  self.yoManipulator.refreshDelays() # should be able to calculate without polling 
+            if 'on' in delays:
+                self.node.setDriver('GV1', delays['on'], True, True)
+            if 'off' in delays:
+                self.node.setDriver('GV2', delays['off'], True, True)               
         else:
             self.node.setDriver('GV1', 0, True, True)     
             self.node.setDriver('GV2', 0, True, True)     

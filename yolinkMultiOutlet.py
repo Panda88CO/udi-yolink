@@ -18,7 +18,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdates'   ]
         yolink.eventList = ['StatusChange', 'Report']
         yolink.type = 'MultiOutlet'
-        yolink.ManipulatorName = 'MultiOutletEvent'
+        yolink.MultiOutletName = 'MultiOutletEvent'
         yolink.eventTime = 'Time'
         time.sleep(2)
 

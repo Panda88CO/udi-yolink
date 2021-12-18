@@ -38,9 +38,9 @@ class udiYoSubOutlet(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 30}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 33}, 
-            {'driver': 'GV4', 'value': 0, 'uom': 33},           
+            {'driver': 'GV1', 'value': 0, 'uom': 44}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 44}, 
+            {'driver': 'GV4', 'value': 0, 'uom': 25},           
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -62,6 +62,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
         self.node.setDriver('GV4', self.port+1, True, True)
+        self.yolink.
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
@@ -238,17 +239,18 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yoMulteOutlet  = YoLinkMultiOut(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
         self.yoMulteOutlet.initNode()
         time.sleep(2)
+        logging.debug('multiOutlet past initNode')
         self.nbrOutlets = self.yoMulteOutlet.getNbrPorts()
-        states = self.yoMulteOutlet.getMultiOutletState()
+        #states = self.yoMulteOutlet.getMultiOutletState()
         delays = self.yoMulteOutlet.getDelays()
-        logging.debug('init data {}, {}, {}'.format(self.nbrOutlets, states, delays))
+        logging.debug('init data {}, {}, {}'.format(self.nbrOutlets, delays))
 
         self.subnodeName = {}
         if self.yoMulteOutlet.online:
             for port in range(0,self.nbrOutlets):
                 try:
                     self.subnodeName[port] = self.address+'s'+str(port+1)
-                    node = udiYoSubOutlet(self.poly, self.address, self.subnodeName[port], 'SubOutlet-'+str(port+1), port, self.yoMulteOutlet)
+                    node = udiYoSubOutlet(self.poly, self.address, self.subnodeName[port], 'SubOutlet-'+str(port+1),self.yoMulteOutlet, port)
                     self.poly.addNode(node)
                     self.wait_for_node_done()
                     
@@ -266,9 +268,15 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.node.setDriver('ST', 1, True, True)
             self.subNodesReady = True
             self.createdNodes = self.poly.getNodes()
+            logging.info('udiYoMultiOutlet - creating sub nodes')
+            #logging.debug(self.subnodeName)
+            #logging.debug(self.createdNodes)
+            
+            
         else:
             logging.info('MultiOulet is not online')
-        #time.sleep(3)
+   
+        self.yoMulteOutlet.refreshMultiOutlet()
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -328,6 +336,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                 if onDelay != 0 or offDelay != 0:
                     self.delaysActive = True
                 for node in self.createdNodes:
+                    logging.debug('Subnode names: {} {}'.format(nodeName, node.name))
                     if node.name == nodeName:
                         if self.yoMulteOutlet.online:
                             node.updateNode(State, onDelay,offDelay )

@@ -480,7 +480,7 @@ class YoLinkMQTTDevice(object):
 
     def setOnline(yolink, data):
         logging.debug('SetOnline: {}'.format(data))
-        if 'online' in data[yolink.dData]:
+        if yolink.dOnline in data[yolink.dData]:
             yolink.dataAPI[yolink.dOnline] = data[yolink.dData][yolink.dOnline]
         elif data[yolink.dData] == {}:
             yolink.dataAPI[yolink.dOnline] = False
