@@ -61,7 +61,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.poly.addNode(self)
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
-        self.node.setDriver('GV4', self.port+1, True, True)
+        self.node.setDriver('GV4', self.port, True, True)
         
 
     def start (self):
@@ -76,7 +76,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.node.setDriver('GV0', outeletState, True, True)
         self.node.setDriver('GV1', onDelay, True, False)
         self.node.setDriver('GV2', offDelay, True, False)
-        self.node.setDriver('GV4', self.port+1, False, False)
+        self.node.setDriver('GV4', self.port, False, False)
       
 
     def switchControl(self, command):
