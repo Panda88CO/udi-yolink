@@ -243,7 +243,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.nbrOutlets = self.yoMulteOutlet.getNbrPorts()
         #states = self.yoMulteOutlet.getMultiOutletState()
         delays = self.yoMulteOutlet.getDelays()
-        logging.debug('init data {}, {}, {}'.format(self.nbrOutlets, delays))
+        logging.debug('init data {}, {}'.format(self.nbrOutlets, delays))
 
         self.subnodeName = {}
         if self.yoMulteOutlet.online:
@@ -251,7 +251,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             for port in range(0,self.nbrOutlets):
                 try:
                     self.subnodeName[port] = self.address+'s'+str(port+1)
-                    node = udiYoSubOutlet(self.poly, self.address, self.subnodeName[port], 'SubOutlet-'+str(port+1),self.yoMulteOutlet, port)
+                    node = udiYoSubOutlet(self.poly, self.address, self.subnodeName[port], 'SubOutlet-'+str(port),self.yoMulteOutlet, port)
                     self.poly.addNode(node)
                     self.wait_for_node_done()
                                        
