@@ -338,12 +338,12 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.delaysActive = True
                 for node in self.createdNodes:
 
-                    logging.debug('Subnode Address: {} {}'.format(nodeAdr, node))
-                    if node.address == nodeAdr:
+                    logging.debug('Subnode Address: {} {}'.format(nodeAdr, self.createdNodes[node].address))
+                    if self.createdNodes[node].address == nodeAdr:
                         if self.yoMultiOutlet.online:
-                            node.updateNode(State, onDelay,offDelay )
+                            self.createdNodes[node].updateNode(State, onDelay,offDelay )
                         else:
-                            node.updateNode(99, 0,0  )
+                            self.createdNodes[node].updateNode(99, 0,0  )
             if self.nbrOutlets == 4:
                 logging.debug('need to add USB port support in data extraction ')
                 portName = 'port4'
@@ -353,9 +353,10 @@ class udiYoMultiOutlet(udi_interface.Node):
                 else:
                     USBport = 99
                 for node in self.createdNodes:
-                    logging.debug('search node name - {}'.format(node.address))
-                    if node.address == nodeAdr:
-                        node.updateNode(USBport)
+                    logging.debug('search node name - {}'.format(self.createdNodes[node].address))
+                    if self.createdNodes[node].address == nodeAdr:
+                        self.createdNodes[node].updateNode(USBport)
+                    #else
   
 
                 
