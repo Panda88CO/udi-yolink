@@ -330,22 +330,19 @@ class udiYoMultiOutlet(udi_interface.Node):
                     onDelay = outletStates[portName]['delays']['on']
                     offDelay = outletStates[portName]['delays']['off']
                 else:
-                    State =-1
+                    State = 99
                     onDelay = 0
                     offDelay = 0
                 nodeAdr = self.subnodeAdr[port]
                 if onDelay != 0 or offDelay != 0:
                     self.delaysActive = True
                 for node in self.createdNodes:
-
                     logging.debug('Subnode Address: {} {}'.format(nodeAdr, self.createdNodes[node].address))
                     if self.createdNodes[node].address == nodeAdr:
                         if self.yoMultiOutlet.online:
                             self.createdNodes[node].updateNode(State, onDelay,offDelay )
-                        else:
-                            self.createdNodes[node].updateNode(99, 0,0  )
             if self.nbrOutlets == 4:
-                logging.debug('need to add USB port support in data extraction ')
+                logging.debug('need to include USB port in extraction ')
                 portName = 'port4'
                 nodeAdr = self.subnodeAdr[4]
                 if  self.yoMultiOutlet.online:
@@ -356,30 +353,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                     logging.debug('search node name - {}'.format(self.createdNodes[node].address))
                     if self.createdNodes[node].address == nodeAdr:
                         self.createdNodes[node].updateNode(USBport)
-                    #else
-  
 
-                
-        #Need to update USB port states 
-
-        '''
-        if self.node is not None:
-            state =  self.yoMultiOutlet.getState()
-            print(state)
-            if state.upper() == 'ON':
-                self.node.setDriver('GV0', 1, True, True)
-            else:
-                self.node.setDriver('GV0', 0, True, True)
-            #tmp =  self.yoMultiOutlet.getEnergy()
-            #power = tmp['power']
-            #watt = tmp['watt']
-            #self.node.setDriver('GV3', power, True, True)
-            #self.node.setDriver('GV4', watt, True, True)
-            self.node.setDriver('GV5', self.yoMultiOutlet.bool2Nbr(self.yoMultiOutlet.getOnlineStatus()), True, True)
-        
-        #while self.yoMultiOutlet.eventPending():
-        #    print(self.yoMultiOutlet.getEvent())
-        '''
 
     # Need to use shortPoll
     def pollDelays(self):
