@@ -72,6 +72,7 @@ class YoLinkSetup (udi_interface.Node):
 
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
+        
         self.devicesReady = False
         logging.debug('YoLinkSetup init DONE')
 

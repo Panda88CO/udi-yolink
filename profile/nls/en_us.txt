@@ -52,13 +52,13 @@ CMD-nlsubout-SWCTRL-NAME =  Outlet control
 CMD-nlsubout-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsubout-OFFDELAY-NAME =  Set Off Delay (min)
 
-ND-yousbout-NAME = YoLink USB Ports
-ND-yousbout-ICON = Switch
-ST-nlsusbout-GV0-NAME = USB Ports
-ST-nlsusbout-GV5-NAME = Online
-ST-nlsusbout-ST-NAME = Nodeserver Status
-CMD-nlsoutlet-UPDATE-NAME = Update Status
-CMD-nlsusbout-USBCTRL-NAME =  USB Port Control
+ND-yosubusb-NAME = YoLink USB Ports
+ND-yosubusb-ICON = Switch
+ST-nlssubusb-GV0-NAME = USB Ports
+ST-nlssubusb-GV5-NAME = Online
+ST-nlssubusb-ST-NAME = Nodeserver Status
+CMD-nlssubusb-UPDATE-NAME = Update Status
+CMD-nlssubusb-USBCTRL-NAME =  USB Port Control
 
 
 ND-yomanipulator-NAME = YoLink Manipulator
@@ -171,3 +171,4 @@ portlist-4 = Pwr Port 5
 portlist-5 = Pwr Port 6
 portlist-6 = Pwr Port 7
 portlist-7 = Pwr Port 8
+

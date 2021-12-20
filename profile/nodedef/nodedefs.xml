@@ -114,7 +114,7 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yousbout" nls="nlsusbout">
+   <nodeDef id="yosubusb" nls="nlssubusb">
       <editors />
       <sts>
          <st id="GV0" editor="usbstate" />
