@@ -29,20 +29,17 @@
   <editor id = "doorstate" > 
      <range  uom="25" subset="0-1,99" nls="doorstate" />
 </editor>
-
   <editor id = "online" > 
      <range  uom="25" subset="0-1" nls="online" />
 </editor>
   <editor id = "motionstate" > 
      <range  uom="25" subset="0-1,99" nls="motionstate" />
 </editor>
-</editor>
   <editor id = "waterstate" > 
      <range  uom="25" subset="0-1,99" nls="waterstate" />
 </editor>
   <editor id = "manstate" > 
      <range  uom="25" subset="0-1,99" nls="mastate" />
-</editor>
 </editor>
   <editor id = "usbstate" > 
      <range  uom="25" subset="0-1,99" nls="usbstate" />

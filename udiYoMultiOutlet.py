@@ -188,7 +188,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25}, 
+            {'driver': 'ST', 'value': 0, 'uom': 25}
             ]
     
 
@@ -336,8 +336,10 @@ class udiYoMultiOutlet(udi_interface.Node):
                         state = 0
                     else:
                         state = 99
-                    onDelay = outletstates[portName]['delays']['on']
-                    offDelay = outletstates[portName]['delays']['off']
+                    if 'on' in outletstates[portName]['delays']:
+                        onDelay = outletstates[portName]['delays']['on']
+                    if 'off' in outletstates[portName]['delays']:
+                        offDelay = outletstates[portName]['delays']['off']
                 else:
                     state = 99
                     onDelay = 0

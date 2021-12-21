@@ -34,7 +34,7 @@ CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
 
 ND-yomultiout-NAME = YoLink Outlet
 ND-yomultiout-ICON = Switch
-ST-nlsmultiout-GV9-NAME = Online
+ST-nlsmultiout-GV8-NAME = Online
 ST-nlsmultiout-ST-NAME = Nodeserver Status
 CMD-nlsmultiout-UPDATE-NAME = Update Status
 

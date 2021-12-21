@@ -89,8 +89,12 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             if 'delays' in temp['data']:
                 delay = None
                 for ch in  temp['data']['delays']:
-                    if ch['ch'] == port+1:
-                        delay = ch
+                    if len(temp['data']['delays']) == 2:
+                        if ch['ch'] == port: ###
+                            delay = ch
+                    elif len(temp['data']['delays']) == 4:
+                        if ch['ch'] == port+1: ###
+                            delay = ch                        
                 states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':delay}
         #print(states)
         return(states)
