@@ -55,7 +55,6 @@ CMD-nlsubout-OFFDELAY-NAME =  Set Off Delay (min)
 ND-yosubusb-NAME = YoLink USB Ports
 ND-yosubusb-ICON = Switch
 ST-nlssubusb-GV0-NAME = USB Ports
-ST-nlssubusb-GV5-NAME = Online
 ST-nlssubusb-ST-NAME = Nodeserver Status
 CMD-nlssubusb-UPDATE-NAME = Update Status
 CMD-nlssubusb-USBCTRL-NAME =  USB Port Control

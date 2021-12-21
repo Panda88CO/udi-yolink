@@ -78,7 +78,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             yolink.setDevice( 'MultiOutlet.setState', data, yolink.updateStatus)
         return(status)
     
-    def getMultiOutletState(yolink):
+    def getMultiOutletStates(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
         temp = yolink.getInfoAPI()
@@ -94,6 +94,20 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                 states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':delay}
         #print(states)
         return(states)
+
+    def getMultiOutletPortState(yolink, port):
+        logging.debug(yolink.type+' - getMultiOutletState')
+        #yolink.refreshMultiOutlet()
+        temp = yolink.getInfoAPI()
+        temp = temp['lastMessage']['data'] # Need to look at include USB in API
+        #logging.debug('getMultiOutletPortState  {} {} {}'.format(port,temp['state'], temp ))
+        if yolink.online and port < len(temp['state']):
+            return(temp['state'][port])
+        else:
+            return('unknown')
+        
+
+
     '''
     def getMultiOutletData(yolink):
         logging.debug(yolink.type+' - getMultiOutletData')
