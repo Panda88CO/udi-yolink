@@ -525,9 +525,17 @@ class YoLinkMQTTDevice(object):
                 elif  type(data[yolink.dData][yolink.dState]) is list:
                     logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))
                     if 'delays'in data[yolink.dData]:
-                        logging.debug('delays exist in data')
+                        logging.debug('delays exist in data - finding first channel')
                         yolink.dataAPI[yolink.dData][yolink.dDelays] = data[yolink.dData][yolink.dDelays]
                         yolink.nbrPorts = len( yolink.dataAPI[yolink.dData][yolink.dDelays])
+                        minCh = 7
+                        for port in range(0,yolink.nbrPorts):
+                            ch = yolink.dataAPI[yolink.dData][yolink.dDelays][port]['ch']
+                            if ch < minCh:
+                                minCh = ch
+                        
+                        yolink.nbrUsb = minCh
+                        #need to update USB handling
                         yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState][0:yolink.nbrPorts]
                 else:
                     for key in data[yolink.dData]:

@@ -54,7 +54,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     def setMultiOutletState(yolink, portList, value ):
         logging.debug( yolink.type+'- setMultiOutletState')
         # portlist a a listof ports being changed port range 0-7
-        # vaue is state that need to change 2 (ON/OFF)
+        # value is state that need to change 2 (ON/OFF)
         status = True
         port = 0
         for i in portList:
@@ -89,14 +89,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             if 'delays' in temp['data']:
                 delay = None
                 for ch in  temp['data']['delays']:
-                    if len(temp['data']['delays']) == 2:
-                        if ch['ch'] == port: ###
+                         if ch['ch'] == port + yolink.nbrUsb: ###
                             delay = ch
-                    elif len(temp['data']['delays']) == 4:
-                        if ch['ch'] == port+1: ###
-                            delay = ch                        
-                states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':delay}
+                   
+                states['port'+str(port)]= {'state':temp['data']['state'][port+ yolink.nbrUsb], 'delays':delay}
         #print(states)
+        for usb in range (0,yolink.nbrUsb):
+                states['usb'+str(usb)]= {'state':temp['data']['state'][port+ yolink.nbrUsb]}
         return(states)
 
     def getMultiOutletPortState(yolink, port):
