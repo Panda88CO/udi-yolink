@@ -333,23 +333,25 @@ class YoLinkMQTTDevice(object):
     def getSchedules(yolink):
         logging.debug(yolink.type + '- getSchedules')
         yolink.refreshSchedules()
-        time.slepep(1)
+        while yolink.dSchedule not in yolink.dataAPI[yolink.dData]:
+            time.sleep(1)
+            
         nbrSchedules  = len(yolink.dataAPI[yolink.dData][yolink.dSchedule])
         temp = {}
         yolink.scheduleList = []
-        for schedule in range(0,nbrSchedules):
-            temp[schedule] = {}
-            for key in yolink.dataAPI[yolink.dData][yolink.dSchedule][str(schedule)]:
+        for scheduleNbr in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
+            temp[scheduleNbr] = {}
+            for key in yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr]:
                 if key == 'week':
-                    days = yolink.maskToDays(yolink.dataAPI[yolink.dData][yolink.dSchedule][str(schedule)][key])
-                    temp[schedule][key]= days
-                elif yolink.dataAPI[yolink.dData][yolink.dSchedule][str(schedule)][key] == '25:0':
+                    days = yolink.maskToDays(yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr][key])
+                    temp[scheduleNbr][key]= days
+                elif yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr][key] == '25:0':
                     #temp[schedule].pop(key)
                     pass
                 else:
-                    temp[schedule][key] = yolink.dataAPI[yolink.dData][yolink.dSchedule][str(schedule)][key]
-            temp[schedule]['index'] = schedule   
-            yolink.scheduleList.append(temp[schedule])
+                    temp[scheduleNbr][key] = yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr][key]
+            temp[scheduleNbr]['index'] = scheduleNbr   
+            yolink.scheduleList.append(temp[scheduleNbr])
         return(temp)
 
 
@@ -526,7 +528,7 @@ class YoLinkMQTTDevice(object):
                 elif  type(data[yolink.dData][yolink.dState]) is list:
                     logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))
                     if 'delays'in data[yolink.dData]:
-                        logging.debug('delays exist in data - finding first channel')
+                        logging.debug('delays exist in data')
                         yolink.dataAPI[yolink.dData][yolink.dDelays] = data[yolink.dData][yolink.dDelays]
                         yolink.nbrPorts = len( yolink.dataAPI[yolink.dData][yolink.dDelays])
                         yolink.fistOutlet = yolink.dataAPI[yolink.dData][yolink.dDelays][0]['ch']

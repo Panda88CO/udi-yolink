@@ -292,14 +292,14 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.info('subOutletUpdates')
         portList = []
         portList.append(port)
-        self.yoMultiOutlet.setMultiOutletState(portList, data)
+        self.yoMultiOutlet.setMultiOutPortState(portList, data)
 
 
     def usbUpdates(self,  data):
         logging.info('usbUpdates not implemented')
         portList = []
         portList.append(4) #USB is port 4 (5th port)
-        self.yoMultiOutlet.setMultiOutletState(portList, data)
+        self.yoMultiOutlet.setMultiOutUsbState(portList, data)
 
 
 
@@ -320,7 +320,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('nbr ports{} , online {}'.format(self.nbrOutlets, self.yoMultiOutlet.online ))
         logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
         self.delaysActive = False
-        outletstates =  self.yoMultiOutlet.getMultiOutletStates()
+        outletstates =  self.yoMultiOutlet.getMultiOutStates()
         logging.debug('outlet states: {}'.format (outletstates))
         logging.debug(outletstates)
         if self.subNodesReady:
@@ -356,7 +356,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             if self.usbExists:
                 logging.debug('Updating USB ')
                 portName = 'port4'
-                usbState =  self.yoMultiOutlet.getMultiOutletPortState(4)
+                usbState =  self.yoMultiOutlet.getMultiOutUsbState(4)
                 #nodeAdr = self.subnodeAdr[4]
                 if  self.yoMultiOutlet.online:
                     if usbState == 'open':

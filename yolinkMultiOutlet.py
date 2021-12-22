@@ -1,6 +1,6 @@
 import json
 import time
-
+import re
 
 from yolink_mqtt_class import YoLinkMQTTDevice
 try:
@@ -50,19 +50,20 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     def refreshMultiOutlet(yolink):
         return(yolink.refreshDevice())
     
-
-    def setMultiOutletState(yolink, portList, value ):
+    def setMultiOutUsbState(yolink, portList, value ):
         logging.debug( yolink.type+'- setMultiOutletState')
         # portlist a a listof ports being changed port range 0-7
         # value is state that need to change 2 (ON/OFF)
         status = True
         port = 0
         for i in portList:
-            if i <= yolink.nbrPorts and i >= 0 :
-                port = port + pow(2, i)
+            portStr = re.findall('[0-9]+', i)
+            portNbr = int(portStr.pop())
+            if portNbr < yolink.nbrUsb and portNbr >= 0 :
+                port = port + pow(2, portNbr)
             else:
                 logging.error('wrong port number (range 0- '+str(yolink.nbrPorts)+'): ' + str(i))
-                status = False
+                return(False)
         if value.upper() == 'ON' or value.upper() == 'OPEN':
             state = 'open'
         elif value.upper() == 'OFF' or value.upper() == 'CLOSED' :
@@ -75,10 +76,40 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             data["params"] = {}
             data["params"]["chs"] =  port
             data["params"]['state'] = state
-            yolink.setDevice( 'MultiOutlet.setState', data, yolink.updateStatus)
+            yolink.setDevice(  data)
         return(status)
     
-    def getMultiOutletStates(yolink):
+    def setMultiOutPortState(yolink, portList, value ):
+        logging.debug( yolink.type+'- setMultiOutletState')
+        # portlist a a listof ports being changed port range 0-7
+        # value is state that need to change 2 (ON/OFF)
+        status = True
+        port = 0
+        for i in portList:            
+            portStr = re.findall('[0-9]+', i)
+            portNbr = int(portStr.pop())
+            portNbr = portNbr + yolink.nbrUsb  # Ports start after USB control ports
+            if portNbr <= yolink.nbrPorts and portNbr >= 0 :
+                port = port + pow(2, portNbr)
+            else:
+                logging.error('wrong port number (range 0- '+str(yolink.nbrPorts)+'): ' + str(i))
+                return(False)
+        if value.upper() == 'ON' or value.upper() == 'OPEN':
+            state = 'open'
+        elif value.upper() == 'OFF' or value.upper() == 'CLOSED' :
+            state = 'closed'
+        else:
+            logging.error('Unknows state passed')
+            status = False
+        if status:
+            data={}
+            data["params"] = {}
+            data["params"]["chs"] =  port
+            data["params"]['state'] = state
+            yolink.setDevice( data)
+        return(status)
+    
+    def getMultiOutStates(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
         temp = yolink.getInfoAPI()
@@ -98,18 +129,33 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                 states['usb'+str(usb)]= {'state':temp['data']['state'][port+ yolink.nbrUsb]}
         return(states)
 
-    def getMultiOutletPortState(yolink, port):
+
+    def getMultiOutPortState(yolink, portStr):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
+        tmpStr = re.findall('[0-9]+', portStr)
+        port = int(tmpStr.pop())
+        port = port + yolink.nbrUsb
         temp = yolink.getInfoAPI()
-        temp = temp['lastMessage']['data'] # Need to look at include USB in API
+        temp = temp['data'] # Need to look at include USB in API
         #logging.debug('getMultiOutletPortState  {} {} {}'.format(port,temp['state'], temp ))
-        if yolink.online and port < len(temp['state']):
+        if yolink.online and port < len(temp['state'])-yolink.nbrUsb:
             return(temp['state'][port])
         else:
             return('unknown')
         
-
+    def getMultiOutUsbState(yolink, usbStr):
+        logging.debug(yolink.type+' - getMultiOutletState')
+        #yolink.refreshMultiOutlet()
+        tmpStr = re.findall('[0-9]+', usbStr)
+        usb = int(tmpStr.pop())
+        temp = yolink.getInfoAPI()
+        temp = temp['data'] # Need to look at include USB in API
+        #logging.debug('getMultiOutletPortState  {} {} {}'.format(port,temp['state'], temp ))
+        if yolink.online and yolink.nbrUsb > 0 and usb < yolink.nbrUsb:
+            return(temp['state'][usb])
+        else:
+            return('unknown')
 
     '''
     def getMultiOutletData(yolink):
