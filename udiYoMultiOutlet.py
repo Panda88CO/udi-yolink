@@ -355,8 +355,8 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.suboutlet[port].updateOutNode(state, onDelay,offDelay )
             if self.usbExists:
                 logging.debug('Updating USB ')
-                portName = 'port4'
-                usbState =  self.yoMultiOutlet.getMultiOutUsbState(4)
+                portName = 'usb0'
+                usbState =  self.yoMultiOutlet.getMultiOutUsbState('usb0') #NEEDS FIXING
                 #nodeAdr = self.subnodeAdr[4]
                 if  self.yoMultiOutlet.online:
                     if usbState == 'open':
