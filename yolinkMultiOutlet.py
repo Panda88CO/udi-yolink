@@ -26,12 +26,17 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     def initNode(yolink):
         logging.debug('MultiOutlet initNode')
         yolink.refreshMultiOutlet() # needed to get number of ports on device
-        
+       
         time.sleep(2)
+        
+        yolink.initDevice()
+        temp = yolink.getInfoAPI()
         yolink.online = yolink.getOnlineStatus()
         if yolink.online:
-            yolink.nbrPorts = yolink.getNbrPorts()
-            logging.debug('MultiOutlt init - Nbr ports: {}'.format(yolink.nbrPorts))
+            logging.info('MultiOutlet init - Nbr Outlets : {}'.format(yolink.nbrOutlets))
+            logging.info('MultiOutlet init - Nbr USB : {}'.format(yolink.nbrUsb))
+    
+           
         else:
             logging.error ('MultiOutlet not online')
         #yolink.refreshSchedules()
@@ -112,21 +117,15 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     def getMultiOutStates(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
-        temp = yolink.getInfoAPI()
-        #yolink.nbrPorts, yolink.online = yolink.getNbrPorts()
         states= {}
-        logging.debug('getMultiOutletState - temp = {}'.format(temp))
-        for port in range(0,yolink.nbrPorts):
-            if 'delays' in temp['data']:
-                delay = None
-                for ch in  temp['data']['delays']:
-                         if ch['ch'] == port + yolink.nbrUsb: ###
-                            delay = ch
-                   
-                states['port'+str(port)]= {'state':temp['data']['state'][port+ yolink.nbrUsb], 'delays':delay}
+        temp = yolink.getInfoAPI()
+      
+        for outlet in temp['data']['delays']:
+            port = outlet['ch']
+            states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':outlet}
         #print(states)
         for usb in range (0,yolink.nbrUsb):
-                states['usb'+str(usb)]= {'state':temp['data']['state'][port+ yolink.nbrUsb]}
+                states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
         return(states)
 
 
