@@ -119,13 +119,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         #yolink.refreshMultiOutlet()
         states= {}
         temp = yolink.getInfoAPI()
-      
-        for outlet in temp['data']['delays']:
-            port = outlet['ch']
-            states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':outlet}
-        #print(states)
-        for usb in range (0,yolink.nbrUsb):
-                states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
+        if yolink.online:
+            for outlet in temp['data']['delays']:
+                port = outlet['ch']-yolink.nbrUsb
+                states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':outlet}
+            #print(states)
+            for usb in range (0,yolink.nbrUsb):
+                    states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
         return(states)
 
 
