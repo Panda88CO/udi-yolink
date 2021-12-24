@@ -255,29 +255,29 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('init data {}, {}'.format(self.nbrOutlets, delays))
         self.subOutlet = {}
         self.subUsb = {}
-        self.usbOutletAdr ={}
+        self.subOutletAdr ={}
         self.subUsbAdr = {}
         if self.yoMultiOutlet.online:
             self.node.setDriver('GV8', 1, True, True)
             for port in range(0,self.yoMultiOutlet.nbrOutlets):
                 try:
-                    self.usbOutletAdr[port] = self.address+'s'+str(port)
-                    self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.usbOutletAdr[port], 'SubOutlet-'+str(port+1),'port'+str(port),self.yoMultiOutlet, self.controlOutlet)
-                    self.poly.addNode(self.suboutlet[port])
+                    self.subOutletAdr[port] = self.address+'s'+str(port)
+                    self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'SubOutlet-'+str(port+1),'port'+str(port),self.yoMultiOutlet, self.controlOutlet)
+                    self.poly.addNode(self.subOutlet[port])
                     self.wait_for_node_done()
                                        
                 except Exception as e:
-                    logging.error('Failed to create {}: {}'.format(self.subnodeAdr[port], e))
-            for usb in range(0, self.nbrUsb):
+                    logging.error('Failed to create {}: {}'.format(self.subOutletAdr[port], e))
+            for usb in range(0, self.yoMultiOutlet.nbrUsb):
                         
                 try:
                     self.subUsbAdr[usb] = self.address+'u'+str(usb)
-                    self.subUsb[usb] = udiYoSubUSB(self.poly, self.address,self.subUsbAdr[usb] , 'USB Port -'+str(usb),'usb'+str(usb), self.yoMultiOutlet, self.controlUSB)
+                    self.subUsb[usb] = udiYoSubUSB(self.poly, self.address,self.subUsbAdr[usb] , 'USB Port -'+str(usb),'usb'+str(usb), self.yoMultiOutlet, self.controlUsb)
                     self.poly.addNode(self.usbOut)
                     self.wait_for_node_done()
                     self.usbExists = True
                 except Exception as e:
-                    logging.error('Failed to create {}: {}'.format(self.subnodeAdr[port], e))
+                    logging.error('Failed to create {}: {}'.format(self.subUsbAdr[usb], e))
             self.node.setDriver('ST', 1, True, True)
             self.subNodesReady = True
             self.createdNodes = self.poly.getNodes()
