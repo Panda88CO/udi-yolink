@@ -112,7 +112,7 @@ class udiYoSubOutlet(udi_interface.Node):
                 'SWCTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay,
-                'update' : update
+                'UPDATE' : update
                 }
 
 
