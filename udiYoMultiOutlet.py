@@ -164,7 +164,6 @@ class udiYoSubUSB(udi_interface.Node):
 
         state = int(command.get('value'))     
         if state == 1:
-            
             self.callback(self.usbPort, {'switch':'ON'})
             self.yolink.setMultiOutUsbState (['usb'+str(self.usbPort)], 'ON')
         else:

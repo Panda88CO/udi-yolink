@@ -12,8 +12,8 @@ client_secret = '3f68536b695a435d8a1a376fc8254e70'
 yolinkURL =  'https://api.yosmart.com/openApi' 
 yolinkV2URL =  'https://api.yosmart.com/open/yolink/v2/api' 
 tokenURL = "https://api.yosmart.com/open/yolink/token"
-UaID = "ua_D78FFCACB1A8465ABE5279E68E201E7B"
-SecID = "sec_v1_Tuqy3L7UqL/t/R3P5xpcBQ=="
+UaID = "ua_93BF42449446432EA43E49887492C3FC"
+SecID = "sec_v1_2IQ13RYyyvxMBpPK3POF0A=="
 
 
 def get_access_token(url, client_id, client_secret):

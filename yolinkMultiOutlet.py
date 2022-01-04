@@ -30,7 +30,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         time.sleep(2)
         
         yolink.initDevice()
-        temp = yolink.getInfoAPI()
+        #temp = yolink.getInfoAPI()
         yolink.online = yolink.getOnlineStatus()
         if yolink.online:
             logging.info('MultiOutlet init - Nbr Outlets : {}'.format(yolink.nbrOutlets))
