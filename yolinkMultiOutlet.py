@@ -38,7 +38,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     
            
         else:
-            logging.error ('MultiOutlet not online')
+            logging.info ('MultiOutlet not online')
         #yolink.refreshSchedules()
         #yolink.refreshFWversion()
 

@@ -178,7 +178,10 @@ class YoLinkMQTTDevice(object):
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(yolink.getDelays())
     
-
+    def checkOnlineStatus(yolink, dataPacket):
+        if 'code' in dataPacket:
+            return(dataPacket['code'] == '000000')
+        
 
     def updateDelayData(yolink, data):
         '''
