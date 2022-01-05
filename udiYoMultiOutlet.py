@@ -333,7 +333,7 @@ class udiYoMultiOutlet(udi_interface.Node):
 
 
     def stop (self):
-        logging.info('Stop not implemented')
+        logging.info('udiYoMultiOutlet Stop')
         self.node.setDriver('ST', 0, True, True)
         self.yoMultiOutlet.shut_down()
 
