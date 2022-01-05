@@ -50,13 +50,15 @@ multiplier. These get updated at every shortPoll interval
 class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
         super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  
-        logging.setLevel(20)
+        self.hb = 0
+        logging.setLevel(10)
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
-
+        self.address = address
+        self.name = name
 
         self.Parameters = Custom(polyglot, 'customparams')
         self.Notices = Custom(polyglot, 'notices')
@@ -70,10 +72,11 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.ready()
         self.poly.addNode(self)
 
-        self.node = polyglot.getNode(address)
+        self.node = polyglot.getNode(self.address)
         self.node.setDriver('ST', 1, True, True)
         
         self.devicesReady = False
+        
         logging.debug('YoLinkSetup init DONE')
 
 
@@ -207,10 +210,20 @@ class YoLinkSetup (udi_interface.Node):
             self.devicesReady = True
         else:
              logging.debug('devices.json does not exist')
-
+    
+    def heartbeat(self):
+        logging.debug('heartbeat: ' + str(self.hb))
+        
+        if self.hb == 0:
+            self.reportCmd('DON',2)
+            self.hb = 1
+        else:
+            self.reportCmd('DOF',2)
+            self.hb = 0
 
     def systemPoll (self, type):
         logging.info('System Poll executing')
+        self.heartbeat()
 
     def handleLevelChange(self, level):
         logging.info('New log level: {}'.format(level))
@@ -358,6 +371,8 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('done with parameter processing')
  
     id = 'setup'
+
+
     drivers = [
            {'driver': 'ST', 'value':0, 'uom':25},
            ]

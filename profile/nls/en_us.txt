@@ -1,5 +1,5 @@
 
-ND-setup-NAME = YoLink Switch
+ND-setup-NAME = YoLink Main
 ND-setup-ICON = GenericCtrl
 ST-nlsetup-ST-NAME = Nodeserver Status
 
@@ -119,6 +119,8 @@ ST-nlsleaksensor-GV8-NAME = Online
 ST-nlsleaksensor-ST-NAME = Nodeserver Status
 CMD-nlsleaksensor-UPDATE-NAME = Update Motion Status
 
+status-0 = Down
+status-1 = Up
 
 swstate-0 = Off
 swstate-1 = On
@@ -137,9 +139,6 @@ alarm-99 = Unknown
 
 online-0 = Offline
 online-1 = Online
-
-status-0 = Down
-status-1 = Up
 
 doorstate-0 = closed
 doorstate-1 = open
