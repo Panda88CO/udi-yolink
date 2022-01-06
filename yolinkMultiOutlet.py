@@ -97,7 +97,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             if portNbr <= yolink.nbrPorts and portNbr >= 0 :
                 port = port + pow(2, portNbr)
             else:
-                logging.error('wrong port number (range 0- '+str(yolink.nbrPorts)+'): ' + str(i))
+                logging.error('wrong port number (range 0 - '+str(yolink.nbrPorts)+'): ' + str(i))
                 return(False)
         if value.upper() == 'ON' or value.upper() == 'OPEN':
             state = 'open'
@@ -119,13 +119,21 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         #yolink.refreshMultiOutlet()
         states= {}
         temp = yolink.getInfoAPI()
+        logging.debug(temp)
         if yolink.online:
-            for outlet in temp['data']['delays']:
-                port = outlet['ch']-yolink.nbrUsb
-                states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':outlet}
-            #print(states)
             for usb in range (0,yolink.nbrUsb):
                     states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
+            if temp['data']['delays'] != None:
+                for outlet in temp['data']['delays']:
+                    port = outlet['ch']-yolink.nbrUsb
+                    states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':outlet}
+            #print(states)
+            else:
+                portNbr = 0
+                for port in range(yolink.nbrUsb,yolink.nbrOutlets):
+                    states['port'+str(portNbr)]= {'state':temp['data']['state'][port]}
+                    portNbr = portNbr + 1
+
         return(states)
 
 

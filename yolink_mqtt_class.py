@@ -34,6 +34,10 @@ class YoLinkMQTTDevice(object):
         yolink.deviceId = yolink.deviceInfo['deviceId']
         yolink.delayList = []
         yolink.online  = False 
+        yolink.nbrPorts = 1
+        yolink.nbrOutlets = 1
+        yolink.nbrUsb = 0 
+
         yolink.yolinkMQTTclient = YoLinkMQTTClient(csName, csid, csseckey, mqtt_URL, mqtt_port,  yolink.deviceId , callback )
 
         yolink.yolink_URL = yolink_URL
@@ -86,7 +90,10 @@ class YoLinkMQTTDevice(object):
             if 'delays' in temp['data']:
                 yolink.nbrOutlets = len(temp['data']['delays'])
                 yolink.nbrUsb = temp['data']['delays'][0]['ch']
-                yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
+            else:
+                yolink.nbrOutlets = 1
+                yolink.nbrUsb = 0
+            yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
 
 
 
@@ -486,19 +493,24 @@ class YoLinkMQTTDevice(object):
                 daysList.append(yolink.daysOfWeek[i])
         return(daysList)
 
+    
+    '''
     def updateNbrPorts(yolink, data):
-        if 'delays' in data['data']:
-            yolink.dataAPI['nbrPorts'] = len(data['data'][''])  
-        return(yolink.dataAPI['nbrPorts'])
-
+        #if 'delays' in data['data']:
+        #    yolink.dataAPI['nbrPorts'] =  len(data['data']['delays'])
+        return(yolink.nbrPorts)
+    '''
+    '''
     def getNbrPorts(yolink):
-        #logging.debug('getNbrPorts - {}, {}'.format(yolink.dataAPI['nbrPorts'], yolink.dataAPI[yolink.dOnline]))
+        logging.debug(yolink.dataAPI)
+        logging.debug('getNbrPorts - {}, {}'.format(yolink.nbrPorts], yolink.dataAPI[yolink.dOnline]))
         yolink.online = yolink.dataAPI[yolink.dOnline]
         if 'nbrPorts' in yolink.dataAPI:
-            logging.debug('getNbrPorts - {}, {}'.format(yolink.dataAPI['nbrPorts'], yolink.dataAPI[yolink.dOnline]))
-            return(yolink.dataAPI['nbrPorts'] )
+            logging.debug('getNbrPorts - {}, {}'.format(yolink.nbrPorts, yolink.dataAPI[yolink.dOnline]))
+            return(yolink.nbrPorts)
         else:
             return (1)
+    '''
 
     def setOnline(yolink, data):
         logging.debug('SetOnline: {}'.format(data))
