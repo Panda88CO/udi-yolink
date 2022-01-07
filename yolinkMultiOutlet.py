@@ -35,6 +35,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         if yolink.online:
             logging.info('MultiOutlet init - Nbr Outlets : {}'.format(yolink.nbrOutlets))
             logging.info('MultiOutlet init - Nbr USB : {}'.format(yolink.nbrUsb))
+            
     
            
         else:
@@ -84,6 +85,36 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             yolink.setDevice(  data)
         return(status)
     
+
+    def usbSetState (yolink, port, state):
+        logging.info('usbSetState')
+        if yolink.online:
+            if yolink.nbrUsb > 0:
+                portList = []
+                portList.append(port+yolink.nbrUsb)
+                yolink.setMultiOutPortState(portList, state)
+            else:
+                logging.error('No USB port on device')
+        else:
+            logging.error('Device not online') 
+
+
+    def outletSetState ( yolink, port, state):
+        logging.info('outletSetState')
+        if yolink.online:
+            portList = []
+            portList.append(int(port)+yolink.nbrUsb)
+            yolink.setMultiOutPortState(portList, state)
+        else:
+            logging.error('Device not online') 
+
+    def outletSetDelay (yolink, port, onDelay, offDelay):
+        logging.info('outletSetDelay')
+        if yolink.online:
+            logging.debug('need to implement')
+        else:
+            logging.error('Device not online') 
+
     def setMultiOutPortState(yolink, portList, value ):
         logging.debug( yolink.type+'- setMultiOutletState')
         # portlist a a listof ports being changed port range 0-7
