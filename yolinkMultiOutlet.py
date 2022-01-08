@@ -195,6 +195,34 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         else:
             return('unknown')
 
+
+    def setMultiDelay(yolink,  delayList):
+        logging.debug(yolink.type+' - setDelay')
+        #port = port + yolink.nbrUsb
+        data = {}
+        if len(delayList) >= 1:
+            for delayNbr in range(0,len(delayList)):
+                for key in delayList:
+                    if key.lower() == 'delayon' or key.lower() == 'on' :
+                        data['params']['delays'][delayNbr]['on'] = delayList[delayNbr][key]
+                    elif key.lower() == 'delayoff'or key.lower() == 'off' :
+                        data['params']['delays'][delayNbr]['off'] = delayList[delayNbr][key] 
+                    elif key.lower == 'ch':
+                        data['params']['delays'][delayNbr]['ch'] = delayList[delayNbr][key] 
+                    else:
+                        logging.debug('Wrong parameter passed - must be overwritten to support multi devices  : ' + str(key))
+        else:
+            logging.debug('Empty list provided ')
+            return(False, yolink.dataAPI[yolink.dOnline])
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = yolink.type+'.setDelay'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token'] 
+        yolink.yolinkMQTTclient.publish_data( data)
+        yolink.online = yolink.dataAPI[yolink.dOnline]
+        return(True)
+
+
     '''
     def getMultiOutletData(yolink):
         logging.debug(yolink.type+' - getMultiOutletData')
