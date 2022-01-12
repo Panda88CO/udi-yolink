@@ -17,25 +17,25 @@ DEBUG = True
 """
 Object representation for YoLink MQTT Client
 """
-class YoLinkMQTTClientV2(object):
+class YoLinkMQTTClient(object):
 
-    def __init__(yolink, UaID, houseID, mqtt_url, mqtt_port, deviceId, callback ):
+    def __init__(yolink, yoAccess,  deviceInfo, callback ):
         yolink.callback = callback
-        yolink.UaID = UaID
-        yolink.houseID = houseID
-        yolink.uniqueID = deviceId
-        #yolink.uniqueID = str(csName+'_'+ yolink.uniqueID )    
-        yolink.topicReq = houseID+'/'+ yolink.uniqueID +'/request'
-        yolink.topicResp = houseID+'/'+ yolink.uniqueID +'/response'
-        yolink.topicReport = houseID+'/'+ yolink.uniqueID +'/report'
-        yolink.topicReportAll = houseID+'/report'
+        yolink.yoAccess = yoAccess
+        yolink.UaID = yoAccess.uaID
+        yolink.homeID = yoAccess.homeID
+        yolink.deviceId = deviceInfo['deviceId']
+        yolink.uniqueID = yolink.deviceId
+        yolink.accessToken = yoAccess.get_access_token()
+ 
+        yolink.topicReq = yolink.homeID+'/'+ yolink.uniqueID +'/request'
+        yolink.topicResp = yolink.homeID+'/'+ yolink.uniqueID +'/response'
+        yolink.topicReport = yolink.homeID+'/'+ yolink.uniqueID +'/report'
+        yolink.topicReportAll = yolink.homeID+'/report'
 
-        yolink.mqtt_port = int(mqtt_port)
-        #yolink.topic = topic
-        yolink.mqtt_url = mqtt_url
-      
-        #yolink.device_hash = device_hash
-        yolink.deviceId = deviceId
+        yolink.mqttPort = int(yoAccess.mqttPort)
+        yolink.mqttURL = yoAccess.mqttURL
+  
         try:
             print('initialize MQTT' )
             yolink.client = mqtt.Client(yolink.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
@@ -57,8 +57,9 @@ class YoLinkMQTTClientV2(object):
         """
         try: 
             logging.info("Connecting to broker...")
-            yolink.client.username_pw_set(username=yolink.UaID, password=None)
-            yolink.client.connect(yolink.mqtt_url, yolink.mqtt_port, 30)
+
+            yolink.client.username_pw_set(username=yolink.accessToken, password=None)
+            yolink.client.connect(yolink.mqttURL, yolink.mqttPort, 30)
             #time.sleep(3)
             logging.debug ('connect:')
             yolink.client.loop_start()
@@ -84,8 +85,6 @@ class YoLinkMQTTClientV2(object):
         logging.debug(payload)
         if msg.topic == yolink.topicReportAll or msg.topic == yolink.topicReport:
             if payload['deviceId'] == yolink.deviceId :
-                #yolink.eventQueue.put(payload['msgid'])
-                #yolink.dataQueue.put(payload)
                 logging.debug (payload)
                 yolink.callback(payload)
                 logging.debug(' device reporting')
@@ -129,7 +128,7 @@ class YoLinkMQTTClientV2(object):
         try:
 
             if (rc == 0):
-                logging.debug("Successfully connected to broker %s" % yolink.mqtt_url)
+                logging.debug("Successfully connected to broker %s" % yolink.mqttURL)
                 test1 = yolink.client.subscribe(yolink.topicResp)
                 #logging.debug(test1)
                 test2 = yolink.client.subscribe(yolink.topicReport)
@@ -169,15 +168,28 @@ class YoLinkMQTTClientV2(object):
     def publish_data(yolink, data):
         logging.debug('publish_data: ')
         logging.debug(data)
-        try:
-            dataTemp = str(json.dumps(data))
-            result = yolink.client.publish(yolink.topicReq, dataTemp)
-            if result.rc == 0:
-                time.sleep(2) 
-        except Exception as E:
-            logging.error('Exception  - publish_data: ' + str(E))
-
-
+        token = yolink.yoAccess.get_access_token()
+        if yolink.accessToken == token:
+            try:
+                dataTemp = str(json.dumps(data))
+                result = yolink.client.publish(yolink.topicReq, dataTemp)
+                if result.rc == 0:
+                    time.sleep(2) 
+            except Exception as E:
+                logging.error('Exception  - publish_data: ' + str(E))
+        else: # token was renewed - we need to reconnect to the broker
+            yolink.accessToken = token 
+            yolink.client.loop_stop()
+            yolink.client.disconnect()
+            yolink.connect_to_broker()
+            try:
+                dataTemp = str(json.dumps(data))
+                result = yolink.client.publish(yolink.topicReq, dataTemp)
+                if result.rc == 0:
+                    time.sleep(2) 
+            except Exception as E:
+                logging.error('Exception  - publish_data: ' + str(E))
+        
     def shut_down(yolink):
         yolink.client.loop_stop()
     

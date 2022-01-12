@@ -2,7 +2,7 @@ import json
 import time
 import re
 
-from yolink_mqtt_class import YoLinkMQTTDevice
+from yolink_mqtt_classV2 import YoLinkMQTTDevice
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -12,8 +12,8 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 
 class YoLinkMultiOut(YoLinkMQTTDevice):
-    def __init__(yolink, csName, csid, csseckey, deviceInfo, callback, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, yolink_URL, mqtt_URL, mqtt_port, deviceInfo, callback)
+    def __init__(yolink, yoAccess,  deviceInfo, callback):
+        super().__init__(  yoAccess, deviceInfo, callback)
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdates'   ]
         yolink.eventList = ['StatusChange', 'Report']
@@ -297,8 +297,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
 class YoLinkMultiOutlet(YoLinkMultiOut):
 
-    def __init__(yolink, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
-        super().__init__(  csName, csid, csseckey, deviceInfo, yolink.updateStatus, yolink_URL, mqtt_URL, mqtt_port)
+    def __init__(yolink, yoAccess, deviceInfo):
+        super().__init__(  yoAccess, deviceInfo, yolink.updateStatus)
         yolink.initNode()
 
     def updateStatus(self, data):

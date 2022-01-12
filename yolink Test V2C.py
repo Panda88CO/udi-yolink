@@ -17,7 +17,7 @@ except ImportError:
 #from logger import getLogger
 from yolink_devices import YoLinkDevice
 #from yolink_mqtt_client import YoLinkMQTTClient
-from yolinkMultiOutlet import YoLinkMultiOutlet
+from yolinkMultiOutletV2 import YoLinkMultiOutlet
 from yolinkTHsensor import YoLinkTHSensor
 from yolinkLeakSensor import YoLinkLeakSensor
 from yolinkManipulator import YoLinkManipulator
@@ -27,6 +27,8 @@ from yolinkGarageDoorSensor import YoLinkGarageDoorSensor
 from yolinkMotionSensor import YoLinkMotionSensor
 from yolinkOutlet import YoLinkOutlet
 from yolinkDoorSensor import YoLinkDoorSensor
+
+from yoLinkInit import YoLinkInitPAC
 
 from cryptography.fernet import Fernet
 #from yolink_mqtt_device import YoLinkGarageDoor
@@ -42,7 +44,7 @@ if (os.path.exists('./devices.json')):
     dataFile.close()
     deviceList = tmp['data']['list']
 
-'''
+
 def getDeviceList1(self):
     logging.debug ('getDeviceList1')
 
@@ -58,7 +60,7 @@ def getDeviceList2(self):
     self.yoDevices = YoLinkDevicesPAC(self.uaid, self.secretKey)
     self.deviceList = self.yoDevices.getDeviceList()
 
-
+'''
 
 
 
@@ -108,13 +110,14 @@ with open('yolinkDeviceList.txt', 'rb') as f:
     f.close()
 devfile = fernet.decrypt(file)
 devstr = devfile.decode('utf-8')
-'''
+
 with open('devicesNew.json', 'r') as f:
     devstr = f.read()
     f.close()
 InstalledDevices = ast.literal_eval(devstr)
-
-
+'''
+UAID = 'ua_93BF42449446432EA43E49887492C3FC'
+SECRET_KEY = 'sec_v1_2IQ13RYyyvxMBpPK3POF0A=='
 
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
@@ -122,35 +125,39 @@ csid = '60dd7fa7960d177187c82039'
 csseckey = '3f68536b695a435d8a1a376fc8254e70'
 csName = 'Panda88'
 
-DeviceList = InstalledDevices['data']['devices']
+yoAccess = YoLinkInitPAC (UAID, SECRET_KEY)
+
+
+DeviceList = yoAccess.getDeviceList()
+
 '''
 WineCoolerTemp =DeviceList[2] 
 spatemp = DeviceList[0] 
 PoolLevel = DeviceList[13]
 '''
-#DeviceList = InstalledDevices['data']['list']
-#HubUS = DeviceList[17] 
-#HubDS = DeviceList[16] 
-#WineCoolerTemp =DeviceList[15] 
-OutdoorTemp = DeviceList[14]
+WineCoolerTemp =DeviceList[16] 
+OutdoorTemp = DeviceList[9]
 PoolLevel = DeviceList[13]
 GarageSensor = DeviceList[12]
 GarageCTRL =DeviceList[11]
 USB_Outlet = DeviceList[10]
-Playground = DeviceList[9]
-GardenPlayground = DeviceList[8]
-DoorSensor = DeviceList[7]
-MultiOUtlet2 = DeviceList[6]
-PoolTemp = DeviceList[5]
-DeckLight = DeviceList[4]
+Playground = DeviceList[8]
+GardenPlayground = DeviceList[7]
+DoorSensor = DeviceList[6]
+MultiOUtlet2 = DeviceList[15]
+PoolTemp = DeviceList[4]
+DeckLight = DeviceList[5]
 MotionSensor1 = DeviceList[3]
 Irrigation = DeviceList[2]
 HouseValve = DeviceList[1]
 FishTank = DeviceList[0]
 
+BathrronIndoor = DeviceList[14]
+HubDS = DeviceList[17]
+HubUS = DeviceList[18]
 
-FishMultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, FishTank)
-MultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, MultiOUtlet2)
+#FishMultiOutput = YoLinkMultiOutlet(csName, csid, csseckey, FishTank)
+MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
 #WineCellarTemp =  YoLinkTHSensor(csName, csid, csseckey, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(csName, csid, csseckey, spatemp)
 #WaterLevel = YoLinkLeakSensor(csName, csid, csseckey, PoolLevel)
@@ -182,7 +189,7 @@ test9 = MultiOutput.getMultiOutUsbState('usb0')
 test9a = MultiOutput.setMultiOutUsbState(['port0'], 'ON')
 test9b = MultiOutput.setMultiOutPortState(['usb0'], 'ON')
 
-
+'''
 Test = FishMultiOutput.getMultiOutStates()
 Test15 = FishMultiOutput.nbrPorts
 Test15 = FishMultiOutput.nbrOutlets
@@ -200,7 +207,7 @@ Test8 = FishMultiOutput.getMultiOutPortState('port4')
 Test9 = FishMultiOutput.getMultiOutUsbState('usb0')
 test9a = FishMultiOutput.setMultiOutUsbState(['usb0'], 'ON')
 test9b = FishMultiOutput.setMultiOutPortState(['port3'], 'ON')
-
+'''
 
 #MultiOutput.setState([1, 0], 'ON')
 #MultiOutput.setState([0], 'off')

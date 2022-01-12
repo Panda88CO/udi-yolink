@@ -219,9 +219,6 @@ class YoLinkMQTTClientV2(object):
         logging.debug(self.deviceId)
         #self.client.tls_set()
 
-    
-    def reconnect_to_broker(self):
-
     def connect_to_broker(self):
         """
         Connect to MQTT broker
