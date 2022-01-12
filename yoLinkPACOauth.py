@@ -15,19 +15,15 @@ except ImportError:
 
 
 class YoLinkDevicesPAC(object):
-    def __init__(yolink, uaId, secKey, tokenURL='https://api.yosmart.com/open/yolink/token', pacURL = 'https://api.yosmart.com/open/yolink/v2/api' ):
-        yolink.token = yolink.get_access_token(uaId, secKey, tokenURL )
-        data= {}
-        data['method'] = 'Home.getDeviceList'
-        data['time'] = str(int(time.time()*1000))
-        #dataTemp = str(json.dumps(data))
-        headers1 = {}
-        headers1['Content-type'] = 'application/json'
-        headers1['Authorization'] = 'Bearer '+ yolink.token['access_token']
-        r = requests.post(pacURL, data=json.dumps(data), headers=headers1) 
-        info = r.json()
-        print(str(info))
-        yolink.deviceList = info['data']['devices']
+    def __init__(yolink, uaID, secID, tokenURL='https://api.yosmart.com/open/yolink/token', pacURL = 'https://api.yosmart.com/open/yolink/v2/api' ):
+       
+        yolink.tokenURL = tokenURL
+        yolink.apiv2URL = pacURL
+        yolink.uaID = uaID
+        yolink.secID = secID
+        yolink.get_access_token(yolink.uaID,  yolink.secID )
+        yolink.retrieveDeviceList()
+        yolink.retrieveHouseID()
         
 
     def get_access_token(yolink, uaId, secret_key, url="https://api.yosmart.com/open/yolink/token"):
@@ -38,6 +34,58 @@ class YoLinkDevicesPAC(object):
         )
         return response.json()
 
+    def get_access_token(yolink, client_id, client_secret):
+        response = requests.post(
+            yolink.tokenURL,
+            data={"grant_type": "client_credentials",
+                "client_id" : client_id,
+                "client_secret" :client_secret},
+        )
+        temp = response.json()
+        yolink.tokenExpTime = str(int(time.time())) + temp['expires_in']
+        yolink.accessToken = temp['access_token']
+        yolink.refreshToken = temp['refresh_token']
+
+
+    def refresh_token(yolink, client_id, token):
+        response = requests.post(
+            yolink.tokenURL,
+            data={"grant_type": "refresh_token",
+                "client_id" : client_id,
+                "refresh_token":yolink.refreshToken,
+                }
+        )
+        temp = response.json()
+        yolink.tokenExpTime = str(int(time.time())) + temp['expires_in']
+        yolink.accessToken = temp['access_token']
+        yolink.refreshToken = temp['refresh_token']  
+
+
+    def retrieveDeviceList(yolink):
+        data= {}
+        data['method'] = 'Home.getDeviceList'
+        data['time'] = str(int(time.time()*1000))
+        headers1 = {}
+        headers1['Content-type'] = 'application/json'
+        headers1['Authorization'] = 'Bearer '+ yolink.accessToken
+        r = requests.post(yolink.apiv2URL, data=json.dumps(data), headers=headers1) 
+        info = r.json()
+        #logging.debug(str(info))
+        yolink.deviceList = info['data']['devices']
+
+
+    def retrieveHouseID(yolink):
+        data= {}
+        data['method'] = 'Home.getGeneralInfo'
+        data['time'] = str(int(time.time()*1000))
+        headers1 = {}
+        headers1['Content-type'] = 'application/json'
+        headers1['Authorization'] = 'Bearer '+yolink.accessToken
+
+        r = requests.post(yolink.apiv2URL, data=json.dumps(data), headers=headers1) 
+        houseId = r.json()
+        logging.debug(houseId)
+        yolink.houseID = houseId['data']['id']
 
     def getDeviceList (yolink):
         return(yolink.deviceList)

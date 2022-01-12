@@ -19,60 +19,60 @@ Object representation for YoLink MQTT Client
 """
 class YoLinkMQTTClient(object):
 
-    def __init__(yolink, csName, csid, csseckey, mqtt_url, mqtt_port, deviceId, callback ):
-        yolink.callback = callback
-        yolink.csid = csid
-        yolink.csseckey = csseckey
-        yolink.uniqueID = deviceId
-        yolink.uniqueID = str(csName+'_'+ yolink.uniqueID )    
-        yolink.topicReq = csName+'/'+ yolink.uniqueID +'/request'
-        yolink.topicResp = csName+'/'+ yolink.uniqueID +'/response'
-        yolink.topicReport = csName+'/'+ yolink.uniqueID +'/report'
-        yolink.topicReportAll = csName+'/report'
+    def __init__(self, csName, csid, csseckey, mqtt_url, mqtt_port, deviceId, callback ):
+        self.callback = callback
+        self.csid = csid
+        self.csseckey = csseckey
+        self.uniqueID = deviceId
+        self.uniqueID = str(csName+'_'+ self.uniqueID )    
+        self.topicReq = csName+'/'+ self.uniqueID +'/request'
+        self.topicResp = csName+'/'+ self.uniqueID +'/response'
+        self.topicReport = csName+'/'+ self.uniqueID +'/report'
+        self.topicReportAll = csName+'/report'
 
-        yolink.mqtt_port = int(mqtt_port)
+        self.mqtt_port = int(mqtt_port)
 
-        yolink.csid = csid
-        yolink.csseckey = csseckey
-        #yolink.topic = topic
-        yolink.mqtt_url = mqtt_url
+        self.csid = csid
+        self.csseckey = csseckey
+        #self.topic = topic
+        self.mqtt_url = mqtt_url
       
-        #yolink.device_hash = device_hash
-        yolink.deviceId = deviceId
+        #self.device_hash = device_hash
+        self.deviceId = deviceId
         try:
             print('initialize MQTT' )
-            yolink.client = mqtt.Client(yolink.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-            yolink.client.on_connect = yolink.on_connect
-            yolink.client.on_message = yolink.on_message
-            yolink.client.on_subscribe = yolink.on_subscribe
-            yolink.client.on_disconnect = yolink.on_disconnect
+            self.client = mqtt.Client(self.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+            self.client.on_connect = self.on_connect
+            self.client.on_message = self.on_message
+            self.client.on_subscribe = self.on_subscribe
+            self.client.on_disconnect = self.on_disconnect
             print('finish subscribing ')
         except Exception as E:
             logging.error('Exception  - -init-: ' + str(E))
-        yolink.messagePending = False
-        logging.debug(yolink.deviceId)
-        #yolink.client.tls_set()
+        self.messagePending = False
+        logging.debug(self.deviceId)
+        #self.client.tls_set()
 
     
-    def connect_to_broker(yolink):
+    def connect_to_broker(self):
         """
         Connect to MQTT broker
         """
         try: 
             logging.info("Connecting to broker...")
-            yolink.client.username_pw_set(username=yolink.csid, password=hashlib.md5(yolink.csseckey.encode('utf-8')).hexdigest())
-            yolink.client.connect(yolink.mqtt_url, yolink.mqtt_port, 30)
+            self.client.username_pw_set(username=self.csid, password=hashlib.md5(self.csseckey.encode('utf-8')).hexdigest())
+            self.client.connect(self.mqtt_url, self.mqtt_port, 30)
             #time.sleep(3)
             logging.debug ('connect:')
-            yolink.client.loop_start()
-            #yolink.client.loop_forever()
+            self.client.loop_start()
+            #self.client.loop_forever()
             #logging.debug('loop started')
             time.sleep(1)
         except Exception as E:
             logging.error('Exception  - connect_to_broker: ' + str(E))
 
 
-    def on_message(yolink, client, userdata, msg):
+    def on_message(self, client, userdata, msg):
         """
         Callback for broker published events
         """
@@ -85,31 +85,31 @@ class YoLinkMQTTClient(object):
         payload = json.loads(msg.payload.decode("utf-8"))
         logging.debug('on_message')
         logging.debug(payload)
-        if msg.topic == yolink.topicReportAll or msg.topic == yolink.topicReport:
-            if payload['deviceId'] == yolink.deviceId :
-                #yolink.eventQueue.put(payload['msgid'])
-                #yolink.dataQueue.put(payload)
+        if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
+            if payload['deviceId'] == self.deviceId :
+                #self.eventQueue.put(payload['msgid'])
+                #self.dataQueue.put(payload)
                 logging.debug (payload)
-                yolink.callback(payload)
+                self.callback(payload)
                 logging.debug(' device reporting')
             else:
                 logging.debug ('\n report on differnt device : ' + msg.topic)
                 logging.debug (payload)
                 logging.debug('\n')
-        elif msg.topic == yolink.topicResp:
-                #yolink.dataQueue.put(payload)
+        elif msg.topic == self.topicResp:
+                #self.dataQueue.put(payload)
                 logging.debug (payload)
-                yolink.callback(payload)
+                self.callback(payload)
                 #print('Device response:')
                 #print(payload)
-        elif msg.topic == yolink.topicReq:
+        elif msg.topic == self.topicReq:
                 logging.debug('publishing request' )
                 logging.debug (payload)
-                yolink.callback(payload) # is this needed????
+                self.callback(payload) # is this needed????
                 logging.debug('device publishing')
                 logging.debug(payload)
         else:
-            logging.debug(msg.topic,  yolink.topicReport, yolink.topicReportAll )
+            logging.debug(msg.topic,  self.topicReport, self.topicReportAll )
         
         if DEBUG:
             f = open('packets.txt', 'a')
@@ -121,9 +121,9 @@ class YoLinkMQTTClient(object):
 
 
 
-        #logging.debug("Event:{0} Device:{1} State:{2}".format(event, yolink.device_hash[deviceId].get_name(), state))
+        #logging.debug("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
    
-    def on_connect(yolink, client, userdata, flags, rc):
+    def on_connect(self, client, userdata, flags, rc):
         """
         Callback for connection to broker
         """
@@ -132,28 +132,28 @@ class YoLinkMQTTClient(object):
         try:
 
             if (rc == 0):
-                logging.debug("Successfully connected to broker %s" % yolink.mqtt_url)
-                test1 = yolink.client.subscribe(yolink.topicResp)
+                logging.debug("Successfully connected to broker %s" % self.mqtt_url)
+                test1 = self.client.subscribe(self.topicResp)
                 #logging.debug(test1)
-                test2 = yolink.client.subscribe(yolink.topicReport)
+                test2 = self.client.subscribe(self.topicReport)
                 #logging.debug(test2)
-                test3 = yolink.client.subscribe(yolink.topicReportAll)
+                test3 = self.client.subscribe(self.topicReportAll)
                 #logging.debug(test3)
 
             else:
                 logging.debug("Connection with result code %s" % rc);
                 sys.exit(2)
             time.sleep(1)
-            logging.debug('Subsribe: ' + yolink.topicResp + ', '+yolink.topicReport+', '+ yolink.topicReportAll )
+            logging.debug('Subsribe: ' + self.topicResp + ', '+self.topicReport+', '+ self.topicReportAll )
 
         except Exception as E:
             logging.error('Exception  -  on_connect: ' + str(E))       
     
-    def on_disconnect(yolink, client, userdata,rc=0):
+    def on_disconnect(self, client, userdata,rc=0):
         logging.debug('Disconnect - stop loop')
-        yolink.client.loop_stop()
+        self.client.loop_stop()
 
-    def on_subscribe(yolink, client, userdata, mID, granted_QOS):
+    def on_subscribe(self, client, userdata, mID, granted_QOS):
         logging.debug('on_subscribe')
         #logging.debug('on_subscribe called')
         #logging.debug('client = ' + str(client))
@@ -162,25 +162,193 @@ class YoLinkMQTTClient(object):
         #logging.debug('Granted QoS: ' +  str(granted_QOS))
         #logging.debug('\n')
 
-    def on_publish(yolink, client, userdata, mID):
+    def on_publish(self, client, userdata, mID):
         logging.debug('on_publish')
         #logging.debug('client = ' + str(client))
         #logging.debug('userdata = ' + str(userdata))
         #logging.debug('mID = '+str(mID))
         #logging.debug('\n')
 
-    def publish_data(yolink, data):
+    def publish_data(self, data):
         logging.debug('publish_data: ')
         logging.debug(data)
         try:
             dataTemp = str(json.dumps(data))
-            result = yolink.client.publish(yolink.topicReq, dataTemp)
+            result = self.client.publish(self.topicReq, dataTemp)
             if result.rc == 0:
                 time.sleep(2) 
         except Exception as E:
             logging.error('Exception  - publish_data: ' + str(E))
 
 
-    def shut_down(yolink):
-        yolink.client.loop_stop()
+    def shut_down(self):
+        self.client.loop_stop()
+
+'''
+For use with API v2 and PAC/UAC authndication 
+'''
+
+class YoLinkMQTTClientV2(object):
+    def __init__(self, yolink, deviceId, callback ):
+        self.callback = callback
+        #self.UaID = UaID
+        #self.houseID = houseID
+        self.uniqueID = deviceId
+        self.topicReq = self.yolink.homeID +'/'+ self.uniqueID +'/request'
+        self.topicResp =  self.yolink.homeID+'/'+ self.uniqueID +'/response'
+        self.topicReport =  self.yolink.homeID+'/'+ self.uniqueID +'/report'
+        self.topicReportAll =  self.yolink.homeID+'/report'
+
+        #self.mqtt_port = int(mqtt_port)
+        #self.topic = topic
+        #self.mqtt_url = mqtt_url
+      
+        #self.device_hash = device_hash
+        self.deviceId = deviceId
+        try:
+            print('initialize MQTT' )
+            self.client = mqtt.Client(self.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+            self.client.on_connect = self.on_connect
+            self.client.on_message = self.on_message
+            self.client.on_subscribe = self.on_subscribe
+            self.client.on_disconnect = self.on_disconnect
+            print('finish subscribing ')
+        except Exception as E:
+            logging.error('Exception  - -init-: ' + str(E))
+        self.messagePending = False
+        logging.debug(self.deviceId)
+        #self.client.tls_set()
+
+    
+    def reconnect_to_broker(self):
+
+    def connect_to_broker(self):
+        """
+        Connect to MQTT broker
+        """
+        try: 
+            logging.info("Connecting to broker...")
+            self.client.username_pw_set(username=self.yolink.access_token, password=None)
+            self.client.connect(self.mqtt_url, self.mqtt_port, 30)
+            #time.sleep(3)
+            logging.debug ('connect:')
+            self.client.loop_start()
+            #self.client.loop_forever()
+            #logging.debug('loop started')
+            time.sleep(1)
+        except Exception as E:
+            logging.error('Exception  - connect_to_broker: ' + str(E))
+
+
+    def on_message(self, client, userdata, msg):
+        """
+        Callback for broker published events
+        """
+        logging.debug('on_message')
+        #logging.debug(client)
+        #logging.debug(userdata)
+        #logging.debug(msg)
+        #logging.debug(msg.topic, msg.payload)
+        
+        payload = json.loads(msg.payload.decode("utf-8"))
+        logging.debug('on_message')
+        logging.debug(payload)
+        if msg.topic == self.topicReportAll or msg.topic == self.topicReport:
+            if payload['deviceId'] == self.deviceId :
+                #self.eventQueue.put(payload['msgid'])
+                #self.dataQueue.put(payload)
+                logging.debug (payload)
+                self.callback(payload)
+                logging.debug(' device reporting')
+            else:
+                logging.debug ('\n report on differnt device : ' + msg.topic)
+                logging.debug (payload)
+                logging.debug('\n')
+        elif msg.topic == self.topicResp:
+                #self.dataQueue.put(payload)
+                logging.debug (payload)
+                self.callback(payload)
+                #print('Device response:')
+                #print(payload)
+        elif msg.topic == self.topicReq:
+                logging.debug('publishing request' )
+                logging.debug (payload)
+                self.callback(payload) # is this needed????
+                logging.debug('device publishing')
+                logging.debug(payload)
+        else:
+            logging.debug(msg.topic,  self.topicReport, self.topicReportAll )
+        
+        if DEBUG:
+            f = open('packets.txt', 'a')
+            jsonStr  = json.dumps(payload, sort_keys=True, indent=4, separators=(',', ': '))
+            f.write(jsonStr)
+            f.write('\n\n')
+            #json.dump(jsonStr, f)
+            f.close()
+
+
+
+        #logging.debug("Event:{0} Device:{1} State:{2}".format(event, self.device_hash[deviceId].get_name(), state))
+   
+    def on_connect(self, client, userdata, flags, rc):
+        """
+        Callback for connection to broker
+        """
+        logging.debug("Connected with result code %s" % rc)
+        #logging.debug( client,  userdata, flags)
+        try:
+
+            if (rc == 0):
+                logging.debug("Successfully connected to broker %s" % self.mqtt_url)
+                test1 = self.client.subscribe(self.topicResp)
+                #logging.debug(test1)
+                test2 = self.client.subscribe(self.topicReport)
+                #logging.debug(test2)
+                test3 = self.client.subscribe(self.topicReportAll)
+                #logging.debug(test3)
+
+            else:
+                logging.debug("Connection with result code %s" % rc);
+                sys.exit(2)
+            time.sleep(1)
+            logging.debug('Subsribe: ' + self.topicResp + ', '+self.topicReport+', '+ self.topicReportAll )
+
+        except Exception as E:
+            logging.error('Exception  -  on_connect: ' + str(E))       
+    
+    def on_disconnect(self, client, userdata,rc=0):
+        logging.debug('Disconnect - stop loop')
+        self.client.loop_stop()
+
+    def on_subscribe(self, client, userdata, mID, granted_QOS):
+        logging.debug('on_subscribe')
+        #logging.debug('on_subscribe called')
+        #logging.debug('client = ' + str(client))
+        #logging.debug('userdata = ' + str(userdata))
+        #logging.debug('mID = '+str(mID))
+        #logging.debug('Granted QoS: ' +  str(granted_QOS))
+        #logging.debug('\n')
+
+    def on_publish(self, client, userdata, mID):
+        logging.debug('on_publish')
+        #logging.debug('client = ' + str(client))
+        #logging.debug('userdata = ' + str(userdata))
+        #logging.debug('mID = '+str(mID))
+        #logging.debug('\n')
+
+    def publish_data(self, data):
+        logging.debug('publish_data: ')
+        logging.debug(data)
+        try:
+            dataTemp = str(json.dumps(data))
+            result = self.client.publish(self.topicReq, dataTemp)
+            if result.rc == 0:
+                time.sleep(2) 
+        except Exception as E:
+            logging.error('Exception  - publish_data: ' + str(E))
+
+
+    def shut_down(self):
+        self.client.loop_stop()
     

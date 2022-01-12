@@ -20,11 +20,6 @@ Parameters = None
 n_queue = []
 count = 0
 
-'''
-TestNode is the device class.  Our simple counter device
-holds two values, the count and the count multiplied by a user defined
-multiplier. These get updated at every shortPoll interval
-'''
 class udiYoSubOutlet(udi_interface.Node):
     
     id = 'yosubout'
