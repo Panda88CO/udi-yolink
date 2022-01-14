@@ -1,7 +1,8 @@
-import hashlib
+#import hashlib
 import json
-import sys
+#import sys
 import time
+import os
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -138,7 +139,7 @@ class YoLinkMQTTClient(object):
 
             else:
                 logging.debug("Connection with result code %s" % rc);
-                sys.exit(2)
+                os.exit(2)
             time.sleep(1)
             logging.debug('Subsribe: ' + yolink.topicResp + ', '+yolink.topicReport+', '+ yolink.topicReportAll )
 
