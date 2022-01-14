@@ -186,9 +186,11 @@ test6 = MultiOutput.getMultiOutStates()
 test7 = MultiOutput.getMultiOutPortState('0')
 test8 = MultiOutput.getMultiOutPortState('port1')
 test9 = MultiOutput.getMultiOutUsbState('usb0')
-test9a = MultiOutput.setMultiOutUsbState(['port0'], 'ON')
-test9b = MultiOutput.setMultiOutPortState(['usb0'], 'ON')
+test9a = MultiOutput.setMultiOutPortState(['port0'], 'ON')
+test9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
 
+test10 = MultiOutput.outletSetDelay('port0', 1, 2)
+test11 = MultiOutput.outletSetDelayList([{'ch':0, 'on':1, 'offDelay':2}])
 '''
 Test = FishMultiOutput.getMultiOutStates()
 Test15 = FishMultiOutput.nbrPorts
