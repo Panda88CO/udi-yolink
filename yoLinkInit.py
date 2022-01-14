@@ -26,21 +26,13 @@ class YoLinkInitPAC(object):
         yoAccess.uaID = uaID
         yoAccess.secID = secID
         yoAccess.apiType = 'UAC'
-        yoAccess.get_access_token(yoAccess.uaID,  yoAccess.secID )
-        yoAccess.retrieve_device_list()
-        yoAccess.retrieve_homeID()
         yoAccess.tokenExpTime = 0
         yoAccess.timeExpMarging = 600 #10min
 
-    #def get_access_token(yoAccess, uaId, secret_key, url="https://api.yosmart.com/open/yolink/token"):
-    #    currentTime = int(time.time())
-    #    if currentTime > yoAccess.tokenExpTime - yoAccess.timeExpMarging :
-    #        response = requests.post(
-    #            url,
-    #            data={"grant_type": "client_credentials"},
-    #            auth=(uaId, secret_key),
-    #        )
-    #   return response.json()
+        yoAccess.get_access_token( )
+        yoAccess.retrieve_device_list()
+        yoAccess.retrieve_homeID()
+
 
     def get_access_token(yoAccess):
         yoAccess.lock.acquire()
@@ -61,6 +53,7 @@ class YoLinkInitPAC(object):
             else:
                 yoAccess.refresh_token()
         yoAccess.lock.release()
+        return(yoAccess.accessToken)
                 
 
     def refresh_token(yoAccess):
