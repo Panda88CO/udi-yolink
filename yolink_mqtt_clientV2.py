@@ -66,7 +66,7 @@ class YoLinkMQTTClient(object):
             yolink.client.loop_start()
             #yolink.client.loop_forever()
             #logging.debug('loop started')
-            time.sleep(1)
+            time.sleep(3)
         except Exception as E:
             logging.error('Exception  - connect_to_broker: ' + str(E))
 

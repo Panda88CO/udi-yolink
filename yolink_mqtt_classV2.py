@@ -83,8 +83,10 @@ class YoLinkMQTTDevice(object):
         yolink.nbrPorts = 1
        
     def initDevice(yolink):
-        yolink.online = yolink.getOnlineStatus()
+        yolink.refreshDevice()
         time.sleep(2) 
+        yolink.online = yolink.getOnlineStatus()
+        
         if yolink.online:
             temp = yolink.getInfoAPI()
             if 'delays' in temp['data']:
