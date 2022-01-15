@@ -109,6 +109,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             yolink.setMultiOutPortState(portList, state)
         else:
             logging.error('Device not online') 
+
     def outletSetDelayList (yolink, delayList):
         logging.info('outletSetDelayList')
         data = {}
@@ -128,7 +129,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                         onDelay = int(delays[delays][key])
                     if key.lower() == 'off' or key.lower() == 'offDelay':
                         offDelay = int(delays[delays][key])
-                data['params']['delays'][delays] = {'ch':ch, 'on':onDelay, 'off':offDelay } 
+                data['params']['delays'].append( {'ch':ch, 'on':onDelay, 'off':offDelay } )
             logging.debug('Sending delay data: {}'.format( data['params']['delays']))
             data['time'] = str(int(time.time())*1000)
             data['method'] = yolink.type+'.setDelay'
@@ -147,9 +148,9 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             data['params']['delays'] = []
             portStr = re.findall('[0-9]+', port)
             portNbr = int(portStr.pop())
-            delayList = [{'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}]        
-            logging.debug('Sending delay data: {}'.format(delayList))
-            data['params']['delays'][0]   = delayList
+            delaySpec = {'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}       
+            logging.debug('Sending delay data: {}'.format(delaySpec))
+            data['params']['delays'].append(delaySpec)
             data['time'] = str(int(time.time())*1000)
             data['method'] = yolink.type+'.setDelay'
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
