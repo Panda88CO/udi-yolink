@@ -52,7 +52,7 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
     
 class YoLinkDoorSensor(YoLinkDoorSens):
     def __init__(yolink, yoAccess,  deviceInfo):
-        super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus())
+        super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)
         yolink.initNode()
 
     def updateStatus(yolink, data):

@@ -41,7 +41,7 @@ class YoLinkMotionSen(YoLinkMQTTDevice):
 
 class YoLinkMotionSensor(YoLinkMotionSen):
     def __init__(yolink, yoAccess,  deviceInfo):
-        super().__init__( yoAccess,  deviceInfo, yolink.updateStatus())
+        super().__init__( yoAccess,  deviceInfo, yolink.updateStatus)
         yolink.initNode()
 
     # Enable Event Support (True below)
