@@ -60,6 +60,7 @@ class YoLinkMQTTClient(object):
             logging.info("Connecting to broker...")
 
             yolink.client.username_pw_set(username=yolink.accessToken, password=None)
+            time.sleep(1)
             yolink.client.connect(yolink.mqttURL, yolink.mqttPort, 30)
             #time.sleep(3)
             logging.debug ('connect:')
