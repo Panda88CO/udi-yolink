@@ -23,7 +23,7 @@ class YoLinkMQTTClient(object):
         self.callback = callback
         self.csid = csid
         self.csseckey = csseckey
-        self.uniqueID = deviceId
+        self.uniqueID = deviceId+str(int(time.time()))
         self.uniqueID = str(csName+'_'+ self.uniqueID )    
         self.topicReq = csName+'/'+ self.uniqueID +'/request'
         self.topicResp = csName+'/'+ self.uniqueID +'/response'
@@ -174,6 +174,7 @@ class YoLinkMQTTClient(object):
         logging.debug(data)
         try:
             dataTemp = str(json.dumps(data))
+            logging.debug('Publishing: {}'.format(dataTemp))
             result = self.client.publish(self.topicReq, dataTemp)
             if result.rc == 0:
                 time.sleep(2) 

@@ -124,11 +124,11 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                     onDelay = 0
                     offDelay = 0      
                     if key.lower() == 'ch' or key.lower() == 'port':
-                        ch = int(delays[delays][key]) + yolink.nbrUsb 
+                        ch = int(delayList[delays][key]) + yolink.nbrUsb 
                     if key.lower() == 'on' or key.lower() == 'onDelay':
-                        onDelay = int(delays[delays][key])
+                        onDelay = int(delayList[delays][key])
                     if key.lower() == 'off' or key.lower() == 'offDelay':
-                        offDelay = int(delays[delays][key])
+                        offDelay = int(delayList[delays][key])
                 data['params']['delays'].append( {'ch':ch, 'on':onDelay, 'off':offDelay } )
             logging.debug('Sending delay data: {}'.format( data['params']['delays']))
             data['time'] = str(int(time.time())*1000)

@@ -178,7 +178,7 @@ class YoLinkMQTTDevice(object):
         else:
             return(False)
 
-    def onlinestatus(yolink):
+    def onlineStatus(yolink):
         return(yolink.getOnlineStatus())
 
     def refreshDelays(yolink):

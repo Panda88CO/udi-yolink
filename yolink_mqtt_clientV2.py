@@ -26,7 +26,7 @@ class YoLinkMQTTClient(object):
         yolink.UaID = yoAccess.uaID
         yolink.homeID = yoAccess.homeID
         yolink.deviceId = deviceInfo['deviceId']
-        yolink.uniqueID = yolink.deviceId
+        yolink.uniqueID = yolink.deviceId+str(int(time.time()))
         yolink.accessToken = yoAccess.get_access_token()
  
         yolink.topicReq = yolink.homeID+'/'+ yolink.uniqueID +'/request'
@@ -167,6 +167,7 @@ class YoLinkMQTTClient(object):
         #logging.debug('\n')
 
     def publish_data(yolink, data):
+        max_retries = 3
         logging.debug('publish_data: ')
         logging.debug(data)
         token = yolink.yoAccess.get_access_token()
@@ -174,8 +175,15 @@ class YoLinkMQTTClient(object):
             try:
                 dataTemp = str(json.dumps(data))
                 result = yolink.client.publish(yolink.topicReq, dataTemp)
-                if result.rc == 0:
-                    time.sleep(2) 
+                if result.rc != 0:
+                    attempts = 0 
+                    while attempts < max_retries:
+                        result = yolink.client.publish(yolink.topicReq, dataTemp)
+                        if result.rc != 0:
+                            attemps = attemps + 1
+                            logging.info('Device not fonund - retrying ')
+                            time.sleep(1)
+
             except Exception as E:
                 logging.error('Exception  - publish_data: ' + str(E))
         else: # token was renewed - we need to reconnect to the broker
