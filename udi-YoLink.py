@@ -8,7 +8,7 @@ import sys
 import os
 import json
 import time
-
+from yoLinkInit import YoLinkInitPAC
 from udiYoSwitch import udiYoSwitch
 from udiYoTHsensor import udiYoTHsensor 
 from udiYoGarageDoorCtrl import udiYoGarageDoor
@@ -82,13 +82,15 @@ class YoLinkSetup (udi_interface.Node):
 
     def start (self):
         logging.debug('Start executing start')
+        yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
+
         self.redirectURL = "" 
         self.tokenObtined = False
         self.deviceList = None
         self.supportedYoTypes = ['Switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
-        logging.info('getDeviceList3')
-        self.getDeviceList3()
-                
+        logging.info('getDeviceList2')
+        self.getDeviceList2() # get devices using PAC / UAC 
+      
         while not self.devicesReady:
             time.sleep(2)
             logging.info('Waiting to retrieve devise list')
