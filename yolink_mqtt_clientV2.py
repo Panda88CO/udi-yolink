@@ -36,6 +36,7 @@ class YoLinkMQTTClient(object):
 
         yolink.mqttPort = int(yoAccess.mqttPort)
         yolink.mqttURL = yoAccess.mqttURL
+        #yolink.lastDataPacket = {}
   
         try:
             print('initialize MQTT' )
@@ -56,6 +57,9 @@ class YoLinkMQTTClient(object):
         """
         Connect to MQTT broker
         """
+        yolink.accessToken  = yolink.yoAccess.get_access_token()
+        yolink.client.loop_stop()
+        yolink.client.disconnect()
         try: 
             logging.info("Connecting to broker...")
 
@@ -67,7 +71,7 @@ class YoLinkMQTTClient(object):
             yolink.client.loop_start()
             #yolink.client.loop_forever()
             #logging.debug('loop started')
-            time.sleep(3)
+            time.sleep(1)
         except Exception as E:
             logging.error('Exception  - connect_to_broker: ' + str(E))
 
@@ -171,17 +175,20 @@ class YoLinkMQTTClient(object):
         max_retries = 3
         logging.debug('publish_data: ')
         logging.debug(data)
+        #yolink.lastDataPacket = data
         token = yolink.yoAccess.get_access_token()
         if yolink.accessToken == token:
             try:
                 dataTemp = str(json.dumps(data))
+                yolink.lastDataPacket = data
                 result = yolink.client.publish(yolink.topicReq, dataTemp)
+                logging.debug('publish result: {}'.format(result.rc))
                 if result.rc != 0:
                     attempts = 0 
                     while attempts < max_retries:
                         result = yolink.client.publish(yolink.topicReq, dataTemp)
                         if result.rc != 0:
-                            attemps = attemps + 1
+                            attempts = attempts + 1
                             logging.info('Device not fonund - retrying ')
                             time.sleep(1)
 

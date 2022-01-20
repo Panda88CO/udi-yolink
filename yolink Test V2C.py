@@ -159,23 +159,23 @@ FishTank        = DeviceList[0]
 
 
 
-FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
+#FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
 MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
 WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
-PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
-WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
-GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
-GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
-MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
+#PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
+#WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
+#GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
+#GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
+#MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
 #IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
-HouseValve = YoLinkManipulator(yoAccess, HouseValve )
-DeckLight = YoLinkMultiOutlet(yoAccess, DeckLight)
-PlaygroundGardenLight = YoLinkSwitch(yoAccess, GardenPlayground)
-PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
-USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
-doorSensor = YoLinkDoorSensor(yoAccess, DoorSensor)
-outdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
-bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
+#HouseValve = YoLinkManipulator(yoAccess, HouseValve )
+#DeckLight = YoLinkMultiOutlet(yoAccess, DeckLight)
+#PlaygroundGardenLight = YoLinkSwitch(yoAccess, GardenPlayground)
+#PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
+#USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
+#doorSensor = YoLinkDoorSensor(yoAccess, DoorSensor)
+#outdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
+#bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
 
 test = MultiOutput.getMultiOutStates()
 
@@ -194,8 +194,12 @@ test9 = MultiOutput.getMultiOutUsbState('usb0')
 test9a = MultiOutput.setMultiOutPortState(['port0'], 'ON')
 test9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
 
-#test10 = MultiOutput.outletSetDelay('port0', 1, 2)
-#test11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2}])
+
+test11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2}])
+time.sleep(200)
+test10 = MultiOutput.outletSetDelay('port0', 1, 2)
+
+
 '''
 Test = FishMultiOutput.getMultiOutStates()
 Test15 = FishMultiOutput.nbrPorts

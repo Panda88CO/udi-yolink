@@ -90,7 +90,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
     def usbSetState (yolink, port, state):
         logging.info('usbSetState')
-        if yolink.online:
+        if yolink.online: # should remove - better try and then handle not on line 
             if yolink.nbrUsb > 0:
                 portList = []
                 portList.append(port+yolink.nbrUsb)
@@ -120,14 +120,14 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             data['params'] = {}
             data['params']['delays'] = []
             for delays in range(0,len(delayList)):
+                onDelay = 0
+                offDelay = 0      
                 for key in delayList[delays]:
-                    onDelay = 0
-                    offDelay = 0      
-                    if key.lower() == 'ch' or key.lower() == 'port':
+                    if key.upper() == 'CK' or key.upper() == 'PORT':
                         ch = int(delayList[delays][key]) + yolink.nbrUsb 
-                    if key.lower() == 'on' or key.lower() == 'onDelay':
+                    if key.upper() == 'ON' or key.upper() == 'ONDELAY':
                         onDelay = int(delayList[delays][key])
-                    if key.lower() == 'off' or key.lower() == 'offDelay':
+                    if key.upper() == 'OFF' or key.upper() == 'OFFDELAY':
                         offDelay = int(delayList[delays][key])
                 data['params']['delays'].append( {'ch':ch, 'on':onDelay, 'off':offDelay } )
             logging.debug('Sending delay data: {}'.format( data['params']['delays']))
@@ -248,11 +248,11 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         if len(delayList) >= 1:
             for delayNbr in range(0,len(delayList)):
                 for key in delayList:
-                    if key.lower() == 'delayon' or key.lower() == 'on' :
+                    if key.upper() == 'DELAYON' or key.upper() == 'ON' :
                         data['params']['delays'][delayNbr]['on'] = delayList[delayNbr][key]
-                    elif key.lower() == 'delayoff'or key.lower() == 'off' :
+                    elif key.upper() == 'DELAYOFF'or key.upper() == 'OFF' :
                         data['params']['delays'][delayNbr]['off'] = delayList[delayNbr][key] 
-                    elif key.lower == 'ch':
+                    elif key.upper == 'CH':
                         data['params']['delays'][delayNbr]['ch'] = delayList[delayNbr][key] 
                     else:
                         logging.debug('Wrong parameter passed - must be overwritten to support multi devices  : ' + str(key))
