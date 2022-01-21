@@ -9,7 +9,7 @@ from os import truncate
 
 import sys
 import time
-from yolinkDoorSensor import YoLinkDoorSens
+from yolinkDoorSensorV2 import YoLinkDoorSens
 
 try:
     import udi_interface
@@ -23,11 +23,7 @@ Parameters = None
 n_queue = []
 count = 0
 
-'''
-TestNode is the device class.  Our simple counter device
-holds two values, the count and the count multiplied by a user defined
-multiplier. These get updated at every shortPoll interval
-'''
+
 
 class udiYoDoorSensor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):

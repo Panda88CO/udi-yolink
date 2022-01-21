@@ -114,7 +114,7 @@ class YoLinkMQTTClient(object):
             logging.debug(msg.topic,  yolink.topicReport, yolink.topicReportAll )
         
         if DEBUG:
-            f = open('packets.txt', 'a')
+            f = open('RXpackets.txt', 'a')
             jsonStr  = json.dumps(payload, sort_keys=True, indent=4, separators=(',', ': '))
             f.write(jsonStr)
             f.write('\n\n')
@@ -179,9 +179,11 @@ class YoLinkMQTTClient(object):
         token = yolink.yoAccess.get_access_token()
         if yolink.accessToken == token:
             try:
-                dataTemp = str(json.dumps(data))
+                
                 yolink.lastDataPacket = data
+                dataTemp = str(json.dumps(data))    
                 result = yolink.client.publish(yolink.topicReq, dataTemp)
+
                 logging.debug('publish result: {}'.format(result.rc))
                 if result.rc != 0:
                     attempts = 0 
@@ -206,7 +208,15 @@ class YoLinkMQTTClient(object):
                     time.sleep(2) 
             except Exception as E:
                 logging.error('Exception  - publish_data: ' + str(E))
-        
+            
+        if DEBUG:
+            f = open('TXpackets.txt', 'a')
+            jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
+            f.write(jsonStr)
+            f.write('\n\n')
+            #json.dump(jsonStr, f)
+            f.close()
+
     def shut_down(yolink):
         yolink.client.loop_stop()
     

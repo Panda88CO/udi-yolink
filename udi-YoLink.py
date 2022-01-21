@@ -41,12 +41,6 @@ tokenURL = "https://api.yosmart.com/open/yolink/token"
 
 
 
-
-'''
-TestNode is the device class.  Our simple counter device
-holds two values, the count and the count multiplied by a user defined
-multiplier. These get updated at every shortPoll interval
-'''
 class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
         super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  

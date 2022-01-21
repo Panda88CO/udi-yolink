@@ -13,7 +13,7 @@ except ImportError:
 
 import sys
 import time
-from yolinkMultiOutlet import YoLinkMultiOut
+from yolinkMultiOutletV2 import YoLinkMultiOut
 
 polyglot = None
 Parameters = None

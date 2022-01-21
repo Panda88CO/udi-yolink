@@ -18,18 +18,14 @@ from os import truncate
 #import udi_interface
 import sys
 import time
-from yolinkOutlet import YoLinkOutl
+from yolinkOutletV2 import YoLinkOutl
 
 polyglot = None
 Parameters = None
 n_queue = []
 count = 0
 
-'''
-TestNode is the device class.  Our simple counter device
-holds two values, the count and the count multiplied by a user defined
-multiplier. These get updated at every shortPoll interval
-'''
+
 
 class udiYoOutlet(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):

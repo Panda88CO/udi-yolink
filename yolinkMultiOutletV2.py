@@ -90,75 +90,69 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
     def usbSetState (yolink, port, state):
         logging.info('usbSetState')
-        if yolink.online: # should remove - better try and then handle not on line 
-            if yolink.nbrUsb > 0:
-                portList = []
-                portList.append(port+yolink.nbrUsb)
-                yolink.setMultiOutPortState(portList, state)
-            else:
-                logging.error('No USB port on device')
+     
+        if yolink.nbrUsb > 0:
+            portList = []
+            portList.append(port+yolink.nbrUsb)
+            yolink.setMultiOutPortState(portList, state)
         else:
-            logging.error('Device not online') 
+            logging.error('No USB port on device')
+
 
 
     def outletSetState ( yolink, port, state):
         logging.info('outletSetState')
-        if yolink.online:
-            portList = []
-            portList.append(int(port)+yolink.nbrUsb)
-            yolink.setMultiOutPortState(portList, state)
-        else:
-            logging.error('Device not online') 
+        portList = []
+        portList.append(int(port)+yolink.nbrUsb)
+        yolink.setMultiOutPortState(portList, state)
 
     def outletSetDelayList (yolink, delayList):
         logging.info('outletSetDelayList')
         data = {}
         data['params'] = {}
         data['params']['delays'] = []
-        if yolink.online:
-            data = {}
-            data['params'] = {}
-            data['params']['delays'] = []
-            for delays in range(0,len(delayList)):
-                onDelay = 0
-                offDelay = 0      
-                for key in delayList[delays]:
-                    if key.upper() == 'CK' or key.upper() == 'PORT':
-                        ch = int(delayList[delays][key]) + yolink.nbrUsb 
-                    if key.upper() == 'ON' or key.upper() == 'ONDELAY':
-                        onDelay = int(delayList[delays][key])
-                    if key.upper() == 'OFF' or key.upper() == 'OFFDELAY':
-                        offDelay = int(delayList[delays][key])
-                data['params']['delays'].append( {'ch':ch, 'on':onDelay, 'off':offDelay } )
-            logging.debug('Sending delay data: {}'.format( data['params']['delays']))
-            data['time'] = str(int(time.time())*1000)
-            data['method'] = yolink.type+'.setDelay'
-            data["targetDevice"] =  yolink.deviceInfo['deviceId']
-            data["token"]= yolink.deviceInfo['token'] 
-            yolink.yolinkMQTTclient.publish_data( data)
-            yolink.online = yolink.dataAPI[yolink.dOnline]
-        else:
-            logging.error('Device not online') 
+
+        data = {}
+        data['params'] = {}
+        data['params']['delays'] = []
+        for delays in range(0,len(delayList)):
+            onDelay = 0
+            offDelay = 0      
+            for key in delayList[delays]:
+                if key.upper() == 'CH' or key.upper() == 'PORT':
+                    ch = int(delayList[delays][key]) + yolink.nbrUsb 
+                if key.upper() == 'ON' or key.upper() == 'ONDELAY':
+                    onDelay = int(delayList[delays][key])
+                if key.upper() == 'OFF' or key.upper() == 'OFFDELAY':
+                    offDelay = int(delayList[delays][key])
+            data['params']['delays'].append( {'ch':ch, 'on':onDelay, 'off':offDelay } )
+        logging.debug('Sending delay data: {}'.format( data['params']['delays']))
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = yolink.type+'.setDelay'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token'] 
+        yolink.yolinkMQTTclient.publish_data( data)
+        yolink.online = yolink.dataAPI[yolink.dOnline]
+
 
     def outletSetDelay (yolink, port, onDelay=0, offDelay=0):
         logging.info('outletSetDelay')
-        if yolink.online:
-            data = {}
-            data['params'] = {}
-            data['params']['delays'] = []
-            portStr = re.findall('[0-9]+', port)
-            portNbr = int(portStr.pop())
-            delaySpec = {'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}       
-            logging.debug('Sending delay data: {}'.format(delaySpec))
-            data['params']['delays'].append(delaySpec)
-            data['time'] = str(int(time.time())*1000)
-            data['method'] = yolink.type+'.setDelay'
-            data["targetDevice"] =  yolink.deviceInfo['deviceId']
-            data["token"]= yolink.deviceInfo['token'] 
-            yolink.yolinkMQTTclient.publish_data( data)
-            yolink.online = yolink.dataAPI[yolink.dOnline]
-        else:
-            logging.error('Device not online') 
+
+        data = {}
+        data['params'] = {}
+        data['params']['delays'] = []
+        portStr = re.findall('[0-9]+', port)
+        portNbr = int(portStr.pop())
+        delaySpec = {'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}       
+        logging.debug('Sending delay data: {}'.format(delaySpec))
+        data['params']['delays'].append(delaySpec)
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = yolink.type+'.setDelay'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token'] 
+        yolink.yolinkMQTTclient.publish_data( data)
+        yolink.online = yolink.dataAPI[yolink.dOnline]
+
 
     def setMultiOutPortState(yolink, portList, value ):
         logging.debug( yolink.type+'- setMultiOutletState')
@@ -196,19 +190,18 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         states= {}
         temp = yolink.getInfoAPI()
         logging.debug(temp)
-        if yolink.online:
-            for usb in range (0,yolink.nbrUsb):
-                    states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
-            if temp['data']['delays'] != None:
-                for outlet in temp['data']['delays']:
-                    port = outlet['ch']-yolink.nbrUsb
-                    states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':outlet}
-            #print(states)
-            else:
-                portNbr = 0
-                for port in range(yolink.nbrUsb,yolink.nbrOutlets):
-                    states['port'+str(portNbr)]= {'state':temp['data']['state'][port]}
-                    portNbr = portNbr + 1
+
+        for usb in range (0,yolink.nbrUsb):
+                states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
+        if temp['data']['delays'] != None:
+            for outlet in temp['data']['delays']:
+                port = outlet['ch']-yolink.nbrUsb
+                states['port'+str(port)]= {'state':temp['data']['state'][port], 'delays':outlet}
+        else:
+            portNbr = 0
+            for port in range(yolink.nbrUsb,yolink.nbrOutlets):
+                states['port'+str(portNbr)]= {'state':temp['data']['state'][port]}
+                portNbr = portNbr + 1
 
         return(states)
 
@@ -222,7 +215,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         temp = yolink.getInfoAPI()
         temp = temp['data'] # Need to look at include USB in API
         #logging.debug('getMultiOutletPortState  {} {} {}'.format(port,temp['state'], temp ))
-        if yolink.online and port < len(temp['state'])-yolink.nbrUsb:
+        if port < len(temp['state'])-yolink.nbrUsb:
             return(temp['state'][port])
         else:
             return('unknown')
@@ -235,7 +228,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         temp = yolink.getInfoAPI()
         temp = temp['data'] # Need to look at include USB in API
         #logging.debug('getMultiOutletPortState  {} {} {}'.format(port,temp['state'], temp ))
-        if yolink.online and yolink.nbrUsb > 0 and usb < yolink.nbrUsb:
+        if yolink.nbrUsb > 0 and usb < yolink.nbrUsb:
             return(temp['state'][usb])
         else:
             return('unknown')

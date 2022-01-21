@@ -7,7 +7,7 @@ MIT License
 """
 from os import truncate
 
-from yolinkLeakSensor import YoLinkLeakSen
+from yolinkLeakSensorV2 import YoLinkLeakSen
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -21,11 +21,7 @@ Parameters = None
 n_queue = []
 count = 0
 
-'''
-TestNode is the device class.  Our simple counter device
-holds two values, the count and the count multiplied by a user defined
-multiplier. These get updated at every shortPoll interval
-'''
+
 
 class udiYoLeakSensor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):

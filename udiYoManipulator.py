@@ -18,7 +18,7 @@ from os import truncate
 #import udi_interface
 import sys
 import time
-from yolinkManipulator import YoLinkManipul
+from yolinkManipulatorV2 import YoLinkManipul
 
 polyglot = None
 Parameters = None

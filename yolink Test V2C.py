@@ -6,6 +6,7 @@ import pytz
 import json
 import requests
 import threading
+from yolinkHubV2 import YoLinkHub
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -27,7 +28,7 @@ from yolinkGarageDoorSensorV2 import YoLinkGarageDoorSensor
 from yolinkMotionSensorV2 import YoLinkMotionSensor
 from yolinkOutletV2 import YoLinkOutlet
 from yolinkDoorSensorV2 import YoLinkDoorSensor
-
+from yolinkHubV2 import YoLinkHub
 from yoLinkInit import YoLinkInitPAC
 
 from cryptography.fernet import Fernet
@@ -138,12 +139,12 @@ PoolLevel = DeviceList[13]
 
 HubUS           = DeviceList[18]
 HubDS           = DeviceList[17]
-WineCoolerTemp  =DeviceList[16] 
+WineCoolerTemp  = DeviceList[16] 
 MultiOUtlet2    = DeviceList[15]
 BathIndoorTemp  = DeviceList[14]
 PoolLevel       = DeviceList[13]
 GarageSensor    = DeviceList[12]
-GarageCTRL      =DeviceList[11]
+GarageCTRL      = DeviceList[11]
 USB_Outlet      = DeviceList[10]
 OutdoorTemp     = DeviceList[9]
 Playground      = DeviceList[8]
@@ -176,6 +177,7 @@ WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #doorSensor = YoLinkDoorSensor(yoAccess, DoorSensor)
 #outdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
 #bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
+#hub1 = YoLinkHub(yoAccess, HubDS)
 
 test = MultiOutput.getMultiOutStates()
 
@@ -191,12 +193,12 @@ test6 = MultiOutput.getMultiOutStates()
 test7 = MultiOutput.getMultiOutPortState('0')
 test8 = MultiOutput.getMultiOutPortState('port1')
 test9 = MultiOutput.getMultiOutUsbState('usb0')
-test9a = MultiOutput.setMultiOutPortState(['port0'], 'ON')
-test9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
+test9a = MultiOutput.setMultiOutPortState(['port0'], 'OFF')
+#test9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
 
 
-test11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2}])
-time.sleep(200)
+test11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
+time.sleep(300)
 test10 = MultiOutput.outletSetDelay('port0', 1, 2)
 
 
