@@ -19,6 +19,7 @@ from udiYoOutlet import udiYoOutlet
 from udiYoMultiOutlet import udiYoMultiOutlet
 from udiYoManipulator import udiYoManipulator
 
+
 from yoLinkPACOauth import YoLinkDevicesPAC
 from yoLinkOauth import YoLinkDevices
 
