@@ -42,7 +42,7 @@ class YoLinkDevicesPAC(object):
                 "client_secret" :client_secret},
         )
         temp = response.json()
-        yolink.tokenExpTime = str(int(time.time())) + temp['expires_in']
+        yolink.tokenExpTime = int(time.time()) + temp['expires_in']
         yolink.accessToken = temp['access_token']
         yolink.refreshToken = temp['refresh_token']
 

@@ -6,6 +6,11 @@ Polyglot TEST v3 node server
 MIT License
 """
 from os import truncate
+
+import sys
+import time
+from yolinkDoorSensorV2 import YoLinkDoorSens
+
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -13,10 +18,6 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
-import sys
-import time
-from yolinkMotionSensor import YoLinkMotionSen
-
 polyglot = None
 Parameters = None
 n_queue = []
@@ -24,41 +25,34 @@ count = 0
 
 
 
-class udiYoMotionSensor(udi_interface.Node):
-    #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yomotionsensor'
+class udiYoDoorSensor(udi_interface.Node):
+    id = 'yodoorsens'
     
     '''
        drivers = [
-            'GV0' = Motin Alert
-            'GV1' = Battery Level
+            'GV0' = DoorState
+            'GV1' = Batery
             'GV8' = Online
             ]
 
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 5, 'uom': 25}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
-    def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('TestYoLinkNode INIT')
-        self.csid = csid
-        self.csseckey = csseckey
-        self.csName = csName
-        self.mqtt_URL= mqtt_URL
-        self.mqtt_port = mqtt_port
-        self.yolink_URL = yolink_URL
 
         self.devInfo =  deviceInfo   
-        self.yoTHsensor  = None
+        self.yoAccess = yoAccess
         #self.address = address
         #self.poly = polyglot
 
@@ -78,68 +72,56 @@ class udiYoMotionSensor(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkMotionSensor')
-        self.yoMotionsSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
-        #self.yoMotionsSensor.initNode()
+        print('start - YoLinkThsensor')
+        self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)
+       
+        self.yoDoorSensor.initNode()
+       
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 
-    '''
     def initNode(self):
-        self.yoMotionsSensor.refreshSensor()
-    '''
+        self.yoDoorSensor.refreshSensor()
+
     
     def stop (self):
-        logging.info('Stop not implemented')
+        logging.info('Stop ')
         self.node.setDriver('ST', 0, True, True)
-        self.yoMotionsSensor.shut_down()
+        self.yoDoorSensor.shut_down()
+       
 
-    '''
-    def yoTHsensor.bool2Nbr(self, bool):
-        if bool:
-            return(1)
-        else:
-            return(0)
-    '''
-    
-    def MotionState(self):
-        if self.yoMotionsSensor.online:
-            if  self.yoMotionsSensor.motionState() == 'normal':
-                return(0)
-            else:
-                return(1)
-        else:
-            return(-1)
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')
-        self.yoMotionsSensor.updateCallbackStatus(data)
-        #motionState = self.yoMotonsSensor.getMotion()
-
+        self.yoDoorSensor.updateCallbackStatus(data)
         logging.debug(data)
+        alarms = self.yoDoorSensor.getAlarms()
         if self.node is not None:
-            if self.yoMotionsSensor.online:
-                self.node.setDriver('GV0', self.MotionState(), True, True)
-                self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
-                self.node.setDriver('GV8', 1, True, True)
+            if self.yoDoorSensor.online:
+                self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
+                self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
+                self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoDoorSensor.getOnlineStatus()), True, True)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV8', 1, True, True)
+                self.node.setDriver('GV8', 0, True, True)
+
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
-            self.yoMotionsSensor.refreshSensor()
+            self.yoDoorSensor.refreshSensor()
 
     def update(self, command = None):
-        logging.info('THsensor Update Status Executed')
-        self.yoMotionsSensor.refreshState()
+        logging.info('GarageDoor Update Status Executed')
+        self.yoDoorSensor.refreshState()
        
+
 
     commands = {
                 'UPDATE': update,
+
                 }
 
 

@@ -6,6 +6,8 @@ Polyglot TEST v3 node server
 MIT License
 """
 from os import truncate
+
+from yolinkLeakSensorV2 import YoLinkLeakSen
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -13,9 +15,6 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
-import sys
-import time
-from yolinkMotionSensor import YoLinkMotionSen
 
 polyglot = None
 Parameters = None
@@ -24,13 +23,12 @@ count = 0
 
 
 
-class udiYoMotionSensor(udi_interface.Node):
-    #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yomotionsensor'
+class udiYoLeakSensor(udi_interface.Node):
+    id = 'yoleaksensor'
     
     '''
        drivers = [
-            'GV0' = Motin Alert
+            'GV0' = Water Alert
             'GV1' = Battery Level
             'GV8' = Online
             ]
@@ -38,25 +36,19 @@ class udiYoMotionSensor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 5, 'uom': 25}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
-    def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('TestYoLinkNode INIT')
-        self.csid = csid
-        self.csseckey = csseckey
-        self.csName = csName
-        self.mqtt_URL= mqtt_URL
-        self.mqtt_port = mqtt_port
-        self.yolink_URL = yolink_URL
-
+        logging.debug('udiYoLeakSensor  INIT')
+        self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
         #self.address = address
@@ -78,21 +70,24 @@ class udiYoMotionSensor(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkMotionSensor')
-        self.yoMotionsSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
-        #self.yoMotionsSensor.initNode()
-        self.node.setDriver('ST', 1, True, True)
+        print('start - YoLinkLeakSensor')
+        self.yoLeakSensor  = YoLinkLeakSen(self.yoAccess, self.devInfo, self.updateStatus)
+        if self.yoLeakSensor:
+            self.yoLeakSensor.initNode()
+            self.node.setDriver('ST', 1, True, True)
+        else:
+            logging.error('Not able to connect leakSensor')
         #time.sleep(3)
+    
 
-    '''
     def initNode(self):
-        self.yoMotionsSensor.refreshSensor()
-    '''
+        self.yoLeakSensor.refreshSensor()
+
     
     def stop (self):
         logging.info('Stop not implemented')
         self.node.setDriver('ST', 0, True, True)
-        self.yoMotionsSensor.shut_down()
+        self.yoLeakSensor.shut_down()
 
     '''
     def yoTHsensor.bool2Nbr(self, bool):
@@ -102,9 +97,9 @@ class udiYoMotionSensor(udi_interface.Node):
             return(0)
     '''
     
-    def MotionState(self):
-        if self.yoMotionsSensor.online:
-            if  self.yoMotionsSensor.motionState() == 'normal':
+    def waterState(self):
+        if self.yoLeakSensor.online:
+            if  self.yoLeakSensor.probeState() == 'normal':
                 return(0)
             else:
                 return(1)
@@ -112,35 +107,39 @@ class udiYoMotionSensor(udi_interface.Node):
             return(-1)
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - yoTHsensor')
-        self.yoMotionsSensor.updateCallbackStatus(data)
-        #motionState = self.yoMotonsSensor.getMotion()
+        logging.debug('updateStatus - yoLeakSensor')
+        self.yoLeakSensor.updateCallbackStatus(data)
+        #motionState = self.yoLeakSensor.getMootion()
 
         logging.debug(data)
         if self.node is not None:
-            if self.yoMotionsSensor.online:
-                self.node.setDriver('GV0', self.MotionState(), True, True)
-                self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
+            if self.yoLeakSensor.online:
+                logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(self.waterState(),self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus())  ))
+                waterState =   self.waterState()          
+                self.node.setDriver('GV0', waterState, True, True)
+                self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV8', 1, True, True)
+                self.node.setDriver('GV8', 0, True, True)
+
 
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
         if 'longPoll' in polltype:
-            self.yoMotionsSensor.refreshSensor()
+            self.yoLeakSensor.refreshSensor()
 
     def update(self, command = None):
         logging.info('THsensor Update Status Executed')
-        self.yoMotionsSensor.refreshState()
+        self.yoLeakSensor.refreshState()
        
 
     commands = {
                 'UPDATE': update,
                 }
+
 
 
 

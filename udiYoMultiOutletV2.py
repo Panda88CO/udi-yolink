@@ -13,7 +13,7 @@ except ImportError:
 
 import sys
 import time
-from yolinkMultiOutlet import YoLinkMultiOut
+from yolinkMultiOutletV2 import YoLinkMultiOut
 
 polyglot = None
 Parameters = None
@@ -21,7 +21,6 @@ n_queue = []
 count = 0
 
 class udiYoSubOutlet(udi_interface.Node):
-    
     id = 'yosubout'
     '''
        drivers = [
@@ -203,20 +202,14 @@ class udiYoMultiOutlet(udi_interface.Node):
             ]
     
 
-    def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+    def  __init__(self, polyglot, primary, address, name,yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('MultiOutlet Node INIT')
  
         self.nodeName = address
-        self.csid = csid
-        self.csseckey = csseckey
-        self.csName = csName
-
-        self.mqtt_URL= mqtt_URL
-        self.mqtt_port = mqtt_port
-        self.yolink_URL = yolink_URL
+        self.yoAccess = yoAccess
         self.delaysActive = False
 
 

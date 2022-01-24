@@ -7,7 +7,7 @@ MIT License
 """
 from os import truncate
 
-from yolinkLeakSensorV2 import YoLinkLeakSen
+from yolinkLeakSensor import YoLinkLeakSen
 try:
     import udi_interface
     logging = udi_interface.LOGGER

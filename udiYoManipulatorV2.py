@@ -28,7 +28,6 @@ count = 0
 
 
 class udiYoManipulator(udi_interface.Node):
-    #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     id = 'yomanipulator'
     '''
        drivers = [
@@ -47,16 +46,11 @@ class udiYoManipulator(udi_interface.Node):
             ]
 
 
-    def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         logging.debug('udiYoManipulator INIT')
    
-        self.mqtt_URL= mqtt_URL
-        self.mqtt_port = mqtt_port
-        self.yolink_URL = yolink_URL
-        self.csid = csid
-        self.csseckey = csseckey
-        self.csName = csName
+        self.yoAccess = yoAccess
 
         self.devInfo =  deviceInfo   
         self.yoManipulator = None
@@ -74,7 +68,7 @@ class udiYoManipulator(udi_interface.Node):
 
     def start(self):
         print('start - udiYoManipulator')
-        self.yoManipulator = YoLinkManipul(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoManipulator = YoLinkManipul(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoManipulator.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)

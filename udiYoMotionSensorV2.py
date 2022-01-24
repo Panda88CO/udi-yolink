@@ -15,7 +15,7 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 import sys
 import time
-from yolinkMotionSensor import YoLinkMotionSen
+from yolinkMotionSensorV2 import YoLinkMotionSen
 
 polyglot = None
 Parameters = None
@@ -25,7 +25,6 @@ count = 0
 
 
 class udiYoMotionSensor(udi_interface.Node):
-    #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     id = 'yomotionsensor'
     
     '''
@@ -45,18 +44,13 @@ class udiYoMotionSensor(udi_interface.Node):
             ]
 
 
-    def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, deviceInfo, yolink_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('TestYoLinkNode INIT')
-        self.csid = csid
-        self.csseckey = csseckey
-        self.csName = csName
-        self.mqtt_URL= mqtt_URL
-        self.mqtt_port = mqtt_port
-        self.yolink_URL = yolink_URL
 
+        self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
         #self.address = address
@@ -79,7 +73,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def start(self):
         print('start - YoLinkMotionSensor')
-        self.yoMotionsSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
         #self.yoMotionsSensor.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)

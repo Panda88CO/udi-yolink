@@ -15,7 +15,7 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 import sys
 import time
-from yolinkGarageDoorToggleV2 import YoLinkGarageDoorCtrl
+from yolinkGarageDoorToggle import YoLinkGarageDoorCtrl
 
 
 polyglot = None
