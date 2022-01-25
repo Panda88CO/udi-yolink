@@ -88,14 +88,14 @@ class YoLinkMQTTClient(object):
         
         payload = json.loads(msg.payload.decode("utf-8"))
         logging.debug('on_message')
-        logging.debug(payload)
+        #logging.debug(payload)
         if msg.topic == yolink.topicReportAll or msg.topic == yolink.topicReport:
             if payload['deviceId'] == yolink.deviceId :
                 logging.debug (payload)
                 yolink.callback(payload)
                 logging.debug(' device reporting')
             else:
-                logging.debug ('\n report on differnt device : ' + msg.topic)
+                logging.debug ('\n report on different device : ' + msg.topic)
                 logging.debug (payload)
                 logging.debug('\n')
         elif msg.topic == yolink.topicResp:
@@ -108,14 +108,15 @@ class YoLinkMQTTClient(object):
                 logging.debug('publishing request' )
                 logging.debug (payload)
                 yolink.callback(payload) # is this needed????
-                logging.debug('device publishing')
-                logging.debug(payload)
+                #logging.debug('device publishing')
+                #logging.debug(payload)
         else:
             logging.debug(msg.topic,  yolink.topicReport, yolink.topicReportAll )
         
         if DEBUG:
             f = open('RXpackets.txt', 'a')
             jsonStr  = json.dumps(payload, sort_keys=True, indent=4, separators=(',', ': '))
+            f.write(msg.topic)
             f.write(jsonStr)
             f.write('\n\n')
             #json.dump(jsonStr, f)
@@ -211,8 +212,9 @@ class YoLinkMQTTClient(object):
             
         if DEBUG:
             f = open('TXpackets.txt', 'a')
-            jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
-            f.write(jsonStr)
+            #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
+            f.write(yolink.topicReq)
+            f.write(dataTemp)
             f.write('\n\n')
             #json.dump(jsonStr, f)
             f.close()

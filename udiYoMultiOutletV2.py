@@ -202,7 +202,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             ]
     
 
-    def  __init__(self, polyglot, primary, address, name,yoAccess, deviceInfo):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
@@ -241,7 +241,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.subNodesReady = False
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet')
-        self.yoMultiOutlet  = YoLinkMultiOut(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
+        self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoMultiOutlet.initNode()
         if self.yoMultiOutlet.online:
             time.sleep(2)
@@ -484,16 +484,13 @@ class udiYoMultiOutlet(udi_interface.Node):
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
-        if self.yoMultiOutlet.online:
-            if 'longPoll' in polltype:
-                self.yoMultiOutlet.refreshMultiOutlet()
-                #self.yoMultiOutlet.refreshSchedules()
-            if 'shortPoll' in polltype:
-                self.pollDelays()
-                #update Delays calculated
-        else: # try if device is bak on line 
-            logging.info('Checking if device is back on-line')
+        if 'longPoll' in polltype:
             self.yoMultiOutlet.refreshMultiOutlet()
+            #self.yoMultiOutlet.refreshSchedules()
+        if 'shortPoll' in polltype:
+            self.pollDelays()
+            #update Delays calculated
+
 
 
 

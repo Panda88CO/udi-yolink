@@ -1,0 +1,18 @@
+"{\"time\": \"1643059484000\", \"method\": \"MultiOutlet.getState\", \"targetDevice\": \"d88b4c0100029ccf\", \"token\": \"10E61ABA6C69D96A6D95715D4E5987B2\"}"
+
+"{\"time\": \"1643059493000\", \"method\": \"THSensor.getState\", \"targetDevice\": \"d88b4c0200041f5e\", \"token\": \"56C9F61A7AC1FFE08B0B7E48AD140BC7\"}"
+
+"{\"params\": {\"chs\": 1, \"state\": \"closed\"}, \"time\": \"1643059494000\", \"method\": \"MultiOutlet.setState\", \"targetDevice\": \"d88b4c0100029ccf\", \"token\": \"10E61ABA6C69D96A6D95715D4E5987B2\"}"
+
+{"time": "1643059581000", "method": "MultiOutlet.getState", "targetDevice": "d88b4c0100029ccf", "token": "10E61ABA6C69D96A6D95715D4E5987B2"}
+
+{"time": "1643059590000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+{"params": {"chs": 1, "state": "closed"}, "time": "1643059591000", "method": "MultiOutlet.setState", "targetDevice": "d88b4c0100029ccf", "token": "10E61ABA6C69D96A6D95715D4E5987B2"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100029ccf1643059781/request{"time": "1643059785000", "method": "MultiOutlet.getState", "targetDevice": "d88b4c0100029ccf", "token": "10E61ABA6C69D96A6D95715D4E5987B2"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643059790/request{"time": "1643059794000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100029ccf1643059781/request{"params": {"chs": 1, "state": "closed"}, "time": "1643059795000", "method": "MultiOutlet.setState", "targetDevice": "d88b4c0100029ccf", "token": "10E61ABA6C69D96A6D95715D4E5987B2"}
+

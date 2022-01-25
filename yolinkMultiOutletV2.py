@@ -332,6 +332,9 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                 #data["params"]["delays"].append(temp)
         return(data)
     '''
+    
+    def shut_down(yolink):
+        yolink.yolinkMQTTclient.shut_down()
 
 class YoLinkMultiOutlet(YoLinkMultiOut):
 

@@ -1,0 +1,240 @@
+{
+    "code": "000000",
+    "data": {
+        "delays": [
+            {
+                "ch": 0,
+                "off": 0,
+                "on": 0
+            },
+            {
+                "ch": 1,
+                "off": 0,
+                "on": 0
+            }
+        ],
+        "loraInfo": {
+            "gatewayId": "d88b4c160300d29c",
+            "gateways": 1,
+            "signal": -60
+        },
+        "state": [
+            "open",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed"
+        ],
+        "tz": -7,
+        "version": "0203"
+    },
+    "method": "MultiOutlet.getState",
+    "msgid": "1643059484000",
+    "targetDevice": "d88b4c0100029ccf",
+    "time": 1643059487146
+}
+
+{
+    "code": "000000",
+    "data": {
+        "deviceId": "d88b4c0200041f5e",
+        "online": true,
+        "reportAt": "2022-01-24T21:08:07.485Z",
+        "state": {
+            "alarm": {
+                "code": 0,
+                "highHumidity": false,
+                "highTemp": false,
+                "lowBattery": false,
+                "lowHumidity": false,
+                "lowTemp": false,
+                "period": false
+            },
+            "battery": 4,
+            "humidity": 46.9,
+            "humidityCorrection": 0,
+            "humidityLimit": {
+                "max": 100,
+                "min": 0
+            },
+            "interval": 30,
+            "mode": "f",
+            "state": "normal",
+            "tempCorrection": 0,
+            "tempLimit": {
+                "max": 20.6,
+                "min": 12.8
+            },
+            "temperature": 14.9,
+            "version": "0366"
+        }
+    },
+    "method": "THSensor.getState",
+    "msgid": "1643059493000",
+    "targetDevice": "d88b4c0200041f5e",
+    "time": 1643059495683
+}
+
+{
+    "code": "000000",
+    "data": {
+        "delays": [
+            {
+                "ch": 0,
+                "off": 0,
+                "on": 0
+            },
+            {
+                "ch": 1,
+                "off": 0,
+                "on": 0
+            }
+        ],
+        "loraInfo": {
+            "gatewayId": "d88b4c160300d29c",
+            "gateways": 1,
+            "signal": -58
+        },
+        "state": [
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed"
+        ],
+        "tz": -7,
+        "version": "0203"
+    },
+    "method": "MultiOutlet.getState",
+    "msgid": "1643059581000",
+    "targetDevice": "d88b4c0100029ccf",
+    "time": 1643059584038
+}
+
+{
+    "code": "000000",
+    "data": {
+        "deviceId": "d88b4c0200041f5e",
+        "online": true,
+        "reportAt": "2022-01-24T21:08:07.485Z",
+        "state": {
+            "alarm": {
+                "code": 0,
+                "highHumidity": false,
+                "highTemp": false,
+                "lowBattery": false,
+                "lowHumidity": false,
+                "lowTemp": false,
+                "period": false
+            },
+            "battery": 4,
+            "humidity": 46.9,
+            "humidityCorrection": 0,
+            "humidityLimit": {
+                "max": 100,
+                "min": 0
+            },
+            "interval": 30,
+            "mode": "f",
+            "state": "normal",
+            "tempCorrection": 0,
+            "tempLimit": {
+                "max": 20.6,
+                "min": 12.8
+            },
+            "temperature": 14.9,
+            "version": "0366"
+        }
+    },
+    "method": "THSensor.getState",
+    "msgid": "1643059590000",
+    "targetDevice": "d88b4c0200041f5e",
+    "time": 1643059592521
+}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100029ccf1643059781/response{
+    "code": "000000",
+    "data": {
+        "delays": [
+            {
+                "ch": 0,
+                "off": 0,
+                "on": 0
+            },
+            {
+                "ch": 1,
+                "off": 0,
+                "on": 0
+            }
+        ],
+        "loraInfo": {
+            "gatewayId": "d88b4c160300d29c",
+            "gateways": 1,
+            "signal": -58
+        },
+        "state": [
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed",
+            "closed"
+        ],
+        "tz": -7,
+        "version": "0203"
+    },
+    "method": "MultiOutlet.getState",
+    "msgid": "1643059785000",
+    "targetDevice": "d88b4c0100029ccf",
+    "time": 1643059788439
+}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643059790/response{
+    "code": "000000",
+    "data": {
+        "deviceId": "d88b4c0200041f5e",
+        "online": true,
+        "reportAt": "2022-01-24T21:27:17.472Z",
+        "state": {
+            "alarm": {
+                "code": 0,
+                "highHumidity": false,
+                "highTemp": false,
+                "lowBattery": false,
+                "lowHumidity": false,
+                "lowTemp": false,
+                "period": false
+            },
+            "battery": 4,
+            "humidity": 46.8,
+            "humidityCorrection": 0,
+            "humidityLimit": {
+                "max": 100,
+                "min": 0
+            },
+            "interval": 30,
+            "mode": "f",
+            "state": "normal",
+            "tempCorrection": 0,
+            "tempLimit": {
+                "max": 20.6,
+                "min": 12.8
+            },
+            "temperature": 14.4,
+            "version": "0366"
+        }
+    },
+    "method": "THSensor.getState",
+    "msgid": "1643059794000",
+    "targetDevice": "d88b4c0200041f5e",
+    "time": 1643059796951
+}
+
