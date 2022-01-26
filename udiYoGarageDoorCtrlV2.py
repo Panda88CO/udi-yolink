@@ -26,7 +26,7 @@ count = 0
 
 
 class udiYoGarageDoor(udi_interface.Node):
-    id = 'yogaragedoor'
+    id = 'yogaragectrl'
     
     '''
        drivers = [

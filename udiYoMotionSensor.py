@@ -26,7 +26,7 @@ count = 0
 
 class udiYoMotionSensor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yomotionsensor'
+    id = 'yomotionsens'
     
     '''
        drivers = [

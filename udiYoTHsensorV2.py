@@ -24,7 +24,7 @@ count = 0
 
 
 class udiYoTHsensor(udi_interface.Node):
-    id = 'yothsensor'
+    id = 'yothsens'
     
     '''
        drivers = [

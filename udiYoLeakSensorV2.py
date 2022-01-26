@@ -24,7 +24,7 @@ count = 0
 
 
 class udiYoLeakSensor(udi_interface.Node):
-    id = 'yoleaksensor'
+    id = 'yoleaksens'
     
     '''
        drivers = [

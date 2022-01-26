@@ -132,7 +132,7 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yomanipulator" nls="nlsmanipulator">
+   <nodeDef id="yomanipu" nls="nlsmanipu">
       <editors />
       <sts>
          <st id="GV0" editor="manstate" />
@@ -160,7 +160,7 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yothsensor" nls="nlsthsensor">
+   <nodeDef id="yothsens" nls="nlsthsens">
       <editors />
       <sts>
          <st id="CLITEMP" editor="tempC" />
@@ -182,7 +182,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
-   <nodeDef id="yodoorsensor" nls="nlsdoorsensor">
+   <nodeDef id="yodoorsen" nls="nlsdoorsen">
       <editors />
       <sts>
          <st id="GV0" editor="doorState" />
@@ -216,7 +216,7 @@
    </nodeDef> 
 
 
-   <nodeDef id="yomotionsensor" nls="nlsmotionsensor">
+   <nodeDef id="yomotionsens" nls="nlsmotionsens">
       <editors />
       <sts>
          <st id="GV0" editor="motionstate" />
@@ -234,7 +234,7 @@
    </nodeDef> 
 
       </nodeDef> 
-      <nodeDef id="yoleaksensor" nls="nlssensor">
+      <nodeDef id="yoleaksens" nls="nlsleaksens">
       <editors />
       <sts>
          <st id="GV0" editor="waterstate" />

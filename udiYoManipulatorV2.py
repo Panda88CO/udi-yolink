@@ -28,7 +28,7 @@ count = 0
 
 
 class udiYoManipulator(udi_interface.Node):
-    id = 'yomanipulator'
+    id = 'yomanipu'
     '''
        drivers = [
             'GV0' = Manipulator State
