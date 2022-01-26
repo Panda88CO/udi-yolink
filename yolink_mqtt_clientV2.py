@@ -221,4 +221,5 @@ class YoLinkMQTTClient(object):
 
     def shut_down(yolink):
         yolink.client.loop_stop()
+        yolink.client.disconnect()
     
