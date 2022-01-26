@@ -85,15 +85,15 @@ ST-nlsthsens-ST-NAME = Nodeserver Status
 CMD-nlsthsens-UPDATE-NAME = Update Status
 
 
-ND-yogaragectrl-NAME = YoLink Garagre Controller
-ND-yogaragectrl-ICON = Switch
-ST-nlsgaragctrl-GV8-NAME = online
-ST-nlsgaragctrl-ST-NAME = Nodeserver Status
-CMD-nlsgaragctrl-TOGGLE-NAME = Toggle Door
+ND-yogarage-NAME = YoLink Garagre Controller
+ND-yogarage-ICON = Switch
+ST-nlsgarage-GV8-NAME = online
+ST-nlsgarage-ST-NAME = Nodeserver Status
+CMD-nlsgarage-TOGGLE-NAME = Toggle Door
 
 
-ND-yodoorsen-NAME = YoLink Door Sensor
-ND-yodoorsen-ICON = Input
+ND-yodoorsens-NAME = YoLink Door Sensor
+ND-yodoorsens-ICON = Input
 ST-nlsdoorsens-GV0-NAME = Garage Door State
 ST-nlsdoorsens-GV1-NAME = Sensor Battery Level
 ST-nlsdoorsens-GV8-NAME = Online
@@ -114,7 +114,7 @@ ND-yoleaksens-ICON = Input
 ST-nlsleaksens-GV0-NAME = Water Sensor
 ST-nlsleaksens-GV1-NAME = Sensor Battery Level
 ST-nlsleaksens-GV8-NAME = Online
-ST-nlsleaksensoST-NAME = Nodeserver Status
+ST-nlsleaksens-ST-NAME = Nodeserver Status
 CMD-nlsleaksens-UPDATE-NAME = Update Motion Status
 
 status-0 = Down

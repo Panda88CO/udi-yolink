@@ -182,7 +182,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
-   <nodeDef id="yodoorsen" nls="nlsdoorsen">
+   <nodeDef id="yodoorsens" nls="nlsdoorsens">
       <editors />
       <sts>
          <st id="GV0" editor="doorState" />
@@ -200,7 +200,7 @@
 
 
 
-   <nodeDef id="yogaragectrl" nls="nlsgaragctrl">
+   <nodeDef id="yogarage" nls="nlsgarage">
       <editors />
       <sts>
          <st id="GV8" editor="online" />

@@ -27,7 +27,7 @@ count = 0
 
 class udiYoGarageDoor(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
-    id = 'yogaragectrl'
+    id = 'yogarage'
     
     '''
        drivers = [
