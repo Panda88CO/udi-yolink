@@ -161,78 +161,86 @@ FishTank        = DeviceList[0]
 
 
 #FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
-MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
+#MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
 WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
 #WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
-#GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
-#GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
+GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
+GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
 #MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
-#IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
+IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
 #HouseValve = YoLinkManipulator(yoAccess, HouseValve )
 #DeckLight = YoLinkMultiOutlet(yoAccess, DeckLight)
 #PlaygroundGardenLight = YoLinkSwitch(yoAccess, GardenPlayground)
 #PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
 #USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
-#doorSensor = YoLinkDoorSensor(yoAccess, DoorSensor)
+DoorSensor = YoLinkDoorSensor(yoAccess, DoorSensor)
 #outdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
 #bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
 #hub1 = YoLinkHub(yoAccess, HubDS)
-
+'''
 test = MultiOutput.getMultiOutStates()
 
-test15 = MultiOutput.nbrPorts
-test15a = MultiOutput.nbrOutlets
-test15b = MultiOutput.nbrUsb
-#test1 = MultiOutput.getSchedules()
-#test2 = MultiOutput.getDelays()
-#test = MultiOutput.getStatus()
-#test = MultiOutput.getInfoAll()
-test5 = MultiOutput.getInfoAPI()
-test6 = MultiOutput.getMultiOutStates()
-test7 = MultiOutput.getMultiOutPortState('0')
-test8 = MultiOutput.getMultiOutPortState('port1')
-test9 = MultiOutput.getMultiOutUsbState('usb0')
-test9a = MultiOutput.setMultiOutPortState(['port0'], 'OFF')
-#test9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
+MO15 = MultiOutput.nbrPorts
+MO15a = MultiOutput.nbrOutlets
+MO15b = MultiOutput.nbrUsb
+MO1 = MultiOutput.getSchedules()
+MO2 = MultiOutput.getDelays()
+MO3 = MultiOutput.getStatus()
+MO4 = MultiOutput.getInfoAll()
+MO5 = MultiOutput.getInfoAPI()
+MO6 = MultiOutput.getMultiOutStates()
+MO7 = MultiOutput.getMultiOutPortState('0')
+MO8 = MultiOutput.getMultiOutPortState('port1')
+MO9 = MultiOutput.getMultiOutUsbState('usb0')
+MO9a = MultiOutput.setMultiOutPortState(['port0'], 'OFF')
+#MO9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
 
 
-test11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
+MO11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
 time.sleep(300)
-test10 = MultiOutput.outletSetDelay('port0', 1, 2)
+MO10 = MultiOutput.outletSetDelay('port0', 1, 2)
 
 
+FT16 = FishMultiOutput.getMultiOutStates()
+FT15 = FishMultiOutput.nbrPorts
+FT15 = FishMultiOutput.nbrOutlets
+FT15a = FishMultiOutput.nbrUsb
+
+FT1 = FishMultiOutput.getSchedules()
+FT2 = FishMultiOutput.getDelays()
+#MO = MultiOutput.getStatus()
+#MO = MultiOutput.getInfoAll()
+FT5 = FishMultiOutput.getInfoAPI()
+
+FT6 = FishMultiOutput.getMultiOutStates()
+FT7 = FishMultiOutput.getMultiOutPortState('port0')
+FT8 = FishMultiOutput.getMultiOutPortState('port4')
+FT9 = FishMultiOutput.getMultiOutUsbState('usb0')
+FT9a = FishMultiOutput.setMultiOutUsbState(['usb0'], 'ON')
+FT9b = FishMultiOutput.setMultiOutPortState(['port3'], 'ON')
 '''
-Test = FishMultiOutput.getMultiOutStates()
-Test15 = FishMultiOutput.nbrPorts
-Test15 = FishMultiOutput.nbrOutlets
-Test15a = FishMultiOutput.nbrUsb
 
-Test1 = FishMultiOutput.getSchedules()
-Test2 = FishMultiOutput.getDelays()
-#test = MultiOutput.getStatus()
-#test = MultiOutput.getInfoAll()
-Test5 = FishMultiOutput.getInfoAPI()
+IV1 = IrrigationValve.getState()
 
-Test6 = FishMultiOutput.getMultiOutStates()
-Test7 = FishMultiOutput.getMultiOutPortState('port0')
-Test8 = FishMultiOutput.getMultiOutPortState('port4')
-Test9 = FishMultiOutput.getMultiOutUsbState('usb0')
-test9a = FishMultiOutput.setMultiOutUsbState(['usb0'], 'ON')
-test9b = FishMultiOutput.setMultiOutPortState(['port3'], 'ON')
-'''
-Wtest1 = WineCellarTemp.getTempValueC()
-Wtest2 = WineCellarTemp.getTempValueF()
-Wtest3 = WineCellarTemp.getHumidityValue()
-Wtest4 = WineCellarTemp.getAlarms()
+
+WC1 = WineCellarTemp.getTempValueC()
+WC2 = WineCellarTemp.getTempValueF()
+WC3 = WineCellarTemp.getHumidityValue()
+WC4 = WineCellarTemp.getAlarms()
+
+
+
+
+
 #MultiOutput.setState([1, 0], 'ON')
 #MultiOutput.setState([0], 'off')
-print(MultiOutput.getInfoAPI())
+#print(MultiOutput.getInfoAPI())
 #MultiOutput.refreshMultiOutput()
-print(MultiOutput.getInfoAPI())
-MultiOutput.refreshSchedules()
+#print(MultiOutput.getInfoAPI())
+#MultiOutput.refreshSchedules()
 
-print(MultiOutput.getInfoAPI())
+#print(MultiOutput.getInfoAPI())
 #MultiOutput.refreshFWversion()
 #WineCellarTemp.refreshSensor()
 '''
