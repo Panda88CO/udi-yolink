@@ -234,8 +234,7 @@
       </cmds>
    </nodeDef> 
 
-      </nodeDef> 
-      <nodeDef id="yoleaksens" nls="nlsleaksens">
+   <nodeDef id="yoleaksens" nls="nlsleaksens">
       <editors />
       <sts>
          <st id="GV0" editor="waterstate" />
