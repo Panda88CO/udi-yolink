@@ -16,3 +16,103 @@ cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643059790/request{"time": "164
 
 cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100029ccf1643059781/request{"params": {"chs": 1, "state": "closed"}, "time": "1643059795000", "method": "MultiOutlet.setState", "targetDevice": "d88b4c0100029ccf", "token": "10E61ABA6C69D96A6D95715D4E5987B2"}
 
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643221863/request{"time": "1643221867000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643221871/request{"time": "1643221875000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643221871/request{"time": "1643221876000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c01000341c31643221928/request{"time": "1643221931000", "method": "Manipulator.getState", "targetDevice": "d88b4c01000341c3", "token": "92450B234004111A0AFF3A48E4546AFC"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c02000177a01643222002/request{"time": "1643222006000", "method": "DoorSensor.getState", "targetDevice": "d88b4c02000177a0", "token": "EA8A130185A4A43EE586B03250F20AD3"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643222036/request{"time": "1643222041000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643222167/request{"time": "1643222229000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643222167/request{"time": "1643222254000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c01000341c31643222311/request{"time": "1643222380000", "method": "Manipulator.getState", "targetDevice": "d88b4c01000341c3", "token": "92450B234004111A0AFF3A48E4546AFC"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643223390/request{"time": "1643223394000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223406/request{"time": "1643223410000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223406/request{"time": "1643223411000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c02000177a01643223418/request{"time": "1643223422000", "method": "DoorSensor.getState", "targetDevice": "d88b4c02000177a0", "token": "EA8A130185A4A43EE586B03250F20AD3"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100038d311643223400/request{"time": "1643223512000", "method": "GarageDoor.toggle", "targetDevice": "d88b4c0100038d31", "token": "674EB963FDB9FEB4868C0B1DA88BB2A1"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643223546/request{"time": "1643223550000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223554/request{"time": "1643223558000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223554/request{"time": "1643223559000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c02000177a01643223560/request{"time": "1643223564000", "method": "DoorSensor.getState", "targetDevice": "d88b4c02000177a0", "token": "EA8A130185A4A43EE586B03250F20AD3"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643223615/request{"time": "1643223619000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223623/request{"time": "1643223627000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223623/request{"time": "1643223628000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c02000177a01643223629/request{"time": "1643223633000", "method": "DoorSensor.getState", "targetDevice": "d88b4c02000177a0", "token": "EA8A130185A4A43EE586B03250F20AD3"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643223706/request{"time": "1643223710000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223714/request{"time": "1643223718000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223714/request{"time": "1643223719000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c02000177a01643223720/request{"time": "1643223724000", "method": "DoorSensor.getState", "targetDevice": "d88b4c02000177a0", "token": "EA8A130185A4A43EE586B03250F20AD3"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100038d311643223711/request{"time": "1643223733000", "method": "GarageDoor.toggle", "targetDevice": "d88b4c0100038d31", "token": "674EB963FDB9FEB4868C0B1DA88BB2A1"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643223807/request{"time": "1643223811000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223815/request{"time": "1643223819000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643223815/request{"time": "1643223820000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c01000349061643223821/request{"time": "1643223826000", "method": "Switch.getState", "targetDevice": "d88b4c0100034906", "token": "CCD19B8871F7D89EB6A4A296068564ED"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c01000349061643223821/request{"time": "1643223827000", "method": "Switch.getSchedules", "targetDevice": "d88b4c0100034906", "token": "CCD19B8871F7D89EB6A4A296068564ED"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c02000177a01643223827/request{"time": "1643223831000", "method": "DoorSensor.getState", "targetDevice": "d88b4c02000177a0", "token": "EA8A130185A4A43EE586B03250F20AD3"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100038d311643223812/request{"time": "1643223832000", "method": "GarageDoor.toggle", "targetDevice": "d88b4c0100038d31", "token": "674EB963FDB9FEB4868C0B1DA88BB2A1"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643251018/request{"time": "1643251022000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643251026/request{"time": "1643251031000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643251026/request{"time": "1643251032000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c01000349061643251033/request{"time": "1643251038000", "method": "Switch.getState", "targetDevice": "d88b4c0100034906", "token": "CCD19B8871F7D89EB6A4A296068564ED"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c02000177a01643251039/request{"time": "1643251043000", "method": "DoorSensor.getState", "targetDevice": "d88b4c02000177a0", "token": "EA8A130185A4A43EE586B03250F20AD3"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100038d311643251023/request{"time": "1643251044000", "method": "GarageDoor.toggle", "targetDevice": "d88b4c0100038d31", "token": "674EB963FDB9FEB4868C0B1DA88BB2A1"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643251070/request{"time": "1643251074000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643251078/request{"time": "1643251083000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643251078/request{"time": "1643251084000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c01000349061643251085/request{"time": "1643251090000", "method": "Switch.getState", "targetDevice": "d88b4c0100034906", "token": "CCD19B8871F7D89EB6A4A296068564ED"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c02000177a01643251091/request{"time": "1643251095000", "method": "DoorSensor.getState", "targetDevice": "d88b4c02000177a0", "token": "EA8A130185A4A43EE586B03250F20AD3"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0100038d311643251075/request{"time": "1643251096000", "method": "GarageDoor.toggle", "targetDevice": "d88b4c0100038d31", "token": "674EB963FDB9FEB4868C0B1DA88BB2A1"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200041f5e1643251265/request{"time": "1643251274000", "method": "THSensor.getState", "targetDevice": "d88b4c0200041f5e", "token": "56C9F61A7AC1FFE08B0B7E48AD140BC7"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643251278/request{"time": "1643251288000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d1643251278/request{"time": "1643251299000", "method": "DoorSensor.getState", "targetDevice": "d88b4c010003281d", "token": "5A44126FFEA7BB5F9AC8224899F538C4"}
+
+cdb97298b19f4d7cb2f4c0e287636243/d88b4c01000349061643251300/request{"time": "1643251318000", "method": "Switch.getState", "targetDevice": "d88b4c0100034906", "token": "CCD19B8871F7D89EB6A4A296068564ED"}
+

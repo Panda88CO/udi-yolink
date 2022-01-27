@@ -35,7 +35,6 @@ class YoLinkSW(YoLinkMQTTDevice):
         yolink.updateCallbackStatus(data, False)
 
     def initNode(yolink):
-
         yolink.refreshState()
         yolink.online = yolink.getOnlineStatus()
         if yolink.online:
@@ -80,9 +79,9 @@ class YoLinkSW(YoLinkMQTTDevice):
             attempts = attempts + 1
         if attempts < 5 and 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
             if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
-                return('ON')
+                return('on')
             elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
-                return('OFF')
+                return('off')
             else:
                 return('Unkown')
         else:

@@ -126,11 +126,11 @@ class YoLinkSetup (udi_interface.Node):
                     self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
                     logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
 
-                elif self.deviceList[dev]['type'] == 'Manipulator':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                #elif self.deviceList[dev]['type'] == 'Manipulator':
+                #    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                #    udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
 
                 elif self.deviceList[dev]['type'] == 'MotionSensor':     
                     logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))

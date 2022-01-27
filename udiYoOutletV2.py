@@ -40,7 +40,7 @@ class udiYoOutlet(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 2, 'uom': 25},
+            {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 44}, 
             {'driver': 'GV2', 'value': 0, 'uom': 44}, 
             {'driver': 'GV3', 'value': -1, 'uom': 30},

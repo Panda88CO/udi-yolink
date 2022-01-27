@@ -168,11 +168,11 @@ WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
 GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
 #MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
-IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
+#IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
 #HouseValve = YoLinkManipulator(yoAccess, HouseValve )
 #DeckLight = YoLinkMultiOutlet(yoAccess, DeckLight)
 #PlaygroundGardenLight = YoLinkSwitch(yoAccess, GardenPlayground)
-#PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
+PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
 #USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
 DoorSensor = YoLinkDoorSensor(yoAccess, DoorSensor)
 #outdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
@@ -221,7 +221,7 @@ FT9a = FishMultiOutput.setMultiOutUsbState(['usb0'], 'ON')
 FT9b = FishMultiOutput.setMultiOutPortState(['port3'], 'ON')
 '''
 
-IV1 = IrrigationValve.getState()
+#IV1 = IrrigationValve.getState()
 
 
 WC1 = WineCellarTemp.getTempValueC()
@@ -229,9 +229,11 @@ WC2 = WineCellarTemp.getTempValueF()
 WC3 = WineCellarTemp.getHumidityValue()
 WC4 = WineCellarTemp.getAlarms()
 
+GS1 = GarageSensor.getState()
+GCT1 = GarageController.toggleDevice()
 
 
-
+PG1= PlaygroundLight.getState()
 
 #MultiOutput.setState([1, 0], 'ON')
 #MultiOutput.setState([0], 'off')
