@@ -45,6 +45,6 @@
      <range  uom="25" subset="0-1,99" nls="usbstate" />
 </editor>
   <editor id = "outletnbr" > 
-     <range  uom="25" subset="0-7" nls="portlist"/> />
+     <range  uom="25" subset="0-7" nls="portlist" /> 
 </editor>
 </editors> 

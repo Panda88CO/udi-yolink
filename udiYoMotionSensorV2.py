@@ -37,8 +37,8 @@ class udiYoMotionSensor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 5, 'uom': 25}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -74,7 +74,8 @@ class udiYoMotionSensor(udi_interface.Node):
     def start(self):
         print('start - YoLinkMotionSensor')
         self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
-        #self.yoMotionsSensor.initNode()
+        self.yoMotionsSensor.initNode()
+        time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 
@@ -103,7 +104,7 @@ class udiYoMotionSensor(udi_interface.Node):
             else:
                 return(1)
         else:
-            return(-1)
+            return(99)
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoTHsensor')

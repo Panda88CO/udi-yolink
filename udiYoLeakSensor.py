@@ -111,7 +111,7 @@ class udiYoLeakSensor(udi_interface.Node):
             else:
                 return(1)
         else:
-            return(-1)
+            return(99)
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoLeakSensor')

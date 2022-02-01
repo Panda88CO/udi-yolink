@@ -105,7 +105,11 @@ class udiYoDoorSensor(udi_interface.Node):
         alarms = self.yoDoorSensor.getAlarms()
         if self.node is not None:
             if self.yoDoorSensor.online:
-                self.node.setDriver('GV0', self.yoDoorSensor.getState(), True, True)
+                state = self.yoDoorSensor.getState()
+                if state.lower() == 'closed':
+                    self.node.setDriver('GV0', 0 , True, True)
+                else:
+                    self.node.setDriver('GV0', 1, True, True)
                 self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoDoorSensor.getOnlineStatus()), True, True)
             else:

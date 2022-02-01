@@ -71,13 +71,16 @@ class udiYoGarageDoor(udi_interface.Node):
     def start(self):
         print('start - YoLinkThsensor')
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.yoAccess, self.devInfo, self.updateStatus)
-             
+
+        time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
 
     def initNode(self):
-        logging.debug('Nothing to init')
+        self.yoDoorControl.online= True
+        self.node.setDriver('GV8', self.yoDoorControl.bool2Nbr(self.yoDoorControl.online), True, True)
+        
 
     
     def stop (self):

@@ -38,8 +38,8 @@ class udiYoMotionSensor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 5, 'uom': 25}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -81,6 +81,7 @@ class udiYoMotionSensor(udi_interface.Node):
         print('start - YoLinkMotionSensor')
         self.yoMotionsSensor  = YoLinkMotionSen(self.csName, self.csid, self.csseckey, self.devInfo, self.updateStatus)
         #self.yoMotionsSensor.initNode()
+        time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 

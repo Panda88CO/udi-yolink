@@ -685,6 +685,7 @@ class YoLinkMQTTDevice(object):
     def getState(yolink):
         try:
             logging.debug(yolink.type +' - getState')
+            
             return(yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState] )
         except Exception as e:
             logging.debug('getState exceptiom: {}'.format(e) )
