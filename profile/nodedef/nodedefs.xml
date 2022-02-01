@@ -186,7 +186,7 @@
    <nodeDef id="yodoorsens" nls="nlsdoorsens">
       <editors />
       <sts>
-         <st id="GV0" editor="doorState" />
+         <st id="GV0" editor="doorstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV8" editor="online" />
          <st id="ST"  editor="status" />

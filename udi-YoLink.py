@@ -114,12 +114,12 @@ class YoLinkSetup (udi_interface.Node):
                 #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
                 #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
                 #    isyNbr += 1
-                #elif self.deviceList[dev]['type'] == 'THsensor':
-                #    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                #    udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                #    isyNbr += 1       
+                elif self.deviceList[dev]['type'] == 'THsensor':
+                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                    udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                    isyNbr += 1       
                 #elif self.deviceList[dev]['type'] == 'MultiOutlet':
                 #    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
                 #    udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
