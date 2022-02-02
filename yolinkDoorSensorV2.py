@@ -16,7 +16,6 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
         super().__init__(yoAccess,  deviceInfo, callback)
         yolink.methodList = ['getState' ]
         yolink.eventList = ['Report']
-        yolink.GarageName = 'GarageEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'DoorSensor'
         time.sleep(2)

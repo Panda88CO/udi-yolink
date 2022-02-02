@@ -3,10 +3,12 @@ import json
 #import sys
 import time
 import os
+from threading import Lock
 try:
     import udi_interface
     logging = udi_interface.LOGGER
     Custom = udi_interface.Custom
+    
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
@@ -21,6 +23,7 @@ Object representation for YoLink MQTT Client
 class YoLinkMQTTClient(object):
 
     def __init__(yolink, yoAccess,  deviceInfo, callback ):
+        yolink.lock = Lock()
         yolink.callback = callback
         yolink.yoAccess = yoAccess
         yolink.UaID = yoAccess.uaID
@@ -87,43 +90,33 @@ class YoLinkMQTTClient(object):
         #logging.debug(msg.topic, msg.payload)
         
         payload = json.loads(msg.payload.decode("utf-8"))
+        if DEBUG:
+            dataTemp = str(json.dumps(payload))
         logging.debug('on_message: {}'.format(msg.topic))
         #logging.debug(payload)
 
-        if msg.topic == yolink.topicReportAll or msg.topic == yolink.topicReport:
+        if  msg.topic == yolink.topicReport:
             if payload['deviceId'] == yolink.deviceId :
                 logging.debug (payload)
                 yolink.callback(payload)
                 logging.debug(' device reporting')
-            else:
-                logging.debug ('\n report on different device : ' + msg.topic)
-                logging.debug (payload)
-                logging.debug('\n')
+            if DEBUG:
+                yolink.savePacket(msg.topic, dataTemp, 'EVENT')
         elif msg.topic == yolink.topicResp:
                 #yolink.dataQueue.put(payload)
                 logging.debug (payload)
+                logging.debug('\n')
                 yolink.callback(payload)
-                #print('Device response:')
-                #print(payload)
+                if DEBUG:
+                    yolink.savePacket(msg.topic, dataTemp, 'RESP')
         elif msg.topic == yolink.topicReq:
                 logging.debug('publishing request' )
                 logging.debug (payload)
-                #yolink.callback(payload) # is this needed????
-                #logging.debug('device publishing')
-                #logging.debug(payload)
+                logging.debug('\n')
+                if DEBUG:
+                    yolink.savePacket(msg.topic, dataTemp, 'REQ')
         else:
-            logging.debug(msg.topic,  yolink.topicReport)
-        
-        if DEBUG:
-            f = open('RXpackets.txt', 'a')
-            jsonStr  = json.dumps(payload, sort_keys=True, indent=4, separators=(',', ': '))
-            f.write(msg.topic)
-            f.write(jsonStr)
-            f.write('\n\n')
-            #json.dump(jsonStr, f)
-            f.close()
-
-
+            logging.debug('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
 
         #logging.debug("Event:{0} Device:{1} State:{2}".format(event, yolink.device_hash[deviceId].get_name(), state))
    
@@ -140,7 +133,7 @@ class YoLinkMQTTClient(object):
                 yolink.client.subscribe(yolink.topicResp)
                 yolink.client.subscribe(yolink.topicReq)
                 yolink.client.subscribe(yolink.topicReport)
-                yolink.client.subscribe(yolink.topicReportAll)
+                #yolink.client.subscribe(yolink.topicReportAll)
 
                 #yolink.client.subscribe('yl-home/'+yolink.homeID+'/+/report')
             else:
@@ -210,14 +203,25 @@ class YoLinkMQTTClient(object):
             except Exception as E:
                 logging.error('Exception  - publish_data: ' + str(E))
             
-        if DEBUG:
+
+
+    def savePacket(yolink, msg, data, fileType):
+        yolink.lock.acquire()
+        if fileType == 'REQ':
             f = open('TXpackets.txt', 'a')
-            #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
-            f.write(yolink.topicReq)
-            f.write(dataTemp)
-            f.write('\n\n')
-            #json.dump(jsonStr, f)
-            f.close()
+        elif fileType == 'RESP':
+            f = open('RXpackets.txt', 'a')
+        elif fileType == 'EVENT':  
+            f = open('EVENTpackets.txt', 'a')
+        else:
+            f = open('MISCpackets.txt', 'a')
+        #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
+        f.write(msg+'\n')
+        f.write(data)
+        f.write('\n\n')
+        #json.dump(jsonStr, f)
+        f.close()
+        yolink.lock.release()
 
     def shut_down(yolink):
         yolink.client.loop_stop()

@@ -1,7 +1,7 @@
 
 import time
 import json
-import threading
+#import threading
 
 from  datetime import datetime
 from dateutil.tz import *
@@ -227,7 +227,7 @@ class YoLinkMQTTDevice(object):
     def updateCallbackStatus(yolink, data, eventSupport = False):
         logging.debug(yolink.type+' - updateCallbackStatus')
         logging.debug(json.dumps(data))
-        yolink.setOnline(data)
+        #yolink.setOnline(data)
         if 'method' in  data:
             if data['code'] == '000000':
                 yolink.noconnect = 0
@@ -559,9 +559,6 @@ class YoLinkMQTTDevice(object):
     def updateStatusData  (yolink, data):
         logging.debug(yolink.type + ' - updateStatusData')
         logging.debug(json.dumps(data))
-
-
-
         #if yolink.type == 'multiOutlet':
         #    yolink.nbrPorts = 1 # assume 1 and overwrite
         #    yolink.nbrUsb = 0  # assume none and overwrite

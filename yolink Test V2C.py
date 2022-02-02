@@ -162,23 +162,23 @@ FishTank        = DeviceList[0]
 
 #FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
 #MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
-#WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
+WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
-#WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
-#GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
-#GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
-#MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
-#IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
+WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
+GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
+GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
+MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
+IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
 #HouseValve = YoLinkManipulator(yoAccess, HouseValve )
 #DeckLight = YoLinkMultiOutlet(yoAccess, DeckLight)
 #PlaygroundGardenLight = YoLinkSwitch(yoAccess, GardenPlayground)
-#PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
+PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
 #USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
 
 DoorSensor1 = YoLinkDoorSensor(yoAccess, DoorSensor)
-#outdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
+OutdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
 #bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
-#hub1 = YoLinkHub(yoAccess, HubDS)
+Hub1 = YoLinkHub(yoAccess, HubDS)
 '''
 test = MultiOutput.getMultiOutStates()
 
@@ -300,9 +300,38 @@ print()
 info = WaterLevel.getInfoAPI()
 '''
 while True :
-    #DS0 = DoorSensor1.refreshDevice()
-    #DS1 = DoorSensor1.getState()
-    #DS2 = DoorSensor1.getBattery()
+    
+    #test = input('Press any key')
+
+    DoorSensor1.refreshDevice()
+    DS1 = DoorSensor1.getState()
+    DS2 = DoorSensor1.getBattery()
+
+    WineCellarTemp.refreshDevice()
+    WC1 = WineCellarTemp.getTempValueC()
+    WC2 = WineCellarTemp.getTempValueF()
+    WC3 = WineCellarTemp.getHumidityValue()
+    WC4 = WineCellarTemp.getAlarms()
+
+    OutdoorTemp.refreshDevice()
+    OD1 = OutdoorTemp.getTempValueC()
+    OD2 = OutdoorTemp.getBattery()
+    OD4 = OutdoorTemp.getAlarms()
+
+    GarageSensor.refreshDevice()
+    GS1 = GarageSensor.getState()
+    GCT1 = GarageController.toggleDevice()
+    
+    IrrigationValve.refreshDevice()
+    IR1 = IrrigationValve.getState()
+    IR2 = IrrigationValve.getBattery()
+ 
+    PlaygroundLight.refreshDevice()
+    PG1= PlaygroundLight.getState()
+    
+    Hub1.refreshDevice()
+    HU1 = Hub1.getState()
+    time.sleep(61)
 
     #print(MultiOutput.getMultiOutletState())
     #print(MultiOutput.getSchedules())
@@ -418,8 +447,7 @@ while True :
     print()
     #info = MotionSensor.getInfoAPI()
     '''
-    time.sleep(1)
-    test = input('Press any key')
+
 #print(PoolTemp.getInfoAll())
 #print(PoolTemp.getTemp())
 #print(PoolTemp.getHumidity())
