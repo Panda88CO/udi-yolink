@@ -26,13 +26,13 @@ class YoLinkMQTTClient(object):
         yolink.UaID = yoAccess.uaID
         yolink.homeID = yoAccess.homeID
         yolink.deviceId = deviceInfo['deviceId']
-        yolink.uniqueID = yolink.deviceId+str(int(time.time()))
+        yolink.uniqueID = yolink.deviceId#+str(int(time.time()))
         yolink.accessToken = yoAccess.get_access_token()
  
-        yolink.topicReq = yolink.homeID+'/'+ yolink.uniqueID +'/request'
-        yolink.topicResp = yolink.homeID+'/'+ yolink.uniqueID +'/response'
-        yolink.topicReport = yolink.homeID+'/'+ yolink.uniqueID +'/report'
-        yolink.topicReportAll = yolink.homeID+'/report'
+        yolink.topicReq = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/request'
+        yolink.topicResp = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/response'
+        yolink.topicReport = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/report'
+        yolink.topicReportAll = 'yl-home/'+yolink.homeID+'/+/report'
 
         yolink.mqttPort = int(yoAccess.mqttPort)
         yolink.mqttURL = yoAccess.mqttURL
@@ -87,8 +87,9 @@ class YoLinkMQTTClient(object):
         #logging.debug(msg.topic, msg.payload)
         
         payload = json.loads(msg.payload.decode("utf-8"))
-        logging.debug('on_message')
+        logging.debug('on_message: {}'.format(msg.topic))
         #logging.debug(payload)
+
         if msg.topic == yolink.topicReportAll or msg.topic == yolink.topicReport:
             if payload['deviceId'] == yolink.deviceId :
                 logging.debug (payload)
@@ -107,11 +108,11 @@ class YoLinkMQTTClient(object):
         elif msg.topic == yolink.topicReq:
                 logging.debug('publishing request' )
                 logging.debug (payload)
-                yolink.callback(payload) # is this needed????
+                #yolink.callback(payload) # is this needed????
                 #logging.debug('device publishing')
                 #logging.debug(payload)
         else:
-            logging.debug(msg.topic,  yolink.topicReport, yolink.topicReportAll )
+            logging.debug(msg.topic,  yolink.topicReport)
         
         if DEBUG:
             f = open('RXpackets.txt', 'a')
@@ -136,13 +137,12 @@ class YoLinkMQTTClient(object):
 
             if (rc == 0):
                 logging.debug("Successfully connected to broker %s" % yolink.mqttURL)
-                test1 = yolink.client.subscribe(yolink.topicResp)
-                #logging.debug(test1)
-                test2 = yolink.client.subscribe(yolink.topicReport)
-                #logging.debug(test2)
-                test3 = yolink.client.subscribe(yolink.topicReportAll)
-                #logging.debug(test3)
+                yolink.client.subscribe(yolink.topicResp)
+                yolink.client.subscribe(yolink.topicReq)
+                yolink.client.subscribe(yolink.topicReport)
+                yolink.client.subscribe(yolink.topicReportAll)
 
+                #yolink.client.subscribe('yl-home/'+yolink.homeID+'/+/report')
             else:
                 logging.debug("Connection with result code %s" % rc);
                 os.exit(2)

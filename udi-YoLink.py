@@ -68,6 +68,8 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.addNode(self)
 
         self.node = polyglot.getNode(self.address)
+        time.sleep(2)
+
         self.node.setDriver('ST', 1, True, True)
         
         self.devicesReady = False
@@ -380,7 +382,7 @@ class YoLinkSetup (udi_interface.Node):
 
 
     drivers = [
-           {'driver': 'ST', 'value':0, 'uom':25},
+           {'driver': 'ST', 'value':1, 'uom':25},
            ]
 
 if __name__ == "__main__":
