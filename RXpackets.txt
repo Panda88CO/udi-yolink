@@ -1,9 +1,0 @@
-yl-home/cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d/response
-{"code": "000000", "time": 1643839929837, "msgid": "1643839923000", "method": "DoorSensor.getState", "data": {"online": true, "state": {"battery": 4, "delay": 10, "openRemindDelay": null, "state": "closed", "version": "0606"}, "deviceId": "d88b4c010003281d", "reportAt": "2022-02-02T21:49:43.610Z"}, "targetDevice": "d88b4c010003281d"}
-
-yl-home/cdb97298b19f4d7cb2f4c0e287636243/d88b4c010003281d/response
-{"code": "000000", "time": 1643839930542, "msgid": "1643839924000", "method": "DoorSensor.getState", "data": {"online": true, "state": {"battery": 4, "delay": 10, "openRemindDelay": null, "state": "closed", "version": "0606"}, "deviceId": "d88b4c010003281d", "reportAt": "2022-02-02T21:49:43.610Z"}, "targetDevice": "d88b4c010003281d"}
-
-yl-home/cdb97298b19f4d7cb2f4c0e287636243/d88b4c0200037b09/response
-{"code": "000000", "time": 1643839935657, "msgid": "1643839929000", "method": "MotionSensor.getState", "data": {"online": true, "state": {"alertInterval": 30, "battery": 4, "devTemperature": 20, "ledAlarm": true, "nomotionDelay": 1, "sensitivity": 3, "state": "normal", "version": "0466"}, "deviceId": "d88b4c0200037b09", "reportAt": "2022-02-02T19:16:31.538Z"}, "targetDevice": "d88b4c0200037b09"}
-
