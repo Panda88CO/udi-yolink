@@ -40,6 +40,7 @@ class YoLinkMQTTClient(object):
         yolink.mqttPort = int(yoAccess.mqttPort)
         yolink.mqttURL = yoAccess.mqttURL
         yolink.retryNbr = 0
+        yolink.disconnect = False
         #yolink.lastDataPacket = {}
   
         try:
@@ -161,7 +162,16 @@ class YoLinkMQTTClient(object):
     
     def on_disconnect(yolink, client, userdata,rc=0):
         logging.debug('Disconnect - stop loop')
-        yolink.client.loop_stop()
+        if yolink.disconnect:
+            logging.debug('Disconnect - stop loop')
+            yolink.client.loop_stop()
+        else:
+            logging.debug('Unintentional disconnect - Restarting loop')
+            yolink.accessToken = yolink.yoAccess.get_access_token() 
+            #yolink.client.loop_stop()
+            yolink.client.disconnect()
+            yolink.connect_to_broker()
+
 
     def on_subscribe(yolink, client, userdata, mID, granted_QOS):
         logging.debug('on_subscribe')
@@ -195,12 +205,18 @@ class YoLinkMQTTClient(object):
                 logging.debug('publish result: {}'.format(result.rc))
                 if result.rc != 0:
                     attempts = 0 
+                    if result.rc == 4: #try to renew token
+                        yolink.accessToken = yolink.yoAccess.get_access_token() 
+                        yolink.client.loop_stop()
+                        yolink.client.disconnect()
+                        yolink.connect_to_broker()
                     while attempts < max_retries and result.rc != 0:
+                        time.sleep(1)
                         result = yolink.client.publish(yolink.topicReq, dataTemp)
                         if result.rc != 0:
                             attempts = attempts + 1
                             logging.info('Device not fonund - retrying ')
-                            time.sleep(1)
+                            
 
             except Exception as E:
                 logging.error('Exception  - publish_data: ' + str(E))

@@ -20,6 +20,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.type = 'MultiOutlet'
         yolink.MultiOutletName = 'MultiOutletEvent'
         yolink.eventTime = 'Time'
+        
         time.sleep(2)
 
 
@@ -332,10 +333,11 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                 #data["params"]["delays"].append(temp)
         return(data)
     '''
-    
+    '''
     def shut_down(yolink):
+        yolink.diconnect = True
         yolink.yolinkMQTTclient.shut_down()
-
+    '''
 class YoLinkMultiOutlet(YoLinkMultiOut):
 
     def __init__(yolink, yoAccess, deviceInfo):

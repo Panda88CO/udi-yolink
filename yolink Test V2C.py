@@ -161,7 +161,7 @@ FishTank        = DeviceList[0]
 
 
 #FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
-#MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
+MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
 WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
 WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
@@ -331,6 +331,30 @@ while True :
     
     Hub1.refreshDevice()
     HU1 = Hub1.getState()
+
+    test = MultiOutput.getMultiOutStates()
+
+    MO15 = MultiOutput.nbrPorts
+    MO15a = MultiOutput.nbrOutlets
+    MO15b = MultiOutput.nbrUsb
+    MO1 = MultiOutput.getSchedules()
+    MO2 = MultiOutput.getDelays()
+    MO3 = MultiOutput.refreshDevice()
+    #MO4 = MultiOutput.getInfoAll()
+    MO5 = MultiOutput.getInfoAPI()
+    MO6 = MultiOutput.getMultiOutStates()
+    MO7 = MultiOutput.getMultiOutPortState('0')
+    MO8 = MultiOutput.getMultiOutPortState('port1')
+    MO9 = MultiOutput.getMultiOutUsbState('usb0')
+    MO9a = MultiOutput.setMultiOutPortState(['port0'], 'OFF')
+    #MO9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
+
+
+    #MO11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
+    #time.sleep(300)
+    MO10 = MultiOutput.outletSetDelay('port0', 1, 2)
+
+
     time.sleep(61)
 
     #print(MultiOutput.getMultiOutletState())

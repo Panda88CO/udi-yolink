@@ -62,7 +62,7 @@ class YoLinkMQTTDevice(object):
         yolink.messageTime = 'time'
         yolink.forceStop = False
         yolink.eventSupport = False # Support adding to EventQueue
-
+        yolink.diconnect = False
         
         yolink.dataAPI = {
                         'lastTime':str(int(time.time()*1000))
@@ -102,6 +102,7 @@ class YoLinkMQTTDevice(object):
 
 
     def shut_down(yolink):
+        yolink.diconnect = True
         yolink.yolinkMQTTclient.shut_down()
    
     def deviceError(yolink, data):
