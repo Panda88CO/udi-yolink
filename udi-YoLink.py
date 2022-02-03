@@ -46,14 +46,17 @@ class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
         super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  
         self.hb = 0
+        self.nodeDefineDone = False
+        self.longPollCountMissed = 0
+        self.address = address
+        self.name = name
+
         logging.setLevel(20)
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
-        self.address = address
-        self.name = name
 
         self.Parameters = Custom(polyglot, 'customparams')
         self.Notices = Custom(polyglot, 'notices')
@@ -61,18 +64,11 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('self.address : ' + str(self.address))
         logging.debug('self.name :' + str(self.name))   
         
-        self.nodeDefineDone = False
-        self.longPollCountMissed = 0
-
         self.poly.ready()
         self.poly.addNode(self)
-
         self.node = polyglot.getNode(self.address)
         time.sleep(2)
-
         self.node.setDriver('ST', 1, True, True)
-        
-        self.devicesReady = False
         
         logging.debug('YoLinkSetup init DONE')
     
