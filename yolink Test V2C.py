@@ -350,9 +350,9 @@ while True :
     #MO9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
 
 
-    #MO11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
+    MO11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
     #time.sleep(300)
-    MO10 = MultiOutput.outletSetDelay('port0', 1, 2)
+    #MO10 = MultiOutput.outletSetDelay('port0', 1, 2)
 
 
     time.sleep(61)
