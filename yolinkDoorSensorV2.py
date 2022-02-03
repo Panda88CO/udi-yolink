@@ -43,6 +43,8 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
+
+
     '''
     def getOnlineStatus(yolink):
         logging.debug(yolink.type+ ' - refreshSensor')

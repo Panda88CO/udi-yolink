@@ -39,6 +39,7 @@ class YoLinkMQTTClient(object):
 
         yolink.mqttPort = int(yoAccess.mqttPort)
         yolink.mqttURL = yoAccess.mqttURL
+        yolink.retryNbr = 0
         #yolink.lastDataPacket = {}
   
         try:
@@ -83,6 +84,7 @@ class YoLinkMQTTClient(object):
         """
         Callback for broker published events
         """
+        maxRetry = 3
         logging.debug('on_message')
         #logging.debug(client)
         #logging.debug(userdata)
@@ -104,14 +106,26 @@ class YoLinkMQTTClient(object):
                 yolink.savePacket(msg.topic, dataTemp, 'EVENT')
         elif msg.topic == yolink.topicResp:
                 #yolink.dataQueue.put(payload)
+                logging.debug('received Response: {}'.format(yolink.topicReq) )
                 logging.debug (payload)
                 logging.debug('\n')
-                yolink.callback(payload)
+                if payload['code'] == '000000':
+                    yolink.retryNbr = 0
+                    yolink.callback(payload)
+                else:
+                    yolink.retryNbr += 1
+                    if yolink.retryNbr <= maxRetry:
+                        time.sleep(5)
+                        yolink.publish_data(yolink.lastDataPacket)
+                    else:
+                        yolink.retryNbr = 0
+                        yolink.callback(payload)
                 if DEBUG:
                     yolink.savePacket(msg.topic, dataTemp, 'RESP')
         elif msg.topic == yolink.topicReq:
-                logging.debug('publishing request' )
+                
                 logging.debug (payload)
+
                 logging.debug('\n')
                 if DEBUG:
                     yolink.savePacket(msg.topic, dataTemp, 'REQ')
@@ -181,7 +195,7 @@ class YoLinkMQTTClient(object):
                 logging.debug('publish result: {}'.format(result.rc))
                 if result.rc != 0:
                     attempts = 0 
-                    while attempts < max_retries:
+                    while attempts < max_retries and result.rc != 0:
                         result = yolink.client.publish(yolink.topicReq, dataTemp)
                         if result.rc != 0:
                             attempts = attempts + 1
