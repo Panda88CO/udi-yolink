@@ -54,7 +54,7 @@ class udiYoOutlet(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('TestYoLinkNode INIT')
+        logging.debug('udiYoOutlet INIT')
 
         
         self.yoAccess = yoAccess
@@ -83,7 +83,7 @@ class udiYoOutlet(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkSw')
+        print('start - YoLinkOutlet')
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoOutlet.initNode()
         self.node.setDriver('ST', 1, True, True)

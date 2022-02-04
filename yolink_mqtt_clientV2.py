@@ -2,6 +2,7 @@
 import json
 #import sys
 import time
+import datetime
 import os
 from threading import Lock
 try:
@@ -14,8 +15,7 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 
 import paho.mqtt.client as mqtt
-#from logger import getLogger
-#log = getLogger(__name__)
+
 DEBUG = True
 """
 Object representation for YoLink MQTT Client
@@ -246,7 +246,7 @@ class YoLinkMQTTClient(object):
         else:
             f = open('MISCpackets.txt', 'a')
         #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
-        f.write(msg+'\n')
+        f.write('{} - {}\n'.format( datetime.datetime.now(), msg))
         f.write(data)
         f.write('\n\n')
         #json.dump(jsonStr, f)

@@ -49,7 +49,7 @@ class udiYoDoorSensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('TestYoLinkNode INIT')
+        logging.debug('udiYoDoorSensor INIT')
 
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess

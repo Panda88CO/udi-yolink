@@ -46,7 +46,7 @@ class udiYoGarageDoor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('TestYoLinkNode INIT')
+        logging.debug('udiYoGarageDoor INIT')
         self.yoAccess=yoAccess
 
         self.devInfo =  deviceInfo   

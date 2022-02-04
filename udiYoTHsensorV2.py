@@ -59,7 +59,7 @@ class udiYoTHsensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('TestYoLinkNode INIT')
+        logging.debug('udiYoTHsensor INIT')
 
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
@@ -83,7 +83,7 @@ class udiYoTHsensor(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkThsensor')
+        print('start - YoLinkTHsensor')
         self.yoTHsensor  = YoLinkTHSen(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoTHsensor.initNode()
         self.node.setDriver('ST', 1, True, True)

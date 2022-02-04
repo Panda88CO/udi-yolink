@@ -81,7 +81,7 @@ class YoLinkSetup (udi_interface.Node):
         logging.info ('Access using PAC/UAC')
 
         self.tokenObtained = False
-        self.supportedYoTypes = ['Switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
+        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
         self.deviceList = yoAccess.getDeviceList()
   
@@ -97,83 +97,83 @@ class YoLinkSetup (udi_interface.Node):
         isyName = 'yolink'  # has to be lower case and less than 13 chars
         logging.setLevel(10)
         for dev in range(0,len(self.deviceList)):
-            logging.debug('adding/checking device : {}'.format(self.deviceList[dev]['type']))
-            if self.deviceList[dev]['type'] in self.supportedYoTypes:
-                if self.deviceList[dev]['type'] == 'Hub':     
-                    logging.info('Hub not added')    
-            
+            logging.debug('adding/checking device : {} = {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
+            #if self.deviceList[dev]['type'] in self.supportedYoTypes:
+            if self.deviceList[dev]['type'] == 'Hub':     
+                logging.info('Hub not added')    
+        
+            #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+            #if self.deviceList[dev]['deviceId'] not in self.Parameters:
+            #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+            #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+            #    isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'Switch':
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'], str(isyName+str(isyNbr)) ))
+                udiYoSwitch(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'THSensor':
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                isyNbr += 1       
+            elif self.deviceList[dev]['type'] == 'MultiOutlet':
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'DoorSensor':
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                
+                udiYoDoorSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'Manipulator':
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'MotionSensor':     
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+
+                udiYoMotionSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'Outlet':     
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                
+                udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])    
+                isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'GarageDoor': 
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                udiYoGarageDoor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'LeakSensor': 
+                logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
+                udiYoLeakSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+                isyNbr += 1
+            #elif self.deviceList[dev]['type'] == 'Hub':     
+            #   logging.info('Hub not added')    
+            #    isyNbr += 1  
                 #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 #if self.deviceList[dev]['deviceId'] not in self.Parameters:
                 #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
                 #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                #    isyNbr += 1
-                elif self.deviceList[dev]['type'] == 'Switch':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'], str(isyName+str(isyNbr)) ))
-                    udiYoSwitch(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                    isyNbr += 1
-                elif self.deviceList[dev]['type'] == 'THsensor':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                    isyNbr += 1       
-                elif self.deviceList[dev]['type'] == 'MultiOutlet':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                    isyNbr += 1
-                elif self.deviceList[dev]['type'] == 'DoorSensor':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    
-                    udiYoDoorSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                    isyNbr += 1
-                elif self.deviceList[dev]['type'] == 'Manipulator':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                    isyNbr += 1
-                elif self.deviceList[dev]['type'] == 'MotionSensor':     
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-
-                    udiYoMotionSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                    isyNbr += 1
-                elif self.deviceList[dev]['type'] == 'Outlet':     
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                 
-                    udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])    
-                    isyNbr += 1
-                elif self.deviceList[dev]['type'] == 'GarageDoor': 
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoGarageDoor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                    isyNbr += 1
-                elif self.deviceList[dev]['type'] == 'LeakSensor': 
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoLeakSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                    isyNbr += 1
-                #elif self.deviceList[dev]['type'] == 'Hub':     
-                #   logging.info('Hub not added')    
-                #    isyNbr += 1  
-                    #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                    #if self.deviceList[dev]['deviceId'] not in self.Parameters:
-                    #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                   
-                else:
-                    logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
+                
+            else:
+                logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         logging.debug(self.Parameters)
 
     def stop(self):
@@ -238,36 +238,7 @@ class YoLinkSetup (udi_interface.Node):
         logging.setLevel(20)
         self.Parameters.load(userParam)
         self.poly.Notices.clear()
-        
-        if 'USER_EMAIL' in userParam:
-            email = userParam['USER_EMAIL']
-        else:
-            self.poly.Notices['ue'] = 'Missing User Email parameter'
-            email = ''
-
-        if 'USER_PASSWORD' in userParam:
-            password = userParam['USER_PASSWORD']
-        else:
-            self.poly.Notices['up'] = 'Missing User Password parameter'
-            password = ''
-        
-        if 'CSID' in userParam:
-            self.csid = userParam['CSID']
-        else:
-            self.poly.Notices['csid'] = 'Missing csid parameter'
-            self.csid = ''
-
-        if 'CSSSECKEY' in userParam:
-            self.csseckey = userParam['CSSSECKEY']
-        else:
-            self.poly.Notices['css'] = 'Missing cssSecKey parameter'
-            self.csseckey = ''
-
-        if 'CSNAME' in userParam:
-            self.csname = userParam['CSNAME']
-        else:
-            self.poly.Notices['csname'] = 'Missing csName parameter'
-            self.csname = ''
+   
     
         if 'UAID' in userParam:
             self.uaid = userParam['UAID']
@@ -281,11 +252,6 @@ class YoLinkSetup (udi_interface.Node):
             self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
             self.secretKey = ''
     
-        if 'YOLINK_URL' in userParam:
-            self.yolinkURL = userParam['YOLINK_URL']
-        else:
-            self.poly.Notices['ylurl'] = 'Missing YOLINK_URL parameter'
-            self.yolinkURL = ''
 
         if 'YOLINKV2_URL' in userParam:
             self.yolinkV2URL = userParam['YOLINKV2_URL']
@@ -311,11 +277,7 @@ class YoLinkSetup (udi_interface.Node):
             self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
             self.mqttPort = 0
 
-        if 'REDIRECT_URL' in userParam:
-            self.redirect_URL = userParam['REDIRECT_URL']
-        else:
-            self.poly.Notices['redirect'] = 'Missing REDIRECT_URL parameter'
-            self.redirectURL = ''       
+    
         
 
         '''
