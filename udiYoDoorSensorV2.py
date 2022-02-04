@@ -53,6 +53,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
+        self.name = name
         #self.address = address
         #self.poly = polyglot
 
@@ -98,8 +99,8 @@ class udiYoDoorSensor(udi_interface.Node):
             return(99)
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - yoTHsensor')
-        self.yoDoorSensor.updateCallbackStatus(data)
+        logging.debug('updateStatus - {}'.format(self.name))
+        self.yoDoorSensor.updateStatus(data)
         logging.debug(data)
         alarms = self.yoDoorSensor.getAlarms()
         if self.node is not None:
@@ -120,7 +121,7 @@ class udiYoDoorSensor(udi_interface.Node):
             self.yoDoorSensor.refreshSensor()
 
     def update(self, command = None):
-        logging.info('GarageDoor Update Status Executed')
+        logging.info('{} - Update Status Executed'.format(self.name))
         self.yoDoorSensor.refreshState()
        
 

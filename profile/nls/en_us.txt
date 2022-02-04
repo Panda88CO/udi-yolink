@@ -115,7 +115,7 @@ ST-nlsleaksens-GV0-NAME = Water Sensor
 ST-nlsleaksens-GV1-NAME = Sensor Battery Level
 ST-nlsleaksens-GV8-NAME = Device Online
 ST-nlsleaksens-ST-NAME = Nodeserver Status
-CMD-nlsleaksens-UPDATE-NAME = Update Motion Status
+CMD-nlsleaksens-UPDATE-NAME = Update Water Status
 
 status-0 = Down
 status-1 = Up

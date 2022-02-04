@@ -104,7 +104,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     def outletSetState ( yolink, port, state):
         logging.info('outletSetState')
         portList = []
-        portList.append(int(port)+yolink.nbrUsb)
+        portList.append(str(int(port)+yolink.nbrUsb))
         yolink.setMultiOutPortState(portList, state)
 
     def outletSetDelayList (yolink, delayList):

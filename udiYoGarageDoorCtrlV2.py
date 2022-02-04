@@ -36,8 +36,9 @@ class udiYoGarageDoor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV8', 'value': 1, 'uom': 25},
+            {'driver': 'ST', 'value': 1, 'uom': 25},
+
             ]
 
 
@@ -78,7 +79,7 @@ class udiYoGarageDoor(udi_interface.Node):
     
 
     def initNode(self):
-        self.yoDoorControl.online= True
+        self.yoDoorControl.online = True
         self.node.setDriver('GV8', self.yoDoorControl.bool2Nbr(self.yoDoorControl.online), True, True)
         
 
