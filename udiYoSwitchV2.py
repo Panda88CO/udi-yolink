@@ -131,7 +131,7 @@ class udiYoSwitch(udi_interface.Node):
         logging.debug(polltype)
         if 'longPoll' in polltype:
             self.yoSwitch.refreshState()
-            self.yoSwitch.refreshSchedules()
+            #self.yoSwitch.refreshSchedules()
         if 'shortPoll' in polltype:
             self.pollDelays()
             #update Delays calculated

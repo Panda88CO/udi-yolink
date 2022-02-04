@@ -145,7 +145,7 @@ class udiYoOutlet(udi_interface.Node):
         if self.yoOutlet.getOnlineStatus():
             if 'longPoll' in polltype:
                 self.yoOutlet.refreshState()
-                self.yoOutlet.refreshSchedules()
+                #self.yoOutlet.refreshSchedules()
             if 'shortPoll' in polltype:
                 self.pollDelays()
                 #update Delays calculated
