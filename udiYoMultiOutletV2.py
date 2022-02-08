@@ -370,12 +370,16 @@ class udiYoMultiOutlet(udi_interface.Node):
                         state = 0
                     else:
                         state = 99
-                    if 'on' in outletStates[portName]['delays']:
-                        onDelay = outletStates[portName]['delays']['on']
-                    if 'off' in outletStates[portName]['delays']:
-                        offDelay = outletStates[portName]['delays']['off']
+                    if 'delays'in outletStates[portName]:
+                        if 'on' in outletStates[portName]['delays']:
+                            onDelay = outletStates[portName]['delays']['on']
+                        else:
+                            onDelay = 0
+                        if 'off' in outletStates[portName]['delays']:
+                            offDelay = outletStates[portName]['delays']['off']
+                        else:
+                            offDelay = 0
                     else:
-                        state = 99
                         onDelay = 0
                         offDelay = 0
                     logging.debug('Updating subnode : {} {}'.format(portName, state))

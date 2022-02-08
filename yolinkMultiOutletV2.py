@@ -201,7 +201,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         else:
             portNbr = 0
             for port in range(yolink.nbrUsb,yolink.nbrOutlets):
-                states['port'+str(portNbr)]= {'state':temp['data']['state'][port]}
+                states['port'+str(portNbr)]= {'state':temp['data']['state'][port], 'delays':{'on':0, 'off':0}}
                 portNbr = portNbr + 1
 
         return(states)
