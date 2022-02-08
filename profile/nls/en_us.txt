@@ -65,7 +65,7 @@ ST-nlsmanipu-GV2-NAME = Off Delay (min)
 ST-nlsmanipu-GV8-NAME = Device Online
 ST-nlsmanipu-ST-NAME = Nodeserver Status
 CMD-nlsmanipu-UPDATE-NAME = Update Status
-CMD-nlsmanipu-MACTRL-NAME =  Switch control
+CMD-nlsmanipu-MANCTRL-NAME =  Switch control
 CMD-nlsmanipu-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsmanipu-OFFDELAY-NAME =  Set Off Delay (min)
 

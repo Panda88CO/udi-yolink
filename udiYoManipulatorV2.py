@@ -173,7 +173,7 @@ class udiYoManipulator(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'MACTRL': switchControl, 
+                'MANCTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 
                 }

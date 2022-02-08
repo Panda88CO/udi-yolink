@@ -29,7 +29,7 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init=1 /> 
+               <p id="" editor="swctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
                <p id="" editor="delay" init="GV1" /> 
@@ -58,7 +58,7 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init=1 /> 
+               <p id="" editor="swctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
                <p id="" editor="delay" init="GV1" /> 
@@ -102,7 +102,7 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init=1 /> 
+               <p id="" editor="swctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
                <p id="" editor="delay" init="GV1" /> 
@@ -126,7 +126,7 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="USBCTRL" > 
-               <p id="" editor="swstate" init=1 /> 
+               <p id="" editor="swstate" init="1" /> 
             </cmd >
          </accepts>
       </cmds>
@@ -147,8 +147,8 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="MACTRL" > 
-               <p id="" editor="manctrl" init=1 /> 
+            <cmd id="MANCTRL" > 
+               <p id="" editor="manctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
                <p id="" editor="delay" init="GV1" /> 
