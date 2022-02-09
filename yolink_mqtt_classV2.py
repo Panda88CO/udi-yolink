@@ -1,5 +1,6 @@
 
 import time
+import datetime
 import json
 #import threading
 
@@ -67,6 +68,7 @@ class YoLinkMQTTDevice(object):
         yolink.dataAPI = {
                         'lastTime':str(int(time.time()*1000))
                         ,'lastMessage':{}
+                        ,'lastStateTime':{}
                         ,'online':None
                         ,'data':{ 'state':{} }
                         }
@@ -123,11 +125,16 @@ class YoLinkMQTTDevice(object):
             data['method'] = methodStr
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
-            logging.debug  ('refreshDevice')
+            #logging.debug  ('refreshDevice')
             yolink.yolinkMQTTclient.publish_data(data)
             yolink.lastControlPacket = data
             time.sleep(1)
               
+
+    def lastUpdate(yolink):
+        logging('Checking last update')
+        return(yolink.dataAPI['lastStateUpdate'])
+
     def setDevice(yolink,  data):
         logging.debug(yolink.type+' - setDevice')
         worked = False
@@ -576,6 +583,11 @@ class YoLinkMQTTDevice(object):
                 yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
         if 'method' in data:
             if yolink.dState in data[yolink.dData]:
+                if 'reportAt' in data[yolink.dData]:
+                    reportAt = datetime.datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
+                    yolink.dataAPI['lastStateTime'] = (reportAt.timestamp() -  yolink.timezoneOffsetSec)*1000
+                else:
+                    yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                 if type(data[yolink.dData][yolink.dState]) is dict:
                     logging.debug('State is Dict: {} '.format(data[yolink.dData][yolink.dState]))
                     for key in data[yolink.dData][yolink.dState]:

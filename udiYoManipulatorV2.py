@@ -104,7 +104,7 @@ class udiYoManipulator(udi_interface.Node):
 
     def updateDelays(self):
         delays =  self.yoManipulator.getDelays()
-        logging.debug('delays: ' + str(delays))
+        logging.debug('delays: {}'.format(delays))
         #print('on delay: ' + str(delays['on']))
         #print('off delay: '+ str(delays['off']))
         if delays != None:
@@ -134,11 +134,14 @@ class udiYoManipulator(udi_interface.Node):
             self.node.setDriver('GV2', 0, True, True)     
 
     def poll(self, polltype):
-        logging.debug('ISY poll ')
-        logging.debug(polltype)
+        logging.debug('ISY poll - {}'.format(polltype))
+
         if 'longPoll' in polltype:
-            self.yoManipulator.refreshState()
-            self.yoManipulator.refreshSchedules()
+            timeNow = time.time()*1000
+            if timeNow -self.yoTHsensor.lastUpdate > 60*60*1000:
+                logging.info('Polling status ')
+                self.yoManipulator.refreshState()
+            #self.yoManipulator.refreshSchedules()
         #if 'shortPoll' in polltype:
             #self.pollDelays()
             #update Delays calculated

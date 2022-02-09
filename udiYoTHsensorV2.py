@@ -134,10 +134,11 @@ class udiYoTHsensor(udi_interface.Node):
                 self.node.setDriver('GV8', 0, True, True)
 
     def poll(self, polltype):
-        logging.debug('ISY poll ')
-        logging.debug(polltype)
+        logging.debug('ISY poll - {} '.format(polltype))
+
         if 'longPoll' in polltype:
             self.yoTHsensor.refreshSensor()
+                
 
     def update(self, command = None):
         logging.info('THsensor Update Status Executed')
