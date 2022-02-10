@@ -98,7 +98,7 @@ class udiYoSubOutlet(udi_interface.Node):
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
-        self.yolink.setMultiDelay([{'ch':self.port, 'on':delay}] )
+        self.yolink.outletSetDelayList([{'ch':self.port, 'on':delay}] )
         self.node.setDriver('GV1', delay, True, True)
 
         self.callback(self.port, {'delayOn':delay})
@@ -107,7 +107,7 @@ class udiYoSubOutlet(udi_interface.Node):
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
-        self.yolink.setMultiDelay([{'ch':self.port, 'off':delay}] )
+        self.yolink.outletSetDelayList([{'ch':self.port, 'off':delay}] )
 
         self.node.setDriver('GV2', delay, True, True)
 
