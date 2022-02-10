@@ -151,13 +151,7 @@ class YoLinkSetup (udi_interface.Node):
                 udiYoLeakSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
                 isyNbr += 1
-            #elif self.deviceList[dev]['type'] == 'Hub':     
-            #   logging.info('Hub not added')    
-            #    isyNbr += 1  
-                #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                #if self.deviceList[dev]['deviceId'] not in self.Parameters:
-                #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
+
                 
             else:
                 logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
