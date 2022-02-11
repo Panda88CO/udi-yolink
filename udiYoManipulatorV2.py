@@ -135,7 +135,7 @@ class udiYoManipulator(udi_interface.Node):
 
         if 'longPoll' in polltype:
             timeNow = time.time()*1000
-            if timeNow -self.yoTHsensor.lastUpdate > 60*60*1000:
+            if timeNow -self.yoManipulator.lastUpdate > 60*60*1000:
                 logging.info('Polling status ')
                 self.yoManipulator.refreshState()
             #self.yoManipulator.refreshSchedules()

@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 """
-Polyglot TEST v3 node server 
-
-
 MIT License
 """
 
