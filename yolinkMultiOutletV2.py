@@ -1,4 +1,5 @@
 import json
+from os import O_NDELAY
 import time
 import re
 
@@ -112,17 +113,21 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data = {}
         data['params'] = {}
         data['params']['delays'] = []
-        for delays in range(0,len(delayList)):
-            onDelay = 0
-            offDelay = 0      
-            for key in delayList[delays]:
+        for delays in range(0,len(delayList)):  
+            temp = {}
+            for key in delayList[delays]:               
                 if key.upper() == 'CH' or key.upper() == 'PORT':
                     ch = int(delayList[delays][key]) + yolink.nbrUsb 
+                    temp['ch'] = ch
                 if key.upper() == 'ON' or key.upper() == 'ONDELAY':
                     onDelay = int(delayList[delays][key])
+                    temp['on'] =  int(delayList[delays][key])
                 if key.upper() == 'OFF' or key.upper() == 'OFFDELAY':
                     offDelay = int(delayList[delays][key])
-            data['params']['delays'].append( {'ch':ch, 'on':onDelay, 'off':offDelay } )
+                    temp['off'] = offDelay
+            logging.debug('temp delayList: {}'.format(temp))
+            if 'ch' in temp and len(temp)>1:
+                data['params']['delays'].append(temp)
         logging.debug('Sending delay data: {}'.format( data['params']['delays']))
         data['time'] = str(int(time.time())*1000)
         data['method'] = yolink.type+'.setDelay'
@@ -186,7 +191,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         #yolink.refreshMultiOutlet()
         states= {}
         temp = yolink.getInfoAPI()
-        logging.debug(temp)
+        #logging.debug(temp)
 
         for usb in range (0,yolink.nbrUsb):
                 states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}

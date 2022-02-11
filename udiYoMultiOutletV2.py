@@ -44,10 +44,8 @@ class udiYoSubOutlet(udi_interface.Node):
         self.yolink = yolink
         self.port = port 
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
-        #logging.debug('self.address : ' + str(self.address))
-        #logging.debug('self.name :' + str(self.name))     
  
-        
+    
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
 
@@ -64,8 +62,10 @@ class udiYoSubOutlet(udi_interface.Node):
             state = self.yolink.getMultiOutPortState(str(self.port))
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
                 self.node.setDriver('GV0', 1, True, True) 
+                self.portState = 1
             else:
                 self.node.setDriver('GV0', 0, True, True) 
+                self.portState = 0
         except Exception as e:
             logging.debug('Exception: {}'.format(e))
 
@@ -89,7 +89,7 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.debug('switchControl pot: {}, state: {}'.format(self.port, state))   
         if state == 1:
             self.yolink.outletSetState(self.port, 'ON')
-            #self.callback(self.port, {'switch':'ON'})
+
         else:
             self.yolink.outletSetState(self.port, 'OFF')
         self.node.setDriver('GV0', state, True, True)
@@ -97,19 +97,18 @@ class udiYoSubOutlet(udi_interface.Node):
         
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
-        delay =int(command.get('value'))
-        self.yolink.outletSetDelayList([{'ch':self.port, 'on':delay}] )
-        self.node.setDriver('GV1', delay, True, True)
+        self.onDelay =int(command.get('value'))
+        self.yolink.outletSetDelayList([{'ch':self.port, 'on':self.onDelay}] )
+        self.node.setDriver('GV1', self.onDelay, True, True)
 
-        self.callback(self.port, {'delayOn':delay})
         
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
-        delay =int(command.get('value'))
-        self.yolink.outletSetDelayList([{'ch':self.port, 'off':delay}] )
+        self.offDelay =int(command.get('value'))
+        self.yolink.outletSetDelayList([{'ch':self.port, 'off':self.offDelay }] )
 
-        self.node.setDriver('GV2', delay, True, True)
+        self.node.setDriver('GV2', self.offDelay , True, True)
 
 
     def update(self, command = None):
