@@ -20,7 +20,7 @@ except ImportError:
 import paho.mqtt.client as mqtt
 from queue import Queue
 from yolink_mqtt_clientV2 import YoLinkMQTTClient
-from yolinkDelayTimer import CountdownTimer
+
 """
 Object representation for YoLink MQTT Client
 """
@@ -81,6 +81,9 @@ class YoLinkMQTTDevice(object):
     
         #yolink.updateInterval = 3
         yolink.messagePending = False
+        yolink.nbrOutlets = 0
+        yolink.nbrUsb = 0
+        yolink.nbrPorts = 1
 
        
     def initDevice(yolink):
@@ -193,8 +196,7 @@ class YoLinkMQTTDevice(object):
 
     def onlineStatus(yolink):
         return(yolink.getOnlineStatus())
-    
-    #needs update
+
     def refreshDelays(yolink):
         logging.debug(yolink.type+' - refreshDelays')
         yolink.refreshDevice()
@@ -207,7 +209,15 @@ class YoLinkMQTTDevice(object):
         
 
     def updateDelayData(yolink, data):
-
+        '''
+        if not data[yolink.dData]: # No data returned
+            yolink.dataAPI[yolink.dOnline] = False
+        elif 'online' in data[yolink.dData]:
+            yolink.dataAPI[yolink.dOnline] = data[yolink.dData][yolink.dOnline]
+        else:   
+            yolink.dataAPI[yolink.dOnline] = True
+        yolink.online = yolink.dataAPI[yolink.dOnline]
+        '''
         if 'event' in data:
             if  yolink.dataAPI[yolink.dOnline]:
                 tmp =  {}
@@ -306,7 +316,7 @@ class YoLinkMQTTDevice(object):
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
    
-    def setDelay(yolink, delayList, OnCallback, OffCallback):
+    def setDelay(yolink, delayList):
         logging.debug(yolink.type+' - setDelay')
         data = {}
         data['params'] = {}
@@ -329,10 +339,6 @@ class YoLinkMQTTDevice(object):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
-        #if data['params']['delayOn'] > 0:
-        #    yolink.onDelayTimer = CountdownTimer(data['params']['delayOn']*60, 60, OnCallback)
-        #if data['params']['delayOff'] > 0:
-        #    yolink.offDelayTimer = CountdownTimer(data['params']['delayOff']*60, 60, OffCallback)
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
 
