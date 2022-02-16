@@ -13,7 +13,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-
+countdownTimerUpdateInterval_G = 10
 
 class YoLinkInitPAC(object):
     def __init__(yoAccess, uaID, secID, tokenURL='https://api.yosmart.com/open/yolink/token', pacURL = 'https://api.yosmart.com/open/yolink/v2/api' , mqttURL= 'api.yosmart.com', mqttPort = 8003):

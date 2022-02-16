@@ -115,8 +115,11 @@ devstr = devfile.decode('utf-8')
 with open('devicesNew.json', 'r') as f:
     devstr = f.read()
     f.close()
-InstalledDevices = ast.literal_eval(devstr)
+InstalledDev
 '''
+def printDelay(timerList):
+    print(timerList)
+
 UAID = 'ua_93BF42449446432EA43E49887492C3FC'
 SECRET_KEY = 'sec_v1_2IQ13RYyyvxMBpPK3POF0A=='
 
@@ -162,21 +165,21 @@ FishTank        = DeviceList[0]
 
 #FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
 MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
-WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
+#WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
-WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
-GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
-GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
-MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
-IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
+#WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
+#GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
+#GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
+#MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
+#IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
 #HouseValve = YoLinkManipulator(yoAccess, HouseValve )
 #DeckLight = YoLinkMultiOutlet(yoAccess, DeckLight)
 #PlaygroundGardenLight = YoLinkSwitch(yoAccess, GardenPlayground)
-PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
-#USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
+#PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
+USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
 
-DoorSensor1 = YoLinkDoorSensor(yoAccess, DoorSensor)
-OutdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
+#DoorSensor1 = YoLinkDoorSensor(yoAccess, DoorSensor)
+#OutdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
 #bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
 Hub1 = YoLinkHub(yoAccess, HubDS)
 '''
@@ -302,7 +305,7 @@ info = WaterLevel.getInfoAPI()
 while True :
     
     #test = input('Press any key')
-
+    '''
     DoorSensor1.refreshDevice()
     DS1 = DoorSensor1.getState()
     DS2 = DoorSensor1.getBattery()
@@ -331,7 +334,7 @@ while True :
     
     Hub1.refreshDevice()
     HU1 = Hub1.getState()
-
+    '''
     test = MultiOutput.getMultiOutStates()
 
     MO15 = MultiOutput.nbrPorts
@@ -348,14 +351,21 @@ while True :
     MO9 = MultiOutput.getMultiOutUsbState('usb0')
     MO9a = MultiOutput.setMultiOutPortState(['port0'], 'OFF')
     #MO9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
+ 
 
 
-    MO11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
+
+    MO11 = MultiOutput.setMultiOutDelayList([{'ch':1, 'on':1, 'delayOff':2},{'ch':0, 'on':3, 'delayOff':4} ], printDelay)
     #time.sleep(300)
-    #MO10 = MultiOutput.outletSetDelay('port0', 1, 2)
-
-
-    time.sleep(61)
+    #MO10 = MultiOutput.setMultiOutDelays('port0', 1, 2, printDelay)
+    
+    #USB1 = USB_Outlet.refreshDevice()
+    #USB1a = USB_Outlet.getState()
+    #USB2 = USB_Outlet.setState('on')
+    #time.sleep(5)
+    #USB3 = USB_Outlet.setState('off')
+    USB4 = USB_Outlet.setDelayList([{'delayOn':2,'off':3}], printDelay )
+    time.sleep(300)
 
     #print(MultiOutput.getMultiOutletState())
     #print(MultiOutput.getSchedules())

@@ -105,10 +105,10 @@
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
-               <p id="" editor="delay" init="GV1" /> 
+               <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
-               <p id="" editor="delay" init="GV2" /> 
+               <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
          </accepts>
       </cmds>

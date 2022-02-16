@@ -32,8 +32,8 @@ class udiYoSubOutlet(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 44}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 44}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV4', 'value': 0, 'uom': 25},           
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -82,6 +82,21 @@ class udiYoSubOutlet(udi_interface.Node):
         self.node.setDriver('GV2', offDelay, True, False)
         #self.node.setDriver('GV4', self.port, False, False)
       
+    def updateDelayCountDown(self, timeRemaining):
+        logging.debug('updateDelayCountDown: {}'.format(timeRemaining))
+        for delayInfo in range(o, len(timeRemaining)):
+            if 'ch' in timeRemaining[delayInfo]:
+                if timeRemaining[delayInfo]['ch'] == self.port:
+                    if 'on' in timeRemaining[delayInfo]:
+                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                    else:
+                        self.node.setDriver('GV1', 0, True, False)
+                    if 'off' in timeRemaining[delayInfo]:
+                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
+                    else:
+                        self.node.setDriver('GV2', 0, True, False)              
+
+
 
     def switchControl(self, command):
         logging.info('switchControl')
@@ -98,17 +113,17 @@ class udiYoSubOutlet(udi_interface.Node):
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         self.onDelay =int(command.get('value'))
-        self.yolink.outletSetDelayList([{'ch':self.port, 'on':self.onDelay}] )
-        self.node.setDriver('GV1', self.onDelay, True, True)
+        self.yolink.setMultiOutDelayList([{'ch':self.port, 'on':self.onDelay}], updateDelayCountDown )
+        self.node.setDriver('GV1', self.onDelay * 60, True, True)
 
         
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         self.offDelay =int(command.get('value'))
-        self.yolink.outletSetDelayList([{'ch':self.port, 'off':self.offDelay }] )
+        self.yolink.setMultiOutDelayList([{'ch':self.port, 'off':self.offDelay }], updateDelayCountDown  )
 
-        self.node.setDriver('GV2', self.offDelay , True, True)
+        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
 
 
     def update(self, command = None):

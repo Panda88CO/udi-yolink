@@ -15,6 +15,9 @@
      <range  uom="33" min="-1" max="2000" prec="2"/>
   </editor>
   <editor id = "delay" > 
+     <range  uom="57"  min="0" max="86400" prec="0" />
+  </editor>     
+  <editor id = "delaymin" > 
      <range  uom="44"  min="0" max="1440" prec="0" />
   </editor>
   <editor id = "tempC" > 

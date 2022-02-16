@@ -38,7 +38,7 @@ class YoLinkMQTTDevice(object):
         yolink.nbrPorts = 1
         yolink.nbrOutlets = 1
         yolink.nbrUsb = 0 
-
+        yolink.delayUpdateInt = 15
         yolink.yolinkMQTTclient = YoLinkMQTTClient(yoAccess,  yolink.deviceInfo, callback )
 
         yolink.yolink_URL = yoAccess.apiv2URL
@@ -306,8 +306,33 @@ class YoLinkMQTTDevice(object):
         else:
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
    
-    def setDelay(yolink, delayList, OnCallback, OffCallback):
+    def setDelays(yolink,  onDelay, offDelay, callback):
         logging.debug(yolink.type+' - setDelay')
+        data = {}
+        delays = {}
+        temp = []
+        data['params'] = {}
+        
+        data['params']['delayOn'] = onDelay
+        data['params']['delayOff'] = offDelay
+        delays['delayOn'] = data['params']['delayOn'] * 60
+        delays['delayOff'] = data['params']['delayOff'] * 60
+        data['time'] = str(int(time.time())*1000)
+        data['method'] = yolink.type+'.setDelay'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token'] 
+        yolink.yolinkMQTTclient.publish_data( data)
+        temp.append(delays)
+        yolink.offDelayTimer = CountdownTimer(temp,  callback)
+        
+        yolink.online = yolink.dataAPI[yolink.dOnline]
+        return(True)
+
+
+    def setDelayList(yolink, delayList, callback):
+        logging.debug(yolink.type+' - setDelay')
+        delays = {}
+        temp = []
         data = {}
         data['params'] = {}
         if len(delayList) == 0:  
@@ -317,8 +342,10 @@ class YoLinkMQTTDevice(object):
             for key in delayList[0]:
                 if key.lower() == 'delayon' or key.lower() == 'on' :
                     data['params']['delayOn'] = delayList[0][key]
+                    delays['delayOn'] = data['params']['delayOn'] * 60
                 elif key.lower() == 'delayoff'or key.lower() == 'off' :
                     data['params']['delayOff'] = delayList[0][key] 
+                    delays['delayOff'] = data['params']['delayOff'] * 60
                 else:
                     logging.debug('Wrong parameter passed - must be overwritten to support multi devices  : ' + str(key))
         else:
@@ -329,10 +356,8 @@ class YoLinkMQTTDevice(object):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
-        #if data['params']['delayOn'] > 0:
-        #    yolink.onDelayTimer = CountdownTimer(data['params']['delayOn']*60, 60, OnCallback)
-        #if data['params']['delayOff'] > 0:
-        #    yolink.offDelayTimer = CountdownTimer(data['params']['delayOff']*60, 60, OffCallback)
+        temp.append(delays)
+        yolink.offDelayTimer = CountdownTimer(temp,  callback)
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
 

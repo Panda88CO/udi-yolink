@@ -1,9 +1,10 @@
 import json
-from os import O_NDELAY
+#from os import ONDELAY
 import time
 import re
 
 from yolink_mqtt_classV2 import YoLinkMQTTDevice
+from yolinkDelayTimer import CountdownTimer
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -21,7 +22,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.type = 'MultiOutlet'
         yolink.MultiOutletName = 'MultiOutletEvent'
         yolink.eventTime = 'Time'
-        
+        yolink.delayUpdateInt = 15
         time.sleep(2)
 
 
@@ -74,9 +75,9 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             else:
                 logging.error('wrong port number (range 0- '+str(yolink.nbrPorts)+'): ' + str(i))
                 return(False)
-        if value.upper() == 'ON' or value.upper() == 'OPEN':
+        if value.lower() == 'on' or value.lower() == 'open':
             state = 'open'
-        elif value.upper() == 'OFF' or value.upper() == 'CLOSED' :
+        elif value.lower() == 'off' or value.lower() == 'closed' :
             state = 'closed'
         else:
             logging.error('Unknows state passed')
@@ -90,7 +91,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         return(status)
     
 
-    def usbSetState (yolink, port, state):
+    def setUsbState (yolink, port, state):
         logging.info('usbSetState')
      
         if yolink.nbrUsb > 0:
@@ -102,42 +103,50 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
 
 
-    def outletSetState ( yolink, port, state):
+    def setMultiOutState ( yolink, port, state):
         logging.info('outletSetState')
         portList = []
         portList.append(str(int(port)+yolink.nbrUsb))
         yolink.setMultiOutPortState(portList, state)
 
-    def outletSetDelayList (yolink, delayList):
+    def setMultiOutDelayList (yolink, delayList, callback):
         logging.info('outletSetDelayList')
         data = {}
+        delTemp = []
+        dTemp = {}
         data['params'] = {}
         data['params']['delays'] = []
         for delays in range(0,len(delayList)):  
             temp = {}
+            dTemp = {}
             for key in delayList[delays]:               
-                if key.upper() == 'CH' or key.upper() == 'PORT':
+                if key.lower() == 'ch' or key.lower() == 'port':
                     ch = int(delayList[delays][key]) + yolink.nbrUsb 
                     temp['ch'] = ch
-                if key.upper() == 'ON' or key.upper() == 'ONDELAY':
+                    dTemp['ch'] = ch
+                if key.lower() == 'on' or key.lower() == 'ondelay' or key.lower() == 'delayon':
                     onDelay = int(delayList[delays][key])
-                    temp['on'] =  int(delayList[delays][key])
-                if key.upper() == 'OFF' or key.upper() == 'OFFDELAY':
+                    temp['on'] =  onDelay
+                    dTemp['on'] = onDelay*60
+                if key.lower() == 'off' or key.lower() == 'offdelay' or key.lower() == 'delayoff':
                     offDelay = int(delayList[delays][key])
                     temp['off'] = offDelay
+                    dTemp['off'] = offDelay*60
             logging.debug('temp delayList: {}'.format(temp))
             if 'ch' in temp and len(temp)>1:
                 data['params']['delays'].append(temp)
+                delTemp.append(dTemp)
         logging.debug('Sending delay data: {}'.format( data['params']['delays']))
         data['time'] = str(int(time.time())*1000)
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
+        yolink.offDelayTimer = CountdownTimer(delTemp, callback)
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 
-    def outletSetDelay (yolink, port, onDelay=0, offDelay=0):
+    def setMultiOutDelays (yolink, port, onDelay, offDelay, callback):
         logging.info('outletSetDelay')
 
         data = {}
@@ -146,6 +155,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         portStr = re.findall('[0-9]+', port)
         portNbr = int(portStr.pop())
         delaySpec = {'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}       
+        
         logging.debug('Sending delay data: {}'.format(delaySpec))
         data['params']['delays'].append(delaySpec)
         data['time'] = str(int(time.time())*1000)
@@ -153,6 +163,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
+        yolink.offDelayTimer = CountdownTimer([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay*60, 'off':offDelay*60}] , callback)
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 
@@ -171,9 +182,9 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             else:
                 logging.error('wrong port number (range 0 - '+str(yolink.nbrPorts)+'): ' + str(i))
                 return(False)
-        if value.upper() == 'ON' or value.upper() == 'OPEN':
+        if value.lower() == 'on' or value.lower() == 'open':
             state = 'open'
-        elif value.upper() == 'OFF' or value.upper() == 'CLOSED' :
+        elif value.lower() == 'off' or value.lower() == 'closed' :
             state = 'closed'
         else:
             logging.error('Unknows state passed')
@@ -245,11 +256,11 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         if len(delayList) >= 1:
             for delayNbr in range(0,len(delayList)):
                 for key in delayList[delayNbr]:
-                    if key.upper() == 'DELAYON' or key.upper() == 'ON' :
+                    if key.lower() == 'delayon' or key.lower() == 'on' :
                         data['params']['delays'][delayNbr]['on'] = delayList[delayNbr][key]
-                    elif key.upper() == 'DELAYOFF'or key.upper() == 'OFF' :
+                    elif key.lower() == 'delay'or key.lower() == 'off' :
                         data['params']['delays'][delayNbr]['off'] = delayList[delayNbr][key] 
-                    elif key.upper == 'CH':
+                    elif key.lower == 'CH':
                         data['params']['delays'][delayNbr]['ch'] = delayList[delayNbr][key] 
                     else:
                         logging.debug('Wrong parameter passed - must be overwritten to support multi devices  : ' + str(key))
