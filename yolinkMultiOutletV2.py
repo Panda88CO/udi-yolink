@@ -121,7 +121,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             dTemp = {}
             for key in delayList[delays]:               
                 if key.lower() == 'ch' or key.lower() == 'port':
-                    ch = int(delayList[delays][key]) + yolink.nbrUsb 
+                    ch = int(delayList[delays][key])
                     temp['ch'] = ch
                     dTemp['ch'] = ch
                 if key.lower() == 'on' or key.lower() == 'ondelay' or key.lower() == 'delayon':

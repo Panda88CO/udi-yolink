@@ -85,7 +85,7 @@ class udiYoLeakSensor(udi_interface.Node):
 
     
     def stop (self):
-        logging.info('Stop not implemented')
+        logging.info('Stop udiYoLeakSensor ')
         self.node.setDriver('ST', 0, True, True)
         self.yoLeakSensor.shut_down()
 

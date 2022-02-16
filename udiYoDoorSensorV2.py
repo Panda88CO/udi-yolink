@@ -73,7 +73,7 @@ class udiYoDoorSensor(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkThsensor')
+        print('start - udiYoDoorSensor')
         self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)     
         self.yoDoorSensor.initNode()
         time.sleep(2)
@@ -85,7 +85,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
     
     def stop (self):
-        logging.info('Stop ')
+        logging.info('Stop - udiYoDoorSensor')
         self.node.setDriver('ST', 0, True, True)
         self.yoDoorSensor.shut_down()
        

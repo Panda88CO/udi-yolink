@@ -85,7 +85,7 @@ class udiYoMotionSensor(udi_interface.Node):
     '''
     
     def stop (self):
-        logging.info('Stop not implemented')
+        logging.info('StopudiYoMotionSensor')
         self.node.setDriver('ST', 0, True, True)
         self.yoMotionsSensor.shut_down()
 

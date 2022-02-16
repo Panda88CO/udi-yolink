@@ -71,7 +71,7 @@ class udiYoManipulator(udi_interface.Node):
         #time.sleep(3)
 
     def stop (self):
-        logging.info('Stop ')
+        logging.info('Stop udiYoManipulator')
         self.node.setDriver('ST', 0, True, True)
         self.yoManipulator.shut_down()
 

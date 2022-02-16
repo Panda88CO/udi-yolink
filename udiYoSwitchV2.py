@@ -84,7 +84,7 @@ class udiYoSwitch(udi_interface.Node):
         #time.sleep(3)
 
     def stop (self):
-        logging.info('Stop not implemented')
+        logging.info('Stop udiYoSwitch')
         self.node.setDriver('ST', 0, True, True)
         self.yoSwitch.shut_down()
 

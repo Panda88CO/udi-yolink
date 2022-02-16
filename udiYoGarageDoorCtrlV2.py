@@ -85,7 +85,7 @@ class udiYoGarageDoor(udi_interface.Node):
 
     
     def stop (self):
-        logging.info('Stop ')
+        logging.info('Stop udiYoGarageDoor')
         self.node.setDriver('ST', 0, True, True)
         self.yoDoorControl.shut_down()
 
