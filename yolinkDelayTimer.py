@@ -33,11 +33,10 @@ class CountdownTimer(object):
     def __init__ (self,  ):
         self.delayTimes = []
         self.updateInterval = 5
-        self.callback = callback
         self.timeRemain = []
         self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
         #self.timer.start()
-        self.timerRunning = True
+        self.timerRunning = False
         self.lock = Lock()
         
     def add(self, delayTimes, callback):
@@ -47,6 +46,8 @@ class CountdownTimer(object):
             self.timerRunning = True
         self.lock.acquire()
         for delay in range(0,len(delayTimes)):
+# should overwrite 
+
             self.timeRemain.append(delayTimes[delay])
         self.lock.release()
 
