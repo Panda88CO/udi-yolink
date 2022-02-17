@@ -118,7 +118,7 @@ with open('devicesNew.json', 'r') as f:
 InstalledDev
 '''
 def printDelay(timerList):
-    print(timerList)
+    print('timerTest: {}\n'.format( timerList))
 
 UAID = 'ua_93BF42449446432EA43E49887492C3FC'
 SECRET_KEY = 'sec_v1_2IQ13RYyyvxMBpPK3POF0A=='
@@ -335,6 +335,7 @@ while True :
     Hub1.refreshDevice()
     HU1 = Hub1.getState()
     '''
+    '''
     test = MultiOutput.getMultiOutStates()
 
     MO15 = MultiOutput.nbrPorts
@@ -351,12 +352,16 @@ while True :
     MO9 = MultiOutput.getMultiOutUsbState('usb0')
     MO9a = MultiOutput.setMultiOutPortState(['port0'], 'OFF')
     #MO9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
- 
+    '''
 
 
 
     MO11 = MultiOutput.setMultiOutDelayList([{'ch':1, 'on':1, 'delayOff':2},{'ch':0, 'on':3, 'delayOff':4} ], printDelay)
-    #time.sleep(300)
+    MO12 = MultiOutput.refreshDevice()
+    MO2 = MultiOutput.getDelays()
+    
+    
+    time.sleep(10)
     #MO10 = MultiOutput.setMultiOutDelays('port0', 1, 2, printDelay)
     
     #USB1 = USB_Outlet.refreshDevice()
@@ -365,6 +370,7 @@ while True :
     #time.sleep(5)
     #USB3 = USB_Outlet.setState('off')
     USB4 = USB_Outlet.setDelayList([{'delayOn':2,'off':3}], printDelay )
+    USB5 = USB_Outlet.refreshDevice()
     time.sleep(300)
 
     #print(MultiOutput.getMultiOutletState())

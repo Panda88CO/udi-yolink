@@ -166,7 +166,7 @@ class YoLinkSetup (udi_interface.Node):
                 nodes[node].setDriver('ST', 0, True, True)
         
         exit()
-
+    '''
     def getDeviceList1(self):
         logging.debug ('getDeviceList1')
     
@@ -196,7 +196,7 @@ class YoLinkSetup (udi_interface.Node):
             self.devicesReady = True
         else:
              logging.debug('devices.json does not exist')
-    
+    '''
     def heartbeat(self):
         logging.debug('heartbeat: ' + str(self.hb))
         

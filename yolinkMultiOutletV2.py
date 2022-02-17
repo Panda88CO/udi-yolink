@@ -23,6 +23,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.MultiOutletName = 'MultiOutletEvent'
         yolink.eventTime = 'Time'
         yolink.delayUpdateInt = 15
+        yolink.offDelayTimer = CountdownTimer()
         time.sleep(2)
 
 
@@ -142,13 +143,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
-        yolink.offDelayTimer = CountdownTimer(delTemp, callback)
+        yolink.writeDelayData(data)
+        yolink.offDelayTimer .add(delTemp, callback)
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 
     def setMultiOutDelays (yolink, port, onDelay, offDelay, callback):
         logging.info('outletSetDelay')
-
         data = {}
         data['params'] = {}
         data['params']['delays'] = []
@@ -163,7 +164,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
-        yolink.offDelayTimer = CountdownTimer([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay*60, 'off':offDelay*60}] , callback)
+        yolink.writeDelayData(data)
+        yolink.offDelayTimer.add([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay*60, 'off':offDelay*60}] , callback)
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 

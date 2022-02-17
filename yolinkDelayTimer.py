@@ -1,9 +1,10 @@
 
 import time
 
-from threading import Timer
+from threading import Timer, Lock
 
 from  datetime import datetime
+from typing import List
 from dateutil.tz import *
 
 try:
@@ -29,20 +30,33 @@ Object for handling Delay - cbackground countdowm timer
 Requires call back to handle updates
 """
 class CountdownTimer(object):
-    def __init__ (self, delayTimes,  callback):
-        self.delayTimes = delayTimes
+    def __init__ (self,  ):
+        self.delayTimes = []
         self.updateInterval = 5
         self.callback = callback
-        self.timeRemain = delayTimes 
+        self.timeRemain = []
         self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
-        self.timer.start()
+        #self.timer.start()
+        self.timerRunning = True
+        self.lock = Lock()
         
+    def add(self, delayTimes, callback):
+        self.callback = callback
+        if not self.timerRunning:
+            self.timer.start()
+            self.timerRunning = True
+        self.lock.acquire()
+        for delay in range(0,len(delayTimes)):
+            self.timeRemain.append(delayTimes[delay])
+        self.lock.release()
+
     def timerReportInterval (self, reportInterval):
         self.updateInterval = reportInterval
 
 
     def timeUpdate(self):
         noDelays = True
+        self.lock.acquire()
         for delay in range(0,len(self.timeRemain)):
             if 'delayOn' in self.timeRemain[delay]:
                 self.timeRemain[delay]['delayOn'] -= self.updateInterval
@@ -70,7 +84,9 @@ class CountdownTimer(object):
                     self.timeRemain[delay]['off'] = 0           
         if noDelays:
             self.timer.cancel()
+            self.timerRunning = False
         self.callback(self.timeRemain)
+        self.lock.release()
     
     def stop(self):
         self.timer.cancel()
