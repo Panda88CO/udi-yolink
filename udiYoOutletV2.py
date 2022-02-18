@@ -82,6 +82,7 @@ class udiYoOutlet(udi_interface.Node):
     def start(self):
         print('start - YoLinkOutlet')
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
         self.yoOutlet.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
@@ -118,7 +119,17 @@ class udiYoOutlet(udi_interface.Node):
             watt = tmp['watt']
             self.node.setDriver('GV3', power, True, True)
             self.node.setDriver('GV4', watt, True, True)
-            
+
+    def  updateDelayCountdown( self, timeRemaining):
+        logging.debug('updateDelayCountDown:  delays {}'.format(timeRemaining))
+        for delayInfo in range(0, len(timeRemaining)):
+            if 'ch' in timeRemaining[delayInfo]:
+                if timeRemaining[delayInfo]['ch'] == 1:
+                    if 'on' in timeRemaining[delayInfo]:
+                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                    if 'off' in timeRemaining[delayInfo]:
+                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
+
     # Need to use shortPoll
     def pollDelays(self):
         delays =  self.yoOutlet.getDelays()
@@ -143,9 +154,7 @@ class udiYoOutlet(udi_interface.Node):
             if 'longPoll' in polltype:
                 self.yoOutlet.refreshState()
                 #self.yoOutlet.refreshSchedules()
-            if 'shortPoll' in polltype:
-                self.pollDelays()
-                #update Delays calculated
+           
 
     def switchControl(self, command):
         logging.info('switchControl')
@@ -158,13 +167,13 @@ class udiYoOutlet(udi_interface.Node):
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
-        self.yoOutlet.setDelay([{'delayOn':delay}])
+        self.yoOutlet.setOnDelay(delay)
         self.node.setDriver('GV1', delay, True, True)
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
-        self.yoOutlet.setDelay([{'delayOff':delay}])
+        self.yoOutlet.setOffDelay(delay)
         self.node.setDriver('GV2', delay, True, True)
 
 

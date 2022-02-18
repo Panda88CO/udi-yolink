@@ -44,7 +44,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.yolink = yolink
         self.port = int(port )
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
- 
+        self.yolink.delayTimerCallback (self.updateDelayCountdown, 5)
     
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -109,7 +109,7 @@ class udiYoSubOutlet(udi_interface.Node):
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         self.onDelay =int(command.get('value'))
-        self.yolink.setMultiOutDelayList([{'ch':self.port, 'on':self.onDelay}], self.updateDelayCountdown )
+        self.yolink.setMultiOutDelayList([{'ch':self.port, 'on':self.onDelay}]  )
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
 
         
@@ -117,8 +117,7 @@ class udiYoSubOutlet(udi_interface.Node):
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         self.offDelay =int(command.get('value'))
-        self.yolink.setMultiOutDelayList([{'ch':self.port, 'off':self.offDelay }], self.updateDelayCountdown  )
-
+        self.yolink.setMultiOutDelayList([{'ch':self.port, 'off':self.offDelay }]  )
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
 
 

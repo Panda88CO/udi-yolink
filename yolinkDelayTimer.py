@@ -30,26 +30,46 @@ Object for handling Delay - cbackground countdowm timer
 Requires call back to handle updates
 """
 class CountdownTimer(object):
-    def __init__ (self,  ):
+    def __init__ (self):
         self.delayTimes = []
         self.updateInterval = 5
         self.timeRemain = []
-        self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
+        #self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
         #self.timer.start()
         self.timerRunning = False
         self.lock = Lock()
+        self.callback = None
         
-    def add(self, delayTimes, callback):
+    def timerCallback (self,  callback,updateInterval = 5):
         self.callback = callback
+        self.updateInterval = updateInterval
+        self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
+
+    def addDelays(self, delayTimes):
+        #self.callback = callback
         if not self.timerRunning:
             self.timer.start()
             self.timerRunning = True
         self.lock.acquire()
-        for delay in range(0,len(delayTimes)):
-# should overwrite 
-
-            self.timeRemain.append(delayTimes[delay])
+        for indx in range(0,len(delayTimes)):
+            alreadyExists = False
+            ch = delayTimes[indx]['ch']
+            for delayIndx in range(0,len(self.timeRemain)):
+                if ch == self.timeRemain[delayIndx]['ch']:
+                    alreadyExists = True
+                    if 'on' in delayTimes[indx]:
+                        self.timeRemain[delayIndx]['on'] = delayTimes[indx]['on']
+                    if 'off' in delayTimes[indx]:
+                        self.timeRemain[delayIndx]['off'] = delayTimes[indx]['off']
+                    if 'delayOn' in delayTimes[indx]:
+                        self.timeRemain[delayIndx]['delayOn'] = delayTimes[indx]['delayOn']
+                    if 'delayOff' in delayTimes[indx]:
+                        self.timeRemain[delayIndx]['delayOff'] = delayTimes[indx]['delayOff']
+            if not alreadyExists:
+                self.timeRemain.append(delayTimes[indx])
         self.lock.release()
+
+   
 
     def timerReportInterval (self, reportInterval):
         self.updateInterval = reportInterval

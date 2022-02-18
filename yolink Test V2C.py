@@ -371,6 +371,10 @@ while True :
     #USB3 = USB_Outlet.setState('off')
     USB4 = USB_Outlet.setDelayList([{'delayOn':2,'off':3}], printDelay )
     USB5 = USB_Outlet.refreshDevice()
+    time.sleep(15)
+    USB4 = USB_Outlet.setDelayList([{'delayOn':3,'off':4}], printDelay )
+
+
     time.sleep(300)
 
     #print(MultiOutput.getMultiOutletState())
