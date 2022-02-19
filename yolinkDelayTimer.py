@@ -34,23 +34,22 @@ class CountdownTimer(object):
         self.delayTimes = []
         self.updateInterval = 5
         self.timeRemain = []
-        #self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
-        #self.timer.start()
         self.timerRunning = False
         self.lock = Lock()
         self.callback = None
-        
+        self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
+
     def timerCallback (self,  callback,updateInterval = 5):
         self.callback = callback
         self.updateInterval = updateInterval
-        self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
+        #self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
 
     def addDelays(self, delayTimes):
-        #self.callback = callback
+        self.lock.acquire()
         if not self.timerRunning:
             self.timer.start()
             self.timerRunning = True
-        self.lock.acquire()
+   
         for indx in range(0,len(delayTimes)):
             alreadyExists = False
             ch = delayTimes[indx]['ch']
@@ -72,9 +71,13 @@ class CountdownTimer(object):
    
 
     def timerReportInterval (self, reportInterval):
-        self.updateInterval = reportInterval
-
-
+        self.lock.acquire()
+        self.timer.cancel()
+        self.timer = RepeatTimer(reportInterval, self.timeUpdate )
+        self.timer.start()
+        self.timerRunning = True
+        self.lock.release() 
+        
     def timeUpdate(self):
         noDelays = True
         self.lock.acquire()

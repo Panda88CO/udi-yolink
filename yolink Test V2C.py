@@ -164,7 +164,10 @@ FishTank        = DeviceList[0]
 
 
 #FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
+
 MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
+MultiOutput.delayTimerCallback(printDelay, 10)
+
 #WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
 #WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
@@ -177,7 +180,7 @@ MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
 #PlaygroundGardenLight = YoLinkSwitch(yoAccess, GardenPlayground)
 #PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
 USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
-
+USB_Outlet.delayTimerCallback(printDelay, 5)
 #DoorSensor1 = YoLinkDoorSensor(yoAccess, DoorSensor)
 #OutdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
 #bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
@@ -355,7 +358,7 @@ while True :
     '''
 
 
-
+    
     MO11 = MultiOutput.setMultiOutDelayList([{'ch':1, 'on':1, 'delayOff':2},{'ch':0, 'on':3, 'delayOff':4} ], printDelay)
     MO12 = MultiOutput.refreshDevice()
     MO2 = MultiOutput.getDelays()
