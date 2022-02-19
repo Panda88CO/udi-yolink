@@ -39,7 +39,7 @@ class CountdownTimer(object):
         self.callback = None
         self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
 
-    def timerCallback (self,  callback,updateInterval = 5):
+    def timerCallback (self,  callback, updateInterval = 5):
         self.callback = callback
         self.updateInterval = updateInterval
         #self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
@@ -106,10 +106,11 @@ class CountdownTimer(object):
                     noDelays = False
                 else:
                     self.timeRemain[delay]['off'] = 0           
-        if noDelays:
-            self.timer.cancel()
-            self.timerRunning = False
-        self.callback(self.timeRemain)
+        #if noDelays:
+            #self.timer.cancel()
+            #self.timerRunning = False
+        if self.callback:
+            self.callback(self.timeRemain)
         self.lock.release()
     
     def stop(self):

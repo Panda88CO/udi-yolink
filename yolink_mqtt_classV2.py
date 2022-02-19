@@ -110,9 +110,8 @@ class YoLinkMQTTDevice(object):
         yolink.messagePending = False
     
     def delayTimerCallback(yolink, callback, updateTime=5):
-        if yolink.offDelayTimer:
-            yolink.offDelayTimer.timerCallback(callback, updateTime)
-            yolink.offDelayTimer.timerReportInterval(updateTime)
+        yolink.offDelayTimer.timerCallback(callback, updateTime)
+        yolink.offDelayTimer.timerReportInterval(updateTime)
        
     
     def initDevice(yolink):
@@ -419,8 +418,8 @@ class YoLinkMQTTDevice(object):
         delays['on'] = data['params']['delayOn'] * 60
         delays['off'] = data['params']['delayOff'] * 60
         temp.append(delays)
-        yolink.writeDelayData(data)
-        yolink.offDelayTimer.add(temp)
+        #yolink.writeDelayData(data)
+        yolink.offDelayTimer.addDelays(temp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
 
@@ -777,7 +776,10 @@ class YoLinkMQTTDevice(object):
                         if key == yolink.dDelay:
                             temp = []
                             temp.append(data[yolink.dData][key])
-                            yolink.offDelayTimer.addDelays(temp)   
+                            yolink.offDelayTimer.addDelays(temp) 
+                            yolink.nbrOutlets = 1
+                            yolink.nbrUsb = 0
+                            yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
                         else:
                             yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
             else:

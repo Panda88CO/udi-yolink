@@ -113,7 +113,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         portList.append(str(int(port)+yolink.nbrUsb))
         yolink.setMultiOutPortState(portList, state)
 
-    def setMultiOutDelayList (yolink, delayList, callback):
+    def setMultiOutDelayList (yolink, delayList):
         logging.info('outletSetDelayList')
         data = {}
         delTemp = []
@@ -146,7 +146,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
-        yolink.writeDelayData(data)
+        #yolink.writeDelayData(data)
         yolink.offDelayTimer.addDelays(delTemp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
