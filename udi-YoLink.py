@@ -107,40 +107,40 @@ class YoLinkSetup (udi_interface.Node):
             #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
             #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
             #    isyNbr += 1
-            elif self.deviceList[dev]['type'] == 'Switch':
-                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                
-                udiYoSwitch(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], yoAccess, self.deviceList[dev] )
-                isyNbr += 1
+            #elif self.deviceList[dev]['type'] == 'Switch':
+            #    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                
+            #    udiYoSwitch(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], yoAccess, self.deviceList[dev] )
+            #   isyNbr += 1
             elif self.deviceList[dev]['type'] == 'THSensor':
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                
                 udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
                 isyNbr += 1       
-            elif self.deviceList[dev]['type'] == 'MultiOutlet':
-                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))
-                udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                isyNbr += 1
+            #elif self.deviceList[dev]['type'] == 'MultiOutlet':
+            #    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))
+            #    udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+            #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+            #    isyNbr += 1
             elif self.deviceList[dev]['type'] == 'DoorSensor':
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                
                 udiYoDoorSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
                 isyNbr += 1
-            elif self.deviceList[dev]['type'] == 'Manipulator':
-                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                
-                udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                isyNbr += 1
+            #elif self.deviceList[dev]['type'] == 'Manipulator':
+            #    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                
+            #    udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+            #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+            #    isyNbr += 1
             elif self.deviceList[dev]['type'] == 'MotionSensor':     
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))
                 udiYoMotionSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']                
                 isyNbr += 1
-            elif self.deviceList[dev]['type'] == 'Outlet':     
-                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                                        
-                udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                isyNbr += 1
+            #elif self.deviceList[dev]['type'] == 'Outlet':     
+            #    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                                        
+            #    udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+            #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+            #    isyNbr += 1
             elif self.deviceList[dev]['type'] == 'GarageDoor': 
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))  
                 udiYoGarageDoor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], yoAccess, self.deviceList[dev] )
