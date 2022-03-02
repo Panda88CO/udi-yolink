@@ -112,7 +112,8 @@ class udiYoTHsensor(udi_interface.Node):
         logging.debug(data)
         alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
-            if self.yoTHsensor.online:
+            if self.yoTHsensor.getOnlineStatus():
+                logging.debug("yoTHsensor temp: {}".format(self.yoTHsensor.getTempValueC()))
                 self.node.setDriver('CLITEMP', self.yoTHsensor.getTempValueC(), True, True)
                 self.node.setDriver('GV1', self.yoTHsensor.bool2Nbr(alarms['lowTemp']), True, True)
                 self.node.setDriver('GV2', self.yoTHsensor.bool2Nbr(alarms['highTemp']), True, True)

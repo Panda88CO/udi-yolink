@@ -9,7 +9,7 @@ import os
 import json
 import time
 
-from udiYoSwitch import udiYoSwitch
+from oldStuff.udiYoSwitch import udiYoSwitch
 from udiYoTHsensor import udiYoTHsensor 
 from udiYoGarageDoorCtrl import udiYoGarageDoor
 from udiYoMotionSensor import udiYoMotionSensor

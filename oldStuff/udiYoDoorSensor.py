@@ -9,7 +9,7 @@ from os import truncate
 
 import sys
 import time
-from yolinkDoorSensor import YoLinkDoorSens
+from oldStuff.yolinkDoorSensor import YoLinkDoorSens
 
 try:
     import udi_interface

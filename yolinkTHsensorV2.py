@@ -41,6 +41,7 @@ class YoLinkTHSen(YoLinkMQTTDevice):
     #    logging.debug(yolink.type+ ' - getOnlineStatus')
     #    return(yolink.getOnlineStatus( ))
 
+       
     def getTempValueF(yolink):
         return(yolink.getStateValue('temperature')*9/5+32)
     

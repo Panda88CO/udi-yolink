@@ -10,15 +10,15 @@ from yolink_devices import YoLinkDevice
 #from yolink_mqtt_client import YoLinkMQTTClient
 from yolinkMultiOutlet import YoLinkMultiOutlet
 from yolinkTHsensor import YoLinkTHSensor
-from yolinkLeakSensor import YoLinkLeakSensor
+from oldStuff.yolinkLeakSensor import YoLinkLeakSensor
 from yolinkManipulator import YoLinkManipulator
 from yolinkSwitch import YoLinkSwitch
 from yolinkSwitch import YoLinkSW
-from yolinkGarageDoorToggle import YoLinkGarageDoorToggle
-from yolinkGarageDoorSensor import YoLinkGarageDoorSensor
+from oldStuff.yolinkGarageDoorToggle import YoLinkGarageDoorToggle
+from oldStuff.yolinkGarageDoorSensor import YoLinkGarageDoorSensor
 from yolinkMotionSensor import YoLinkMotionSensor
 from yolinkOutlet import YoLinkOutlet
-from yolinkDoorSensor import YoLinkDoorSensor
+from oldStuff.yolinkDoorSensor import YoLinkDoorSensor
 #import yolinkSwitch
 from cryptography.fernet import Fernet
 #from yolink_mqtt_device import YoLinkGarageDoor

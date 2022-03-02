@@ -168,7 +168,7 @@ FishTank        = DeviceList[0]
 MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
 MultiOutput.delayTimerCallback(printDelay, 10)
 
-#WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
+WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
 #WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
 #GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
@@ -182,7 +182,7 @@ MultiOutput.delayTimerCallback(printDelay, 10)
 USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
 USB_Outlet.delayTimerCallback(printDelay, 5)
 #DoorSensor1 = YoLinkDoorSensor(yoAccess, DoorSensor)
-#OutdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
+OutdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
 #bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
 Hub1 = YoLinkHub(yoAccess, HubDS)
 '''
@@ -312,18 +312,18 @@ while True :
     DoorSensor1.refreshDevice()
     DS1 = DoorSensor1.getState()
     DS2 = DoorSensor1.getBattery()
-
+    '''
     WineCellarTemp.refreshDevice()
     WC1 = WineCellarTemp.getTempValueC()
     WC2 = WineCellarTemp.getTempValueF()
     WC3 = WineCellarTemp.getHumidityValue()
     WC4 = WineCellarTemp.getAlarms()
-
+    
     OutdoorTemp.refreshDevice()
     OD1 = OutdoorTemp.getTempValueC()
     OD2 = OutdoorTemp.getBattery()
     OD4 = OutdoorTemp.getAlarms()
-
+    '''
     GarageSensor.refreshDevice()
     GS1 = GarageSensor.getState()
     GCT1 = GarageController.toggleDevice()
