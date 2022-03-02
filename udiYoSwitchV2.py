@@ -64,8 +64,9 @@ class udiYoSwitch(udi_interface.Node):
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
-        polyglot.subscribe(polyglot.POLL, self.poll)
+        #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
+        polyglot.subscribe(polyglot.STOP, self.stop)
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)

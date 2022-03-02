@@ -211,6 +211,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
         for usb in range (0,yolink.nbrUsb):
                 states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
+        #CHECK HERE
+
         if temp['data']['delays'] != None:
             for outlet in temp['data']['delays']:
                 port = outlet['ch']-yolink.nbrUsb

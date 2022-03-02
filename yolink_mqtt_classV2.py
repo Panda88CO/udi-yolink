@@ -70,27 +70,29 @@ class YoLinkMQTTDevice(object):
         yolink.forceStop = False
         yolink.eventSupport = False # Support adding to EventQueue
         yolink.diconnect = False
-        if yolink.type in yolink.delaySupport and yolink.type not in yolink.scheduleSupport :
+        #if yolink.type in yolink.delaySupport and yolink.type not in yolink.scheduleSupport :
+        #    yolink.dataAPI = {
+        #                      yolink.lastUpdate :str(int(time.time()*1000))
+        #                    , yolink.lastMessage:{}
+        #                    ,'lastStateTime':{}
+        #                    , yolink.dOnline: None
+        #                    , yolink.dData :{   yolink.dState:{}
+        #                                        #,yolink.dDelays :[] 
+        #                                        }
+        #                    }
+        #    yolink.extDelayTimer = CountdownTimer()
+        if yolink.type in yolink.scheduleSupport:
             yolink.dataAPI = {
                               yolink.lastUpdate :str(int(time.time()*1000))
                             , yolink.lastMessage:{}
                             ,'lastStateTime':{}
                             , yolink.dOnline: None
                             , yolink.dData :{   yolink.dState:{}
-                                                ,yolink.dDelays :[] }
+                                                #,yolink.dDelays :[]
+                                                ,yolink.dSchedule : [] 
+                                                }
                             }
-            yolink.offDelayTimer = CountdownTimer()
-        elif yolink.type in yolink.scheduleSupport:
-            yolink.dataAPI = {
-                              yolink.lastUpdate :str(int(time.time()*1000))
-                            , yolink.lastMessage:{}
-                            ,'lastStateTime':{}
-                            , yolink.dOnline: None
-                            , yolink.dData :{   yolink.dState:{}
-                                                ,yolink.dDelays :[]
-                                                ,yolink.dSchedule : [] }
-                            }
-            yolink.offDelayTimer = CountdownTimer()
+            yolink.extDelayTimer = CountdownTimer()
         else:
             yolink.dataAPI = {
                               yolink.lastUpdate :str(int(time.time()*1000))
@@ -99,7 +101,7 @@ class YoLinkMQTTDevice(object):
                             , yolink.dOnline :None
                             , yolink.dData :{ yolink.dState:{} }
                             }  
-            yolink.offDelayTimer = None
+            yolink.extDelayTimer = None
         yolink.eventQueue = Queue()
         #yolink.mutex = threading.Lock()
         yolink.timezoneOffsetSec = yolink.timezoneOffsetSec()
@@ -110,8 +112,8 @@ class YoLinkMQTTDevice(object):
         yolink.messagePending = False
     
     def delayTimerCallback(yolink, callback, updateTime=5):
-        yolink.offDelayTimer.timerCallback(callback, updateTime)
-        yolink.offDelayTimer.timerReportInterval(updateTime)
+        yolink.extDelayTimer.timerCallback(callback, updateTime)
+        yolink.extDelayTimer.timerReportInterval(updateTime)
        
     
     def initDevice(yolink):
@@ -342,8 +344,8 @@ class YoLinkMQTTDevice(object):
         delays['on'] = data['params']['delayOn'] * 60
         delays['off'] = data['params']['delayOff'] * 60
         temp.append(delays)
-        yolink.writeDelayData(data)
-        yolink.offDelayTimer.add(temp)
+        #yolink.writeDelayData(data)
+        yolink.extDelayTimer.addDelays(temp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
 
@@ -364,8 +366,8 @@ class YoLinkMQTTDevice(object):
         delays['on'] = data['params']['delayOn'] * 60
        
         temp.append(delays)
-        yolink.writeDelayData(data)
-        yolink.offDelayTimer.add(temp)
+        #yolink.writeDelayData(data)
+        yolink.extDelayTimer.addDelays(temp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
 
@@ -385,8 +387,8 @@ class YoLinkMQTTDevice(object):
         delays['ch'] = 1
         delays['off'] = data['params']['delayOff'] * 60
         temp.append(delays)
-        yolink.writeDelayData(data)
-        yolink.offDelayTimer.add(temp)
+        #yolink.writeDelayData(data)
+        yolink.extDelayTimer.addDelays(temp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
 
@@ -420,7 +422,7 @@ class YoLinkMQTTDevice(object):
         delays['off'] = data['params']['delayOff'] * 60
         temp.append(delays)
         #yolink.writeDelayData(data)
-        yolink.offDelayTimer.addDelays(temp)
+        yolink.extDelayTimer.addDelays(temp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
 
@@ -758,15 +760,15 @@ class YoLinkMQTTDevice(object):
                 elif  type(data[yolink.dData][yolink.dState]) is list:
                     logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))
                     if yolink.dDelays in data[yolink.dData]:
-                        logging.debug('delays exist in data (LIST')
-                        yolink.offDelayTimer.addDelays(data[yolink.dData][yolink.dDelays])
+                        logging.debug('delays exist in data - LIST')
+                        yolink.extDelayTimer.addDelays(data[yolink.dData][yolink.dDelays])
                         yolink.nbrOutlets = len(data[yolink.dData][yolink.dDelays])
                         yolink.nbrUsb = data[yolink.dData][yolink.dDelays][0]['ch']
                         yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
                         #temp = []
                         #for delatIndx in range(0,len(data[yolink.dData][yolink.dDelays])):
                         # yolink.dataAPI[yolink.dData][yolink.dDelays] = data[yolink.dData][yolink.dDelays]
-                        #yolink.offDelayTimer.add(data[yolink.dData][yolink.dDelays])
+                        #yolink.extDelayTimer.add(data[yolink.dData][yolink.dDelays])
                         #yolink.nbrPorts = len( yolink.dataAPI[yolink.dData][yolink.dDelays])
                         #yolink.fistOutlet = yolink.dataAPI[yolink.dData][yolink.dDelays][0]['ch']
                         #need to update USB handling
@@ -777,7 +779,7 @@ class YoLinkMQTTDevice(object):
                         if key == yolink.dDelay:
                             temp = []
                             temp.append(data[yolink.dData][key])
-                            yolink.offDelayTimer.addDelays(temp) 
+                            yolink.extDelayTimer.addDelays(temp) 
                             yolink.nbrOutlets = 1
                             yolink.nbrUsb = 0
                             yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
@@ -791,13 +793,13 @@ class YoLinkMQTTDevice(object):
                     if key == yolink.dDelay:
                         temp = []
                         temp.append(data[yolink.dData][key])
-                        yolink.offDelayTimer.addDelays(temp)   
+                        yolink.extDelayTimer.addDelays(temp)   
                     else:
                         yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][yolink.dState][key]
             elif  type(data[yolink.dData][yolink.dState]) is list:           
                 if yolink.dDelays in data[yolink.dData]:
                     logging.debug('delays exist in data (LIST')
-                    yolink.offDelayTimer.addDelays(data[yolink.dData][yolink.dDelays])
+                    yolink.extDelayTimer.addDelays(data[yolink.dData][yolink.dDelays])
                     yolink.nbrOutlets = len(data[yolink.dData][yolink.dDelays])
                     yolink.nbrUsb = data[yolink.dData][yolink.dDelays][0]['ch']
                     yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
