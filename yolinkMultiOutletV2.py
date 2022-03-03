@@ -24,8 +24,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.eventTime = 'Time'
         #yolink.delayUpdateInt = 15
         #yolink.timerCallback = callback
-        yolink.offDelayTimer = CountdownTimer()
-        #yolink.offDelayTimer.timerCallback(callback)
+        yolink.extDelayTimer = CountdownTimer()
+        #yolink.extDelayTimer.timerCallback(callback)
 
         time.sleep(2)
 
@@ -127,19 +127,19 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                 if key.lower() == 'ch' or key.lower() == 'port':
                     ch = int(delayList[delays][key])
                     temp['ch'] = ch
-                    dTemp['ch'] = ch
+                    #dTemp['ch'] = ch
                 if key.lower() == 'on' or key.lower() == 'ondelay' or key.lower() == 'delayon':
                     onDelay = int(delayList[delays][key])
                     temp['on'] =  onDelay
-                    dTemp['on'] = onDelay*60
+                    #dTemp['on'] = onDelay
                 if key.lower() == 'off' or key.lower() == 'offdelay' or key.lower() == 'delayoff':
                     offDelay = int(delayList[delays][key])
                     temp['off'] = offDelay
-                    dTemp['off'] = offDelay*60
+                    #dTemp['off'] = offDelay
             logging.debug('temp delayList: {}'.format(temp))
             if 'ch' in temp and len(temp)>1:
                 data['params']['delays'].append(temp)
-                delTemp.append(dTemp)
+                delTemp.append(temp)
         logging.debug('Sending delay data: {}'.format( data['params']['delays']))
         data['time'] = str(int(time.time())*1000)
         data['method'] = yolink.type+'.setDelay'
@@ -147,7 +147,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
         #yolink.writeDelayData(data)
-        yolink.offDelayTimer.addDelays(delTemp)
+        yolink.extDelayTimer.addDelays(delTemp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 
@@ -168,7 +168,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
         yolink.writeDelayData(data)
-        yolink.offDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay*60, 'off':offDelay*60}] )
+        yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}] )
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 

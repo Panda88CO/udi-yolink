@@ -360,8 +360,8 @@ while True :
 
     
     MO11 = MultiOutput.setMultiOutDelayList([{'ch':1, 'on':1, 'delayOff':2},{'ch':0, 'on':3, 'delayOff':4} ])
-    MO12 = MultiOutput.refreshDevice()
-    MO2 = MultiOutput.getDelays()
+    #MO12 = MultiOutput.refreshDevice()
+    MO2 = MultiOutput.refreshDelays()
     
     
     time.sleep(10)
@@ -373,9 +373,11 @@ while True :
     #time.sleep(5)
     #USB3 = USB_Outlet.setState('off')
     USB4 = USB_Outlet.setDelayList([{'delayOn':2,'off':3}])
-    USB5 = USB_Outlet.refreshDevice()
+    #USB5 = USB_Outlet.refreshDevice()
     time.sleep(15)
     USB4 = USB_Outlet.setDelayList([{'delayOn':3,'off':4}] )
+    test = MultiOutput.refreshDelays()
+    test2= USB_Outlet.refreshDelays()
 
 
     time.sleep(300)

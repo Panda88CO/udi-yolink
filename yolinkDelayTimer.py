@@ -57,13 +57,13 @@ class CountdownTimer(object):
                 if ch == self.timeRemain[delayIndx]['ch']:
                     alreadyExists = True
                     if 'on' in delayTimes[indx]:
-                        self.timeRemain[delayIndx]['on'] = delayTimes[indx]['on']
+                        self.timeRemain[delayIndx]['on'] = int(delayTimes[indx]['on']*60)
                     if 'off' in delayTimes[indx]:
-                        self.timeRemain[delayIndx]['off'] = delayTimes[indx]['off']
+                        self.timeRemain[delayIndx]['off'] = int(delayTimes[indx]['off']*60)
                     if 'delayOn' in delayTimes[indx]:
-                        self.timeRemain[delayIndx]['delayOn'] = delayTimes[indx]['delayOn']
+                        self.timeRemain[delayIndx]['on'] = int(delayTimes[indx]['delayOn']*60)
                     if 'delayOff' in delayTimes[indx]:
-                        self.timeRemain[delayIndx]['delayOff'] = delayTimes[indx]['delayOff']
+                        self.timeRemain[delayIndx]['off'] = int(delayTimes[indx]['delayOff']*60)
             if not alreadyExists:
                 self.timeRemain.append(delayTimes[indx])
         self.lock.release()
@@ -116,7 +116,7 @@ class CountdownTimer(object):
     def stop(self):
         self.timer.cancel()
 
-    def timeRemain(self):
+    def timeRemaining(self):
         return(self.timeRemain)
 
 
