@@ -72,7 +72,8 @@ class CountdownTimer(object):
 
     def timerReportInterval (self, reportInterval):
         self.lock.acquire()
-        self.timer.cancel()
+        if self.timerRunning:
+            self.timer.cancel()
         self.timer = RepeatTimer(reportInterval, self.timeUpdate )
         self.timer.start()
         self.timerRunning = True
@@ -106,9 +107,9 @@ class CountdownTimer(object):
                     noDelays = False
                 else:
                     self.timeRemain[delay]['off'] = 0           
-        #if noDelays:
-            #self.timer.cancel()
-            #self.timerRunning = False
+        if noDelays:
+            self.timer.cancel()
+            self.timerRunning = False
         if self.callback:
             self.callback(self.timeRemain)
         self.lock.release()
