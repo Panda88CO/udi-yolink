@@ -258,7 +258,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.nbrOutlets = self.yoMultiOutlet.nbrOutlets
             self.nbrUsb = self.yoMultiOutlet.nbrUsb
             #states = self.yoMultiOutlet.getMultiOutletstate()
-            delays = self.yoMultiOutlet.getDelays()
+            delays = self.yoMultiOutlet.refreshDelays()
             logging.debug('init data {}, {}'.format(self.nbrOutlets, delays))
             self.subOutlet = {}
             self.subUsb = {}
@@ -411,7 +411,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     # Need to use shortPoll
     def pollDelays(self):
         if self.delaysActive and self.yoMultiOutlet.online: 
-            delays =  self.yoMultiOutlet.getDelays()
+            delays =  self.yoMultiOutlet.refreshDelays()
             logging.debug('delays: ' + str(delays))
             delayActive = False
             #outletstates =  self.yoMultiOutlet.getMultiOutletData()

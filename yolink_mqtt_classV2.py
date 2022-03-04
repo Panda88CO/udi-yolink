@@ -121,13 +121,14 @@ class YoLinkMQTTDevice(object):
         '''
         if yolink.online:
             temp = yolink.getInfoAPI()
-            if 'delays' in temp['data']:
-                yolink.nbrOutlets = len(temp['data']['delays'])
-                yolink.nbrUsb = temp['data']['delays'][0]['ch']
-            else:
-                yolink.nbrOutlets = 1
-                yolink.nbrUsb = 0
-            yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
+            if 'data' in temp:
+                if 'delays' in temp['data']:
+                    yolink.nbrOutlets = len(temp['data']['state'])
+                    yolink.nbrUsb = temp['data']['delays'][0]['ch']
+                else:
+                    yolink.nbrOutlets = 1
+                    yolink.nbrUsb = 0
+                yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
         '''
 
 
@@ -549,10 +550,12 @@ class YoLinkMQTTDevice(object):
             
 
     def getSchedules(yolink):
-        logging.debug(yolink.type + '- getSchedules')
+        logging.debug('{}- getSchedules: {}'.format(yolink.type, yolink.deviceInfo['name'] ))
         yolink.refreshSchedules()
-        while yolink.dSchedule not in yolink.dataAPI[yolink.dData]:
+        test = 0 
+        while yolink.dSchedule not in yolink.dataAPI[yolink.dData] and test < 3:
             time.sleep(1)
+            test = test +1
             
         nbrSchedules  = len(yolink.dataAPI[yolink.dData][yolink.dSchedule])
         temp = {}

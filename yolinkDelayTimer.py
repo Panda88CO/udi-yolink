@@ -37,7 +37,7 @@ class CountdownTimer(object):
         self.timerRunning = False
         self.lock = Lock()
         self.callback = None
-        self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
+        #self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
 
     def timerCallback (self,  callback, updateInterval = 5):
         self.callback = callback
@@ -47,6 +47,7 @@ class CountdownTimer(object):
     def addDelays(self, delayTimes):
         self.lock.acquire()
         if not self.timerRunning:
+            self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
             self.timer.start()
             self.timerRunning = True
    
@@ -72,49 +73,50 @@ class CountdownTimer(object):
 
     def timerReportInterval (self, reportInterval):
         self.lock.acquire()
+        self.updateInterval = reportInterval
         if self.timerRunning:
             self.timer.cancel()
+            self.timerRunning = False
         self.timer = RepeatTimer(reportInterval, self.timeUpdate )
         self.timer.start()
         self.timerRunning = True
         self.lock.release() 
         
     def timeUpdate(self):
-        noDelays = True
+        activeDelays = False
         self.lock.acquire()
         for delay in range(0,len(self.timeRemain)):
             if 'delayOn' in self.timeRemain[delay]:
                 self.timeRemain[delay]['delayOn'] -= self.updateInterval
                 if self.timeRemain[delay]['delayOn'] > 0:
-                    noDelays = False
+                    activeDelays = True
                 else:
                     self.timeRemain[delay]['delayOn'] = 0
             if 'on' in self.timeRemain[delay]:
                 self.timeRemain[delay]['on'] -= self.updateInterval
                 if self.timeRemain[delay]['on'] > 0:
-                    noDelays = False
+                    activeDelays = True
                 else:
                     self.timeRemain[delay]['on'] = 0
             if 'delayOff' in self.timeRemain[delay]:
                 self.timeRemain[delay]['delayOff'] -= self.updateInterval
                 if self.timeRemain[delay]['delayOff'] > 0:
-                    noDelays = False
+                    activeDelays = True
                 else:
                     self.timeRemain[delay]['delayOff'] = 0       
             if 'off' in self.timeRemain[delay]:
                 self.timeRemain[delay]['off'] -= self.updateInterval
                 if self.timeRemain[delay]['off'] > 0:
-                    noDelays = False
+                    activeDelays = True
                 else:
                     self.timeRemain[delay]['off'] = 0           
-        if noDelays:
-            self.timer.cancel()
-            self.timerRunning = False
-        if self.callback:
+
+        if self.callback and activeDelays:
             self.callback(self.timeRemain)
         self.lock.release()
     
     def stop(self):
+        self.timerRunning = False
         self.timer.cancel()
 
     def timeRemaining(self):

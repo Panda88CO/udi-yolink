@@ -163,12 +163,12 @@ FishTank        = DeviceList[0]
 
 
 
-#FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
-
+FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
+FishMultiOutput.delayTimerCallback(printDelay, 5)
 MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
 MultiOutput.delayTimerCallback(printDelay, 10)
 
-WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
+#WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
 #WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
 #GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
@@ -179,22 +179,31 @@ WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #DeckLight = YoLinkMultiOutlet(yoAccess, DeckLight)
 #PlaygroundGardenLight = YoLinkSwitch(yoAccess, GardenPlayground)
 #PlaygroundLight = YoLinkSwitch(yoAccess, Playground)
-USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
-USB_Outlet.delayTimerCallback(printDelay, 5)
+#USB_Outlet = YoLinkOutlet(yoAccess, USB_Outlet)
+#USB_Outlet.delayTimerCallback(printDelay, 5)
 #DoorSensor1 = YoLinkDoorSensor(yoAccess, DoorSensor)
-OutdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
+#OutdoorTemp = YoLinkTHSensor(yoAccess, OutdoorTemp)
 #bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
-Hub1 = YoLinkHub(yoAccess, HubDS)
-'''
+#Hub1 = YoLinkHub(yoAccess, HubDS)
+
+Ftest = FishMultiOutput.getMultiOutStates()
+
+FMO15 = FishMultiOutput.nbrPorts
+FMO15a = FishMultiOutput.nbrOutlets
+FMO15b = FishMultiOutput.nbrUsb
+#FMO1 = FishMultiOutput.refreshSchedules()
+FMO2 = FishMultiOutput.refreshDelays()
+
+
 test = MultiOutput.getMultiOutStates()
 
 MO15 = MultiOutput.nbrPorts
 MO15a = MultiOutput.nbrOutlets
 MO15b = MultiOutput.nbrUsb
 MO1 = MultiOutput.getSchedules()
-MO2 = MultiOutput.getDelays()
-MO3 = MultiOutput.getStatus()
-MO4 = MultiOutput.getInfoAll()
+MO2 = MultiOutput.refreshDelays()
+#MO3 = MultiOutput.getStatus()
+#MO4 = MultiOutput.getInfoAll()
 MO5 = MultiOutput.getInfoAPI()
 MO6 = MultiOutput.getMultiOutStates()
 MO7 = MultiOutput.getMultiOutPortState('0')
@@ -202,7 +211,7 @@ MO8 = MultiOutput.getMultiOutPortState('port1')
 MO9 = MultiOutput.getMultiOutUsbState('usb0')
 MO9a = MultiOutput.setMultiOutPortState(['port0'], 'OFF')
 #MO9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
-
+'''
 
 MO11 = MultiOutput.outletSetDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
 time.sleep(300)
@@ -313,6 +322,7 @@ while True :
     DS1 = DoorSensor1.getState()
     DS2 = DoorSensor1.getBattery()
     '''
+    '''
     WineCellarTemp.refreshDevice()
     WC1 = WineCellarTemp.getTempValueC()
     WC2 = WineCellarTemp.getTempValueF()
@@ -323,6 +333,7 @@ while True :
     OD1 = OutdoorTemp.getTempValueC()
     OD2 = OutdoorTemp.getBattery()
     OD4 = OutdoorTemp.getAlarms()
+    '''
     '''
     GarageSensor.refreshDevice()
     GS1 = GarageSensor.getState()
@@ -338,14 +349,14 @@ while True :
     Hub1.refreshDevice()
     HU1 = Hub1.getState()
     '''
-    '''
+    
     test = MultiOutput.getMultiOutStates()
 
     MO15 = MultiOutput.nbrPorts
     MO15a = MultiOutput.nbrOutlets
     MO15b = MultiOutput.nbrUsb
     MO1 = MultiOutput.getSchedules()
-    MO2 = MultiOutput.getDelays()
+    MO2 = MultiOutput.refreshDelays()
     MO3 = MultiOutput.refreshDevice()
     #MO4 = MultiOutput.getInfoAll()
     MO5 = MultiOutput.getInfoAPI()
@@ -355,12 +366,13 @@ while True :
     MO9 = MultiOutput.getMultiOutUsbState('usb0')
     MO9a = MultiOutput.setMultiOutPortState(['port0'], 'OFF')
     #MO9b = MultiOutput.setMultiOutUsbState(['usb0'], 'ON')
-    '''
+    
 
 
     
     MO11 = MultiOutput.setMultiOutDelayList([{'ch':1, 'on':1, 'delayOff':2},{'ch':0, 'on':3, 'delayOff':4} ])
     #MO12 = MultiOutput.refreshDevice()
+    MO12 = MultiOutput.getMultiOutStates()
     MO2 = MultiOutput.refreshDelays()
     
     

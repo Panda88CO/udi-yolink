@@ -57,7 +57,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
-        self.poly.subscribe(self.poly.POLL, self.systemPoll)
+        #self.poly.subscribe(self.poly.POLL, self.systemPoll)
 
         self.Parameters = Custom(polyglot, 'customparams')
         self.Notices = Custom(polyglot, 'notices')
@@ -96,6 +96,10 @@ class YoLinkSetup (udi_interface.Node):
         isyNbr = 0
         isyName = 'yolink'  # has to be lower case and less than 13 chars
         logging.setLevel(10)
+        if 'Nbr Devices' in self.Parameters:
+            nbrDevicePreInstalled = self.Parameters['Nbr Devices']
+        else:
+            nbrDevicePreInstalled = 0
         for dev in range(0,len(self.deviceList)):
             logging.debug('adding/checking device : {} = {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
             #if self.deviceList[dev]['type'] in self.supportedYoTypes:
@@ -153,6 +157,7 @@ class YoLinkSetup (udi_interface.Node):
                 isyNbr += 1    
             else:
                 logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
+            self.Parameters['Nbr Devices'] = isyNbr        
         logging.debug(self.Parameters)
 
     def stop(self):

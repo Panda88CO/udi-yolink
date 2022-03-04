@@ -106,13 +106,13 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('GV8', 1, True, True)
             else:
                 self.node.setDriver('GV8', 0, True, True)
-            a=self.pollDelays()
+                #self.pollDelays()
            
 
 
     # Need to use shortPoll
     def pollDelays(self):
-        delays =  self.yoSwitch.getDelays()
+        delays =  self.yoSwitch.refreshDelays()
         logging.debug('delays: ' + str(delays))
         #print('on delay: ' + str(delays['on']))
         #print('off delay: '+ str(delays['off']))
@@ -148,13 +148,13 @@ class udiYoSwitch(udi_interface.Node):
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
-        self.yoSwitch.setDelay([{'delayOn':delay}])
+        self.yoSwitch.setOnDelay([{'delayOn':delay}])
         self.node.setDriver('GV1', delay, True, True)
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
-        self.yoSwitch.setDelay([{'delayOff':delay}])
+        self.yoSwitch.setOffDelay([{'delayOff':delay}])
         self.node.setDriver('GV2', delay, True, True)
 
 
