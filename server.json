@@ -8,7 +8,7 @@
     "notice": "Uses MQTT comminication",
     "shortPoll": "60",
     "longPoll": "600",
-    "profile_version": "0.0.3",
+    "profile_version": "0.0.5",
     "customParams": {
         "YOLINK_URL" : "https://api.yosmart.com/openApi",   
         "YOLINKV2_URL": "https://api.yosmart.com/open/yolink/v2/api", 
@@ -22,8 +22,8 @@
         {
             "title": "A NodeServer to allow integration of YoLink devices ",
             "author": "Panda88CO",
-            "version": "0.0.4",
-            "date": "Dec 18,  2021",
+            "version": "0.0.5",
+            "date": "March 5,  2022",
             "source": "https://github.com/Panda88CO/udi-yolink",
             "license": "https://github.com/Panda88CO/udi-yolink/blob/main/license"
         }
