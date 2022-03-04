@@ -126,7 +126,7 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="USBCTRL" > 
-               <p id="" editor="swstate" init="1" /> 
+               <p id="" editor="usbctrl" init="1" /> 
             </cmd >
          </accepts>
       </cmds>

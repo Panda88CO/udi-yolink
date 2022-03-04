@@ -118,18 +118,7 @@ class YoLinkMQTTDevice(object):
         yolink.refreshDevice()
         time.sleep(2) 
         yolink.online = yolink.getOnlineStatus()
-        '''
-        if yolink.online:
-            temp = yolink.getInfoAPI()
-            if 'data' in temp:
-                if 'delays' in temp['data']:
-                    yolink.nbrOutlets = len(temp['data']['state'])
-                    yolink.nbrUsb = temp['data']['delays'][0]['ch']
-                else:
-                    yolink.nbrOutlets = 1
-                    yolink.nbrUsb = 0
-                yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
-        '''
+
 
 
     def shut_down(yolink):
@@ -235,6 +224,11 @@ class YoLinkMQTTDevice(object):
     def checkOnlineStatus(yolink, dataPacket):
         if 'code' in dataPacket:
             return(dataPacket['code'] == '000000')
+        elif 'event' in dataPacket:
+            return(True)
+        else:
+            logging.debug('checkOnlineStatus {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
+            return(False)
 
     def updateCallbackStatus(yolink, data, eventSupport = False):
         logging.debug(yolink.type+' - updateCallbackStatus')

@@ -54,7 +54,7 @@ ND-yosubusb-ICON = Switch
 ST-nlssubusb-GV0-NAME = USB Power
 ST-nlssubusb-ST-NAME = Nodeserver Status
 CMD-nlssubusb-UPDATE-NAME = Update Status
-CMD-nlssubusb-USBCTRL-NAME =  USB Port Control
+CMD-nlssubusb-USBCTRL-NAME =  USB Power
 
 
 ND-yomanipu-NAME = YoLink Manipulator

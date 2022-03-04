@@ -84,8 +84,6 @@ class YoLinkSetup (udi_interface.Node):
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
         self.deviceList = yoAccess.getDeviceList()
-  
-        logging.debug(self.deviceList)
         while  self.devicesReady:
             time.sleep(2)
             logging.info('Waiting to retrieve devise list')
@@ -101,7 +99,7 @@ class YoLinkSetup (udi_interface.Node):
         else:
             nbrDevicePreInstalled = 0
         for dev in range(0,len(self.deviceList)):
-            logging.debug('adding/checking device : {} = {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
+            logging.debug('adding/checking device : {} - {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
             #if self.deviceList[dev]['type'] in self.supportedYoTypes:
             if self.deviceList[dev]['type'] == 'Hub':     
                 logging.info('Hub not added')    

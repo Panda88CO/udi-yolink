@@ -100,18 +100,47 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
      
         if yolink.nbrUsb > 0:
             portList = []
-            portList.append(port+yolink.nbrUsb)
-            yolink.setMultiOutPortState(portList, state)
+            portList.append(str(int(port)))
+            yolink.setMultiOutUsbState(portList, state)
         else:
             logging.error('No USB port on device')
 
-
+    def setMultiOutPortState(yolink, portList, value ):
+        logging.debug( yolink.type+'- setMultiOutletState')
+        # portlist a a listof ports being changed port range 0-7
+        # value is state that need to change 2 (ON/OFF)
+        status = True
+        port = 0
+        for i in portList:            
+            portStr = re.findall('[0-9]+', i)
+            portNbr = int(portStr.pop())
+            portNbr = portNbr + yolink.nbrUsb  # Ports start after USB control ports
+            if portNbr <= yolink.nbrPorts and portNbr >= 0 :
+                port = port + pow(2, portNbr)
+            else:
+                logging.error('wrong port number (range 0 - '+str(yolink.nbrPorts)+'): ' + str(i))
+                return(False)
+        if value.lower() == 'on' or value.lower() == 'open':
+            state = 'open'
+        elif value.lower() == 'off' or value.lower() == 'closed' :
+            state = 'closed'
+        else:
+            logging.error('Unknows state passed')
+            status = False
+        if status:
+            data={}
+            data["params"] = {}
+            data["params"]["chs"] =  port
+            data["params"]['state'] = state
+            yolink.setDevice( data)
+        return(status)
 
     def setMultiOutState ( yolink, port, state):
         logging.info('outletSetState')
         portList = []
-        portList.append(str(int(port)+yolink.nbrUsb))
+        portList.append(str(int(port))) # port is 0 based
         yolink.setMultiOutPortState(portList, state)
+
 
     def setMultiOutDelayList (yolink, delayList):
         logging.info('outletSetDelayList')
@@ -172,35 +201,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 
-    def setMultiOutPortState(yolink, portList, value ):
-        logging.debug( yolink.type+'- setMultiOutletState')
-        # portlist a a listof ports being changed port range 0-7
-        # value is state that need to change 2 (ON/OFF)
-        status = True
-        port = 0
-        for i in portList:            
-            portStr = re.findall('[0-9]+', i)
-            portNbr = int(portStr.pop())
-            portNbr = portNbr + yolink.nbrUsb  # Ports start after USB control ports
-            if portNbr <= yolink.nbrPorts and portNbr >= 0 :
-                port = port + pow(2, portNbr)
-            else:
-                logging.error('wrong port number (range 0 - '+str(yolink.nbrPorts)+'): ' + str(i))
-                return(False)
-        if value.lower() == 'on' or value.lower() == 'open':
-            state = 'open'
-        elif value.lower() == 'off' or value.lower() == 'closed' :
-            state = 'closed'
-        else:
-            logging.error('Unknows state passed')
-            status = False
-        if status:
-            data={}
-            data["params"] = {}
-            data["params"]["chs"] =  port
-            data["params"]['state'] = state
-            yolink.setDevice( data)
-        return(status)
+
     
     def getMultiOutStates(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')

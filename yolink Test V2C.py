@@ -186,16 +186,21 @@ MultiOutput.delayTimerCallback(printDelay, 10)
 #bathRTemp =  YoLinkTHSensor(yoAccess, BathIndoorTemp)
 #Hub1 = YoLinkHub(yoAccess, HubDS)
 
-Ftest = FishMultiOutput.getMultiOutStates()
+#Ftest = FishMultiOutput.getMultiOutStates()
 
 FMO15 = FishMultiOutput.nbrPorts
 FMO15a = FishMultiOutput.nbrOutlets
 FMO15b = FishMultiOutput.nbrUsb
 #FMO1 = FishMultiOutput.refreshSchedules()
+test = FishMultiOutput.refreshMultiOutlet()
 FMO2 = FishMultiOutput.refreshDelays()
+FM3 = FishMultiOutput.setMultiOutState(2, 'ON')
+test = FishMultiOutput.refreshMultiOutlet()
+FM3a = FishMultiOutput.setMultiOutState(2, 'OFF')
+test = FishMultiOutput.refreshMultiOutlet()
 
 
-test = MultiOutput.getMultiOutStates()
+time.sleep(10)
 
 MO15 = MultiOutput.nbrPorts
 MO15a = MultiOutput.nbrOutlets
