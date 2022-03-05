@@ -65,11 +65,12 @@ class YoLinkOutl(YoLinkMQTTDevice):
         else:
             return(False)
     
+    '''
     def getDelays(yolink):
         yolink.online = yolink.getOnlineStatus()
         if yolink.online :
             return super().getDelays()
-
+    '''
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')

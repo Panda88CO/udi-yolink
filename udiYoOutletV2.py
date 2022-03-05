@@ -121,7 +121,7 @@ class udiYoOutlet(udi_interface.Node):
             self.node.setDriver('GV3', power, True, True)
             self.node.setDriver('GV4', watt, True, True)
 
-    def  updateDelayCountdown( self, timeRemaining):
+    def updateDelayCountdown( self, timeRemaining):
         logging.debug('updateDelayCountDown:  delays {}'.format(timeRemaining))
         for delayInfo in range(0, len(timeRemaining)):
             if 'ch' in timeRemaining[delayInfo]:
