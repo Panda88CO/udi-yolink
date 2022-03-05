@@ -86,7 +86,7 @@ class YoLinkMQTTClient(object):
         Callback for broker published events
         """
         maxRetry = 3
-        logging.debug('on_message')
+        #logging.debug('on_message')
         #logging.debug(client)
         #logging.debug(userdata)
         #logging.debug(msg)
@@ -95,28 +95,26 @@ class YoLinkMQTTClient(object):
         payload = json.loads(msg.payload.decode("utf-8"))
         if DEBUG:
             dataTemp = str(json.dumps(payload))
-        logging.debug('on_message: {}'.format(msg.topic))
+        logging.debug('on_message: {}\n {}'.format(msg.topic, payload))
         #logging.debug(payload)
 
         if  msg.topic == yolink.topicReport:
             if payload['deviceId'] == yolink.deviceId :
-                logging.debug (payload)
+                #logging.debug (payload)
                 yolink.callback(payload)
-                logging.debug(' device reporting')
+                #logging.debug(' device reporting')
             if DEBUG:
                 yolink.savePacket(msg.topic, dataTemp, 'EVENT')
         elif msg.topic == yolink.topicResp:
                 #yolink.dataQueue.put(payload)
-                logging.debug('received Response: {}'.format(yolink.topicReq) )
-                logging.debug (payload)
-                logging.debug('\n')
+                #logging.debug('received Response: {} \n {}'.format(yolink.topicReq, payload) )
                 if payload['code'] == '000000':
                     yolink.retryNbr = 0
                     yolink.callback(payload)
                 else:
                     yolink.retryNbr += 1
                     if yolink.retryNbr <= maxRetry:
-                        time.sleep(5)
+                        time.sleep(2)
                         yolink.publish_data(yolink.lastDataPacket)
                     else:
                         yolink.retryNbr = 0
@@ -124,10 +122,8 @@ class YoLinkMQTTClient(object):
                 if DEBUG:
                     yolink.savePacket(msg.topic, dataTemp, 'RESP')
         elif msg.topic == yolink.topicReq:
-                
-                logging.debug (payload)
-
-                logging.debug('\n')
+                #logging.debug (payload)
+                #logging.debug('\n')
                 if DEBUG:
                     yolink.savePacket(msg.topic, dataTemp, 'REQ')
         else:
@@ -144,7 +140,7 @@ class YoLinkMQTTClient(object):
         try:
 
             if (rc == 0):
-                logging.debug("Successfully connected to broker %s" % yolink.mqttURL)
+                logging.debug("{} - Successfully connected to broker {} ".format(yolink.devideInfo['name'], yolink.mqttURL))
                 yolink.client.subscribe(yolink.topicResp)
                 yolink.client.subscribe(yolink.topicReq)
                 yolink.client.subscribe(yolink.topicReport)
@@ -152,10 +148,10 @@ class YoLinkMQTTClient(object):
 
                 #yolink.client.subscribe('yl-home/'+yolink.homeID+'/+/report')
             else:
-                logging.debug("Connection with result code %s" % rc);
+                logging.debug("Connection with result code {}".format(rc))
                 os.exit(2)
             time.sleep(1)
-            logging.debug('Subsribe: ' + yolink.topicResp + ', '+yolink.topicReport+', '+ yolink.topicReportAll )
+            #logging.debug('Subsribe: ' + yolink.topicResp + ', '+yolink.topicReport+', '+ yolink.topicReportAll )
 
         except Exception as E:
             logging.error('Exception  -  on_connect: ' + str(E))       

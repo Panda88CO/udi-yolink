@@ -32,10 +32,12 @@ class YoLinkOutl(YoLinkMQTTDevice):
     def initNode(yolink):
         yolink.refreshState()
         yolink.online = yolink.getOnlineStatus()
-        if yolink.online:
-            yolink.refreshSchedules()
-        else:
+        if not yolink.online:
             logging.error('Outlet not online')
+        #else:
+        #   yolink.refreshSchedules()
+      
+            
        
         #self.refreshFWversion()
         #print(' YoLinkSW - finished intializing')

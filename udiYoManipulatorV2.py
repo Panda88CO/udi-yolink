@@ -36,8 +36,8 @@ class udiYoManipulator(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 44}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 44}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -114,7 +114,7 @@ class udiYoManipulator(udi_interface.Node):
             self.node.setDriver('GV1', 0, True, True)     
             self.node.setDriver('GV2', 0, True, True)     
 
-
+    '''
     # Need to use shortPoll
     def pollDelays(self):
         delays =  self.yoManipulator.getDelays()
@@ -143,7 +143,7 @@ class udiYoManipulator(udi_interface.Node):
         #if 'shortPoll' in polltype:
             #self.pollDelays()
             #update Delays calculated
-
+    '''
     def switchControl(self, command):
         logging.info('switchControl')
         state = int(command.get('value'))     
@@ -155,21 +155,21 @@ class udiYoManipulator(udi_interface.Node):
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
-        self.yoManipulator.setDelay([{'delayOn':delay}])
-        self.node.setDriver('GV1', delay, True, True)
+        self.yoManipulator.setOnDelay(delay)
+        self.node.setDriver('GV1', delay*60, True, True)
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
-        self.yoManipulator.setDelay([{'delayOff':delay}])
-        self.node.setDriver('GV2', delay, True, True)
+        self.yoManipulator.setOffDelay(delay)
+        self.node.setDriver('GV2', delay*60, True, True)
 
 
 
     def update(self, command = None):
         logging.info('Update Status Executed')
         self.yoManipulator.refreshState()
-        self.yoManipulator.refreshSchedules()     
+        #self.yoManipulator.refreshSchedules()     
 
 
     commands = {

@@ -38,8 +38,8 @@ class udiYoOutlet(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 44}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 44}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV3', 'value': -1, 'uom': 30},
             {'driver': 'GV4', 'value': -1, 'uom': 33},
             {'driver': 'GV8', 'value': 0, 'uom': 25},
@@ -132,6 +132,7 @@ class udiYoOutlet(udi_interface.Node):
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
 
     # Need to use shortPoll
+    '''
     def pollDelays(self):
         delays =  self.yoOutlet.getDelays()
         logging.debug('delays: ' + str(delays))
@@ -147,7 +148,8 @@ class udiYoOutlet(udi_interface.Node):
         else:
             self.node.setDriver('GV1', 0, True, True)     
             self.node.setDriver('GV2', 0, True, True)     
-
+    '''
+    '''
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
@@ -155,7 +157,7 @@ class udiYoOutlet(udi_interface.Node):
             if 'longPoll' in polltype:
                 self.yoOutlet.refreshState()
                 #self.yoOutlet.refreshSchedules()
-           
+    ''' 
 
     def switchControl(self, command):
         logging.info('switchControl')
@@ -169,20 +171,20 @@ class udiYoOutlet(udi_interface.Node):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
         self.yoOutlet.setOnDelay(delay)
-        self.node.setDriver('GV1', delay, True, True)
+        self.node.setDriver('GV1', delay*60, True, True)
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
         self.yoOutlet.setOffDelay(delay)
-        self.node.setDriver('GV2', delay, True, True)
+        self.node.setDriver('GV2', delay*60, True, True)
 
 
 
     def update(self, command = None):
         logging.info('Update Status Executed')
         self.yoOutlet.refreshState()
-        self.yoOutlet.refreshSchedules()     
+        #self.yoOutlet.refreshSchedules()     
 
 
     commands = {

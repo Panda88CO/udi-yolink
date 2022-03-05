@@ -31,8 +31,8 @@ class udiYoSwitch(udi_interface.Node):
     id = 'yoswitch'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 44}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 44}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             #{'driver': 'GV3', 'value': 0, 'uom': 30},
             #{'driver': 'GV4', 'value': 0, 'uom': 33},
             {'driver': 'GV8', 'value': 0, 'uom': 25},
@@ -109,7 +109,7 @@ class udiYoSwitch(udi_interface.Node):
                 #self.pollDelays()
            
 
-
+    '''
     # Need to use shortPoll
     def pollDelays(self):
         delays =  self.yoSwitch.refreshDelays()
@@ -126,7 +126,8 @@ class udiYoSwitch(udi_interface.Node):
         else:
             self.node.setDriver('GV1', 0, True, True)     
             self.node.setDriver('GV2', 0, True, True)     
-
+    '''
+    '''
     def poll(self, polltype):
         logging.debug('ISY poll ')
         logging.debug(polltype)
@@ -136,7 +137,7 @@ class udiYoSwitch(udi_interface.Node):
         if 'shortPoll' in polltype:
             self.pollDelays()
             #update Delays calculated
-
+    '''
     def switchControl(self, command):
         logging.info('switchControl')
         state = int(command.get('value'))     
@@ -148,21 +149,20 @@ class udiYoSwitch(udi_interface.Node):
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
-        self.yoSwitch.setOnDelay([{'delayOn':delay}])
-        self.node.setDriver('GV1', delay, True, True)
+        self.yoSwitch.setOnDelay(delay)
+        self.node.setDriver('GV1', delay*60, True, True)
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
-        self.yoSwitch.setOffDelay([{'delayOff':delay}])
-        self.node.setDriver('GV2', delay, True, True)
-
+        self.yoSwitch.setOffDelay(delay)
+        self.node.setDriver('GV2', delay*60, True, True)
 
 
     def update(self, command = None):
         logging.info('Update Status Executed')
         self.yoSwitch.refreshState()
-        self.yoSwitch.refreshSchedules()     
+        #self.yoSwitch.refreshSchedules()     
 
 
     commands = {

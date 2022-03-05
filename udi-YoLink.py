@@ -57,7 +57,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
-        #self.poly.subscribe(self.poly.POLL, self.systemPoll)
+        self.poly.subscribe(self.poly.POLL, self.systemPoll)
 
         self.Parameters = Custom(polyglot, 'customparams')
         self.Notices = Custom(polyglot, 'notices')
@@ -72,14 +72,14 @@ class YoLinkSetup (udi_interface.Node):
         self.node.setDriver('ST', 1, True, True)
         
         logging.debug('YoLinkSetup init DONE')
-    
+
 
 
 
     def start (self):
-        logging.debug('Start executing start')
+        logging.info('Start executing start')
         logging.info ('Access using PAC/UAC')
-
+        logging.setLevel(20)
         self.tokenObtained = False
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
@@ -217,7 +217,7 @@ class YoLinkSetup (udi_interface.Node):
 
     def handleParams (self, userParam ):
         logging.debug('handleParams')
-        logging.setLevel(20)
+        
         self.Parameters.load(userParam)
         self.poly.Notices.clear()
    
@@ -316,8 +316,8 @@ class YoLinkSetup (udi_interface.Node):
         if not cloud_valid and not local_valid:
             self.poly.Notices['cfg'] = 'Tesla PowerWall NS needs configuration.'
         '''
-        logging.setLevel(10)
-        logging.debug('done with parameter processing')
+        #logging.setLevel(10)
+        #logging.debug('done with parameter processing')
  
     id = 'setup'
 
