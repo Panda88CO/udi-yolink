@@ -148,8 +148,8 @@ class YoLinkSetup (udi_interface.Node):
                 #udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 #self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
                 #isyNbr += 1
-                name = self.deviceList[dev]['deviceId'][:-14] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
-                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'] , self.deviceList[dev]['type'], str(name) ))                                        
+                name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                 udiYoOutlet(polyglot, name, name, self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
 
@@ -225,16 +225,16 @@ class YoLinkSetup (udi_interface.Node):
             self.yoAccess.get_access_token() #Keep token current
         if 'shortPoll' in polltype:
             self.heartbeat()
-            nodes = self.poly.getNodes()
-            for node in nodes:
-                if node != 'setup':   # but not the controller node
-                    nodes[node].checkOnline()
+            #nodes = self.poly.getNodes()
+            #for node in nodes:
+            #    if node != 'setup':   # but not the controller node
+            #       nodes[node].checkOnline()
             # check if devices off-line are back on-line?
 
 
     def handleLevelChange(self, level):
         logging.info('New log level: {}'.format(level))
-        logging.setLevel(level)
+        logging.setLevel(level['level'])
 
 
 
