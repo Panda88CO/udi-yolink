@@ -71,8 +71,12 @@ class YoLinkSetup (udi_interface.Node):
         time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
         
-        logging.debug('YoLinkSetup init DONE')
+        self.nodeList
 
+
+        logging.debug('YoLinkSetup init DONE')
+        
+     
 
 
 
@@ -129,21 +133,27 @@ class YoLinkSetup (udi_interface.Node):
                 udiYoDoorSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
                 isyNbr += 1
-            #elif self.deviceList[dev]['type'] == 'Manipulator':
-            #    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                
-            #    udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-            #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-            #    isyNbr += 1
+            elif self.deviceList[dev]['type'] == 'Manipulator':
+                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                
+                udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                isyNbr += 1
             elif self.deviceList[dev]['type'] == 'MotionSensor':     
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))
                 udiYoMotionSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']                
                 isyNbr += 1
             elif self.deviceList[dev]['type'] == 'Outlet':     
-                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                                        
-                udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                #logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))                                        
+                #udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
+                #self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
+                #isyNbr += 1
+                name = self.deviceList[dev]['deviceId'][:-14] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'] , self.deviceList[dev]['type'], str(name) ))                                        
+                udiYoOutlet(polyglot, name, name, self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
                 self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                isyNbr += 1
+
+
             elif self.deviceList[dev]['type'] == 'GarageDoor': 
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)), self.deviceList[dev]['type'] ))  
                 udiYoGarageDoor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], yoAccess, self.deviceList[dev] )
@@ -215,11 +225,18 @@ class YoLinkSetup (udi_interface.Node):
             self.yoAccess.get_access_token() #Keep token current
         if 'shortPoll' in polltype:
             self.heartbeat()
+            nodes = self.poly.getNodes()
+            for node in nodes:
+                if node != 'setup':   # but not the controller node
+                    nodes[node].checkOnline()
             # check if devices off-line are back on-line?
 
 
     def handleLevelChange(self, level):
         logging.info('New log level: {}'.format(level))
+        logging.setLevel(level)
+
+
 
     def handleParams (self, userParam ):
         logging.debug('handleParams')

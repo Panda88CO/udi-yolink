@@ -91,7 +91,8 @@ class udiYoOutlet(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoOutlet')
         self.node.setDriver('ST', 0, True, True)
-        self.yoOutlet.shut_down()
+        if self.yoOutlet.onlineStatus():
+            self.yoOutlet.shut_down()
 
 
     def updateStatus(self, data):
@@ -130,7 +131,12 @@ class udiYoOutlet(udi_interface.Node):
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
 
+    
     # Need to use shortPoll
+    def checkOnline(self):
+        logging.debug()
+
+        
     '''
     def pollDelays(self):
         delays =  self.yoOutlet.getDelays()
