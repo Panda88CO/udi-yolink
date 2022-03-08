@@ -114,7 +114,6 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV4', -1, True, True)
                 self.node.setDriver('GV8',0, True, True)
             
-            self.pollDelays
             tmp =  self.yoOutlet.getEnergy()
             power = tmp['power']
             watt = tmp['watt']

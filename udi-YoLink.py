@@ -20,8 +20,8 @@ from udiYoMultiOutletV2 import udiYoMultiOutlet
 from udiYoManipulatorV2 import udiYoManipulator
 
 
-from yoLinkPACOauth import YoLinkDevicesPAC
-from yoLinkOauth import YoLinkDevices
+#from oldStuff.yoLinkPACOauth import YoLinkDevicesPAC
+#from oldStuff.yoLinkOauth import YoLinkDevices
 
 try:
     import udi_interface
@@ -83,6 +83,7 @@ class YoLinkSetup (udi_interface.Node):
         self.tokenObtained = False
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
+        self.yoAccess = yoAccess
         self.deviceList = yoAccess.getDeviceList()
         while  self.devicesReady:
             time.sleep(2)
@@ -208,9 +209,14 @@ class YoLinkSetup (udi_interface.Node):
             self.reportCmd('DOF',2)
             self.hb = 0
 
-    def systemPoll (self, type):
+    def systemPoll (self, polltype):
         logging.info('System Poll executing')
-        self.heartbeat()
+        if 'longPoll' in polltype:
+            self.yoAccess.get_access_token() #Keep token current
+        if 'shortPoll' in polltype:
+            self.heartbeat()
+            # check if devices off-line are back on-line?
+
 
     def handleLevelChange(self, level):
         logging.info('New log level: {}'.format(level))

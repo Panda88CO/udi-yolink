@@ -26,7 +26,7 @@ class YoLinkMQTTClient(object):
         yolink.lock = Lock()
         yolink.callback = callback
         yolink.yoAccess = yoAccess
-        yolink.UaID = yoAccess.uaID
+        yolink.deviceInfo = deviceInfo
         yolink.homeID = yoAccess.homeID
         yolink.deviceId = deviceInfo['deviceId']
         yolink.uniqueID = yolink.deviceId#+str(int(time.time()))
@@ -140,7 +140,7 @@ class YoLinkMQTTClient(object):
         try:
 
             if (rc == 0):
-                logging.debug("{} - Successfully connected to broker {} ".format(yolink.devideInfo['name'], yolink.mqttURL))
+                logging.debug("{} - Successfully connected to broker {} ".format(yolink.deviceInfo['name'], yolink.mqttURL))
                 yolink.client.subscribe(yolink.topicResp)
                 yolink.client.subscribe(yolink.topicReq)
                 yolink.client.subscribe(yolink.topicReport)
@@ -217,6 +217,7 @@ class YoLinkMQTTClient(object):
             except Exception as E:
                 logging.error('Exception  - publish_data: ' + str(E))
         else: # token was renewed - we need to reconnect to the broker
+            logging.debug('access token renewed')
             yolink.accessToken = token 
             yolink.client.loop_stop()
             yolink.client.disconnect()

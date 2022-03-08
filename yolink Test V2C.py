@@ -36,7 +36,7 @@ from cryptography.fernet import Fernet
 #from oauthlib.oauth2 import BackendApplicationClient
 #from requests.auth import HTTPBasicAuth
 #from rauth import OAuth2Service
-from requests_oauthlib import OAuth2Session
+#from requests_oauthlib import OAuth2Session
 '''
 if (os.path.exists('./devices.json')):
     #logging.debug('reading /devices.json')
@@ -131,7 +131,6 @@ csName = 'Panda88'
 
 yoAccess = YoLinkInitPAC (UAID, SECRET_KEY)
 
-
 DeviceList = yoAccess.getDeviceList()
 
 '''
@@ -167,7 +166,10 @@ FishMultiOutput = YoLinkMultiOutlet(yoAccess, FishTank)
 FishMultiOutput.delayTimerCallback(printDelay, 5)
 MultiOutput = YoLinkMultiOutlet(yoAccess, MultiOUtlet2)
 MultiOutput.delayTimerCallback(printDelay, 10)
-
+#while True:
+#    print(yoAccess.get_access_token())
+#    MultiOutput.refreshDevice()
+#    time.sleep(10)
 #WineCellarTemp =  YoLinkTHSensor(yoAccess, WineCoolerTemp)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
 #WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)

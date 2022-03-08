@@ -117,7 +117,7 @@
    <nodeDef id="yosubusb" nls="nlssubusb">
       <editors />
       <sts>
-         <st id="GV0" editor="usbctrl" />
+         <st id="GV0" editor="usbstate" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>

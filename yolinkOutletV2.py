@@ -65,12 +65,6 @@ class YoLinkOutl(YoLinkMQTTDevice):
         else:
             return(False)
     
-    '''
-    def getDelays(yolink):
-        yolink.online = yolink.getOnlineStatus()
-        if yolink.online :
-            return super().getDelays()
-    '''
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
@@ -97,9 +91,10 @@ class YoLinkOutl(YoLinkMQTTDevice):
 
         yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
-            return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
-        else:
-            return({'power': -1, 'watt':-1})
+            try:    
+                return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['watt']})
+            except:
+                return({'power': -1, 'watt':-1})
     
     
 class YoLinkOutlet(YoLinkOutl):
