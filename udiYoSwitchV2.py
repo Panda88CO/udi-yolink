@@ -84,7 +84,7 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSwitch.shut_down()
 
     def checkOnline(self):
-        self.yoSwitch.refreshState() 
+        self.yoSwitch.refreshDevice() 
 
     def updateStatus(self, data):
         logging.info('updateStatus - Switch')

@@ -125,7 +125,7 @@ class udiYoOutlet(udi_interface.Node):
     
     
     def checkOnline(self):
-        self.yoOutlet.refreshState()
+        self.yoOutlet.refreshDevice()
 
 
     def switchControl(self, command):

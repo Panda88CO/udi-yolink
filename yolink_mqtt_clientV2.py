@@ -158,10 +158,15 @@ class YoLinkMQTTClient(object):
             logging.debug('Disconnect - stop loop')
             yolink.client.loop_stop()
         else:
-            logging.debug('Unintentional disconnect - Restarting loop')
-            yolink.accessToken = yolink.yoAccess.get_access_token() 
-            #yolink.client.loop_stop()
+            logging.debug('Unintentional disconnect - Reacquiring connection')
+            #yolink.accessToken = yolink.yoAccess.get_access_token() 
+            yolink.client.loop_stop()
             yolink.client.disconnect()
+            while not yolink.yoAccess.request_new_token():
+                time.sleep(60)
+                logging.info('Trying to acquire new token')
+            time.sleep(1)
+            yolink.accessToken = yolink.yoAccess.get_access_token()
             yolink.connect_to_broker()
 
 

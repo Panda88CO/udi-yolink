@@ -82,7 +82,7 @@ class udiYoLeakSensor(udi_interface.Node):
         self.yoLeakSensor.shut_down()
 
     def checkOnline(self):
-        self.yoLeakSensor.refreshSensor()
+        self.yoLeakSensor.refreshDevice()
     
     def waterState(self):
         if self.yoLeakSensor.online:

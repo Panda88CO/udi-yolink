@@ -90,7 +90,7 @@ class udiYoDoorSensor(udi_interface.Node):
             return(99)
     
     def checkOnline(self):
-        self.yoDoorSensor.refreshSensor()
+        self.yoDoorSensor.refreshDevice()
 
     def updateStatus(self, data):
         logging.debug('updateStatus - {}'.format(self.name))

@@ -81,7 +81,7 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor.shut_down()
 
     def checkOnline(self):
-        self.yoMotionsSensor.refreshState()   
+        self.yoMotionsSensor.refreshDevice()   
     
 
     def MotionState(self):

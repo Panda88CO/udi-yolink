@@ -100,7 +100,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor.shut_down()
 
     def checkOnline(self):
-        self.yoTHsensor.refreshState() 
+        self.yoTHsensor.refreshDevice() 
 
     def updateStatus(self, data):
         logging.debug('udiYoTHsensor - updateStatus')

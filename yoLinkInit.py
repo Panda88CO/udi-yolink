@@ -79,7 +79,6 @@ class YoLinkInitPAC(object):
             else:
                 yoAccess.refresh_token()
         yoAccess.lock.release()
-        
         return(yoAccess.token['access_token'])
                 
     def is_token_expired (yoAccess, accessToken):

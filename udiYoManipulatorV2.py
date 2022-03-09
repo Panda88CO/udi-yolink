@@ -79,7 +79,7 @@ class udiYoManipulator(udi_interface.Node):
             self.yoManipulator.shut_down()
 
     def checkOnline(self):
-        self.yoManipulator.refreshState()    
+        self.yoManipulator.refreshDevice()    
 
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoManipulator')

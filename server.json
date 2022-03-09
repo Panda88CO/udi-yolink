@@ -13,8 +13,8 @@
         "YOLINK_URL" : "https://api.yosmart.com/openApi",   
         "YOLINKV2_URL": "https://api.yosmart.com/open/yolink/v2/api", 
         "TOKEN_URL" : "https://api.yosmart.com/open/yolink/token",
-        "UAID":"",
-        "SECRET_KEY":"",
+        "UAID":"ua_93BF42449446432EA43E49887492C3FC",
+        "SECRET_KEY":"sec_v1_2IQ13RYyyvxMBpPK3POF0A==",
         "MQTT_URL":"api.yosmart.com",
         "MQTT_PORT":8003
 	    },

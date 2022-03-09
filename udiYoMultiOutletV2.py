@@ -340,7 +340,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yoMultiOutlet.shut_down()
 
     def checkOnline(self):
-        self.yoMultiOutlet.refreshState() 
+        self.yoMultiOutlet.refreshDevice() 
 
     def updateStatus(self, data):
         

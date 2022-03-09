@@ -31,11 +31,7 @@ except ImportError:
 polyglot = None
 #Parameters = None
 
-client_id = '60dd7fa7960d177187c82039'
-client_secret = '3f68536b695a435d8a1a376fc8254e70'
-yolinkURL =  'https://api.yosmart.com/openApi' 
-yolinkV2URL =  'https://api.yosmart.com/open/yolink/v2/api' 
-tokenURL = "https://api.yosmart.com/open/yolink/token"
+
 
 
 
@@ -70,7 +66,7 @@ class YoLinkSetup (udi_interface.Node):
         self.node.setDriver('ST', 1, True, True)
         
         logging.debug('YoLinkSetup init DONE')
-        
+        self.nodeDefineDone = True
      
     def start (self):
         logging.info('Start executing start')
@@ -198,20 +194,28 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
-
     def systemPoll (self, polltype):
-        logging.info('System Poll executing')
-        if 'longPoll' in polltype:
-            self.yoAccess.get_access_token() #Keep token current
-            logging.info('Updating device status')
-            nodes = self.poly.getNodes()
-            for node in nodes:
-                if node != 'setup':   # but not the controller node
-                   nodes[node].checkOnline()
-             
-        if 'shortPoll' in polltype:
-            self.heartbeat()
+        pass
 
+    '''
+    def systemPoll (self, polltype):
+        if self.nodeDefineDone:
+            logging.info('System Poll executing')
+            if 'longPoll' in polltype:
+                #Keep token current
+                if not self.yoAccess.refresh_token(): #refresh failed
+                    while not self.yoAccess.request_new_token()
+                            time.sleep(60)
+                logging.info('Updating device status')
+                nodes = self.poly.getNodes()
+                for node in nodes:
+                    if node != 'setup':   # but not the controller node
+                        nodes[node].checkOnline()
+                
+                
+            if 'shortPoll' in polltype:
+                self.heartbeat()
+    '''
 
 
     def handleLevelChange(self, level):
@@ -225,44 +229,46 @@ class YoLinkSetup (udi_interface.Node):
         
         self.Parameters.load(userParam)
         self.poly.Notices.clear()
-   
-    
-        if 'UAID' in userParam:
-            self.uaid = userParam['UAID']
-        else:
-            self.poly.Notices['uaid'] = 'Missing UAID parameter'
-            self.uaid = ''
+        try:
+            if 'YOLINKV2_URL' in userParam:
+                self.yolinkV2URL = userParam['YOLINKV2_URL']
+            else:
+                self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
+                self.yolinkV2URL = ''
 
-        if 'SECRET_KEY' in userParam:
-            self.secretKey = userParam['SECRET_KEY']
-        else:
-            self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
-            self.secretKey = ''
-    
+            if 'TOKEN_URL' in userParam:
+                self.tokenURL = userParam['TOKEN_URL']
+            else:
+                self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
+                self.tokenURL = ''
 
-        if 'YOLINKV2_URL' in userParam:
-            self.yolinkV2URL = userParam['YOLINKV2_URL']
-        else:
-            self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
-            self.yolinkV2URL = ''
+            if 'MQTT_URL' in userParam:
+                self.mqttURL = userParam['MQTT_URL']
+            else:
+                self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
+                self.mqttURL = ''
 
-        if 'TOKEN_URL' in userParam:
-            self.tokenURL = userParam['TOKEN_URL']
-        else:
-            self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
-            self.tokenURL = ''
+            if 'MQTT_PORT' in userParam:
+                self.mqttPort = userParam['MQTT_PORT']
+            else:
+                self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
+                self.mqttPort = 0
 
-        if 'MQTT_URL' in userParam:
-            self.mqttURL = userParam['MQTT_URL']
-        else:
-            self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
-            self.mqttURL = ''
+            if 'UAID' in userParam:
+                self.uaid = userParam['UAID']
+            else:
+                self.poly.Notices['uaid'] = 'Missing UAID parameter'
+                self.uaid = ''
 
-        if 'MQTT_PORT' in userParam:
-            self.mqttPort = userParam['MQTT_PORT']
-        else:
-            self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
-            self.mqttPort = 0
+            if 'SECRET_KEY' in userParam:
+                self.secretKey = userParam['SECRET_KEY']
+            else:
+                self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
+                self.secretKey = ''
+        except:
+            logging.debug('Error: {}'.format(userParam))
+
+ 
 
     
     id = 'setup'
