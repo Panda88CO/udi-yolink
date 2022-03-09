@@ -1,11 +1,5 @@
-
-import time
-
+#!/usr/bin/env python3
 from threading import Timer, Lock
-
-from  datetime import datetime
-from typing import List
-from dateutil.tz import *
 
 try:
     import udi_interface
@@ -44,6 +38,8 @@ class CountdownTimer(object):
         self.updateInterval = updateInterval
         #self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
 
+
+    # list of delays with format [{'ch':channel, 'on':on in min, 'off':off in min}]
     def addDelays(self, delayTimes):
         self.lock.acquire()
         if not self.timerRunning:
@@ -70,7 +66,7 @@ class CountdownTimer(object):
         self.lock.release()
 
    
-
+    # updated the reporting interval in sec
     def timerReportInterval (self, reportInterval):
         self.lock.acquire()
         self.updateInterval = reportInterval
@@ -81,7 +77,8 @@ class CountdownTimer(object):
         self.timer.start()
         self.timerRunning = True
         self.lock.release() 
-        
+
+    # updated the remainig time in the running count down timer         
     def timeUpdate(self):
         activeDelays = False
         self.lock.acquire()

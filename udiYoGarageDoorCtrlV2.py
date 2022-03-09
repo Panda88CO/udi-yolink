@@ -44,19 +44,13 @@ class udiYoGarageDoor(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
-        #  
-        logging.debug('udiYoGarageDoor INIT')
-        self.yoAccess=yoAccess
 
+        
+        self.yoAccess=yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
-        #self.address = address
-        #self.poly = polyglot
+        logging.debug('udiYoGarageDoor INIT - {}'.format(deviceInfo['name']))
 
-        #self.Parameters = Custom(polyglot, 'customparams')
-        # subscribe to the events we want
-        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -64,14 +58,9 @@ class udiYoGarageDoor(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.node = polyglot.getNode(address)
-        
-
-        #self.switchState = self.yoSwitch.getState()
-        #self.switchPower = self.yoSwitch.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkThsensor')
+        logging.info('start - YoLinkThsensor')
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.yoAccess, self.devInfo, self.updateStatus)
 
         time.sleep(2)
@@ -83,27 +72,22 @@ class udiYoGarageDoor(udi_interface.Node):
         self.yoDoorControl.online = True
         self.node.setDriver('GV8', self.yoDoorControl.bool2Nbr(self.yoDoorControl.online), True, True)
         
-
+    def checkOnline(self):
+        pass
+        
     
     def stop (self):
         logging.info('Stop udiYoGarageDoor')
         self.node.setDriver('ST', 0, True, True)
         self.yoDoorControl.shut_down()
 
-
+    
     def updateStatus(self, data):
-        logging.debug('updateStatus - yoTHsensor')
+        logging.debug('updateStatus - udiYoGarageDoor')
         self.yoDoorControl.updateCallbackStatus(data)
         logging.debug(data)
         if self.node is not None:
             self.node.setDriver('GV8', self.yoDoorControl.bool2Nbr(self.yoDoorControl.online), True, True)
-
-
-    '''
-    def poll(self, polltype):
-        logging.debug('ISY poll ')
-        logging.debug(polltype)
-    '''
 
 
     def toggleDoor(self, command = None):

@@ -5,9 +5,6 @@ Polyglot TEST v3 node server
 
 MIT License
 """
-from os import truncate
-
-import sys
 import time
 from yolinkDoorSensorV2 import YoLinkDoorSens
 
@@ -49,37 +46,30 @@ class udiYoDoorSensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('udiYoDoorSensor INIT')
-
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.name = name
-        #self.address = address
-        #self.poly = polyglot
+        logging.debug('udiYoDoorSensor INIT - {}'.format(deviceInfo['name']))
 
-        #self.Parameters = Custom(polyglot, 'customparams')
-        # subscribe to the events we want
-        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
+        
+
+
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
-        # start processing events and create add our controller node
+
         polyglot.ready()
         self.poly.addNode(self)
         self.node = polyglot.getNode(address)
         
 
-        #self.switchState = self.yoSwitch.getState()
-        #self.switchPower = self.yoSwitch.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
-
     def start(self):
-        print('start - udiYoDoorSensor')
+        logging.info('start - udiYoDoorSensor')
         self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)     
         self.yoDoorSensor.initNode()
         time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
-        #time.sleep(3)
+
 
     def initNode(self):
         self.yoDoorSensor.refreshSensor()
@@ -98,6 +88,9 @@ class udiYoDoorSensor(udi_interface.Node):
             return(1)
         else:
             return(99)
+    
+    def checkOnline(self):
+        self.yoDoorSensor.refreshSensor()
 
     def updateStatus(self, data):
         logging.debug('updateStatus - {}'.format(self.name))
@@ -115,11 +108,6 @@ class udiYoDoorSensor(udi_interface.Node):
                 self.node.setDriver('GV8', 0, True, True)
 
 
-    def poll(self, polltype):
-        logging.debug('ISY poll ')
-        logging.debug(polltype)
-        if 'longPoll' in polltype:
-            self.yoDoorSensor.refreshSensor()
 
     def update(self, command = None):
         logging.info('{} - Update Status Executed'.format(self.name))

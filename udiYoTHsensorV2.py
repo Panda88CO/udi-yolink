@@ -59,7 +59,7 @@ class udiYoTHsensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('udiYoTHsensor INIT')
+        logging.debug('udiYoTHsensor INIT- {}'.format(deviceInfo['name']))
 
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
@@ -84,7 +84,7 @@ class udiYoTHsensor(udi_interface.Node):
         #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkTHsensor')
+        logging.info('Start udiYoTHsensor')
         self.yoTHsensor  = YoLinkTHSen(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoTHsensor.initNode()
         self.node.setDriver('ST', 1, True, True)
@@ -99,18 +99,13 @@ class udiYoTHsensor(udi_interface.Node):
         self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor.shut_down()
 
-    '''
-    def yoTHsensor.bool2Nbr(self, bool):
-        if bool:
-            return(1)
-        else:
-            return(0)
-    '''
+    def checkOnline(self):
+        self.yoTHsensor.refreshState() 
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - yoTHsensor')
+        logging.debug('udiYoTHsensor - updateStatus')
         self.yoTHsensor.updateCallbackStatus(data)
-        logging.debug(data)
+
         alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
             if self.yoTHsensor.getOnlineStatus():
@@ -134,16 +129,10 @@ class udiYoTHsensor(udi_interface.Node):
                 self.node.setDriver('BATLVL', 99, True, True)
                 self.node.setDriver('GV7',99, True, True)
                 self.node.setDriver('GV8', 0, True, True)
-    '''
-    def poll(self, polltype):
-        logging.debug('ISY poll - {} '.format(polltype))
 
-        if 'longPoll' in polltype:
-            self.yoTHsensor.refreshSensor()
-    '''         
 
     def update(self, command = None):
-        logging.info('THsensor Update Status Executed')
+        logging.info('THsensor Update')
         self.yoTHsensor.refreshState()
        
 

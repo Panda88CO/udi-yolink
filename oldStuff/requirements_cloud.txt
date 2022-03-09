@@ -1,5 +1,0 @@
-tesla_powerwall
-requests_oauth2
-svglib
-reportlab
-requests>=2.22.0

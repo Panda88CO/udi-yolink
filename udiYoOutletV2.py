@@ -49,25 +49,16 @@ class udiYoOutlet(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
-        #  
-        logging.debug('udiYoOutlet INIT')
+
+        logging.debug('udiYoOutlet INIT- {}'.format(deviceInfo['name']))
 
         
         self.yoAccess = yoAccess
 
         self.devInfo =  deviceInfo   
         self.yoOutlet = None
-        #self.outletStates = {'ON':1, 'OFF':0, 'UNKNOWN':2}
-        #self.address = address
-        #self.poly = polyglot
-        #self.count = 0
-        #self.n_queue = []
+        self.powerSupported = True # assume 
 
-        #self.Parameters = Custom(polyglot, 'customparams')
-        # subscribe to the events we want
-        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
-        #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         # start processing events and create add our controller node
@@ -76,12 +67,9 @@ class udiYoOutlet(udi_interface.Node):
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
 
-        #self.switchState = self.yoOutlet.getState()
-        #self.switchPower = self.yoOutlet.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkOutlet')
+        logging.info('start - YoLinkOutlet')
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
         self.yoOutlet.initNode()
@@ -96,7 +84,7 @@ class udiYoOutlet(udi_interface.Node):
 
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - TestYoLinkNode')
+        logging.info('udiYoOutlet updateStatus')
         self.yoOutlet.updateCallbackStatus(data)
 
         if self.node is not None:
@@ -109,20 +97,23 @@ class udiYoOutlet(udi_interface.Node):
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV8',1, True, True)
+                tmp =  self.yoOutlet.getEnergy()
+                if tmp != None:
+                    power = tmp['power']
+                    watt = tmp['watt']
+                    self.node.setDriver('GV3', power, True, True)
+                    self.node.setDriver('GV4', watt, True, True)
+
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV3', -1, True, True)
                 self.node.setDriver('GV4', -1, True, True)
                 self.node.setDriver('GV8',0, True, True)
             
-            tmp =  self.yoOutlet.getEnergy()
-            power = tmp['power']
-            watt = tmp['watt']
-            self.node.setDriver('GV3', power, True, True)
-            self.node.setDriver('GV4', watt, True, True)
+
 
     def updateDelayCountdown( self, timeRemaining):
-        logging.debug('updateDelayCountDown:  delays {}'.format(timeRemaining))
+        logging.debug('udiYoOutlet updateDelayCountDown:  delays {}'.format(timeRemaining))
         for delayInfo in range(0, len(timeRemaining)):
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
@@ -134,39 +125,11 @@ class udiYoOutlet(udi_interface.Node):
     
     
     def checkOnline(self):
-        logging.debug()
-        #return()
+        self.yoOutlet.refreshState()
 
-
-    '''
-    def pollDelays(self):
-        delays =  self.yoOutlet.getDelays()
-        logging.debug('delays: ' + str(delays))
-        #print('on delay: ' + str(delays['on']))
-        #print('off delay: '+ str(delays['off']))
-        if delays != None and  self.yoOutlet.online:
-            if delays['on'] != 0 or delays['off'] !=0:
-                delays =  self.yoOutlet.refreshDelays() # should be able to calculate without polling 
-                if 'on' in delays:
-                    self.node.setDriver('GV1', delays['on'], True, True)
-                if 'off' in delays:
-                    self.node.setDriver('GV2', delays['off'], True, True)               
-        else:
-            self.node.setDriver('GV1', 0, True, True)     
-            self.node.setDriver('GV2', 0, True, True)     
-    '''
-    '''
-    def poll(self, polltype):
-        logging.debug('ISY poll ')
-        logging.debug(polltype)
-        if self.yoOutlet.getOnlineStatus():
-            if 'longPoll' in polltype:
-                self.yoOutlet.refreshState()
-                #self.yoOutlet.refreshSchedules()
-    ''' 
 
     def switchControl(self, command):
-        logging.info('switchControl')
+        logging.info('udiYoOutlet switchControl')
         state = int(command.get('value'))     
         if state == 1:
             self.yoOutlet.setState('ON')
@@ -174,13 +137,13 @@ class udiYoOutlet(udi_interface.Node):
             self.yoOutlet.setState('OFF')
         
     def setOnDelay(self, command ):
-        logging.info('setOnDelay')
+        logging.info('udiYoOutlet setOnDelay')
         delay =int(command.get('value'))
         self.yoOutlet.setOnDelay(delay)
         self.node.setDriver('GV1', delay*60, True, True)
 
     def setOffDelay(self, command):
-        logging.info('setOnDelay Executed')
+        logging.info('udiYoOutlet setOnDelay Executed')
         delay =int(command.get('value'))
         self.yoOutlet.setOffDelay(delay)
         self.node.setDriver('GV2', delay*60, True, True)
@@ -190,7 +153,7 @@ class udiYoOutlet(udi_interface.Node):
     def update(self, command = None):
         logging.info('Update Status Executed')
         self.yoOutlet.refreshState()
-        #self.yoOutlet.refreshSchedules()     
+ 
 
 
     commands = {

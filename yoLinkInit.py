@@ -27,7 +27,7 @@ class YoLinkInitPAC(object):
         yoAccess.secID = secID
         yoAccess.apiType = 'UAC'
         yoAccess.tokenExpTime = 0
-        yoAccess.timeExpMarging = 600 #10min
+        yoAccess.timeExpMarging = 3600 # 1 hour - most devices report once per hour
         #yoAccess.timeExpMarging = 7170 #min for testing 
         yoAccess.token = None
         yoAccess.get_access_token( )

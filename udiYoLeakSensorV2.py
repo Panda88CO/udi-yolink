@@ -47,15 +47,11 @@ class udiYoLeakSensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
-        logging.debug('udiYoLeakSensor  INIT')
+        logging.debug('udiYoLeakSensor  INIT - {}'.format(deviceInfo['name']))
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
-        #self.address = address
-        #self.poly = polyglot
 
-        #self.Parameters = Custom(polyglot, 'customparams')
-        # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -64,14 +60,9 @@ class udiYoLeakSensor(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.node = polyglot.getNode(address)
-        
-
-        #self.switchState = self.yoSwitch.getState()
-        #self.switchPower = self.yoSwitch.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkLeakSensor')
+        logging.info('start - YoLinkLeakSensor')
         self.yoLeakSensor  = YoLinkLeakSen(self.yoAccess, self.devInfo, self.updateStatus)
         if self.yoLeakSensor:
             self.yoLeakSensor.initNode()
@@ -90,13 +81,8 @@ class udiYoLeakSensor(udi_interface.Node):
         self.node.setDriver('ST', 0, True, True)
         self.yoLeakSensor.shut_down()
 
-    '''
-    def yoTHsensor.bool2Nbr(self, bool):
-        if bool:
-            return(1)
-        else:
-            return(0)
-    '''
+    def checkOnline(self):
+        self.yoLeakSensor.refreshSensor()
     
     def waterState(self):
         if self.yoLeakSensor.online:
@@ -110,9 +96,6 @@ class udiYoLeakSensor(udi_interface.Node):
     def updateStatus(self, data):
         logging.debug('updateStatus - yoLeakSensor')
         self.yoLeakSensor.updateCallbackStatus(data)
-        #motionState = self.yoLeakSensor.getMootion()
-
-        logging.debug(data)
         if self.node is not None:
             if self.yoLeakSensor.online:
                 waterState =   self.waterState()  
@@ -126,11 +109,6 @@ class udiYoLeakSensor(udi_interface.Node):
                 self.node.setDriver('GV8', 0, True, True)
 
 
-    def poll(self, polltype):
-        logging.debug('ISY poll ')
-        logging.debug(polltype)
-        if 'longPoll' in polltype:
-            self.yoLeakSensor.refreshSensor()
 
     def update(self, command = None):
         logging.info('THsensor Update Status Executed')

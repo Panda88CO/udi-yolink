@@ -16,7 +16,7 @@ except ImportError:
 
 import paho.mqtt.client as mqtt
 
-DEBUG = True
+DEBUG = False
 """
 Object representation for YoLink MQTT Client
 """
@@ -44,17 +44,17 @@ class YoLinkMQTTClient(object):
         #yolink.lastDataPacket = {}
   
         try:
-            print('initialize MQTT' )
+            logging.debug('initialize MQTT' )
             yolink.client = mqtt.Client(yolink.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
             yolink.client.on_connect = yolink.on_connect
             yolink.client.on_message = yolink.on_message
             yolink.client.on_subscribe = yolink.on_subscribe
             yolink.client.on_disconnect = yolink.on_disconnect
-            print('finish subscribing ')
+            logging.debug('finish subscribing ')
         except Exception as E:
             logging.error('Exception  - -init-: ' + str(E))
         yolink.messagePending = False
-        logging.debug(yolink.deviceId)
+        #logging.debug(yolink.deviceId)
         #yolink.client.tls_set()
 
     
@@ -72,10 +72,8 @@ class YoLinkMQTTClient(object):
             time.sleep(1)
             yolink.client.connect(yolink.mqttURL, yolink.mqttPort, 30)
             #time.sleep(3)
-            logging.debug ('connect:')
+
             yolink.client.loop_start()
-            #yolink.client.loop_forever()
-            #logging.debug('loop started')
             time.sleep(1)
         except Exception as E:
             logging.error('Exception  - connect_to_broker: ' + str(E))
@@ -85,7 +83,7 @@ class YoLinkMQTTClient(object):
         """
         Callback for broker published events
         """
-        maxRetry = 3
+        maxRetry = 2
         #logging.debug('on_message')
         #logging.debug(client)
         #logging.debug(userdata)
@@ -96,24 +94,23 @@ class YoLinkMQTTClient(object):
         if DEBUG:
             dataTemp = str(json.dumps(payload))
         logging.debug('on_message: {}\n {}'.format(msg.topic, payload))
-        #logging.debug(payload)
+
 
         if  msg.topic == yolink.topicReport:
             if payload['deviceId'] == yolink.deviceId :
-                #logging.debug (payload)
                 yolink.callback(payload)
-                #logging.debug(' device reporting')
+
             if DEBUG:
                 yolink.savePacket(msg.topic, dataTemp, 'EVENT')
         elif msg.topic == yolink.topicResp:
-                #yolink.dataQueue.put(payload)
-                #logging.debug('received Response: {} \n {}'.format(yolink.topicReq, payload) )
+
                 if payload['code'] == '000000':
                     yolink.retryNbr = 0
                     yolink.callback(payload)
                 else:
                     yolink.retryNbr += 1
                     if yolink.retryNbr <= maxRetry:
+                        yolink.callback(payload)
                         time.sleep(2)
                         yolink.publish_data(yolink.lastDataPacket)
                     else:
@@ -122,14 +119,13 @@ class YoLinkMQTTClient(object):
                 if DEBUG:
                     yolink.savePacket(msg.topic, dataTemp, 'RESP')
         elif msg.topic == yolink.topicReq:
-                #logging.debug (payload)
-                #logging.debug('\n')
+
                 if DEBUG:
                     yolink.savePacket(msg.topic, dataTemp, 'REQ')
         else:
-            logging.debug('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
+            logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
 
-        #logging.debug("Event:{0} Device:{1} State:{2}".format(event, yolink.device_hash[deviceId].get_name(), state))
+        
    
     def on_connect(yolink, client, userdata, flags, rc):
         """
@@ -187,8 +183,7 @@ class YoLinkMQTTClient(object):
 
     def publish_data(yolink, data):
         max_retries = 3
-        logging.debug('publish_data: ')
-        logging.debug(data)
+        #logging.debug('publish_data: {}'.format(data))
         #yolink.lastDataPacket = data
         token = yolink.yoAccess.get_access_token()
         if yolink.accessToken == token:
@@ -198,7 +193,7 @@ class YoLinkMQTTClient(object):
                 dataTemp = str(json.dumps(data))    
                 result = yolink.client.publish(yolink.topicReq, dataTemp)
 
-                logging.debug('publish result: {}'.format(result.rc))
+                #logging.debug('publish result: {}'.format(result.rc))
                 if result.rc != 0:
                     attempts = 0 
                     if result.rc == 4: #try to renew token
@@ -217,7 +212,7 @@ class YoLinkMQTTClient(object):
             except Exception as E:
                 logging.error('Exception  - publish_data: ' + str(E))
         else: # token was renewed - we need to reconnect to the broker
-            logging.debug('access token renewed')
+            logging.info('access token renewed')
             yolink.accessToken = token 
             yolink.client.loop_stop()
             yolink.client.disconnect()
@@ -252,5 +247,3 @@ class YoLinkMQTTClient(object):
 
     def shut_down(yolink):
         yolink.client.loop_stop()
-        #yolink.client.disconnect()
-    

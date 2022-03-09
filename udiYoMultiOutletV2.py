@@ -77,6 +77,9 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.debug('udiYoSubOutlet - stop')
         self.node.setDriver('ST', 0, True, True)
        
+    def checkOnline(self):
+        pass
+
 
     def updateOutNode(self, outeletstate, onDelay, offDelay):
         logging.debug('udiYoSubOutlet - updateOutNode: state={} onD={} offD={}'.format(outeletstate, onDelay, offDelay))
@@ -86,25 +89,25 @@ class udiYoSubOutlet(udi_interface.Node):
         #self.node.setDriver('GV4', self.port, False, False)
       
     def updateDelayCountdown(self, timeRemaining):
-        logging.debug('updateDelayCountDown: port: {} delays: {}'.format(self.port, timeRemaining))
+        logging.debug('udiYoSubOutlet updateDelayCountDown: port: {} delays: {}'.format(self.port, timeRemaining))
         ch = self.port 
         for delayInfo in range(0, len(timeRemaining)):
-            logging.debug('debug port: {} timeReim: {}'.format(ch, timeRemaining))
+            #logging.debug('debug port: {} timeReim: {}'.format(ch, timeRemaining))
             if 'ch' in timeRemaining[delayInfo]:
                 
                 if timeRemaining[delayInfo]['ch'] == ch:
-                    logging.debug('debug port: {} timeReim: {}  tr[delaying]{}'.format(ch, timeRemaining, timeRemaining[delayInfo] ))
+                    #logging.debug('debug port: {} timeReim: {}  trdelaying]{}'.format(ch, timeRemaining, timeRemaining[delayInfo] ))
                     if 'on' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, True)
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, True)
-                logging.debug('display update {}'.format(timeRemaining))
+                #logging.debug('display update {}'.format(timeRemaining))
         
 
     def switchControl(self, command):
-        logging.info('switchControl')
+        logging.info('udiYoSubOutlet switchControl')
         state = int(command.get('value'))  
-        logging.debug('switchControl port: {}, state: {}'.format(self.port, state))   
+        #logging.debug('switchControl port: {}, state: {}'.format(self.port, state))   
         if state == 1:
             self.yolink.setMultiOutState(self.port, 'ON')
 
@@ -114,7 +117,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
         
     def setOnDelay(self, command ):
-        logging.info('setOnDelay')
+        logging.info('udiYoSubOutlet setOnDelay Executed')
         self.onDelay =int(command.get('value'))
         self.yolink.setMultiOutDelayList([{'ch':self.port, 'on':self.onDelay}]  )
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
@@ -122,14 +125,14 @@ class udiYoSubOutlet(udi_interface.Node):
         
 
     def setOffDelay(self, command):
-        logging.info('setOnDelay Executed')
+        logging.info('udiYoSubOutlet setOffDelay Executed')
         self.offDelay =int(command.get('value'))
         self.yolink.setMultiOutDelayList([{'ch':self.port, 'off':self.offDelay }]  )
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
 
 
     def update(self, command = None):
-        logging.info('Update Status Executed')
+        logging.info('udiYoSubOutlet Update Executed')
         self.yolink.getMultiOutStates()
 
     commands = {
@@ -162,9 +165,6 @@ class udiYoSubUSB(udi_interface.Node):
 
         #self.port = port
         logging.debug('udiYoSubUSB - init - port {}'.format(self.usbPort))
-        #logging.debug('self.address : ' + str(self.address))
-        #logging.debug('self.name :' + str(self.name))    
-
 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -188,16 +188,18 @@ class udiYoSubUSB(udi_interface.Node):
             logging.debug('Exception: {}'.format(e))
 
     def stop (self):
-        logging.debug('udiYoSubUSB - stop')
+        logging.info('udiYoSubUSB - stop')
         self.node.setDriver('ST', 0, True, True)
-
+    
+    def checkOnline(self):
+        pass
 
     def updateUsbNode(self, gv0):
-        logging.debug('udiYoSubUSB - updateUsbNode: {}'.format(gv0))
+        logging.info('udiYoSubUSB - updateUsbNode: {}'.format(gv0))
         self.node.setDriver('GV0', gv0, True, True)
 
     def usbControl(self, command):
-        logging.info('switchControl')
+        logging.info('udiYoSubUSB - usbControl')
 
         state = int(command.get('value'))     
         if state == 1:
@@ -261,11 +263,6 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
 
-        
-
-        #self.switchstate = self.yoMultiOutlet.getstate()
-        #self.switchPower = self.yoMultiOutlet.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
         self.subNodesReady = False
@@ -286,13 +283,15 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.subUsb = {}
             self.subOutletAdr ={}
             self.subUsbAdr = {}
+            self.outletName = 'outlet'
+            self.usbName = 'usb'
             self.node.setDriver('GV8', 1, True, True)
             for port in range(0,self.yoMultiOutlet.nbrOutlets):
                 try:
-                    logging.debug('Adding sub outlet : {}'.format(port))
-                    self.subOutletAdr[port] = self.address+'s'+str(port)
-                    logging.debug('create: {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'SubOutlet-'+str(port+1), port))
-                    self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'SubOutlet-'+str(port+1),port, self.yoMultiOutlet)
+                    #logging.debug('Adding sub outlet : {}'.format(port))
+                    self.subOutletAdr[port] =  self.address[0:11]+'_o' + str(port)
+                    logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1), port))
+                    self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1),port, self.yoMultiOutlet)
                     self.poly.addNode(self.subOutlet[port])
                     self.wait_for_node_done()
                                     
@@ -301,8 +300,9 @@ class udiYoMultiOutlet(udi_interface.Node):
             for usb in range(0, self.yoMultiOutlet.nbrUsb):
                         
                 try:
-                    self.subUsbAdr[usb] = self.address+'u'+str(usb)
-                    self.subUsb[usb] = udiYoSubUSB(self.poly, self.address,self.subUsbAdr[usb] , 'USB Port-'+str(usb),usb, self.yoMultiOutlet)
+                    self.subUsbAdr[usb] = self.address[0:11]+'_u'+str(usb)
+                    logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
+                    self.subUsb[usb] = udiYoSubUSB(self.poly, self.address,self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
                     self.poly.addNode(self.subUsb[usb])
                     self.wait_for_node_done()
                     self.usbExists = True
@@ -313,34 +313,16 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.createdNodes = self.poly.getNodes()
             logging.info('udiYoMultiOutlet - finished creating sub nodes')
             #logging.debug(self.subnodeAdr)
-            logging.debug(self.createdNodes)
+            #logging.debug(self.createdNodes)
     
             self.yoMultiOutlet.refreshMultiOutlet()
-            logging.debug('Finished  MultiOutlet start')
+            #logging.debug('Finished  MultiOutlet start')
         else:
             logging.info('MultiOulet is not online')
             self.ports = 0
             self.nbrOutlets = 0
             self.node.setDriver('ST', 0, True, True)
 
-
-    '''
-    def controlUsb(self, controlCmd):
-        logging.debug('controlDevice')
-    '''
-
-    '''
-    def controlOutlet(self, port, controlCmd):
-        logging.debug('controlOutlet')
-        if 'switch' in controlCmd:
-            self.subOutletUpdates(port, controlCmd['switch'])
-        elif 'delayOn' in controlCmd:
-            logging.debug('setting On delay')
-        elif 'delayOff' in controlCmd:
-            logging.debug('setting Off delay')
-        else:
-            logging.error ('Unknown command')
-    '''
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -350,28 +332,15 @@ class udiYoMultiOutlet(udi_interface.Node):
             time.sleep(0.1)
         self.n_queue.pop()
 
-    '''
-    def subOutletUpdates(self, port, state):
-        logging.info('subOutletUpdates')
-        
-        portList = []
-        portList.append(port+self.nbrUsb)
-        self.yoMultiOutlet.setMultiOutPortState(portList, state)
 
-
-    def usbUpdates(self, port, state):
-        logging.info('usbUpdates not implemented')
-        portList = []
-        portList.append(port) 
-        self.yoMultiOutlet.setMultiOutUsbState(portList, state)
-
-    '''
 
     def stop (self):
         logging.info('Stop udiYoMultiOutlet ')
         self.node.setDriver('ST', 0, True, True)
         self.yoMultiOutlet.shut_down()
 
+    def checkOnline(self):
+        self.yoMultiOutlet.refreshState() 
 
     def updateStatus(self, data):
         
@@ -381,15 +350,12 @@ class udiYoMultiOutlet(udi_interface.Node):
 
         if self.yoMultiOutlet.online:
             self.yoMultiOutlet.updateCallbackStatus(data)
-
-            logging.debug('updateCallbackStatus - udiYoMultiOutlet')
-            logging.debug(data)
-            logging.debug('nbr ports {} , online {}'.format(self.nbrOutlets, self.yoMultiOutlet.online ))
-            logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
+            #logging.debug('updateCallbackStatus - udiYoMultiOutlet')
+            #logging.debug(data)
+            #logging.debug('nbr ports {} , online {}'.format(self.nbrOutlets, self.yoMultiOutlet.online ))
+            #logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
             self.delaysActive = False
             outletStates =  self.yoMultiOutlet.getMultiOutStates()
-            logging.debug('outlet states: {}'.format (outletStates))
-            logging.debug(outletStates)
             if self.subNodesReady and self.yoMultiOutlet.online:
                 for outlet in range(0,self.nbrOutlets):
                     portName = 'port'+str(outlet)
@@ -412,10 +378,9 @@ class udiYoMultiOutlet(udi_interface.Node):
                     #else:
                     #    onDelay = 0
                     #    offDelay = 0
-                    logging.debug('Updating subnode : {} {}'.format(portName, state))
+                    #logging.debug('Updating subnode : {} {}'.format(portName, state))
                     self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
                 for usb in range(0,self.nbrUsb):       
-                    logging.debug('Updating USB - {}'.format(usb))
                     usbName = 'usb'+str(usb)
                     if outletStates[usbName]['state'] == 'open':
                         state = 1
@@ -428,43 +393,11 @@ class udiYoMultiOutlet(udi_interface.Node):
             logging.info( '{} - not on line'.format(self.nodeName))
 
 
-    '''
-    # Need to use shortPoll
-    def pollDelays(self):
-        if self.delaysActive and self.yoMultiOutlet.online: 
-            delays =  self.yoMultiOutlet.refreshDelays()
-            logging.debug('delays: ' + str(delays))
-            delayActive = False
-            #outletstates =  self.yoMultiOutlet.getMultiOutletData()
-            for port in range(0,self.nbrOutlets):
-                portName = 'port'+str(port)
-                port = delays[portName]['delays']['ch']
-                state = delays[portName]['state']
-                onDelay = delays[portName]['delays']['on']
-                offDelay = delays[portName]['delays']['off']
-
-                nodeAdr = self.subnodeAdr[port]
-                if onDelay != 0 or offDelay != 0:
-                    self.delaysActive = True
-                self.suboutlet[port].updateOutNode(state, onDelay, offDelay )
-            self.delaysActive = delayActive
-        
-        
-    def poll(self, polltype):
-        logging.debug('ISY poll ')
-        logging.debug(polltype)
-        if 'longPoll' in polltype:
-            self.yoMultiOutlet.refreshMultiOutlet()
-            #self.yoMultiOutlet.refreshSchedules()
-        if 'shortPoll' in polltype:
-            self.pollDelays()
-            #update Delays calculated
-    '''
 
 
 
     def update(self, command = None):
-        logging.info('Update Status Executed')
+        logging.info('udiYoMultiOutlet Update Executed')
         self.yoMultiOutlet.refreshMultiOutlet()
         #self.yoMultiOutlet.refreshSchedules()     
 

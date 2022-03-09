@@ -45,7 +45,7 @@ class udiYoManipulator(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('udiYoManipulator INIT')
+        logging.debug('udiYoManipulator INIT- {}'.format(deviceInfo['name']))
    
         self.yoAccess = yoAccess
 
@@ -65,7 +65,7 @@ class udiYoManipulator(udi_interface.Node):
 
 
     def start(self):
-        print('start - udiYoManipulator')
+        logging.info('Start - udiYoManipulator')
         self.yoManipulator = YoLinkManipul(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
         self.yoManipulator.initNode()
@@ -75,14 +75,14 @@ class udiYoManipulator(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoManipulator')
         self.node.setDriver('ST', 0, True, True)
-        self.yoManipulator.shut_down()
         if self.yoManipulator.onlineStatus():
             self.yoManipulator.shut_down()
 
-    
+    def checkOnline(self):
+        self.yoManipulator.refreshState()    
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - udiYoManipulator')
+        logging.info('updateStatus - udiYoManipulator')
         self.yoManipulator.updateCallbackStatus(data)
         
         if self.node is not None:
@@ -96,7 +96,6 @@ class udiYoManipulator(udi_interface.Node):
                     self.node.setDriver('GV0', 99, True, True)
                 
                 self.node.setDriver('GV8', 1, True, True)
-                self.updateDelays()
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 0, True, True)     
@@ -106,7 +105,7 @@ class udiYoManipulator(udi_interface.Node):
 
 
     def updateDelayCountdown( self, timeRemaining):
-        logging.debug('updateDelayCountDown:  delays {}'.format(timeRemaining))
+        logging.debug('Manipulator updateDelayCountDown:  delays {}'.format(timeRemaining))
         for delayInfo in range(0, len(timeRemaining)):
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
@@ -115,63 +114,9 @@ class udiYoManipulator(udi_interface.Node):
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
 
-    '''
-    def updateDelays(self, timeRemaining):
-        #delays =  self.yoManipulator.getDelays()
-        logging.debug('delays: {}'.format(timeRemaining))
-        for delayInfo in range(0, len(timeRemaining)):
-            if 'ch' in timeRemaining[delayInfo]:
-                if timeRemaining[delayInfo]['ch'] == 1:
-                    if 'on' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
-                    if 'off' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
-
-
-
-        #print('on delay: ' + str(delays['on']))
-        #print('off delay: '+ str(delays['off']))
-        if delays != None:
-            if 'on' in delays:
-                self.node.setDriver('GV1', delays['on'], True, True)
-            if 'off' in delays:
-                self.node.setDriver('GV2', delays['off'], True, True)               
-        else:
-            self.node.setDriver('GV1', 0, True, True)     
-            self.node.setDriver('GV2', 0, True, True)     
-    '''
-    '''
-    # Need to use shortPoll
-    def pollDelays(self):
-        delays =  self.yoManipulator.getDelays()
-        logging.debug('delays: ' + str(delays))
-        #print('on delay: ' + str(delays['on']))
-        #print('off delay: '+ str(delays['off']))
-        if delays != None:
-            delays =  self.yoManipulator.refreshDelays() # should be able to calculate without polling 
-            if 'on' in delays:
-                self.node.setDriver('GV1', delays['on'], True, True)
-            if 'off' in delays:
-                self.node.setDriver('GV2', delays['off'], True, True)               
-        else:
-            self.node.setDriver('GV1', 0, True, True)     
-            self.node.setDriver('GV2', 0, True, True)     
-
-    def poll(self, polltype):
-        logging.debug('ISY poll - {}'.format(polltype))
-
-        if 'longPoll' in polltype:
-            timeNow = time.time()*1000
-            if timeNow -self.yoManipulator.lastUpdate > 60*60*1000:
-                logging.info('Polling status ')
-                self.yoManipulator.refreshState()
-            #self.yoManipulator.refreshSchedules()
-        #if 'shortPoll' in polltype:
-            #self.pollDelays()
-            #update Delays calculated
-    '''
+  
     def switchControl(self, command):
-        logging.info('switchControl')
+        logging.info('Manipulator switchControl')
         state = int(command.get('value'))     
         if state == 1:
             self.yoManipulator.setState('ON')
@@ -195,7 +140,7 @@ class udiYoManipulator(udi_interface.Node):
     def update(self, command = None):
         logging.info('Update Status Executed')
         self.yoManipulator.refreshState()
-        #self.yoManipulator.refreshSchedules()     
+
 
 
     commands = {

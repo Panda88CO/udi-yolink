@@ -46,15 +46,12 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
-        #  
-        logging.debug('YoLinkMotionSensor INIT')
+
+        logging.debug('YoLinkMotionSensor INIT- {}'.format(deviceInfo['name']))
 
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
-        #self.address = address
-        #self.poly = polyglot
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -68,36 +65,25 @@ class udiYoMotionSensor(udi_interface.Node):
         self.node = polyglot.getNode(address)
         
 
-        #self.switchState = self.yoSwitch.getState()
-        #self.switchPower = self.yoSwitch.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
 
     def start(self):
-        print('start - YoLinkMotionSensor')
+        logging.info('start - udiYoLinkMotionSensor')
         self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoMotionsSensor.initNode()
         time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 
-    '''
-    def initNode(self):
-        self.yoMotionsSensor.refreshSensor()
-    '''
     
     def stop (self):
-        logging.info('StopudiYoMotionSensor')
+        logging.info('Stop udiYoMotionSensor')
         self.node.setDriver('ST', 0, True, True)
         self.yoMotionsSensor.shut_down()
 
-    '''
-    def yoTHsensor.bool2Nbr(self, bool):
-        if bool:
-            return(1)
-        else:
-            return(0)
-    '''
+    def checkOnline(self):
+        self.yoMotionsSensor.refreshState()   
     
+
     def MotionState(self):
         if self.yoMotionsSensor.online:
             if  self.yoMotionsSensor.motionState() == 'normal':
@@ -108,11 +94,9 @@ class udiYoMotionSensor(udi_interface.Node):
             return(99)
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - yoTHsensor')
+        logging.info('updateStatus - udiYoLinkMotionSensor')
         self.yoMotionsSensor.updateCallbackStatus(data)
-        #motionState = self.yoMotonsSensor.getMotion()
 
-        logging.debug(data)
         if self.node is not None:
             if self.yoMotionsSensor.online:
                 self.node.setDriver('GV0', self.MotionState(), True, True)
@@ -123,14 +107,10 @@ class udiYoMotionSensor(udi_interface.Node):
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('GV8', 1, True, True)
 
-    def poll(self, polltype):
-        logging.debug('ISY poll ')
-        logging.debug(polltype)
-        if 'longPoll' in polltype:
-            self.yoMotionsSensor.refreshSensor()
+
 
     def update(self, command = None):
-        logging.info('THsensor Update Status Executed')
+        logging.info('udiYoMotionSensor Update  Executed')
         self.yoMotionsSensor.refreshSensor()
        
 

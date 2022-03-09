@@ -94,7 +94,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
             try:    
                 return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['watt']})
             except:
-                return({'power': -1, 'watt':-1})
+                return(None)
     
     
 class YoLinkOutlet(YoLinkOutl):

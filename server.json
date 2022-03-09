@@ -7,14 +7,14 @@
     "description": "Nodeserver to allow integration of Yolink devices",
     "notice": "Uses MQTT comminication",
     "shortPoll": "60",
-    "longPoll": "600",
-    "profile_version": "0.0.5",
+    "longPoll": "3600",
+    "profile_version": "0.1",
     "customParams": {
         "YOLINK_URL" : "https://api.yosmart.com/openApi",   
         "YOLINKV2_URL": "https://api.yosmart.com/open/yolink/v2/api", 
         "TOKEN_URL" : "https://api.yosmart.com/open/yolink/token",
-        "UAID":"ua_93BF42449446432EA43E49887492C3FC",
-        "SECRET_KEY":"sec_v1_2IQ13RYyyvxMBpPK3POF0A==",
+        "UAID":"",
+        "SECRET_KEY":"",
         "MQTT_URL":"api.yosmart.com",
         "MQTT_PORT":8003
 	    },
@@ -22,7 +22,7 @@
         {
             "title": "A NodeServer to allow integration of YoLink devices ",
             "author": "Panda88CO",
-            "version": "0.0.5",
+            "version": "0.1",
             "date": "March 5,  2022",
             "source": "https://github.com/Panda88CO/udi-yolink",
             "license": "https://github.com/Panda88CO/udi-yolink/blob/main/license"
