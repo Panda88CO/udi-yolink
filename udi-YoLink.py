@@ -86,7 +86,7 @@ class YoLinkSetup (udi_interface.Node):
         logging.info('Executing start - udi-YoLink')
         logging.info ('Access using PAC/UAC')
         #logging.setLevel(20)
-        while  not self.nodeDefineDone or not self.handleParamsDone:
+        while  not self.nodeDefineDone:
             time.sleep(2)
             logging.info('Waiting to retrieve device list')
         self.tokenObtained = False
