@@ -89,8 +89,6 @@ class YoLinkSetup (udi_interface.Node):
         while  not self.nodeDefineDone or not self.handleParamsDone:
             time.sleep(2)
             logging.info('Waiting to retrieve device list')
-        #self.Parameters.load(userParam)
-        #self.poly.Notices.clear()
         self.tokenObtained = False
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
@@ -217,53 +215,53 @@ class YoLinkSetup (udi_interface.Node):
        
         self.poly.Notices.clear()
 
-    #try:
-        if 'YOLINKV2_URL' in userParam:
-            self.yolinkV2URL = userParam['YOLINKV2_URL']
-        else:
-            self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
-            self.yolinkV2URL = ''
+        try:
+            if 'YOLINKV2_URL' in userParam:
+                self.yolinkV2URL = userParam['YOLINKV2_URL']
+            else:
+                self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
+                self.yolinkV2URL = ''
 
-        if 'TOKEN_URL' in userParam:
-            self.tokenURL = userParam['TOKEN_URL']
-        else:
-            self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
-            self.tokenURL = ''
+            if 'TOKEN_URL' in userParam:
+                self.tokenURL = userParam['TOKEN_URL']
+            else:
+                self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
+                self.tokenURL = ''
 
-        if 'MQTT_URL' in userParam:
-            self.mqttURL = userParam['MQTT_URL']
-        else:
-            self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
-            self.mqttURL = ''
+            if 'MQTT_URL' in userParam:
+                self.mqttURL = userParam['MQTT_URL']
+            else:
+                self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
+                self.mqttURL = ''
 
-        if 'MQTT_PORT' in userParam:
-            self.mqttPort = userParam['MQTT_PORT']
-        else:
-            self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
-            self.mqttPort = 0
+            if 'MQTT_PORT' in userParam:
+                self.mqttPort = userParam['MQTT_PORT']
+            else:
+                self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
+                self.mqttPort = 0
 
-        if 'UAID' in userParam:
-            self.uaid = userParam['UAID']
-        else:
-            self.poly.Notices['uaid'] = 'Missing UAID parameter'
-            self.uaid = ''
+            if 'UAID' in userParam:
+                self.uaid = userParam['UAID']
+            else:
+                self.poly.Notices['uaid'] = 'Missing UAID parameter'
+                self.uaid = ''
 
-        if 'SECRET_KEY' in userParam:
-            self.secretKey = userParam['SECRET_KEY']
-        else:
-            self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
-            self.secretKey = ''
+            if 'SECRET_KEY' in userParam:
+                self.secretKey = userParam['SECRET_KEY']
+            else:
+                self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
+                self.secretKey = ''
 
-        for param in userParam:
-            if param not in supportParams:
-                del self.Parameters[param]
-                logging.debug ('erasing key: ' + str(param))
+            for param in userParam:
+                if param not in supportParams:
+                    del self.Parameters[param]
+                    logging.debug ('erasing key: ' + str(param))
 
-        self.handleParamsDone = True
+            self.handleParamsDone = True
 
 
-    #except:
-    #    logging.debug('Error: {}'.format(userParam))
+        except:
+            logging.debug('Error: {}'.format(userParam))
 
  
 
