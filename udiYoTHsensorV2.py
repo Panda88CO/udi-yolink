@@ -76,6 +76,7 @@ class udiYoTHsensor(udi_interface.Node):
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
+        self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         
 

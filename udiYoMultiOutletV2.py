@@ -54,6 +54,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
         self.poly.ready()
         self.poly.addNode(self)
+        self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
         self.node.setDriver('GV4', self.port, True, True)
@@ -171,6 +172,7 @@ class udiYoSubUSB(udi_interface.Node):
 
         self.poly.ready()
         self.poly.addNode(self)
+        self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
 
@@ -260,6 +262,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
+        self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
 

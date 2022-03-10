@@ -40,11 +40,12 @@ class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
         super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  
         self.hb = 0
-        self.devicesReady = False
+        #self.devicesReady = False
         self.nodeDefineDone = False
         self.longPollCountMissed = 0
         self.address = address
         self.name = name
+        self.n_queue = []
 
         #logging.setLevel(20)
         self.poly.subscribe(self.poly.STOP, self.stop)
@@ -52,6 +53,8 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
+        self.poly.subscribe(polyglot.ADDNODEDONE, self.node_queue)
+
 
         self.Parameters = Custom(polyglot, 'customparams')
         self.Notices = Custom(polyglot, 'notices')
@@ -61,25 +64,41 @@ class YoLinkSetup (udi_interface.Node):
         
         self.poly.ready()
         self.poly.addNode(self)
+        self.wait_for_node_done()
         self.node = polyglot.getNode(self.address)
-        time.sleep(2)
+        time.sleep(10)
         self.node.setDriver('ST', 1, True, True)
         
         logging.debug('YoLinkSetup init DONE')
+
         self.nodeDefineDone = True
-     
+
+
+
+    def node_queue(self, data):
+        self.n_queue.append(data['address'])
+
+    def wait_for_node_done(self):
+        while len(self.n_queue) == 0:
+            time.sleep(0.1)
+        self.n_queue.pop()
+
+
+
     def start (self):
         logging.info('Start executing start')
         logging.info ('Access using PAC/UAC')
-        logging.setLevel(20)
+        #logging.setLevel(20)
+        while  self.nodeDefineDone:
+            time.sleep(2)
+            logging.info('Waiting to retrieve devise list')
+        #self.Parameters.load(userParam)
+        #self.poly.Notices.clear()
         self.tokenObtained = False
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
         self.yoAccess = yoAccess
         self.deviceList = yoAccess.getDeviceList()
-        while  self.devicesReady:
-            time.sleep(2)
-            logging.info('Waiting to retrieve devise list')
         #self.deviceList = self.getDeviceList2()
 
         logging.debug('{} devices detected : {}'.format(len(self.deviceList), self.deviceList) )
@@ -154,37 +173,8 @@ class YoLinkSetup (udi_interface.Node):
                 nodes[node].setDriver('ST', 0, True, True)
         
         exit()
-    '''
-    def getDeviceList1(self):
-        logging.debug ('getDeviceList1')
-    
-        self.yoDevices = YoLinkDevices(self.csid, self.csseckey)
-        webLink = self.yoDevices.getAuthURL()
-        #self.Parameters['REDIRECT_URL'] = ''
-        self.poly.Notices['url'] = 'Copy this address to browser. Follow screen to long. After screen refreshes copy resulting  redirect URL (address bar) into config REDICRECT_URL: ' + str(webLink) 
+ 
 
-
-    def getDeviceList2(self):
-        logging.debug('Start executing getDeviceList2')
-        self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
-        self.yoDevices = YoLinkDevicesPAC(self.uaid, self.secretKey)
-        self.deviceList = self.yoDevices.getDeviceList()
-
-    def getDeviceList3(self):
-        logging.debug('reading /devices.json')
-        logging.debug(os.getcwd())
-        if (os.path.exists('./devices.json')):
-            logging.debug('reading /devices.json')
-            dataFile = open('./devices.json', 'r')
-            tmp= json.load(dataFile)
-            logging.debug(tmp)
-            dataFile.close()
-            self.deviceList = tmp['data']['list']
-            logging.debug(self.deviceList)
-            self.devicesReady = True
-        else:
-             logging.debug('devices.json does not exist')
-    '''
     def heartbeat(self):
         logging.debug('heartbeat: ' + str(self.hb))
         
@@ -224,9 +214,13 @@ class YoLinkSetup (udi_interface.Node):
 
     def handleParams (self, userParam ):
         logging.debug('handleParams')
+        while  userParam == None:
+            logging.debug('waiting for handleParams')
+            time.sleep(1)
+            self.Parameters.load(userParam)
         
-        self.Parameters.load(userParam)
         self.poly.Notices.clear()
+
         try:
             if 'YOLINKV2_URL' in userParam:
                 self.yolinkV2URL = userParam['YOLINKV2_URL']
