@@ -194,17 +194,15 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
-    def systemPoll (self, polltype):
-        pass
 
-    '''
+
     def systemPoll (self, polltype):
         if self.nodeDefineDone:
             logging.info('System Poll executing')
             if 'longPoll' in polltype:
                 #Keep token current
                 if not self.yoAccess.refresh_token(): #refresh failed
-                    while not self.yoAccess.request_new_token()
+                    while not self.yoAccess.request_new_token():
                             time.sleep(60)
                 logging.info('Updating device status')
                 nodes = self.poly.getNodes()
@@ -215,7 +213,7 @@ class YoLinkSetup (udi_interface.Node):
                 
             if 'shortPoll' in polltype:
                 self.heartbeat()
-    '''
+    
 
 
     def handleLevelChange(self, level):

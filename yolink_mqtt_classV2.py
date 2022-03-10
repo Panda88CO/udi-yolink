@@ -43,7 +43,6 @@ class YoLinkMQTTDevice(object):
         yolink.nbrPorts = 1
         yolink.nbrOutlets = 1
         yolink.nbrUsb = 0 
-        yolink.delayUpdateInt = 15
         yolink.yolinkMQTTclient = YoLinkMQTTClient(yoAccess,  yolink.deviceInfo, callback )
         
 
@@ -56,8 +55,7 @@ class YoLinkMQTTDevice(object):
         
         
         yolink.maxSchedules = 6
-        yolink.methodList = []
-        yolink.eventList = []
+        yolink.methodList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor']
         yolink.lastUpdate = 'lastTime'
         yolink.lastMessage = 'lastMessage'
         yolink.dOnline = 'online'
