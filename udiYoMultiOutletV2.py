@@ -266,6 +266,13 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
 
+    def node_queue(self, data):
+        self.n_queue.append(data['address'])
+
+    def wait_for_node_done(self):
+        while len(self.n_queue) == 0:
+            time.sleep(0.1)
+        self.n_queue.pop()
 
     def start(self):
         self.subNodesReady = False
@@ -296,7 +303,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                     logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1), port))
                     self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1),port, self.yoMultiOutlet)
                     self.poly.addNode(self.subOutlet[port])
-                    self.wait_for_node_done()
+                    #self.wait_for_node_done()
                                     
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subOutletAdr[port], e))
@@ -378,10 +385,10 @@ class udiYoMultiOutlet(udi_interface.Node):
                             offDelay = outletStates[portName]['delays']['off']*60
                         else:
                             offDelay = 0
-                    #else:
-                    #    onDelay = 0
-                    #    offDelay = 0
-                    #logging.debug('Updating subnode : {} {}'.format(portName, state))
+                    else:
+                        onDelay = 0
+                        offDelay = 0
+                    logging.debug('Updating subnode {}: {} {} {}'.format(outlet, state, onDelay, offDelay))
                     self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
                 for usb in range(0,self.nbrUsb):       
                     usbName = 'usb'+str(usb)
