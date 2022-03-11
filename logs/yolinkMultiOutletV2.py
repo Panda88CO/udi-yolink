@@ -146,10 +146,12 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         logging.info('outletSetDelayList')
         data = {}
         delTemp = []
+        dTemp = {}
         data['params'] = {}
         data['params']['delays'] = []
         for delays in range(0,len(delayList)):  
             temp = {}
+            dTemp = {}
             for key in delayList[delays]:               
                 if key.lower() == 'ch' or key.lower() == 'port':
                     ch = int(delayList[delays][key])
@@ -194,7 +196,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.yolinkMQTTclient.publish_data( data)
-        #yolink.writeDelayData(data)
+        yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}] )
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
@@ -210,7 +212,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
         for usb in range (0,yolink.nbrUsb):
                 states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
-        delays = yolink.extDelayTimer.timeRemaining()      
+        delays = yolink.refreshDelays()      
         for outlet in range(0, yolink.nbrOutlets):      
             state = temp['data']['state'][outlet + yolink.nbrUsb]
             found = False

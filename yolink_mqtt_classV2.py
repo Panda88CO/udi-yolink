@@ -619,7 +619,7 @@ class YoLinkMQTTDevice(object):
             return(0)
 
 
-    '''
+    
     def setOnline(yolink, data):
         logging.debug('SetOnline: {}'.format(data))
         if yolink.dOnline in data[yolink.dData]:
@@ -630,7 +630,7 @@ class YoLinkMQTTDevice(object):
             yolink.dataAPI[yolink.dOnline] = True
         yolink.online = yolink.dataAPI[yolink.dOnline]
         logging.debug('online: {}'.format( yolink.online))
-    '''
+ 
 
     def updateLoraInfo(yolink, data):
         if yolink.dState in data[yolink.dData]:
