@@ -92,7 +92,7 @@ class YoLinkSetup (udi_interface.Node):
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
         yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
         self.yoAccess = yoAccess
-        self.deviceList = yoAccess.getDeviceList()
+        self.deviceList = self.yoAccess.getDeviceList()
         #self.deviceList = self.getDeviceList2()
 
         logging.debug('{} devices detected : {}'.format(len(self.deviceList), self.deviceList) )
@@ -137,7 +137,7 @@ class YoLinkSetup (udi_interface.Node):
                 name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                 udiYoMotionSensor(self.poly, name, name, self.deviceList[dev]['name'],  yoAccess, self.deviceList[dev] )
-                self.Parameters[self.deviceList[dev][name]] =  self.deviceList[dev]['name']                
+                self.Parameters[name] =  self.deviceList[dev]['name']                
             elif self.deviceList[dev]['type'] == 'Outlet':     
                 name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
@@ -165,6 +165,7 @@ class YoLinkSetup (udi_interface.Node):
         for node in nodes:
             if node != 'setup':   # but not the controller node
                 nodes[node].setDriver('ST', 0, True, True)
+        time.sleep(2)
         self.poly.stop()
         exit()
  
@@ -182,18 +183,22 @@ class YoLinkSetup (udi_interface.Node):
 
     def systemPoll (self, polltype):
         if self.nodeDefineDone:
-            logging.info('System Poll executing')
+            logging.info('System Poll executing: {}'.format(polltype))
             if 'longPoll' in polltype:
                 #Keep token current
-                if not self.yoAccess.refresh_token(): #refresh failed
-                    while not self.yoAccess.request_new_token():
-                            time.sleep(60)
-                logging.info('Updating device status')
-                nodes = self.poly.getNodes()
-                for node in nodes:
-                    if node != 'setup':   # but not the controller node
-                        nodes[node].checkOnline()
-                
+                try:
+                    if not self.yoAccess.refresh_token(): #refresh failed
+                        while not self.yoAccess.request_new_token():
+                                time.sleep(60)
+                    logging.info('Updating device status')
+                    nodes = self.poly.getNodes()
+                    for node in nodes:
+                        if node != 'setup':   # but not the controller node
+                            nodes[node].checkOnline()
+                except Exception as e:
+                    logging.debug('Exeption occcured during request_new_token : {}'.format(e))
+                    self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
+                    self.deviceList = self.yoAccess.getDeviceList()           
                 
             if 'shortPoll' in polltype:
                 self.heartbeat()

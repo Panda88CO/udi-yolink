@@ -158,17 +158,24 @@ class YoLinkMQTTClient(object):
             logging.debug('Disconnect - stop loop')
             yolink.client.loop_stop()
         else:
-            logging.debug('Unintentional disconnect - Reacquiring connection')
-            #yolink.accessToken = yolink.yoAccess.get_access_token() 
-            yolink.client.loop_stop()
-            yolink.client.disconnect()
-            while not yolink.yoAccess.request_new_token():
-                time.sleep(60)
-                logging.info('Trying to acquire new token')
-            time.sleep(1)
-            yolink.accessToken = yolink.yoAccess.get_access_token()
-            yolink.connect_to_broker()
-
+            try:
+                logging.debug('Unintentional disconnect - Reacquiring connection')
+                #yolink.accessToken = yolink.yoAccess.get_access_token() 
+                yolink.client.loop_stop()
+                yolink.client.disconnect()
+                time.sleep(1)
+                while not yolink.yoAccess.request_new_token():
+                    time.sleep(60)
+                    logging.info('Trying to acquire new token')
+                time.sleep(1)
+                yolink.accessToken = yolink.yoAccess.get_access_token()
+                yolink.connect_to_broker()
+            except Exception as e:
+                logging.error('Exeption occcured during on_ disconnect : {}'.format(e))
+                if yolink.yoAccess:
+                    yolink.yoAccess.request_new_token()
+                else:
+                    logging.error('Lost credential info - need to restart node server')
 
     def on_subscribe(yolink, client, userdata, mID, granted_QOS):
         logging.debug('on_subscribe')
@@ -214,8 +221,9 @@ class YoLinkMQTTClient(object):
                             logging.info('Device not fonund - retrying ')
                             
 
-            except Exception as E:
-                logging.error('Exception  - publish_data: ' + str(E))
+            except Exception as e:
+                logging.error('Exception  - publish_data: {}'.format(e))
+
         else: # token was renewed - we need to reconnect to the broker
             logging.info('access token renewed')
             yolink.accessToken = token 

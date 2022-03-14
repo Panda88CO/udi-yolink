@@ -9,18 +9,14 @@ try:
     Custom = udi_interface.Custom
 except ImportError:
     import logging
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
 from os import truncate
 #import udi_interface
-import sys
+#import sys
 import time
 from yolinkManipulatorV2 import YoLinkManipul
 
-polyglot = None
-Parameters = None
-n_queue = []
-count = 0
 
 
 
@@ -56,12 +52,25 @@ class udiYoManipulator(udi_interface.Node):
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.n_queue = []
+
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
+
+
+
+    def node_queue(self, data):
+        self.n_queue.append(data['address'])
+
+    def wait_for_node_done(self):
+        while len(self.n_queue) == 0:
+            time.sleep(0.1)
+        self.n_queue.pop()
 
 
 
@@ -80,6 +89,7 @@ class udiYoManipulator(udi_interface.Node):
             self.yoManipulator.shut_down()
 
     def checkOnline(self):
+        #get get info even if battery operated 
         self.yoManipulator.refreshDevice()    
 
     def updateStatus(self, data):

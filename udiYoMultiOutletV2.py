@@ -9,17 +9,13 @@ try:
     Custom = udi_interface.Custom
 except ImportError:
     import logging
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
 #import sys
 import time
 from yolinkMultiOutletV2 import YoLinkMultiOut
 import re
 
-polyglot = None
-Parameters = None
-n_queue = []
-count = 0
 
 class udiYoSubOutlet(udi_interface.Node):
     id = 'yosubout'
@@ -51,6 +47,9 @@ class udiYoSubOutlet(udi_interface.Node):
     
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.n_queue = []   
+
 
         self.poly.ready()
         self.poly.addNode(self)
@@ -59,6 +58,14 @@ class udiYoSubOutlet(udi_interface.Node):
         self.node.setDriver('ST', 1, True, True)
         self.node.setDriver('GV4', self.port, True, True)
         
+    def node_queue(self, data):
+        self.n_queue.append(data['address'])
+
+    def wait_for_node_done(self):
+        while len(self.n_queue) == 0:
+            time.sleep(0.1)
+        self.n_queue.pop()
+
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
@@ -169,12 +176,27 @@ class udiYoSubUSB(udi_interface.Node):
 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.n_queue = []
 
+        # start processing events and create add our controller node
         self.poly.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         self.node.setDriver('ST', 1, True, True)
+
+
+    def node_queue(self, data):
+        self.n_queue.append(data['address'])
+
+    def wait_for_node_done(self):
+        while len(self.n_queue) == 0:
+            time.sleep(0.1)
+        self.n_queue.pop()
+
+
+
 
     def start (self):
         logging.debug('udiYoSubUSB - start')

@@ -14,12 +14,7 @@ try:
     Custom = udi_interface.Custom
 except ImportError:
     import logging
-    logging.basicConfig(level=logging.DEBUG)
-polyglot = None
-Parameters = None
-n_queue = []
-count = 0
-
+    logging.basicConfig(level=logging.INFO)
 
 
 class udiYoDoorSensor(udi_interface.Node):
@@ -57,12 +52,23 @@ class udiYoDoorSensor(udi_interface.Node):
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.n_queue = []
 
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         
+
+    def node_queue(self, data):
+        self.n_queue.append(data['address'])
+
+    def wait_for_node_done(self):
+        while len(self.n_queue) == 0:
+            time.sleep(0.1)
+        self.n_queue.pop()
+
 
     def start(self):
         logging.info('start - udiYoDoorSensor')
@@ -91,7 +97,9 @@ class udiYoDoorSensor(udi_interface.Node):
             return(99)
     
     def checkOnline(self):
-        self.yoDoorSensor.refreshDevice()
+        # only gets the casched status (battery operated device)
+        #self.yoDoorSensor.refreshDevice()
+        pass
 
     def updateStatus(self, data):
         logging.debug('updateStatus - {}'.format(self.name))

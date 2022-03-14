@@ -146,7 +146,7 @@ doorstate-1 = open
 doorstate-99 = Unknown 
 
 motionstate-0 = No Motion
-motionstate-1 = Motion Detected
+motionstate-1 = Motion
 motionstate-99 = Unknown 
 
 waterstate-0 = Dry
