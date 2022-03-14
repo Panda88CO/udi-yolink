@@ -388,17 +388,18 @@ class udiYoMultiOutlet(udi_interface.Node):
             #logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
             self.delaysActive = False
             outletStates =  self.yoMultiOutlet.getMultiOutStates()
-            if self.subNodesReady and self.yoMultiOutlet.online:
+
+            if self.subNodesReady:
                 for outlet in range(0,self.nbrOutlets):
                     portName = 'port'+str(outlet)
-
-                    if outletStates[portName]['state'] == 'open':
-                        state = 1
-                    elif outletStates[portName]['state'] == 'closed':
-                        state = 0
+                    if self.yoMultiOutlet.online:
+                        if outletStates[portName]['state'] == 'open':
+                            state = 1
+                        elif outletStates[portName]['state'] == 'closed':
+                            state = 0
                     else:
                         state = 99
-                    if 'delays'in outletStates[portName]:
+                    if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
                         if 'on' in outletStates[portName]['delays']:
                             onDelay = outletStates[portName]['delays']['on']*60
                         else:
@@ -414,15 +415,17 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
                 for usb in range(0,self.nbrUsb):       
                     usbName = 'usb'+str(usb)
-                    if outletStates[usbName]['state'] == 'open':
-                        state = 1
-                    elif outletStates[usbName]['state'] == 'closed':
-                        state = 0
+                    if self.yoMultiOutlet.online:
+                        if outletStates[usbName]['state'] == 'open':
+                            state = 1
+                        elif outletStates[usbName]['state'] == 'closed':
+                            state = 0
                     else:
                         state = 99
                     self.subUsb[usb].updateUsbNode(state)
-        else:
-            logging.info( '{} - not on line'.format(self.nodeName))
+            if not self.yoMultiOutlet.online:
+                logging.error( '{} - not on line'.format(self.nodeName))
+  
 
 
 
