@@ -26,3 +26,7 @@
     Enter both UAID and SecretKey under configuration - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
 
 ## Notes 
+    Currently the API does not support multiple homes - promised that there will be support in a month or so - will implement then (I need it myself)
+    Remaining delay shown in ISY is estimated - count down is running on not server - not device
+    Schdules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schdules)  - I did not manage to get API working with schdules yet 
+    

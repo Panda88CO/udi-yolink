@@ -278,6 +278,9 @@ class YoLinkMQTTDevice(object):
             elif '.getSchedules' in data['event']:
                 if int(data['time']) > int(yolink.getLastUpdate()):
                     yolink.updateScheduleStatus(data)   
+            elif '.setSchedules' in data['event']:
+                if int(data['time']) > int(yolink.getLastUpdate()):
+                    yolink.updateScheduleStatus(data)   
             elif '.Alert' in data['event']:         
                 if int(data['time']) > int(yolink.getLastUpdate()):
                     yolink.updateStatusData(data)  
