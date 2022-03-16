@@ -70,7 +70,7 @@ class YoLinkMQTTClient(object):
 
             yolink.client.username_pw_set(username=yolink.accessToken, password=None)
             time.sleep(1)
-            yolink.client.connect(yolink.mqttURL, yolink.mqttPort, 30)
+            yolink.client.connect(yolink.mqttURL, yolink.mqttPort, keepalive= 16000) #devices report every 4 hours or earlier
             #time.sleep(3)
 
             yolink.client.loop_start()
@@ -198,7 +198,7 @@ class YoLinkMQTTClient(object):
         #logging.debug('publish_data: {}'.format(data))
         #yolink.lastDataPacket = data
         token = yolink.yoAccess.get_access_token()
-        logging.debug ('publish data - tokens : {} {} {}'.format(yolink.accessToken == token,yolink.accessToken, token  ))
+        logging.debug ('publish data - tokens identical  : {}'.format(yolink.accessToken == token))
         if yolink.accessToken == token:
             try:
                 
