@@ -1,4 +1,4 @@
-#!/usr/bin/env python3   
+#!/usr/bin/env python3
 #import hashlib
 import json
 #import sys
@@ -25,35 +25,44 @@ class YoLinkMQTTClient(object):
 
     def __init__(yolink, yoAccess,  deviceInfo, callback ):
         yolink.lock = Lock()
-        yolink.callback = callback
+        #yolink.callback = callback
         yolink.yoAccess = yoAccess
-        yolink.deviceInfo = deviceInfo
+        #yolink.deviceInfo = deviceInfo
         yolink.homeID = yoAccess.homeID
-        yolink.deviceId = deviceInfo['deviceId']
-        yolink.uniqueID = yolink.deviceId#+str(int(time.time()))
+        #yolink.deviceId = deviceInfo['deviceId']
+        yolink.uniqueID = deviceInfo['deviceId']#+str(int(time.time()))
         yolink.accessToken = yoAccess.get_access_token()
- 
+
         yolink.topicReq = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/request'
         yolink.topicResp = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/response'
         yolink.topicReport = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/report'
         yolink.topicReportAll = 'yl-home/'+yolink.homeID+'/+/report'
 
+        if yolink.deviceList == None:
+            yolink.deviceList = {}
+        yolink.deviceList[yolink.deviceID] = {  'callback': callback, 
+                                                'request': yolink.topicReq,
+                                                'response': yolink.topicResp,
+                                                'report': yolink.topicReport,
+                                                'subscribed': False}
         yolink.mqttPort = int(yoAccess.mqttPort)
         yolink.mqttURL = yoAccess.mqttURL
         yolink.retryNbr = 0
         yolink.disconnect = False
         #yolink.lastDataPacket = {}
-  
-        try:
-            logging.debug('initialize MQTT' )
-            yolink.client = mqtt.Client(yolink.uniqueID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-            yolink.client.on_connect = yolink.on_connect
-            yolink.client.on_message = yolink.on_message
-            yolink.client.on_subscribe = yolink.on_subscribe
-            yolink.client.on_disconnect = yolink.on_disconnect
-            logging.debug('finish subscribing ')
-        except Exception as E:
-            logging.error('Exception  - -init-: ' + str(E))
+        if yolink.client == None:    
+            try:
+                logging.debug('initialize MQTT' )
+                yolink.client = mqtt.Client(yolink.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+                yolink.client.on_connect = yolink.on_connect
+                yolink.client.on_message = yolink.on_message
+                yolink.client.on_subscribe = yolink.on_subscribe
+                yolink.client.on_disconnect = yolink.on_disconnect
+                logging.debug('finish subscribing ')
+            except Exception as E:
+                logging.error('Exception - init- MQTT: {}'.format(E))
+        else:
+            logging.debug('MQTT client already connected :{}'.format(deviceInfo['name']) )
         yolink.messagePending = False
         #logging.debug(yolink.deviceId)
         #yolink.client.tls_set()
@@ -68,16 +77,14 @@ class YoLinkMQTTClient(object):
         yolink.client.disconnect()
         try: 
             logging.info("Connecting to broker...")
-
             yolink.client.username_pw_set(username=yolink.accessToken, password=None)
-            time.sleep(1)
+            #time.sleep(1)
             yolink.client.connect(yolink.mqttURL, yolink.mqttPort, keepalive= 16000) #devices report every 4 hours or earlier
             #time.sleep(3)
-
             yolink.client.loop_start()
-            time.sleep(1)
-        except Exception as E:
-            logging.error('Exception  - connect_to_broker: ' + str(E))
+            #time.sleep(1)
+        except Exception as e:
+            logging.error('Exception  - connect_to_broker: {}'.format(e))
 
 
     def on_message(yolink, client, userdata, msg):
@@ -92,41 +99,46 @@ class YoLinkMQTTClient(object):
         #logging.debug(msg.topic, msg.payload)
         
         payload = json.loads(msg.payload.decode("utf-8"))
-        if DEBUG:
-            dataTemp = str(json.dumps(payload))
-        logging.debug('on_message: {}\n {}'.format(msg.topic, payload))
-
-
-        if  msg.topic == yolink.topicReport:
-            if payload['deviceId'] == yolink.deviceId :
-                yolink.callback(payload)
-
+        deviceId = 'unknown'
+        try:
+            deviceId = payload['targetDevice']
             if DEBUG:
-                yolink.savePacket(msg.topic, dataTemp, 'EVENT')
-        elif msg.topic == yolink.topicResp:
+                dataTemp = str(json.dumps(payload))
+            logging.debug('on_message for {}: {}\n {}'.format(deviceId, msg.topic, payload))
 
-                if payload['code'] == '000000':
-                    yolink.retryNbr = 0
-                    yolink.callback(payload)
+            if deviceId in yolink.deviceList:
+                tempCallback = yolink.deviceList[deviceId]['callback']
+                if  msg.topic == yolink.topicReport:                    
+                    tempCallback(payload)
+                    if DEBUG:
+                        yolink.savePacket(msg.topic, dataTemp, 'EVENT')
+                elif msg.topic == yolink.topicResp:
+
+                        if payload['code'] == '000000':
+                            yolink.retryNbr = 0
+                            tempCallback(payload)
+                        else:
+                            yolink.retryNbr += 1
+                            if yolink.retryNbr <= maxRetry:
+                                tempCallback(payload)
+                                time.sleep(2)
+                                yolink.publish_data(yolink.lastDataPacket)
+                            else:
+                                yolink.retryNbr = 0
+                                tempCallback(payload)
+                        if DEBUG:
+                            yolink.savePacket(msg.topic, dataTemp, 'RESP')
+                elif msg.topic == yolink.topicReq:
+
+                        if DEBUG:
+                            yolink.savePacket(msg.topic, dataTemp, 'REQ')
                 else:
-                    yolink.retryNbr += 1
-                    if yolink.retryNbr <= maxRetry:
-                        yolink.callback(payload)
-                        time.sleep(2)
-                        yolink.publish_data(yolink.lastDataPacket)
-                    else:
-                        yolink.retryNbr = 0
-                        yolink.callback(payload)
-                if DEBUG:
-                    yolink.savePacket(msg.topic, dataTemp, 'RESP')
-        elif msg.topic == yolink.topicReq:
-
-                if DEBUG:
-                    yolink.savePacket(msg.topic, dataTemp, 'REQ')
-        else:
-            logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
-
-        
+                    logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
+            else:
+                logging.error('Unsupported device: {}'.format(deviceId))
+        except Exception as e:
+            logging.error('Exception  - on_broker for {}: {}'.format(deviceId, e))
+            logging.error
    
     def on_connect(yolink, client, userdata, flags, rc):
         """
@@ -138,9 +150,12 @@ class YoLinkMQTTClient(object):
 
             if (rc == 0):
                 logging.debug("{} - Successfully connected to broker {} ".format(yolink.deviceInfo['name'], yolink.mqttURL))
-                yolink.client.subscribe(yolink.topicResp)
-                yolink.client.subscribe(yolink.topicReq)
-                yolink.client.subscribe(yolink.topicReport)
+                for deviceId in yolink.deviceList:
+                    if not yolink.deviceList[deviceId]['subscribed']:
+                        yolink.client.subscribe(yolink.deviceList[deviceId]['request'])
+                        yolink.client.subscribe(yolink.deviceList[deviceId]['response'])
+                        yolink.client.subscribe(yolink.deviceList[deviceId]['report'])
+                        yolink.deviceList[deviceId]['subscribed'] = True
                 #yolink.client.subscribe(yolink.topicReportAll)
 
                 #yolink.client.subscribe('yl-home/'+yolink.homeID+'/+/report')
@@ -164,11 +179,11 @@ class YoLinkMQTTClient(object):
                 #yolink.accessToken = yolink.yoAccess.get_access_token() 
                 yolink.client.loop_stop()
                 yolink.client.disconnect()
-                time.sleep(1)
+                #time.sleep(1)
                 while not yolink.yoAccess.request_new_token():
                     time.sleep(60)
                     logging.info('Trying to acquire new token')
-                time.sleep(1)
+                #time.sleep(1)
                 yolink.accessToken = yolink.yoAccess.get_access_token()
                 yolink.connect_to_broker()
             except Exception as e:
@@ -205,7 +220,8 @@ class YoLinkMQTTClient(object):
                 
                 yolink.lastDataPacket = data
                 dataTemp = str(json.dumps(data))    
-                result = yolink.client.publish(yolink.topicReq, dataTemp)
+                if dataTemp['data']['targetDevice'] in yolink.deviceList:
+                    result = yolink.client.publish(yolink.deviceList[dataTemp]['data']['targetDevice']['request'], dataTemp)
 
                 #logging.debug('publish result: {}'.format(result.rc))
                 if result.rc != 0:
@@ -234,7 +250,11 @@ class YoLinkMQTTClient(object):
             yolink.connect_to_broker()
             try:
                 dataTemp = str(json.dumps(data))
-                result = yolink.client.publish(yolink.topicReq, dataTemp)
+                if dataTemp['data']['targetDevice'] in yolink.deviceList:
+                    result = yolink.client.publish(yolink.deviceList[dataTemp]['data']['targetDevice']['request'], dataTemp)
+                    #result = yolink.client.publish(yolink.topicReq, dataTemp)
+                else:
+                    logging.debug('Device not subscribed: {}'.format(dataTemp))
                 if result.rc == 0:
                     time.sleep(2) 
             except Exception as E:
