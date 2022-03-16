@@ -44,7 +44,7 @@ class YoLinkSetup (udi_interface.Node):
         self.handleParamsDone = False
         self.address = address
         self.name = name
-        self.n_queue = []
+        
 
         #logging.setLevel(20)
         self.poly.subscribe(self.poly.STOP, self.stop)
@@ -53,7 +53,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-
+        self.n_queue = []
 
         self.Parameters = Custom(self.poly, 'customparams')
         self.Notices = Custom(self.poly, 'notices')

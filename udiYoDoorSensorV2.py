@@ -98,8 +98,8 @@ class udiYoDoorSensor(udi_interface.Node):
     
     def checkOnline(self):
         # only gets the casched status (battery operated device)
-        #self.yoDoorSensor.refreshDevice()
-        pass
+        self.yoDoorSensor.refreshDevice()
+       
 
     def updateStatus(self, data):
         logging.debug('updateStatus - {}'.format(self.name))

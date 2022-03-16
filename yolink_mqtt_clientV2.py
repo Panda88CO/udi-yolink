@@ -198,6 +198,7 @@ class YoLinkMQTTClient(object):
         #logging.debug('publish_data: {}'.format(data))
         #yolink.lastDataPacket = data
         token = yolink.yoAccess.get_access_token()
+        logging.debug ('publish data - tokens : {} {} {}'.format(yolink.accessToken == token,yolink.accessToken, token  ))
         if yolink.accessToken == token:
             try:
                 

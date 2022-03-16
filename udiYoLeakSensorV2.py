@@ -93,8 +93,9 @@ class udiYoLeakSensor(udi_interface.Node):
         self.yoLeakSensor.shut_down()
 
     def checkOnline(self):
-        #self.yoLeakSensor.refreshDevice() - no info from batter operated device 
-        pass
+        #we only get casched values - but MQTT remains alive
+        self.yoLeakSensor.refreshDevice()  
+        
     def waterState(self):
         if self.yoLeakSensor.online:
             if  self.yoLeakSensor.probeState() == 'normal' or self.yoLeakSensor.probeState() == 'dry' :
