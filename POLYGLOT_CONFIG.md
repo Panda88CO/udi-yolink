@@ -2,7 +2,6 @@
     Suppport for YoLink devices 
     
 ## Yolink Node server
-    Enables yoLink (https://shop.yosmart.com/) devices to be controlled using the ISY
     Current list of devices supported is as follows:
     
     'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor'
