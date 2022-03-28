@@ -67,7 +67,9 @@ class YoLinkMQTTClient(object):
         #logging.debug(yolink.deviceId)
         #yolink.client.tls_set()
 
-    
+    def addDevce(yolink, deviceId, callback ):
+        logging.debug('Adding device')
+        
     def connect_to_broker(yolink):
         """
         Connect to MQTT broker
