@@ -78,11 +78,11 @@ class YoLinkInitPAC(object):
         now = int(time.time())
         if yoAccess.token == None:
             yoAccess.request_new_token()
-        if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
-            if now > yoAccess.token['expirationTime']: #we loast the token
-                yoAccess.request_new_token()
-            else:
-                yoAccess.refresh_token()
+        #if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
+        #    if now > yoAccess.token['expirationTime']: #we loast the token
+        #        yoAccess.request_new_token()
+        #    else:
+        #        yoAccess.refresh_token()
         yoAccess.lock.release()
         return(yoAccess.token['access_token'])
                 

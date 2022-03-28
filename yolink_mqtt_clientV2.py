@@ -158,13 +158,14 @@ class YoLinkMQTTClient(object):
         if yolink.disconnect:
             logging.debug('Disconnect - stop loop')
             yolink.client.loop_stop()
+        '''    
         else:
             try:
                 logging.debug('Unintentional disconnect - Reacquiring connection')
                 #yolink.accessToken = yolink.yoAccess.get_access_token() 
                 yolink.client.loop_stop()
                 yolink.client.disconnect()
-                time.sleep(1)
+                #time.sleep(1)
                 while not yolink.yoAccess.request_new_token():
                     time.sleep(60)
                     logging.info('Trying to acquire new token')
@@ -177,7 +178,8 @@ class YoLinkMQTTClient(object):
                     yolink.yoAccess.request_new_token()
                 else:
                     logging.error('Lost credential info - need to restart node server')
-
+        '''
+        
     def on_subscribe(yolink, client, userdata, mID, granted_QOS):
         logging.debug('on_subscribe')
         #logging.debug('on_subscribe called')
@@ -200,38 +202,39 @@ class YoLinkMQTTClient(object):
         #yolink.lastDataPacket = data
         token = yolink.yoAccess.get_access_token()
         logging.debug ('publish data - tokens identical  : {}'.format(yolink.accessToken == token))
-        if yolink.accessToken == token:
-            try:
-                
-                yolink.lastDataPacket = data
-                dataTemp = str(json.dumps(data))    
-                result = yolink.client.publish(yolink.topicReq, dataTemp)
+        #if yolink.accessToken == token:
+        try:
+            
+            yolink.lastDataPacket = data
+            dataTemp = str(json.dumps(data))    
+            result = yolink.client.publish(yolink.topicReq, dataTemp)
 
-                #logging.debug('publish result: {}'.format(result.rc))
-                if result.rc != 0:
-                    attempts = 0 
-                    if result.rc == 4: #try to renew token
-                        yolink.accessToken = yolink.yoAccess.get_access_token() 
-                        yolink.client.loop_stop()
-                        yolink.client.disconnect()
-                        yolink.connect_to_broker()
-                    while attempts < max_retries and result.rc != 0:
-                        time.sleep(1)
-                        result = yolink.client.publish(yolink.topicReq, dataTemp)
-                        if result.rc != 0:
-                            attempts = attempts + 1
-                            logging.info('Device not fonund - retrying ')
-                            
+            #logging.debug('publish result: {}'.format(result.rc))
+            if result.rc != 0:
+                attempts = 0 
+                if result.rc == 4: #try to renew token
+                    yolink.accessToken = yolink.yoAccess.request_new_token() 
+                    yolink.client.loop_stop()
+                    yolink.client.disconnect()
+                    yolink.connect_to_broker()
+                while attempts < max_retries and result.rc != 0:
+                    time.sleep(1)
+                    result = yolink.client.publish(yolink.topicReq, dataTemp)
+                    if result.rc != 0:
+                        attempts = attempts + 1
+                        logging.info('Device not fonund - retrying ')
+                        
 
-            except Exception as e:
-                logging.error('Exception  - publish_data: {}'.format(e))
-
+        except Exception as e:
+            logging.error('Exception  - publish_data: {}'.format(e))
+        '''
         else: # token was renewed - we need to reconnect to the broker
             logging.info('access token renewed')
-            yolink.accessToken = token 
+            yolink.accessToken = token
+            yolink.disconnect = False
             yolink.client.loop_stop()
             yolink.client.disconnect()
-            yolink.connect_to_broker()
+            #yolink.connect_to_broker()
             try:
                 dataTemp = str(json.dumps(data))
                 result = yolink.client.publish(yolink.topicReq, dataTemp)
@@ -239,7 +242,7 @@ class YoLinkMQTTClient(object):
                     time.sleep(2) 
             except Exception as E:
                 logging.error('Exception  - publish_data: ' + str(E))
-            
+        '''    
 
 
     def savePacket(yolink, msg, data, fileType):

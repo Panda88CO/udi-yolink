@@ -37,7 +37,7 @@ except ImportError:
 
 class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
-        super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  
+        super().__init__( polyglot, primary, address, name)  
         self.hb = 0
         self.poly=polyglot
         self.nodeDefineDone = False

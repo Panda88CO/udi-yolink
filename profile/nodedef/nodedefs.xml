@@ -93,7 +93,6 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
-
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
