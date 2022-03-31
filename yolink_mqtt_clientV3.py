@@ -4,7 +4,7 @@ import json
 #import sys
 import time
 import datetime
-import os
+
 from threading import Lock
 try:
     import udi_interface
@@ -23,30 +23,30 @@ Object representation for YoLink MQTT Client
 """
 class YoLinkMQTTClient(object):
 
-    def __init__(yolink, yoAccess,  deviceInfo, callback ):
+    def __init__ ( yolink, yoAccess, homeID ):
         yolink.lock = Lock()
         #yolink.callback = callback
         yolink.yoAccess = yoAccess
         #yolink.deviceInfo = deviceInfo
-        yolink.homeID = yoAccess.homeID
+        yolink.homeID = homeID
         #yolink.deviceId = deviceInfo['deviceId']
-        yolink.uniqueID = deviceInfo['deviceId']#+str(int(time.time()))
+        #yolink.uniqueID = deviceInfo['deviceId']#+str(int(time.time()))
         yolink.accessToken = yoAccess.get_access_token()
 
-        yolink.topicReq = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/request'
-        yolink.topicResp = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/response'
-        yolink.topicReport = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/report'
-        yolink.topicReportAll = 'yl-home/'+yolink.homeID+'/+/report'
+        #yolink.topicReq = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/request'
+        #yolink.topicResp = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/response'
+        #yolink.topicReport = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/report'
+        #yolink.topicReportAll = 'yl-home/'+yolink.homeID+'/+/report'
 
         if yolink.deviceList == None:
             yolink.deviceList = {}
-        yolink.deviceList[yolink.deviceID] = {  'callback': callback, 
-                                                'request': yolink.topicReq,
-                                                'response': yolink.topicResp,
-                                                'report': yolink.topicReport,
-                                                'subscribed': False}
-        yolink.mqttPort = int(yoAccess.mqttPort)
-        yolink.mqttURL = yoAccess.mqttURL
+        #yolink.deviceList[yolink.deviceID] = {  'callback': callback, 
+        #                                        'request': yolink.topicReq,
+        #                                        'response': yolink.topicResp,
+        #                                        'report': yolink.topicReport,
+        #                                        'subscribed': False}
+        #yolink.mqttPort = int(yoAccess.mqttPort)
+        #yolink.mqttURL = yoAccess.mqttURL
         yolink.retryNbr = 0
         yolink.disconnect = False
         #yolink.lastDataPacket = {}

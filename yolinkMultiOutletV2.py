@@ -16,6 +16,7 @@ except ImportError:
 class YoLinkMultiOut(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(  yoAccess, deviceInfo, callback)
+        yolink.yoAccess = yoAccess
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdates'   ]
         yolink.eventList = ['StatusChange', 'Report']
@@ -172,7 +173,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yolinkMQTTclient.publish_data( data)
+        yolink.yoAccess.publish_data( data)
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays(delTemp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
@@ -193,7 +194,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yolinkMQTTclient.publish_data( data)
+        yolink.yoAccess.publish_data( data)
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}] )
         yolink.online = yolink.dataAPI[yolink.dOnline]

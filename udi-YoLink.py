@@ -6,7 +6,7 @@ MIT License
 
 import sys
 import time
-from yoLinkInit import YoLinkInitPAC
+from yoLinkInitV2 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoTHsensorV2 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor

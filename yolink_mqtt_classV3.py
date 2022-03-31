@@ -17,7 +17,7 @@ except ImportError:
 
 
 
-#import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt
 from queue import Queue
 #from yolink_mqtt_clientV3 import YoLinkMQTTClient
 from yolinkDelayTimer import CountdownTimer
@@ -33,7 +33,7 @@ class YoLinkMQTTDevice(object):
         #{"deviceId": "d88b4c1603007966", "deviceUDID": "75addd8e21394d769b85bc292c553275", "name": "YoLink Hub", "token": "118347ae-d7dc-49da-976b-16fae28d8444", "type": "Hub"}
         
         yolinkDelaySupport = ['']
-        yolink.yoAccess = yoAccess
+        
         yolink.deviceInfo = deviceInfo
         yolink.deviceId = yolink.deviceInfo['deviceId']
         yolink.type = yolink.deviceInfo['type']
@@ -43,11 +43,11 @@ class YoLinkMQTTDevice(object):
         yolink.nbrPorts = 1
         yolink.nbrOutlets = 1
         yolink.nbrUsb = 0 
-        yolink.yoAccess.subscribe_mqtt( yolink.deviceId, callback)
+       
         
 
-        #yolink.yolink_URL = yoAccess.apiv2URL
-        #yolink.mqttURL = yoAccess.mqttURL
+        yolink.yolink_URL = yoAccess.apiv2URL
+        yolink.mqttURL = yoAccess.mqttURL
         yolink.noconnect = 0 # number on consecutive no connect to device
   
         yolink.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
@@ -101,7 +101,7 @@ class YoLinkMQTTDevice(object):
         yolink.eventQueue = Queue()
         #yolink.mutex = threading.Lock()
         yolink.timezoneOffsetSec = yolink.timezoneOffsetSec()
-        #yolink.yoAccess.connect_to_broker()
+        yolink.yoAccess.connect_to_broker()
         #yolink.loopTimeSec = updateTimeSec
     
         #yolink.updateInterval = 3

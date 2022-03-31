@@ -17,9 +17,9 @@ except ImportError:
 
 
 
-#import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt
 from queue import Queue
-#from yolink_mqtt_clientV3 import YoLinkMQTTClient
+from yolink_mqtt_clientV3 import YoLinkMQTTClient
 from yolinkDelayTimer import CountdownTimer
 """
 Object representation for YoLink MQTT Client
@@ -33,7 +33,7 @@ class YoLinkMQTTDevice(object):
         #{"deviceId": "d88b4c1603007966", "deviceUDID": "75addd8e21394d769b85bc292c553275", "name": "YoLink Hub", "token": "118347ae-d7dc-49da-976b-16fae28d8444", "type": "Hub"}
         
         yolinkDelaySupport = ['']
-        yolink.yoAccess = yoAccess
+        
         yolink.deviceInfo = deviceInfo
         yolink.deviceId = yolink.deviceInfo['deviceId']
         yolink.type = yolink.deviceInfo['type']
@@ -43,11 +43,11 @@ class YoLinkMQTTDevice(object):
         yolink.nbrPorts = 1
         yolink.nbrOutlets = 1
         yolink.nbrUsb = 0 
-        yolink.yoAccess.subscribe_mqtt( yolink.deviceId, callback)
+        yolink.yolinkMQTTclient = YoLinkMQTTClient(yoAccess,  yolink.deviceInfo, callback )
         
 
-        #yolink.yolink_URL = yoAccess.apiv2URL
-        #yolink.mqttURL = yoAccess.mqttURL
+        yolink.yolink_URL = yoAccess.apiv2URL
+        yolink.mqttURL = yoAccess.mqttURL
         yolink.noconnect = 0 # number on consecutive no connect to device
   
         yolink.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
@@ -101,7 +101,7 @@ class YoLinkMQTTDevice(object):
         yolink.eventQueue = Queue()
         #yolink.mutex = threading.Lock()
         yolink.timezoneOffsetSec = yolink.timezoneOffsetSec()
-        #yolink.yoAccess.connect_to_broker()
+        yolink.yolinkMQTTclient.connect_to_broker()
         #yolink.loopTimeSec = updateTimeSec
     
         #yolink.updateInterval = 3
@@ -121,7 +121,7 @@ class YoLinkMQTTDevice(object):
 
     def shut_down(yolink):
         yolink.diconnect = True
-        yolink.yoAccess.shut_down()
+        yolink.yolinkMQTTclient.shut_down()
    
     def deviceError(yolink, data):
         logging.debug(yolink.type+' - deviceError')
@@ -142,7 +142,7 @@ class YoLinkMQTTDevice(object):
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
             #logging.debug  ('refreshDevice')
-            yolink.yoAccess.publish_data(data)
+            yolink.yolinkMQTTclient.publish_data(data)
             yolink.lastControlPacket = data
             time.sleep(1)
               
@@ -165,7 +165,7 @@ class YoLinkMQTTDevice(object):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token']
         if worked:
-            yolink.yoAccess.publish_data(data)
+            yolink.yolinkMQTTclient.publish_data(data)
             return(True)
         else:
             return(False)
@@ -324,7 +324,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yoAccess.publish_data( data)
+        yolink.yolinkMQTTclient.publish_data( data)
         
         delays['ch'] = 1
         delays['on'] = data['params']['delayOn']
@@ -345,7 +345,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yoAccess.publish_data( data)
+        yolink.yolinkMQTTclient.publish_data( data)
         
         delays['ch'] = 1
         delays['on'] = data['params']['delayOn']
@@ -365,7 +365,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yoAccess.publish_data( data)
+        yolink.yolinkMQTTclient.publish_data( data)
         
         delays['ch'] = 1
         delays['off'] = data['params']['delayOff']
@@ -398,7 +398,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yoAccess.publish_data( data)
+        yolink.yolinkMQTTclient.publish_data( data)
         delays['ch'] = 1
         delays['on'] = data['params']['delayOn']
         delays['off'] = data['params']['delayOff']
@@ -449,7 +449,7 @@ class YoLinkMQTTDevice(object):
             data['method'] = methodStr
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
-            yolink.yoAccess.publish_data(data)
+            yolink.yolinkMQTTclient.publish_data(data)
             
 
     def getSchedules(yolink):
@@ -488,7 +488,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setSchedules'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token']
-        yolink.yoAccess.publish_data(data)
+        yolink.yolinkMQTTclient.publish_data(data)
         time.sleep(1)
 
     
