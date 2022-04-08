@@ -25,6 +25,7 @@ try:
     import udi_interface
     logging = udi_interface.LOGGER
     Custom = udi_interface.Custom
+
 except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
@@ -46,7 +47,7 @@ class YoLinkSetup (udi_interface.Node):
         self.name = name
         
 
-        #logging.setLevel(20)
+        #logging.setLevel(30)
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
@@ -85,7 +86,7 @@ class YoLinkSetup (udi_interface.Node):
     def start (self):
         logging.info('Executing start - udi-YoLink')
         logging.info ('Access using PAC/UAC')
-        logging.setLevel(10)
+        #logging.setLevel(30)
         while not self.nodeDefineDone:
             time.sleep(1)
             logging.debug ('waiting for inital node to get created')
