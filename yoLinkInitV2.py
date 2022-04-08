@@ -400,7 +400,7 @@ class YoLinkInitPAC(object):
         else:
             f = open('MISCpackets.txt', 'a')
         #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
-        f.write('{} - {}\n'.format( datetime.datatime.now(), msg))
+        f.write('{} - {}\n'.format( datetime.datetime.now(), msg))
         f.write(data)
         f.write('\n\n')
         #json.dump(jsonStr, f)
