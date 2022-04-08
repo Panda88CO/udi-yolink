@@ -22,17 +22,17 @@ class YoLinkManipul(YoLinkMQTTDevice):
         yolink.type = 'Manipulator'
         time.sleep(1)
 
-
+    '''
     def initNode(yolink):
         yolink.refreshState()
-        yolink.online = yolink.getOnlineStatus()
-        #
-        #if yolink.online:
+        time.sleep(2)
+        if not yolink.online:
+            logging.error('Manipulator device not online')
         #    yolink.refreshSchedules()
         #else:
-        #    logging.error('Manipulator device not online')
+        #    
         #yolink.refreshFW
-        
+    ''' 
 
     
     def updateStatus(self, data):
@@ -40,7 +40,7 @@ class YoLinkManipul(YoLinkMQTTDevice):
 
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState')
-        yolink.online = yolink.getOnlineStatus()
+        #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
             if state.lower() != 'open' and  state.lower() != 'closed':
                 logging.error('Unknows state passed')
@@ -53,7 +53,7 @@ class YoLinkManipul(YoLinkMQTTDevice):
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
-        yolink.online = yolink.getOnlineStatus()
+        #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
             attempts = 0
             while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
@@ -70,7 +70,7 @@ class YoLinkManipul(YoLinkMQTTDevice):
                 return('Unkown')
     
     def getData(yolink):
-        yolink.online = yolink.getOnlineStatus()
+        #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
             return(yolink.getData())
 

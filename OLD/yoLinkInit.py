@@ -14,7 +14,7 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 
 countdownTimerUpdateInterval_G = 10
-from yolink_mqtt_clientV3 import YoLinkMQTTClient
+from OLD.yolink_mqtt_clientV3 import YoLinkMQTTClient
 
 
 class YoLinkInitPAC(object):

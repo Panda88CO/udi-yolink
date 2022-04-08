@@ -28,27 +28,31 @@ class YoLinkOutl(YoLinkMQTTDevice):
         #yolink.refreshSchedules()
         #yolink.refreshFWversion()
 
-
+    '''
     def initNode(yolink):
+        attemps = 0
+        maxAttemts = 3
         yolink.refreshState()
-        yolink.online = yolink.getOnlineStatus()
-        if not yolink.online:
+        time.sleep(1)
+        #yolink.online = yolink.getOnlineStatus()
+        while not yolink.online and attemps <= maxAttemts:
+            yolink.refreshState()
+            time.sleep(1)
+        if yolink.online:    
             logging.error('Outlet not online')
         #else:
         #   yolink.refreshSchedules()
-      
-            
-       
         #self.refreshFWversion()
         #print(' YoLinkSW - finished intializing')
- 
+    '''
+    
     def updateStatus(self, data):
         self.updateCallbackStatus(data, False)
 
     def setState(yolink, state):
         logging.debug(yolink.type + ' - setState')
         outlet = str(state)
-        yolink.online = yolink.getOnlineStatus()
+        #yolink.online = yolink.getOnlineStatus()
         if yolink.online:
             if 'setState'  in yolink.methodList:          
                 if outlet.lower() not in yolink.stateList:
@@ -68,7 +72,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
-        yolink.online = yolink.getOnlineStatus()
+        #yolink.online = yolink.getOnlineStatus()
         if yolink.online:       
             attempts = 0
             while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
@@ -89,7 +93,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
     def getEnergy(yolink):
         logging.debug(yolink.type+' - getEnergy')
 
-        yolink.online = yolink.getOnlineStatus()
+        #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
             try:    
                 return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['watt']})

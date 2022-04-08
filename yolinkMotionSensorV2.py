@@ -20,12 +20,14 @@ class YoLinkMotionSen(YoLinkMQTTDevice):
         yolink.type = 'MotionSensor'
         time.sleep(2)
        
-
+    '''
     def initNode(yolink):
         yolink.refreshDevice()
-        yolink.online = yolink.getOnlineStatus()
+        time.sleep(2)
+        #yolink.online = yolink.getOnlineStatus()
         if not yolink.online:
             logging.error('Motion Sensor not online')
+    '''
     
     def refreshSensor(yolink):
         yolink.refreshDevice()

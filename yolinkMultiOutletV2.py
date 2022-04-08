@@ -30,29 +30,28 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
         time.sleep(2)
 
-
+    '''
     def initNode(yolink):
         logging.debug('MultiOutlet initNode - {}'.format(yolink.deviceInfo['name']))
+        
         yolink.initDevice()
-       
+        time.sleep(2)
         #time.sleep(2)
         
        
         #temp = yolink.getInfoAPI()
         #yolink.refreshMultiOutlet() # needed to get number of ports on device
         #yolink.refreshDevice()
-        yolink.online = yolink.getOnlineStatus()
+        #yolink.online = yolink.getOnlineStatus()
         if yolink.online:
             logging.info('MultiOutlet init - Nbr Outlets : {}'.format(yolink.nbrOutlets))
             logging.info('MultiOutlet init - Nbr USB : {}'.format(yolink.nbrUsb))
-            
-    
-           
         else:
             logging.info ('MultiOutlet not online')
         #yolink.refreshSchedules()
         #yolink.refreshFWversion()
-
+    '''
+    
     '''
     def getSchedules (yolink):
         return(yolink.dataAPI['data']['schedules'])  
@@ -373,6 +372,11 @@ class YoLinkMultiOutlet(YoLinkMultiOut):
     def __init__(yolink, yoAccess, deviceInfo):
         super().__init__(  yoAccess, deviceInfo, yolink.updateStatus)
         yolink.initNode()
+        if yolink.online:
+            logging.info('MultiOutlet init - Nbr Outlets : {}'.format(yolink.nbrOutlets))
+            logging.info('MultiOutlet init - Nbr USB : {}'.format(yolink.nbrUsb))
+        else:
+            logging.info ('MultiOutlet not online')        
 
     def updateStatus(self, data):
         self.updateCallbackStatus(data, True)

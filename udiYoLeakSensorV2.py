@@ -75,6 +75,7 @@ class udiYoLeakSensor(udi_interface.Node):
     def start(self):
         logging.info('start - YoLinkLeakSensor')
         self.yoLeakSensor  = YoLinkLeakSen(self.yoAccess, self.devInfo, self.updateStatus)
+        time.sleep(2)
         if self.yoLeakSensor:
             self.yoLeakSensor.initNode()
             self.node.setDriver('ST', 1, True, True)
@@ -82,10 +83,10 @@ class udiYoLeakSensor(udi_interface.Node):
             logging.error('Not able to connect leakSensor')
         #time.sleep(3)
     
-
+    '''
     def initNode(self):
         self.yoLeakSensor.refreshSensor()
-
+    '''
     
     def stop (self):
         logging.info('Stop udiYoLeakSensor ')
@@ -111,7 +112,7 @@ class udiYoLeakSensor(udi_interface.Node):
         if self.node is not None:
             if self.yoLeakSensor.online:
                 waterState =   self.waterState()  
-                logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus())  ))
+                logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
                 self.node.setDriver('GV0', waterState, True, True)
                 self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)

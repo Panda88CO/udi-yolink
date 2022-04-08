@@ -80,6 +80,7 @@ class udiYoOutlet(udi_interface.Node):
         logging.info('start - YoLinkOutlet')
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+        time.sleep(2)
         self.yoOutlet.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)

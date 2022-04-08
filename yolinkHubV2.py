@@ -26,13 +26,14 @@ class YoLinkHu(YoLinkMQTTDevice):
     def refreshHub(yolink):
         logging.debug('refreshHub') 
         return(yolink.refreshDevice( ))
-
+    '''
     def initNode(yolink):
         yolink.refreshDevice()
-        yolink.online = yolink.getOnlineStatus()
+        time.sleep(2)
         if not yolink.online:
             logging.error('Hub not online')
-
+    '''
+    
     def updataStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 

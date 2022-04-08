@@ -301,6 +301,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
+        time.sleep(2)
         self.yoMultiOutlet.initNode()
         if self.yoMultiOutlet.online:
             time.sleep(2)

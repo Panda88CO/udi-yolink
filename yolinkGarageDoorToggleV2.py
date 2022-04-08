@@ -22,6 +22,7 @@ class YoLinkGarageDoorCtrl(YoLinkMQTTDevice):
         yolink.eventTime = 'Time'
         yolink.type = 'GarageDoor'
         time.sleep(1)
+        yolink.online = True # No way to check 
         
     def toggleDevice(yolink):
         logging.debug(yolink.type+' - toggle')
@@ -36,7 +37,8 @@ class YoLinkGarageDoorToggle(YoLinkGarageDoorCtrl):
     def __init__(yolink, yoAccess,  deviceInfo ):
         super().__init__( yoAccess,  deviceInfo, yolink.updateStatus)
         #yolink.initNode()
-
+        yolink.online = True # No way to check 
+        
 
     # Enable Event Support (True below)
     def updateStatus(yolink, data):

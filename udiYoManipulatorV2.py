@@ -78,6 +78,7 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Start - udiYoManipulator')
         self.yoManipulator = YoLinkManipul(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
+        time.sleep(2)
         self.yoManipulator.initNode()
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
@@ -85,8 +86,7 @@ class udiYoManipulator(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoManipulator')
         self.node.setDriver('ST', 0, True, True)
-        if self.yoManipulator.onlineStatus():
-            self.yoManipulator.shut_down()
+        self.yoManipulator.shut_down()
 
     def checkOnline(self):
         #get get info even if battery operated 

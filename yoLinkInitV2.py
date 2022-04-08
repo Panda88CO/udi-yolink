@@ -18,7 +18,7 @@ except ImportError:
 countdownTimerUpdateInterval_G = 10
 #from yolink_mqtt_clientV3 import YoLinkMQTTClient
 import paho.mqtt.client as mqtt
-DEBUG = False
+DEBUG = True
 
 
 class YoLinkInitPAC(object):
@@ -61,6 +61,7 @@ class YoLinkInitPAC(object):
             yoAccess.client.on_message = yoAccess.on_message
             yoAccess.client.on_subscribe = yoAccess.on_subscribe
             yoAccess.client.on_disconnect = yoAccess.on_disconnect
+            yoAccess.client.on_publish = yoAccess.on_publish
             #logging.debug('finish subscribing ')
             yoAccess.connect_to_broker()
         except Exception as E:
@@ -159,6 +160,10 @@ class YoLinkInitPAC(object):
     def getDeviceList (yoAccess):
         return(yoAccess.deviceList)
 
+
+    def shut_down(yoAccess):
+        yoAccess.client.loop_stop()
+
     ########################################
     # MQTT stuff
     ########################################
@@ -197,67 +202,65 @@ class YoLinkInitPAC(object):
                                             'request': topicReq,
                                             'response': topicResp,
                                             'report': topicReport,
-                                            'subscribed': True}
+                                            'subscribed': True
+                                            }
+            #logging.debug('subscribe_mqtt: {}'.format(yoAccess.mqttList))
+            time.sleep(2)
+
 
 
     def on_message(yoAccess, client, userdata, msg):
         """
         Callback for broker published events
         """
-        maxRetry = 2
         #logging.debug('on_message')
         #logging.debug(client)
         #logging.debug(userdata)
         #logging.debug(msg)
-        #logging.debug(msg.topic, msg.payload)
+        logging.debug('on message in topic {}, payload{}: '.format(msg.topic, msg.payload))
         
         payload = json.loads(msg.payload.decode("utf-8"))
         deviceId = 'unknown'
-        try:
-            if 'targetDevice' in payload:
-                deviceId = payload['targetDevice']
-            elif 'deviceId' in payload:
-                deviceId = payload['deviceId']
-            else:
-                logging.debug('Unknow device in payload : {}'.format(payload))
-                return(False)
-            if DEBUG:
-                dataTemp = str(json.dumps(payload))
-            logging.debug('on_message for {}: {}\n {}'.format(deviceId, msg.topic, payload))
+        #try:
+        if 'targetDevice' in payload:
+            deviceId = payload['targetDevice']
+        elif 'deviceId' in payload:
+            deviceId = payload['deviceId']
+        else:
+            logging.debug('Unknow device in payload : {}'.format(payload))
+            return(False)
+        if DEBUG:
+            dataTemp = str(json.dumps(payload))
+        logging.debug('on_message for {}: {} {}'.format(deviceId, msg.topic, payload))
 
-            if deviceId in yoAccess.mqttList:
-                tempCallback = yoAccess.mqttList[deviceId]['callback']
-                if  msg.topic == yoAccess.mqttList[deviceId]['report']:                    
-                    tempCallback(payload)
+        if deviceId in yoAccess.mqttList:
+            tempCallback = yoAccess.mqttList[deviceId]['callback']
+            if  msg.topic == yoAccess.mqttList[deviceId]['report']:                    
+                tempCallback(payload)
+                if DEBUG:
+                    yoAccess.savePacket(msg.topic, dataTemp, 'EVENT')
+            elif msg.topic == yoAccess.mqttList[deviceId]['response']:
+
+                    if payload['code'] == '000000':
+                       tempCallback(payload)
+                    else:
+                        logging.error('NON 000000 code {}: {}'.format(payload['desc'], payload))
+                        tempCallback(payload)
+                        #time.sleep(2)
+                        #yoAccess.publish_data(yoAccess.lastDataPacket[deviceId])
                     if DEBUG:
-                        yoAccess.savePacket(msg.topic, dataTemp, 'EVENT')
-                elif msg.topic == yoAccess.mqttList[deviceId]['response']:
+                        yoAccess.savePacket(msg.topic, dataTemp, 'RESP')
+            elif msg.topic == yoAccess.mqttList[deviceId]['request']:
 
-                        if payload['code'] == '000000':
-                            yoAccess.retryNbr = 0
-                            tempCallback(payload)
-                        else:
-                            yoAccess.retryNbr += 1
-                            if yoAccess.retryNbr <= maxRetry:
-                                tempCallback(payload)
-                                time.sleep(2)
-                                yoAccess.publish_data(yoAccess.lastDataPacket[deviceId])
-                            else:
-                                yoAccess.retryNbr = 0
-                                tempCallback(payload)
-                        if DEBUG:
-                            yoAccess.savePacket(msg.topic, dataTemp, 'RESP')
-                elif msg.topic == yoAccess.mqttList[deviceId]['request']:
-
-                        if DEBUG:
-                            yoAccess.savePacket(msg.topic, dataTemp, 'REQ')
-                else:
-                    logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
+                    if DEBUG:
+                        yoAccess.savePacket(msg.topic, dataTemp, 'REQ')
             else:
-                logging.error('Unsupported device: {}'.format(deviceId))
-        except Exception as e:
-            logging.error('Exception  - on_message for {} {}: {}'.format(deviceId, payload, e))
-            logging.error ('Error data: {}'.format(payload))
+                logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
+        else:
+            logging.error('Unsupported device: {}'.format(deviceId))
+        #except Exception as e:
+        #    logging.error('Exception - on_message for {} {}: {}'.format(deviceId, payload, e))
+        #    logging.error ('Error data: {}'.format(payload))
    
     def on_connect(yoAccess, client, userdata, flags, rc):
         """
@@ -339,10 +342,14 @@ class YoLinkInitPAC(object):
             deviceId = data['targetDevice']
             #dataTempStr = str(dataTemp)
             yoAccess.lastDataPacket[deviceId] = data
+            logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
+            logging.debug('mqtt list : {}'.format(yoAccess.mqttList))
             if deviceId in yoAccess.mqttList:
+                logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr)
-
-            #logging.debug('publish result: {}'.format(result.rc))
+            else:
+                logging.error('device {} not in mqtt list'.format(deviceId))
+            logging.debug('publish result: {}'.format(result.rc))
             if result.rc != 0:
                 attempts = 0 
                 if result.rc == 4: #try to renew token
@@ -393,15 +400,14 @@ class YoLinkInitPAC(object):
         else:
             f = open('MISCpackets.txt', 'a')
         #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
-        f.write('{} - {}\n'.format( datetime.datetime.now(), msg))
+        f.write('{} - {}\n'.format( datetime.datatime.now(), msg))
         f.write(data)
         f.write('\n\n')
         #json.dump(jsonStr, f)
         f.close()
         yoAccess.lock.release()
 
-    def shut_down(yoAccess):
-        yoAccess.client.loop_stop()
+
 
 
 
