@@ -181,6 +181,8 @@ class YoLinkInitPAC(object):
     def shut_down(yoAccess):
         yoAccess.client.loop_stop()
         yoAccess.STOP.set()
+        yoAccess.client.disconnect()
+        yoAccess.disconnect = True
 
 
     ########################################
