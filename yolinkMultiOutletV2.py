@@ -28,7 +28,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.extDelayTimer = CountdownTimer()
         #yolink.extDelayTimer.timerCallback(callback)
 
-        time.sleep(2)
+        time.sleep(1)
 
     '''
     def initNode(yolink):
@@ -143,6 +143,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
 
     def setMultiOutDelayList (yolink, delayList):
+        attempt = 1
+        maxAttempts = 3
         logging.info('outletSetDelayList')
         data = {}
         delTemp = []
@@ -168,17 +170,21 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                 data['params']['delays'].append(temp)
                 delTemp.append(temp)
         logging.debug('Sending delay data: {}'.format( data['params']['delays']))
-        data['time'] = str(int(time.time())*1000)
+        data['time'] = str(int(time.time_ns()//1e6))
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yoAccess.publish_data( data)
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays(delTemp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 
     def setMultiOutDelays (yolink, port, onDelay, offDelay, callback):
+        attempt = 1
+        maxAttempts = 3
         logging.info('outletSetDelay')
         data = {}
         data['params'] = {}
@@ -189,11 +195,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         
         logging.debug('Sending delay data: {}'.format(delaySpec))
         data['params']['delays'].append(delaySpec)
-        data['time'] = str(int(time.time())*1000)
+        data['time'] = str(int(time.time_ns()//1e6))
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yoAccess.publish_data( data)
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}] )
         yolink.online = yolink.dataAPI[yolink.dOnline]
@@ -262,6 +270,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
     '''
     def setMultiDelay(yolink,  delayList):
+        atttempt = 1
+        maxAttempts = 3
         logging.debug(yolink.type+' - setDelay')
         #port = port + yolink.nbrUsb
         data = {}
@@ -282,11 +292,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             logging.debug('Empty list provided ')
 
             return(False, yolink.dataAPI[yolink.dOnline])
-        data['time'] = str(int(time.time())*1000)
+        data['time'] = str(int(time.time_ns()//1e6))
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yolinkMQTTclient.publish_data( data)
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
     '''

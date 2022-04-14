@@ -88,7 +88,7 @@ class udiYoOutlet(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoOutlet')
         self.node.setDriver('ST', 0, True, True)
-        if self.yoOutlet.onlineStatus():
+        if self.yoOutlet.online:
             self.yoOutlet.shut_down()
 
 

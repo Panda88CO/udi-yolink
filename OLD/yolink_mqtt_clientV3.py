@@ -62,7 +62,7 @@ class YoLinkMQTTClient(object):
             except Exception as E:
                 logging.error('Exception - init- MQTT: {}'.format(E))
         else:
-            logging.debug('MQTT client already connected :{}'.format(deviceInfo['name']) )
+            logging.debug('MQTT client already connected :')
         yolink.messagePending = False
         #logging.debug(yolink.deviceId)
         #yolink.client.tls_set()

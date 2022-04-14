@@ -21,7 +21,7 @@ class YoLinkGarageDoorCtrl(YoLinkMQTTDevice):
         yolink.ToggleName = 'GarageEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'GarageDoor'
-        time.sleep(1)
+        #time.sleep(1)
         yolink.online = True # No way to check 
         
     def toggleDevice(yolink):

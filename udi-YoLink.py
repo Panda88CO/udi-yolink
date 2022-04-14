@@ -66,7 +66,8 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(self.address)
-        self.node.setDriver('ST', 1, True, True)
+
+        
         
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
@@ -163,12 +164,13 @@ class YoLinkSetup (udi_interface.Node):
 
     def stop(self):
         logging.info('Stop Called:')
-        self.node.setDriver('ST', 0, True, True)
-        nodes = self.poly.getNodes()
-        for node in nodes:
-            if node != 'setup':   # but not the controller node
-                nodes[node].setDriver('ST', 0, True, True)
-        time.sleep(2)
+        if self.node:
+            self.node.setDriver('ST', 0, True, True)
+            nodes = self.poly.getNodes()
+            for node in nodes:
+                if node != 'setup':   # but not the controller node
+                    nodes[node].setDriver('ST', 0, True, True)
+            time.sleep(2)
         self.poly.stop()
         exit()
  
