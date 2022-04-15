@@ -171,7 +171,8 @@ class YoLinkSetup (udi_interface.Node):
             #    if node != 'setup':   # but not the controller node
             #        nodes[node].setDriver('ST', 0, True, True)
             time.sleep(2)
-        self.yoAccess.shut_down()
+        if self.yoAccess:
+            self.yoAccess.shut_down()
         self.poly.stop()
         exit()
  

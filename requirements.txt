@@ -1,6 +1,3 @@
 udi_interface>=3.0.35
-paho-mqtt
+paho-mqtt>1.6.1
 requests>=2.25
-datetime 
-threading
-queue

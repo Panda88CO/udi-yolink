@@ -256,7 +256,7 @@ class YoLinkInitPAC(object):
             #return(False)
         #yoAccess.lastDataPacket[deviceId] = payload
 
-        logging.info('on_message for {}: {} {}'.format(deviceId, msg.topic, payload))
+        logging.debug('on_message for {}: {} {}'.format(deviceId, msg.topic, payload))
 
         if deviceId in yoAccess.mqttList:
             tempCallback = yoAccess.mqttList[deviceId]['callback']
@@ -315,7 +315,7 @@ class YoLinkInitPAC(object):
             if (rc == 0):
                 logging.info(" Successfully connected to broker {} ".format(yoAccess.mqttURL))
             else:
-                logging.debug("Broker connection failed with result code {}".format(rc))
+                logging.error("Broker connection failed with result code {}".format(rc))
                 os.exit(2)
             time.sleep(1)
             #logging.debug('Subsribe: ' + yoAccess.topicResp + ', '+yoAccess.topicReport+', '+ yoAccess.topicReportAll )
@@ -374,14 +374,14 @@ class YoLinkInitPAC(object):
         while not yoAccess.STOP.is_set():
             try:
                 data = yoAccess.publishQueue.get(timeout = 10) 
-                logging.info('QueSize after get(): {}'.format(yoAccess.publishQueue.qsize()))
+                #logging.info('QueSize after get(): {}'.format(yoAccess.publishQueue.qsize()))
                 #time.sleep(4)
                 deviceId = data['targetDevice']
                 dataStr = str(json.dumps(data))
                 yoAccess.tmpData[deviceId] = dataStr
                 yoAccess.lastDataPacket[deviceId] = data
                 if deviceId in yoAccess.mqttList:
-                    logging.info( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
+                    logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                     result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr)
                 else:
                     logging.error('device {} not in mqtt list'.format(deviceId))
@@ -403,7 +403,7 @@ class YoLinkInitPAC(object):
                         yoAccess.connect_to_broker()
 
             except Exception as e:
-                logging.debug('Data  Queue looping {}'.format(e))
+                #logging.debug('Data  Queue looping {}'.format(e))
                 pass # go wait again unless stop is called
 
             
@@ -511,7 +511,7 @@ class YoLinkInitPAC(object):
                 f.close()
                 time.sleep(0.2)
             except Exception as e:
-                logging.debug('File Queue looping {}'.format(e))
+                #logging.debug('File Queue looping {}'.format(e))
                 pass # go wait again unless stop is called
 
 

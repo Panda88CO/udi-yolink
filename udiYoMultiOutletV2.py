@@ -322,18 +322,18 @@ class udiYoMultiOutlet(udi_interface.Node):
             for port in range(0,self.yoMultiOutlet.nbrOutlets):
                 try:
                     #logging.debug('Adding sub outlet : {}'.format(port))
-                    self.subOutletAdr[port] =  self.address[0:11]+'_o' + str(port)
+                    self.subOutletAdr[port] =  self.address[0:11]+'OP' + str(port)
                     logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1), port))
                     self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1),port, self.yoMultiOutlet)
                     self.poly.addNode(self.subOutlet[port])
-                    #self.wait_for_node_done()
+                    self.wait_for_node_done()
                                     
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subOutletAdr[port], e))
             for usb in range(0, self.yoMultiOutlet.nbrUsb):
                         
                 try:
-                    self.subUsbAdr[usb] = self.address[0:11]+'_u'+str(usb)
+                    self.subUsbAdr[usb] = self.address[0:11]+'US'+str(usb)
                     logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
                     self.subUsb[usb] = udiYoSubUSB(self.poly, self.address,self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
                     self.poly.addNode(self.subUsb[usb])
