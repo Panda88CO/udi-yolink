@@ -85,8 +85,8 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.debug('udiYoSubOutlet - stop')
         self.node.setDriver('ST', 0, True, True)
        
-    #def checkOnline(self):
-    #    pass
+    def checkOnline(self):
+        pass
 
 
     def updateOutNode(self, outeletstate, onDelay, offDelay):
