@@ -18,7 +18,7 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
         yolink.eventList = ['Report']
         yolink.eventTime = 'Time'
         yolink.type = 'DoorSensor'
-        time.sleep(2)
+        #time.sleep(2)
        
   
     def refreshDoorSensor(yolink):
@@ -30,13 +30,7 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
 
     def doorData(yolink):
         return(yolink.getData())
-    '''    
-    def initNode(yolink):
-        yolink.refreshDevice()
-        time.sleep(2)
-        if not yolink.online:
-            logging.error('Door Sensor not online')
-    '''
+
     
     def refreshSensor(yolink):
         yolink.refreshDevice()
@@ -44,13 +38,6 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
-
-
-    '''
-    def getOnlineStatus(yolink):
-        logging.debug(yolink.type+ ' - refreshSensor')
-        return(yolink.getOnlineStatus( ))
-    '''
     
 class YoLinkDoorSensor(YoLinkDoorSens):
     def __init__(yolink, yoAccess,  deviceInfo):

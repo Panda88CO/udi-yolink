@@ -871,9 +871,8 @@ class YoLinkMQTTDevice(object):
 
     def refreshState(yolink):
         logging.debug(str(yolink.type)+ ' - refreshState')
-        #devStr = str(yolink.type)+'.getSate'
         yolink.refreshDevice()
-        #time.sleep(2)
+
    
     def getState(yolink):
         try:

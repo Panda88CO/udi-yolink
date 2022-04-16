@@ -20,7 +20,7 @@ class YoLinkManipul(YoLinkMQTTDevice):
         yolink.ManipulatorName = 'ManipulatorEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'Manipulator'
-        time.sleep(1)
+        #time.sleep(1)
 
     '''
     def initNode(yolink):
@@ -56,7 +56,7 @@ class YoLinkManipul(YoLinkMQTTDevice):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
             attempts = 0
-            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 5:
+            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
                 time.sleep(1)
                 attempts = attempts + 1
             if attempts <= 5:

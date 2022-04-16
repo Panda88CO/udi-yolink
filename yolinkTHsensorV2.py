@@ -21,7 +21,7 @@ class YoLinkTHSen(YoLinkMQTTDevice):
         yolink.humidity = 'Humidity'
         yolink.eventTime = 'Time'
         yolink.type = 'THSensor'
-        time.sleep(2)
+        #time.sleep(2)
 
     '''    
     def initNode(yolink):

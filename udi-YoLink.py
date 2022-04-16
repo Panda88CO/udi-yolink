@@ -190,14 +190,14 @@ class YoLinkSetup (udi_interface.Node):
 
     def systemPoll (self, polltype):
         if self.nodeDefineDone:
-            logging.info('System Poll executing: {}'.format(polltype))
+            logging.debug('System Poll executing: {}'.format(polltype))
             if 'longPoll' in polltype:
                 #Keep token current
                 try:
                     if not self.yoAccess.refresh_token(): #refresh failed
                         while not self.yoAccess.request_new_token():
                                 time.sleep(60)
-                    logging.info('Updating device status')
+                    #logging.info('Updating device status')
                     nodes = self.poly.getNodes()
                     for node in nodes:
                         if node != 'setup':   # but not the controller node

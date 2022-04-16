@@ -22,12 +22,12 @@ class YoLinkLeakSen(YoLinkMQTTDevice):
         yolink.waterName = 'WaterEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'LeakSensor'
-        time.sleep(1)
+        #time.sleep(1)
         #yolink.refreshSensor()
 
     def refreshSensor(yolink):
         logging.debug('refreshWaterSensor')
-        time.sleep(2)
+        #time.sleep(2)
         if yolink.online:   
             return(yolink.refreshDevice())
 

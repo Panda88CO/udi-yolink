@@ -23,7 +23,7 @@ class YoLinkSW(YoLinkMQTTDevice):
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.eventTime = 'Time'
         yolink.type = 'Switch'
-        time.sleep(2)
+        #time.sleep(2)
         #print('yolink.refreshState')
         #yolink.refreshState()
         #yolink.refreshSchedules()

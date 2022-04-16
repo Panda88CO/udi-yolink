@@ -24,9 +24,10 @@
 ## Installation
     Credentials needs to be added to configuration.  Goto Settings->Account->Advanced Settings -> User Access Credentials 
     Enter both UAID and SecretKey under configuration - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
+    Sometimes a reboot of teh ISY is required to make the node server show up correctly 
 
 ## Notes 
     Currently the API does not support multiple homes - it is promised that there will be support in a month or so - will implement then (I need it myself)
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
-    Schedules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schdules)  - I did not manage to get API working with schdules yet 
+    Schedules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schedules)  - I did not manage to get API working with schdules yet 
     

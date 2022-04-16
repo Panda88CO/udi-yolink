@@ -23,12 +23,12 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.type = 'MultiOutlet'
         yolink.MultiOutletName = 'MultiOutletEvent'
         yolink.eventTime = 'Time'
-        #yolink.delayUpdateInt = 15
+        yolink.delayUpdateInt = 15
         #yolink.timerCallback = callback
         yolink.extDelayTimer = CountdownTimer()
         #yolink.extDelayTimer.timerCallback(callback)
 
-        time.sleep(1)
+        #time.sleep(1)
 
     '''
     def initNode(yolink):
