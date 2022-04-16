@@ -65,10 +65,9 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = self.poly.getNode(self.address)
 
-        
-        
+        self.node = self.poly.getNode(self.address)
+        self.node.setDriver('ST', 1, True, True)
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
 

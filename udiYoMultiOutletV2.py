@@ -55,6 +55,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
+        time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
         self.node.setDriver('GV4', self.port, True, True)
         
@@ -69,6 +70,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
+        self.yolink.delayTimerCallback(self.updateDelayCountdown, 5) 
         try:
             state = self.yolink.getMultiOutPortState(self.port)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -129,7 +131,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.onDelay =int(command.get('value'))
         self.yolink.setMultiOutDelayList([{'ch':self.port, 'on':self.onDelay}]  )
         #self.node.setDriver('GV1', self.onDelay * 60, True, True)
-        self.yolink.delayTimerCallback(self.updateDelayCountdown, 5)
+        #self.yolink.delayTimerCallback(self.updateDelayCountdown, 5)
 
         
 
@@ -138,7 +140,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.offDelay =int(command.get('value'))
         self.yolink.setMultiOutDelayList([{'ch':self.port, 'off':self.offDelay }]  )
         #self.node.setDriver('GV2', self.offDelay * 60 , True, True)
-        self.yolink.delayTimerCallback(self.updateDelayCountdown, 5)        
+        #self.yolink.delayTimerCallback(self.updateDelayCountdown, 5)        
 
     def update(self, command = None):
         logging.info('udiYoSubOutlet Update Executed')
@@ -185,6 +187,7 @@ class udiYoSubUSB(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
+        time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
 
 
@@ -302,7 +305,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
-        #time.sleep(2)
+        #self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+        time.sleep(1)
         self.yoMultiOutlet.initNode()
         if self.yoMultiOutlet.online:
             time.sleep(2)
