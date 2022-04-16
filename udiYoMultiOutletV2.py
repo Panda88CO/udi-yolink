@@ -128,7 +128,7 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.info('udiYoSubOutlet setOnDelay Executed')
         self.onDelay =int(command.get('value'))
         self.yolink.setMultiOutDelayList([{'ch':self.port, 'on':self.onDelay}]  )
-        self.node.setDriver('GV1', self.onDelay * 60, True, True)
+        #self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.yolink.delayTimerCallback(self.updateDelayCountdown, 5)
 
         
@@ -137,7 +137,7 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.info('udiYoSubOutlet setOffDelay Executed')
         self.offDelay =int(command.get('value'))
         self.yolink.setMultiOutDelayList([{'ch':self.port, 'off':self.offDelay }]  )
-        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+        #self.node.setDriver('GV2', self.offDelay * 60 , True, True)
         self.yolink.delayTimerCallback(self.updateDelayCountdown, 5)        
 
     def update(self, command = None):
@@ -323,7 +323,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             for port in range(0,self.yoMultiOutlet.nbrOutlets):
                 try:
                     #logging.debug('Adding sub outlet : {}'.format(port))
-                    self.subOutletAdr[port] =  self.address[0:11]+'OP' + str(port)
+                    self.subOutletAdr[port] =  self.address[0:11]+'_o' + str(port)
                     logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1), port))
                     self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1),port, self.yoMultiOutlet)
                     self.poly.addNode(self.subOutlet[port])
@@ -334,7 +334,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             for usb in range(0, self.yoMultiOutlet.nbrUsb):
                         
                 try:
-                    self.subUsbAdr[usb] = self.address[0:11]+'US'+str(usb)
+                    self.subUsbAdr[usb] = self.address[0:11]+'_u'+str(usb)
                     logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
                     self.subUsb[usb] = udiYoSubUSB(self.poly, self.address,self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
                     self.poly.addNode(self.subUsb[usb])

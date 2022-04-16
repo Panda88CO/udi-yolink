@@ -107,8 +107,9 @@ class YoLinkMQTTDevice(object):
         yolink.messagePending = False
     
     def delayTimerCallback(yolink, callback, updateTime=5):
-        yolink.extDelayTimer.timerCallback(callback, updateTime)
         yolink.extDelayTimer.timerReportInterval(updateTime)
+        yolink.extDelayTimer.timerCallback(callback, updateTime)
+       
        
     
     def initDevice(yolink):
