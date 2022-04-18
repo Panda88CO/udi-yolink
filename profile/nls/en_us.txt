@@ -36,7 +36,6 @@ ST-nlsmultiout-GV8-NAME = Device Online
 ST-nlsmultiout-ST-NAME = Nodeserver Status
 CMD-nlsmultiout-UPDATE-NAME = Update Status
 
-
 ND-yosubout-NAME = YoLink subOutlet
 ND-yosubout-ICON = Switch
 ST-nlsubout-GV0-NAME = Outlet State
@@ -56,7 +55,6 @@ ST-nlssubusb-ST-NAME = Nodeserver Status
 CMD-nlssubusb-UPDATE-NAME = Update Status
 CMD-nlssubusb-USBCTRL-NAME =  USB Power
 
-
 ND-yomanipu-NAME = YoLink Manipulator
 ND-yomanipu-ICON = GenericCtrl
 ST-nlsmanipu-GV0-NAME = Manipulator State
@@ -68,7 +66,6 @@ CMD-nlsmanipu-UPDATE-NAME = Update Status
 CMD-nlsmanipu-MANCTRL-NAME =  Switch control
 CMD-nlsmanipu-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsmanipu-OFFDELAY-NAME =  Set Off Delay (min)
-
 
 ND-yothsens-NAME = YoLink THsensor
 ND-yothsens-ICON = TempSensor
