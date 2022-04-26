@@ -72,7 +72,6 @@ class YoLinkSetup (udi_interface.Node):
         self.nodeDefineDone = True
 
 
-
     def node_queue(self, data):
         self.n_queue.append(data['address'])
 
