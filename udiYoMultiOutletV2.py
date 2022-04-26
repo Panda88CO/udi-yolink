@@ -43,7 +43,6 @@ class udiYoSubOutlet(udi_interface.Node):
         self.port  = int(portStr.pop())
         #self.port = int(port )
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
-        self.yolink.delayTimerCallback (self.updateDelayCountdown, 5)
     
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -70,7 +69,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-        self.yolink.delayTimerCallback(self.updateDelayCountdown, 5) 
+
         try:
             state = self.yolink.getMultiOutPortState(self.port)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -91,9 +90,9 @@ class udiYoSubOutlet(udi_interface.Node):
         pass
 
 
-    def updateOutNode(self, outeletstate, onDelay, offDelay):
-        logging.debug('udiYoSubOutlet - updateOutNode: state={} onD={} offD={}'.format(outeletstate, onDelay, offDelay))
-        self.node.setDriver('GV0', outeletstate, True, True)
+    def updateOutNode(self, outletstate, onDelay, offDelay):
+        logging.debug('udiYoSubOutlet - updateOutNode: state={} onD={} offD={}'.format(outletstate, onDelay, offDelay))
+        self.node.setDriver('GV0', outletstate, True, True)
         self.node.setDriver('GV1', onDelay, True, False)
         self.node.setDriver('GV2', offDelay, True, False)
         #self.node.setDriver('GV4', self.port, False, False)
@@ -102,17 +101,17 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.debug('udiYoSubOutlet updateDelayCountDown: port: {} delays: {}'.format(self.port, timeRemaining))
         #ch = self.port - 1 # 0 based vs 1 based 
         for delayInfo in range(0, len(timeRemaining)):
-            logging.debug('debug port: {} timeReim: {}'.format((self.port-1), timeRemaining))
+
             if 'ch' in timeRemaining[delayInfo]:
                 
-                if timeRemaining[delayInfo]['ch'] == (self.port - 1):
-                    logging.debug('debug port: {} timeReim: {}  trdelaying]{}'.format(self.port - 1, timeRemaining, timeRemaining[delayInfo] ))
+                if timeRemaining[delayInfo]['ch'] == (self.port):
+                    logging.debug('debug port: {} timeRemain: {} '.format(self.port, timeRemaining[delayInfo] ))
                     if 'on' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, True)
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, True)
                 logging.debug('display update {}'.format(timeRemaining))
-        
+        #self.node.reportDrivers()
 
     def switchControl(self, command):
         logging.info('udiYoSubOutlet switchControl')
@@ -130,7 +129,7 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.info('udiYoSubOutlet setOnDelay Executed')
         self.onDelay =int(command.get('value'))
         self.yolink.setMultiOutDelayList([{'ch':self.port, 'on':self.onDelay}]  )
-        #self.node.setDriver('GV1', self.onDelay * 60, True, True)
+        self.node.setDriver('GV1', self.onDelay * 60, True, True)
         #self.yolink.delayTimerCallback(self.updateDelayCountdown, 5)
 
         
@@ -139,7 +138,7 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.info('udiYoSubOutlet setOffDelay Executed')
         self.offDelay =int(command.get('value'))
         self.yolink.setMultiOutDelayList([{'ch':self.port, 'off':self.offDelay }]  )
-        #self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
         #self.yolink.delayTimerCallback(self.updateDelayCountdown, 5)        
 
     def update(self, command = None):
@@ -305,7 +304,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
-        #self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(1)
         self.yoMultiOutlet.initNode()
         if self.yoMultiOutlet.online:
@@ -370,6 +369,10 @@ class udiYoMultiOutlet(udi_interface.Node):
             time.sleep(0.1)
         self.n_queue.pop()
 
+    def updateDelayCountdown(self, timeRemaining):
+        logging.debug('updateDelayCountdown - time: {}'.format(timeRemaining))
+        for outlet in range(0,self.nbrOutlets):
+            self.subOutlet[outlet].updateDelayCountdown(timeRemaining)
 
 
     def stop (self):
