@@ -8,7 +8,7 @@
     "notice": "Uses MQTT comminication",
     "shortPoll": "60",
     "longPoll": "3600",
-    "profile_version": "0.1.2",
+    "profile_version": "0.1.3",
     "customParams": {
         "UAID":"",
         "SECRET_KEY":""
