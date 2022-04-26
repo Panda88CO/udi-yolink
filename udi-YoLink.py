@@ -45,7 +45,11 @@ class YoLinkSetup (udi_interface.Node):
         self.handleParamsDone = False
         self.address = address
         self.name = name
-        
+        self.yolinkURL = 'https://api.yosmart.com/openApi'
+        self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api'
+        self.tokenURL = 'https://api.yosmart.com/open/yolink/token'
+        self.mqttURL = 'api.yosmart.com'
+        self.mqttPort = 8003
 
         #logging.setLevel(30)
         self.poly.subscribe(self.poly.STOP, self.stop)
