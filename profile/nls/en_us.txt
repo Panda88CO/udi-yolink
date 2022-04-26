@@ -1,5 +1,5 @@
 
-ND-setup-NAME = YoLink Main
+ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
 ST-nlsetup-ST-NAME = Nodeserver Status
 
