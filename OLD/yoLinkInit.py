@@ -16,7 +16,7 @@ except ImportError:
 countdownTimerUpdateInterval_G = 10
 from OLD.yolink_mqtt_clientV3 import YoLinkMQTTClient
 
-
+ 
 class YoLinkInitPAC(object):
     def __init__(yoAccess, uaID, secID, tokenURL='https://api.yosmart.com/open/yolink/token', pacURL = 'https://api.yosmart.com/open/yolink/v2/api' , mqttURL= 'api.yosmart.com', mqttPort = 8003):
        

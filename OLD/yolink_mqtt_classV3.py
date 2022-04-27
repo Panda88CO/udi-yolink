@@ -53,7 +53,7 @@ class YoLinkMQTTDevice(object):
         yolink.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
         
         
-        
+         
         yolink.maxSchedules = 6
         yolink.methodList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor']
         yolink.lastUpdate = 'lastTime'

@@ -32,7 +32,7 @@ class YoLinkMQTTClient(object):
         yolink.deviceId = deviceInfo['deviceId']
         yolink.uniqueID = yolink.deviceId#+str(int(time.time()))
         yolink.accessToken = yoAccess.get_access_token()
- 
+  
         yolink.topicReq = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/request'
         yolink.topicResp = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/response'
         yolink.topicReport = 'yl-home/'+yolink.homeID+'/'+ yolink.uniqueID +'/report'

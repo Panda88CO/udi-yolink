@@ -17,7 +17,7 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 
 import paho.mqtt.client as mqtt
-
+ 
 DEBUG = False
 """
 Object representation for YoLink MQTT Client
