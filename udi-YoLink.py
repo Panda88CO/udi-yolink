@@ -47,6 +47,7 @@ class YoLinkSetup (udi_interface.Node):
         self.name = name
         self.yolinkURL = 'https://api.yosmart.com/openApi'
         self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api'
+
         self.tokenURL = 'https://api.yosmart.com/open/yolink/token'
         self.mqttURL = 'api.yosmart.com'
         self.mqttPort = 8003
@@ -102,7 +103,7 @@ class YoLinkSetup (udi_interface.Node):
         #self.deviceList = self.getDeviceList2()
 
         logging.debug('{} devices detected : {}'.format(len(self.deviceList), self.deviceList) )
-        #logging.setLevel(10)
+        
 
         for dev in range(0,len(self.deviceList)):
             logging.debug('adding/checking device : {} - {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
@@ -232,27 +233,27 @@ class YoLinkSetup (udi_interface.Node):
         try:
             if 'YOLINKV2_URL' in userParam:
                 self.yolinkV2URL = userParam['YOLINKV2_URL']
-            else:
-                self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
-                self.yolinkV2URL = ''
+            #else:
+            #    self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
+            #    self.yolinkV2URL = ''
 
             if 'TOKEN_URL' in userParam:
                 self.tokenURL = userParam['TOKEN_URL']
-            else:
-                self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
-                self.tokenURL = ''
+            #else:
+            #    self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
+            #    self.tokenURL = ''
 
             if 'MQTT_URL' in userParam:
                 self.mqttURL = userParam['MQTT_URL']
-            else:
-                self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
-                self.mqttURL = ''
+            #else:
+            #    self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
+            #    self.mqttURL = ''
 
             if 'MQTT_PORT' in userParam:
                 self.mqttPort = userParam['MQTT_PORT']
-            else:
-                self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
-                self.mqttPort = 0
+            #else:
+            #    self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
+            #    self.mqttPort = 0
 
             if 'UAID' in userParam:
                 self.uaid = userParam['UAID']
