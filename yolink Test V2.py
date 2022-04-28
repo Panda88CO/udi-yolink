@@ -73,6 +73,7 @@ for dev in range(0,len(deviceList)):
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkSpeakerHub (yoAccess, deviceList[dev])
         devices[dev].getStatus()
+        
 
     elif deviceList[dev]['type'] == 'Switch':
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
