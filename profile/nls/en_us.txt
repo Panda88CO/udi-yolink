@@ -1,5 +1,5 @@
 
-ND-setup-NAME = YoLink Switch
+ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
 ST-nlsetup-ST-NAME = Nodeserver Status
 
@@ -8,7 +8,7 @@ ND-yoswitch-ICON = Switch
 ST-nlsswitch-GV0-NAME = Switch State
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
-ST-nlsswitch-GV5-NAME = Online
+ST-nlsswitch-GV8-NAME = Device Online
 ST-nlsswitch-ST-NAME = Nodeserver Status
 CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
@@ -19,120 +19,156 @@ CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
 ND-yooutlet-NAME = YoLink Outlet
 ND-yooutlet-ICON = Switch
 ST-nlsoutlet-GV0-NAME = Outlet State
-ST-nlsoutlet-GV1-NAME = On Delay (min)
-ST-nlsoutlet-GV2-NAME = Off Delay (min)
+ST-nlsoutlet-GV1-NAME = On Delay Remaining
+ST-nlsoutlet-GV2-NAME = Off Delay Remaining
 ST-nlsoutlet-GV3-NAME = Watt
 ST-nlsoutlet-GV4-NAME = Energy
-ST-nlsoutlet-GV5-NAME = Online
+ST-nlsoutlet-GV8-NAME = Device Online
 ST-nlsoutlet-ST-NAME = Nodeserver Status
 CMD-nlsoutlet-UPDATE-NAME = Update Status
 CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
 CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
 
+ND-yomultiout-NAME = YoLink Outlet
+ND-yomultiout-ICON = Switch
+ST-nlsmultiout-GV8-NAME = Device Online
+ST-nlsmultiout-ST-NAME = Nodeserver Status
+CMD-nlsmultiout-UPDATE-NAME = Update Status
+
 ND-yosubout-NAME = YoLink subOutlet
 ND-yosubout-ICON = Switch
 ST-nlsubout-GV0-NAME = Outlet State
-ST-nlsubout-GV1-NAME = On Delay (min)
-ST-nlsubout-GV2-NAME = Off Delay (min)
-ST-nlsubout-GV3-NAME = Outlet number
-ST-nlsubout-GV5-NAME = Online
+ST-nlsubout-GV1-NAME = On Delay Remaining
+ST-nlsubout-GV2-NAME = Off Delay Remaining
+ST-nlsubout-GV4-NAME = Outlet 
 ST-nlsubout-ST-NAME = Nodeserver Status
 CMD-nlsubout-UPDATE-NAME = Update Status
 CMD-nlsubout-SWCTRL-NAME =  Outlet control
 CMD-nlsubout-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsubout-OFFDELAY-NAME =  Set Off Delay (min)
 
-ND-yousbout-NAME = YoLink USB Ports
-ND-yousbout-ICON = Switch
-ST-nlsusbout-GV0-NAME = USB Ports
-ST-nlsusbout-GV5-NAME = Online
-ST-nlsusbout-ST-NAME = Nodeserver Status
-CMD-nlsoutlet-UPDATE-NAME = Update Status
-CMD-nlsusbout-USBCTRL-NAME =  USB Port Control
+ND-yosubusb-NAME = YoLink USB Ports
+ND-yosubusb-ICON = Switch
+ST-nlssubusb-GV0-NAME = USB Power
+ST-nlssubusb-ST-NAME = Nodeserver Status
+CMD-nlssubusb-UPDATE-NAME = Update Status
+CMD-nlssubusb-USBCTRL-NAME =  USB Power
+
+ND-yomanipu-NAME = YoLink Manipulator
+ND-yomanipu-ICON = GenericCtrl
+ST-nlsmanipu-GV0-NAME = Manipulator State
+ST-nlsmanipu-GV1-NAME = On Delay Remaining
+ST-nlsmanipu-GV2-NAME = Off Delay Remaining
+ST-nlsmanipu-GV8-NAME = Device Online
+ST-nlsmanipu-ST-NAME = Nodeserver Status
+CMD-nlsmanipu-UPDATE-NAME = Update Status
+CMD-nlsmanipu-MANCTRL-NAME =  Switch control
+CMD-nlsmanipu-ONDELAY-NAME =  Set On Delay (min)
+CMD-nlsmanipu-OFFDELAY-NAME =  Set Off Delay (min)
+
+ND-yothsens-NAME = YoLink THsensor
+ND-yothsens-ICON = TempSensor
+ST-nlsthsens-CLITEMP-NAME = Current Temp (C)
+ST-nlsthsens-GV1-NAME = Low Temp Alarm
+ST-nlsthsens-GV2-NAME = High Temp Alarm
+ST-nlsthsens-CLIHUM-NAME = Current Rel Humidity (%)
+ST-nlsthsens-GV4-NAME = Low Humidity Alarm
+ST-nlsthsens-GV5-NAME = High Humidity Alarm
+ST-nlsthsens-BATLVL-NAME = Battery Level
+ST-nlsthsens-GV7-NAME = Battery Alarm
+ST-nlsthsens-GV8-NAME = Device Online
+ST-nlsthsens-ST-NAME = Nodeserver Status
+CMD-nlsthsens-UPDATE-NAME = Update Status
 
 
-ND-yomanipulator-NAME = YoLink Manipulator
-ND-yomanipulator-ICON = GenericCtrl
-ST-nlsmanipulator-GV0-NAME = Manipulator State
-ST-nlsmanipulator-GV1-NAME = On Delay (min)
-ST-nlsmanipulator-GV2-NAME = Off Delay (min)
-ST-nlsmanipulator-GV5-NAME = Online
-ST-nlsmanipulator-ST-NAME = Nodeserver Status
-CMD-nlsmanipulator-UPDATE-NAME = Update Status
-CMD-nlsmanipulator-MACTRL-NAME =  Switch control
-CMD-nlsmanipulator-ONDELAY-NAME =  Set On Delay (min)
-CMD-nlsmanipulator-OFFDELAY-NAME =  Set Off Delay (min)
+ND-yogarage-NAME = YoLink Garagre Controller
+ND-yogarage-ICON = Switch
+ST-nlsgarage-GV8-NAME = online
+ST-nlsgarage-ST-NAME = Nodeserver Status
+CMD-nlsgarage-TOGGLE-NAME = Toggle Door
 
 
-ND-yothsensor-NAME = YoLink THsensor
-ND-yothsensor-ICON = TempSensor
-ST-nlsthsensor-CLITEMP-NAME = Current Temp (C)
-ST-nlsthsensor-GV1-NAME = Low Temp Alarm
-ST-nlsthsensor-GV2-NAME = High Temp Alarm
-ST-nlsthsensor-CLIHUM-NAME = Current Rel Humidity (%)
-ST-nlsthsensor-GV4-NAME = Low Humidity Alarm
-ST-nlsthsensor-GV5-NAME = High Humidity Alarm
-ST-lsthsensor-BATLVL-NAME = Battery Level
-ST-nlsthsensor-GV7-NAME = Battery Alarm
-ST-nlsthsensor-GV8-NAME = Online
-ST-nlsthsensor-ST-NAME = Nodeserver Status
-CMD-nlsthsensor-UPDATE-NAME = Update Status
+ND-yodoorsens-NAME = YoLink Door Sensor
+ND-yodoorsens-ICON = Input
+ST-nlsdoorsens-GV0-NAME = Door State
+ST-nlsdoorsens-GV1-NAME = Sensor Battery Level
+ST-nlsdoorsens-GV8-NAME = Device Online
+ST-nlsdoorsens-ST-NAME = Nodeserver Status
+CMD-nlsdoorsens-UPDATE-NAME = Update Door Status
 
 
-ND-yogaragectrl-NAME = YoLink GAragre Controller
-ND-yogaragectrl-ICON = Switch
-ST-nlsgaragctrl-GV8-NAME = online
-ST-nlsgaragctrl-ST-NAME = Nodeserver Status
-CMD-nlsgaragctrl-TOGGLE-NAME = Toggle Door
+ND-yomotionsens-NAME = YoLink Motion Sensor
+ND-yomotionsens-ICON = Input
+ST-nlsmotionsens-GV0-NAME = Motoion State
+ST-nlsmotionsens-GV1-NAME = Sensor Battery Level
+ST-nlsmotionsens-GV8-NAME = Device Online
+ST-nlsmotionsens-ST-NAME = Nodeserver Status
+CMD-nlsmotionsens-UPDATE-NAME = Update Motion Status
 
+ND-yoleaksens-NAME = YoLink Water Sensor
+ND-yoleaksens-ICON = Input
+ST-nlsleaksens-GV0-NAME = Water Sensor
+ST-nlsleaksens-GV1-NAME = Sensor Battery Level
+ST-nlsleaksens-GV8-NAME = Device Online
+ST-nlsleaksens-ST-NAME = Nodeserver Status
+CMD-nlsleaksens-UPDATE-NAME = Update Water Status
 
-ND-yodoorsensor-NAME = YoLink Door Sensor
-ND-yogaragedoor-ICON = Input
-ST-nlsdoorsensor-GV0-NAME = Garage Door State
-ST-nlsdoorsensor-GV1-NAME = Sensor Battery Level
-ST-nlsdoorsensor-GV8-NAME = Online
-ST-nlsdoorsensor-ST-NAME = Nodeserver Status
-CMD-nlsgaragedoor-UPDATE-NAME = Update Door Status
-
-
-ND-yomotionsensor-NAME = YoLink Motion Sensor
-ND-yomotionsensor-ICON = Input
-ST-nlsmotionsensor-GV0-NAME = Motoion State
-ST-nlsmotionsensor-GV1-NAME = Sensor Battery Level
-ST-nlsmotionsensor-GV8-NAME = Online
-ST-nlsmotionsensor-ST-NAME = Nodeserver Status
-CMD-nlsmotionsensor-UPDATE-NAME = Update Motion Status
-
-ND-yoleaksensor-NAME = YoLink Water Sensor
-ND-yoleaksensor-ICON = Input
-ST-nlsleaksensor-GV0-NAME = Water Sensor
-ST-nlsleaksensor-GV1-NAME = Sensor Battery Level
-ST-nlsleaksensor-GV8-NAME = Online
-ST-nlsleaksensor-ST-NAME = Nodeserver Status
-CMD-nlsleaksensor-UPDATE-NAME = Update Motion Status
-
+status-0 = Down
+status-1 = Up
 
 swstate-0 = Off
 swstate-1 = On
+swstate-99 = Unknown
+
+swctrl-0 = Off
+swctrl-1 = On
+
 batlevel-0 = Low 
 batlevel-1 = Medium Low
 batlevel-2 = Medium
 batlevel-3 =  Medium High
 batlevel-4 = High
+batlevel-99 = Unknown
+
 alarm-0 = Normal
 alarm-1 = Alarm
+alarm-99 = Unknown 
+
 online-0 = Offline
 online-1 = Online
-status-0 = Down
-status-1 = Up
+
 doorstate-0 = closed
 doorstate-1 = open
+doorstate-99 = Unknown 
+
 motionstate-0 = No Motion
-motionstate-1 = Motion Detected
+motionstate-1 = Motion
+motionstate-99 = Unknown 
+
 waterstate-0 = Dry
 waterstate-1 = Wet
+waterstate-99 = Unknown 
+
 manstate-0 = Closed
 manstate-1 = Open
+manstate-99 = Unknown 
+
+manctrl-0 = Close
+manctrl-1 = Open
+
 usbstate-0 = Disabled
 usbstate-1 = Enabled
+usbstate-99 = Unknown 
+
+usbctrl-0 = Disable
+usbctrl-1 = Enable
+
+portlist-0 = Outlet 1
+portlist-1 = Outlet 2
+portlist-2 = Outlet 3
+portlist-3 = Outlet 4
+portlist-4 = Outlet 5
+portlist-5 = Outlet 6
+portlist-6 = Outlet 7
+portlist-7 = Outlet 8

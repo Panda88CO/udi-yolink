@@ -3,13 +3,10 @@
 Yolink Control Main Node  program 
 MIT License
 """
-from os import truncate
+
 import sys
-import os
-import json
 import time
-<<<<<<< Updated upstream
-=======
+
 from yoLinkInitV2 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoTHsensorV2 import udiYoTHsensor 
@@ -20,176 +17,106 @@ from udiYoDoorSensorV2 import udiYoDoorSensor
 from udiYoOutletV2 import udiYoOutlet
 from udiYoMultiOutletV2 import udiYoMultiOutlet
 from udiYoManipulatorV2 import udiYoManipulator
+
 #from udiYoSpeakerHubV2 import udiYoSpeakerHub
->>>>>>> Stashed changes
 
-from udiYoSwitch import udiYoSwitch
-from udiYoTHsensor import udiYoTHsensor 
-from udiYoGarageDoorCtrl import udiYoGarageDoor
-from udiYoMotionSensor import udiYoMotionSensor
-from udiYoLeakSensor import udiYoLeakSensor
-from udiYoDoorSensor import udiYoDoorSensor
-from udiYoOutlet import udiYoOutlet
-from udiYoMultiOutlet import udiYoMultiOutlet
-from udiYoManipulator import udiYoManipulator
 
-from yoLinkPACOauth import YoLinkDevicesPAC
-from yoLinkOauth import YoLinkDevices
 
 try:
     import udi_interface
     logging = udi_interface.LOGGER
     Custom = udi_interface.Custom
+
 except ImportError:
     import logging
-    logging.basicConfig(level=logging.DEBUG)
-polyglot = None
-#Parameters = None
-
-client_id = '60dd7fa7960d177187c82039'
-client_secret = '3f68536b695a435d8a1a376fc8254e70'
-yolinkURL =  'https://api.yosmart.com/openApi' 
-yolinkV2URL =  'https://api.yosmart.com/open/yolink/v2/api' 
-tokenURL = "https://api.yosmart.com/open/yolink/token"
+    logging.basicConfig(level=logging.INFO)
 
 
 
 
 
-'''
-TestNode is the device class.  Our simple counter device
-holds two values, the count and the count multiplied by a user defined
-multiplier. These get updated at every shortPoll interval
-'''
+
+
 class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
-        super(YoLinkSetup, self).__init__( polyglot, primary, address, name)  
-        
+        super().__init__( polyglot, primary, address, name)  
+        self.hb = 0
+        self.poly=polyglot
+        self.nodeDefineDone = False
+        self.handleParamsDone = False
+        self.address = address
+        self.name = name
+        self.yolinkURL = 'https://api.yosmart.com/openApi'
+        self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api'
+
+        self.tokenURL = 'https://api.yosmart.com/open/yolink/token'
+        self.mqttURL = 'api.yosmart.com'
+        self.mqttPort = 8003
+
+        #logging.setLevel(30)
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.n_queue = []
 
-
-        self.Parameters = Custom(polyglot, 'customparams')
-        self.Notices = Custom(polyglot, 'notices')
-       
+        self.Parameters = Custom(self.poly, 'customparams')
+        self.Notices = Custom(self.poly, 'notices')
+        logging.debug('YoLinkSetup init')
         logging.debug('self.address : ' + str(self.address))
         logging.debug('self.name :' + str(self.name))   
         
-        self.nodeDefineDone = False
-        self.longPollCountMissed = 0
-
         self.poly.ready()
         self.poly.addNode(self)
+        self.wait_for_node_done()
 
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(self.address)
         self.node.setDriver('ST', 1, True, True)
-        self.devicesReady = False
         logging.debug('YoLinkSetup init DONE')
+        self.nodeDefineDone = True
+
+
+    def node_queue(self, data):
+        self.n_queue.append(data['address'])
+
+    def wait_for_node_done(self):
+        while len(self.n_queue) == 0:
+            time.sleep(0.1)
+        self.n_queue.pop()
+
 
 
     def start (self):
-        logging.debug('Start executing start')
-        self.redirectURL = "" 
-        self.tokenObtined = False
-        self.deviceList = None
-        self.supportedYoTypes = ['Switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
-        logging.info('getDeviceList3')
-        self.getDeviceList3()
-                
-        while not self.devicesReady:
-            time.sleep(2)
-            logging.info('Waiting to retrieve devise list')
+        logging.info('Executing start - udi-YoLink')
+        logging.info ('Access using PAC/UAC')
+        #logging.setLevel(30)
+        while not self.nodeDefineDone:
+            time.sleep(1)
+            logging.debug ('waiting for inital node to get created')
+        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
+        if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
+            logging.error('UAID and secretKey must be provided to start node server')
+            exit() 
+        self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
+        self.deviceList = self.yoAccess.getDeviceList()
         #self.deviceList = self.getDeviceList2()
 
-        logging.debug( self.deviceList)
-        logging.debug('{} devices detected'.format(len(self.deviceList)))
-        isyNbr = 0
-        isyName = 'yolink'  # has to be lower case and less than 13 chars
+        logging.debug('{} devices detected : {}'.format(len(self.deviceList), self.deviceList) )
+        
+
         for dev in range(0,len(self.deviceList)):
-<<<<<<< Updated upstream
-            logging.debug('adding/checking device : {}'.format(self.deviceList[dev]['type']))
-            if self.deviceList[dev]['type'] in self.supportedYoTypes:
-                isyNbr += 1
-                if self.deviceList[dev]['type'] == 'Switch':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'], str(isyName+str(isyNbr)) ))
-                    udiYoSwitch(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
 
-                elif self.deviceList[dev]['type'] == 'THsensor':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoTHsensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-                        
-                elif self.deviceList[dev]['type'] == 'MultiOutlet':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoMultiOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-
-                elif self.deviceList[dev]['type'] == 'DoorSensor':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    
-                    udiYoDoorSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-
-                elif self.deviceList[dev]['type'] == 'Manipulator':
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoManipulator(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-
-                elif self.deviceList[dev]['type'] == 'MotionSensor':     
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-
-                    udiYoMotionSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-
-                elif self.deviceList[dev]['type'] == 'Outlet':     
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-               
-                    udiYoOutlet(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-
-                elif self.deviceList[dev]['type'] == 'GarageDoor': 
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoGarageDoor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-
-                elif self.deviceList[dev]['type'] == 'LeakSensor': 
-                    logging.info('Adding device {} as {}'.format( self.deviceList[dev]['type'],str(isyName+str(isyNbr)) ))
-                    udiYoLeakSensor(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-
-                elif self.deviceList[dev]['type'] == 'Hub':     
-                    logging.info('Hub not added')    
-                    isyNbr -= 1  
-                    #udiYoLeakHub(polyglot, str(isyName+str(isyNbr)), str(isyName+str(isyNbr)), self.deviceList[dev]['name'], self.csname, self.csid, self.csseckey, self.deviceList[dev], self.yolinkURL,self.mqttURL, self.mqttPort )
-                    #if self.deviceList[dev]['deviceId'] not in self.Parameters:
-                    #    self.Parameters[self.deviceList[dev]['deviceId']] =  self.deviceList[dev]['name']
-                    #    logging.debug('adding :' + self.deviceList[dev]['deviceId'] + '  ' +  self.deviceList[dev]['type'])
-
-                else:
-                    logging.debug('unsupported device : {}'.format(self.deviceList[dev]['type'] ))
-        logging.debug(self.Parameters)
-=======
             logging.debug('adding/checking device : {} - {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
+
 
             if self.deviceList[dev]['type'] == 'Hub':     
                 logging.info('Hub not added - ISY cannot do anything useful with it')    
-                name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
-                logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
-                udiYoHub(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
-                self.Parameters[name]  =  self.deviceList[dev]['name']
+                #name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                #logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
+                #udiYoHub(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
+                #self.Parameters[name]  =  self.deviceList[dev]['name']
 
             elif self.deviceList[dev]['type'] == 'Switch':
                 name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -241,197 +168,128 @@ class YoLinkSetup (udi_interface.Node):
 
         self.poly.updateProfile()
 
->>>>>>> Stashed changes
+
 
     def stop(self):
         logging.info('Stop Called:')
-        nodes = self.poly.getNodes()
-        for node in nodes:
-            if node != 'setup':   # but not the controller node
-                nodes[node].setDriver('ST', 0, True, True)
-        self.node.setDriver('ST', 0, True, True)
+        if self.node:
+            self.node.setDriver('ST', 0, True, True)
+            #nodes = self.poly.getNodes()
+            #for node in nodes:
+            #    if node != 'setup':   # but not the controller node
+            #        nodes[node].setDriver('ST', 0, True, True)
+            time.sleep(2)
+        if self.yoAccess:
+            self.yoAccess.shut_down()
+        self.poly.stop()
         exit()
+ 
 
-    def getDeviceList1(self):
-        logging.debug ('getDeviceList1')
-    
-        self.yoDevices = YoLinkDevices(self.csid, self.csseckey)
-        webLink = self.yoDevices.getAuthURL()
-        #self.Parameters['REDIRECT_URL'] = ''
-        self.poly.Notices['url'] = 'Copy this address to browser. Follow screen to long. After screen refreshes copy resulting  redirect URL (address bar) into config REDICRECT_URL: ' + str(webLink) 
-
-
-    def getDeviceList2(self):
-        logging.debug('Start executing getDeviceList2')
-        self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
-        self.yoDevices = YoLinkDevicesPAC(self.uaid, self.secretKey)
-        self.deviceList = self.yoDevices.getDeviceList()
-
-    def getDeviceList3(self):
-        logging.debug('reading /devices.json')
-        logging.debug(os.getcwd())
-        if (os.path.exists('./devices.json')):
-            logging.debug('reading /devices.json')
-            dataFile = open('./devices.json', 'r')
-            tmp= json.load(dataFile)
-            logging.debug(tmp)
-            dataFile.close()
-            self.deviceList = tmp['data']['list']
-            logging.debug(self.deviceList)
-            self.devicesReady = True
+    def heartbeat(self):
+        logging.debug('heartbeat: ' + str(self.hb))
+        
+        if self.hb == 0:
+            self.reportCmd('DON',2)
+            self.hb = 1
         else:
-             logging.debug('devices.json does not exist')
+            self.reportCmd('DOF',2)
+            self.hb = 0
 
 
-    def systemPoll (self, type):
-        logging.info('System Poll executing')
+    def systemPoll (self, polltype):
+        if self.nodeDefineDone:
+            logging.debug('System Poll executing: {}'.format(polltype))
+            if 'longPoll' in polltype:
+                #Keep token current
+                try:
+                    if not self.yoAccess.refresh_token(): #refresh failed
+                        while not self.yoAccess.request_new_token():
+                                time.sleep(60)
+                    #logging.info('Updating device status')
+                    nodes = self.poly.getNodes()
+                    for node in nodes:
+                        if node != 'setup':   # but not the controller node
+                            nodes[node].checkOnline()
+                except Exception as e:
+                    logging.debug('Exeption occcured during request_new_token : {}'.format(e))
+                    self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
+                    self.deviceList = self.yoAccess.getDeviceList()           
+                
+            if 'shortPoll' in polltype:
+                self.heartbeat()
+    
+
 
     def handleLevelChange(self, level):
         logging.info('New log level: {}'.format(level))
+        logging.setLevel(level['level'])
+
+
 
     def handleParams (self, userParam ):
         logging.debug('handleParams')
+        supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY' ]
         self.Parameters.load(userParam)
+
+       
         self.poly.Notices.clear()
-        
-        if 'USER_EMAIL' in userParam:
-            email = userParam['USER_EMAIL']
-        else:
-            self.poly.Notices['ue'] = 'Missing User Email parameter'
-            email = ''
 
-        if 'USER_PASSWORD' in userParam:
-            password = userParam['USER_PASSWORD']
-        else:
-            self.poly.Notices['up'] = 'Missing User Password parameter'
-            password = ''
-        
-        if 'CSID' in userParam:
-            self.csid = userParam['CSID']
-        else:
-            self.poly.Notices['csid'] = 'Missing csid parameter'
-            self.csid = ''
+        try:
+            if 'YOLINKV2_URL' in userParam:
+                self.yolinkV2URL = userParam['YOLINKV2_URL']
+            #else:
+            #    self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
+            #    self.yolinkV2URL = ''
 
-        if 'CSSSECKEY' in userParam:
-            self.csseckey = userParam['CSSSECKEY']
-        else:
-            self.poly.Notices['css'] = 'Missing cssSecKey parameter'
-            self.csseckey = ''
+            if 'TOKEN_URL' in userParam:
+                self.tokenURL = userParam['TOKEN_URL']
+            #else:
+            #    self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
+            #    self.tokenURL = ''
 
-        if 'CSNAME' in userParam:
-            self.csname = userParam['CSNAME']
-        else:
-            self.poly.Notices['csname'] = 'Missing csName parameter'
-            self.csname = ''
-    
-        if 'UAID' in userParam:
-            self.uaid = userParam['UAID']
-        else:
-            self.poly.Notices['uaid'] = 'Missing UAID parameter'
-            self.uaid = ''
+            if 'MQTT_URL' in userParam:
+                self.mqttURL = userParam['MQTT_URL']
+            #else:
+            #    self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
+            #    self.mqttURL = ''
 
-        if 'SECRET_KEY' in userParam:
-            self.secretKey = userParam['SECRET_KEY']
-        else:
-            self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
-            self.secretKey = ''
-    
-        if 'YOLINK_URL' in userParam:
-            self.yolinkURL = userParam['YOLINK_URL']
-        else:
-            self.poly.Notices['ylurl'] = 'Missing YOLINK_URL parameter'
-            self.yolinkURL = ''
+            if 'MQTT_PORT' in userParam:
+                self.mqttPort = userParam['MQTT_PORT']
+            #else:
+            #    self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
+            #    self.mqttPort = 0
 
-        if 'YOLINKV2_URL' in userParam:
-            self.yolinkV2URL = userParam['YOLINKV2_URL']
-        else:
-            self.poly.Notices['yl2url'] = 'Missing YOLINKV2_URL parameter'
-            self.yolinkV2URL = ''
+            if 'UAID' in userParam:
+                self.uaid = userParam['UAID']
+            else:
+                self.poly.Notices['uaid'] = 'Missing UAID parameter'
+                self.uaid = ''
 
-        if 'TOKEN_URL' in userParam:
-            self.tokenURL = userParam['TOKEN_URL']
-        else:
-            self.poly.Notices['turl'] = 'Missing TOKEN_URL parameter'
-            self.tokenURL = ''
+            if 'SECRET_KEY' in userParam:
+                self.secretKey = userParam['SECRET_KEY']
+            else:
+                self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
+                self.secretKey = ''
 
-        if 'MQTT_URL' in userParam:
-            self.mqttURL = userParam['MQTT_URL']
-        else:
-            self.poly.Notices['murl'] = 'Missing MQTT_URL parameter'
-            self.mqttURL = ''
+            #for param in userParam:
+            #    if param not in supportParams:
+            #        del self.Parameters[param]
+            #        logging.debug ('erasing key: ' + str(param))
 
-        if 'MQTT_PORT' in userParam:
-            self.mqttPort = userParam['MQTT_PORT']
-        else:
-            self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
-            self.mqttPort = 0
-
-        if 'REDIRECT_URL' in userParam:
-            self.redirect_URL = userParam['REDIRECT_URL']
-        else:
-            self.poly.Notices['redirect'] = 'Missing REDIRECT_URL parameter'
-            self.redirectURL = ''       
-        
-
-        '''
-        if self.redirectURL != "" :
-            #self.poly.Notices['url'] = 'Input redirected address to REDIRECR address field'       
-            logging.debug(self.redirect_URL)
-            logging.debug('getting token ')  
-            self.token = self.yoDevices.getToken(self.csseckey, self.redirect_URL)
-            logging.debug(self.token)
-            temp = self.yoDevices.getDeviceList(self.token, self.csid, self.csseckey)
-            logging.debug(temp)
-            self.deviceList = temp['data']['list']
-            logging.debug( self.deviceList)
-        '''
-        '''
-        if local_email != '' or local_password != '' or local_ip != '':
-            logging.debug('local access true, cfg = {} {} {}'.format(local_email, local_password, local_ip))
-            local_valid = True
-            if local_email == '':
-                self.poly.Notices['lu'] = 'Please enter the local user name'
-                local_valid = False
-            if local_password == '':
-                self.poly.Notices['lp'] = 'Please enter the local user password'
-                local_valid = False
-            if local_ip == '':
-                self.poly.Notices['ip'] = 'Please enter the local IP address'
-                local_valid = False
+            self.handleParamsDone = True
 
 
-        if cloud_email != '' or cloud_password != '' or cloud_token != '':
-            logging.debug('cloud access true, cfg = {} {} {}'.format(cloud_email, cloud_password, cloud_token))
-            cloud_valid = True
-            if cloud_email == '':
-                self.poly.Notices['cu'] = 'Please enter the cloud user name'
-                cloud_valid = False
-            if cloud_password == '':
-                self.poly.Notices['cp'] = 'Please enter the cloud user password'
-                cloud_valid = False
-            if cloud_token == '':
-                self.poly.Notices['ct'] = 'Please enter the Tesla Refresh Token - see readme for futher info '
-                cloud_valid = False
+        except:
+            logging.debug('Error: {}'.format(userParam))
 
-        if local_valid:
-            logging.debug('Local access is valid, configure....')
-            self.localAccess = True
-
-        if cloud_valid:
-            logging.debug('Cloud access is valid, configure....')
-            self.cloudAccess = True
-
-        if cloud_valid or local_valid:
-            self.tesla_initialize(local_email, local_password, local_ip, cloud_email, cloud_password)
-
-        if not cloud_valid and not local_valid:
-            self.poly.Notices['cfg'] = 'Tesla PowerWall NS needs configuration.'
-        '''
-        logging.debug('done with parameter processing')
  
+
+    
     id = 'setup'
+
+
     drivers = [
-           {'driver': 'ST', 'value':0, 'uom':25},
+           {'driver': 'ST', 'value':1, 'uom':25},
            ]
 
 if __name__ == "__main__":

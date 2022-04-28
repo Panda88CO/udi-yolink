@@ -1,5 +1,5 @@
 {
-    "name": "Test Node for YoLink",
+    "name": "YoLink Integration",
     "docs": "https://github.com/Panda88CO/udi-yolink",
     "type": "python3",
     "executable": "udi-YoLink.py",
@@ -7,29 +7,18 @@
     "description": "Nodeserver to allow integration of Yolink devices",
     "notice": "Uses MQTT comminication",
     "shortPoll": "60",
-    "longPoll": "180",
-    "profile_version": "0.0.2",
+    "longPoll": "3600",
+    "profile_version": "0.1.3",
     "customParams": {
-        "YOLINK_URL" : "https://api.yosmart.com/openApi",   
-        "YOLINKV2_URL": "https://api.yosmart.com/open/yolink/v2/api", 
-        "TOKEN_URL" : "https://api.yosmart.com/open/yolink/token",
-        "CSID" : "60dd7fa7960d177187c82039",
-        "CSSSECKEY":"3f68536b695a435d8a1a376fc8254e70",
-        "CSNAME":"Panda88",
-        "UAID":"ua_79732E30349644A19D13386D68D92070",
-        "SECRET_KEY":"sec_v1_MXh1ZeJElLs5gY6Vymm6Uw==",
-        "USER_EMAIL":"christian.olgaard@gmail.com",
-        "USER_PASSWORD":"coe123COE",
-        "MQTT_URL":"api.yosmart.com",
-        "MQTT_PORT":8003 ,
-        "REDIRECT_URL" : ""
+        "UAID":"",
+        "SECRET_KEY":""
 	    },
     "credits": [
         {
-            "title": "A NodeServer to test integration of YoLink devices ",
+            "title": "A NodeServer to allow integration of YoLink devices ",
             "author": "Panda88CO",
-            "version": "0.0.2",
-            "date": "Nov 20,  2021",
+            "version": "0.2.0",
+            "date": "April 24,  2022",
             "source": "https://github.com/Panda88CO/udi-yolink",
             "license": "https://github.com/Panda88CO/udi-yolink/blob/main/license"
         }

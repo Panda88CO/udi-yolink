@@ -1,5 +1,3 @@
-requests_oauth2
-requests_oauthlib
-udi_interface>=3.0.24
-paho-mqtt
-requests>=2.22.0
+udi_interface>=3.0.35
+paho-mqtt>1.6.1
+requests>=2.25

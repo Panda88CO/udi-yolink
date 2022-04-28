@@ -20,7 +20,7 @@
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
-         <st id="GV5" editor="online" />
+         <st id="GV8" editor="online" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -29,13 +29,13 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swstate" init="GV0" /> 
+               <p id="" editor="swctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
-               <p id="" editor="delay" init="GV1" /> 
+               <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
-               <p id="" editor="delay" init="GV2" /> 
+               <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
          </accepts>
       </cmds>
@@ -49,7 +49,7 @@
          <st id="GV2" editor="delay" />
          <st id="GV3" editor="watt" />
          <st id="GV4" editor="energy" />
-         <st id="GV5" editor="online" />
+         <st id="GV8" editor="online" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -58,13 +58,13 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swstate" init="GV0" /> 
+               <p id="" editor="swctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
-               <p id="" editor="delay" init="GV1" /> 
+               <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
-               <p id="" editor="delay" init="GV2" /> 
+               <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
          </accepts>
       </cmds>
@@ -81,7 +81,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-             </cmd >
          </accepts>
       </cmds>
    </nodeDef> 
@@ -94,7 +93,6 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
-
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -103,19 +101,19 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swstate" init="GV0" /> 
+               <p id="" editor="swctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
-               <p id="" editor="delay" init="GV1" /> 
+               <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
-               <p id="" editor="delay" init="GV2" /> 
+               <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
          </accepts>
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yousbout" nls="nlsusbout">
+   <nodeDef id="yosubusb" nls="nlssubusb">
       <editors />
       <sts>
          <st id="GV0" editor="usbstate" />
@@ -127,20 +125,20 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="USBCTRL" > 
-               <p id="" editor="swstate" init="GV0" /> 
+               <p id="" editor="usbctrl" init="1" /> 
             </cmd >
          </accepts>
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yomanipulator" nls="nlsmanipulator">
+   <nodeDef id="yomanipu" nls="nlsmanipu">
       <editors />
       <sts>
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
 
-         <st id="GV5" editor="online" />
+         <st id="GV8" editor="online" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -148,20 +146,20 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="MACTRL" > 
-               <p id="" editor="manstate" init="GV0" /> 
+            <cmd id="MANCTRL" > 
+               <p id="" editor="manctrl" init="1" /> 
             </cmd >
             <cmd id="ONDELAY" > 
-               <p id="" editor="delay" init="GV1" /> 
+               <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
-               <p id="" editor="delay" init="GV2" /> 
+               <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
          </accepts>
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yothsensor" nls="nlsthsensor">
+   <nodeDef id="yothsens" nls="nlsthsens">
       <editors />
       <sts>
          <st id="CLITEMP" editor="tempC" />
@@ -183,10 +181,11 @@
          </accepts>
       </cmds>
    </nodeDef> 
-   <nodeDef id="yodoorsensor" nls="nlsdoorsensor">
+
+   <nodeDef id="yodoorsens" nls="nlsdoorsens">
       <editors />
       <sts>
-         <st id="GV0" editor="doorState" />
+         <st id="GV0" editor="doorstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV8" editor="online" />
          <st id="ST"  editor="status" />
@@ -198,10 +197,10 @@
             <cmd id="UPDATE" /> 
          </accepts>
       </cmds>
+   </nodeDef> 
 
 
-
-   <nodeDef id="yogaragectrl" nls="nlsgaragctrl">
+   <nodeDef id="yogarage" nls="nlsgarage">
       <editors />
       <sts>
          <st id="GV8" editor="online" />
@@ -211,11 +210,13 @@
          <sends>
          </sends>
          <accepts>
-            <cmd id="TOGGLE" > 
+            <cmd id="TOGGLE" /> 
          </accepts>
       </cmds>
    </nodeDef> 
-      <nodeDef id="yomotionsensor" nls="nlsmotionsensor">
+
+
+   <nodeDef id="yomotionsens" nls="nlsmotionsens">
       <editors />
       <sts>
          <st id="GV0" editor="motionstate" />
@@ -230,11 +231,9 @@
             <cmd id="UPDATE" /> 
          </accepts>
       </cmds>
-
    </nodeDef> 
 
-      </nodeDef> 
-      <nodeDef id="yoleaksensor" nls="nlssensor">
+   <nodeDef id="yoleaksens" nls="nlsleaksens">
       <editors />
       <sts>
          <st id="GV0" editor="waterstate" />

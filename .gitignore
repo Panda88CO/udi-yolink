@@ -9,3 +9,33 @@ TPWauth.py
 devicesSaratoga.json
 devices.txt
 packets.txt
+devicesNewS.json
+devicesNew.json
+PACoauthTest.py
+devicesNew.json
+devicesS.json
+devicesT.json
+EVENTpackets.txt
+RXpackets.txt
+RXpacketsOLD.txt
+TXpacketsOLD.txt
+RXpackets.txt
+TXpackets.txt
+RXpackets.txt
+TXpackets.txt
+TXpackets.txt
+udi-YoLinkORG.py
+yolink_mqtt_delaysV2.py
+yolink Test V2C.py
+yolink Test V2C.py
+yolink Test V2C.py
+codes
+yolink.code-workspace
+logs/debug.log
+OLD/yolink_mqtt_clientV3.py
+OLD/yolink_mqtt_clientV3.py
+OLD/yolink_mqtt_classV2old.py
+OLD/yolink_mqtt_classV2old.py
+OLD/yolink_mqtt_clientV2.py
+OLD/yolink_mqtt_clientV3.py
+OLD/yoLinkInit.py
