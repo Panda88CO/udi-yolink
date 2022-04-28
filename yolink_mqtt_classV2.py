@@ -19,7 +19,6 @@ except ImportError:
 
 import paho.mqtt.client as mqtt
 from queue import Queue
-from yolink_mqtt_clientV2 import YoLinkMQTTClient
 from yolinkDelayTimer import CountdownTimer
 """
 Object representation for YoLink MQTT Client
