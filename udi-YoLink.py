@@ -21,7 +21,6 @@ from udiYoManipulatorV2 import udiYoManipulator
 #from udiYoSpeakerHubV2 import udiYoSpeakerHub
 
 
-
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -107,7 +106,6 @@ class YoLinkSetup (udi_interface.Node):
         
 
         for dev in range(0,len(self.deviceList)):
-
             logging.debug('adding/checking device : {} - {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
 
 
@@ -167,7 +165,6 @@ class YoLinkSetup (udi_interface.Node):
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
 
         self.poly.updateProfile()
-
 
 
     def stop(self):
