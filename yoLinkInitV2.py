@@ -104,7 +104,7 @@ class YoLinkInitPAC(object):
 
     def refresh_token(yoAccess):
         try:
-            logging.info('Refershing Token ')
+            logging.info('Refreshing Token ')
             now = int(time.time())
             response = requests.post( yoAccess.tokenURL,
                 data={"grant_type": "refresh_token",
@@ -113,7 +113,10 @@ class YoLinkInitPAC(object):
                     }
             )
             temp =  response.json()
-            yoAccess.token = temp
+            if temp['access_token'] != yoAccess.token['access_token'] :
+                yoAccess.token = temp
+                yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
+                #need to check if device tokens change with new access token
             yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in'] + now )
             return(True)
 
@@ -123,15 +126,15 @@ class YoLinkInitPAC(object):
 
     def get_access_token(yoAccess):
         yoAccess.tokenLock.acquire()
-        #now = int(time.time())
+        now = int(time.time())
         if yoAccess.token == None:
             yoAccess.request_new_token()
-        #if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
-        #    if now > yoAccess.token['expirationTime']: #we loast the token
+        if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
+            yoAccess.refresh_token()
+        #    if now > yoAccess.token['expirationTime']: #we lost the token
         #        yoAccess.request_new_token()
         #    else:
-        #        yoAccess.refresh_token()
-        yoAccess.tokenLock.release()
+        yoAccess.tokenLock.release() 
 
                 
     def is_token_expired (yoAccess, accessToken):
