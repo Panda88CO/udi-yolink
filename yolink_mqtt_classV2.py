@@ -232,7 +232,50 @@ class YoLinkMQTTDevice(object):
         except Exception as e:
             logging.debug('getData exceptiom: {}'.format(e) )
             return( )
-  
+      
+    def getInfoAPI (yolink):
+        return(yolink.dataAPI)
+
+    def sensorOnline(yolink):
+        return(yolink.dataAPI[yolink.dOnline] )       
+
+    def getAlarms(yolink):
+        return(yolink.getStateValue('alarm'))
+
+    def getBattery(yolink):
+        return(yolink.getStateValue('battery'))
+
+    def getLastUpdate (yolink):
+        return(yolink.dataAPI[yolink.lastUpd])
+
+    def refreshState(yolink):
+        logging.debug(str(yolink.type)+ ' - refreshState')
+        yolink.refreshDevice()
+
+    def getDataAll(yolink):
+        try:
+            logging.debug(yolink.type +' - getDataAll')
+            return(yolink.dataAPI[yolink.dData])
+        except Exception as e:
+            logging.debug('getData exceptiom: {}'.format(e) )
+            return(None)
+   
+    def getState(yolink):
+        try:
+            logging.debug(yolink.type +' - getState')
+            return(yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState] )
+        except Exception as e:
+            logging.debug('getState exception: {}'.format(e) )
+            return(None)
+
+    def getData(yolink):
+        try:
+            logging.debug(yolink.type +' - getData')
+            return(yolink.dataAPI[yolink.dData][yolink.dState])
+        except Exception as e:
+            logging.debug('getData exceptiom: {}'.format(e) )
+            return(None)
+
     '''
     def getOnlineStatus(yolink):
         maxCount = 3
@@ -855,41 +898,6 @@ class YoLinkMQTTDevice(object):
         else:
             return(None)
            
-    def getInfoAPI (yolink):
-        return(yolink.dataAPI)
-
-    def sensorOnline(yolink):
-        return(yolink.dataAPI[yolink.dOnline] )       
-
-    def getAlarms(yolink):
-        return(yolink.getStateValue('alarm'))
-
-    def getBattery(yolink):
-        return(yolink.getStateValue('battery'))
-
-    def getLastUpdate (yolink):
-        return(yolink.dataAPI[yolink.lastUpd])
-
-    def refreshState(yolink):
-        logging.debug(str(yolink.type)+ ' - refreshState')
-        yolink.refreshDevice()
-
-   
-    def getState(yolink):
-        try:
-            logging.debug(yolink.type +' - getState')
-            return(yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState] )
-        except Exception as e:
-            logging.debug('getState exception: {}'.format(e) )
-            return(None)
-
-    def getData(yolink):
-        try:
-            logging.debug(yolink.type +' - getData')
-            return(yolink.dataAPI[yolink.dData][yolink.dState])
-        except Exception as e:
-            logging.debug('getData exceptiom: {}'.format(e) )
-            return(None)
 
 
     def timezoneOffsetSec(yolink):

@@ -55,7 +55,7 @@ mqttURL = 'api.yosmart.com'
 
 yoAccess = YoLinkInitPAC (UAID, SECRET_KEY)
 
-deviceList = yoAccess.getdeviceList()
+deviceList = yoAccess.getDeviceList()
 
 devices = {}
 for dev in range(0,len(deviceList)):
@@ -65,61 +65,92 @@ for dev in range(0,len(deviceList)):
     if deviceList[dev]['type'] == 'Hub':     
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkHub(yoAccess, deviceList[dev])
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
 
-
+        print('\n')
 
     elif deviceList[dev]['type'] == 'SpeakerHub':
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkSpeakerHub (yoAccess, deviceList[dev])
-        devices[dev].getStatus()
-        
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'Switch':
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkSwitch(yoAccess, deviceList[dev])                               
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+        print(devices[dev].getState())
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'THSensor':      
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkTHSensor(yoAccess, deviceList[dev])   
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'MultiOutlet':
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkMultiOutlet(yoAccess, deviceList[dev])                
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'DoorSensor':
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkDoorSensor(yoAccess, deviceList[dev])     
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'Manipulator':
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkManipulator(yoAccess, deviceList[dev])             
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'MotionSensor':     
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkMotionSensor(yoAccess, deviceList[dev])         
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'Outlet':     
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkOutlet(yoAccess, deviceList[dev])   
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'GarageDoor': 
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkGarageDoorToggle(yoAccess, deviceList[dev])    
-        devices[dev].getStatus()
+        devices[dev].refreshDevice()
+        print(devices[dev].getDataAll())
+
+        print('\n')
 
     elif deviceList[dev]['type'] == 'LeakSensor': 
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkLeakSensor(yoAccess, deviceList[dev])   
-        devices[dev].getStatus()
+        print(devices[dev].getSrefreshDevicetatus())
+        print(devices[dev].getDataAll())
 
+        print('\n')
 
     else:
         logging.debug('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))

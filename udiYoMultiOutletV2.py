@@ -288,7 +288,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -306,7 +306,12 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(1)
         self.yoMultiOutlet.initNode()
-        if self.yoMultiOutlet.online:
+
+        if not self.yoMultiOutlet.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.poly.delNode(self.node)
+        else:
+            self.node.setDriver('ST', 1, True, True)
             time.sleep(2)
             logging.debug('multiOutlet past initNode')
             self.ports = self.yoMultiOutlet.getMultiOutStates()

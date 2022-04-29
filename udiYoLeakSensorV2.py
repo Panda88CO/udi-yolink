@@ -76,11 +76,13 @@ class udiYoLeakSensor(udi_interface.Node):
         logging.info('start - YoLinkLeakSensor')
         self.yoLeakSensor  = YoLinkLeakSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        if self.yoLeakSensor:
-            self.yoLeakSensor.initNode()
-            self.node.setDriver('ST', 1, True, True)
+        self.yoLeakSensor.initNode()
+        if not self.yoLeakSensor.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.poly.delNode(self.node)  
         else:
-            logging.error('Not able to connect leakSensor')
+            self.node.setDriver('ST', 1, True, True)
+
         #time.sleep(3)
     
     '''

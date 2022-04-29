@@ -18,11 +18,11 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(yoAccess,  deviceInfo, callback)
         
-        yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
+        yolink.methodList = ['getState', 'setWiFi', 'playAudio', 'setOption' ]
         yolink.eventList = ['StatusChange', 'Report', 'getState']
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.eventTime = 'Time'
-        yolink.type = 'Switch'
+        yolink.type = 'SpeakerHub'
         #time.sleep(2)
         #print('yolink.refreshState')
         #yolink.refreshState()

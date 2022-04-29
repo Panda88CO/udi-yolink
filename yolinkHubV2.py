@@ -14,7 +14,7 @@ from yolink_mqtt_classV2 import YoLinkMQTTDevice
 class YoLinkHu(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(yoAccess,  deviceInfo, callback)
-        yolink.methodList = ['getState' ]
+        yolink.methodList = ['getState', 'setWiFi' ]
         yolink.eventList = ['Report']
         yolink.HubName = 'HubEvent'
         yolink.eventTime = 'Time'

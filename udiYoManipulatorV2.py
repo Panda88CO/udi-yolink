@@ -80,7 +80,11 @@ class udiYoManipulator(udi_interface.Node):
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
         self.yoManipulator.initNode()
-        self.node.setDriver('ST', 1, True, True)
+        if not self.yoManipulator.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.poly.delNode(self.node)
+        else:
+            self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 
     def stop (self):

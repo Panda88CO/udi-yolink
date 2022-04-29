@@ -99,8 +99,11 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor  = YoLinkTHSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoTHsensor.initNode()
-        self.node.setDriver('ST', 1, True, True)
-        #time.sleep(3)
+        if not self.yoTHsensor.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.poly.delNode(self.node)
+        else:
+            self.node.setDriver('ST', 1, True, True)
 
     def initNode(self):
         self.yoTHsensor.refreshSensor()

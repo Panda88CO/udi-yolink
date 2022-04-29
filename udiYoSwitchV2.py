@@ -82,9 +82,12 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
         self.yoSwitch.initNode()
-        logging.debug('SWITCH ONLINE: {}'.format(self.yoSwitch.online))
-        
-        self.node.setDriver('ST', 1, True, True)
+        if not self.yoSwitch.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.poly.delNode(self.node)
+        else:
+            self.node.setDriver('ST', 1, True, True)
+        #time.sleep(3)
         #time.sleep(3)
 
     def updateDelayCountdown (self, delayRemaining ) :

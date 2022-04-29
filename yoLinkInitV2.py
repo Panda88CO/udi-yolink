@@ -83,6 +83,8 @@ class YoLinkInitPAC(object):
 
         yoAccess.messagePending = False
 
+    def getDeviceList(yoAccess):
+        return(yoAccess.deviceList)
 
     def request_new_token(yoAccess):
         try:

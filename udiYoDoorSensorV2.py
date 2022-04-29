@@ -75,7 +75,12 @@ class udiYoDoorSensor(udi_interface.Node):
         self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)   
         time.sleep(2)
         self.yoDoorSensor.initNode()
-        self.node.setDriver('ST', 1, True, True)
+        
+        if not self.yoDoorSensor.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.poly.delNode(self.node)
+        else:
+            self.node.setDriver('ST', 1, True, True)
 
 
     '''

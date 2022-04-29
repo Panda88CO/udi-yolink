@@ -82,9 +82,11 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
         self.yoOutlet.initNode()
-        self.node.setDriver('ST', 1, True, True)
-        #time.sleep(3)
-
+        if not self.yoOutlet.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.poly.delNode(self.node)
+        else:
+            self.node.setDriver('ST', 1, True, True)
     def stop (self):
         logging.info('Stop udiYoOutlet')
         self.node.setDriver('ST', 0, True, True)
