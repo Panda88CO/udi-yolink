@@ -43,7 +43,7 @@ class udiYoMotionSensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
 
         logging.debug('YoLinkMotionSensor INIT- {}'.format(deviceInfo['name']))
-
+        self.adress = address
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None

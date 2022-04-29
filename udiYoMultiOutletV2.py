@@ -310,6 +310,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         if not self.yoMultiOutlet.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.poly.delNode(self.node)
+            self.ports = 0
+            self.nbrOutlets = 0
         else:
             self.node.setDriver('ST', 1, True, True)
             time.sleep(2)
@@ -358,11 +360,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     
             self.yoMultiOutlet.refreshMultiOutlet()
             #logging.debug('Finished  MultiOutlet start')
-        else:
-            logging.info('MultiOulet is not online')
-            self.ports = 0
-            self.nbrOutlets = 0
-            self.node.setDriver('ST', 0, True, True)
+
 
 
     def node_queue(self, data):

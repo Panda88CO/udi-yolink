@@ -18,9 +18,9 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-from yolinkSwitchV2 import YoLinkSW
+from yolinkHubV2 import YoLinkHu
 
-class udiYoSwitch(udi_interface.Node):
+class udiYoHub(udi_interface.Node):
   
     id = 'yoswitch'
     drivers = [
@@ -46,7 +46,7 @@ class udiYoSwitch(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('udiYoSwitch INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoHub INIT- {}'.format(deviceInfo['name']))
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSpeakerHub = None
@@ -77,8 +77,8 @@ class udiYoSwitch(udi_interface.Node):
 
 
     def start(self):
-        logging.info('start - udiYoSwitch')
-        self.yoSpeakerHub  = YoLinkSW(self.yoAccess, self.devInfo, self.updateStatus)
+        logging.info('start - udiYoHub')
+        self.yoSpeakerHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoSpeakerHub.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
         self.yoSpeakerHub.initNode()
@@ -95,7 +95,7 @@ class udiYoSwitch(udi_interface.Node):
         logging.debug('updateDelayCountdown {}'.format(delayRemaining))
 
     def stop (self):
-        logging.info('Stop udiYoSwitch')
+        logging.info('Stop udiYoHub')
         self.node.setDriver('ST', 0, True, True)
         self.yoSpeakerHub.shut_down()
 
@@ -103,7 +103,7 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSpeakerHub.refreshDevice() 
 
     def updateStatus(self, data):
-        logging.info('updateStatus - speakerHub')
+        logging.info('updateStatus - Hub')
         self.yoSpeakerHub.updateCallbackStatus(data)
 
         if self.node is not None:
@@ -120,9 +120,21 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('GV8', 0, True, True)
                 #self.pollDelays()
            
+    def setWiFi (self, command):
+        logging ('setWiFi')
+        
+    def setSSID (self, command):
+        logging ('setSSID')
+        ssidStr = command.get('value')
 
+    def setPassword (self, command ):
+
+        logging ('setPassword')
+        passwordStr = command.get('value')
+        
+    '''
     def switchControl(self, command):
-        logging.info('udiYoSwitch switchControl')
+        logging.info('udiYoHub switchControl')
         state = int(command.get('value'))     
         if state == 1:
             self.yoSpeakerHub.setState('ON')
@@ -130,29 +142,27 @@ class udiYoSwitch(udi_interface.Node):
             self.yoSpeakerHub.setState('OFF')
         
     def setOnDelay(self, command ):
-        logging.info('udiYoSwitch setOnDelay')
+        logging.info('udiYoHub setOnDelay')
         delay =int(command.get('value'))
         self.yoSpeakerHub.setOnDelay(delay)
         self.node.setDriver('GV1', delay*60, True, True)
 
     def setOffDelay(self, command):
-        logging.info('udiYoSwitch setOffDelay')
+        logging.info('udiYoHub setOffDelay')
         delay =int(command.get('value'))
         self.yoSpeakerHub.setOffDelay(delay)
         self.node.setDriver('GV2', delay*60, True, True)
-
+    '''
 
     def update(self, command = None):
-        logging.info('udiYoSwitch Update Status')
+        logging.info('udiYoHub Update Status')
         self.yoSpeakerHub.refreshState()
         #self.yoSpeakerHub.refreshSchedules()     
 
 
     commands = {
                 'UPDATE': update,
-                'SWCTRL': switchControl, 
-                'ONDELAY' : setOnDelay,
-                'OFFDELAY' : setOffDelay 
+
                 }
 
 
