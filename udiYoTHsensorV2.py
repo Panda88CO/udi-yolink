@@ -79,10 +79,6 @@ class udiYoTHsensor(udi_interface.Node):
         self.node = polyglot.getNode(address)
 
 
-        #self.switchState = self.yoSwitch.getState()
-        #self.switchPower = self.yoSwitch.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
-
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
