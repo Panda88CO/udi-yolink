@@ -29,7 +29,21 @@ class YoLinkHu(YoLinkMQTTDevice):
     def updataStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
-   
+    def setWiFi (yolink, SSID, password):
+        logging.debug(yolink.type+' - setWiFi')
+        maxAttempts = 3
+        if password != '' and SSID != '':
+            data = {}
+            data['params'] = {}
+            data['method'] = yolink.type+'.setWiFi'
+            data["targetDevice"] =  yolink.deviceInfo['deviceId']
+            data["token"]= yolink.deviceInfo['token']
+            data['params']['ssid'] = SSID
+            data['params']['password'] = password
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+               time.sleep(1)
+               attempt = attempt + 1
+        yolink.lastControlPacket = data
 
 
 class YoLinkHub(YoLinkHu):        

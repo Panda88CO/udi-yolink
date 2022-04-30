@@ -75,8 +75,11 @@ for dev in range(0,len(deviceList)):
         devices[dev] = YoLinkSpeakerHub (yoAccess, deviceList[dev])
         devices[dev].refreshDevice()
         print(devices[dev].getDataAll())
-        devices[dev].setOptions(5, True)
-        devices[dev].playAudio('alert', 4, 'This is a test')
+        #devices[dev].setWiFi('SSID', 'password')
+        devices[dev].setWiFi('Olgaard-Guest', '00000000')
+        devices[dev].refreshDevice()
+        devices[dev].setOptions(5, True, False)
+        devices[dev].playAudio('alert', 4, 'This is a test', 0)
         
         print('\n')
 

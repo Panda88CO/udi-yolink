@@ -51,16 +51,22 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     def getDelays(yolink):
         return super().getDelays()
     '''
+
     def setWiFi (yolink, SSID, password):
-        logging ('setWiFi')
+        logging.debug(yolink.type+' - setWiFi')
+        maxAttempts = 3
         if password != '' and SSID != '':
             data = {}
             data['params'] = {}
+            data['method'] = yolink.type+'.setWiFi'
+            data["targetDevice"] =  yolink.deviceInfo['deviceId']
+            data["token"]= yolink.deviceInfo['token']
             data['params']['ssid'] = SSID
             data['params']['password'] = password
-            return(yolink.setWiFi (data))
-        else:
-            return(False)
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+               time.sleep(1)
+               attempt = attempt + 1
+        yolink.lastControlPacket = data
 
 
 
