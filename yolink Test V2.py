@@ -75,9 +75,12 @@ for dev in range(0,len(deviceList)):
         devices[dev] = YoLinkSpeakerHub (yoAccess, deviceList[dev])
         devices[dev].refreshDevice()
         print(devices[dev].getDataAll())
-
+        devices[dev].setOptions(5, True)
+        devices[dev].playAudio('alert', 4, 'This is a test')
+        
         print('\n')
 
+    '''
     elif deviceList[dev]['type'] == 'Switch':
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkSwitch(yoAccess, deviceList[dev])                               
@@ -151,9 +154,10 @@ for dev in range(0,len(deviceList)):
         print(devices[dev].getDataAll())
 
         print('\n')
+    '''
 
-    else:
-        logging.debug('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
+    #else:
+    #    logging.debug('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
 
 
 

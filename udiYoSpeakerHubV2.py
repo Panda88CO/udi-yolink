@@ -20,7 +20,7 @@ from os import truncate
 import time
 from yolinkSpeakerHubV2 import YoLinkSpeakerH
 
-class udiYoSpeakerHu(udi_interface.Node):
+class udiYoSpeakerHub(udi_interface.Node):
   
     id = 'yoswitch'
     drivers = [
@@ -119,14 +119,14 @@ class udiYoSpeakerHu(udi_interface.Node):
     def setWiFi (self, command):
         logging ('setWiFi')
         
-    def setSSID (self, command):
+    def setSSID (self, ssid):
         logging ('setSSID')
-        ssidStr = command.get('value')
+        self.WiFiSSID = ssid
 
     def setPassword (self, command ):
 
         logging ('setPassword')
-        passwordStr = command.get('value')
+        self.WiFipassword = password
         
     '''
     def switchControl(self, command):

@@ -17,10 +17,12 @@ except ImportError:
 class YoLinkSpeakerH(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(yoAccess,  deviceInfo, callback)
-        
+        yolink.WiFipassword = ''
+        yolink.WiFiSSID = ''
+        yolink.volume = 5
         yolink.methodList = ['getState', 'setWiFi', 'playAudio', 'setOption' ]
         yolink.eventList = ['StatusChange', 'Report', 'getState']
-        yolink.stateList = ['open', 'closed', 'on', 'off']
+        yolink.toneList = ['emergency', 'alert', 'warn', 'tip', 'none']
         yolink.eventTime = 'Time'
         yolink.type = 'SpeakerHub'
         #time.sleep(2)
@@ -49,31 +51,67 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     def getDelays(yolink):
         return super().getDelays()
     '''
-
-    def setWiFi(yolink, ssid, password):
-        logging.debug(yolink.type+' - setWiFi')
-        if 'setState'  in yolink.methodList:          
-            if state.lower() not in yolink.stateList:
-                logging.error('Unknows state passed')
-                return(False)
-            if state.lower() == 'on':
-                state = 'open'
-            if state.lower() == 'off':
-                state = 'closed'
+    def setWiFi (yolink, SSID, password):
+        logging ('setWiFi')
+        if password != '' and SSID != '':
             data = {}
             data['params'] = {}
-            data['params']['state'] = state.lower()
-            return(yolink.setDevice( data))
+            data['params']['ssid'] = SSID
+            data['params']['password'] = password
+            return(yolink.setWiFi (data))
         else:
             return(False)
+
+
+
     
-    def setPlayAudio(yolink, tts_string):
-        logging.debug(yolink.type+' - setPlayAudio')
+    def playAudio(yolink, tone, volume=-1, message='', repeat=0):
+        logging.debug(yolink.type+' - playAudio')
+        maxAttempts = 3
+        #missing try
+        data = {}
+
+        data['method'] = yolink.type+'.playAudio'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token']
+        data['params'] = {}
+        if tone in yolink.toneList and tone.lower() != 'none':
+            tone= tone.capitalize()
+            data['params']['tone'] = tone
+        if volume <0 and volume > 16:
+            volume = yolink.volume
+        data['params']['volume'] = volume
+
+        if message != '':
+            if len(message ) > 200:
+               message = message[0:200]
+            data['params']['message'] = message
+        if repeat >= 0 and repeat <= 10:
+            data['params']['repeat'] = repeat
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+               time.sleep(1)
+               attempt = attempt + 1
+        yolink.lastControlPacket = data
 
 
-    def setOptions(yolink, tts_string):
+    def setOptions(yolink, volume, beep=False, mute=False):
         logging.debug(yolink.type+' - setOptions')
-
+        maxAttempts = 3
+        #missing try
+        data = {}
+        data['method'] = yolink.type+'.setOption'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token']
+        data['params'] = {}
+        if volume >0 and volume <= 16:
+            data['params']['volume'] = volume
+            yolink.volume = volume
+        data['params']['enableBeep'] = beep
+        data['params']['mute'] = mute
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+               time.sleep(1)
+               attempt = attempt + 1
+        yolink.lastControlPacket = data
 
 
     def getState(yolink):
