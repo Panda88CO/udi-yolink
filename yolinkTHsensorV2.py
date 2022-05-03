@@ -60,11 +60,11 @@ class YoLinkTHSen(YoLinkMQTTDevice):
         return(yolink.getStateValue('battery'))
     '''    
 
-    def probeState(yolink):
-         return(yolink.getState() )
+    #def probeState(yolink):
+    #     return(yolink.getState() )
 
-    def probeData(yolink):
-        return(yolink.getData() )
+    #def probeData(yolink):
+    #    return(yolink.getData() )
 
 '''
 Stand-Alone Operation of THsensor (no call back to live update data - pooling data in upper APP)

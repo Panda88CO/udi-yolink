@@ -51,6 +51,17 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     def getDelays(yolink):
         return super().getDelays()
     '''
+    def getWiFiInfo(yolink):
+        logging.debug('getWiFiInfo')
+        return(yolink.dataAPI['lastMessage']['data']['wifi'])
+
+    def getEthernetInfo(yolink):
+        logging.debug('getEthernetInfo')
+        return(yolink.dataAPI['lastMessage']['data']['eth'])
+
+    def getOptionInfo(yolink):
+        logging.debug('getOptionInfo')
+        return(yolink.dataAPI['lastMessage']['data']['options'])
 
     def setWiFi (yolink, SSID, password):
         logging.debug(yolink.type+' - setWiFi')

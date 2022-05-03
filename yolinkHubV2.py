@@ -45,6 +45,14 @@ class YoLinkHu(YoLinkMQTTDevice):
                attempt = attempt + 1
         yolink.lastControlPacket = data
 
+    def getWiFiInfo(yolink):
+        logging.debug('getWiFiInfo')
+        return(yolink.dataAPI['lastMessage']['data']['wifi'])
+
+
+    def getEthernetInfo(yolink):
+        logging.debug('getEthernetInfo')
+        return(yolink.dataAPI['lastMessage']['data']['eth'])
 
 class YoLinkHub(YoLinkHu):        
     def __init__(yolink, yoAccess,  deviceInfo):

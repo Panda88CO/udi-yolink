@@ -1,4 +1,3 @@
-import json
 import time
 try:
     import udi_interface
@@ -11,38 +10,30 @@ except ImportError:
 from yolink_mqtt_classV2 import YoLinkMQTTDevice
 
 
-class YoLinkDoorSens(YoLinkMQTTDevice):
-    def __init__ (yolink, yoAccess,  deviceInfo, callback):
+class YoLinkVibrationSen(YoLinkMQTTDevice):
+    def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(yoAccess,  deviceInfo, callback)
         yolink.methodList = ['getState' ]
-        yolink.eventList = ['Report']
+        yolink.eventList = ['Alert' , 'getState', 'StatusChange']
+        yolink.eventName = 'VibrationEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'DoorSensor'
+        yolink.type = 'VibrationSensor'
         #time.sleep(2)
        
-  
-    #def refreshDoorSensor(yolink):
-    #    logging.debug(yolink.type+ ' - refreshDoorSensor') 
-    #    return(yolink.refreshDevice( ))
-
-    #def doorState(yolink):
-    #    return(yolink.getState())
-
-    #def doorData(yolink):
-    #    return(yolink.getData())
-
     
-    #def refreshSensor(yolink):
-    #    yolink.refreshDevice()
-
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
+    def getVibrationState(yolink):
+        return(yolink.getState())
     
-class YoLinkDoorSensor(YoLinkDoorSens):
+    
+
+class YoLinkVibrationSensor(YoLinkVibrationSen):
     def __init__(yolink, yoAccess,  deviceInfo):
-        super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)
+        super().__init__( yoAccess,  deviceInfo, yolink.updateStatus)
         yolink.initNode()
 
+    # Enable Event Support (True below)
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, True)

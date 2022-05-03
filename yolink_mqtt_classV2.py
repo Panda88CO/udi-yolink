@@ -43,18 +43,18 @@ class YoLinkMQTTDevice(object):
         yolink.nbrUsb = 0 
         logging.debug('subscribe_mqtt: {}'.format(yolink.deviceInfo['deviceId']))
         yolink.yoAccess.subscribe_mqtt(deviceInfo['deviceId'], callback)
-        
-
+        yolink.lastDataPacket = ''
+        yolink.lastControlPacket = '' 
+        yolink.TZcomp = (yolink.timezoneOffsetSec() /60 /60)
         #yolink.yolink_URL = yoAccess.apiv2URL
         #yolink.mqttURL = yoAccess.mqttURL
         yolink.noconnect = 0 # number on consecutive no connect to device
   
         yolink.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
         
-        
-        
+               
         yolink.maxSchedules = 6
-        yolink.deviceSupportList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub']
+        yolink.deviceSupportList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationSensor']
         yolink.lastUpd = 'lastUpdTime'
         yolink.lastMessage = 'lastMessage'
         yolink.dOnline = 'online'
@@ -232,12 +232,13 @@ class YoLinkMQTTDevice(object):
         except Exception as e:
             logging.debug('getData exceptiom: {}'.format(e) )
             return( )
-      
+ 
+
     def getInfoAPI (yolink):
         return(yolink.dataAPI)
 
-    def sensorOnline(yolink):
-        return(yolink.dataAPI[yolink.dOnline] )       
+    #def sensorOnline(yolink):
+    #    return(yolink.dataAPI[yolink.dOnline] )       
 
     def getAlarms(yolink):
         return(yolink.getStateValue('alarm'))
@@ -259,7 +260,10 @@ class YoLinkMQTTDevice(object):
         except Exception as e:
             logging.debug('getData exceptiom: {}'.format(e) )
             return(None)
-   
+
+    def getLastDataPacket(yolink):
+        return(yolink.dataAPI['lastMessage']) 
+
     def getState(yolink):
         try:
             logging.debug(yolink.type +' - getState')
@@ -401,6 +405,7 @@ class YoLinkMQTTDevice(object):
                         logging.error('Unsupported event detected: ' + str(E))
             if eventSupport:
                 yolink.eventQueue.put(data['event']) 
+            yolink.lastDataPacket = data
         else:
             yolink.online = yolink.checkOnlineStatus(data)
             logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
