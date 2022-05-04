@@ -2,6 +2,7 @@
 import time
 import datetime
 import json
+import re
 #import threading
 
 from  datetime import datetime
@@ -118,7 +119,7 @@ class YoLinkMQTTDevice(object):
         #yolink.online = yolink.getOnlineStatus()
 
     def publish_data(yolink, data):
-        logging.info( 'Publish Data to Queue: {}'.format(data))
+        logging.debug( 'Publish Data to Queue: {}'.format(data))
         yolink.yoAccess.publishQueue.put(data, timeout = 2)
         if yolink.yoAccess.publishQueue.full():
             return(False)
@@ -322,7 +323,7 @@ class YoLinkMQTTDevice(object):
         return(yolink.online)
 
     def updateCallbackStatus(yolink, data, eventSupport = False):
-        logging.info('{} - updateCallbackStatus : {}'.format(yolink.type, data))
+        logging.debug('{} - updateCallbackStatus : {}'.format(yolink.type, data))
         if 'method' in  data:
             #logging.debug('Method detected')
             if data['code'] == '000000':
@@ -903,7 +904,10 @@ class YoLinkMQTTDevice(object):
         else:
             return(None)
            
-
+    def extractStrNbr (yolink, port):
+        portStr = str(port)
+        portStr = re.findall('[0-9]+', portStr)
+        return(int(portStr.pop()))
 
     def timezoneOffsetSec(yolink):
         local = tzlocal()

@@ -87,7 +87,6 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         maxAttempts = 3
         #missing try
         data = {}
-
         data['method'] = yolink.type+'.playAudio'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token']
