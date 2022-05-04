@@ -1,0 +1,9 @@
+{
+"UAID" : "ua_XXXX",
+"SECRET_KEY" : "sec_v1_XXXX",
+"csid" : "123456789abcedf",
+"csseckey" : "123456789abcedf",
+"csName" : "User",
+"WiFissid" : "WiFIssid",
+"WiFipassword" : "WiFipassword"
+}

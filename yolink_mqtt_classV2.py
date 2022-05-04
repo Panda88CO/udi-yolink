@@ -769,9 +769,6 @@ class YoLinkMQTTDevice(object):
    
     def updateStatusData  (yolink, data):
         logging.debug('{} - updateStatusDat : {}'.format(yolink.type , data))
-         #if yolink.type == 'multiOutlet':
-        #    yolink.nbrPorts = 1 # assume 1 and overwrite
-        #    yolink.nbrUsb = 0  # assume none and overwrite
         yolink.setOnline(data)
 
         if 'delays' in data['data']:
