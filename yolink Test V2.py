@@ -143,8 +143,10 @@ for dev in range(0,len(deviceList)):
         print('{} - getDataAll: {} \n'.format(deviceList[dev]['type'], devices[dev].getDataAll()))
         print('{} - getLastDataPacket: {} \n'.format(deviceList[dev]['type'], devices[dev].getLastDataPacket()))
         print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState()))
-        devices[dev].setState('on')
+        print('{} - setState: {} \n'.format(deviceList[dev]['type'],devices[dev].setState('on')))
         time.sleep(3)
+        print('{} - setState: {} \n'.format(deviceList[dev]['type'],devices[dev].setState('off')))
+    
         devices[dev].setState('off')
         devices[dev].delayTimerCallback(printDelay, 10) #call print delay every 10 sec
         devices[dev].setDelayList([{'delayOn':2,'off':3}])
@@ -174,9 +176,9 @@ for dev in range(0,len(deviceList)):
         print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState()))
         
        
-        devices[dev].setState('off')
+        devices[dev].setState('closed')
         time.sleep(3)
-        devices[dev].setState('on')
+        devices[dev].setState('open')
         devices[dev].delayTimerCallback(printDelay, 10) #call print delay every 10 sec
         devices[dev].setDelayList([{'delayOn':2,'off':3}])
         print('{} - refreshDelays: {} \n'.format(deviceList[dev]['type'], devices[dev].refreshDelays))
@@ -219,7 +221,7 @@ for dev in range(0,len(deviceList)):
         print('{} - getLastUpdate(): {} = {}'.format(deviceList[dev]['type'], timeSec, str(datetime.fromtimestamp(timeSec).strftime("%m/%d/%Y, %H:%M:%S"))))
         print('{} - getDataAll: {} \n'.format(deviceList[dev]['type'], devices[dev].getDataAll()))
         print('{} - getLastDataPacket: {} \n'.format(deviceList[dev]['type'], devices[dev].getLastDataPacket()))
-        print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState))
+        print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState()))
         print('{} - getStateValue: {} \n'.format(deviceList[dev]['type'], devices[dev].getStateValue('state'))) 
         print('{} - getBattery: {} \n'.format(deviceList[dev]['type'], devices[dev].getBattery()))
         print('{} - getAlarms: {} \n'.format(deviceList[dev]['type'], devices[dev].getAlarms()))   
@@ -234,7 +236,7 @@ for dev in range(0,len(deviceList)):
         print('{} - getLastUpdate(): {} = {}'.format(deviceList[dev]['type'], timeSec, str(datetime.fromtimestamp(timeSec).strftime("%m/%d/%Y, %H:%M:%S"))))
         print('{} - getDataAll: {} \n'.format(deviceList[dev]['type'], devices[dev].getDataAll()))
         print('{} - getLastDataPacket: {} \n'.format(deviceList[dev]['type'], devices[dev].getLastDataPacket()))
-        print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState))
+        print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState()))
         print('{} - getStateValue: {} \n'.format(deviceList[dev]['type'], devices[dev].getStateValue('state'))) 
         print('{} - getBattery: {} \n'.format(deviceList[dev]['type'], devices[dev].getBattery()))
         print('{} - getAlarms: {} \n'.format(deviceList[dev]['type'], devices[dev].getAlarms()))     
@@ -243,13 +245,28 @@ for dev in range(0,len(deviceList)):
     elif deviceList[dev]['type'] == 'LeakSensor' and 'LeakSensor' in deviceTestList: 
         print('{} - {}  : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkLeakSensor(yoAccess, deviceList[dev])   
-        print(devices[dev].getSrefreshDevicetatus())
+        devices[dev].refreshDevice()
         print('{} - Online status: {}'.format(deviceList[dev]['type'], devices[dev].online))
         timeSec = int(devices[dev].getLastUpdate()/1000)
         print('{} - getLastUpdate(): {} = {}'.format(deviceList[dev]['type'], timeSec, str(datetime.fromtimestamp(timeSec).strftime("%m/%d/%Y, %H:%M:%S"))))
         print('{} - getDataAll: {} \n'.format(deviceList[dev]['type'], devices[dev].getDataAll()))
         print('{} - getLastDataPacket: {} \n'.format(deviceList[dev]['type'], devices[dev].getLastDataPacket()))
-        print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState))
+        print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState()))
+        print('{} - getStateValue: {} \n'.format(deviceList[dev]['type'], devices[dev].getStateValue('state'))) 
+        print('{} - getBattery: {} \n'.format(deviceList[dev]['type'], devices[dev].getBattery()))
+        print('{} - getAlarms: {} \n'.format(deviceList[dev]['type'], devices[dev].getAlarms()))     
+        print('\n')
+    
+    elif deviceList[dev]['type'] == 'VibrationSensor' and 'VibrationSensor' in deviceTestList: 
+        print('{} - {}  : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkLeakSensor(yoAccess, deviceList[dev])   
+        devices[dev].refreshDevice()
+        print('{} - Online status: {}'.format(deviceList[dev]['type'], devices[dev].online))
+        timeSec = int(devices[dev].getLastUpdate()/1000)
+        print('{} - getLastUpdate(): {} = {}'.format(deviceList[dev]['type'], timeSec, str(datetime.fromtimestamp(timeSec).strftime("%m/%d/%Y, %H:%M:%S"))))
+        print('{} - getDataAll: {} \n'.format(deviceList[dev]['type'], devices[dev].getDataAll()))
+        print('{} - getLastDataPacket: {} \n'.format(deviceList[dev]['type'], devices[dev].getLastDataPacket()))
+        print('{} - getState: {} \n'.format(deviceList[dev]['type'], devices[dev].getState()))
         print('{} - getStateValue: {} \n'.format(deviceList[dev]['type'], devices[dev].getStateValue('state'))) 
         print('{} - getBattery: {} \n'.format(deviceList[dev]['type'], devices[dev].getBattery()))
         print('{} - getAlarms: {} \n'.format(deviceList[dev]['type'], devices[dev].getAlarms()))     
@@ -260,19 +277,45 @@ for dev in range(0,len(deviceList)):
         devices[dev] = YoLinkGarageDoorToggle(yoAccess, deviceList[dev])    
         devices[dev].toggleDevice()
         print('\n')
-    '''
+  
     elif deviceList[dev]['type'] == 'MultiOutlet' and 'MultiOutlet' in deviceTestList:
         print('{} - {}  : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkMultiOutlet(yoAccess, deviceList[dev])                
         devices[dev].refreshDevice()
+        print('{} - Online status: {}'.format(deviceList[dev]['type'], devices[dev].online))
+        timeSec = int(devices[dev].getLastUpdate()/1000)
+        print('{} - getLastUpdate(): {} = {}'.format(deviceList[dev]['type'], timeSec, str(datetime.fromtimestamp(timeSec).strftime("%m/%d/%Y, %H:%M:%S"))))
+        print('{} - getDataAll: {} \n'.format(deviceList[dev]['type'], devices[dev].getDataAll()))
+        print('{} - getLastDataPacket: {} \n'.format(deviceList[dev]['type'], devices[dev].getLastDataPacket()))
+        print('{} - nbrPorts: {} \n'.format(deviceList[dev]['type'], devices[dev].nbrPorts))
+        print('{} - nbrOutlets: {} \n'.format(deviceList[dev]['type'], devices[dev].nbrOutlets))
+        print('{} - nbrUsb: {} \n'.format(deviceList[dev]['type'], devices[dev].nbrUsb))
+      
+        print('{} - getMultiOutStates: {} \n'.format(deviceList[dev]['type'], devices[dev].getMultiOutStates()))
+        print('{} - getMultiOutPortState: {} \n'.format(deviceList[dev]['type'], devices[dev].getMultiOutPortState('0'))) 
+        print('{} - getMultiOutPortState: {} \n'.format(deviceList[dev]['type'], devices[dev].getMultiOutPortState('Port1'))) 
+        print('{} - getMultiOutUsbState: {} \n'.format(deviceList[dev]['type'], devices[dev].getMultiOutUsbState('Usb0'))) 
+
+        print('{} - setMultiOutState: {} \n'.format(deviceList[dev]['type'], devices[dev].setMultiOutState('Port0', 'ON')))
+        print('{} - setUsbState: {} \n'.format(deviceList[dev]['type'], devices[dev].setUsbState('Usb0', 'ON')))
+
+
+        print('{} - setMultiOutPortState: {} \n'.format(deviceList[dev]['type'], devices[dev].setMultiOutPortState(['port0', 'port1'], 'OFF')))  
+        print('{} - setMultiOutUsbState: {} \n'.format(deviceList[dev]['type'], devices[dev].setMultiOutUsbState(['usb0'], 'OFF')))  
+
+        devices[dev].setMultiOutDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])
+        print('{} - refreshDelays: {} \n'.format(deviceList[dev]['type'], devices[dev].refreshDelays))
+        time.sleep(30)
+        devices[dev].setMultiOutDelay('port1', 3, 4) # on = 3 min, off = 4 min
+        print('{} - refreshDelays: {} \n'.format(deviceList[dev]['type'], devices[dev].refreshDelays))
+
+        devices[dev].setMultiOutOnDelays('port1', 3) # on = 3min
+        devices[dev].setMultiOutOffDelays('port1', 4) # on = 3min
         print(devices[dev].getDataAll())
 
-        print('\n')
-    '''
-    
 
-    #else:
-    #    logging.debug('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
+    else:
+        logging.debug('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
 
 
 
