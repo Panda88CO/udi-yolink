@@ -29,6 +29,7 @@ from yolinkSwitchV2 import YoLinkSwitch
 from yolinkGarageDoorToggleV2 import YoLinkGarageDoorToggle
 from yolinkDoorSensorV2 import YoLinkDoorSensor
 from yolinkMotionSensorV2 import YoLinkMotionSensor
+from yolinkVibrationSensorV2 import YoLinkVibrationSensor
 from yolinkOutletV2 import YoLinkOutlet
 from yolinkDoorSensorV2 import YoLinkDoorSensor
 from yolinkHubV2 import YoLinkHub
@@ -52,7 +53,8 @@ if (os.path.exists('./loginInfo.json')):
     WiFipwd = tmp['WiFipassword']
 
 #deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub']
-deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor', 'MotionSensor', 'Outlet', 'LeakSensor', 'Hub', 'SpeakerHub']
+#deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor', 'MotionSensor', 'Outlet', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationsSensor']
+deviceTestList = ['Hub', 'VibrationSensor']
 
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
@@ -69,12 +71,12 @@ for dev in range(0,len(deviceList)):
     if deviceList[dev]['type'] == 'Hub' and 'Hub' in deviceTestList:     
         print('{} - {}  : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkHub(yoAccess, deviceList[dev])
-        print('{} - refreshDelays(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
+        print('{} - refreshDevice(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
         print('{} - online: {}'.format(deviceList[dev]['name'], devices[dev].online))
         if devices[dev].online:
             timeSec = int(devices[dev].getLastUpdate()/1000)
             print('{} - getLastUpdate(): {} = {}'.format(deviceList[dev]['name'], timeSec, str(datetime.fromtimestamp(timeSec).strftime("%m/%d/%Y, %H:%M:%S"))))
-            print('{} - getDataAll(): {}'.format(deviceList[dev]['name'], devices[dev].getDataAll()))
+            #print('{} - getDataAll(): {}'.format(deviceList[dev]['name'], devices[dev].getDataAll()))
             print('{} - getLastDataPacket(): {}'.format(deviceList[dev]['name'], devices[dev].getLastDataPacket()))
             print('{} - getWiFiInfo: {}'.format(deviceList[dev]['name'], devices[dev].getWiFiInfo()))
             print('{} - getEthernetInfo: {}'.format(deviceList[dev]['name'], devices[dev].getEthernetInfo()))
@@ -103,8 +105,6 @@ for dev in range(0,len(deviceList)):
             repeat = 0 
             print('{} - setOptions({}, {}, {}): {}'.format(deviceList[dev]['name'], volume, enableBeep,mute, devices[dev].setOptions(volume, enableBeep, mute)))
             print('{} - playAudio( {}, {}, {},{} ):{}'.format(deviceList[dev]['name'], 'alert', volume+1,'This is a test', repeat, devices[dev].playAudio('alert', volume+1, 'This is a test', repeat)))
-
-            devices[dev].playAudio('alert', volume+1, 'This is a test', repeat)
         print( '\n')
 
 
@@ -245,7 +245,7 @@ for dev in range(0,len(deviceList)):
 
     elif deviceList[dev]['type'] == 'VibrationSensor' and 'VibrationSensor' in deviceTestList:     
         print('{} - {}  : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
-        devices[dev] = YoLinkMotionSensor(yoAccess, deviceList[dev])         
+        devices[dev] = YoLinkVibrationSensor(yoAccess, deviceList[dev])         
         print('{} - refreshDevice: {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
         print('{} - online: {}'.format(deviceList[dev]['name'], devices[dev].online))
         if devices[dev].online:
@@ -255,8 +255,7 @@ for dev in range(0,len(deviceList)):
             print('{} - getLastDataPacket(): {}'.format(deviceList[dev]['name'], devices[dev].getLastDataPacket()))
             print('{} - getState(): {}'.format(deviceList[dev]['name'], devices[dev].getState()))
             print('{} - getStateValue({}): {}'.format(deviceList[dev]['name'],'state', devices[dev].getStateValue('state'))) 
-            print('{} - getBattery(): {}'.format(deviceList[dev]['name'], devices[dev].getBattery()))
-            print('{} - getAlarms(): {}'.format(deviceList[dev]['name'], devices[dev].getAlarms()))     
+            print('{} - getBattery(): {}'.format(deviceList[dev]['name'], devices[dev].getBattery()))  
         print( '\n')
 
     elif deviceList[dev]['type'] == 'LeakSensor' and 'LeakSensor' in deviceTestList: 
@@ -319,6 +318,7 @@ for dev in range(0,len(deviceList)):
             print('{} - setUsbState({}): {}'.format(deviceList[dev]['name'],"'Usb0', 'ON'",devices[dev].setUsbState('Usb0', 'ON')))
             print('{} - setMultiOutPortState({}): {}'.format(deviceList[dev]['name'],"['port0', 'port1'], 'OFF'", devices[dev].setMultiOutPortState(['port0', 'port1'], 'OFF')))  
             print('{} - setMultiOutUsbState({}): {}'.format(deviceList[dev]['name'], "['usb0'], 'OFF'", devices[dev].setMultiOutUsbState(['usb0'], 'OFF')))  
+            devices[dev].delayTimerCallback(printDelay, 10) #call print delay every 10 sec
             print('{} - setMultiOutDelayList({}): {}'.format(deviceList[dev]['name'],"[{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ]", devices[dev].setMultiOutDelayList([{'ch':1, 'on':1, 'offDelay':2},{'ch':0, 'on':3, 'offDelay':4}, ])))
             print('{} - refreshDelays(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDelays()))
             time.sleep(30)

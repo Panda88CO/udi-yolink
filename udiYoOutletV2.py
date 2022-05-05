@@ -136,10 +136,8 @@ class udiYoOutlet(udi_interface.Node):
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
 
     
-    
     def checkOnline(self):
         self.yoOutlet.refreshDevice()
-
 
     def switchControl(self, command):
         logging.info('udiYoOutlet switchControl')
@@ -160,8 +158,6 @@ class udiYoOutlet(udi_interface.Node):
         delay =int(command.get('value'))
         self.yoOutlet.setOffDelay(delay)
         self.node.setDriver('GV2', delay*60, True, True)
-
-
 
     def update(self, command = None):
         logging.info('Update Status Executed')

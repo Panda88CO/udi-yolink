@@ -72,12 +72,10 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.n_queue.pop()
 
 
-        
-
 
     def start(self):
         logging.info('start - udiYoVibrationSensor')
-        self.yoVibrationSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoVibrationSensor  = YoLinkVibrationSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoVibrationSensor.initNode()
         if not self.yoVibrationSensor.online:

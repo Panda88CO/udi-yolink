@@ -90,8 +90,17 @@ class udiYoSwitch(udi_interface.Node):
         #time.sleep(3)
         #time.sleep(3)
 
-    def updateDelayCountdown (self, delayRemaining ) :
-        logging.debug('updateDelayCountdown {}'.format(delayRemaining))
+    def updateDelayCountdown (self, timeRemaining ) :
+        logging.debug('updateDelayCountdown {}'.format(timeRemaining))
+        for delayInfo in range(0, len(timeRemaining)):
+            if 'ch' in timeRemaining[delayInfo]:
+                if timeRemaining[delayInfo]['ch'] == 1:
+                    if 'on' in timeRemaining[delayInfo]:
+                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                    if 'off' in timeRemaining[delayInfo]:
+                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
+
+      
 
     def stop (self):
         logging.info('Stop udiYoSwitch')
