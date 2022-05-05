@@ -173,7 +173,7 @@ class YoLinkSetup (udi_interface.Node):
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
 
-
+        #self.poly.updateProfile()
 
     def stop(self):
         logging.info('Stop Called:')
