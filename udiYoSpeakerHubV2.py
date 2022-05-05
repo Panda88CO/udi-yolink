@@ -24,18 +24,25 @@ class udiYoSpeakerHub(udi_interface.Node):
   
     id = 'yoswitch'
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 107}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 2}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 2}, 
+            {'driver': 'GV3', 'value': 0, 'uom': 25}, 
+            {'driver': 'GV4', 'value': 0, 'uom': 145}, 
+            {'driver': 'GV5', 'value': 0, 'uom': 57},        
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
        drivers = [
-            'GV0' =  switch State
-            'GV1' = OnDelay
-            'GV2' = OffDelay
-            'GV5' = Online
+            'GV0' = Volume
+            'GV1' = BeepEnable
+            'GV2' = Mute
+            'GV3' = Tone
+            'GV4' = MessageStr
+            'GV5' = Repeat
+
+            'GV8' = Online
             ]
 
     ''' 
@@ -123,33 +130,48 @@ class udiYoSpeakerHub(udi_interface.Node):
         logging ('setSSID')
         self.WiFiSSID = ssid
 
-    def setPassword (self, command ):
-
+    def setPassword (self, password ):
         logging ('setPassword')
         self.WiFipassword = password
         
-    '''
-    def switchControl(self, command):
-        logging.info('udiYoSpeakerHub switchControl')
+    def getMessage(self, command):
+        logging.info('udiYoSpeakerHub getMesage')
         state = int(command.get('value'))     
         if state == 1:
             self.yoSpeakerHub.setState('ON')
         else:
             self.yoSpeakerHub.setState('OFF')
         
-    def setOnDelay(self, command ):
-        logging.info('udiYoSpeakerHub setOnDelay')
-        delay =int(command.get('value'))
-        self.yoSpeakerHub.setOnDelay(delay)
-        self.node.setDriver('GV1', delay*60, True, True)
+    def setTone(self, command ):
+        logging.info('udiYoSpeakerHub setTone')
+        tone =int(command.get('value'))
 
-    def setOffDelay(self, command):
-        logging.info('udiYoSpeakerHub setOffDelay')
-        delay =int(command.get('value'))
-        self.yoSpeakerHub.setOffDelay(delay)
-        self.node.setDriver('GV2', delay*60, True, True)
-    '''
+        self.node.setDriver('GV3', tone, True, True)
 
+    def setRepeat(self, command):
+        logging.info('udiYoSpeakerHub setRepeat')
+        repeat =int(command.get('value'))
+        self.node.setDriver('GV5', repeat, True, True)
+
+    def setMute(self, command):
+        logging.info('udiYoSpeakerHub setMute')
+        mute = int(command.get('value'))
+        self.node.setDriver('GV2', mute, True, True)
+    
+    def setBeepEnable(self, command):
+        logging.info('udiYoSpeakerHub setBeepEnable')
+        beepEn =int(command.get('value'))
+        self.node.setDriver('GV1',beepEn, True, True)
+
+    def setVolume(self, command):
+        logging.info('udiYoSpeakerHub setVolume')
+        volume =int(command.get('value'))
+        self.node.setDriver('GV0',volume, True, True)
+
+    def playMessage(self, command = None):
+        logging.info('udiYoSpeakerHub playMessage')
+
+    
     def update(self, command = None):
         logging.info('udiYoSpeakerHub Update Status')
         self.yoSpeakerHub.refreshState()
@@ -157,10 +179,14 @@ class udiYoSpeakerHub(udi_interface.Node):
 
 
     commands = {
-                'UPDATE': update,
+                'UPDATE'    : update,
+                'BEEP'      : setBeepEnable,
+                'MUTE'      : setMute,
+                'REPEAT'    : setRepeat,
+                'TONE'      : setTone,
+                'MESSAGE'   : getMessage,
+                'PLAY'      : playMessage,
 
-                }
-
-
+    }
 
 

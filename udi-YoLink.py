@@ -94,7 +94,7 @@ class YoLinkSetup (udi_interface.Node):
         while not self.nodeDefineDone:
             time.sleep(1)
             logging.debug ('waiting for inital node to get created')
-        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'speakerHub', 'VibrationSenseor' ]
+        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationSenseor' ]
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')
             exit() 
@@ -120,7 +120,7 @@ class YoLinkSetup (udi_interface.Node):
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                 #udiYoHub(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                 self.Parameters[name]  =  self.deviceList[dev]['name']
-            elif self.deviceList[dev]['type'] == 'SpeakerHubh':
+            elif self.deviceList[dev]['type'] == 'SpeakerHub':
                 name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                 logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                 #udiYoSpeakerHub(self.poly, name, name, self.deviceList[dev]['name'],  self.yoAccess, self.deviceList[dev] )

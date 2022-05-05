@@ -129,7 +129,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
                attempt = attempt + 1
         yolink.lastControlPacket = data
 
-
+    '''
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
         attempts = 0
@@ -146,7 +146,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
                 return('Unkown')
         else:
             return('Unkown')
-    '''
+    
     def getEnergy(yolink):
         logging.debug(yolink.type+' - getEnergy')
         return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
