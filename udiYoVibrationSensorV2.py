@@ -20,7 +20,7 @@ from yolinkVibrationSensorV2 import YoLinkVibrationSen
 
 
 class udiYoVibrationSensor(udi_interface.Node):
-    id = 'yomotionsens'
+    id = 'yovibrasens'
     
     '''
        drivers = [

@@ -59,5 +59,10 @@
   <editor id = "outletnbr" > 
      <range  uom="25" subset="0-7" nls="portlist" /> 
   </editor>
+  <editor id = "vibrationsstate" > 
+     <range  uom="25" subset="0-1,99" nls="vibrationsstate" />
+  </editor>
+
+
 </editors> 
 

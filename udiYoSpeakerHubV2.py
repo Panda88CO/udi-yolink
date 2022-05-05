@@ -22,7 +22,7 @@ from yolinkSpeakerHubV2 import YoLinkSpeakerH
 
 class udiYoSpeakerHub(udi_interface.Node):
   
-    id = 'yoswitch'
+    id = 'yospeakerh'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 107}, 
             {'driver': 'GV1', 'value': 0, 'uom': 2}, 
@@ -168,9 +168,13 @@ class udiYoSpeakerHub(udi_interface.Node):
         volume =int(command.get('value'))
         self.node.setDriver('GV0',volume, True, True)
 
-    def playMessage(self, command = None):
+    def playMessage(self, command ):
         logging.info('udiYoSpeakerHub playMessage')
-
+        state = int(command.get('value'))     
+        if state == 1:
+            self.yoSpeakerHub.setState('ON')
+        else:
+            self.yoSpeakerHub.setState('OFF')
     
     def update(self, command = None):
         logging.info('udiYoSpeakerHub Update Status')
@@ -184,7 +188,6 @@ class udiYoSpeakerHub(udi_interface.Node):
                 'MUTE'      : setMute,
                 'REPEAT'    : setRepeat,
                 'TONE'      : setTone,
-                'MESSAGE'   : getMessage,
                 'PLAY'      : playMessage,
 
     }
