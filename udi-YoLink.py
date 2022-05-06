@@ -66,7 +66,7 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('YoLinkSetup init')
         logging.debug('self.address : ' + str(self.address))
         logging.debug('self.name :' + str(self.name))   
-        
+        self.poly.updateProfile()
         self.poly.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
