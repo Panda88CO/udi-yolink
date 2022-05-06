@@ -83,6 +83,7 @@ class udiYoManipulator(udi_interface.Node):
         if not self.yoManipulator.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.poly.delNode(self.node)
+            self.yoManipulator.shut_down()
         else:
             self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)

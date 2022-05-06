@@ -312,6 +312,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.poly.delNode(self.node)
             self.ports = 0
             self.nbrOutlets = 0
+            self.yoMultiOutlet.shut_down()
         else:
             self.node.setDriver('ST', 1, True, True)
             time.sleep(2)

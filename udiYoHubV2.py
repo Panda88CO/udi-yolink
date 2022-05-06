@@ -22,7 +22,7 @@ from yolinkHubV2 import YoLinkHu
 
 class udiYoHub(udi_interface.Node):
   
-    id = 'yoswitch'
+    id = 'yohub'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
@@ -49,7 +49,7 @@ class udiYoHub(udi_interface.Node):
         logging.debug('udiYoHub INIT- {}'.format(deviceInfo['name']))
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
-        self.yoSpeakerHub = None
+        self.yoHub = None
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -78,15 +78,16 @@ class udiYoHub(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoHub')
-        self.yoSpeakerHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoSpeakerHub.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoHub.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
-        self.yoSpeakerHub.initNode()
+        self.yoHub.initNode()
         
         
-        if not self.yoSpeakerHub.online:
+        if not self.yoHub.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.poly.delNode(self.node)
+            self.yoHub.shut_down()
         else:
             self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
@@ -97,18 +98,18 @@ class udiYoHub(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoHub')
         self.node.setDriver('ST', 0, True, True)
-        self.yoSpeakerHub.shut_down()
+        self.yoHub.shut_down()
 
     def checkOnline(self):
-        self.yoSpeakerHub.refreshDevice() 
+        self.yoHub.refreshDevice() 
 
     def updateStatus(self, data):
         logging.info('updateStatus - Hub')
-        self.yoSpeakerHub.updateCallbackStatus(data)
+        self.yoHub.updateCallbackStatus(data)
 
         if self.node is not None:
-            state =  self.yoSpeakerHub.getState().upper()
-            if self.yoSpeakerHub.online:
+            state =  self.yoHub.getState().upper()
+            if self.yoHub.online:
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                 elif  state == 'OFF':
@@ -137,27 +138,27 @@ class udiYoHub(udi_interface.Node):
         logging.info('udiYoHub switchControl')
         state = int(command.get('value'))     
         if state == 1:
-            self.yoSpeakerHub.setState('ON')
+            self.yoHub.setState('ON')
         else:
-            self.yoSpeakerHub.setState('OFF')
+            self.yoHub.setState('OFF')
         
     def setOnDelay(self, command ):
         logging.info('udiYoHub setOnDelay')
         delay =int(command.get('value'))
-        self.yoSpeakerHub.setOnDelay(delay)
+        self.yoHub.setOnDelay(delay)
         self.node.setDriver('GV1', delay*60, True, True)
 
     def setOffDelay(self, command):
         logging.info('udiYoHub setOffDelay')
         delay =int(command.get('value'))
-        self.yoSpeakerHub.setOffDelay(delay)
+        self.yoHub.setOffDelay(delay)
         self.node.setDriver('GV2', delay*60, True, True)
     '''
 
     def update(self, command = None):
         logging.info('udiYoHub Update Status')
-        self.yoSpeakerHub.refreshState()
-        #self.yoSpeakerHub.refreshSchedules()     
+        self.yoHub.refreshState()
+        #self.yoHub.refreshSchedules()     
 
 
     commands = {

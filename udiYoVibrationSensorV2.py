@@ -81,6 +81,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         if not self.yoVibrationSensor.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.poly.delNode(self.node)
+            self.yoVibrationSensor.shut_down()
         else:
             self.node.setDriver('ST', 1, True, True)
 
