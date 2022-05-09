@@ -80,8 +80,8 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.yoVibrationSensor.initNode()
         if not self.yoVibrationSensor.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.poly.delNode(self.node)
             self.yoVibrationSensor.shut_down()
+            self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
 
@@ -95,7 +95,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.yoVibrationSensor.refreshDevice()   
     
 
-    def MotionState(self):
+    def getVibrationState(self):
         if self.yoVibrationSensor.online:
             if  self.yoVibrationSensor.getVibrationState() == 'normal':
                 return(0)
@@ -105,7 +105,7 @@ class udiYoVibrationSensor(udi_interface.Node):
             return(99)
 
     def updateStatus(self, data):
-        logging.info('updateStatus - udiYoLinkMotionSensor')
+        logging.info('updateStatus - udiYoLinkVibrationSensor')
         self.yoVibrationSensor.updateCallbackStatus(data)
 
         if self.node is not None:

@@ -83,11 +83,10 @@ class udiYoOutlet(udi_interface.Node):
         time.sleep(2)
         self.yoOutlet.initNode()
         if not self.yoOutlet.online:
-            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.poly.delNode(self.node)            
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))       
             self.node.setDriver('ST', 0, True, True)
             self.yoOutlet.shut_down()
-    
+            self.poly.delNode(self.node) 
     
     def stop (self):
         logging.info('Stop udiYoOutlet')

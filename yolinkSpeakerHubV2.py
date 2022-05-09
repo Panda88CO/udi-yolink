@@ -22,7 +22,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         yolink.volume = 5
         yolink.methodList = ['getState', 'setWiFi', 'playAudio', 'setOption' ]
         yolink.eventList = ['StatusChange', 'Report', 'getState']
-        yolink.toneList = ['emergency', 'alert', 'warn', 'tip', 'none']
+        yolink.toneList = ['none', 'emergency', 'alert', 'warn', 'tip']
         yolink.eventTime = 'Time'
         yolink.type = 'SpeakerHub'
         #time.sleep(2)

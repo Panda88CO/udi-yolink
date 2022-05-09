@@ -120,9 +120,47 @@ ST-nlsvibrasens-GV0-NAME = Vibration State
 ST-nlsvibrasens-GV1-NAME = Sensor Battery Level
 ST-nlsvibrasens-GV8-NAME = Device Online
 ST-nlsvibrasens-ST-NAME = Nodeserver Status
-CMD-nlsvibrasens-UPDATE-NAME = Update Motion Status
+CMD-nlsvibrasens-UPDATE-NAME = Update Vibration Status
 
 
+ND-yospeakerh-NAME = YoLink Speaker Hub
+ND-yospeakerh-ICON = Output
+ST-nlsspeakerh-GV0-NAME = Speaker volume
+ST-nlsspeakerh-GV1-NAME = Command Beep
+ST-nlsspeakerh-GV2-NAME = Mute
+ST-nlsspeakerh-GV3-NAME = Tone Type
+ST-nlsspeakerh-GV4-NAME =Message
+ST-nlsspeakerh-GV5-NAME = Repeat
+ST-nlsspeakerh-GV8-NAME = Device Online
+ST-nlsspeakerh-ST-NAME = Nodeserver Status
+CMD-nlsspeakerh-UPDATE-NAME = Update Status
+CMD-nlsspeakerh-BEEP-NAME = Set Beep
+CMD-nlsspeakerh-MUTE-NAME = set Mute
+CMD-nlsspeakerh-TONE-NAME = Set Tone
+CMD-nlsspeakerh-REPEAT-NAME = Set Repeat
+CMD-nlsspeakerh-MESSAGE-NAME = Message
+CMD-nlsspeakerh-PLAY-NAME = Update Status
+
+
+sphmute-0 = Muted
+sphmute-1 = Unmuted
+sphmute-99 = Unknown
+
+
+sphbeepen-0 = Beep Disabled
+sphbeepen-1 = Beep Enabled
+sphbeepen-99 = Unknown
+
+sphtones-0 = No Tone
+sphtones-1 = Emergency Tone
+sphtones-2 = Alert Tone
+sphtones-3 = Warning Tone
+sphtones-4 = Tip Tone
+
+
+vibration-0 = No Vibration
+vibration-1 = Vibration Detected
+vibration-99 = Unknown
 
 status-0 = Down
 status-1 = Up

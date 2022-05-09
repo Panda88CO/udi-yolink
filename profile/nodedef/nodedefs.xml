@@ -302,13 +302,12 @@
             <cmd id="REPEAT" > 
                <p id="" editor="repeat" init="GV5" />
             </cmd >
+            <cmd id="MESSAGE" > 
+               <p id="" editor="message" init="GV4" />
+            </cmd >
             <cmd id="PLAY" > 
                <p id="" editor="message" init="GV4" />
             </cmd >
-
-
-
-
 
          </accepts>
       </cmds>

@@ -35,7 +35,7 @@ class YoLinkMotionSen(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
-    def motionState(yolink):
+    def getMotionState(yolink):
         return(yolink.getState())
     
     def motionData(yolink):

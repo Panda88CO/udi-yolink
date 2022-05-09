@@ -24,12 +24,12 @@ class udiYoSpeakerHub(udi_interface.Node):
   
     id = 'yospeakerh'
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 107}, 
-            {'driver': 'GV1', 'value': 0, 'uom': 2}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 2}, 
+            {'driver': 'GV0', 'value': 5, 'uom': 107}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 25}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 25}, 
             {'driver': 'GV3', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV4', 'value': 0, 'uom': 145}, 
-            {'driver': 'GV5', 'value': 0, 'uom': 57},        
+            {'driver': 'GV4', 'value': 'Message', 'uom': 145}, 
+            {'driver': 'GV5', 'value': 0, 'uom': 107},        
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -82,15 +82,14 @@ class udiYoSpeakerHub(udi_interface.Node):
     def start(self):
         logging.info('start - udiYoSpeakerHub')
         self.yoSpeakerHub  = YoLinkSpeakerH(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoSpeakerHub.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
         self.yoSpeakerHub.initNode()
         
         
         if not self.yoSpeakerHub.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.poly.delNode(self.node)
             self.yoSpeakerHub.shut_down()
+            self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
@@ -169,6 +168,11 @@ class udiYoSpeakerHub(udi_interface.Node):
         volume =int(command.get('value'))
         self.node.setDriver('GV0',volume, True, True)
 
+    def inputMessage(self, command):
+        logging.info('udiYoSpeakerHub inputMessage')
+        message = command.get('value')
+        self.node.setDriver('GV4',message, True, True)
+
     def playMessage(self, command ):
         logging.info('udiYoSpeakerHub playMessage')
         state = int(command.get('value'))     
@@ -189,6 +193,7 @@ class udiYoSpeakerHub(udi_interface.Node):
                 'MUTE'      : setMute,
                 'REPEAT'    : setRepeat,
                 'TONE'      : setTone,
+                'MESSAGE'   : inputMessage,
                 'PLAY'      : playMessage,
 
     }

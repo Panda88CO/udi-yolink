@@ -79,8 +79,8 @@ class udiYoLeakSensor(udi_interface.Node):
         self.yoLeakSensor.initNode()
         if not self.yoLeakSensor.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.poly.delNode(self.node)  
             self.yoLeakSensor.shut_down()
+            self.poly.delNode(self.node)  
         else:
             self.node.setDriver('ST', 1, True, True)
 

@@ -79,15 +79,14 @@ class udiYoHub(udi_interface.Node):
     def start(self):
         logging.info('start - udiYoHub')
         self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoHub.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
         self.yoHub.initNode()
         
         
         if not self.yoHub.online:
-            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.poly.delNode(self.node)
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))            
             self.yoHub.shut_down()
+            self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)

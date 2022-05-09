@@ -82,8 +82,8 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor.initNode()
         if not self.yoMotionsSensor.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.poly.delNode(self.node)
             self.yoMotionsSensor.shut_down()
+            self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
 
@@ -97,9 +97,9 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor.refreshDevice()   
     
 
-    def MotionState(self):
+    def getMotionState(self):
         if self.yoMotionsSensor.online:
-            if  self.yoMotionsSensor.motionState() == 'normal':
+            if  self.yoMotionsSensor.getMotionState() == 'normal':
                 return(0)
             else:
                 return(1)
@@ -112,7 +112,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
         if self.node is not None:
             if self.yoMotionsSensor.online:
-                self.node.setDriver('GV0', self.MotionState(), True, True)
+                self.node.setDriver('GV0', self.getMotionState(), True, True)
                 self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)
             else:
