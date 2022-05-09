@@ -112,13 +112,14 @@ class udiYoSpeakerHub(udi_interface.Node):
         if self.node is not None:
             state =  self.yoSpeakerHub.getState().upper()
             if self.yoSpeakerHub.online:
-                if state == 'ON':
-                    self.node.setDriver('GV0', 1, True, True)
-                elif  state == 'OFF':
-                    self.node.setDriver('GV0', 0, True, True)
-                else:
-                    self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV8', 1, True, True)
+                logging.debug('testing text')
+                #if state == 'ON':
+                #    self.node.setDriver('GV0', 1, True, True)
+                #elif  state == 'OFF':
+                #    self.node.setDriver('GV0', 0, True, True)
+                #else:
+                #    self.node.setDriver('GV0', 99, True, True)
+                #self.node.setDriver('GV8', 1, True, True)
             else:
                 self.node.setDriver('GV8', 0, True, True)
                 #self.pollDelays()

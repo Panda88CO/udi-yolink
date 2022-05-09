@@ -278,7 +278,7 @@
          <st id="GV1" editor="beep" />
          <st id="GV2" editor="mute" />
          <st id="GV3" editor="tone" />
-         <st id="GV4" editor="message" />
+         <st id="GV4" editor="tone" />
          <st id="GV5" editor="repeat" />
 
 
@@ -303,7 +303,7 @@
                <p id="" editor="repeat" init="GV5" />
             </cmd >
             <cmd id="MESSAGE" > 
-               <p id="" editor="message" init="GV4" />
+               <p id="" editor="tone" init="GV4" />
             </cmd >
             <cmd id="PLAY" > 
                <p id="" editor="message" init="GV4" />
