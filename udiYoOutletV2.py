@@ -79,7 +79,6 @@ class udiYoOutlet(udi_interface.Node):
     def start(self):
         logging.info('start - YoLinkOutlet')
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
         self.yoOutlet.initNode()
         if not self.yoOutlet.online:
@@ -87,6 +86,9 @@ class udiYoOutlet(udi_interface.Node):
             self.node.setDriver('ST', 0, True, True)
             self.yoOutlet.shut_down()
             self.poly.delNode(self.node) 
+        else:
+            self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+            self.node.setDriver('ST', 1, True, True)
     
     def stop (self):
         logging.info('Stop udiYoOutlet')

@@ -28,7 +28,7 @@ class udiYoSpeakerHub(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25}, 
             {'driver': 'GV3', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV4', 'value': 'Message', 'uom': 145}, 
+            {'driver': 'GV4', 'value': 0, 'uom': 25}, 
             {'driver': 'GV5', 'value': 0, 'uom': 107},        
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
@@ -154,27 +154,27 @@ class udiYoSpeakerHub(udi_interface.Node):
         repeat =int(command.get('value'))
         self.node.setDriver('GV5', repeat, True, True)
 
-    def setMute(self, command):
+    def setMute(self, command = None):
         logging.info('udiYoSpeakerHub setMute')
         mute = int(command.get('value'))
         self.node.setDriver('GV2', mute, True, True)
     
-    def setBeepEnable(self, command):
+    def setBeepEnable(self, command = None):
         logging.info('udiYoSpeakerHub setBeepEnable')
         beepEn =int(command.get('value'))
         self.node.setDriver('GV1',beepEn, True, True)
 
-    def setVolume(self, command):
+    def setVolume(self, command = None):
         logging.info('udiYoSpeakerHub setVolume')
         volume =int(command.get('value'))
         self.node.setDriver('GV0',volume, True, True)
 
-    def inputMessage(self, command):
+    def inputMessage(self, command = None):
         logging.info('udiYoSpeakerHub inputMessage')
         message = command.get('value')
         self.node.setDriver('GV4',message, True, True)
 
-    def playMessage(self, command ):
+    def playMessage(self, command = None ):
         logging.info('udiYoSpeakerHub playMessage')
         state = int(command.get('value'))     
         if state == 1:
@@ -193,8 +193,9 @@ class udiYoSpeakerHub(udi_interface.Node):
                 'BEEP'      : setBeepEnable,
                 'MUTE'      : setMute,
                 'REPEAT'    : setRepeat,
+                'VOLUME'    : setVolume,
                 'TONE'      : setTone,
-                'MESSAGE'   : inputMessage,
+                'TTSMESSAGE': inputMessage,
                 'PLAY'      : playMessage,
 
     }

@@ -275,10 +275,10 @@
       <editors />
       <sts>
          <st id="GV0" editor="volume" />
-         <st id="GV1" editor="beep" />
+         <st id="GV1" editor="beepEn" />
          <st id="GV2" editor="mute" />
          <st id="GV3" editor="tone" />
-         <st id="GV4" editor="tone" />
+         <st id="GV4" editor="message" />
          <st id="GV5" editor="repeat" />
 
 
@@ -302,12 +302,13 @@
             <cmd id="REPEAT" > 
                <p id="" editor="repeat" init="GV5" />
             </cmd >
-            <cmd id="MESSAGE" > 
-               <p id="" editor="tone" init="GV4" />
-            </cmd >
-            <cmd id="PLAY" > 
+            <cmd id="VOLUME" > 
+               <p id="" editor="volume" init="GV0" />
+            </cmd >            
+            <cmd id="TTSMESSAGE" > 
                <p id="" editor="message" init="GV4" />
             </cmd >
+            <cmd id="PLAY" /> 
 
          </accepts>
       </cmds>

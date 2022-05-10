@@ -79,7 +79,6 @@ class udiYoSwitch(udi_interface.Node):
     def start(self):
         logging.info('start - udiYoSwitch')
         self.yoSwitch  = YoLinkSW(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(2)
         self.yoSwitch.initNode()
         if not self.yoSwitch.online:
@@ -88,8 +87,9 @@ class udiYoSwitch(udi_interface.Node):
             self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
-        #time.sleep(3)
-        #time.sleep(3)
+            self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
+
+
 
     def updateDelayCountdown (self, timeRemaining ) :
         logging.debug('updateDelayCountdown {}'.format(timeRemaining))

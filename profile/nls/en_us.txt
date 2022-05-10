@@ -137,8 +137,9 @@ CMD-nlsspeakerh-UPDATE-NAME = Update Status
 CMD-nlsspeakerh-BEEP-NAME = Set Beep
 CMD-nlsspeakerh-MUTE-NAME = set Mute
 CMD-nlsspeakerh-TONE-NAME = Set Tone
+CMD-nlsspeakerh-VOLUME-NAME = Set Volume
 CMD-nlsspeakerh-REPEAT-NAME = Set Repeat
-CMD-nlsspeakerh-MESSAGE-NAME = Message
+CMD-nlsspeakerh-TTSMESSAGE-NAME = Message
 CMD-nlsspeakerh-PLAY-NAME = Update Status
 
 
@@ -147,8 +148,8 @@ sphmute-1 = Unmuted
 sphmute-99 = Unknown
 
 
-sphbeepen-0 = Beep Disabled
-sphbeepen-1 = Beep Enabled
+sphbeepen-0 = Disabled
+sphbeepen-1 = Enabled
 sphbeepen-99 = Unknown
 
 sphtones-0 = No Tone
@@ -157,9 +158,19 @@ sphtones-2 = Alert Tone
 sphtones-3 = Warning Tone
 sphtones-4 = Tip Tone
 
+sphtts-0 = Message 0
+sphtts-1 = Message 1
+sphtts-2 = Message 2
+sphtts-3 = Message 3
+sphtts-4 = Message 4
+sphtts-5 = Message 5
+sphtts-6 = Message 6
+sphtts-7 = Message 7
+sphtts-8 = Message 8
+sphtts-9 = Message 9
 
 vibration-0 = No Vibration
-vibration-1 = Vibration Detected
+vibration-1 = Vibration
 vibration-99 = Unknown
 
 status-0 = Down

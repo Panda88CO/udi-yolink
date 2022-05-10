@@ -77,7 +77,7 @@ class udiYoManipulator(udi_interface.Node):
     def start(self):
         logging.info('Start - udiYoManipulator')
         self.yoManipulator = YoLinkManipul(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
+        
         time.sleep(2)
         self.yoManipulator.initNode()
         if not self.yoManipulator.online:
@@ -86,6 +86,7 @@ class udiYoManipulator(udi_interface.Node):
             self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
+            self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
         #time.sleep(3)
 
     def stop (self):

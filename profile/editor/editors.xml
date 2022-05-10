@@ -72,15 +72,14 @@
  <editor id = "repeat" > 
      <range  uom="107" min="0" max ="10" prec="0" />
   </editor>
- <editor id = "beep" > 
+ <editor id = "beepEn" > 
      <range  uom="25" subset="0-1,99" nls="sphbeepen" />
   </editor>
  <editor id = "tone" > 
      <range  uom="25" subset="0-4" nls="sphtones" />
   </editor>
- <editor id = "message" > 
-     <range  uom="145"  />
+ <editor id = "messages" > 
+     <range  uom="25" subset="0-9" nls="sphtts" />
   </editor>
-
 </editors> 
 

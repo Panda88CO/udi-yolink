@@ -303,7 +303,6 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(1)
         self.yoMultiOutlet.initNode()
 
@@ -315,6 +314,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
+            self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             time.sleep(2)
             logging.debug('multiOutlet past initNode')
             self.ports = self.yoMultiOutlet.getMultiOutStates()
