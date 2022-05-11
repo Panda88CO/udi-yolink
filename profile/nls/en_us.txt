@@ -140,7 +140,7 @@ CMD-nlsspeakerh-TONE-NAME = Set Tone
 CMD-nlsspeakerh-VOLUME-NAME = Set Volume
 CMD-nlsspeakerh-REPEAT-NAME = Set Repeat
 CMD-nlsspeakerh-TTSMESSAGE-NAME = Message
-CMD-nlsspeakerh-PLAY-NAME = Update Status
+CMD-nlsspeakerh-PLAY-NAME = Play Message
 
 
 sphmute-0 = Muted

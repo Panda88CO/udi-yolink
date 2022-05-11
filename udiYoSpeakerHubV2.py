@@ -24,12 +24,12 @@ class udiYoSpeakerHub(udi_interface.Node):
   
     id = 'yospeakerh'
     drivers = [
-            {'driver': 'GV0', 'value': 5, 'uom': 107}, 
+            {'driver': 'GV0', 'value': 5, 'uom': 12}, 
             {'driver': 'GV1', 'value': 0, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25}, 
             {'driver': 'GV3', 'value': 0, 'uom': 25}, 
             {'driver': 'GV4', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV5', 'value': 0, 'uom': 107},        
+            {'driver': 'GV5', 'value': 0, 'uom': 0},        
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -84,7 +84,6 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.yoSpeakerHub  = YoLinkSpeakerH(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoSpeakerHub.initNode()
-        
         
         if not self.yoSpeakerHub.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))

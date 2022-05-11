@@ -34,7 +34,25 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
 
     ''' Assume no event support needed if using MQTT'''
     def updataStatus(yolink, data):
-        yolink.updateCallbackStatus(data, False)
+        if 'method' in  data:
+            if data['code'] == '000000':                
+                yolink.online = yolink.checkOnlineStatus(data)
+                if  '.setWiFi' in data['method'] :
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)       
+                elif  '.playAudio' in data['method'] :
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)      
+                elif  '.setOption' in data['method'] :
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)       
+                else:       
+                    yolink.updateCallbackStatus(data, False)
+            else:
+                yolink.deviceError(data)
+                yolink.online = yolink.checkOnlineStatus(data)
+                logging.error(yolink.type+ ': ' + data['desc'])
+
     '''
     def initNode(yolink):
         yolink.refreshState()
@@ -133,7 +151,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
         attempts = 0
-
+        yolink.refreshDevice
         while yolink.dState not in yolink.dataAPI[yolink.dData] and attempts < 5:
             time.sleep(1)
             attempts = attempts + 1
@@ -146,11 +164,9 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
                 return('Unkown')
         else:
             return('Unkown')
-    
-    def getEnergy(yolink):
-        logging.debug(yolink.type+' - getEnergy')
-        return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
     '''
+   
+    
 
 class YoLinkSpeakerHub(YoLinkSpeakerH):
     def __init__(yolink, yoAccess,  deviceInfo):
