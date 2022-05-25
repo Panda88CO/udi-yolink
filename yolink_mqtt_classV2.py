@@ -67,7 +67,7 @@ class YoLinkMQTTDevice(object):
         yolink.messageTime = 'time'
         yolink.forceStop = False
         yolink.eventSupport = False # Support adding to EventQueue
-        yolink.diconnect = False
+        yolink.disconnect = False
         if yolink.type in yolink.delaySupport and yolink.type not in yolink.scheduleSupport :
             yolink.dataAPI = {
                               yolink.lastUpd :str(int(time.time_ns()/1e6))
@@ -127,7 +127,7 @@ class YoLinkMQTTDevice(object):
             return(True)
 
     def shut_down(yolink):
-        yolink.diconnect = True
+        yolink.disconnect = True
         yolink.online = False
         #yolink.yoAccess.shut_down()
    
@@ -142,7 +142,7 @@ class YoLinkMQTTDevice(object):
         yolink.refreshState()
         time.sleep(1)
         #yolink.online = yolink.getOnlineStatus()
-        while not yolink.online and count < maxCount:
+        while not yolink.online and count < maxCount and not yolink.disconnect:
             time.sleep(10)
             yolink.refreshState()
             count = count + 1
@@ -331,7 +331,7 @@ class YoLinkMQTTDevice(object):
                 yolink.noconnect = 0
                 if  '.getState' in data['method'] :
                     if int(data['time']) > int(yolink.getLastUpdate()):
-                        yolink.updateStatusData(data)       
+                        yolink.updateStatusData(data)    
                 elif  '.setState' in data['method'] :
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)                          
@@ -349,7 +349,23 @@ class YoLinkMQTTDevice(object):
                         yolink.updateFWStatus(data)
                 elif  '.toggle' in data['method']:
                     if int(data['time']) > int(yolink.getLastUpdate()):
-                        yolink.updateStatusData(data)                        
+                        yolink.updateStatusData(data)          
+                if  '.setWiFi' in data['method'] :
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        #yolink.updateStatusData(data)       
+                        logging.debug('Do Nothing for now')
+                elif  '.playAudio' in data['method'] :
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        logging.debug('Do Nothing for now')
+                        #yolink.updateStatusData(data)      
+                elif  '.setOption' in data['method'] :
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        logging.debug('Do Nothing for now')
+                        #yolink.updateStatusData(data)   
+
+
+
+
                 else:
                     logging.debug('Unsupported Method passed' + str(json.dumps(data))) 
             #elif data['code'] == '000201': #Cannot connect to device - retry

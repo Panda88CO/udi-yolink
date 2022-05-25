@@ -134,13 +134,13 @@ ST-nlsspeakerh-GV5-NAME = Repeat
 ST-nlsspeakerh-GV8-NAME = Device Online
 ST-nlsspeakerh-ST-NAME = Nodeserver Status
 CMD-nlsspeakerh-UPDATE-NAME = Update Status
-CMD-nlsspeakerh-BEEP-NAME = Set Beep
-CMD-nlsspeakerh-MUTE-NAME = set Mute
-CMD-nlsspeakerh-TONE-NAME = Set Tone
-CMD-nlsspeakerh-VOLUME-NAME = Set Volume
-CMD-nlsspeakerh-REPEAT-NAME = Set Repeat
-CMD-nlsspeakerh-TTSMESSAGE-NAME = Message
 CMD-nlsspeakerh-PLAY-NAME = Play Message
+CMD-nlsspeakerh-VOLUME-NAME = Volume
+CMD-nlsspeakerh-BEEP-NAME = Beep
+CMD-nlsspeakerh-MUTE-NAME = Mute
+CMD-nlsspeakerh-TONE-NAME = Tone
+CMD-nlsspeakerh-REPEAT-NAME = Repeat
+CMD-nlsspeakerh-MESSAGE-NAME = Select Message
 
 
 sphmute-0 = Muted

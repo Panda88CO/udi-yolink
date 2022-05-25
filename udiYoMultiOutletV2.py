@@ -346,7 +346,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                 try:
                     self.subUsbAdr[usb] = self.address[0:11]+'_u'+str(usb)
                     logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
-                    self.subUsb[usb] = udiYoSubUSB(self.poly, self.address,self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
+                    self.subUsb[usb] = udiYoSubUSB(self.poly, self.address, self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
                     self.poly.addNode(self.subUsb[usb])
                     self.wait_for_node_done()
                     self.usbExists = True

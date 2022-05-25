@@ -15,7 +15,10 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
-
+                        #, 
+                        #filename="newfile.log",
+                        #format='%(asctime)s %(message)s',
+                        #filemode='w')
 
 
 from yoLinkInitV2 import YoLinkInitPAC
@@ -39,7 +42,7 @@ def printDelay(timerList):
     print('Timer - timerTest: {}' .format( timerList))
 
 if (os.path.exists('./loginInfo.json')):
-    #logging.debug('reading /devices.json')
+    #print('reading /devices.json')
     dataFile = open('./loginInfo.json', 'r')
     tmp= json.load(dataFile)
     dataFile.close()
@@ -54,7 +57,7 @@ if (os.path.exists('./loginInfo.json')):
 
 #deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub']
 #deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor', 'MotionSensor', 'Outlet', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationsSensor']
-deviceTestList = ['Hub', 'VibrationSensor']
+deviceTestList = ['SpeakerHub', 'VibrationSensor']
 
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
@@ -65,7 +68,7 @@ deviceList = yoAccess.getDeviceList()
 
 devices = {}
 for dev in range(0,len(deviceList)):
-    logging.debug('adding/checking device : {} - {}'.format(deviceList[dev]['name'], deviceList[dev]['type']))
+    print('adding/checking device : {} - {}'.format(deviceList[dev]['name'], deviceList[dev]['type']))
 
 
     if deviceList[dev]['type'] == 'Hub' and 'Hub' in deviceTestList:     
@@ -88,7 +91,7 @@ for dev in range(0,len(deviceList)):
     elif deviceList[dev]['type'] == 'SpeakerHub' and 'SpeakerHub' in deviceTestList:
         print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
         devices[dev] = YoLinkSpeakerHub (yoAccess, deviceList[dev])
-        print('{} - refreshDelays(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
+        #print('{} - refreshDelays(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
         print('{} - online: {}'.format(deviceList[dev]['name'], devices[dev].online))
         if devices[dev].online:
             timeSec = int(devices[dev].getLastUpdate()/1000)
@@ -99,12 +102,13 @@ for dev in range(0,len(deviceList)):
             print('{} - getEthernetInfo(): {}'.format(deviceList[dev]['name'], devices[dev].getEthernetInfo())) #makes no sense but API provides it - maybe future product
             print('{} - getOptionInfo(): {}'.format(deviceList[dev]['name'], devices[dev].getOptionInfo()))
             print('{} - setWiFi({}, {}):  {}'.format(deviceList[dev]['name'], WiFissid, WiFipwd, devices[dev].setWiFi(WiFissid, WiFipwd)))
-            volume = 5
-            enableBeep = True
-            mute = False 
-            repeat = 0 
-            print('{} - setOptions({}, {}, {}): {}'.format(deviceList[dev]['name'], volume, enableBeep,mute, devices[dev].setOptions(volume, enableBeep, mute)))
-            print('{} - playAudio( {}, {}, {},{} ):{}'.format(deviceList[dev]['name'], 'alert', volume+1,'This is a test', repeat, devices[dev].playAudio('alert', volume+1, 'This is a test', repeat)))
+            print('{} - setVolume({}):{}'.format(deviceList[dev]['name'], 5, devices[dev].setVolume(5)))
+            print('{} - setRepeat({}):{}'.format(deviceList[dev]['name'], 0, devices[dev].setRepeat(0)))
+            print('{} - setBeepEnable({}){}:'.format(deviceList[dev]['name'], True, devices[dev].setBeepEnable(True)))
+            print('{} - setMute({}){}:'.format(deviceList[dev]['name'], False, devices[dev].setMute(False)))
+            print('{} - setOptions() {}'.format(deviceList[dev]['name'],  devices[dev].setOptions()))
+            print('{} - setSetTone({}):{}'.format(deviceList[dev]['name'], 'Alert', devices[dev].setTone('Alert'))) #use 'none or empty toset no tone                       
+            print('{} - playAudio({} ):{}'.format(deviceList[dev]['name'],'This is a test',devices[dev].playAudio('This is a test')))
         print( '\n')
 
 
@@ -332,7 +336,7 @@ for dev in range(0,len(deviceList)):
         print( '\n')
 
     else:
-        logging.debug('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
+        print('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
 
 
 

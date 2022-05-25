@@ -278,7 +278,7 @@
          <st id="GV1" editor="beepEn" />
          <st id="GV2" editor="mute" />
          <st id="GV3" editor="tone" />
-         <st id="GV4" editor="messages" />
+
          <st id="GV5" editor="repeat" />
 
 
@@ -290,6 +290,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="PLAY" /> 
+            <cmd id="VOLUME" > 
+               <p id="" editor="volume" init="GV0" />
+            </cmd >    
             <cmd id="BEEP" > 
                <p id="" editor="beepEn" init="GV1" />
             </cmd >
@@ -302,19 +306,12 @@
             <cmd id="REPEAT" > 
                <p id="" editor="repeat" init="GV5" />
             </cmd >
-            <cmd id="VOLUME" > 
-               <p id="" editor="volume" init="GV0" />
-            </cmd >            
-            <cmd id="TTSMESSAGE" > 
-               <p id="" editor="messages" init="GV4" />
-            </cmd >
-            <cmd id="PLAY" /> 
-
+            <cmd id="MESSAGE" > 
+               <p id="" editor="messages" init="0" />
+            </cmd >                        
+            
          </accepts>
       </cmds>
    </nodeDef> 
-
-
-
-
+   
 </nodeDefs> 
