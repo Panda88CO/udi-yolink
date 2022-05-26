@@ -19,7 +19,7 @@ testMessages = ['Mes1', 'Mess2','Messa3','Messag4','Message 5', 'mes77']
 
 
 
-def udiTssProfileUpdate( messages):
+def udiTssProfileUpdate(messages):
     '''
         if (os.path.exists('./profile/editor/editor.xml')):
             #logging.debug('reading /devices.json')

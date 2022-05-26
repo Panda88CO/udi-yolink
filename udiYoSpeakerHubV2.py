@@ -24,12 +24,12 @@ class udiYoSpeakerHub(udi_interface.Node):
   
     id = 'yospeakerh'
     drivers = [
-            {'driver': 'GV0', 'value': 5, 'uom': 12}, 
+            {'driver': 'GV0', 'value': 5, 'uom': 107}, 
             {'driver': 'GV1', 'value': 0, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25}, 
             {'driver': 'GV3', 'value': 0, 'uom': 25}, 
             {'driver': 'GV4', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV5', 'value': 0, 'uom': 0},        
+            {'driver': 'GV5', 'value': 0, 'uom': 107},        
             {'driver': 'GV8', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -63,6 +63,9 @@ class udiYoSpeakerHub(udi_interface.Node):
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.n_queue = []        
+        
+
+
 
         # start processing events and create add our controller node
         polyglot.ready()
@@ -85,8 +88,14 @@ class udiYoSpeakerHub(udi_interface.Node):
         logging.info('start - udiYoSpeakerHub')
         self.yoSpeakerHub  = YoLinkSpeakerH(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
+        self.yoSpeakerHub.volume = 5
+        self.yoSpeakerHub.beepEnabled = False
+        self.yoSpeakerHub.mute = False
+        self.yoSpeakerHub.tone = 'none'
+        self.yoSpeakerHub.repeat = 0
+        self.messageNbr = 0
+        self.yoSpeakerHub.setMessageNbr(self.messageNbr )
         self.yoSpeakerHub.initNode()
-        
         if not self.yoSpeakerHub.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.yoSpeakerHub.shut_down()
@@ -127,7 +136,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.yoSpeakerHub.updateCallbackStatus(data)
 
         if self.node is not None:
-            state =  self.yoSpeakerHub.getState().upper()
+            #state =  self.yoSpeakerHub.getState().upper()
             if self.yoSpeakerHub.online:
                 self.node.setDriver('GV0', self.yoSpeakerHub.volume, True, True)
                 self.node.setDriver('GV1', self.bool2nbr(self.yoSpeakerHub.beepEnabled), True, True)
@@ -173,7 +182,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.node.setDriver('GV5', self.repeat, True, True)
         self.yoSpeakerHub.setRepeat(self.repeat)
 
-    def setMute(self, command = None):
+    def setMute(self, command):
         logging.info('udiYoSpeakerHub setMute')
         self.mute = int(command.get('value'))
         self.node.setDriver('GV2', self.mute, True, True)
@@ -182,7 +191,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         else:
             self.yoSpeakerHub.setMute(False)
     
-    def setBeepEnable(self, command = None):
+    def setBeepEnable(self, command):
         logging.info('udiYoSpeakerHub setBeepEnable')
         self.beepEn =int(command.get('value'))
         self.node.setDriver('GV1', self.beepEn, True, True)
@@ -191,18 +200,19 @@ class udiYoSpeakerHub(udi_interface.Node):
         else:
             self.yoSpeakerHub.setBeepEnable(False)
 
-    def setVolume(self, command = None):
+    def setVolume(self, command):
         logging.info('udiYoSpeakerHub setVolume')
         volume =int(command.get('value'))
         self.yoSpeakerHub.volume = volume
         self.node.setDriver('GV0',self.yoSpeakerHub.volume , True, True)
         self.yoSpeakerHub.setVolume(self.yoSpeakerHub.volume )
 
-    def setMessage(self, command = None):
-        logging.info('udiYoSpeakerHub setVolume')
+    def setMessage(self, command):
+        logging.info('udiYoSpeakerHub setMessage')
         self.messageNbr =int(command.get('value'))
         self.node.setDriver('GV4',self.messageNbr, True, True)
         self.yoSpeakerHub.setMessageNbr(self.messageNbr )
+        logging.info('udiYoSpeakerHub setMessage {} {}'.format(self.messageNbr, self.yoAccess.TtsMessages[self.messageNbr]))
 
     def playMessage(self, command = None ):
         logging.info('udiYoSpeakerHub playMessage')

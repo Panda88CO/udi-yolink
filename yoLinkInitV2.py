@@ -47,8 +47,8 @@ class YoLinkInitPAC(object):
         yoAccess.TtsMessages = {}
         yoAccess.nbrTTS = 0
         
-        yoAccess.TSSfile = 'TSSmessages.json'
-        yoAccess.readTssFile()
+        #yoAccess.TSSfile = 'TSSmessages.json'
+        #yoAccess.readTssFile()
 
         yoAccess.token = None
         while not yoAccess.request_new_token( ):
@@ -88,22 +88,6 @@ class YoLinkInitPAC(object):
 
     #######################################
 
-
-    def readTssFile(yoAccess):
-        if (os.path.exists('./'+yoAccess.TSSfile)):
-            #logging.debug('reading /devices.json')
-            dataFile = open('./'+yoAccess.TSSfile, 'r')
-            yoAccess.TtsMessages = json.load(dataFile)
-            yoAccess.nbrTTS = len(yoAccess.TtsMessages)
-            dataFile.close() 
-        else:
-            yoAccess.TtsMessages = {}
-            yoAccess.nbrTTS = len(yoAccess.TtsMessages)         
-
-    def writeTtsFile(yoAccess):
-        dataFile = open('./'+yoAccess.TSSfile, 'w')
-        json.dump(yoAccess.TtsMessages, dataFile)
-        dataFile.close() 
 
 
     #####################################

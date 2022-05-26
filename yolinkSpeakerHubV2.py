@@ -30,7 +30,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         yolink.mute = False
         yolink.tone = None
         yolink.beepEnabled = False
-
+        yolink.TtsMessageNbr = 0
         #time.sleep(2)
         #print('yolink.refreshState')
         #yolink.refreshState()
@@ -138,7 +138,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         if len(message ) > 200:
             message = message[0:200]
         data['params']['message'] = message
-
+        logging.debug('playAudio: {}'.format(data))
         while  not yolink.publish_data( data) and attempt <= maxAttempts:
                time.sleep(1)
                attempt = attempt + 1
