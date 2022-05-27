@@ -253,7 +253,7 @@ class YoLinkSetup (udi_interface.Node):
     def stop(self):
         logging.info('Stop Called:')
         #self.yoAccess.writeTtsFile() #save current TTS messages
-        if self.node:
+        if 'self.node' in locals():
             self.node.setDriver('ST', 0, True, True)
             #nodes = self.poly.getNodes()
             #for node in nodes:
@@ -398,7 +398,7 @@ class YoLinkSetup (udi_interface.Node):
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-        polyglot.start()
+        polyglot.start('0.3.4')
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
         # Just sit and wait for events
