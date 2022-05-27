@@ -59,7 +59,7 @@ class udiYoLeakSensor(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -75,17 +75,21 @@ class udiYoLeakSensor(udi_interface.Node):
     def start(self):
         logging.info('start - YoLinkLeakSensor')
         self.yoLeakSensor  = YoLinkLeakSen(self.yoAccess, self.devInfo, self.updateStatus)
-        if self.yoLeakSensor:
-            self.yoLeakSensor.initNode()
-            self.node.setDriver('ST', 1, True, True)
+        time.sleep(2)
+        self.yoLeakSensor.initNode()
+        if not self.yoLeakSensor.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.yoLeakSensor.shut_down()
+            self.poly.delNode(self.node)  
         else:
-            logging.error('Not able to connect leakSensor')
+            self.node.setDriver('ST', 1, True, True)
+
         #time.sleep(3)
     
-
+    '''
     def initNode(self):
         self.yoLeakSensor.refreshSensor()
-
+    '''
     
     def stop (self):
         logging.info('Stop udiYoLeakSensor ')
@@ -111,7 +115,7 @@ class udiYoLeakSensor(udi_interface.Node):
         if self.node is not None:
             if self.yoLeakSensor.online:
                 waterState =   self.waterState()  
-                logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.getOnlineStatus())  ))
+                logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
                 self.node.setDriver('GV0', waterState, True, True)
                 self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)

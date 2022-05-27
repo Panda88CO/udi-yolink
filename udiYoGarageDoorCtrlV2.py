@@ -55,7 +55,7 @@ class udiYoGarageDoor(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
 
 
     def node_queue(self, data):
@@ -69,9 +69,8 @@ class udiYoGarageDoor(udi_interface.Node):
 
 
     def start(self):
-        logging.info('start - YoLinkThsensor')
+        logging.info('start - udiYoGarageDoor')
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.yoAccess, self.devInfo, self.updateStatus)
-
         time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)

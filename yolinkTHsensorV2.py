@@ -21,15 +21,17 @@ class YoLinkTHSen(YoLinkMQTTDevice):
         yolink.humidity = 'Humidity'
         yolink.eventTime = 'Time'
         yolink.type = 'THSensor'
-        time.sleep(2)
+        #time.sleep(2)
 
-        
+    '''    
     def initNode(yolink):
         yolink.refreshSensor()
-        yolink.online = yolink.getOnlineStatus()
+        time.sleep(2)
+        #yolink.online = yolink.getOnlineStatus()
         if not yolink.online:
             logging.error('THsensor not online')
-
+    '''
+    
     def updataStatus(self, data):
         self.updateCallbackStatus(data, False)
 
@@ -58,11 +60,11 @@ class YoLinkTHSen(YoLinkMQTTDevice):
         return(yolink.getStateValue('battery'))
     '''    
 
-    def probeState(yolink):
-         return(yolink.getState() )
+    #def probeState(yolink):
+    #     return(yolink.getState() )
 
-    def probeData(yolink):
-        return(yolink.getData() )
+    #def probeData(yolink):
+    #    return(yolink.getData() )
 
 '''
 Stand-Alone Operation of THsensor (no call back to live update data - pooling data in upper APP)

@@ -63,7 +63,7 @@ class udiYoOutlet(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
         self.node.setDriver('ST', 1, True, True)
 
     def node_queue(self, data):
@@ -79,15 +79,21 @@ class udiYoOutlet(udi_interface.Node):
     def start(self):
         logging.info('start - YoLinkOutlet')
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+        time.sleep(2)
         self.yoOutlet.initNode()
-        self.node.setDriver('ST', 1, True, True)
-        #time.sleep(3)
-
+        if not self.yoOutlet.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))       
+            self.node.setDriver('ST', 0, True, True)
+            self.yoOutlet.shut_down()
+            self.poly.delNode(self.node)
+        else:
+            self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+            self.node.setDriver('ST', 1, True, True)
+    
     def stop (self):
         logging.info('Stop udiYoOutlet')
         self.node.setDriver('ST', 0, True, True)
-        if self.yoOutlet.onlineStatus():
+        if self.yoOutlet.online:
             self.yoOutlet.shut_down()
 
 
@@ -131,10 +137,8 @@ class udiYoOutlet(udi_interface.Node):
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
 
     
-    
     def checkOnline(self):
         self.yoOutlet.refreshDevice()
-
 
     def switchControl(self, command):
         logging.info('udiYoOutlet switchControl')
@@ -155,8 +159,6 @@ class udiYoOutlet(udi_interface.Node):
         delay =int(command.get('value'))
         self.yoOutlet.setOffDelay(delay)
         self.node.setDriver('GV2', delay*60, True, True)
-
-
 
     def update(self, command = None):
         logging.info('Update Status Executed')

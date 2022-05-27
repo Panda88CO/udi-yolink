@@ -5,9 +5,7 @@ Polyglot TEST v3 node server
 
 MIT License
 """
-import time
-from yolinkDoorSensorV2 import YoLinkDoorSens
-
+from os import truncate
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -16,14 +14,18 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
 
+import time
+from yolinkVibrationSensorV2 import YoLinkVibrationSen
 
-class udiYoDoorSensor(udi_interface.Node):
-    id = 'yodoorsens'
+
+
+class udiYoVibrationSensor(udi_interface.Node):
+    id = 'yovibrasens'
     
     '''
        drivers = [
-            'GV0' = DoorState
-            'GV1' = Batery
+            'GV0' = Vibration Alert
+            'GV1' = Battery Level
             'GV8' = Online
             ]
 
@@ -39,27 +41,27 @@ class udiYoDoorSensor(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
-        #  
-        self.devInfo =  deviceInfo   
+
+        logging.debug('udiYoVibrationSensor INIT- {}'.format(deviceInfo['name']))
+        self.adress = address
         self.yoAccess = yoAccess
-        self.name = name
-        logging.debug('udiYoDoorSensor INIT - {}'.format(deviceInfo['name']))
+        self.devInfo =  deviceInfo   
+        self.yoTHsensor  = None
 
-        
-
-
+        #self.Parameters = Custom(polyglot, 'customparams')
+        # subscribe to the events we want
+        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.n_queue = []
 
+        # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -70,66 +72,58 @@ class udiYoDoorSensor(udi_interface.Node):
         self.n_queue.pop()
 
 
+
     def start(self):
-        logging.info('start - udiYoDoorSensor')
-        self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)   
+        logging.info('start - udiYoVibrationSensor')
+        self.yoVibrationSensor  = YoLinkVibrationSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        self.yoDoorSensor.initNode()
-        
-        if not self.yoDoorSensor.online:
+        self.yoVibrationSensor.initNode()
+        if not self.yoVibrationSensor.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.yoDoorSensor.shut_down()
+            self.yoVibrationSensor.shut_down()
             self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
 
-
-    '''
-    def initNode(self):
-        self.yoDoorSensor.refreshSensor()
-    '''
     
     def stop (self):
-        logging.info('Stop - udiYoDoorSensor')
+        logging.info('Stop udiYoVibrationSensor')
         self.node.setDriver('ST', 0, True, True)
-        self.yoDoorSensor.shut_down()
-       
-    def doorState(self):
-        state = self.yoDoorSensor.getState()
-        if state.lower() == 'closed':
-            return(0)
-        elif state.lower() == 'open':
-            return(1)
+        self.yoVibrationSensor.shut_down()
+
+    def checkOnline(self):
+        self.yoVibrationSensor.refreshDevice()   
+    
+
+    def getVibrationState(self):
+        if self.yoVibrationSensor.online:
+            if  self.yoVibrationSensor.getVibrationState() == 'normal':
+                return(0)
+            else:
+                return(1)
         else:
             return(99)
-    
-    def checkOnline(self):
-        # only gets the casched status (battery operated device)
-        self.yoDoorSensor.refreshDevice()
-       
 
     def updateStatus(self, data):
-        logging.debug('updateStatus - {}'.format(self.name))
-        self.yoDoorSensor.updateStatus(data)
-        logging.debug(data)
-        alarms = self.yoDoorSensor.getAlarms()
+        logging.info('updateStatus - udiYoLinkVibrationSensor')
+        self.yoVibrationSensor.updateCallbackStatus(data)
+
         if self.node is not None:
-            if self.yoDoorSensor.online:
-                self.node.setDriver('GV0', self.doorState() , True, True)
-                self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
-                self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoDoorSensor.online), True, True)
+            if self.yoVibrationSensor.online:
+                self.node.setDriver('GV0', self.getVibrationState(), True, True)
+                self.node.setDriver('GV1', self.yoVibrationSensor.getBattery(), True, True)
+                self.node.setDriver('GV8', 1, True, True)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV8', 0, True, True)
+                self.node.setDriver('GV8', 1, True, True)
 
 
 
     def update(self, command = None):
-        logging.info('{} - Update Status Executed'.format(self.name))
-        self.yoDoorSensor.refreshSensor()
+        logging.info('udiYoVibrationSensor Update  Executed')
+        self.yoVibrationSensor.refreshSensor()
        
-
 
     commands = {
                 'UPDATE': update,

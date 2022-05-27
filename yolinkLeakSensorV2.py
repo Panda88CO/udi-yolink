@@ -22,23 +22,25 @@ class YoLinkLeakSen(YoLinkMQTTDevice):
         yolink.waterName = 'WaterEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'LeakSensor'
-        time.sleep(1)
+        #time.sleep(1)
         #yolink.refreshSensor()
 
     def refreshSensor(yolink):
         logging.debug('refreshWaterSensor')
-        yolink.online = yolink.getOnlineStatus()
+        #time.sleep(2)
         if yolink.online:   
             return(yolink.refreshDevice())
 
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
-
+    '''
     def initNode(yolink):
         yolink.refreshDevice()
-        yolink.online = yolink.getOnlineStatus()
+        #time.sleep(2)
+        #yolink.online = yolink.getOnlineStatus()
         if not yolink.online:
             logging.error('Leak Sensor not online')
+    '''
     
     def probeState(yolink):
          return(yolink.getState() )

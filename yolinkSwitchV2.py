@@ -23,7 +23,7 @@ class YoLinkSW(YoLinkMQTTDevice):
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.eventTime = 'Time'
         yolink.type = 'Switch'
-        time.sleep(3)
+        #time.sleep(2)
         #print('yolink.refreshState')
         #yolink.refreshState()
         #yolink.refreshSchedules()
@@ -33,10 +33,10 @@ class YoLinkSW(YoLinkMQTTDevice):
     ''' Assume no event support needed if using MQTT'''
     def updataStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
-
+    '''
     def initNode(yolink):
         yolink.refreshState()
-        yolink.online = yolink.getOnlineStatus()
+        time.sleep(2)
         if not yolink.online:
             logging.error('Switch not online')
         #    yolink.refreshSchedules()
@@ -44,11 +44,8 @@ class YoLinkSW(YoLinkMQTTDevice):
             
         #yolink.refreshFWversion()
         #print(' YoLinkSW - finished intializing')
- 
-    def updateStatus(yolink, data):
-        yolink.updateCallbackStatus(data, False)
-
-    '''
+    
+    
     def getDelays(yolink):
         return super().getDelays()
     '''

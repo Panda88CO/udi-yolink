@@ -5,7 +5,7 @@
     Enables yoLink (https://shop.yosmart.com/) devices to be controlled using the ISY
     Current list of devices supported is as follows:
     
-    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor'
+    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'VibrationSensor', 'SpeakerHub'
     
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls in 60 sec
@@ -24,9 +24,14 @@
 ## Installation
     Credentials needs to be added to configuration.  Goto Settings->Account->Advanced Settings -> User Access Credentials 
     Enter both UAID and SecretKey under configuration - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
+    Sometimes a reboot of the ISY is required to make the node server show up correctly.  
+     
 
 ## Notes 
     Currently the API does not support multiple homes - it is promised that there will be support in a month or so - will implement then (I need it myself)
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
-    Schedules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schdules)  - I did not manage to get API working with schdules yet 
+
+    <SpeakerHub> supports up to 10 Test to Speech messages.  You specify the number of messages desired, and then add the text of the message in TTS<n>.  Restart the node server.  After this a restart of the ISY/PoI is needed to transfer the messages to the UI.  The ISY/PoI only reads the file containg the messages during startup 
+
+    Schedules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schedules)  - I did not manage to get API working with schdules yet 
     

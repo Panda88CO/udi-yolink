@@ -18,11 +18,11 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-from yolinkSwitchV2 import YoLinkSW
+from yolinkHubV2 import YoLinkHu
 
-class udiYoSwitch(udi_interface.Node):
+class udiYoHub(udi_interface.Node):
   
-    id = 'yoswitch'
+    id = 'yohub'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
@@ -46,10 +46,10 @@ class udiYoSwitch(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('udiYoSwitch INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoHub INIT- {}'.format(deviceInfo['name']))
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
-        self.yoSwitch = None
+        self.yoHub = None
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -77,47 +77,38 @@ class udiYoSwitch(udi_interface.Node):
 
 
     def start(self):
-        logging.info('start - udiYoSwitch')
-        self.yoSwitch  = YoLinkSW(self.yoAccess, self.devInfo, self.updateStatus)
+        logging.info('start - udiYoHub')
+        self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        self.yoSwitch.initNode()
-        if not self.yoSwitch.online:
+        self.yoHub.initNode()
+        
+        
+        if not self.yoHub.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))            
-            self.yoSwitch.shut_down()
+            self.yoHub.shut_down()
             self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
-            self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
+        #time.sleep(3)
 
-
-
-    def updateDelayCountdown (self, timeRemaining ) :
-        logging.debug('updateDelayCountdown {}'.format(timeRemaining))
-        for delayInfo in range(0, len(timeRemaining)):
-            if 'ch' in timeRemaining[delayInfo]:
-                if timeRemaining[delayInfo]['ch'] == 1:
-                    if 'on' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
-                    if 'off' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
-
-      
+    def updateDelayCountdown (self, delayRemaining ) :
+        logging.debug('updateDelayCountdown {}'.format(delayRemaining))
 
     def stop (self):
-        logging.info('Stop udiYoSwitch')
+        logging.info('Stop udiYoHub')
         self.node.setDriver('ST', 0, True, True)
-        self.yoSwitch.shut_down()
+        self.yoHub.shut_down()
 
     def checkOnline(self):
-        self.yoSwitch.refreshDevice() 
+        self.yoHub.refreshDevice() 
 
     def updateStatus(self, data):
-        logging.info('updateStatus - Switch')
-        self.yoSwitch.updateCallbackStatus(data)
+        logging.info('updateStatus - Hub')
+        self.yoHub.updateCallbackStatus(data)
 
         if self.node is not None:
-            state =  self.yoSwitch.getState().upper()
-            if self.yoSwitch.online:
+            state =  self.yoHub.getState().upper()
+            if self.yoHub.online:
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                 elif  state == 'OFF':
@@ -129,39 +120,49 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('GV8', 0, True, True)
                 #self.pollDelays()
            
+    def setWiFi (self, command):
+        logging ('setWiFi')
+        
+    def setSSID (self, command):
+        logging ('setSSID')
+        ssidStr = command.get('value')
 
+    def setPassword (self, command ):
+
+        logging ('setPassword')
+        passwordStr = command.get('value')
+        
+    '''
     def switchControl(self, command):
-        logging.info('udiYoSwitch switchControl')
+        logging.info('udiYoHub switchControl')
         state = int(command.get('value'))     
         if state == 1:
-            self.yoSwitch.setState('ON')
+            self.yoHub.setState('ON')
         else:
-            self.yoSwitch.setState('OFF')
+            self.yoHub.setState('OFF')
         
     def setOnDelay(self, command ):
-        logging.info('udiYoSwitch setOnDelay')
+        logging.info('udiYoHub setOnDelay')
         delay =int(command.get('value'))
-        self.yoSwitch.setOnDelay(delay)
+        self.yoHub.setOnDelay(delay)
         self.node.setDriver('GV1', delay*60, True, True)
 
     def setOffDelay(self, command):
-        logging.info('udiYoSwitch setOffDelay')
+        logging.info('udiYoHub setOffDelay')
         delay =int(command.get('value'))
-        self.yoSwitch.setOffDelay(delay)
+        self.yoHub.setOffDelay(delay)
         self.node.setDriver('GV2', delay*60, True, True)
-
+    '''
 
     def update(self, command = None):
-        logging.info('udiYoSwitch Update Status')
-        self.yoSwitch.refreshState()
-        #self.yoSwitch.refreshSchedules()     
+        logging.info('udiYoHub Update Status')
+        self.yoHub.refreshState()
+        #self.yoHub.refreshSchedules()     
 
 
     commands = {
                 'UPDATE': update,
-                'SWCTRL': switchControl, 
-                'ONDELAY' : setOnDelay,
-                'OFFDELAY' : setOffDelay 
+
                 }
 
 

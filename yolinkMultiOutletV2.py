@@ -16,42 +16,42 @@ except ImportError:
 class YoLinkMultiOut(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(  yoAccess, deviceInfo, callback)
+        yolink.yoAccess = yoAccess
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdates'   ]
         yolink.eventList = ['StatusChange', 'Report']
         yolink.type = 'MultiOutlet'
         yolink.MultiOutletName = 'MultiOutletEvent'
         yolink.eventTime = 'Time'
-        #yolink.delayUpdateInt = 15
+        yolink.delayUpdateInt = 15
         #yolink.timerCallback = callback
         yolink.extDelayTimer = CountdownTimer()
         #yolink.extDelayTimer.timerCallback(callback)
 
-        time.sleep(2)
+        #time.sleep(1)
 
-
+    '''
     def initNode(yolink):
         logging.debug('MultiOutlet initNode - {}'.format(yolink.deviceInfo['name']))
+        
         yolink.initDevice()
-       
+        time.sleep(2)
         #time.sleep(2)
         
        
         #temp = yolink.getInfoAPI()
         #yolink.refreshMultiOutlet() # needed to get number of ports on device
         #yolink.refreshDevice()
-        yolink.online = yolink.getOnlineStatus()
+        #yolink.online = yolink.getOnlineStatus()
         if yolink.online:
             logging.info('MultiOutlet init - Nbr Outlets : {}'.format(yolink.nbrOutlets))
             logging.info('MultiOutlet init - Nbr USB : {}'.format(yolink.nbrUsb))
-            
-    
-           
         else:
             logging.info ('MultiOutlet not online')
         #yolink.refreshSchedules()
         #yolink.refreshFWversion()
-
+    '''
+    
     '''
     def getSchedules (yolink):
         return(yolink.dataAPI['data']['schedules'])  
@@ -72,8 +72,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         status = True
         port = 0
         for i in portList:
-            portStr = re.findall('[0-9]+', i)
-            portNbr = int(portStr.pop())
+            portNbr = yolink.extractStrNbr(i)
             if portNbr < yolink.nbrUsb and portNbr >= 0 :
                 port = port + pow(2, portNbr)
             else:
@@ -100,10 +99,12 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
      
         if yolink.nbrUsb > 0:
             portList = []
-            portList.append(str(int(port)))
+            portList.append(yolink.extractStrNbr(port))
             yolink.setMultiOutUsbState(portList, state)
         else:
             logging.error('No USB port on device')
+
+
 
     def setMultiOutPortState(yolink, portList, value ):
         logging.debug( yolink.type+'- setMultiOutletState')
@@ -112,8 +113,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         status = True
         port = 0
         for i in portList:            
-            portStr = re.findall('[0-9]+', i)
-            portNbr = int(portStr.pop())
+            portNbr = yolink.extractStrNbr(i)
             portNbr = portNbr + yolink.nbrUsb  # Ports start after USB control ports
             if portNbr <= yolink.nbrPorts and portNbr >= 0 :
                 port = port + pow(2, portNbr)
@@ -138,11 +138,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     def setMultiOutState ( yolink, port, state):
         logging.info('outletSetState')
         portList = []
-        portList.append(str(int(port))) # port is 0 based
+        portList.append(str(yolink.extractStrNbr(port))) # port is 0 based
         yolink.setMultiOutPortState(portList, state)
 
 
     def setMultiOutDelayList (yolink, delayList):
+        attempt = 1
+        maxAttempts = 3
         logging.info('outletSetDelayList')
         data = {}
         delTemp = []
@@ -168,39 +170,88 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                 data['params']['delays'].append(temp)
                 delTemp.append(temp)
         logging.debug('Sending delay data: {}'.format( data['params']['delays']))
-        data['time'] = str(int(time.time())*1000)
+        data['time'] = str(int(time.time_ns()//1e6))
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yolinkMQTTclient.publish_data( data)
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays(delTemp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
 
-    def setMultiOutDelays (yolink, port, onDelay, offDelay, callback):
+    def setMultiOutDelay (yolink, port, onDelay, offDelay):
+        attempt = 1
+        maxAttempts = 3
         logging.info('outletSetDelay')
         data = {}
         data['params'] = {}
         data['params']['delays'] = []
-        portStr = re.findall('[0-9]+', port)
-        portNbr = int(portStr.pop())
+        portNbr = yolink.extractStrNbr(port)
         delaySpec = {'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}       
         
         logging.debug('Sending delay data: {}'.format(delaySpec))
         data['params']['delays'].append(delaySpec)
-        data['time'] = str(int(time.time())*1000)
+        data['time'] = str(int(time.time_ns()//1e6))
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yolinkMQTTclient.publish_data( data)
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}] )
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
-
-
+    def setMultiOutOnDelay (yolink, port, onDelay):
+        attempt = 1
+        maxAttempts = 3
+        logging.info('outletSetDelay')
+        data = {}
+        data['params'] = {}
+        data['params']['delays'] = []
+        portNbr = yolink.extractStrNbr(port)
+        delaySpec = {'ch':portNbr+yolink.nbrUsb, 'on':onDelay}       
+        
+        logging.debug('Sending delay data: {}'.format(delaySpec))
+        data['params']['delays'].append(delaySpec)
+        data['time'] = str(int(time.time_ns()//1e6))
+        data['method'] = yolink.type+'.setDelay'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token'] 
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
+        #yolink.writeDelayData(data)
+        yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay}] )
+        yolink.online = yolink.dataAPI[yolink.dOnline]
     
+    def setMultiOutOffDelay (yolink, port, offDelay):
+        attempt = 1
+        maxAttempts = 3
+        logging.info('outletSetDelay')
+        data = {}
+        data['params'] = {}
+        data['params']['delays'] = []
+        portNbr = yolink.extractStrNbr(port)
+        delaySpec = {'ch':portNbr+yolink.nbrUsb, 'off':offDelay}       
+        
+        logging.debug('Sending delay data: {}'.format(delaySpec))
+        data['params']['delays'].append(delaySpec)
+        data['time'] = str(int(time.time_ns()//1e6))
+        data['method'] = yolink.type+'.setDelay'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token'] 
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
+        #yolink.writeDelayData(data)
+        yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'off':offDelay}] )
+        yolink.online = yolink.dataAPI[yolink.dOnline]
+
+
     def getMultiOutStates(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
@@ -236,8 +287,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     def getMultiOutPortState(yolink, portStr):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
-        tmpStr = re.findall('[0-9]+', str(portStr))
-        port = int(tmpStr.pop())
+        port = yolink.extractStrNbr(portStr)
         port = port + yolink.nbrUsb
         temp = yolink.getInfoAPI()
         temp = temp['data'] # Need to look at include USB in API
@@ -250,8 +300,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     def getMultiOutUsbState(yolink, usbStr):
         logging.debug(yolink.type+' - getMultiOutletState')
         #yolink.refreshMultiOutlet()
-        tmpStr = re.findall('[0-9]+', str(usbStr))
-        usb = int(tmpStr.pop())
+        usb = yolink.extractStrNbr(usbStr)
         temp = yolink.getInfoAPI()
         temp = temp['data'] # Need to look at include USB in API
         #logging.debug('getMultiOutletPortState  {} {} {}'.format(port,temp['state'], temp ))
@@ -262,6 +311,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
     '''
     def setMultiDelay(yolink,  delayList):
+        atttempt = 1
+        maxAttempts = 3
         logging.debug(yolink.type+' - setDelay')
         #port = port + yolink.nbrUsb
         data = {}
@@ -282,11 +333,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             logging.debug('Empty list provided ')
 
             return(False, yolink.dataAPI[yolink.dOnline])
-        data['time'] = str(int(time.time())*1000)
+        data['time'] = str(int(time.time_ns()//1e6))
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        yolink.yolinkMQTTclient.publish_data( data)
+        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
         yolink.online = yolink.dataAPI[yolink.dOnline]
         return(True)
     '''
@@ -372,6 +425,11 @@ class YoLinkMultiOutlet(YoLinkMultiOut):
     def __init__(yolink, yoAccess, deviceInfo):
         super().__init__(  yoAccess, deviceInfo, yolink.updateStatus)
         yolink.initNode()
+        if yolink.online:
+            logging.info('MultiOutlet init - Nbr Outlets : {}'.format(yolink.nbrOutlets))
+            logging.info('MultiOutlet init - Nbr USB : {}'.format(yolink.nbrUsb))
+        else:
+            logging.info ('MultiOutlet not online')        
 
     def updateStatus(self, data):
         self.updateCallbackStatus(data, True)

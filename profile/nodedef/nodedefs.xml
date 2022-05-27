@@ -93,7 +93,6 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
-
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -249,7 +248,70 @@
             <cmd id="UPDATE" /> 
          </accepts>
       </cmds>
-
    </nodeDef> 
 
+
+
+
+   <nodeDef id="yovibrasens" nls="nlsvibrasens">
+      <editors />
+      <sts>
+         <st id="GV0" editor="vibrastate" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV8" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+
+   <nodeDef id="yospeakerh" nls="nlsspeakerh">
+      <editors />
+      <sts>
+         <st id="GV0" editor="volume" />
+         <st id="GV1" editor="beepEn" />
+         <st id="GV2" editor="mute" />
+         <st id="GV3" editor="tone" />
+         <st id="GV4" editor="messages" />
+         <st id="GV5" editor="repeat" />
+
+
+         <st id="GV8" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="PLAY" /> 
+            <cmd id="VOLUME" > 
+               <p id="" editor="volume" init="GV0" />
+            </cmd >    
+            <cmd id="BEEP" > 
+               <p id="" editor="beepEn" init="GV1" />
+            </cmd >
+            <cmd id="MUTE" > 
+               <p id="" editor="mute" init="GV2" />
+            </cmd >
+            <cmd id="TONE" > 
+               <p id="" editor="tone" init="GV3" />
+            </cmd >
+            <cmd id="REPEAT" > 
+               <p id="" editor="repeat" init="GV5" />
+            </cmd >
+            <cmd id="MESSAGE" > 
+               <p id="" editor="messages" init="GV4" />
+            </cmd >                        
+            
+         </accepts>
+      </cmds>
+   </nodeDef> 
+   
 </nodeDefs> 
