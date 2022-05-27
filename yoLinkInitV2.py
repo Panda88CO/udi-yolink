@@ -21,7 +21,7 @@ countdownTimerUpdateInterval_G = 10
 import paho.mqtt.client as mqtt
 from queue import Queue
 from threading import Thread, Event
-DEBUG = True
+DEBUG = logging.getEffectiveLevel() == logging.DEBUG
 
 
 class YoLinkInitPAC(object):
@@ -29,8 +29,7 @@ class YoLinkInitPAC(object):
        
         yoAccess.tokenLock = Lock()
         yoAccess.publishQueue = Queue()
-        if DEBUG:
-            yoAccess.fileQueue = Queue()
+        yoAccess.fileQueue = Queue()
         yoAccess.tokenURL = tokenURL
         yoAccess.apiv2URL = pacURL
         yoAccess.mqttURL = mqttURL
@@ -251,7 +250,7 @@ class YoLinkInitPAC(object):
                 logging.debug('Unknow device in payload : {}'.format(payload))
 
             logging.debug('on_message for {}: {} {}'.format(deviceId, msg.topic, payload))
-
+            DEBUG = logging.getEffectiveLevel() == logging.DEBUG
             if deviceId in yoAccess.mqttList:
                 tempCallback = yoAccess.mqttList[deviceId]['callback']
 
@@ -364,7 +363,7 @@ class YoLinkInitPAC(object):
         while not yoAccess.STOP.is_set():
             try:
                 data = yoAccess.publishQueue.get(timeout = 10) 
-
+                DEBUG = logging.getEffectiveLevel() == logging.DEBUG
                 deviceId = data['targetDevice']
                 dataStr = str(json.dumps(data))
                 yoAccess.tmpData[deviceId] = dataStr
