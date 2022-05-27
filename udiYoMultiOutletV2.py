@@ -287,8 +287,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        self.node = self.poly.getNode(address)
+        
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -303,10 +303,18 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
-        self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
         time.sleep(1)
         self.yoMultiOutlet.initNode()
-        if self.yoMultiOutlet.online:
+
+        if not self.yoMultiOutlet.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.ports = 0
+            self.nbrOutlets = 0
+            self.yoMultiOutlet.shut_down()
+            self.node.delNode()
+        else:
+            self.node.setDriver('ST', 1, True, True)
+            self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             time.sleep(2)
             logging.debug('multiOutlet past initNode')
             self.ports = self.yoMultiOutlet.getMultiOutStates()
@@ -338,7 +346,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                 try:
                     self.subUsbAdr[usb] = self.address[0:11]+'_u'+str(usb)
                     logging.debug('Adding outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
-                    self.subUsb[usb] = udiYoSubUSB(self.poly, self.address,self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
+                    self.subUsb[usb] = udiYoSubUSB(self.poly, self.address, self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
                     self.poly.addNode(self.subUsb[usb])
                     self.wait_for_node_done()
                     self.usbExists = True
@@ -353,11 +361,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     
             self.yoMultiOutlet.refreshMultiOutlet()
             #logging.debug('Finished  MultiOutlet start')
-        else:
-            logging.info('MultiOulet is not online')
-            self.ports = 0
-            self.nbrOutlets = 0
-            self.node.setDriver('ST', 0, True, True)
+
 
 
     def node_queue(self, data):

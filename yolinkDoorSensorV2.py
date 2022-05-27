@@ -21,19 +21,19 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
         #time.sleep(2)
        
   
-    def refreshDoorSensor(yolink):
-        logging.debug(yolink.type+ ' - refreshDoorSensor') 
-        return(yolink.refreshDevice( ))
+    #def refreshDoorSensor(yolink):
+    #    logging.debug(yolink.type+ ' - refreshDoorSensor') 
+    #    return(yolink.refreshDevice( ))
 
-    def doorState(yolink):
-        return(yolink.getState())
+    #def doorState(yolink):
+    #    return(yolink.getState())
 
-    def doorData(yolink):
-        return(yolink.getData())
+    #def doorData(yolink):
+    #    return(yolink.getData())
 
     
-    def refreshSensor(yolink):
-        yolink.refreshDevice()
+    #def refreshSensor(yolink):
+    #    yolink.refreshDevice()
 
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)

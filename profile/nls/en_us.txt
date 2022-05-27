@@ -99,7 +99,7 @@ CMD-nlsdoorsens-UPDATE-NAME = Update Door Status
 
 
 ND-yomotionsens-NAME = YoLink Motion Sensor
-ND-yomotionsens-ICON = Input
+ND-yomotionsens-ICON = MotionSensor
 ST-nlsmotionsens-GV0-NAME = Motoion State
 ST-nlsmotionsens-GV1-NAME = Sensor Battery Level
 ST-nlsmotionsens-GV8-NAME = Device Online
@@ -113,6 +113,54 @@ ST-nlsleaksens-GV1-NAME = Sensor Battery Level
 ST-nlsleaksens-GV8-NAME = Device Online
 ST-nlsleaksens-ST-NAME = Nodeserver Status
 CMD-nlsleaksens-UPDATE-NAME = Update Water Status
+
+ND-yovibrasens-NAME = YoLink Vibrations Sensor
+ND-yovibrasens-ICON = MotionSensor
+ST-nlsvibrasens-GV0-NAME = Vibration State
+ST-nlsvibrasens-GV1-NAME = Sensor Battery Level
+ST-nlsvibrasens-GV8-NAME = Device Online
+ST-nlsvibrasens-ST-NAME = Nodeserver Status
+CMD-nlsvibrasens-UPDATE-NAME = Update Vibration Status
+
+
+ND-yospeakerh-NAME = YoLink Speaker Hub
+ND-yospeakerh-ICON = Output
+ST-nlsspeakerh-GV0-NAME = Speaker volume
+ST-nlsspeakerh-GV1-NAME = Command Beep
+ST-nlsspeakerh-GV2-NAME = Mute
+ST-nlsspeakerh-GV3-NAME = Tone Type
+ST-nlsspeakerh-GV4-NAME = Message
+ST-nlsspeakerh-GV5-NAME = Repeat
+ST-nlsspeakerh-GV8-NAME = Device Online
+ST-nlsspeakerh-ST-NAME = Nodeserver Status
+CMD-nlsspeakerh-UPDATE-NAME = Update Status
+CMD-nlsspeakerh-PLAY-NAME = Play Message
+CMD-nlsspeakerh-VOLUME-NAME = Volume
+CMD-nlsspeakerh-BEEP-NAME = Beep
+CMD-nlsspeakerh-MUTE-NAME = Mute
+CMD-nlsspeakerh-TONE-NAME = Tone
+CMD-nlsspeakerh-REPEAT-NAME = Repeat
+CMD-nlsspeakerh-MESSAGE-NAME = Select Message
+
+
+sphmute-0 = Muted
+sphmute-1 = Unmuted
+sphmute-99 = Unknown
+
+
+sphbeepen-0 = Disabled
+sphbeepen-1 = Enabled
+sphbeepen-99 = Unknown
+
+sphtones-0 = No Tone
+sphtones-1 = Emergency
+sphtones-2 = Alert
+sphtones-3 = Warning 
+sphtones-4 = Tip
+
+vibration-0 = No Vibration
+vibration-1 = Vibration
+vibration-99 = Unknown
 
 status-0 = Down
 status-1 = Up
@@ -146,6 +194,10 @@ motionstate-0 = No Motion
 motionstate-1 = Motion
 motionstate-99 = Unknown 
 
+vibrastate-0 = No Motion
+vibrastate-1 = Motion
+vibrastate-99 = Unknown 
+
 waterstate-0 = Dry
 waterstate-1 = Wet
 waterstate-99 = Unknown 
@@ -172,3 +224,9 @@ portlist-4 = Outlet 5
 portlist-5 = Outlet 6
 portlist-6 = Outlet 7
 portlist-7 = Outlet 8
+
+sphtts-0 = Test Message 1
+sphtts-1 = Message 1
+sphtts-2 = Message 2
+sphtts-3 = This is a test 
+sphtts-4 = Message 4

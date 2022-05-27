@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-import ast
+#import ast
 import os
 import time
-import pytz
+#import pytz
 import json
 import requests
-import threading
-from yolinkHubV2 import YoLinkHub
+#import threading
+
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -15,150 +15,144 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-#from logger import getLogger
-from yolink_devices import YoLinkDevice
-#from yolink_mqtt_client import YoLinkMQTTClient
+
+
+from yoLinkInitV2 import YoLinkInitPAC
+from yolinkHubV2 import YoLinkHub
+from yolinkSpeakerHubV2 import YoLinkSpeakerHub
 from yolinkMultiOutletV2 import YoLinkMultiOutlet
 from yolinkTHsensorV2 import YoLinkTHSensor
 from yolinkLeakSensorV2 import YoLinkLeakSensor
 from yolinkManipulatorV2 import YoLinkManipulator
 from yolinkSwitchV2 import YoLinkSwitch
 from yolinkGarageDoorToggleV2 import YoLinkGarageDoorToggle
-from yolinkGarageDoorSensorV2 import YoLinkGarageDoorSensor
+from yolinkDoorSensorV2 import YoLinkDoorSensor
 from yolinkMotionSensorV2 import YoLinkMotionSensor
 from yolinkOutletV2 import YoLinkOutlet
 from yolinkDoorSensorV2 import YoLinkDoorSensor
 from yolinkHubV2 import YoLinkHub
-from yoLinkInit import YoLinkInitPAC
 
-from cryptography.fernet import Fernet
-#from yolink_mqtt_device import YoLinkGarageDoor
-#from oauthlib.oauth2 import BackendApplicationClient
-#from requests.auth import HTTPBasicAuth
-#from rauth import OAuth2Service
-#from requests_oauthlib import OAuth2Session
-'''
-if (os.path.exists('./devices.json')):
-    #logging.debug('reading /devices.json')
-    dataFile = open('./devices.json', 'r')
-    tmp= json.load(dataFile)
-    dataFile.close()
-    deviceList = tmp['data']['list']
-
-
-def getDeviceList1(self):
-    logging.debug ('getDeviceList1')
-
-    self.yoDevices = YoLinkDevices(self.csid, self.csseckey)
-    webLink = self.yoDevices.getAuthURL()
-    #self.Parameters['REDIRECT_URL'] = ''
-    self.poly.Notices['url'] = 'Copy this address to browser. Follow screen to long. After screen refreshes copy resulting  redirect URL (address bar) into config REDICRECT_URL: ' + str(webLink) 
-
-
-def getDeviceList2(self):
-    logging.debug('Start executing getDeviceList2')
-    self.supportedYoTypes = ['switch', 'THsensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub' ]
-    self.yoDevices = YoLinkDevicesPAC(self.uaid, self.secretKey)
-    self.deviceList = self.yoDevices.getDeviceList()
-
-'''
-
-
-
-
-'''
-    CSID : 60dd7fa7960d177187c82039
-
-    CSName : Panda88
-
-    CSSecKey : 3f68536b695a435d8a1a376fc8254e70
-
-    SVR_URL : https://api.yosmart.com 
-
-    API Doc : http://www.yosmart.com/doc/lorahomeapi/#/YLAS/
-'''
-'''
-Hub
-1374B849C6164E93989C8CFD56B00E89
-Garage relay
-D36C052E35BC4B62A409B200EB3CB0A5
-Garage sensor
-43B25F8585AE45D89300FFE08CFE2C52
-Motion sensor
-A69DA7A252D74CFDA1E7CEF416245B98
-
-
-
-    
-# decrypt the file
-decrypt_file = fernet.decrypt(file)
-# open the file and wite the encrypted data
-with open('test.txt', 'wb') as decrypted_file:
-    decrypted_file.write(decrypt_file)
-print('File is decrypted')
-'''
-'''
-# read the key
-with open('file_key.key', 'rb') as filekey:
-    key = filekey.read()
-    ffilekey.close()
-# crate instance of Fernet
-# with encryption key
-fernet = Fernet(key)
-# read the file to decrypt
-with open('yolinkDeviceList.txt', 'rb') as f:
-    file = f.read()
-    f.close()
-devfile = fernet.decrypt(file)
-devstr = devfile.decode('utf-8')
-
-with open('devicesNew.json', 'r') as f:
-    devstr = f.read()
-    f.close()
-InstalledDev
-'''
 
 def printDelay(timerList):
     print('timerTest: {}\n'.format( timerList))
 
-UAID = 'ua_93BF42449446432EA43E49887492C3FC'
-SECRET_KEY = 'sec_v1_2IQ13RYyyvxMBpPK3POF0A=='
+if (os.path.exists('./loginInfo.json')):
+    #logging.debug('reading /devices.json')
+    dataFile = open('./loginInfo.json', 'r')
+    tmp= json.load(dataFile)
+    dataFile.close()
+
+    UAID = tmp['UAID']
+    SECRET_KEY = tmp['SECRET_KEY']
+    csid = tmp['csid']
+    csseckey = tmp['csseckey']
+    csName = tmp['csName']
+
+
 
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
-csid = '60dd7fa7960d177187c82039'
-csseckey = '3f68536b695a435d8a1a376fc8254e70'
-csName = 'Panda88'
 
 yoAccess = YoLinkInitPAC (UAID, SECRET_KEY)
 
-DeviceList = yoAccess.getDeviceList()
+deviceList = yoAccess.getdeviceList()
+
+devices = {}
+for dev in range(0,len(deviceList)):
+    logging.debug('adding/checking device : {} - {}'.format(deviceList[dev]['name'], deviceList[dev]['type']))
+
+
+    if deviceList[dev]['type'] == 'Hub':     
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkHub(yoAccess, deviceList[dev])
+        devices[dev].getStatus()
+
+
+
+    elif deviceList[dev]['type'] == 'SpeakerHub':
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkSpeakerHub (yoAccess, deviceList[dev])
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'Switch':
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkSwitch(yoAccess, deviceList[dev])                               
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'THSensor':      
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkTHSensor(yoAccess, deviceList[dev])   
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'MultiOutlet':
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkMultiOutlet(yoAccess, deviceList[dev])                
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'DoorSensor':
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkDoorSensor(yoAccess, deviceList[dev])     
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'Manipulator':
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkManipulator(yoAccess, deviceList[dev])             
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'MotionSensor':     
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkMotionSensor(yoAccess, deviceList[dev])         
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'Outlet':     
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkOutlet(yoAccess, deviceList[dev])   
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'GarageDoor': 
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkGarageDoorToggle(yoAccess, deviceList[dev])    
+        devices[dev].getStatus()
+
+    elif deviceList[dev]['type'] == 'LeakSensor': 
+        print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+        devices[dev] = YoLinkLeakSensor(yoAccess, deviceList[dev])   
+        devices[dev].getStatus()
+
+
+    else:
+        logging.debug('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
+
+
+
+
+
 
 '''
-WineCoolerTemp =DeviceList[2] 
-spatemp = DeviceList[0] 
-PoolLevel = DeviceList[13]
+WineCoolerTemp =deviceList[2] 
+spatemp = deviceList[0] 
+PoolLevel = deviceList[13]
 '''
 
-HubUS           = DeviceList[18]
-HubDS           = DeviceList[17]
-WineCoolerTemp  = DeviceList[16] 
-MultiOUtlet2    = DeviceList[15]
-OutdoorTemp     = DeviceList[14]
-PoolLevel       = DeviceList[13]
-GarageSensor    = DeviceList[12]
-GarageCTRL      = DeviceList[11]
-USB_Outlet      = DeviceList[10]
-Playground      = DeviceList[9]
-GardenPlayground = DeviceList[8]
-DoorSensor      = DeviceList[7]
-DeckLight       = DeviceList[6]
-BathIndoorTemp  = DeviceList[5]
-PoolTemp        = DeviceList[4]
-MotionSensor1   = DeviceList[3]
-Irrigation      = DeviceList[2]
-HouseValve      = DeviceList[1]
-FishTank        = DeviceList[0]
+HubUS           = deviceList[18]
+HubDS           = deviceList[17]
+WineCoolerTemp  = deviceList[16] 
+MultiOUtlet2    = deviceList[15]
+OutdoorTemp     = deviceList[14]
+PoolLevel       = deviceList[13]
+GarageSensor    = deviceList[12]
+GarageCTRL      = deviceList[11]
+USB_Outlet      = deviceList[10]
+Playground      = deviceList[9]
+GardenPlayground = deviceList[8]
+DoorSensor      = deviceList[7]
+DeckLight       = deviceList[6]
+BathIndoorTemp  = deviceList[5]
+PoolTemp        = deviceList[4]
+MotionSensor1   = deviceList[3]
+Irrigation      = deviceList[2]
+HouseValve      = deviceList[1]
+FishTank        = deviceList[0]
 
 
 
@@ -175,7 +169,7 @@ MultiOutput.delayTimerCallback(printDelay, 10)
 #PoolTemp =  YoLinkTHSensor(yoAccess, PoolTemp)
 #WaterLevel = YoLinkLeakSensor(yoAccess, PoolLevel)
 #GarageController = YoLinkGarageDoorToggle(yoAccess, GarageCTRL)
-#GarageSensor = YoLinkGarageDoorSensor(yoAccess, GarageSensor)
+#GarageSensor = YoLinkDoorSensor(yoAccess, GarageSensor)
 #MotionSensor = YoLinkMotionSensor(yoAccess, MotionSensor1 )
 #IrrigationValve = YoLinkManipulator(yoAccess, Irrigation )
 #HouseValve = YoLinkManipulator(yoAccess, HouseValve )

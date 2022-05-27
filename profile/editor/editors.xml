@@ -59,5 +59,27 @@
   <editor id = "outletnbr" > 
      <range  uom="25" subset="0-7" nls="portlist" /> 
   </editor>
+  <editor id = "vibrastate" > 
+     <range  uom="25" subset="0-1,99" nls="vibration" />
+  </editor>
+
+  <editor id = "volume" > 
+     <range  uom="107" min="0" max="16"  prec="0"/>
+  </editor>
+  <editor id = "mute" > 
+     <range  uom="25" subset="0-1,99" nls="sphmute" />
+  </editor>
+ <editor id = "repeat" > 
+     <range  uom="107" min="0" max ="10" prec="0" />
+  </editor>
+ <editor id = "beepEn" > 
+     <range  uom="25" subset="0-1,99" nls="sphbeepen" />
+  </editor>
+ <editor id = "tone" > 
+     <range  uom="25" subset="0-4" nls="sphtones" />
+  </editor>
+ <editor id = "messages" > 
+     <range  uom="25" subset="0-9" nls="sphtts" />
+  </editor>
 </editors> 
 

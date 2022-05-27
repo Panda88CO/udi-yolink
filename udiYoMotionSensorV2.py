@@ -43,7 +43,7 @@ class udiYoMotionSensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
 
         logging.debug('YoLinkMotionSensor INIT- {}'.format(deviceInfo['name']))
-
+        self.adress = address
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
@@ -61,7 +61,7 @@ class udiYoMotionSensor(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -80,9 +80,12 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoMotionsSensor.initNode()
-
-        self.node.setDriver('ST', 1, True, True)
-        #time.sleep(3)
+        if not self.yoMotionsSensor.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            self.yoMotionsSensor.shut_down()
+            self.poly.delNode(self.node)
+        else:
+            self.node.setDriver('ST', 1, True, True)
 
     
     def stop (self):
@@ -94,9 +97,9 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor.refreshDevice()   
     
 
-    def MotionState(self):
+    def getMotionState(self):
         if self.yoMotionsSensor.online:
-            if  self.yoMotionsSensor.motionState() == 'normal':
+            if  self.yoMotionsSensor.getMotionState() == 'normal':
                 return(0)
             else:
                 return(1)
@@ -109,7 +112,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
         if self.node is not None:
             if self.yoMotionsSensor.online:
-                self.node.setDriver('GV0', self.MotionState(), True, True)
+                self.node.setDriver('GV0', self.getMotionState(), True, True)
                 self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)
             else:

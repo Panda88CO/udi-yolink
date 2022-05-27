@@ -76,12 +76,8 @@ class udiYoTHsensor(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
 
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
 
-
-        #self.switchState = self.yoSwitch.getState()
-        #self.switchPower = self.yoSwitch.getEnergy()
-        #udi_interface.__init__(self, polyglot, primary, address, name)
 
 
     def node_queue(self, data):
@@ -99,8 +95,12 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor  = YoLinkTHSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoTHsensor.initNode()
-        self.node.setDriver('ST', 1, True, True)
-        #time.sleep(3)
+        if not self.yoTHsensor.online:
+            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))            
+            self.yoTHsensor.shut_down()
+            self.poly.delNode(self.node)
+        else:
+            self.node.setDriver('ST', 1, True, True)
 
     def initNode(self):
         self.yoTHsensor.refreshSensor()
