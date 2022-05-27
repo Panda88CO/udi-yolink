@@ -61,7 +61,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -81,7 +81,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         if not self.yoVibrationSensor.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.yoVibrationSensor.shut_down()
-            self.node.delNode()
+            self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
 

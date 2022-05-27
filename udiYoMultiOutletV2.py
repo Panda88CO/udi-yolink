@@ -287,7 +287,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
         
 
     def node_queue(self, data):

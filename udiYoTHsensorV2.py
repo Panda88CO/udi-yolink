@@ -76,7 +76,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
 
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
 
 
 
@@ -98,7 +98,7 @@ class udiYoTHsensor(udi_interface.Node):
         if not self.yoTHsensor.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))            
             self.yoTHsensor.shut_down()
-            self.node.delNode()
+            self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
 

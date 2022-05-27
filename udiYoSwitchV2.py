@@ -64,7 +64,7 @@ class udiYoSwitch(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
         self.node.setDriver('ST', 1, True, True)
     
     def node_queue(self, data):
@@ -84,7 +84,7 @@ class udiYoSwitch(udi_interface.Node):
         if not self.yoSwitch.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))            
             self.yoSwitch.shut_down()
-            self.node.delNode()
+            self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
             self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)

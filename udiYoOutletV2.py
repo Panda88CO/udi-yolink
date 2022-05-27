@@ -63,7 +63,7 @@ class udiYoOutlet(udi_interface.Node):
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = self.poly.getNode(address)
         self.node.setDriver('ST', 1, True, True)
 
     def node_queue(self, data):
@@ -85,7 +85,7 @@ class udiYoOutlet(udi_interface.Node):
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))       
             self.node.setDriver('ST', 0, True, True)
             self.yoOutlet.shut_down()
-            self.node.delNode() 
+            self.poly.delNode(self.node)
         else:
             self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             self.node.setDriver('ST', 1, True, True)
