@@ -126,9 +126,9 @@ class YoLinkSetup (udi_interface.Node):
         delparams = []
         for param in self.Parameters:
             logging.debug( 'Parameters - checking {}'.format(param))
-            if param not in self.supportParams:
-                logging.debug( 'Parameters - deleting {}'.format(param))
-                if param.find(self.TTSstr) == -1:                    
+            if param not in self.supportParams:             
+                if param.find(self.TTSstr) == -1:     
+                    logging.debug( 'Parameters - deleting {}'.format(param))               
                     delparams.append(param)
         for param in delparams:
             self.Parameters.delete(param)
@@ -167,7 +167,8 @@ class YoLinkSetup (udi_interface.Node):
                     #self.yoAccess.writeTtsFile()
                     logging.info('TTS messages : {}'.format(self.yoAccess.TtsMessages))
                     logging.info('Updating profile files ')
-                    udiProfileHandler.udiTssProfileUpdate(self.yoAccess.TtsMessages)
+                    if udiProfileHandler.udiTssProfileUpdate(self.yoAccess.TtsMessages):
+                        self.poly.Notices['tts'] = 'Speaker hub messages updated - PoI/ISY need to be restarted to take effect'
                     self.poly.updateProfile()   
 
                 elif self.deviceList[dev]['type'] == 'Switch':

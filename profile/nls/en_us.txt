@@ -225,14 +225,8 @@ portlist-5 = Outlet 6
 portlist-6 = Outlet 7
 portlist-7 = Outlet 8
 
-
-sphtts-0 = Message 0
+sphtts-0 = Test Message 1
 sphtts-1 = Message 1
 sphtts-2 = Message 2
-sphtts-3 = Message 3
+sphtts-3 = This is a test 
 sphtts-4 = Message 4
-sphtts-5 = Message 5
-sphtts-6 = Message 6
-sphtts-7 = Message 7
-sphtts-8 = Message 8
-sphtts-9 = Message 9

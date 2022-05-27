@@ -99,7 +99,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         if not self.yoSpeakerHub.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.yoSpeakerHub.shut_down()
-            self.poly.delNode(self.node)
+            self.node.delNode()
         else:
             self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
