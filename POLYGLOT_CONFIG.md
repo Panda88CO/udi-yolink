@@ -4,7 +4,7 @@
 ## Yolink Node server
     Current list of devices supported is as follows:
     
-    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor'
+    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'SpeakerHub', 'VibrationSensor'
     
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls in 60 sec
@@ -21,8 +21,8 @@
     Coded in Python 3 - MIT license 
 
 ## Installation
-    Credentials needs to be added to configuration.  Goto Settings->Account->Advanced Settings -> User Access Credentials 
-    Enter both UAID and SecretKey under configuration - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
+    Credentials needs to be added to configuration.   In YoLink app goto Settings->Account->Advanced Settings -> User Access Credentials and copy UAID and SecretKey (alternaltive path in app is Profile->Advanced Settings -> User Access Credentials )
+    Enter both UAID and SecretKey under configuration - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern).  Note If devices are off-line when restarting they will get removed (They will stay if off-line during normal operation)
 
 ## Notes 
     Currently the API does not support multiple homes - it is promised that there will be support in a month or so - will implement then (I need it myself)

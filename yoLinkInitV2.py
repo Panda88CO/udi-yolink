@@ -21,7 +21,7 @@ countdownTimerUpdateInterval_G = 10
 import paho.mqtt.client as mqtt
 from queue import Queue
 from threading import Thread, Event
-DEBUG = False
+DEBUG = True
 
 
 class YoLinkInitPAC(object):
@@ -39,12 +39,14 @@ class YoLinkInitPAC(object):
         yoAccess.apiType = 'UAC'
         yoAccess.tokenExpTime = 0
         yoAccess.timeExpMarging = 3600 # 1 hour - most devices report once per hour
+        yoAccess.lastTransferTime = time.time()
         #yoAccess.timeExpMarging = 7170 #min for testing 
         yoAccess.tmpData = {}
         yoAccess.lastDataPacket = {}
         yoAccess.mqttList = {}
         yoAccess.TtsMessages = {}
         yoAccess.nbrTTS = 0
+        yoAccess.temp_unit = 0
         
         #yoAccess.TSSfile = 'TSSmessages.json'
         #yoAccess.readTssFile()
@@ -360,9 +362,11 @@ class YoLinkInitPAC(object):
 
 
     def transfer_data(yoAccess):
+        errorCount = 0
+        yoAccess.lastTransferTime = time.time()
         while not yoAccess.STOP.is_set():
             try:
-                data = yoAccess.publishQueue.get(timeout = 10) 
+                data = yoAccess.publishQueue.get(timeout = 30) 
                 #DEBUG = logging.getEffectiveLevel() == logging.DEBUG
                 deviceId = data['targetDevice']
                 dataStr = str(json.dumps(data))
@@ -384,14 +388,30 @@ class YoLinkInitPAC(object):
                 
                 if result.rc != 0:
                     logging.error('Error during publishing {}'.format(data))
-                    if result.rc == 4: #try to renew token
+                    errorCount = errorCount + 1
+                    if result.rc == 4 or errorCount > 3: #try to renew token
                         yoAccess.get_access_token() 
                         yoAccess.client.loop_stop()
                         yoAccess.client.disconnect()
                         yoAccess.connect_to_broker()
+                        if errorCount> 3:
+                            logging.debug('Multiple Errors Occured - reacquiring Tokens')
+                            errorCount = 0
+                else:
+                    yoAccess.lastTransferTime = time.time()
 
             except Exception as e:
-                # logging.debug('Data  Queue looping {}'.format(e))
+                #logging.debug('Data  Queue looping {}'.format(e))
+                # Check if no activity for a while - 
+                if yoAccess.lastTransferTime + yoAccess.timeExpMarging + 900 <= time.time():
+                    logging.info('No Activity in {} sec - trying to reacquire token'.format(time.time() - yoAccess.lastTransferTime))
+                    yoAccess.get_access_token() 
+                    yoAccess.client.loop_stop()
+                    yoAccess.client.disconnect()
+                    yoAccess.connect_to_broker()
+                    yoAccess.lastTransferTime = time.time()
+                    time.sleep(60)
+
                 pass # go wait again unless stop is called
 
 
@@ -423,11 +443,14 @@ class YoLinkInitPAC(object):
                 pass # go wait again unless stop is called
 
 
+################
+#   Misc stuff
+###############
+    def set_temp_unit(yoAccess, unit):
+        yoAccess.temp_unit = unit
 
-
-
-
-
+    def get_temp_unit(yoAccess):
+        return(yoAccess.temp_unit)
 
 class YoLinkInitCSID(object):
     def __init__(yoAccess,  csName, csid, csSeckey, yoAccess_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003 ):

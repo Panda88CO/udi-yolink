@@ -21,8 +21,15 @@
      <range  uom="44"  min="0" max="1440" prec="0" />
   </editor>
   <editor id = "tempC" > 
-     <range  uom="4"  min="-40" max="140" prec="1" />
+        <range uom="4" min="-40" max="105"  prec="1"/>
+        <range uom="17" min="-40" max="221"  prec="1"/>
+        <range uom="26" min="233" max="378"  prec="1"/>
+        <range uom="25" subset="0,99"  nls="error"/>
   </editor>
+  <editor id = "tempunit" > 
+     <range  uom="25" subset="0-2,99" nls="tempunit" />
+  </editor>    
+
   <editor id = "alarm" > 
      <range  uom="25" subset="0-1,99" nls="alarm" />
   </editor>

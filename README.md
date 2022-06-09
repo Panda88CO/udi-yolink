@@ -22,7 +22,7 @@
     Coded in Python 3 - MIT license 
 
 ## Installation
-    Credentials needs to be added to configuration.  Goto Settings->Account->Advanced Settings -> User Access Credentials 
+    Credentials needs to be added to configuration.  In YoLink app goto Settings->Account->Advanced Settings -> User Access Credentials and copy UAID and SecretKey (alternaltive path in app is Profile->Advanced Settings -> User Access Credentials )
     Enter both UAID and SecretKey under configuration - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
     Sometimes a reboot of the ISY is required to make the node server show up correctly.  
      
@@ -32,6 +32,8 @@
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
 
     <SpeakerHub> supports up to 10 Test to Speech messages.  You specify the number of messages desired, and then add the text of the message in TTS<n>.  Restart the node server.  After this a restart of the ISY/PoI is needed to transfer the messages to the UI.  The ISY/PoI only reads the file containg the messages during startup 
+
+    In configuraiton TEMP_UNIT can be used to set temperature until to C, F or K
 
     Schedules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schedules)  - I did not manage to get API working with schdules yet 
     

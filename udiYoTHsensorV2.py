@@ -51,7 +51,7 @@ class udiYoTHsensor(udi_interface.Node):
             ]
 
 
-    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo, temp_unit):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
@@ -60,6 +60,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
+        self.temp_unit = temp_unit
         #self.address = address
         #self.poly = polyglot
 
@@ -123,7 +124,14 @@ class udiYoTHsensor(udi_interface.Node):
         if self.node is not None:
             if self.yoTHsensor.online:
                 logging.debug("yoTHsensor temp: {}".format(self.yoTHsensor.getTempValueC()))
-                self.node.setDriver('CLITEMP', self.yoTHsensor.getTempValueC(), True, True)
+                if self.temp_unit == 0:
+                    self.node.setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC(),1), True, True, 4)
+                elif self.temp_unit == 1:
+                    self.node.setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC()*9/5+32,1), True, True, 17)
+                elif self.temp_unit == 2:
+                    self.node.setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC()+273.15,1), True, True, 26)
+                else:
+                    self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('GV1', self.yoTHsensor.bool2Nbr(alarms['lowTemp']), True, True)
                 self.node.setDriver('GV2', self.yoTHsensor.bool2Nbr(alarms['highTemp']), True, True)
                 self.node.setDriver('CLIHUM', self.yoTHsensor.getHumidityValue(), True, True)
@@ -133,7 +141,7 @@ class udiYoTHsensor(udi_interface.Node):
                 self.node.setDriver('GV7', self.yoTHsensor.bool2Nbr(alarms['lowBattery']), True, True)
                 self.node.setDriver('GV8', self.yoTHsensor.bool2Nbr(self.yoTHsensor.online), True, True)
             else:
-                self.node.setDriver('CLITEMP', 0, True, True)
+                self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('GV1',99, True, True)
                 self.node.setDriver('GV2', 99, True, True)
                 self.node.setDriver('CLIHUM', 0, True, True)

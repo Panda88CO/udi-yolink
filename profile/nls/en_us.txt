@@ -2,6 +2,13 @@
 ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
 ST-nlssetup-ST-NAME = Nodeserver Status
+ST-nlssetup-GV0-NAME = Temperature Unit
+tempunit-0 = Celcius
+tempunit-1 = Fahrenheit
+tempunit-2 = Kelvin
+
+error-0 = unknown
+error-99 = offline
 
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch

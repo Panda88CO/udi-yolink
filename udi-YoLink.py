@@ -51,7 +51,7 @@ class YoLinkSetup (udi_interface.Node):
         self.address = address
         self.name = name
         self.TTSstr = 'TTS'
-        self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS' ]
+        self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]
         self.yolinkURL = 'https://api.yosmart.com/openApi'
         self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api'
 
@@ -94,7 +94,13 @@ class YoLinkSetup (udi_interface.Node):
 
 
 
-
+    def convert_temp_unit(self, tempStr):
+        if tempStr.capitalize()[:1] == 'F':
+            return(1)
+        elif tempStr.capitalize()[:1] == 'K':
+            return(2)
+        else:
+            return(0)
 
 
     def start (self):
@@ -105,12 +111,23 @@ class YoLinkSetup (udi_interface.Node):
             time.sleep(1)
             logging.debug ('waiting for inital node to get created')
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationSensor' ]
-        #self.supportedYoTypes = [ 'SpeakerHub' ]
+        #self.supportedYoTypes = [ 'THSensor' ]
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')
             exit() 
+
+        if 'TEMP_UNIT' in self.Parameters:
+            self.temp_unit = self.convert_temp_unit(self.Parameters['TEMP_UNIT'])
+        else:
+            self.temp_unit = 0  
+            self.Parameters['TEMP_UNIT'] = 'C'
+        logging.debug('TEMP_UNIT: {}'.format(self.temp_unit ))
+        
+
+
         self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
+        
         self.deviceList = self.yoAccess.getDeviceList()
         #self.deviceList = self.getDeviceList2()
 
@@ -170,6 +187,11 @@ class YoLinkSetup (udi_interface.Node):
                     if udiProfileHandler.udiTssProfileUpdate(self.yoAccess.TtsMessages):
                         self.poly.Notices['tts'] = 'Speaker hub messages updated - PoI/ISY need to be restarted to take effect'
                     self.poly.updateProfile()   
+                    for nbr in range(0,self.nbrTTS):
+                        index = 'TTS'+str(nbr)
+                        if index not in self.Parameters:
+                            self.Parameters[index] = index
+                        self.yoAccess.TtsMessages[nbr] = self.Parameters[index]    
 
                 elif self.deviceList[dev]['type'] == 'Switch':
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -179,7 +201,7 @@ class YoLinkSetup (udi_interface.Node):
                 elif self.deviceList[dev]['type'] == 'THSensor':      
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
-                    udiYoTHsensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
+                    udiYoTHsensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev], self.temp_unit )
                     self.Parameters[name] =  self.deviceList[dev]['name']
                 elif self.deviceList[dev]['type'] == 'MultiOutlet':
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -294,6 +316,7 @@ class YoLinkSetup (udi_interface.Node):
             logging.debug('System Poll executing: {}'.format(polltype))
             if 'longPoll' in polltype:
                 #Keep token current
+                #self.node.setDriver('GV0', self.temp_unit, True, True)
                 try:
                     if not self.yoAccess.refresh_token(): #refresh failed
                         while not self.yoAccess.request_new_token():
@@ -310,6 +333,7 @@ class YoLinkSetup (udi_interface.Node):
                 
             if 'shortPoll' in polltype:
                 self.heartbeat()
+
     
 
 
@@ -321,7 +345,7 @@ class YoLinkSetup (udi_interface.Node):
 
     def handleParams (self, userParam ):
         logging.debug('handleParams')
-        supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS' ]
+        supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]
         self.Parameters.load(userParam)
 
        
@@ -352,6 +376,11 @@ class YoLinkSetup (udi_interface.Node):
             #    self.poly.Notices['mport'] = 'Missing MQTT_PORT parameter'
             #    self.mqttPort = 0
 
+            if 'TEMP_UNIT' in userParam:
+                self.temp_unit = self.convert_temp_unit(userParam['TEMP_UNIT'])
+            else:
+                self.temp_unit = 0
+
             if 'UAID' in userParam:
                 self.uaid = userParam['UAID']
             else:
@@ -365,11 +394,8 @@ class YoLinkSetup (udi_interface.Node):
                 self.secretKey = ''
 
             if 'NBR_TTS' in userParam:
-                self.nbrTTS = userParam['SECRET_KEY']
-                for nbr in range(0,self.nbrTTS):
-                    index = 'TTS'+str(nbr)
-                    if index in userParam:
-                        self.yoAccess.TtsMessages[nbr] = userParam[index]
+                self.nbrTTS = int(userParam['NBR_TTS'])
+              
                 #self.yoAccess.writeTtsFile()    
                 
                 
@@ -382,23 +408,32 @@ class YoLinkSetup (udi_interface.Node):
             self.handleParamsDone = True
 
 
-        except:
-            logging.debug('Error: {}'.format(userParam))
+        except Exception as e:
+            logging.debug('Error: {} {}'.format(e, userParam))
 
- 
+    '''
+    def set_t_unit(self, command ):
+        logging.info('set_t_unit ')
+        unit = int(command.get('value'))
+        if unit >= 1 and unit <= 3:
+            self.temp_unit = unit
+            #self.node.setDriver('GV0', self.temp_unit, True, True)
+    '''
 
-    
     id = 'setup'
-
+    #commands = {
+    #            'TEMPUNIT': set_t_unit,
+    #            }
 
     drivers = [
            {'driver': 'ST', 'value':1, 'uom':25},
+
            ]
 
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-        polyglot.start('0.3.4')
+        polyglot.start('0.3.5')
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
         # Just sit and wait for events
