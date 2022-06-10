@@ -92,7 +92,15 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def updateOutNode(self, outletstate, onDelay, offDelay):
         logging.debug('udiYoSubOutlet - updateOutNode: state={} onD={} offD={}'.format(outletstate, onDelay, offDelay))
-        self.node.setDriver('GV0', outletstate, True, True)
+        if outletstate == 1:
+            self.node.setDriver('GV0', 1, True, True)
+            self.node.reportCmd('DON')
+        elif outletstate == 0:
+            self.node.setDriver('GV0', 0, True, True)
+            self.node.reportCmd('DOF')        
+        else:
+            self.node.setDriver('GV0', 99, True, True)
+
         self.node.setDriver('GV1', onDelay, True, False)
         self.node.setDriver('GV2', offDelay, True, False)
 
@@ -210,6 +218,7 @@ class udiYoSubUSB(udi_interface.Node):
             else:
                 self.node.setDriver('GV0', 0, True, True) 
                 self.portState = 0
+    
         except Exception as e:
             logging.debug('Exception: {}'.format(e))
 
@@ -230,9 +239,15 @@ class udiYoSubUSB(udi_interface.Node):
         state = int(command.get('value'))     
         if state == 1:
             self.yolink.setUsbState(self.usbPort, 'ON')
-        else:
+            self.node.setDriver('GV0', 1, True, True)
+            self.node.reportCmd('DON')
+        elif state == 0:
             self.yolink.setUsbState(self.usbPort, 'OFF')
-        self.node.setDriver('GV0', state, True, True)
+            self.node.setDriver('GV0', 0, True, True)
+            self.node.reportCmd('DOF')      
+        else:
+            self.node.setDriver('GV0', 99, True, True)
+  
 
 
 

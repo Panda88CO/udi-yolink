@@ -25,6 +25,8 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="swstate"  />               
+            <cmd id="DOF" editor="swstate"  />   
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -54,11 +56,13 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="swstate"  />               
+            <cmd id="DOF" editor="swstate"  />   
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="1" /> 
+               <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
             <cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
@@ -97,11 +101,13 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="swstate"  />               
+            <cmd id="DOF" editor="swstate"  />             
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="1" /> 
+               <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
             <cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
@@ -121,6 +127,8 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="usbstate"  />               
+            <cmd id="DOF" editor="usbstate"  />     
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -143,6 +151,8 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />    
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -192,6 +202,8 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="doorstate"  />               
+            <cmd id="DOF" editor="doorstate"  />    
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -210,7 +222,7 @@
          <sends>
          </sends>
          <accepts>
-            <cmd id="TOGGLE" /> 
+            <cmd id="TOGGLE" />  
          </accepts>
       </cmds>
    </nodeDef> 
@@ -226,6 +238,8 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="motionstate"  />               
+            <cmd id="DOF" editor="motionstate"  />    
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -243,6 +257,8 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="waterstate"  />               
+            <cmd id="DOF" editor="waterstate"  />    
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -263,6 +279,8 @@
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="vibrastate"  />               
+            <cmd id="DOF" editor="vibrastate"  />    
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -280,8 +298,6 @@
          <st id="GV3" editor="tone" />
          <st id="GV4" editor="messages" />
          <st id="GV5" editor="repeat" />
-
-
          <st id="GV8" editor="online" />
          <st id="ST"  editor="status" />
       </sts>

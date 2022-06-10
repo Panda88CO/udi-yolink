@@ -3,12 +3,7 @@ ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
 ST-nlssetup-ST-NAME = Nodeserver Status
 ST-nlssetup-GV0-NAME = Temperature Unit
-tempunit-0 = Celcius
-tempunit-1 = Fahrenheit
-tempunit-2 = Kelvin
 
-error-0 = unknown
-error-99 = offline
 
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
@@ -21,7 +16,8 @@ CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
-
+CMD-nlsswitch-DON-NAME = Switched On
+CMD-nlsswitch-DOF-NAME = Switched Off
 
 ND-yooutlet-NAME = YoLink Outlet
 ND-yooutlet-ICON = Switch
@@ -36,12 +32,15 @@ CMD-nlsoutlet-UPDATE-NAME = Update Status
 CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
 CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
+CMD-nlsoutlet-DON-NAME = Switched On
+CMD-nlsoutlet-DOF-NAME = Switched Off
 
 ND-yomultiout-NAME = YoLink Outlet
 ND-yomultiout-ICON = Switch
 ST-nlsmultiout-GV8-NAME = Device Online
 ST-nlsmultiout-ST-NAME = Nodeserver Status
 CMD-nlsmultiout-UPDATE-NAME = Update Status
+
 
 ND-yosubout-NAME = YoLink subOutlet
 ND-yosubout-ICON = Switch
@@ -54,6 +53,10 @@ CMD-nlsubout-UPDATE-NAME = Update Status
 CMD-nlsubout-SWCTRL-NAME =  Outlet control
 CMD-nlsubout-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsubout-OFFDELAY-NAME =  Set Off Delay (min)
+CMD-nlsubout-DON-NAME = Switched On
+CMD-nlsubout-DOF-NAME = Switched Off
+
+
 
 ND-yosubusb-NAME = YoLink USB Ports
 ND-yosubusb-ICON = Switch
@@ -61,6 +64,8 @@ ST-nlssubusb-GV0-NAME = USB Power
 ST-nlssubusb-ST-NAME = Nodeserver Status
 CMD-nlssubusb-UPDATE-NAME = Update Status
 CMD-nlssubusb-USBCTRL-NAME =  USB Power
+CMD-nlssubusb-DON-NAME = Enabled
+CMD-nlssubusb-DOF-NAME = Disabled
 
 ND-yomanipu-NAME = YoLink Manipulator
 ND-yomanipu-ICON = GenericCtrl
@@ -73,6 +78,8 @@ CMD-nlsmanipu-UPDATE-NAME = Update Status
 CMD-nlsmanipu-MANCTRL-NAME =  Switch control
 CMD-nlsmanipu-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsmanipu-OFFDELAY-NAME =  Set Off Delay (min)
+CMD-nlsmanipu-DON-NAME = Opened
+CMD-nlsmanipu-DOF-NAME = Closed
 
 ND-yothsens-NAME = YoLink THsensor
 ND-yothsens-ICON = TempSensor
@@ -89,11 +96,13 @@ ST-nlsthsens-ST-NAME = Nodeserver Status
 CMD-nlsthsens-UPDATE-NAME = Update Status
 
 
+
 ND-yogarage-NAME = YoLink Garage Controller
 ND-yogarage-ICON = Switch
 ST-nlsgarage-GV8-NAME = online
 ST-nlsgarage-ST-NAME = Nodeserver Status
 CMD-nlsgarage-TOGGLE-NAME = Toggle Door
+
 
 
 ND-yodoorsens-NAME = YoLink Door Sensor
@@ -103,6 +112,8 @@ ST-nlsdoorsens-GV1-NAME = Sensor Battery Level
 ST-nlsdoorsens-GV8-NAME = Device Online
 ST-nlsdoorsens-ST-NAME = Nodeserver Status
 CMD-nlsdoorsens-UPDATE-NAME = Update Door Status
+CMD-nlsdoorsens-DON-NAME = Opened
+CMD-nlsdoorsens-DOF-NAME = Closed
 
 
 ND-yomotionsens-NAME = YoLink Motion Sensor
@@ -112,6 +123,8 @@ ST-nlsmotionsens-GV1-NAME = Sensor Battery Level
 ST-nlsmotionsens-GV8-NAME = Device Online
 ST-nlsmotionsens-ST-NAME = Nodeserver Status
 CMD-nlsmotionsens-UPDATE-NAME = Update Motion Status
+CMD-nlsmotionsens-DON-NAME = Motion
+CMD-nlsmotionsens-DOF-NAME = No Motion
 
 ND-yoleaksens-NAME = YoLink Water Sensor
 ND-yoleaksens-ICON = Input
@@ -120,6 +133,8 @@ ST-nlsleaksens-GV1-NAME = Sensor Battery Level
 ST-nlsleaksens-GV8-NAME = Device Online
 ST-nlsleaksens-ST-NAME = Nodeserver Status
 CMD-nlsleaksens-UPDATE-NAME = Update Water Status
+CMD-nlsleaksens-DON-NAME = Water Alert Detected
+CMD-nlsleaksens-DOF-NAME = Normal
 
 ND-yovibrasens-NAME = YoLink Vibrations Sensor
 ND-yovibrasens-ICON = MotionSensor
@@ -128,7 +143,8 @@ ST-nlsvibrasens-GV1-NAME = Sensor Battery Level
 ST-nlsvibrasens-GV8-NAME = Device Online
 ST-nlsvibrasens-ST-NAME = Nodeserver Status
 CMD-nlsvibrasens-UPDATE-NAME = Update Vibration Status
-
+CMD-nlsleaksens-DON-NAME = Vibration Detected
+CMD-nlsleaksens-DOF-NAME = Normal
 
 ND-yospeakerh-NAME = YoLink Speaker Hub
 ND-yospeakerh-ICON = Output
@@ -149,7 +165,12 @@ CMD-nlsspeakerh-TONE-NAME = Tone
 CMD-nlsspeakerh-REPEAT-NAME = Repeat
 CMD-nlsspeakerh-MESSAGE-NAME = Select Message
 
+tempunit-0 = Celcius
+tempunit-1 = Fahrenheit
+tempunit-2 = Kelvin
 
+error-0 = unknown
+error-99 = offline
 sphmute-0 = Muted
 sphmute-1 = Unmuted
 sphmute-99 = Unknown

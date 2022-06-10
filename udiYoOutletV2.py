@@ -86,7 +86,7 @@ class udiYoOutlet(udi_interface.Node):
             self.node.setDriver('ST', 0, True, True)
             self.yoOutlet.shut_down()
             if self.node:
-                self.poly.delNode(self.node)
+                self.poly.delNode(self.node.address)
         else:
             self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             self.node.setDriver('ST', 1, True, True)
@@ -107,8 +107,10 @@ class udiYoOutlet(udi_interface.Node):
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
                     self.node.setDriver('GV0',1 , True, True)
+                    self.node.reportCmd('DON')  
                 elif state == 'OFF' :
                     self.node.setDriver('GV0', 0, True, True)
+                    self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV8',1, True, True)

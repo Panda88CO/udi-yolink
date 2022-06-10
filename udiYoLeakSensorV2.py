@@ -81,7 +81,7 @@ class udiYoLeakSensor(udi_interface.Node):
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.yoLeakSensor.shut_down()
             if self.node:
-                self.poly.delNode(self.node)  
+                self.poly.delNode(self.node.address)  
         else:
             self.node.setDriver('ST', 1, True, True)
 
@@ -117,7 +117,14 @@ class udiYoLeakSensor(udi_interface.Node):
             if self.yoLeakSensor.online:
                 waterState =   self.waterState()  
                 logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
-                self.node.setDriver('GV0', waterState, True, True)
+                if waterState == 1:
+                    self.node.setDriver('GV0', 1, True, True)
+                    self.node.reportCmd('DON')
+                elif waterState == 0:
+                    self.node.setDriver('GV0', 0, True, True)
+                    self.node.reportCmd('DOF')
+                else:
+                    self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)
             else:

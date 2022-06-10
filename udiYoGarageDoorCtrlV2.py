@@ -101,6 +101,7 @@ class udiYoGarageDoor(udi_interface.Node):
     def toggleDoor(self, command = None):
         logging.info('GarageDoor Toggle Door')
         self.yoDoorControl.toggleDevice()
+        self.node.reportCmd('DON')
 
     commands = {
                     'TOGGLE': toggleDoor

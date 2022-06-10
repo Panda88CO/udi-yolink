@@ -8,7 +8,7 @@
     "notice": "Uses MQTT comminication",
     "shortPoll": "60",
     "longPoll": "3600",
-    "profile_version": "0.2.2",
+    "profile_version": "0.3.0",
     "customParams": {
         "UAID":"",
         "SECRET_KEY":""
@@ -17,7 +17,7 @@
         {
             "title": "A NodeServer to allow integration of YoLink devices ",
             "author": "Panda88CO",
-            "version": "0.3.6",
+            "version": "0.4.0",
             "date": "May 21st,  2022",
             "source": "https://github.com/Panda88CO/udi-yolink",
             "license": "https://github.com/Panda88CO/udi-yolink/blob/main/license"

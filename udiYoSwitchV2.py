@@ -85,7 +85,7 @@ class udiYoSwitch(udi_interface.Node):
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))            
             self.yoSwitch.shut_down()
             if self.mode:
-                self.poly.delNode(self.node)
+                self.poly.delNode(self.node.address)
         else:
             self.node.setDriver('ST', 1, True, True)
             self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
@@ -121,8 +121,10 @@ class udiYoSwitch(udi_interface.Node):
             if self.yoSwitch.online:
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
+                    self.node.reportCmd('DON')  
                 elif  state == 'OFF':
                     self.node.setDriver('GV0', 0, True, True)
+                    self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV8', 1, True, True)

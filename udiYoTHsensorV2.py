@@ -101,7 +101,7 @@ class udiYoTHsensor(udi_interface.Node):
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))            
             self.yoTHsensor.shut_down()
             if self.node:
-                self.poly.delNode(self.node)
+                self.poly.delNode(self.node.address)
         else:
             self.node.setDriver('ST', 1, True, True)
 
