@@ -60,6 +60,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
+        
         self.temp_unit = temp_unit
         #self.address = address
         #self.poly = polyglot

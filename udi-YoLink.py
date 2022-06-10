@@ -12,6 +12,7 @@ from yoLinkInitV2 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoTHsensorV2 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
+from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
 from udiYoMotionSensorV2 import udiYoMotionSensor
 from udiYoLeakSensorV2 import udiYoLeakSensor
 from udiYoDoorSensorV2 import udiYoDoorSensor
@@ -110,7 +111,7 @@ class YoLinkSetup (udi_interface.Node):
         while not self.nodeDefineDone:
             time.sleep(1)
             logging.debug ('waiting for inital node to get created')
-        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationSensor' ]
+        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationSensor', 'Finger' ]
         #self.supportedYoTypes = [ 'THSensor' ]
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
@@ -202,6 +203,7 @@ class YoLinkSetup (udi_interface.Node):
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoTHsensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev], self.temp_unit )
+                    udiYoTHsensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev], self.temp_unit)
                     self.Parameters[name] =  self.deviceList[dev]['name']
                 elif self.deviceList[dev]['type'] == 'MultiOutlet':
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -238,7 +240,13 @@ class YoLinkSetup (udi_interface.Node):
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoGarageDoor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
-                    self.Parameters[name]  =  self.deviceList[dev]['name']                
+                    self.Parameters[name]  =  self.deviceList[dev]['name']     
+                elif self.deviceList[dev]['type'] == 'Finger': 
+                    name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
+                    udiYoGarageFinger(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
+                    self.Parameters[name]  =  self.deviceList[dev]['name']                       
+
                 elif self.deviceList[dev]['type'] == 'LeakSensor': 
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
@@ -426,14 +434,14 @@ class YoLinkSetup (udi_interface.Node):
     #            }
 
     drivers = [
-           {'driver': 'ST', 'value':1, 'uom':25},
-
+            {'driver': 'ST', 'value':1, 'uom':25},
+          # {'driver': 'GV0', 'value':0, 'uom':25},
            ]
 
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-        polyglot.start('0.3.5')
+        polyglot.start('0.3.6')
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
         # Just sit and wait for events

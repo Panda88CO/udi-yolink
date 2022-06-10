@@ -89,7 +89,7 @@ ST-nlsthsens-ST-NAME = Nodeserver Status
 CMD-nlsthsens-UPDATE-NAME = Update Status
 
 
-ND-yogarage-NAME = YoLink Garagre Controller
+ND-yogarage-NAME = YoLink Garage Controller
 ND-yogarage-ICON = Switch
 ST-nlsgarage-GV8-NAME = online
 ST-nlsgarage-ST-NAME = Nodeserver Status
