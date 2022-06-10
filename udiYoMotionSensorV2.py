@@ -83,7 +83,8 @@ class udiYoMotionSensor(udi_interface.Node):
         if not self.yoMotionsSensor.online:
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
             self.yoMotionsSensor.shut_down()
-            self.poly.delNode(self.node)
+            if self.node:
+                self.poly.delNode(self.node)
         else:
             self.node.setDriver('ST', 1, True, True)
 

@@ -85,7 +85,8 @@ class udiYoOutlet(udi_interface.Node):
             logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))       
             self.node.setDriver('ST', 0, True, True)
             self.yoOutlet.shut_down()
-            self.poly.delNode(self.node)
+            if self.node:
+                self.poly.delNode(self.node)
         else:
             self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             self.node.setDriver('ST', 1, True, True)
