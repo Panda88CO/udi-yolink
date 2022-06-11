@@ -327,7 +327,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.nbrOutlets = 0
             self.yoMultiOutlet.shut_down()
             if self.node:
-                self.node.delNode()
+                self.poly.delNode(self.node.address)
         else:
             self.node.setDriver('ST', 1, True, True)
             self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
