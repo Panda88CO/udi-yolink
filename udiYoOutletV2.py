@@ -82,11 +82,9 @@ class udiYoOutlet(udi_interface.Node):
         time.sleep(2)
         self.yoOutlet.initNode()
         if not self.yoOutlet.online:
-            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))       
+            logging.warning('Device {} not on-line'.format(self.devInfo['name']))       
             self.node.setDriver('ST', 0, True, True)
-            self.yoOutlet.shut_down()
-            if self.node:
-                self.poly.delNode(self.node.address)
+
         else:
             self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             self.node.setDriver('ST', 1, True, True)
@@ -94,9 +92,9 @@ class udiYoOutlet(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoOutlet')
         self.node.setDriver('ST', 0, True, True)
-        if self.yoOutlet.online:
-            self.yoOutlet.shut_down()
-
+        self.yoOutlet.shut_down()
+        if self.node:
+            self.poly.delNode(self.node.address)
 
     def updateStatus(self, data):
         logging.info('udiYoOutlet updateStatus')

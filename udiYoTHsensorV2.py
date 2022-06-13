@@ -98,10 +98,10 @@ class udiYoTHsensor(udi_interface.Node):
         time.sleep(2)
         self.yoTHsensor.initNode()
         if not self.yoTHsensor.online:
-            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))            
-            self.yoTHsensor.shut_down()
-            if self.node:
-                self.poly.delNode(self.node.address)
+            logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
+            #self.yoTHsensor.shut_down()
+            #if self.node:
+            #    self.poly.delNode(self.node.address)
         else:
             self.node.setDriver('ST', 1, True, True)
 
@@ -113,6 +113,8 @@ class udiYoTHsensor(udi_interface.Node):
         logging.info('Stop udiYoTHsensor')
         self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor.shut_down()
+        if self.node:
+            self.poly.delNode(self.node.address)
 
     def checkOnline(self):
         self.yoTHsensor.refreshDevice()

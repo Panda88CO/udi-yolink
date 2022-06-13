@@ -322,12 +322,10 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yoMultiOutlet.initNode()
 
         if not self.yoMultiOutlet.online:
-            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
+            logging.warning('Device {} not on-line -  Cannot determine number of outlets and USBs'.format(self.devInfo['name']))
             self.ports = 0
             self.nbrOutlets = 0
-            self.yoMultiOutlet.shut_down()
-            if self.node:
-                self.poly.delNode(self.node.address)
+
         else:
             self.node.setDriver('ST', 1, True, True)
             self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
@@ -398,6 +396,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.info('Stop udiYoMultiOutlet ')
         self.node.setDriver('ST', 0, True, True)
         self.yoMultiOutlet.shut_down()
+        if self.node:
+            self.poly.delNode(self.node.address)
 
     def checkOnline(self):
         self.yoMultiOutlet.refreshDevice() 

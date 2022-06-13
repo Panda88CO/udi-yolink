@@ -77,10 +77,8 @@ class udiYoDoorSensor(udi_interface.Node):
         self.yoDoorSensor.initNode()
         
         if not self.yoDoorSensor.online:
-            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.yoDoorSensor.shut_down()
-            if self.node:
-                self.poly.delNode(self.node.address)
+            logging.warning('Device {} not on-line'.format(self.devInfo['name']))
+
         else:
             self.node.setDriver('ST', 1, True, True)
 
@@ -94,7 +92,9 @@ class udiYoDoorSensor(udi_interface.Node):
         logging.info('Stop - udiYoDoorSensor')
         self.node.setDriver('ST', 0, True, True)
         self.yoDoorSensor.shut_down()
-       
+        if self.node:
+            self.poly.delNode(self.node.address)
+
     def doorState(self):
         state = self.yoDoorSensor.getState()
         if state.lower() == 'closed':

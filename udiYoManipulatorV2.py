@@ -81,10 +81,8 @@ class udiYoManipulator(udi_interface.Node):
         time.sleep(2)
         self.yoManipulator.initNode()
         if not self.yoManipulator.online:
-            logging.error('Device {} not on-line - remove node'.format(self.devInfo['name']))
-            self.yoManipulator.shut_down()
-            if self.node:
-                self.poly.delNode(self.node.address)
+            logging.warning('Device {} not on-line'.format(self.devInfo['name']))
+
         else:
             self.node.setDriver('ST', 1, True, True)
             self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
@@ -94,7 +92,9 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Stop udiYoManipulator')
         self.node.setDriver('ST', 0, True, True)
         self.yoManipulator.shut_down()
-
+        if self.node:
+            self.poly.delNode(self.node.address)
+            
     def checkOnline(self):
         #get get info even if battery operated 
         self.yoManipulator.refreshDevice()    
