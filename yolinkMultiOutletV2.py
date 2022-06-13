@@ -429,7 +429,8 @@ class YoLinkMultiOutlet(YoLinkMultiOut):
             logging.info('MultiOutlet init - Nbr Outlets : {}'.format(yolink.nbrOutlets))
             logging.info('MultiOutlet init - Nbr USB : {}'.format(yolink.nbrUsb))
         else:
-            logging.info ('MultiOutlet not online')        
+            logging.info ('MultiOutlet not online')   
+
 
     def updateStatus(self, data):
         self.updateCallbackStatus(data, True)

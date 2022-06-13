@@ -409,6 +409,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
 
         if self.yoMultiOutlet.online:
+            if self.ports == 0: # Device was never initialized
+                self.start()
             self.yoMultiOutlet.updateCallbackStatus(data)
             #logging.debug('updateCallbackStatus - udiYoMultiOutlet')
             #logging.debug(data)
