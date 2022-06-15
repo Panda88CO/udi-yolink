@@ -2,8 +2,8 @@
 ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
 ST-nlssetup-ST-NAME = Nodeserver Status
-CMD-nlssetup-DON-NAME = On
-CMD-nlssetup-DOF-NAME = Off
+CMD-nlssetup-DON-NAME = Heart Beat On
+CMD-nlssetup-DOF-NAME = Heart Beat Off
 
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
