@@ -32,8 +32,8 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
     #    return(yolink.getData())
 
     
-    #def refreshSensor(yolink):
-    #    yolink.refreshDevice()
+    def refreshSensor(yolink):
+        yolink.refreshDevice()
 
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
