@@ -2,8 +2,8 @@
 ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
 ST-nlssetup-ST-NAME = Nodeserver Status
-ST-nlssetup-GV0-NAME = Temperature Unit
-
+CMD-nlssetup-DON-NAME = On
+CMD-nlssetup-DOF-NAME = Off
 
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
