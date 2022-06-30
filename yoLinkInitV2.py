@@ -392,10 +392,10 @@ class YoLinkInitPAC(object):
                     if result.rc == 4 or errorCount > 3: #try to renew token
                         yoAccess.get_access_token() 
                         yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-                        yoAccess.client.reconnect()
-                        #yoAccess.client.loop_stop()
-                        #yoAccess.client.disconnect()
-                        #yoAccess.connect_to_broker()
+                        #yoAccess.client.reconnect()
+                        yoAccess.client.loop_stop()
+                        yoAccess.client.disconnect()
+                        yoAccess.connect_to_broker()
                         if errorCount> 3:
                             logging.debug('Multiple Errors Occured - reacquiring Tokens')
                             errorCount = 0
@@ -409,10 +409,10 @@ class YoLinkInitPAC(object):
                     logging.info('No Activity in {} sec - trying to reacquire token'.format(time.time() - yoAccess.lastTransferTime))
                     yoAccess.get_access_token() 
                     yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-                    yoAccess.client.reconnect()
-                    #yoAccess.client.loop_stop()
-                    #yoAccess.client.disconnect()
-                    #yoAccess.connect_to_broker()
+                    #yoAccess.client.reconnect()
+                    yoAccess.client.loop_stop()
+                    yoAccess.client.disconnect()
+                    yoAccess.connect_to_broker()
                     yoAccess.lastTransferTime = time.time()
                     time.sleep(60)
 
