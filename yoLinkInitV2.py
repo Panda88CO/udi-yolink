@@ -209,7 +209,7 @@ class YoLinkInitPAC(object):
         try: 
             logging.info("Connecting to broker...")
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-            yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 16000) #devices report every 4 hours or earlier
+            yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
             yoAccess.client.loop_start()
 
         except Exception as e:
@@ -391,9 +391,11 @@ class YoLinkInitPAC(object):
                     errorCount = errorCount + 1
                     if result.rc == 4 or errorCount > 3: #try to renew token
                         yoAccess.get_access_token() 
-                        yoAccess.client.loop_stop()
-                        yoAccess.client.disconnect()
-                        yoAccess.connect_to_broker()
+                        yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
+                        yoAccess.client.reconnect()
+                        #yoAccess.client.loop_stop()
+                        #yoAccess.client.disconnect()
+                        #yoAccess.connect_to_broker()
                         if errorCount> 3:
                             logging.debug('Multiple Errors Occured - reacquiring Tokens')
                             errorCount = 0
@@ -406,9 +408,11 @@ class YoLinkInitPAC(object):
                 if yoAccess.lastTransferTime + yoAccess.timeExpMarging + 900 <= time.time():
                     logging.info('No Activity in {} sec - trying to reacquire token'.format(time.time() - yoAccess.lastTransferTime))
                     yoAccess.get_access_token() 
-                    yoAccess.client.loop_stop()
-                    yoAccess.client.disconnect()
-                    yoAccess.connect_to_broker()
+                    yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
+                    yoAccess.client.reconnect()
+                    #yoAccess.client.loop_stop()
+                    #yoAccess.client.disconnect()
+                    #yoAccess.connect_to_broker()
                     yoAccess.lastTransferTime = time.time()
                     time.sleep(60)
 

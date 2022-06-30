@@ -402,7 +402,10 @@ class YoLinkMQTTDevice(object):
                     yolink.updateStatusData(data)  
             elif '.setDelay' in data['event']:         
                 if int(data['time']) > int(yolink.getLastUpdate()):
-                    yolink.updateStatusData(data)                    
+                    yolink.updateStatusData(data)     
+            elif '.openReminder' in data['event']:         
+                if int(data['time']) > int(yolink.getLastUpdate()):
+                    yolink.updateStatusData(data)                          
             else:
                 logging.debug('Unsupported Event passed - trying anyway; {}'.format(data) )
                 if int(data['time']) > int(yolink.getLastUpdate()):
