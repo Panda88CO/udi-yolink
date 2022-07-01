@@ -140,6 +140,7 @@ class YoLinkSetup (udi_interface.Node):
 
 
     def addNodes (self, deviceList):
+        '''
         logging.debug('Parsing Parameters for old elements')
         delparams = []
         for param in self.Parameters:
@@ -151,7 +152,7 @@ class YoLinkSetup (udi_interface.Node):
         for param in delparams:
             self.Parameters.delete(param)
             logging.debug( 'Parameters - deleting {}'.format(param))
-
+        '''
 
         for dev in range(0,len(self.deviceList)):
             if self.deviceList[dev]['type']  in self.supportedYoTypes:
@@ -440,7 +441,7 @@ class YoLinkSetup (udi_interface.Node):
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-        polyglot.start('0.4.3')
+        polyglot.start('0.4.4')
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
         # Just sit and wait for events
