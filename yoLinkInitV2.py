@@ -209,7 +209,7 @@ class YoLinkInitPAC(object):
         try: 
             logging.info("Connecting to broker...")
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-            yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
+            yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 10) # ping server every 10 sec
             yoAccess.client.loop_start()
 
         except Exception as e:
@@ -366,7 +366,7 @@ class YoLinkInitPAC(object):
         yoAccess.lastTransferTime = time.time()
         while not yoAccess.STOP.is_set():
             try:
-                data = yoAccess.publishQueue.get(timeout = 30) 
+                data = yoAccess.publishQueue.get(timeout = 10) 
                 #DEBUG = logging.getEffectiveLevel() == logging.DEBUG
                 deviceId = data['targetDevice']
                 dataStr = str(json.dumps(data))

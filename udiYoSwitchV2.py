@@ -106,8 +106,8 @@ class udiYoSwitch(udi_interface.Node):
         logging.info('Stop udiYoSwitch')
         self.node.setDriver('ST', 0, True, True)
         self.yoSwitch.shut_down()
-        if self.mode:
-            self.poly.delNode(self.node.address)
+        #if self.node:
+        #    self.poly.delNode(self.node.address)
             
     def checkOnline(self):
         self.yoSwitch.refreshDevice() 

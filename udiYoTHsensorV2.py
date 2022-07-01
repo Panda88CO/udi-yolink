@@ -113,8 +113,8 @@ class udiYoTHsensor(udi_interface.Node):
         logging.info('Stop udiYoTHsensor')
         self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor.shut_down()
-        if self.node:
-            self.poly.delNode(self.node.address)
+        #if self.node:
+        #    self.poly.delNode(self.node.address)
 
     def checkOnline(self):
         self.yoTHsensor.refreshDevice()

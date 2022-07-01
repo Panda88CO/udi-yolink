@@ -396,8 +396,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.info('Stop udiYoMultiOutlet ')
         self.node.setDriver('ST', 0, True, True)
         self.yoMultiOutlet.shut_down()
-        if self.node:
-            self.poly.delNode(self.node.address)
+        #if self.node:
+        #    self.poly.delNode(self.node.address)
 
     def checkOnline(self):
         self.yoMultiOutlet.refreshDevice() 

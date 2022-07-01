@@ -97,8 +97,8 @@ class udiYoHub(udi_interface.Node):
         logging.info('Stop udiYoHub')
         self.node.setDriver('ST', 0, True, True)
         self.yoHub.shut_down()
-        if self.node:
-            self.poly.delNode(self.node.address)
+        #if self.node:
+        #    self.poly.delNode(self.node.address)
 
 
     def checkOnline(self):

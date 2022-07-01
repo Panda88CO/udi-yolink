@@ -91,8 +91,8 @@ class udiYoMotionSensor(udi_interface.Node):
         logging.info('Stop udiYoMotionSensor')
         self.node.setDriver('ST', 0, True, True)
         self.yoMotionsSensor.shut_down()
-        if self.node:
-            self.poly.delNode(self.node.address)
+        #if self.node:
+        #    self.poly.delNode(self.node.address)
                 
     def checkOnline(self):
         self.yoMotionsSensor.refreshDevice()   

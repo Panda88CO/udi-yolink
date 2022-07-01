@@ -92,8 +92,8 @@ class udiYoDoorSensor(udi_interface.Node):
         logging.info('Stop - udiYoDoorSensor')
         self.node.setDriver('ST', 0, True, True)
         self.yoDoorSensor.shut_down()
-        if self.node:
-            self.poly.delNode(self.node.address)
+        #if self.node:
+        #    self.poly.delNode(self.node.address)
 
     def doorState(self):
         state = self.yoDoorSensor.getState()

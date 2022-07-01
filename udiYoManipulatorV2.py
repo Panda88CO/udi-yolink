@@ -92,8 +92,8 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Stop udiYoManipulator')
         self.node.setDriver('ST', 0, True, True)
         self.yoManipulator.shut_down()
-        if self.node:
-            self.poly.delNode(self.node.address)
+        #if self.node:
+        #    self.poly.delNode(self.node.address)
             
     def checkOnline(self):
         #get get info even if battery operated 

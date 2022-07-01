@@ -94,8 +94,8 @@ class udiYoLeakSensor(udi_interface.Node):
         logging.info('Stop udiYoLeakSensor ')
         self.node.setDriver('ST', 0, True, True)
         self.yoLeakSensor.shut_down()
-        if self.node:
-            self.poly.delNode(self.node.address)  
+        #if self.node:
+        #    self.poly.delNode(self.node.address)  
 
     def checkOnline(self):
         #we only get casched values - but MQTT remains alive
