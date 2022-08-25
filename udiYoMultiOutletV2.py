@@ -286,6 +286,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.delaysActive = False
         self.nbrOutlets = -1
         self.nbrUsb = -1
+        self.ports = -1
         self.devInfo =  deviceInfo   
         self.yoMultiOutlet = None
         self.n_queue = []

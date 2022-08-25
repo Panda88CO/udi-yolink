@@ -32,8 +32,8 @@ class YoLinkHu(YoLinkMQTTDevice):
     def setWiFi (yolink, SSID, password):
         logging.debug(yolink.type+' - setWiFi')
         maxAttempts = 3
-        if yolink.dataAPI['lastMessage']['data']['wifi']['enabled']:
-            if password != '' and SSID != '' and yolink.dataAPI['lastMessage']['data']['wifi']['enabled'] :
+        if yolink.dataAPI['lastMessage']['data']['wifi']['enable']:
+            if password != '' and SSID != '' and yolink.dataAPI['lastMessage']['data']['wifi']['enable'] :
                 data = {}
                 data['params'] = {}
                 data['method'] = yolink.type+'.setWiFi'

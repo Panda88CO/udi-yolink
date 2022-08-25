@@ -52,12 +52,20 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
 
     def getWiFiInfo(yolink):
         logging.debug('getWiFiInfo')
-        return(yolink.dataAPI['lastMessage']['data']['wifi'])
+        if 'data' in yolink.dataAPI['lastMessage']:
+            if 'wifi' in yolink.dataAPI['lastMessage']['data']:
+                return(yolink.dataAPI['lastMessage']['data']['wifi'])
+        else:
+            return(None)
 
     def getEthernetInfo(yolink):
         logging.debug('getEthernetInfo')
-        return(yolink.dataAPI['lastMessage']['data']['eth'])
-
+        if 'data' in yolink.dataAPI['lastMessage']:
+            if 'eth' in yolink.dataAPI['lastMessage']['data']:
+                return(yolink.dataAPI['lastMessage']['data']['eth'])
+        else:
+            return(None)
+            
     def getOptionInfo(yolink):
         logging.debug('getOptionInfo')
         return({'volume':yolink.volume, 'mute':yolink.mute, 'enableBeep':yolink.beepEnabled})
