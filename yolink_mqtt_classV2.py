@@ -822,7 +822,7 @@ class YoLinkMQTTDevice(object):
 
     def updateStatusData  (yolink, data):
         try:
-            logging.debug('{} - updateStatusData : {}'.format(yolink.type , data))
+            #logging.debug('{} - updateStatusData : {}'.format(yolink.type , data))
             yolink.setOnline(data)
             if 'reportAt' in data[yolink.dData] :
                 reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')

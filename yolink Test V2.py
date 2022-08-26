@@ -72,7 +72,7 @@ if (os.path.exists('./loginInfo.json')):
 #deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor', 'MotionSensor', 'Outlet', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationsSensor']
 #deviceTestList = ['SpeakerHub', 'VibrationSensor']
 #deviceTestList = ['Hub', 'DoorSensor', 'MultiOutlet' ]
-deviceTestList = [ 'DoorSensor' ]
+deviceTestList = [ 'DoorSensor',  'THSensor']
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
 
