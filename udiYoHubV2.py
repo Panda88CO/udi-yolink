@@ -104,10 +104,11 @@ class udiYoHub(udi_interface.Node):
     def checkOnline(self):
         self.yoHub.refreshDevice() 
 
-    def updateStatus(self, data):
-        logging.info('updateStatus - Hub')
-        self.yoHub.updateCallbackStatus(data)
+    def checkDataUpdate(self):
+        if self.yoHub.data_updated():
+            self.updateData()
 
+    def updateData(self):
         if self.node is not None:
             state =  self.yoHub.getState().upper()
             if self.yoHub.online:
@@ -121,6 +122,11 @@ class udiYoHub(udi_interface.Node):
             else:
                 self.node.setDriver('GV8', 0, True, True)
                 #self.pollDelays()
+
+    def updateStatus(self, data):
+        logging.info('updateStatus - Hub')
+        self.yoHub.updateStatus(data)
+        self.updateData()
            
     def setWiFi (self, command):
         logging ('setWiFi')

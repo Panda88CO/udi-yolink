@@ -156,7 +156,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def updateStatus(self, data):
         logging.info('updateStatus - speakerHub')
-        self.yoSpeakerHub.updateCallbackStatus(data)
+        self.yoSpeakerHub.updateStatus(data)
         self.updateData()
 
 
