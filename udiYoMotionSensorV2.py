@@ -108,7 +108,7 @@ class udiYoMotionSensor(udi_interface.Node):
             return(99)
 
     def checkDataUpdate(self):
-        if self.yoDoorSensor.data_updated():
+        if self.yoMotionsSensor.data_updated():
             self.updateData()
 
 

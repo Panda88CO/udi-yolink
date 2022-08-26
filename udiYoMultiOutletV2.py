@@ -89,6 +89,8 @@ class udiYoSubOutlet(udi_interface.Node):
     def checkOnline(self):
         pass
 
+    def checkDataUpdate(self):
+        pass
 
     def updateOutNode(self, outletstate, onDelay, offDelay):
         logging.debug('udiYoSubOutlet - updateOutNode: state={} onD={} offD={}'.format(outletstate, onDelay, offDelay))
@@ -228,6 +230,10 @@ class udiYoSubUSB(udi_interface.Node):
     
     def checkOnline(self):
         pass
+
+    def checkDataUpdate(self):
+        pass
+
 
     def updateUsbNode(self, gv0):
         logging.info('udiYoSubUSB - updateUsbNode: {}'.format(gv0))

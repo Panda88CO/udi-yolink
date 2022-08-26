@@ -68,11 +68,11 @@ if (os.path.exists('./loginInfo.json')):
     WiFissid = tmp['WiFissid']
     WiFipwd = tmp['WiFipassword']
 
-#deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub']
+deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub']
 #deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor', 'MotionSensor', 'Outlet', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationsSensor']
 #deviceTestList = ['SpeakerHub', 'VibrationSensor']
 #deviceTestList = ['Hub', 'DoorSensor', 'MultiOutlet' ]
-deviceTestList = [ 'DoorSensor',  'THSensor']
+#eviceTestList = [ 'DoorSensor',  'THSensor', 'MultiOutlet', 'Outlet']
 yolinkURL =  'https://api.yosmart.com/openApi' 
 mqttURL = 'api.yosmart.com'
 
@@ -83,7 +83,7 @@ deviceList = yoAccess.getDeviceList()
 devices = {}
 
 
-for i in range(0,50):
+for i in range(0,10):
     for dev in range(0,len(deviceList)) :
         #print(' Device ID: {} - concat {}'.format(deviceList[dev]['deviceId'], deviceList[dev]['deviceId'][-14:]))
         if deviceList[dev]['type'] in deviceTestList:

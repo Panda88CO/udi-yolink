@@ -51,10 +51,7 @@ class YoLinkMQTTDevice(object):
         #yolink.yolink_URL = yoAccess.apiv2URL
         #yolink.mqttURL = yoAccess.mqttURL
         yolink.noconnect = 0 # number on consecutive no connect to device
-  
         yolink.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-        
-               
         yolink.maxSchedules = 6
         yolink.deviceSupportList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationSensor']
         yolink.lastUpd = 'lastUpdTime'
@@ -71,20 +68,20 @@ class YoLinkMQTTDevice(object):
         yolink.disconnect = False
         if yolink.type in yolink.delaySupport and yolink.type not in yolink.scheduleSupport :
             yolink.dataAPI = {
-                              yolink.lastUpd :str(int(time.time_ns()/1e6))
+                              yolink.lastUpd:0
                             , yolink.lastMessage:{}
                             ,'lastStateTime':{}
-                            , yolink.dOnline: False
-                            , yolink.dData :{   yolink.dState:{}
+                            , yolink.dOnline:False
+                            , yolink.dData :{yolink.dState:{}
                                              }
                             }
             yolink.extDelayTimer = CountdownTimer()
         elif yolink.type in yolink.scheduleSupport:
             yolink.dataAPI = {
-                              yolink.lastUpd :str(int(time.time_ns()/1e6))
+                              yolink.lastUpd:0
                             , yolink.lastMessage:{}
                             ,'lastStateTime':{}
-                            , yolink.dOnline: False
+                            , yolink.dOnline:False
                             , yolink.dData :{   yolink.dState:{}
                                                 ,yolink.dSchedule : [] 
                                                 }
@@ -92,7 +89,7 @@ class YoLinkMQTTDevice(object):
             yolink.extDelayTimer = CountdownTimer()
         else:
             yolink.dataAPI = {
-                              yolink.lastUpd :str(int(time.time_ns()/1e6))
+                              yolink.lastUpd:0
                             , yolink.lastMessage:{}
                             ,'lastStateTime':{}
                             , yolink.dOnline :False
@@ -142,7 +139,7 @@ class YoLinkMQTTDevice(object):
         count = 0
         maxCount = 2
         yolink.refreshDevice()
-        time.sleep(1)
+        time.sleep(3)
         #yolink.online = yolink.getOnlineStatus()
         while not yolink.online and count < maxCount and not yolink.disconnect:
             time.sleep(10)
@@ -272,9 +269,14 @@ class YoLinkMQTTDevice(object):
 
     def getLastUpdate (yolink):
         try:
-            if yolink.dataAPI[yolink.lastUpd] and  yolink.dataAPI[yolink.lastUpd] !='' :
-                return(int(yolink.dataAPI[yolink.lastUpd]))
+            if yolink.lastUpd in yolink.dataAPI:
+                if yolink.dataAPI[yolink.lastUpd] and  yolink.dataAPI[yolink.lastUpd] !='' :
+                    return(int(yolink.dataAPI[yolink.lastUpd]))
+                else:
+                    yolink.dataAPI[yolink.lastUpd] = 0
+                    return(0)
             else:
+                yolink.dataAPI[yolink.lastUpd] = 0
                 return(0)
         except:
             logging.debug('Exception yolink.dataAPI[yolink.lastUpd] does not exist')
@@ -409,7 +411,7 @@ class YoLinkMQTTDevice(object):
                     logging.error(yolink.type+ ': ' + data['desc'])
             elif 'event' in data:
                 #logging.debug('Event deteced')
-                yolink.online = yolink.checkOnlineStatus(data)
+                yolink.online = True#
                 if '.StatusChange' in data['event']:
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)              
