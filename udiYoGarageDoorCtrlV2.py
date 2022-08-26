@@ -83,8 +83,8 @@ class udiYoGarageDoor(udi_interface.Node):
     def checkOnline(self):
         pass
         
-        def checkDataUpdate(self):
-            pass
+    def checkDataUpdate(self):
+        pass
     
     def stop (self):
         logging.info('Stop udiYoGarageDoor')
