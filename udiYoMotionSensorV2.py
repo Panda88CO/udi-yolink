@@ -107,10 +107,12 @@ class udiYoMotionSensor(udi_interface.Node):
         else:
             return(99)
 
-    def updateStatus(self, data):
-        logging.info('updateStatus - udiYoLinkMotionSensor')
-        self.yoMotionsSensor.updateCallbackStatus(data)
+    def checkDataUpdate(self):
+        if self.yoDoorSensor.data_updated():
+            self.updateData()
 
+
+    def updateData(self):
         if self.node is not None:
             if self.yoMotionsSensor.online:
                 motion_state = self.getMotionState()
@@ -128,6 +130,14 @@ class udiYoMotionSensor(udi_interface.Node):
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('GV8', 1, True, True)
+
+
+
+
+    def updateStatus(self, data):
+        logging.info('updateStatus - udiYoLinkMotionSensor')
+        self.yoMotionsSensor.updateStatus(data)
+
 
 
 

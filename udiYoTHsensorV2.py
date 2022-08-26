@@ -119,11 +119,12 @@ class udiYoTHsensor(udi_interface.Node):
     def checkOnline(self):
         self.yoTHsensor.refreshDevice()
 
+    def checkDataUpdate(self):
+        if self.yoTHsensor.data_updated():
+            self.updateData()
 
-    def updateStatus(self, data):
-        logging.debug('udiYoTHsensor - updateStatus')
-        self.yoTHsensor.updateCallbackStatus(data)
 
+    def updateData(self):
         alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
             if self.yoTHsensor.online:
@@ -154,6 +155,14 @@ class udiYoTHsensor(udi_interface.Node):
                 self.node.setDriver('BATLVL', 99, True, True)
                 self.node.setDriver('GV7',99, True, True)
                 self.node.setDriver('GV8', 0, True, True)
+
+
+
+    def updateStatus(self, data):
+        logging.debug('udiYoTHsensor - updateStatus')
+        self.yoTHsensor.updateStatus(data)
+        self.updateData()
+
 
 
     def update(self, command = None):

@@ -322,6 +322,7 @@ class YoLinkSetup (udi_interface.Node):
     def systemPoll (self, polltype):
         if self.nodeDefineDone:
             logging.debug('System Poll executing: {}'.format(polltype))
+
             if 'longPoll' in polltype:
                 #Keep token current
                 #self.node.setDriver('GV0', self.temp_unit, True, True)
@@ -341,7 +342,10 @@ class YoLinkSetup (udi_interface.Node):
                 
             if 'shortPoll' in polltype:
                 self.heartbeat()
-
+                nodes = self.poly.getNodes()
+                for nde in nodes:
+                    if nde != 'setup':   # but not the controller node
+                        nodes[nde].checkDataUpdate()
     
 
 

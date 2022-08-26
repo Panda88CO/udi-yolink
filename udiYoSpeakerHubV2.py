@@ -131,11 +131,13 @@ class udiYoSpeakerHub(udi_interface.Node):
             
     def checkOnline(self):
         self.yoSpeakerHub.refreshDevice() 
+        
+    def checkDataUpdate(self):
+        if self.yoSpeakerHub.data_updated():
+            self.updateData()
 
-    def updateStatus(self, data):
-        logging.info('updateStatus - speakerHub')
-        self.yoSpeakerHub.updateCallbackStatus(data)
 
+    def updateData(self):
         if self.node is not None:
             #state =  self.yoSpeakerHub.getState().upper()
             if self.yoSpeakerHub.online:
@@ -149,6 +151,15 @@ class udiYoSpeakerHub(udi_interface.Node):
             else:
                 self.node.setDriver('GV8', 0, True, True)
                 #self.pollDelays()
+
+
+
+    def updateStatus(self, data):
+        logging.info('updateStatus - speakerHub')
+        self.yoSpeakerHub.updateCallbackStatus(data)
+        self.updateData()
+
+
     def setWiFi (self, command):
         logging ('setWiFi')
         
@@ -221,7 +232,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('udiYoSpeakerHub Update Status')
-        self.yoSpeakerHub.refreshState()
+        self.yoSpeakerHub.refreshDevice()
         #self.yoSpeakerHub.refreshSchedules()     
 
 

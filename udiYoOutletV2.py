@@ -96,10 +96,12 @@ class udiYoOutlet(udi_interface.Node):
         #if self.node:
         #    self.poly.delNode(self.node.address)
 
-    def updateStatus(self, data):
-        logging.info('udiYoOutlet updateStatus')
-        self.yoOutlet.updateCallbackStatus(data)
+    def checkDataUpdate(self):
+        if self.yoOutlet.data_updated():
+            self.updateData()
 
+
+    def updateData(self):
         if self.node is not None:
             if  self.yoOutlet.online:
                 state = str(self.yoOutlet.getState()).upper()
@@ -125,6 +127,13 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV4', -1, True, True)
                 self.node.setDriver('GV8',0, True, True)
             
+
+
+
+    def updateStatus(self, data):
+        logging.info('udiYoOutlet updateStatus')
+        self.yoOutlet.updateStatus(data)
+        self.updateData()
 
 
     def updateDelayCountdown( self, timeRemaining):
@@ -163,7 +172,7 @@ class udiYoOutlet(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('Update Status Executed')
-        self.yoOutlet.refreshState()
+        self.yoOutlet.refreshDevice()
  
 
 

@@ -99,10 +99,12 @@ class udiYoManipulator(udi_interface.Node):
         #get get info even if battery operated 
         self.yoManipulator.refreshDevice()    
 
-    def updateStatus(self, data):
-        logging.info('updateStatus - udiYoManipulator')
-        self.yoManipulator.updateCallbackStatus(data)
-        
+    def checkDataUpdate(self):
+        if self.yoManipulator.data_updated():
+            self.updateData()
+
+
+    def updateData(self):
         if self.node is not None:
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
@@ -122,6 +124,12 @@ class udiYoManipulator(udi_interface.Node):
                 self.node.setDriver('GV2', 0, True, True)   
                 self.node.setDriver('GV8', 0, True, True)   
                 
+
+    def updateStatus(self, data):
+        logging.info('updateStatus - udiYoManipulator')
+        self.yoManipulator.updateStatus(data)
+        self.updateData()
+      
 
 
     def updateDelayCountdown( self, timeRemaining):

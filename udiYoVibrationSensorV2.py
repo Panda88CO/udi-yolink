@@ -95,20 +95,12 @@ class udiYoVibrationSensor(udi_interface.Node):
     def checkOnline(self):
         self.yoVibrationSensor.refreshDevice()   
     
+    def checkDataUpdate(self):
+        if self.yoVibrationSensor.data_updated():
+            self.updateData()
 
-    def getVibrationState(self):
-        if self.yoVibrationSensor.online:
-            if  self.yoVibrationSensor.getVibrationState() == 'normal':
-                return(0)
-            else:
-                return(1)
-        else:
-            return(99)
 
-    def updateStatus(self, data):
-        logging.info('updateStatus - udiYoLinkVibrationSensor')
-        self.yoVibrationSensor.updateCallbackStatus(data)
-
+    def updateData(self):
         if self.node is not None:
             if self.yoVibrationSensor.online:
                 vib_state = self.getVibrationState()
@@ -126,6 +118,24 @@ class udiYoVibrationSensor(udi_interface.Node):
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('GV8', 1, True, True)
+
+
+
+
+
+    def getVibrationState(self):
+        if self.yoVibrationSensor.online:
+            if  self.yoVibrationSensor.getVibrationState() == 'normal':
+                return(0)
+            else:
+                return(1)
+        else:
+            return(99)
+
+    def updateStatus(self, data):
+        logging.info('updateStatus - udiYoLinkVibrationSensor')
+        self.yoVibrationSensor.updateStatus(data)
+        self.updateData()
 
 
 

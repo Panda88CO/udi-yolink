@@ -85,6 +85,7 @@ devices = {}
 
 for i in range(0,50):
     for dev in range(0,len(deviceList)) :
+        #print(' Device ID: {} - concat {}'.format(deviceList[dev]['deviceId'], deviceList[dev]['deviceId'][-14:]))
         if deviceList[dev]['type'] in deviceTestList:
             print('adding/checking device : {} - {}'.format(deviceList[dev]['name'], deviceList[dev]['type']))
 

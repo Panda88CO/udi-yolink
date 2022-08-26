@@ -108,12 +108,13 @@ class udiYoDoorSensor(udi_interface.Node):
         # only gets the casched status (battery operated device)
         self.yoDoorSensor.refreshDevice()
        
+    def checkDataUpdate(self):
+        if self.yoDoorSensor.data_updated():
+            self.updateData()
 
-    def updateStatus(self, data):
-        logging.debug('updateStatus - {}'.format(self.name))
-        self.yoDoorSensor.updateStatus(data)
-        logging.debug(data)
-        alarms = self.yoDoorSensor.getAlarms()
+
+    def updateData(self):
+
         if self.node is not None:
             if self.yoDoorSensor.online:
                 doorstate = self.doorState()
@@ -131,6 +132,14 @@ class udiYoDoorSensor(udi_interface.Node):
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('GV8', 0, True, True)
+
+
+
+    def updateStatus(self, data):
+        logging.debug('updateStatus - {}'.format(self.name))
+        self.yoDoorSensor.updateStatus(data)
+        #logging.debug(data)
+        self.updateData()
 
 
 

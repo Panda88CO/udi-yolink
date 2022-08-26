@@ -111,12 +111,15 @@ class udiYoSwitch(udi_interface.Node):
             
     def checkOnline(self):
         self.yoSwitch.refreshDevice() 
+    
+    
+    def checkDataUpdate(self):
+        if self.yoSwitch.data_updated():
+            self.updateData()
 
-    def updateStatus(self, data):
-        logging.info('updateStatus - Switch')
-        self.yoSwitch.updateCallbackStatus(data)
 
-        if self.node is not None:
+    def updateData(self):
+       if self.node is not None:
             state =  self.yoSwitch.getState().upper()
             if self.yoSwitch.online:
                 if state == 'ON':
@@ -132,6 +135,14 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('GV8', 0, True, True)
                 #self.pollDelays()
            
+
+
+
+    def updateStatus(self, data):
+        logging.info('updateStatus - Switch')
+        self.yoSwitch.updateStatus(data)
+        self.updateData()
+ 
 
     def switchControl(self, command):
         logging.info('udiYoSwitch switchControl')
