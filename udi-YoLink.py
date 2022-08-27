@@ -54,7 +54,8 @@ class YoLinkSetup (udi_interface.Node):
         self.TTSstr = 'TTS'
         self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]
         self.yolinkURL = 'https://api.yosmart.com/openApi'
-        self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api'
+        self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api' 
+        self.temp_unit = 0
 
         self.tokenURL = 'https://api.yosmart.com/open/yolink/token'
         self.mqttURL = 'api.yosmart.com'

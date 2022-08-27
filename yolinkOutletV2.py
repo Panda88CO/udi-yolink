@@ -47,6 +47,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
     '''
     
     def updateStatus(self, data):
+        
         self.updateCallbackStatus(data, False)
 
     def setState(yolink, state):
