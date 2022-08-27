@@ -167,7 +167,7 @@ class udiYoManipulator(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('Update Status Executed')
-        self.yoManipulator.refreshState()
+        self.yoManipulator.refreshDevice()
 
 
 

@@ -143,7 +143,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('udiYoMotionSensor Update  Executed')
-        self.yoMotionsSensor.refreshSensor()
+        self.yoMotionsSensor.refreshDevice()
        
 
     commands = {

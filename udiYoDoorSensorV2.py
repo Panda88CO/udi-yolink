@@ -145,7 +145,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('{} - Update Status Executed'.format(self.name))
-        self.yoDoorSensor.refreshSensor()
+        self.yoDoorSensor.refreshDevice()
        
 
 

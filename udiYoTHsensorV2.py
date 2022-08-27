@@ -167,7 +167,7 @@ class udiYoTHsensor(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('THsensor Update')
-        self.yoTHsensor.refreshState()
+        self.yoTHsensor.refreshDevice()
        
 
     commands = {

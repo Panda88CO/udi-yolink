@@ -164,7 +164,7 @@ class udiYoHub(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('udiYoHub Update Status')
-        self.yoHub.refreshState()
+        self.yoHub.refreshDevice()
         #self.yoHub.refreshSchedules()     
 
 

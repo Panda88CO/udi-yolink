@@ -167,7 +167,7 @@ class udiYoSwitch(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('udiYoSwitch Update Status')
-        self.yoSwitch.refreshState()
+        self.yoSwitch.refreshDevice()
         #self.yoSwitch.refreshSchedules()     
 
 
