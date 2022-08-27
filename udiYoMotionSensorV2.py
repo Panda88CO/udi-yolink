@@ -80,6 +80,7 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoMotionsSensor.initNode()
+        time.sleep(2)
         if not self.yoMotionsSensor.online:
             logging.warning('Device {} not on-line'.format(self.devInfo['name']))
 
@@ -115,6 +116,7 @@ class udiYoMotionSensor(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if self.yoMotionsSensor.online:
+                self.node.setDriver('ST', 1, True, True)
                 motion_state = self.getMotionState()
                 if motion_state == 1:
                     self.node.setDriver('GV0', 1, True, True)

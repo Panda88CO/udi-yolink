@@ -75,9 +75,9 @@ class udiYoDoorSensor(udi_interface.Node):
         self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)   
         time.sleep(2)
         self.yoDoorSensor.initNode()
-        
+        time.sleep(2)
         if not self.yoDoorSensor.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))
+            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
 
         else:
             self.node.setDriver('ST', 1, True, True)
@@ -117,6 +117,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
         if self.node is not None:
             if self.yoDoorSensor.online:
+                self.node.setDriver('ST', 1, True, True)
                 doorstate = self.doorState()
                 if doorstate == 1:
                     self.node.setDriver('GV0', 1 , True, True)

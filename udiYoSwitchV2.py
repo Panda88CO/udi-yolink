@@ -81,6 +81,7 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSwitch  = YoLinkSW(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoSwitch.initNode()
+        time.sleep(2)
         if not self.yoSwitch.online:
             logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
 
@@ -122,6 +123,7 @@ class udiYoSwitch(udi_interface.Node):
        if self.node is not None:
             state =  self.yoSwitch.getState().upper()
             if self.yoSwitch.online:
+                self.node.setDriver('ST', 1, True, True)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                     self.node.reportCmd('DON')  

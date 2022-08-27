@@ -327,14 +327,14 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(5)
         self.yoMultiOutlet.initNode()
-
+        time.sleep(2)
         if not self.yoMultiOutlet.online:
             logging.warning('Device {} not on-line -  Cannot determine number of outlets and USBs'.format(self.devInfo['name']))
             self.ports = 0
             self.nbrOutlets = 0
 
         else:
-            self.node.setDriver('ST', 1, True, True)
+            
             self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             time.sleep(2)
             logging.debug('multiOutlet past initNode')
@@ -422,6 +422,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             for outlet in range(0,self.nbrOutlets):
                 portName = 'port'+str(outlet)
                 if self.yoMultiOutlet.online:
+                    
                     if outletStates[portName]['state'] == 'open':
                         state = 1
                     elif outletStates[portName]['state'] == 'closed':

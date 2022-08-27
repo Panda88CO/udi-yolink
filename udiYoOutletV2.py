@@ -81,8 +81,9 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoOutlet.initNode()
+        time.sleep(2)
         if not self.yoOutlet.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))       
+            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))       
             self.node.setDriver('ST', 0, True, True)
 
         else:
@@ -104,6 +105,7 @@ class udiYoOutlet(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if  self.yoOutlet.online:
+                self.node.setDriver('ST', 1, True, True)
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
                     self.node.setDriver('GV0',1 , True, True)

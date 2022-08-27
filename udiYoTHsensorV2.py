@@ -97,8 +97,9 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor  = YoLinkTHSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoTHsensor.initNode()
+        time.sleep(2)
         if not self.yoTHsensor.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
+            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))            
             #self.yoTHsensor.shut_down()
             #if self.node:
             #    self.poly.delNode(self.node.address)
@@ -128,6 +129,7 @@ class udiYoTHsensor(udi_interface.Node):
         alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
             if self.yoTHsensor.online:
+                self.node.setDriver('ST', 1, True, True)
                 logging.debug("yoTHsensor temp: {}".format(self.yoTHsensor.getTempValueC()))
                 if self.temp_unit == 0:
                     self.node.setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC(),1), True, True, 4)

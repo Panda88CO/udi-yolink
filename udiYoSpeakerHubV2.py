@@ -96,6 +96,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.messageNbr = 0
         self.yoSpeakerHub.setMessageNbr(self.messageNbr )
         self.yoSpeakerHub.initNode()
+        time.sleep(2)
         if not self.yoSpeakerHub.online:
             logging.warning('Device {} not on-line - remove node'.format(self.devInfo['name']))
 
@@ -141,6 +142,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         if self.node is not None:
             #state =  self.yoSpeakerHub.getState().upper()
             if self.yoSpeakerHub.online:
+                self.node.setDriver('ST', 1, True, True)
                 self.node.setDriver('GV0', self.yoSpeakerHub.volume, True, True)
                 self.node.setDriver('GV1', self.bool2nbr(self.yoSpeakerHub.beepEnabled), True, True)
                 self.node.setDriver('GV2', self.bool2nbr(self.yoSpeakerHub.mute), True, True)

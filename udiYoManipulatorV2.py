@@ -80,9 +80,10 @@ class udiYoManipulator(udi_interface.Node):
         
         time.sleep(2)
         self.yoManipulator.initNode()
+        time.sleep(2)
         if not self.yoManipulator.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))
-
+            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
+            self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
         else:
             self.node.setDriver('ST', 1, True, True)
             self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
@@ -108,6 +109,7 @@ class udiYoManipulator(udi_interface.Node):
         if self.node is not None:
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
+                self.node.setDriver('ST', 1, True, True)
                 if state.upper() == 'OPEN':
                     self.node.setDriver('GV0', 1, True, True)
                     self.node.reportCmd('DON')
