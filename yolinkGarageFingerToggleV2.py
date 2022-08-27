@@ -28,7 +28,7 @@ class YoLinkGarageFingerCtrl(YoLinkMQTTDevice):
         data={}
         return(yolink.setDevice(data))
 
-    def updataStatus(yolink, data):
+    def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
     

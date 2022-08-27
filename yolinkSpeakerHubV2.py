@@ -39,7 +39,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         #print(' YoLinkSW - finished initailizing')
 
     ''' Assume no event support needed if using MQTT'''
-    def updataStatus(yolink, data):
+    def updateStatus(yolink, data):
         print('SpeakerHub update data {}'.format(data))
         yolink.updateCallbackStatus(data, False)
         if data['code'] == '000000':

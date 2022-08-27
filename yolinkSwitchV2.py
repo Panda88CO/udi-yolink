@@ -31,7 +31,7 @@ class YoLinkSW(YoLinkMQTTDevice):
         #print(' YoLinkSW - finished initailizing')
 
     ''' Assume no event support needed if using MQTT'''
-    def updataStatus(yolink, data):
+    def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
     '''
     def initNode(yolink):

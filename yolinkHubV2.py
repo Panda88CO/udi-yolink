@@ -26,7 +26,7 @@ class YoLinkHu(YoLinkMQTTDevice):
         return(yolink.refreshDevice( ))
 
     
-    def updataStatus(yolink, data):
+    def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
     def setWiFi (yolink, SSID, password):
