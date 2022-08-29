@@ -109,7 +109,7 @@ class udiYoManipulator(udi_interface.Node):
         if self.node is not None:
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
-                self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('ST', 1)
                 if state.upper() == 'OPEN':
                     self.node.setDriver('GV0', 1, True, True)
                     self.node.reportCmd('DON')
@@ -150,8 +150,10 @@ class udiYoManipulator(udi_interface.Node):
         state = int(command.get('value'))     
         if state == 1:
             self.yoManipulator.setState('ON')
+            self.node.reportCmd('DON')
         else:
             self.yoManipulator.setState('OFF')
+            self.node.reportCmd('DOF')
         
     def setOnDelay(self, command ):
         logging.info('setOnDelay')

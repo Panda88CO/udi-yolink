@@ -199,6 +199,7 @@ swstate-99 = Unknown
 
 swctrl-0 = Off
 swctrl-1 = On
+swctrl-2 = Toggle
 
 batlevel-0 = Low 
 batlevel-1 = Medium Low
@@ -243,6 +244,7 @@ usbstate-99 = Unknown
 
 usbctrl-0 = Disable
 usbctrl-1 = Enable
+usbctrl-2 = Toggle
 
 portlist-0 = Outlet 1
 portlist-1 = Outlet 2

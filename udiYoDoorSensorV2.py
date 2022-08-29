@@ -117,7 +117,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
         if self.node is not None:
             if self.yoDoorSensor.online:
-                self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('ST', 1)
                 doorstate = self.doorState()
                 if doorstate == 1:
                     self.node.setDriver('GV0', 1 , True, True)

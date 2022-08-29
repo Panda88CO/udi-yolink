@@ -123,7 +123,7 @@ class udiYoSwitch(udi_interface.Node):
        if self.node is not None:
             state =  self.yoSwitch.getState().upper()
             if self.yoSwitch.online:
-                self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('ST', 1)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                     self.node.reportCmd('DON')  
@@ -147,13 +147,29 @@ class udiYoSwitch(udi_interface.Node):
  
 
     def switchControl(self, command):
-        logging.info('udiYoSwitch switchControl')
-        state = int(command.get('value'))     
-        if state == 1:
+        logging.info('udiYoSwitch switchControl') 
+        ctrl = int(command.get('value'))     
+        if ctrl == 1:
             self.yoSwitch.setState('ON')
-        else:
+            self.node.setDriver('GV0',1 , True, True)
+            self.node.reportCmd('DON')
+        elif ctrl == 0:
             self.yoSwitch.setState('OFF')
-        
+            self.node.setDriver('GV0',0 , True, True)
+            self.node.reportCmd('DOF')
+        else: #toggle
+            state = str(self.yoOutlet.getState()).upper() 
+            if state == 'ON':
+                self.yoSwitch.setState('OFF')
+                self.node.setDriver('GV0',0 , True, True)
+                self.node.reportCmd('DOF')
+            elif state == 'OFF':
+                self.yoSwitch.setState('ON')
+                self.node.setDriver('GV0',1 , True, True)
+                self.node.reportCmd('DON')
+            #Unknown remains unknown
+    
+
     def setOnDelay(self, command ):
         logging.info('udiYoSwitch setOnDelay')
         delay =int(command.get('value'))

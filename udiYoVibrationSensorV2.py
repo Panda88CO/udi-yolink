@@ -104,7 +104,7 @@ class udiYoVibrationSensor(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if self.yoVibrationSensor.online:
-                self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('ST', 1)
                 vib_state = self.getVibrationState()
                 if vib_state == 1:
                     self.node.setDriver('GV0', 1, True, True)

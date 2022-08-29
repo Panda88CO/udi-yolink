@@ -112,7 +112,7 @@ class udiYoHub(udi_interface.Node):
         if self.node is not None:
             state =  self.yoHub.getState().upper()
             if self.yoHub.online:
-                self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('ST', 1)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                 elif  state == 'OFF':
