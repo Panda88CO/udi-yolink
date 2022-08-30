@@ -153,7 +153,8 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.refreshDevice()
 
     def switchControl(self, command):
-        logging.info('udiYoOutlet switchControl')
+        ctrl = int(command.get('value'))   
+        logging.info('udiYoOutlet switchControl - {}'.format(ctrl))
         ctrl = int(command.get('value'))     
         if ctrl == 1:
             self.yoOutlet.setState('ON')
