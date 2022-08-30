@@ -105,7 +105,9 @@ class udiYoGarageFinger(udi_interface.Node):
         self.yoDoorControl.toggleDevice()
 
     commands = {
-                    'TOGGLE': toggleDoor
+                    'TOGGLE': toggleDoor,
+                    'DON'   : toggleDoor,
+                    'DOF'   : toggleDoor,
                 }
 
 

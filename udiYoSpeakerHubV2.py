@@ -240,6 +240,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     commands = {
                 'UPDATE'    : update,
+                'QUERY'     : update,
                 'VOLUME'    : setVolume,
                 'BEEP'      : setBeepEnable,
                 'MUTE'      : setMute,

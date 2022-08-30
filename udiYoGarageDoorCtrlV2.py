@@ -108,7 +108,9 @@ class udiYoGarageDoor(udi_interface.Node):
         self.node.reportCmd('DOF')
 
     commands = {
-                    'TOGGLE': toggleDoor
+                    'TOGGLE': toggleDoor,
+                    'DON'   : toggleDoor,
+                    'DOF'   : toggleDoor,
                 }
 
 

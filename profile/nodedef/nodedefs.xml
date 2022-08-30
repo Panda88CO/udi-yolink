@@ -30,6 +30,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
@@ -61,6 +65,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
@@ -85,6 +93,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -106,6 +115,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
@@ -132,6 +145,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
+
             <cmd id="USBCTRL" > 
                <p id="" editor="usbctrl" init="1" /> 
             </cmd >
@@ -156,6 +173,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
+
             <cmd id="MANCTRL" > 
                <p id="" editor="manctrl" init="1" /> 
             </cmd >
@@ -207,6 +228,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -222,6 +244,9 @@
          <sends>
          </sends>
          <accepts>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
             <cmd id="TOGGLE" />  
          </accepts>
       </cmds>
@@ -243,6 +268,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -262,6 +288,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -284,6 +311,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -306,6 +334,11 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
+
+
             <cmd id="PLAY" /> 
             <cmd id="VOLUME" > 
                <p id="" editor="volume" init="GV0" />

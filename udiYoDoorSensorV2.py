@@ -152,6 +152,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
+                'QUERY' : update, 
                 }
 
 

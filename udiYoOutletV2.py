@@ -11,6 +11,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
 
+from ctypes import set_errno
 from os import truncate
 #import udi_interface
 #import sys
@@ -152,6 +153,21 @@ class udiYoOutlet(udi_interface.Node):
     def checkOnline(self):
         self.yoOutlet.refreshDevice()
 
+
+    def set_outlet_on(self):
+        logging.info('udiYoOutlet set_outlet_on')
+        self.yoOutlet.setState('ON')
+        self.node.setDriver('GV0',1 , True, True)
+        self.node.reportCmd('DON')
+
+    def set_outlet_off(self):
+        logging.info('udiYoOutlet set_outlet_off')
+        self.yoOutlet.setState('OFF')
+        self.node.setDriver('GV0',0 , True, True)
+        self.node.reportCmd('DOF')
+
+
+
     def switchControl(self, command):
         ctrl = int(command.get('value'))   
         logging.info('udiYoOutlet switchControl - {}'.format(ctrl))
@@ -197,6 +213,8 @@ class udiYoOutlet(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
+                'DON'   : set_outlet_on,
+                'DOF'   : set_outlet_off,
                 'SWCTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 

@@ -125,6 +125,22 @@ class udiYoSubOutlet(udi_interface.Node):
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, True)
                 #logging.debug('display update {}'.format(timeRemaining))
 
+   
+   
+    def set_port_on(self):
+        logging.info('udiYoSubOutlet set_port_on')
+        self.yolink.setMultiOutState(self.port, 'ON')
+        self.node.setDriver('GV0',1 , True, True)
+        self.node.reportCmd('DON')
+        self.portState = 1
+
+    def set_port_off(self):
+        logging.info('udiYoSubOutlet set_port_off')
+        self.yolink.setMultiOutState(self.port, 'OFF')
+        self.node.setDriver('GV0',0 , True, True)
+        self.node.reportCmd('DOF')
+        self.portState = 0
+
     def switchControl(self, command):
         logging.info('udiYoSubOutlet switchControl')
 
@@ -176,10 +192,13 @@ class udiYoSubOutlet(udi_interface.Node):
         self.yolink.refreshDevice()
 
     commands = {
-                'SWCTRL': switchControl, 
-                'ONDELAY' : setOnDelay,
+                'SWCTRL'   : switchControl, 
+                'ONDELAY'  : setOnDelay,
                 'OFFDELAY' : setOffDelay,
-                'UPDATE' : update
+                'UPDATE'   : update,
+                'QUERY'    : update,
+                'DON'      : set_port_on,
+                'DOF'      : set_port_off,
                 }
 
 
@@ -289,8 +308,19 @@ class udiYoSubUSB(udi_interface.Node):
                 self.portState = 1
 
   
+    def usb_on(self):
+        logging.info('udiYoSubUSB - usb_on')
+        self.yolink.setUsbState(self.usbPort, 'ON')
+        self.node.setDriver('GV0', 1, True, True)
+        self.node.reportCmd('DON')
+        self.portState = 1
 
-
+    def usb_off(self):
+        logging.info('udiYoSubUSB - usb_off')
+        self.yolink.setUsbState(self.usbPort, 'OFF')
+        self.node.setDriver('GV0', 0, True, True)
+        self.node.reportCmd('DOF')  
+        self.portState = 0    
 
     def update(self, command = None):
         logging.info('Update Status Executed')
@@ -298,7 +328,10 @@ class udiYoSubUSB(udi_interface.Node):
 
     commands = {
                  'USBCTRL': usbControl, 
-                 'UPDATE' : update
+                 'UPDATE' : update,
+                 'QUERY'  : updayte, 
+                 'DON'    : usb_on,
+                 'DOF'    : usb_off,
                 }
 
 class udiYoMultiOutlet(udi_interface.Node):
@@ -524,7 +557,8 @@ class udiYoMultiOutlet(udi_interface.Node):
 
 
     commands = {
-                'UPDATE': update                        
+                'UPDATE': update,
+                'QUERY' : update,                    
 
                 }
 

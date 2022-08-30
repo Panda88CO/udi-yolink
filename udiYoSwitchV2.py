@@ -145,6 +145,18 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSwitch.updateStatus(data)
         self.updateData()
  
+    def set_switch_on(self):
+        logging.info('udiYoSwitch set_switch_on')  
+        self.yoSwitch.setState('ON')
+        self.node.setDriver('GV0',1 , True, True)
+        self.node.reportCmd('DON')
+
+    def set_switch_off(self):
+        logging.info('udiYoSwitch set_switch_off')  
+        self.yoSwitch.setState('OFF')
+        self.node.setDriver('GV0',0 , True, True)
+        self.node.reportCmd('DOF')
+
 
     def switchControl(self, command):
         logging.info('udiYoSwitch switchControl') 
@@ -191,6 +203,9 @@ class udiYoSwitch(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
+                'QUERY' : update,
+                'DON'   : set_switch_on,
+                'DOF'   : set_switch_off,
                 'SWCTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 

@@ -151,6 +151,7 @@ class udiYoLeakSensor(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
+                'QUERY' : update
                 }
 
 

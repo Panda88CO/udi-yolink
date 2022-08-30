@@ -152,6 +152,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
+                'QUERY' : update
                 }
 
 
