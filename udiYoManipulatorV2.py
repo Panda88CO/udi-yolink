@@ -155,12 +155,12 @@ class udiYoManipulator(udi_interface.Node):
             self.yoManipulator.setState('OFF')
             self.node.reportCmd('DOF')
 
-    def set_open(self):
+    def set_open(self, command = None):
         logging.info('Manipulator - set_open')
         self.yoManipulator.setState('ON')
         self.node.reportCmd('DON')
 
-    def set_close(self):
+    def set_close(self, command = None):
         logging.info('Manipulator - set_close')
         self.yoManipulator.setState('OFF')
         self.node.reportCmd('DOF')
