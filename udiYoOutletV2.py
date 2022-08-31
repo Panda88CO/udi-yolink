@@ -158,13 +158,13 @@ class udiYoOutlet(udi_interface.Node):
         logging.info('udiYoOutlet set_outlet_on')
         self.yoOutlet.setState('ON')
         self.node.setDriver('GV0',1 , True, True)
-        self.node.reportCmd('DON')
+        #self.node.reportCmd('DON')
 
     def set_outlet_off(self, command = None):
         logging.info('udiYoOutlet set_outlet_off')
         self.yoOutlet.setState('OFF')
         self.node.setDriver('GV0',0 , True, True)
-        self.node.reportCmd('DOF')
+        #self.node.reportCmd('DOF')
 
 
 

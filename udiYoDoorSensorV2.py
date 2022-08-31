@@ -148,11 +148,14 @@ class udiYoDoorSensor(udi_interface.Node):
         logging.info('{} - Update Status Executed'.format(self.name))
         self.yoDoorSensor.refreshDevice()
        
-
+    def noop(self, command = None):
+        pass
 
     commands = {
                 'UPDATE': update,
                 'QUERY' : update, 
+                'DON'   : noop,
+                'DOF'   : noop
                 }
 
 

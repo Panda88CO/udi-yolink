@@ -148,10 +148,14 @@ class udiYoLeakSensor(udi_interface.Node):
         logging.info('THsensor Update Status Executed')
         self.yoLeakSensor.refreshDevice()
        
+    def noop(self, command = None):
+        pass
 
     commands = {
                 'UPDATE': update,
-                'QUERY' : update
+                'QUERY' : update, 
+                'DON'   : noop,
+                'DOF'   : noop
                 }
 
 

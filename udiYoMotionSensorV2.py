@@ -150,10 +150,16 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor.refreshDevice()
        
 
+    def noop(self, command = None):
+        pass
+
     commands = {
                 'UPDATE': update,
-                'QUERY' : update
+                'QUERY' : update, 
+                'DON'   : noop,
+                'DOF'   : noop
                 }
+
 
 
 

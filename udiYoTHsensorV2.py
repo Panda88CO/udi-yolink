@@ -172,9 +172,14 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor.refreshDevice()
        
 
+    def noop(self, command = None):
+        pass
+
     commands = {
                 'UPDATE': update,
-                'QUERY' : update,
+                'QUERY' : update, 
+                'DON'   : noop,
+                'DOF'   : noop
                 }
 
 

@@ -227,6 +227,8 @@
             <cmd id="DOF" editor="doorstate"  />    
          </sends>
          <accepts>
+            <cmd id="DON" /> 
+            <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
@@ -267,8 +269,11 @@
             <cmd id="DOF" editor="motionstate"  />    
          </sends>
          <accepts>
+            <cmd id="DON" /> 
+            <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
+            
          </accepts>
       </cmds>
    </nodeDef> 
@@ -287,6 +292,8 @@
             <cmd id="DOF" editor="waterstate"  />    
          </sends>
          <accepts>
+            <cmd id="DON" /> 
+            <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
@@ -310,6 +317,8 @@
             <cmd id="DOF" editor="vibrastate"  />    
          </sends>
          <accepts>
+            <cmd id="DON" /> 
+            <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
