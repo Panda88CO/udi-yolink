@@ -366,8 +366,10 @@ class YoLinkInitPAC(object):
 
             elif (rc == 5):
                 logging.error('Authentication error 5 - try again ')
+                yoAccess.client.loop_stop()
                 time.sleep(2)
                 yoAccess.token = None
+                yoAccess.connect_to_broker()
                 yoAccess.connectedToBroker = True
                 #yoAccess.connect_to_broker()
             else:
