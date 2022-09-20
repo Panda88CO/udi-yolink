@@ -247,9 +247,9 @@ class YoLinkInitPAC(object):
         #topicReportAll = 'yl-home/'+yoAccess.homeID+'/+/report'
         
         if not deviceId in yoAccess.mqttList :
-            yoAccess.client.subscribe(topicReq)
-            yoAccess.client.subscribe(topicResp)
-            yoAccess.client.subscribe(topicReport)
+            yoAccess.client.subscribe(topicReq, 2)
+            yoAccess.client.subscribe(topicResp, 2)
+            yoAccess.client.subscribe(topicReport,2)
 
             yoAccess.mqttList[deviceId] = { 'callback': callback, 
                                             'request': topicReq,
@@ -357,9 +357,9 @@ class YoLinkInitPAC(object):
                 if yoAccess.disconnect_occured:
                     logging.debug('Resubscribing devices after disconnect')
                     for deviceId in yoAccess.mqttList:
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['request'])
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['response'])
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['report'])
+                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['request'], 2)
+                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['response'], 2)
+                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['report'], 2)
                     
                     #yoAccess.clean_up_pending_Dict()
                 time.sleep(5)
@@ -434,7 +434,7 @@ class YoLinkInitPAC(object):
                 yoAccess.lastDataPacket[deviceId] = data
                 if deviceId in yoAccess.mqttList:
                     logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
-                    result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr)
+                    result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
                     #yoAccess.pendingDict[data['time']] = data
                     #logging.debug('PUT yoAccess.pendingDict {}'.format(len(yoAccess.pendingDict)))
                     #logging.debug('publish result: {}'.format(result.rc))
