@@ -16,8 +16,8 @@ CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
-CMD-nlsswitch-DON-NAME = Switched On
-CMD-nlsswitch-DOF-NAME = Switched Off
+CMD-nlsswitch-DON-NAME = Switch On
+CMD-nlsswitch-DOF-NAME = Switch Off
 
 ND-yooutlet-NAME = YoLink Outlet
 ND-yooutlet-ICON = Switch
@@ -32,8 +32,8 @@ CMD-nlsoutlet-UPDATE-NAME = Update Status
 CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
 CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
-CMD-nlsoutlet-DON-NAME = Switched On
-CMD-nlsoutlet-DOF-NAME = Switched Off
+CMD-nlsoutlet-DON-NAME = Switch On
+CMD-nlsoutlet-DOF-NAME = Switch Off
 
 ND-yomultiout-NAME = YoLink Outlet
 ND-yomultiout-ICON = Switch
@@ -53,8 +53,8 @@ CMD-nlsubout-UPDATE-NAME = Update Status
 CMD-nlsubout-SWCTRL-NAME =  Outlet control
 CMD-nlsubout-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsubout-OFFDELAY-NAME =  Set Off Delay (min)
-CMD-nlsubout-DON-NAME = Switched On
-CMD-nlsubout-DOF-NAME = Switched Off
+CMD-nlsubout-DON-NAME = Switch On
+CMD-nlsubout-DOF-NAME = Switch Off
 
 
 
