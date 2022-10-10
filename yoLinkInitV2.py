@@ -20,7 +20,7 @@ countdownTimerUpdateInterval_G = 10
 import paho.mqtt.client as mqtt
 from queue import Queue
 from threading import Thread, Event
-DEBUG = True
+DEBUG = False
 
 
 class YoLinkInitPAC(object):
