@@ -177,7 +177,7 @@ ND-yolock-NAME = YoLink Smart Lock
 ND-yolock-ICON = DoorLock
 ST-nlslock-GV0-NAME = Lock State
 ST-nlslock-GV1-NAME = Battery Level
-ST-nlslock-GV1-NAME = Door Bell Active
+ST-nlslock-GV2-NAME = Door Bell Active
 ST-nlslock-GV8-NAME = Device Online
 ST-nlslock-ST-NAME = Nodeserver Status
 CMD-nlslock-UPDATE-NAME = Update Lock Status
@@ -190,13 +190,13 @@ CMD-nlslock-LOCKCTRL-NAME = Set Lock
 
 lockstate-0 = Unlocked
 lockstate-1 = Locked
-lockstate-99 = unknown
+lockstate-99 = Unknown
 
 lock-0 = Unlocked
 lock-1 = Locked
 
 doorbell-0 = Idle
-doorvell-1 = Activated
+doorbell-1 = Activated
 
 tempunit-0 = Celcius
 tempunit-1 = Fahrenheit

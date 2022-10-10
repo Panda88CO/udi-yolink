@@ -357,7 +357,7 @@ class YoLinkInitPAC(object):
         Callback for broker published events
         """
         yoAccess.messageQueue.put(msg)
-        logging.debug('Message: {}'.format(msg) )
+        logging.debug('Message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )
         logging.debug('Message received and put in queue (size : {})'.format(yoAccess.messageQueue.qsize()))
 
     #def obtain_connection (yoAccess):
