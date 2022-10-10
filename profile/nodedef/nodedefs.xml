@@ -25,15 +25,20 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="swstate"  />               
-            <cmd id="DOF" editor="swstate"  />   
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />
+            <cmd id="DFON"  />               
+            <cmd id="DFOF"  />    
+      
          </sends>
-         <accepts>
-            <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
 
+         <accepts>
+            <cmd id="UPDATE"  /> 
+            <cmd id="DON"  /> 
+            <cmd id="DOF"  /> 
+            <cmd id="DFON"  /> 
+            <cmd id="DFOF"  /> 
+            <cmd id="QUERY" /> 
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
@@ -90,6 +95,7 @@
       </sts>
       <cmds>
          <sends>
+
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -111,7 +117,8 @@
       <cmds>
          <sends>
             <cmd id="DON" editor="swstate"  />               
-            <cmd id="DOF" editor="swstate"  />             
+            <cmd id="DOF" editor="swstate"  />    
+      
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -209,6 +216,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="QUERY" />             
          </accepts>
       </cmds>
    </nodeDef> 
@@ -223,8 +231,8 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="doorstate"  />               
-            <cmd id="DOF" editor="doorstate"  />    
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
          </sends>
          <accepts>
             <cmd id="DON" /> 
@@ -290,6 +298,7 @@
          <sends>
             <cmd id="DON" editor="waterstate"  />               
             <cmd id="DOF" editor="waterstate"  />    
+
          </sends>
          <accepts>
             <cmd id="DON" /> 
@@ -315,6 +324,7 @@
          <sends>
             <cmd id="DON" editor="vibrastate"  />               
             <cmd id="DOF" editor="vibrastate"  />    
+
          </sends>
          <accepts>
             <cmd id="DON" /> 
@@ -371,5 +381,33 @@
          </accepts>
       </cmds>
    </nodeDef> 
+   <nodeDef id="yolock" nls="nlslock">
+      <editors />
+      <sts>
+         <st id="GV0" editor="lockstate" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="doorbell" />
+         <st id="GV8" editor="online" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" editor="lock"  />               
+            <cmd id="DOF" editor="lock"  />    
+         </sends>
+         <accepts>
+            <!-- <cmd id="DON" />
+            <cmd id="DOF" />    -->
+            <cmd id="LOCK" /> 
+            <cmd id="UNLOCK" /> 
+            <cmd id="LOCKCTRL" >   
+               <p id="" editor="lock" init="GV0" />
+            </cmd > 
+            <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
    
 </nodeDefs> 
