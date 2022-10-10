@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-
-
-from pickle import FALSE
 import requests
 import time
 import json
@@ -255,14 +252,12 @@ class YoLinkInitPAC(object):
             yoAccess.get_access_token()
                    
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-            #yoAccess.obtain_connection()
-            #yoAccess.client.will_set()
             yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
             yoAccess.connectedToBroker = True
             time.sleep(5)              
             yoAccess.client.loop_start()
 
-            yoAccess.client.will_set()
+            #yoAccess.client.will_set()
 
         except Exception as e:
             logging.error('Exception  - connect_to_broker: {}'.format(e))
