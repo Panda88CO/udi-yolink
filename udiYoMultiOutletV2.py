@@ -224,11 +224,11 @@ class udiYoSubUSB(udi_interface.Node):
 
         #self.port = port
         logging.debug('udiYoSubUSB - init - port {}'.format(self.usbPort))
-
+        self.n_queue = []
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []
+       
 
         # start processing events and create add our controller node
         self.poly.ready()

@@ -42,7 +42,7 @@ class udiYoManipulator(udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         logging.debug('udiYoManipulator INIT- {}'.format(deviceInfo['name']))
-        elf.n_queue = []
+        self.n_queue = []
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoManipulator = None
