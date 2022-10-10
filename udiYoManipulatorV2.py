@@ -52,7 +52,6 @@ class udiYoManipulator(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        s
 
         # start processing events and create add our controller node
         polyglot.ready()
