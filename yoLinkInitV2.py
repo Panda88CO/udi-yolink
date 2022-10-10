@@ -30,7 +30,8 @@ class YoLinkInitPAC(object):
         yoAccess.messageLock = Lock()
         yoAccess.publishQueue = Queue()
         yoAccess.messageQueue = Queue()
-        yoAccess.fileQueue = Queue()
+        if DEBUG:
+            yoAccess.fileQueue = Queue()
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
         yoAccess.time_since_last_message_RX = 0
@@ -85,7 +86,8 @@ class YoLinkInitPAC(object):
             
             yoAccess.messageThread = Thread(target = yoAccess.process_message )
             yoAccess.publishThread = Thread(target = yoAccess.transfer_data )
-            yoAccess.fileThread =  Thread(target = yoAccess.save_packet_info )
+            if DEBUG:
+                yoAccess.fileThread =  Thread(target = yoAccess.save_packet_info )
             #yoAccess.connectionMonitorThread = Thread(target = yoAccess.connection_monitor)
 
             yoAccess.messageThread.start()
