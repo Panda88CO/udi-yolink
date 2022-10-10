@@ -20,7 +20,7 @@ from yolinkLockV2 import YoLink_lock
 
 
 
-class udiYo_lock(udi_interface.Node):
+class udiYoLock(udi_interface.Node):
     id = 'yolock'
     '''
        drivers = [
