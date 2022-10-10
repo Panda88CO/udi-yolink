@@ -109,7 +109,7 @@ class udiYoLock(udi_interface.Node):
                     self.node.setDriver('GV0', 99, True, True)
                 battery = self.yoLock.getBattery()
                 self.node.setDriver('GV1', battery, True, True)
-                if None == self.yolink.getDoorBellRing():
+                if None == self.yoLock.getDoorBellRing():
                     self.node.setDriver('GV2', 0, True, True)
                 else:
                     self.node.setDriver('GV2', 1, True, True)
