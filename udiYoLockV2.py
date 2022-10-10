@@ -43,10 +43,9 @@ class udiYoLock(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
 
         logging.debug('udiYoOutlet INIT- {}'.format(deviceInfo['name']))
-
+        self.n_queue = []   
         
         self.yoAccess = yoAccess
-
         self.devInfo =  deviceInfo   
         self.yoLock = None
         self.powerSupported = True # assume 
@@ -54,7 +53,7 @@ class udiYoLock(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []        
+             
 
         # start processing events and create add our controller node
         polyglot.ready()
