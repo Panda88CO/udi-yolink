@@ -65,7 +65,6 @@ class udiYoSwitch(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
     
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -82,12 +81,8 @@ class udiYoSwitch(udi_interface.Node):
         time.sleep(2)
         self.yoSwitch.initNode()
         time.sleep(2)
-        if not self.yoSwitch.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
-
-        else:
-            self.node.setDriver('ST', 1, True, True)
-            self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.node.setDriver('ST', 1, True, True)
+        self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
 
 
 
@@ -123,7 +118,6 @@ class udiYoSwitch(udi_interface.Node):
        if self.node is not None:
             state =  self.yoSwitch.getState().upper()
             if self.yoSwitch.online:
-                self.node.setDriver('ST', 1)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                     self.node.reportCmd('DON')  

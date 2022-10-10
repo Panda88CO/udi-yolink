@@ -51,7 +51,7 @@ class udiYoTHsensor(udi_interface.Node):
             ]
 
 
-    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo, temp_unit):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
@@ -60,7 +60,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
-        self.temp_unit = temp_unit
+        self.temp_unit = self.yoAccess.get_temp_unit()
         #self.address = address
         #self.poly = polyglot
 
@@ -97,13 +97,8 @@ class udiYoTHsensor(udi_interface.Node):
         time.sleep(2)
         self.yoTHsensor.initNode()
         time.sleep(2)
-        if not self.yoTHsensor.online:
-            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))            
-            #self.yoTHsensor.shut_down()
-            #if self.node:
-            #    self.poly.delNode(self.node.address)
-        else:
-            self.node.setDriver('ST', 1, True, True)
+        self.temp_unit = self.yoAccess.get_temp_unit()
+        self.node.setDriver('ST', 1, True, True)
 
     def initNode(self):
         self.yoTHsensor.refreshSensor()
@@ -128,7 +123,6 @@ class udiYoTHsensor(udi_interface.Node):
         alarms = self.yoTHsensor.getAlarms()
         if self.node is not None:
             if self.yoTHsensor.online:
-                self.node.setDriver('ST', 1)
                 logging.debug("yoTHsensor temp: {}".format(self.yoTHsensor.getTempValueC()))
                 if self.temp_unit == 0:
                     self.node.setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC(),1), True, True, 4)

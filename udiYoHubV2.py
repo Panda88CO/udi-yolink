@@ -66,7 +66,7 @@ class udiYoHub(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        
     
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -82,14 +82,13 @@ class udiYoHub(udi_interface.Node):
         self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoHub.initNode()
+        self.node.setDriver('ST', 1, True, True)
         
-        
-        if not self.yoHub.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
-
-        else:
-            self.node.setDriver('ST', 1, True, True)
-        #time.sleep(3)
+        #if not self.yoHub.online:
+        #    logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
+        #else:
+        #    self.node.setDriver('ST', 1, True, True)
+        time.sleep(3)
 
     def updateDelayCountdown (self, delayRemaining ) :
         logging.debug('updateDelayCountdown {}'.format(delayRemaining))
@@ -113,7 +112,6 @@ class udiYoHub(udi_interface.Node):
         if self.node is not None:
             state =  self.yoHub.getState().upper()
             if self.yoHub.online:
-                self.node.setDriver('ST', 1)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                 elif  state == 'OFF':

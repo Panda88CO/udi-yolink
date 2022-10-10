@@ -60,7 +60,7 @@ class udiYoLock(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -78,9 +78,8 @@ class udiYoLock(udi_interface.Node):
         time.sleep(2)
         self.yoLock.initNode()
         time.sleep(2)
-        if not self.yoLock.online:
-            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))       
-            self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 1, True, True)
+
 
     def stop (self):
         logging.info('Stop udiYoOutlet')
@@ -97,15 +96,12 @@ class udiYoLock(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if  self.yoLock.online:
-                self.node.setDriver('ST', 1)
                 state = str(self.yoLock.getState()).upper()
                 logging.debug('Lock state: {}'.format(state))
                 if state == 'LOCK':
                     self.node.setDriver('GV0', 1, True, True)
-                    #self.node.reportCmd('DON')  
                 elif state == 'UNLOCK' :
                     self.node.setDriver('GV0', 0, True, True)
-                    #self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 battery = self.yoLock.getBattery()

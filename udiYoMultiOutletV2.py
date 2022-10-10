@@ -55,7 +55,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         time.sleep(1)
-        self.node.setDriver('ST', 1, True, True)
+        
         self.node.setDriver('GV4', self.port, True, True)
         
     def node_queue(self, data):
@@ -69,7 +69,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-
+        self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutPortState(self.port)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -236,7 +236,7 @@ class udiYoSubUSB(udi_interface.Node):
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         time.sleep(1)
-        self.node.setDriver('ST', 1, True, True)
+        
 
 
     def node_queue(self, data):
@@ -252,6 +252,7 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB - start')
+        self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -392,7 +393,9 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.subNodesReady = False
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
+
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
+        self.node.setDriver('ST', 1, True, True)
         time.sleep(5)
         self.yoMultiOutlet.initNode()
         time.sleep(2)
@@ -402,7 +405,6 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.nbrOutlets = 0
 
         else:
-            
             self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             time.sleep(2)
             logging.debug('multiOutlet past initNode')
@@ -441,7 +443,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.usbExists = True
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subUsbAdr[usb], e))
-            self.node.setDriver('ST', 1, True, True)
+           
             self.subNodesReady = True
             self.createdNodes = self.poly.getNodes()
             logging.info('udiYoMultiOutlet - finished creating sub nodes')

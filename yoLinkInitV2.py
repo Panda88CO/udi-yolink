@@ -30,8 +30,7 @@ class YoLinkInitPAC(object):
         yoAccess.messageLock = Lock()
         yoAccess.publishQueue = Queue()
         yoAccess.messageQueue = Queue()
-        if DEBUG:
-            yoAccess.fileQueue = Queue()
+        yoAccess.debug = False
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
         yoAccess.time_since_last_message_RX = 0
@@ -86,8 +85,7 @@ class YoLinkInitPAC(object):
             
             yoAccess.messageThread = Thread(target = yoAccess.process_message )
             yoAccess.publishThread = Thread(target = yoAccess.transfer_data )
-            if DEBUG:
-                yoAccess.fileThread =  Thread(target = yoAccess.save_packet_info )
+            yoAccess.fileThread =  Thread(target = yoAccess.save_packet_info )
             #yoAccess.connectionMonitorThread = Thread(target = yoAccess.connection_monitor)
 
             yoAccess.messageThread.start()
@@ -302,7 +300,7 @@ class YoLinkInitPAC(object):
                     logging.debug('Unknow device in payload : {}'.format(payload))
 
                 logging.debug('process_message for {}: {} {}'.format(deviceId, msg.topic, payload))
-                #DEBUG = logging.root.level <= logging.DEBUG
+                #yoAccess.debug = logging.root.level <= logging.DEBUG
                 if deviceId in yoAccess.mqttList:
 
                     tempCallback = yoAccess.mqttList[deviceId]['callback']
@@ -312,7 +310,7 @@ class YoLinkInitPAC(object):
                     #    logging.debug('POP {} yoAccess.pendingDict {}:{}'.format(payload['msgid'] ,len(yoAccess.pendingDict), yoAccess.pendingDict))
                     if  msg.topic == yoAccess.mqttList[deviceId]['report']:                    
                         tempCallback(payload)
-                        if DEBUG:
+                        if yoAccess.debug:
                                 fileData= {}
                                 fileData['type'] = 'EVENT'
                                 fileData['data'] = payload 
@@ -324,7 +322,7 @@ class YoLinkInitPAC(object):
                         else:
                             logging.error('Non-000000 code {}: {}'.format(payload['desc'], str(json.dumps(payload))))
                             tempCallback(payload)
-                        if DEBUG:
+                        if yoAccess.debug:
                             fileData= {}
                             fileData['type'] = 'RESP'
                             fileData['data'] = payload 
@@ -332,7 +330,7 @@ class YoLinkInitPAC(object):
                             
                     elif msg.topic == yoAccess.mqttList[deviceId]['request']:
                         #transmitted message
-                        if DEBUG:
+                        if yoAccess.debug:
                             fileData= {}
                             fileData['type'] = 'REQ'
                             fileData['data'] = payload
@@ -340,7 +338,7 @@ class YoLinkInitPAC(object):
 
                     else:
                         logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
-                        if DEBUG:
+                        if yoAccess.debug:
                             fileData= {}
                             fileData['type'] = 'MISC'
                             fileData['data'] = payload
@@ -505,7 +503,7 @@ class YoLinkInitPAC(object):
 
                     return (False)
                 
-                #if DEBUG:
+                #if yoAccess.debug:
                 #    fileData = {}
                 #    fileData['type'] = 'REQ'
                 #    fileData['data'] = data
@@ -581,6 +579,9 @@ class YoLinkInitPAC(object):
 
     def get_temp_unit(yoAccess):
         return(yoAccess.temp_unit)
+
+    def set_debug(yoAccess, debug):
+        yoAccess.debug = debug
 
 class YoLinkInitCSID(object):
     def __init__(yoAccess,  csName, csid, csSeckey, yoAccess_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003 ):

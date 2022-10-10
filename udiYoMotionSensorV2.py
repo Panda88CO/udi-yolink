@@ -81,11 +81,7 @@ class udiYoMotionSensor(udi_interface.Node):
         time.sleep(2)
         self.yoMotionsSensor.initNode()
         time.sleep(2)
-        if not self.yoMotionsSensor.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))
-
-        else:
-            self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
 
     
     def stop (self):
@@ -116,7 +112,6 @@ class udiYoMotionSensor(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if self.yoMotionsSensor.online:
-                self.node.setDriver('ST', 1)
                 motion_state = self.getMotionState()
                 if motion_state == 1:
                     self.node.setDriver('GV0', 1, True, True)

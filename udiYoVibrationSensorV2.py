@@ -79,11 +79,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         time.sleep(2)
         self.yoVibrationSensor.initNode()
         time.sleep(2)
-        if not self.yoVibrationSensor.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))
-
-        else:
-            self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
 
     
     def stop (self):
@@ -103,8 +99,7 @@ class udiYoVibrationSensor(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            if self.yoVibrationSensor.online:
-                self.node.setDriver('ST', 1)
+            if self.yoVibrationSensor.online:               
                 vib_state = self.getVibrationState()
                 if vib_state == 1:
                     self.node.setDriver('GV0', 1, True, True)

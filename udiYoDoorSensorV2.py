@@ -61,6 +61,7 @@ class udiYoDoorSensor(udi_interface.Node):
         self.node = self.poly.getNode(address)
         
 
+
     def node_queue(self, data):
         self.n_queue.append(data['address'])
 
@@ -76,11 +77,12 @@ class udiYoDoorSensor(udi_interface.Node):
         time.sleep(2)
         self.yoDoorSensor.initNode()
         time.sleep(2)
-        if not self.yoDoorSensor.online:
-            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
+        self.node.setDriver('ST', 1, True, True)
+        #if not self.yoDoorSensor.online:
+        #    logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
 
-        else:
-            self.node.setDriver('ST', 1, True, True)
+        #else:
+        #    self.node.setDriver('ST', 1, True, True)
 
 
     '''
@@ -117,7 +119,6 @@ class udiYoDoorSensor(udi_interface.Node):
 
         if self.node is not None:
             if self.yoDoorSensor.online:
-                self.node.setDriver('ST', 1)
                 doorstate = self.doorState()
                 if doorstate == 1:
                     self.node.setDriver('GV0', 1 , True, True)

@@ -82,13 +82,8 @@ class udiYoOutlet(udi_interface.Node):
         time.sleep(2)
         self.yoOutlet.initNode()
         time.sleep(2)
-        if not self.yoOutlet.online:
-            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))       
-            self.node.setDriver('ST', 0, True, True)
-
-        else:
-            self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
-            self.node.setDriver('ST', 1, True, True)
+        self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.node.setDriver('ST', 1, True, True)
     
     def stop (self):
         logging.info('Stop udiYoOutlet')
@@ -105,7 +100,6 @@ class udiYoOutlet(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if  self.yoOutlet.online:
-                self.node.setDriver('ST', 1)
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
                     self.node.setDriver('GV0',1 , True, True)
