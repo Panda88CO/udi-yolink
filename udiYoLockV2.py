@@ -99,10 +99,11 @@ class udiYoLock(udi_interface.Node):
             if  self.yoLock.online:
                 self.node.setDriver('ST', 1)
                 state = str(self.yoLock.getState()).upper()
-                if state == 'LOCKED':
+                logging.debug('Lock state: {}'.format(state))
+                if state == 'LOCK':
                     self.node.setDriver('GV0', 1, True, True)
                     #self.node.reportCmd('DON')  
-                elif state == 'UNLOCKED' :
+                elif state == 'UNLOCK' :
                     self.node.setDriver('GV0', 0, True, True)
                     #self.node.reportCmd('DOF')  
                 else:

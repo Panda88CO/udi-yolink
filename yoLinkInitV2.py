@@ -136,11 +136,11 @@ class YoLinkInitPAC(object):
                     )
                 
                 temp = response.json()
-                logging.debug('yoAccess Token : {}'.format(temp))
+                #logging.debug('yoAccess Token : {}'.format(temp))
                 if 'state' not in temp:
                     yoAccess.token = temp
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in'] + now )
-                    logging.debug('yoAccess Token : {}'.format(yoAccess.token ))
+                    #logging.debug('yoAccess Token : {}'.format(yoAccess.token ))
                 else:
                     if temp['state'] != 'error':
                         logging.error('Authentication error')
