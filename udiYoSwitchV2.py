@@ -50,7 +50,7 @@ class udiYoSwitch(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSwitch = None
-
+        self.n_queue = [] 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -58,7 +58,7 @@ class udiYoSwitch(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []        
+               
 
         # start processing events and create add our controller node
         polyglot.ready()

@@ -45,7 +45,7 @@ class udiYoDoorSensor(udi_interface.Node):
         self.yoAccess = yoAccess
         self.name = name
         logging.debug('udiYoDoorSensor INIT - {}'.format(deviceInfo['name']))
-
+        self.n_queue = []
         
 
 
@@ -53,7 +53,7 @@ class udiYoDoorSensor(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []
+        
 
         polyglot.ready()
         self.poly.addNode(self)

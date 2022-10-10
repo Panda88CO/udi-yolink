@@ -42,9 +42,8 @@ class udiYoManipulator(udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         logging.debug('udiYoManipulator INIT- {}'.format(deviceInfo['name']))
-   
+        elf.n_queue = []
         self.yoAccess = yoAccess
-
         self.devInfo =  deviceInfo   
         self.yoManipulator = None
 
@@ -53,7 +52,7 @@ class udiYoManipulator(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []
+        s
 
         # start processing events and create add our controller node
         polyglot.ready()

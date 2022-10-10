@@ -43,11 +43,11 @@ class udiYoSubOutlet(udi_interface.Node):
         self.port  = int(portStr.pop())
         #self.port = int(port )
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
-    
+        self.n_queue = [] 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []   
+          
 
 
         self.poly.ready()

@@ -53,7 +53,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSpeakerHub = None
-        
+        self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -62,7 +62,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []        
+                
         
 
 

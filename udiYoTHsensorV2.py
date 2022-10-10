@@ -56,11 +56,10 @@ class udiYoTHsensor(udi_interface.Node):
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         #  
         logging.debug('udiYoTHsensor INIT- {}'.format(deviceInfo['name']))
-
+        self.n_queue = []  
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
-        
         self.temp_unit = temp_unit
         #self.address = address
         #self.poly = polyglot
@@ -72,7 +71,7 @@ class udiYoTHsensor(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []               
+                     
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
