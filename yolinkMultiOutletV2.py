@@ -94,6 +94,16 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         return(status)
     
 
+    def data_updated(yolink):
+        tmp = yolink.lastUpdate()
+        if ( tmp > yolink.lastUpdateTime):
+            yolink.lastUpdateTime = tmp 
+            logging.debug('{} - Data Updated'.format(yolink.type))
+            return(True)
+        else:
+            return(False)
+
+
     def setUsbState (yolink, port, state):
         logging.info('usbSetState')
      

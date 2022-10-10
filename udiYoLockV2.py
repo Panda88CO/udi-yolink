@@ -85,8 +85,7 @@ class udiYoLock(udi_interface.Node):
         logging.info('Stop udiYoOutlet')
         self.node.setDriver('ST', 0, True, True)
         self.yoLock.shut_down()
-        #if self.node:
-        #    self.poly.delNode(self.node.address)
+
 
     def checkDataUpdate(self):
         if self.yoLock.data_updated():
@@ -165,6 +164,7 @@ class udiYoLock(udi_interface.Node):
     def update(self, command = None):
         logging.info('Update Status Executed')
         self.yoLock.refreshDevice()
+        
  
 
 

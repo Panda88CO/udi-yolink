@@ -218,31 +218,37 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoSwitch(self.poly, name, name, self.deviceList[dev]['name'],  self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']
+
                 elif self.deviceList[dev]['type'] == 'THSensor':      
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoTHsensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev])
                     self.Parameters[name] =  self.deviceList[dev]['name']
+
                 elif self.deviceList[dev]['type'] == 'MultiOutlet':
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoMultiOutlet(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']                
+
                 elif self.deviceList[dev]['type'] == 'DoorSensor':
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoDoorSensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']            
+
                 elif self.deviceList[dev]['type'] == 'Manipulator':
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoManipulator(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']                
+
                 elif self.deviceList[dev]['type'] == 'MotionSensor':     
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoMotionSensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']      
+
                 elif self.deviceList[dev]['type'] == 'VibrationSensor':     
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
@@ -254,22 +260,26 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoOutlet(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']
+
                 elif self.deviceList[dev]['type'] == 'GarageDoor': 
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoGarageDoor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']     
+
                 elif self.deviceList[dev]['type'] == 'Finger': 
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoGarageFinger(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']                       
+
                 elif self.deviceList[dev]['type'] == 'Lock': 
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoLock(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']                       
                 elif self.deviceList[dev]['type'] == 'InfraredRemoter': 
+
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     #udiYoInfraredRemoter(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
