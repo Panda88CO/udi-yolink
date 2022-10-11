@@ -31,7 +31,7 @@
      
 
 ## Notes 
-    One node server can only handle 1 home - you can get credential for each home in teh APP by selecting the home and get credentials - multiple credentials can exist at the same time, but ther node server can only handle one
+    One node server can only handle 1 home - you can get credential for each home in the APP by selecting the home and get credentials - multiple credentials can exist at the same time, but ther node server can only handle one
 
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
 
