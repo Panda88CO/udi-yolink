@@ -526,16 +526,18 @@ class YoLinkInitPAC(object):
             except Exception as e:
                 #logging.debug('Data  Queue looping {}'.format(e))
                 # Check if no activity for a while - 
-                if yoAccess.lastTransferTime + yoAccess.timeExpMarging + 900 <= time.time():
-                    logging.info('No Activity in {} sec - trying to reacquire token'.format(time.time() - yoAccess.lastTransferTime))
-                    yoAccess.get_access_token() 
-                    yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-                    yoAccess.client.reconnect()
+                #if yoAccess.lastTransferTime + yoAccess.timeExpMarging + 900 <= time.time():
+                #    logging.info('No Activity in {} sec - trying to reacquire token'.format(time.time() - yoAccess.lastTransferTime))
+                #    yoAccess.get_access_token() 
+                #    yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
+                    
+                    
+                    #yoAccess.client.reconnect()
                     #yoAccess.client.loop_stop()
                     #yoAccess.client.disconnect()
                     #yoAccess.connect_to_broker()
-                    yoAccess.lastTransferTime = time.time()
-                    time.sleep(60)
+                #    yoAccess.lastTransferTime = time.time()
+                #    time.sleep(60)
 
                 pass # go wait again unless stop is called
 
