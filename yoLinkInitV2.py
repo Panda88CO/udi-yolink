@@ -421,8 +421,8 @@ class YoLinkInitPAC(object):
             #time.sleep(1)
             #logging.debug('Subsribe: ' + yoAccess.topicResp + ', '+yoAccess.topicReport+', '+ yoAccess.topicReportAll )
 
-        except Exception as E:
-            logging.error('Exception  -  on_connect: ' + str(E))       
+        except Exception as e:
+            logging.error('Exception  -  on_connect: ' + str(e))       
 
 
     def on_disconnect(yoAccess, client, userdata,rc=0):
