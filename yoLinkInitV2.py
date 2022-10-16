@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-
-
 import requests
 import time
 import json
-import os
+import psutil
+
 from threading import Lock
 from  datetime import datetime
 try:
@@ -21,7 +20,7 @@ countdownTimerUpdateInterval_G = 10
 import paho.mqtt.client as mqtt
 from queue import Queue
 from threading import Thread, Event
-DEBUG = True
+DEBUG = False
 
 
 class YoLinkInitPAC(object):
@@ -31,7 +30,7 @@ class YoLinkInitPAC(object):
         yoAccess.messageLock = Lock()
         yoAccess.publishQueue = Queue()
         yoAccess.messageQueue = Queue()
-        yoAccess.fileQueue = Queue()
+        yoAccess.debug = False
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
         yoAccess.time_since_last_message_RX = 0
@@ -39,6 +38,7 @@ class YoLinkInitPAC(object):
         yoAccess.apiv2URL = pacURL
         yoAccess.mqttURL = mqttURL
         yoAccess.mqttPort = mqttPort
+        yoAccess.connectedToBroker = False
         yoAccess.uaID = uaID
         yoAccess.secID = secID
         yoAccess.apiType = 'UAC'
@@ -74,7 +74,7 @@ class YoLinkInitPAC(object):
 
             #if yoAccess.client == None:    
       
-            logging.debug('initialize MQTT' )
+            #logging.debug('initialize MQTT' )
             yoAccess.client = mqtt.Client(yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
             yoAccess.client.on_connect = yoAccess.on_connect
             yoAccess.client.on_message = yoAccess.on_message
@@ -94,6 +94,7 @@ class YoLinkInitPAC(object):
             yoAccess.connect_to_broker()
             #yoAccess.connectionMonitorThread.start()
             
+            #logging.debug('Connectoin Established: {}'.format(yoAccess.check_connection( yoAccess.mqttPort )))
             
         except Exception as E:
             logging.error('Exception - init- MQTT: {}'.format(E))
@@ -101,7 +102,21 @@ class YoLinkInitPAC(object):
         yoAccess.messagePending = False
 
     #######################################
+    #check if connected to YoLink Cloud server
 
+    def check_connection(yoAccess, port):
+        logging.debug( 'check_connection: port {}'.format(port))
+        connectons = psutil.net_connections()
+        #logging.debug('connections: {}'.format(connectons))
+        for netid in connectons:
+            raddr = netid.raddr
+            if len (raddr) > 0:
+                if  port == raddr.port:
+                    logging.debug('found : {} {}'.format(raddr.port, netid.status ))
+                    return(netid)
+        else:
+
+            return(None)
 
 
     #####################################
@@ -110,6 +125,7 @@ class YoLinkInitPAC(object):
         return(yoAccess.deviceList)
 
     def request_new_token(yoAccess):
+        logging.debug('yoAccess Token : {}'.format(yoAccess.token ))
         if yoAccess.token == None:
             try:
                 now = int(time.time())
@@ -120,14 +136,21 @@ class YoLinkInitPAC(object):
                     )
                 
                 temp = response.json()
-                yoAccess.token = temp
-                yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in'] + now )
+                #logging.debug('yoAccess Token : {}'.format(temp))
+                if 'state' not in temp:
+                    yoAccess.token = temp
+                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in'] + now )
+                    #logging.debug('yoAccess Token : {}'.format(yoAccess.token ))
+                else:
+                    if temp['state'] != 'error':
+                        logging.error('Authentication error')
                 return(True)
 
             except Exception as e:
                 logging.debug('Exeption occcured during request_new_token : {}'.format(e))
                 return(False)
         else:
+
             return(True) # use existing Token 
 
     def refresh_token(yoAccess):
@@ -135,19 +158,20 @@ class YoLinkInitPAC(object):
         try:
             logging.info('Refreshing Token ')
             now = int(time.time())
-            if yoAccess.token == None:
-                response = requests.post( yoAccess.tokenURL,
-                    data={"grant_type": "refresh_token",
-                        "client_id" :  yoAccess.uaID,
-                        "refresh_token":yoAccess.token['refresh_token'],
-                        }
-                )
-                temp =  response.json()
+            #if yoAccess.token == None:
+            response = requests.post( yoAccess.tokenURL,
+                data={"grant_type": "refresh_token",
+                    "client_id" :  yoAccess.uaID,
+                    "refresh_token":yoAccess.token['refresh_token'],
+                    }
+            )
+            yoAccess.token =  response.json()
+            yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now 
+
             #if temp['access_token'] != yoAccess.token['access_token'] :
             #    yoAccess.token = temp
             #    yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
             #    #need to check if device tokens change with new access token
-            yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now 
             return(True)
 
         except Exception as e:
@@ -223,18 +247,17 @@ class YoLinkInitPAC(object):
         """
         Connect to MQTT broker
         """
-        yoAccess.get_access_token()
-        #yoAccess.client.loop_stop()
-        #yoAccess.client.disconnect()
         try: 
             logging.info("Connecting to broker...")
+            yoAccess.get_access_token()
+                   
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-            #yoAccess.obtain_connection()
             yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
-            time.sleep(5)
-            #while not yoAccess.connectedToBroker:              
-            #    yoAccess.obtain_connection()                    
+            yoAccess.connectedToBroker = True
+            time.sleep(5)              
             yoAccess.client.loop_start()
+
+            #yoAccess.client.will_set()
 
         except Exception as e:
             logging.error('Exception  - connect_to_broker: {}'.format(e))
@@ -277,7 +300,7 @@ class YoLinkInitPAC(object):
                     logging.debug('Unknow device in payload : {}'.format(payload))
 
                 logging.debug('process_message for {}: {} {}'.format(deviceId, msg.topic, payload))
-                #DEBUG = logging.root.level <= logging.DEBUG
+                #yoAccess.debug = logging.root.level <= logging.DEBUG
                 if deviceId in yoAccess.mqttList:
 
                     tempCallback = yoAccess.mqttList[deviceId]['callback']
@@ -287,7 +310,7 @@ class YoLinkInitPAC(object):
                     #    logging.debug('POP {} yoAccess.pendingDict {}:{}'.format(payload['msgid'] ,len(yoAccess.pendingDict), yoAccess.pendingDict))
                     if  msg.topic == yoAccess.mqttList[deviceId]['report']:                    
                         tempCallback(payload)
-                        if DEBUG:
+                        if yoAccess.debug:
                                 fileData= {}
                                 fileData['type'] = 'EVENT'
                                 fileData['data'] = payload 
@@ -299,7 +322,7 @@ class YoLinkInitPAC(object):
                         else:
                             logging.error('Non-000000 code {}: {}'.format(payload['desc'], str(json.dumps(payload))))
                             tempCallback(payload)
-                        if DEBUG:
+                        if yoAccess.debug:
                             fileData= {}
                             fileData['type'] = 'RESP'
                             fileData['data'] = payload 
@@ -307,7 +330,7 @@ class YoLinkInitPAC(object):
                             
                     elif msg.topic == yoAccess.mqttList[deviceId]['request']:
                         #transmitted message
-                        if DEBUG:
+                        if yoAccess.debug:
                             fileData= {}
                             fileData['type'] = 'REQ'
                             fileData['data'] = payload
@@ -315,7 +338,7 @@ class YoLinkInitPAC(object):
 
                     else:
                         logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
-                        if DEBUG:
+                        if yoAccess.debug:
                             fileData= {}
                             fileData['type'] = 'MISC'
                             fileData['data'] = payload
@@ -334,6 +357,7 @@ class YoLinkInitPAC(object):
         Callback for broker published events
         """
         yoAccess.messageQueue.put(msg)
+        logging.debug('Message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )
         logging.debug('Message received and put in queue (size : {})'.format(yoAccess.messageQueue.qsize()))
 
     #def obtain_connection (yoAccess):
@@ -347,39 +371,58 @@ class YoLinkInitPAC(object):
         """
         Callback for connection to broker
         """
-        
+        netstate = []
         try:
-            logging.debug("Connected with result code %s" % rc)
-            if (rc == 0):
-                yoAccess.connectedToBroker = True
-                yoAccess.online = True
-                logging.info(" Successfully connected to broker {} ".format(yoAccess.mqttURL))
-                if yoAccess.disconnect_occured:
-                    logging.debug('Resubscribing devices after disconnect')
-                    for deviceId in yoAccess.mqttList:
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['request'])
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['response'])
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['report'])
-                    
-                    #yoAccess.clean_up_pending_Dict()
-                time.sleep(5)
+            logging.debug('on_connect -Connected with result code {}'.format(rc))
 
-            elif (rc == 5):
-                logging.error('Authentication error 5 - try again ')
-                time.sleep(2)
-                yoAccess.token = None
-                yoAccess.connectedToBroker = True
-                #yoAccess.connect_to_broker()
+            if (rc == 0):
+                yoAccess.online = True
+                logging.info('Successfully connected to broker {} '.format(yoAccess.mqttURL))
+                if not yoAccess.connectedToBroker:
+                    logging.debug('Re-subscribing devices after after disconnect')
+                    for deviceId in yoAccess.mqttList:
+                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['request'],2)
+                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['response'],2)
+                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['report'],2)
+                    yoAccess.connectedToBroker = True
+                    #yoAccess.clean_up_pending_Dict()
+                    time.sleep(5)
+            elif (rc >= 5):
+                logging.error('Authentication error 5 - check credentials and try again  ')
+                if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
+                    #yoAccess.client.reconnect()
+                    #yoAccess.client.loop_stop()
+                    yoAccess.get_access_token()                  
+                    time.sleep(2)
+                    #yoAccess.connectedToBroker = False
+                netid = yoAccess.check_connection(yoAccess.mqttPort)
+                logging.debug('netid = {}'.format(netid))
+                if None == netid:
+                    restart = True
+                    yoAccess.connectedToBroker = False
+                else:
+                    restart = False
+                if restart:
+                    logging.info('Connection lost - disconnecting to force reconnect')
+                    
+                    #yoAccess.disconnect = False
+                    yoAccess.client.loop_stop()
+                    yoAccess.client.disconnect()
+                    yoAccess.connectedToBroker = False
+                else:
+                    logging.debug('Connection status = {}'.format(netid.status))
+                yoAccess.online = False
             else:
-                logging.error("Broker connection failed with result code {}".format(rc))
+                logging.error('Broker connection failed with result code {}'.format(rc))
                 yoAccess.connectedToBroker = True
+                yoAccess.online = False
                 #yoAccess.connect_to_broker()
                 #os.exit(2)
             #time.sleep(1)
             #logging.debug('Subsribe: ' + yoAccess.topicResp + ', '+yoAccess.topicReport+', '+ yoAccess.topicReportAll )
 
-        except Exception as E:
-            logging.error('Exception  -  on_connect: ' + str(E))       
+        except Exception as e:
+            logging.error('Exception  -  on_connect: ' + str(e))       
 
 
     def on_disconnect(yoAccess, client, userdata,rc=0):
@@ -392,7 +435,24 @@ class YoLinkInitPAC(object):
             
         else:
             logging.debug('Unintentional disconnect - Reacquiring connection')
+
             try:
+                #netid = yoAccess.check_connection(yoAccess.mqttPort)
+                #if None == netid:
+                #    restart = True
+                #elif netid.status.__contains__('ESTABLISHED'):
+                #    restart = False
+                #else:
+                #    restart = False
+                if not yoAccess.connectedToBroker:
+                    #yoAccess.client.loop_stop() 
+                    #yoAccess.client.disconnect()     
+                    yoAccess.get_access_token()               
+                    time.sleep(2)
+                    #yoAccess.connectedToBroker = False
+                    yoAccess.token = None
+                    yoAccess.connect_to_broker()
+                    yoAccess.connectedToBroker = True
                 yoAccess.online = False
                 time.sleep(3)   
 
@@ -432,7 +492,7 @@ class YoLinkInitPAC(object):
                 yoAccess.lastDataPacket[deviceId] = data
                 if deviceId in yoAccess.mqttList:
                     logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
-                    result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr)
+                    result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
                     #yoAccess.pendingDict[data['time']] = data
                     #logging.debug('PUT yoAccess.pendingDict {}'.format(len(yoAccess.pendingDict)))
                     #logging.debug('publish result: {}'.format(result.rc))
@@ -443,7 +503,7 @@ class YoLinkInitPAC(object):
 
                     return (False)
                 
-                #if DEBUG:
+                #if yoAccess.debug:
                 #    fileData = {}
                 #    fileData['type'] = 'REQ'
                 #    fileData['data'] = data
@@ -455,22 +515,29 @@ class YoLinkInitPAC(object):
                     if result.rc == 4 or result.rc == 3: #off line
                         logging.debug('rc = {}'.format(result.rc))
                         yoAccess.online = False
+                        #yoAccess.client.reconnect() # is this the right strategy 
+
+                        #logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
+                        #result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr)
+
                 else:
                     yoAccess.lastTransferTime = time.time()
                     yoAccess.online = True
             except Exception as e:
                 #logging.debug('Data  Queue looping {}'.format(e))
                 # Check if no activity for a while - 
-                if yoAccess.lastTransferTime + yoAccess.timeExpMarging + 900 <= time.time():
-                    logging.info('No Activity in {} sec - trying to reacquire token'.format(time.time() - yoAccess.lastTransferTime))
-                    yoAccess.get_access_token() 
-                    yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-                    yoAccess.client.reconnect()
+                #if yoAccess.lastTransferTime + yoAccess.timeExpMarging + 900 <= time.time():
+                #    logging.info('No Activity in {} sec - trying to reacquire token'.format(time.time() - yoAccess.lastTransferTime))
+                #    yoAccess.get_access_token() 
+                #    yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
+                    
+                    
+                    #yoAccess.client.reconnect()
                     #yoAccess.client.loop_stop()
                     #yoAccess.client.disconnect()
                     #yoAccess.connect_to_broker()
-                    yoAccess.lastTransferTime = time.time()
-                    time.sleep(60)
+                #    yoAccess.lastTransferTime = time.time()
+                #    time.sleep(60)
 
                 pass # go wait again unless stop is called
 
@@ -514,6 +581,9 @@ class YoLinkInitPAC(object):
 
     def get_temp_unit(yoAccess):
         return(yoAccess.temp_unit)
+
+    def set_debug(yoAccess, debug):
+        yoAccess.debug = debug
 
 class YoLinkInitCSID(object):
     def __init__(yoAccess,  csName, csid, csSeckey, yoAccess_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003 ):

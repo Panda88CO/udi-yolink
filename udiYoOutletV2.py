@@ -11,6 +11,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
 
+from ctypes import set_errno
 from os import truncate
 #import udi_interface
 #import sys
@@ -46,10 +47,9 @@ class udiYoOutlet(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
 
         logging.debug('udiYoOutlet INIT- {}'.format(deviceInfo['name']))
-
+        self.n_queue = [] 
         
         self.yoAccess = yoAccess
-
         self.devInfo =  deviceInfo   
         self.yoOutlet = None
         self.powerSupported = True # assume 
@@ -57,7 +57,7 @@ class udiYoOutlet(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []        
+               
 
         # start processing events and create add our controller node
         polyglot.ready()
@@ -82,13 +82,8 @@ class udiYoOutlet(udi_interface.Node):
         time.sleep(2)
         self.yoOutlet.initNode()
         time.sleep(2)
-        if not self.yoOutlet.online:
-            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))       
-            self.node.setDriver('ST', 0, True, True)
-
-        else:
-            self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
-            self.node.setDriver('ST', 1, True, True)
+        self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.node.setDriver('ST', 1, True, True)
     
     def stop (self):
         logging.info('Stop udiYoOutlet')
@@ -105,7 +100,6 @@ class udiYoOutlet(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if  self.yoOutlet.online:
-                self.node.setDriver('ST', 1)
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
                     self.node.setDriver('GV0',1 , True, True)
@@ -152,8 +146,24 @@ class udiYoOutlet(udi_interface.Node):
     def checkOnline(self):
         self.yoOutlet.refreshDevice()
 
+
+    def set_outlet_on(self, command = None):
+        logging.info('udiYoOutlet set_outlet_on')
+        self.yoOutlet.setState('ON')
+        self.node.setDriver('GV0',1 , True, True)
+        #self.node.reportCmd('DON')
+
+    def set_outlet_off(self, command = None):
+        logging.info('udiYoOutlet set_outlet_off')
+        self.yoOutlet.setState('OFF')
+        self.node.setDriver('GV0',0 , True, True)
+        #self.node.reportCmd('DOF')
+
+
+
     def switchControl(self, command):
-        logging.info('udiYoOutlet switchControl')
+        ctrl = int(command.get('value'))   
+        logging.info('udiYoOutlet switchControl - {}'.format(ctrl))
         ctrl = int(command.get('value'))     
         if ctrl == 1:
             self.yoOutlet.setState('ON')
@@ -196,6 +206,8 @@ class udiYoOutlet(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
+                'DON'   : set_outlet_on,
+                'DOF'   : set_outlet_off,
                 'SWCTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 

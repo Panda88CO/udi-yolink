@@ -48,13 +48,13 @@ class udiYoLeakSensor(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
-
+        self.n_queue = []   
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []        
+             
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
@@ -78,11 +78,7 @@ class udiYoLeakSensor(udi_interface.Node):
         time.sleep(2)
         self.yoLeakSensor.initNode()
         time.sleep(1)
-        if not self.yoLeakSensor.online:
-            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
-
-        else:
-            self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
 
         #time.sleep(3)
     
@@ -118,7 +114,6 @@ class udiYoLeakSensor(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if self.yoLeakSensor.online:
-                self.node.setDriver('ST', 1)
                 waterState =   self.waterState()  
                 logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
                 if waterState == 1:
@@ -148,9 +143,14 @@ class udiYoLeakSensor(udi_interface.Node):
         logging.info('THsensor Update Status Executed')
         self.yoLeakSensor.refreshDevice()
        
+    def noop(self, command = None):
+        pass
 
     commands = {
                 'UPDATE': update,
+                'QUERY' : update, 
+                'DON'   : noop,
+                'DOF'   : noop
                 }
 
 

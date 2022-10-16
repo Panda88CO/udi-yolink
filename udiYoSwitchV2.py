@@ -50,7 +50,7 @@ class udiYoSwitch(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSwitch = None
-
+        self.n_queue = [] 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -58,14 +58,13 @@ class udiYoSwitch(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []        
+               
 
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
     
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -82,12 +81,8 @@ class udiYoSwitch(udi_interface.Node):
         time.sleep(2)
         self.yoSwitch.initNode()
         time.sleep(2)
-        if not self.yoSwitch.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
-
-        else:
-            self.node.setDriver('ST', 1, True, True)
-            self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.node.setDriver('ST', 1, True, True)
+        self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, 5)
 
 
 
@@ -123,7 +118,6 @@ class udiYoSwitch(udi_interface.Node):
        if self.node is not None:
             state =  self.yoSwitch.getState().upper()
             if self.yoSwitch.online:
-                self.node.setDriver('ST', 1)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
                     self.node.reportCmd('DON')  
@@ -145,6 +139,18 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSwitch.updateStatus(data)
         self.updateData()
  
+    def set_switch_on(self, command = None):
+        logging.info('udiYoSwitch set_switch_on')  
+        self.yoSwitch.setState('ON')
+        self.node.setDriver('GV0',1 , True, True)
+        #self.node.reportCmd('DON')
+
+    def set_switch_off(self, command = None):
+        logging.info('udiYoSwitch set_switch_off')  
+        self.yoSwitch.setState('OFF')
+        self.node.setDriver('GV0',0 , True, True)
+        #self.node.reportCmd('DOF')
+
 
     def switchControl(self, command):
         logging.info('udiYoSwitch switchControl') 
@@ -191,6 +197,9 @@ class udiYoSwitch(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
+                'QUERY' : update,
+                'DON'   : set_switch_on,
+                'DOF'   : set_switch_off,
                 'SWCTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 

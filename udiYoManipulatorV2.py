@@ -42,9 +42,8 @@ class udiYoManipulator(udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         logging.debug('udiYoManipulator INIT- {}'.format(deviceInfo['name']))
-   
+        self.n_queue = []
         self.yoAccess = yoAccess
-
         self.devInfo =  deviceInfo   
         self.yoManipulator = None
 
@@ -53,14 +52,13 @@ class udiYoManipulator(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []
 
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        
 
 
 
@@ -81,12 +79,8 @@ class udiYoManipulator(udi_interface.Node):
         time.sleep(2)
         self.yoManipulator.initNode()
         time.sleep(2)
-        if not self.yoManipulator.online:
-            logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
-            self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
-        else:
-            self.node.setDriver('ST', 1, True, True)
-            self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.node.setDriver('ST', 1, True, True)
+        self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
         #time.sleep(3)
 
     def stop (self):
@@ -109,7 +103,6 @@ class udiYoManipulator(udi_interface.Node):
         if self.node is not None:
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
-                self.node.setDriver('ST', 1)
                 if state.upper() == 'OPEN':
                     self.node.setDriver('GV0', 1, True, True)
                     self.node.reportCmd('DON')
@@ -154,7 +147,17 @@ class udiYoManipulator(udi_interface.Node):
         else:
             self.yoManipulator.setState('OFF')
             self.node.reportCmd('DOF')
-        
+
+    def set_open(self, command = None):
+        logging.info('Manipulator - set_open')
+        self.yoManipulator.setState('ON')
+        #self.node.reportCmd('DON')
+
+    def set_close(self, command = None):
+        logging.info('Manipulator - set_close')
+        self.yoManipulator.setState('OFF')
+        #self.node.reportCmd('DOF')
+
     def setOnDelay(self, command ):
         logging.info('setOnDelay')
         delay =int(command.get('value'))
@@ -177,6 +180,9 @@ class udiYoManipulator(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
+                'QUERY' : update,
+                'DON'   : set_open,
+                'DOF'   : set_close,
                 'MANCTRL': switchControl, 
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 

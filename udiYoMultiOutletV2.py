@@ -43,11 +43,11 @@ class udiYoSubOutlet(udi_interface.Node):
         self.port  = int(portStr.pop())
         #self.port = int(port )
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
-    
+        self.n_queue = [] 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []   
+          
 
 
         self.poly.ready()
@@ -55,7 +55,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         time.sleep(1)
-        self.node.setDriver('ST', 1, True, True)
+        
         self.node.setDriver('GV4', self.port, True, True)
         
     def node_queue(self, data):
@@ -69,7 +69,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-
+        self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutPortState(self.port)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -125,6 +125,22 @@ class udiYoSubOutlet(udi_interface.Node):
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, True)
                 #logging.debug('display update {}'.format(timeRemaining))
 
+   
+   
+    def set_port_on(self, command = None):
+        logging.info('udiYoSubOutlet set_port_on')
+        self.yolink.setMultiOutState(self.port, 'ON')
+        self.node.setDriver('GV0',1 , True, True)
+        #self.node.reportCmd('DON')
+        self.portState = 1
+
+    def set_port_off(self, command = None):
+        logging.info('udiYoSubOutlet set_port_off')
+        self.yolink.setMultiOutState(self.port, 'OFF')
+        self.node.setDriver('GV0',0 , True, True)
+        #self.node.reportCmd('DOF')
+        self.portState = 0
+
     def switchControl(self, command):
         logging.info('udiYoSubOutlet switchControl')
 
@@ -176,10 +192,13 @@ class udiYoSubOutlet(udi_interface.Node):
         self.yolink.refreshDevice()
 
     commands = {
-                'SWCTRL': switchControl, 
-                'ONDELAY' : setOnDelay,
+                'SWCTRL'   : switchControl, 
+                'ONDELAY'  : setOnDelay,
                 'OFFDELAY' : setOffDelay,
-                'UPDATE' : update
+                'UPDATE'   : update,
+                'QUERY'    : update,
+                'DON'      : set_port_on,
+                'DOF'      : set_port_off,
                 }
 
 
@@ -205,11 +224,11 @@ class udiYoSubUSB(udi_interface.Node):
 
         #self.port = port
         logging.debug('udiYoSubUSB - init - port {}'.format(self.usbPort))
-
+        self.n_queue = []
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []
+       
 
         # start processing events and create add our controller node
         self.poly.ready()
@@ -217,7 +236,7 @@ class udiYoSubUSB(udi_interface.Node):
         self.wait_for_node_done()
         self.node = polyglot.getNode(address)
         time.sleep(1)
-        self.node.setDriver('ST', 1, True, True)
+        
 
 
     def node_queue(self, data):
@@ -233,6 +252,7 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB - start')
+        self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -289,8 +309,19 @@ class udiYoSubUSB(udi_interface.Node):
                 self.portState = 1
 
   
+    def usb_on(self, command = None ):
+        logging.info('udiYoSubUSB - usb_on')
+        self.yolink.setUsbState(self.usbPort, 'ON')
+        self.node.setDriver('GV0', 1, True, True)
+        #self.node.reportCmd('DON')
+        self.portState = 1
 
-
+    def usb_off(self, command = None):
+        logging.info('udiYoSubUSB - usb_off')
+        self.yolink.setUsbState(self.usbPort, 'OFF')
+        self.node.setDriver('GV0', 0, True, True)
+        #self.node.reportCmd('DOF')  
+        self.portState = 0    
 
     def update(self, command = None):
         logging.info('Update Status Executed')
@@ -298,7 +329,10 @@ class udiYoSubUSB(udi_interface.Node):
 
     commands = {
                  'USBCTRL': usbControl, 
-                 'UPDATE' : update
+                 'UPDATE' : update,
+                 'QUERY'  : update, 
+                 'DON'    : usb_on,
+                 'DOF'    : usb_off,
                 }
 
 class udiYoMultiOutlet(udi_interface.Node):
@@ -359,7 +393,9 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.subNodesReady = False
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
+
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
+        self.node.setDriver('ST', 1, True, True)
         time.sleep(5)
         self.yoMultiOutlet.initNode()
         time.sleep(2)
@@ -369,7 +405,6 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.nbrOutlets = 0
 
         else:
-            
             self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
             time.sleep(2)
             logging.debug('multiOutlet past initNode')
@@ -408,7 +443,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.usbExists = True
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subUsbAdr[usb], e))
-            self.node.setDriver('ST', 1, True, True)
+           
             self.subNodesReady = True
             self.createdNodes = self.poly.getNodes()
             logging.info('udiYoMultiOutlet - finished creating sub nodes')
@@ -515,8 +550,6 @@ class udiYoMultiOutlet(udi_interface.Node):
 
 
 
-
-
     def update(self, command = None):
         logging.info('udiYoMultiOutlet Update Executed')
         self.yoMultiOutlet.refreshMultiOutlet()
@@ -524,8 +557,9 @@ class udiYoMultiOutlet(udi_interface.Node):
 
 
     commands = {
-                'UPDATE': update                        
-
+                'UPDATE': update,
+                'QUERY' : update,
+             
                 }
 
 

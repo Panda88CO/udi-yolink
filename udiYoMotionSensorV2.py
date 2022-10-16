@@ -47,7 +47,7 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoTHsensor  = None
-
+        self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -55,7 +55,7 @@ class udiYoMotionSensor(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []
+        
 
         # start processing events and create add our controller node
         polyglot.ready()
@@ -81,11 +81,7 @@ class udiYoMotionSensor(udi_interface.Node):
         time.sleep(2)
         self.yoMotionsSensor.initNode()
         time.sleep(2)
-        if not self.yoMotionsSensor.online:
-            logging.warning('Device {} not on-line'.format(self.devInfo['name']))
-
-        else:
-            self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
 
     
     def stop (self):
@@ -116,7 +112,6 @@ class udiYoMotionSensor(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if self.yoMotionsSensor.online:
-                self.node.setDriver('ST', 1)
                 motion_state = self.getMotionState()
                 if motion_state == 1:
                     self.node.setDriver('GV0', 1, True, True)
@@ -150,9 +145,16 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor.refreshDevice()
        
 
+    def noop(self, command = None):
+        pass
+
     commands = {
                 'UPDATE': update,
+                'QUERY' : update, 
+                'DON'   : noop,
+                'DOF'   : noop
                 }
+
 
 
 

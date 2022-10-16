@@ -53,7 +53,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSpeakerHub = None
-        
+        self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -62,7 +62,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.n_queue = []        
+                
         
 
 
@@ -72,7 +72,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        
     
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -97,11 +97,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.yoSpeakerHub.setMessageNbr(self.messageNbr )
         self.yoSpeakerHub.initNode()
         time.sleep(2)
-        if not self.yoSpeakerHub.online:
-            logging.warning('Device {} not on-line - remove node'.format(self.devInfo['name']))
-
-        else:
-            self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 
  
@@ -142,7 +138,6 @@ class udiYoSpeakerHub(udi_interface.Node):
         if self.node is not None:
             #state =  self.yoSpeakerHub.getState().upper()
             if self.yoSpeakerHub.online:
-                self.node.setDriver('ST', 1)
                 self.node.setDriver('GV0', self.yoSpeakerHub.volume, True, True)
                 self.node.setDriver('GV1', self.bool2nbr(self.yoSpeakerHub.beepEnabled), True, True)
                 self.node.setDriver('GV2', self.bool2nbr(self.yoSpeakerHub.mute), True, True)
@@ -240,6 +235,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     commands = {
                 'UPDATE'    : update,
+                'QUERY'     : update,
                 'VOLUME'    : setVolume,
                 'BEEP'      : setBeepEnable,
                 'MUTE'      : setMute,

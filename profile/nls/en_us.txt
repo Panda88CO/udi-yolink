@@ -5,6 +5,8 @@ ST-nlssetup-ST-NAME = Nodeserver Status
 CMD-nlssetup-DON-NAME = Heart Beat On
 CMD-nlssetup-DOF-NAME = Heart Beat Off
 
+
+# YoLink Switch
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
 ST-nlsswitch-GV0-NAME = Switch State
@@ -16,9 +18,14 @@ CMD-nlsswitch-UPDATE-NAME = Update Status
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
-CMD-nlsswitch-DON-NAME = Switch On
-CMD-nlsswitch-DOF-NAME = Switch Off
+CMD-nlsswitch-DON-NAME = ON command
+CMD-nlsswitch-DOF-NAME = OFF command
+CMD-nlsswitch-DFON-NAME = Fast ON command 
+CMD-nlsswitch-DFOF-NAME = Fast OFF command
 
+
+
+#YoLink Outlet
 ND-yooutlet-NAME = YoLink Outlet
 ND-yooutlet-ICON = Switch
 ST-nlsoutlet-GV0-NAME = Outlet State
@@ -112,8 +119,8 @@ ST-nlsdoorsens-GV1-NAME = Sensor Battery Level
 ST-nlsdoorsens-GV8-NAME = Device Online
 ST-nlsdoorsens-ST-NAME = Nodeserver Status
 CMD-nlsdoorsens-UPDATE-NAME = Update Door Status
-CMD-nlsdoorsens-DON-NAME = Opened
-CMD-nlsdoorsens-DOF-NAME = Closed
+CMD-nlsdoorsens-DOM-NAME = No use
+CMD-nlsdoorsens-DOF-NAME = No use
 
 
 ND-yomotionsens-NAME = YoLink Motion Sensor
@@ -143,8 +150,8 @@ ST-nlsvibrasens-GV1-NAME = Sensor Battery Level
 ST-nlsvibrasens-GV8-NAME = Device Online
 ST-nlsvibrasens-ST-NAME = Nodeserver Status
 CMD-nlsvibrasens-UPDATE-NAME = Update Vibration Status
-CMD-nlsleaksens-DON-NAME = Vibration Detected
-CMD-nlsleaksens-DOF-NAME = Normal
+CMD-nlsvibrasens-DON-NAME = Vibration Detected
+CMD-nlsvibrasens-DOF-NAME = Normal
 
 ND-yospeakerh-NAME = YoLink Speaker Hub
 ND-yospeakerh-ICON = Output
@@ -164,6 +171,32 @@ CMD-nlsspeakerh-MUTE-NAME = Mute
 CMD-nlsspeakerh-TONE-NAME = Tone
 CMD-nlsspeakerh-REPEAT-NAME = Repeat
 CMD-nlsspeakerh-MESSAGE-NAME = Select Message
+
+
+ND-yolock-NAME = YoLink Smart Lock
+ND-yolock-ICON = DoorLock
+ST-nlslock-GV0-NAME = Lock State
+ST-nlslock-GV1-NAME = Battery Level
+ST-nlslock-GV2-NAME = Door Bell Active
+ST-nlslock-GV8-NAME = Device Online
+ST-nlslock-ST-NAME = Nodeserver Status
+CMD-nlslock-UPDATE-NAME = Update Lock Status
+CMD-nlslock-QUERY-NAME = Query
+#CMD-nlslock-DON-NAME = Lock Lock
+#CMD-nlslock-DOF-NAME = Unlock Lock
+CMD-nlslock-LOCK-NAME = Lock Lock
+CMD-nlslock-UNLOCK-NAME = Unlock Lock
+CMD-nlslock-LOCKCTRL-NAME = Set Lock
+
+lockstate-0 = Unlocked
+lockstate-1 = Locked
+lockstate-99 = Unknown
+
+lock-0 = Unlocked
+lock-1 = Locked
+
+doorbell-0 = Idle
+doorbell-1 = Activated
 
 tempunit-0 = Celcius
 tempunit-1 = Fahrenheit
@@ -200,6 +233,8 @@ swstate-99 = Unknown
 swctrl-0 = Off
 swctrl-1 = On
 swctrl-2 = Toggle
+swctrl-3 = Fast On
+swctrl-4 = Fast Off
 
 batlevel-0 = Low 
 batlevel-1 = Medium Low
