@@ -30,7 +30,7 @@ class YoLinkInitPAC(object):
         yoAccess.messageLock = Lock()
         yoAccess.publishQueue = Queue()
         yoAccess.messageQueue = Queue()
-        yoAccess.debug = False
+        yoAccess.debug = True
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
         yoAccess.time_since_last_message_RX = 0
@@ -147,7 +147,7 @@ class YoLinkInitPAC(object):
                 return(True)
 
             except Exception as e:
-                logging.debug('Exeption occcured during request_new_token : {}'.format(e))
+                logging.error('Exeption occcured during request_new_token : {}'.format(e))
                 return(False)
         else:
 
@@ -183,8 +183,8 @@ class YoLinkInitPAC(object):
         now = int(time.time())
         if yoAccess.token == None:
             yoAccess.request_new_token()
-        if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
-            yoAccess.refresh_token()
+        #if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
+        #    yoAccess.refresh_token()
         #    if now > yoAccess.token['expirationTime']: #we lost the token
         #        yoAccess.request_new_token()
         #    else:
@@ -231,7 +231,6 @@ class YoLinkInitPAC(object):
 
 
     def shut_down(yoAccess):
-        
         yoAccess.STOP.set()
         yoAccess.disconnect = True
         yoAccess.client.disconnect()
@@ -290,6 +289,8 @@ class YoLinkInitPAC(object):
                 msg = yoAccess.messageQueue.get(timeout = 10) 
                 logging.debug('Received message - Q size={}'.format(yoAccess.messageQueue.qsize()))
                 payload = json.loads(msg.payload.decode("utf-8"))
+                #logging.debug('process_message : {}'.format(payload))
+                
                 deviceId = 'unknown'
 
                 if 'targetDevice' in payload:
@@ -299,7 +300,7 @@ class YoLinkInitPAC(object):
                 else:
                     logging.debug('Unknow device in payload : {}'.format(payload))
 
-                logging.debug('process_message for {}: {} {}'.format(deviceId, msg.topic, payload))
+                logging.debug('process_message for {}: {} {}'.format(deviceId, payload, msg.topic))
                 #yoAccess.debug = logging.root.level <= logging.DEBUG
                 if deviceId in yoAccess.mqttList:
 
@@ -356,9 +357,10 @@ class YoLinkInitPAC(object):
         """
         Callback for broker published events
         """
-        yoAccess.messageQueue.put(msg)
-        logging.debug('Message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )
+        #logging.debug('Message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )
         logging.debug('Message received and put in queue (size : {})'.format(yoAccess.messageQueue.qsize()))
+        yoAccess.messageQueue.put(msg)
+
 
     #def obtain_connection (yoAccess):
     #    if not yoAccess.connectedToBroker:    
@@ -405,10 +407,10 @@ class YoLinkInitPAC(object):
                 if restart:
                     logging.info('Connection lost - disconnecting to force reconnect')
                     
-                    #yoAccess.disconnect = False
+                    yoAccess.disconnect = False
+                    yoAccess.connectedToBroker = False
                     yoAccess.client.loop_stop()
                     yoAccess.client.disconnect()
-                    yoAccess.connectedToBroker = False
                 else:
                     logging.debug('Connection status = {}'.format(netid.status))
                 yoAccess.online = False
