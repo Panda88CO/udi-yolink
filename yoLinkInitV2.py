@@ -248,7 +248,7 @@ class YoLinkInitPAC(object):
         """
         try: 
             logging.info("Connecting to broker...")
-            yoAccess.get_access_token()
+            yoAccess.request_new_token()
                    
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
             yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
@@ -390,15 +390,30 @@ class YoLinkInitPAC(object):
                     #yoAccess.clean_up_pending_Dict()
                     time.sleep(5)
             elif (rc >= 5):
-                logging.error('Authentication error 5 - check credentials and try again  ')
+               
                 if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
-                    #yoAccess.client.reconnect()
-                    #yoAccess.client.loop_stop()
-                    yoAccess.get_access_token()                  
-                    time.sleep(2)
+                    logging.error('Authentication error 5 - Token no longer valid - Need to reconnect ')
+                    netid = yoAccess.check_connection(yoAccess.mqttPort)
+                    logging.debug('netid = {}'.format(netid))
+
+                    if None == netid: # no communication to brooker possible 
+                        yoAccess.connectedToBroker = False
+                        yoAccess.disconnect = True
+                        yoAccess.client.disconnect()
+                        time.sleep(2)
+                        yoAccess.connect_to_broker()
+                    else: # still connected - needs new token - disconnect should automatically reconnect
+                        yoAccess.connectedToBroker = False
+                        yoAccess.client.disconnect()
+                    #yoAccess.refresh_token()  #Token no longer valid   
+                    #time.sleep(2)
                     #yoAccess.connectedToBroker = False
+                else:
+                    logging.error('Authentication error 5 - check credentials and try again  ')
+                '''
                 netid = yoAccess.check_connection(yoAccess.mqttPort)
                 logging.debug('netid = {}'.format(netid))
+
                 if None == netid:
                     restart = True
                     yoAccess.connectedToBroker = False
@@ -406,7 +421,6 @@ class YoLinkInitPAC(object):
                     restart = False
                 if restart:
                     logging.info('Connection lost - disconnecting to force reconnect')
-                    
                     yoAccess.disconnect = False
                     yoAccess.connectedToBroker = False
                     yoAccess.client.loop_stop()
@@ -414,6 +428,7 @@ class YoLinkInitPAC(object):
                 else:
                     logging.debug('Connection status = {}'.format(netid.status))
                 yoAccess.online = False
+                '''
             else:
                 logging.error('Broker connection failed with result code {}'.format(rc))
                 yoAccess.connectedToBroker = True
@@ -429,7 +444,7 @@ class YoLinkInitPAC(object):
 
     def on_disconnect(yoAccess, client, userdata,rc=0):
         logging.debug('Disconnect - stop loop')
-        yoAccess.connectedToBroker = False
+        #yoAccess.connectedToBroker = False
         yoAccess.disconnect_occured = True
         if yoAccess.disconnect:
             logging.debug('Disconnect - stop loop')
@@ -449,7 +464,7 @@ class YoLinkInitPAC(object):
                 if not yoAccess.connectedToBroker:
                     #yoAccess.client.loop_stop() 
                     #yoAccess.client.disconnect()     
-                    yoAccess.get_access_token()               
+                    #yoAccess.get_access_token()               
                     time.sleep(2)
                     #yoAccess.connectedToBroker = False
                     yoAccess.token = None
