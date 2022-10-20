@@ -248,8 +248,10 @@ class YoLinkInitPAC(object):
         """
         try: 
             logging.info("Connecting to broker...")
-            yoAccess.request_new_token()
-                   
+            if not yoAccess.request_new_token():
+                time.sleep(30) # Wait 30 sec and try again
+                logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
+   
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
             yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
             yoAccess.connectedToBroker = True
