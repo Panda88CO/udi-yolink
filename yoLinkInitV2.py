@@ -62,9 +62,9 @@ class YoLinkInitPAC(object):
             while not yoAccess.request_new_token( ):
                 time.sleep(60)
                 logging.info('Waiting to acquire access token')
-            logging.info('Retrieving YoLink API info')
-            yoAccess.retrieve_device_list()
-            yoAccess.retrieve_homeID()
+           
+            #yoAccess.retrieve_device_list()
+            #yoAccess.retrieve_homeID()
 
             yoAccess.retryNbr = 0
             yoAccess.disconnect = False
@@ -91,6 +91,7 @@ class YoLinkInitPAC(object):
             yoAccess.messageThread.start()
             yoAccess.publishThread.start()
             yoAccess.fileThread.start()
+            
             yoAccess.connect_to_broker()
             #yoAccess.connectionMonitorThread.start()
             
@@ -248,16 +249,22 @@ class YoLinkInitPAC(object):
         """
         try: 
             logging.info("Connecting to broker...")
-            if not yoAccess.request_new_token():
+            while not yoAccess.request_new_token():
                 time.sleep(30) # Wait 30 sec and try again
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
-   
+            logging.info('Retrieving YoLink API info')
+            yoAccess.retrieve_device_list()
+            yoAccess.retrieve_homeID()
+            time.sleep(1)
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
             yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
             yoAccess.connectedToBroker = True
             time.sleep(5)              
             yoAccess.client.loop_start()
 
+            for deviceId in yoAccess.mqttList:
+                yoAccess.update_mqtt_device(deviceId)
+                logging.debug('Updating {} in mqttList'.format(deviceId))
             #yoAccess.client.will_set()
 
         except Exception as e:
@@ -281,7 +288,30 @@ class YoLinkInitPAC(object):
                                             'report': topicReport,
                                             'subscribed': True
                                             }
-            time.sleep(3)
+            time.sleep(1)
+
+
+    def update_mqtt_device (yoAccess, deviceId):
+        logging.info('update_mqtt_device {} '.format(deviceId))
+        topicReq = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/request'
+        topicResp = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/response'
+        topicReport = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/report'
+        #topicReportAll = 'yl-home/'+yoAccess.homeID+'/+/report'
+        
+        if  deviceId in yoAccess.mqttList :
+            yoAccess.client.subscribe(topicReq)
+            yoAccess.client.subscribe(topicResp)
+            yoAccess.client.subscribe(topicReport)
+
+            yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['request'] )
+            yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['response'] )
+            yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['report'] )
+
+            yoAccess.mqttList[deviceId]['request'] =  topicReq
+
+            yoAccess.mqttList[deviceId]['response'] = topicResp
+            yoAccess.mqttList[deviceId]['report'] = topicReport
+
 
     def process_message(yoAccess):
 
