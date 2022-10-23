@@ -60,9 +60,9 @@ class YoLinkInitPAC(object):
 
         yoAccess.token = None
         try:
-            while not yoAccess.request_new_token( ):
-                time.sleep(60)
-                logging.info('Waiting to acquire access token')
+            #while not yoAccess.request_new_token( ):
+            #    time.sleep(60)
+            #    logging.info('Waiting to acquire access token')
            
             #yoAccess.retrieve_device_list()
             #yoAccess.retrieve_homeID()
@@ -70,6 +70,16 @@ class YoLinkInitPAC(object):
             yoAccess.retryNbr = 0
             yoAccess.disconnect = False
             yoAccess.STOP = Event()
+
+            yoAccess.messageThread = Thread(target = yoAccess.process_message )
+            yoAccess.publishThread = Thread(target = yoAccess.transfer_data )
+            yoAccess.fileThread =  Thread(target = yoAccess.save_packet_info )
+            #yoAccess.connectionMonitorThread = Thread(target = yoAccess.connection_monitor)
+
+            yoAccess.messageThread.start()
+            yoAccess.publishThread.start()
+            yoAccess.fileThread.start()
+            
 
             logging.info('Connecting to YoLink MQTT server')
             yoAccess.retrieve_homeID()      
@@ -83,16 +93,7 @@ class YoLinkInitPAC(object):
             yoAccess.client.on_disconnect = yoAccess.on_disconnect
             yoAccess.client.on_publish = yoAccess.on_publish
             #logging.debug('finish subscribing ')
-            
-            yoAccess.messageThread = Thread(target = yoAccess.process_message )
-            yoAccess.publishThread = Thread(target = yoAccess.transfer_data )
-            yoAccess.fileThread =  Thread(target = yoAccess.save_packet_info )
-            #yoAccess.connectionMonitorThread = Thread(target = yoAccess.connection_monitor)
 
-            yoAccess.messageThread.start()
-            yoAccess.publishThread.start()
-            yoAccess.fileThread.start()
-            
             yoAccess.connect_to_broker()
             #yoAccess.connectionMonitorThread.start()
             
@@ -264,7 +265,7 @@ class YoLinkInitPAC(object):
             yoAccess.client.loop_start()
 
             for deviceId in yoAccess.mqttList:
-                yoAccess.update_mqtt_device(deviceId)
+                yoAccess.update_mqtt_subscription(deviceId)
                 logging.debug('Updating {} in mqttList'.format(deviceId))
             #yoAccess.client.will_set()
 
@@ -292,8 +293,8 @@ class YoLinkInitPAC(object):
             time.sleep(1)
 
 
-    def update_mqtt_device (yoAccess, deviceId):
-        logging.info('update_mqtt_device {} '.format(deviceId))
+    def update_mqtt_subscription (yoAccess, deviceId):
+        logging.info('update_mqtt_subscription {} '.format(deviceId))
         topicReq = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/request'
         topicResp = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/response'
         topicReport = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/report'
@@ -309,7 +310,6 @@ class YoLinkInitPAC(object):
             yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['report'] )
 
             yoAccess.mqttList[deviceId]['request'] =  topicReq
-
             yoAccess.mqttList[deviceId]['response'] = topicResp
             yoAccess.mqttList[deviceId]['report'] = topicReport
 
@@ -558,6 +558,17 @@ class YoLinkInitPAC(object):
                 #    fileData['type'] = 'REQ'
                 #    fileData['data'] = data
                 #    yoAccess.fileQueue.put(fileData)
+                #// Possible values for client.state()
+                #define MQTT_CONNECTION_TIMEOUT     -4
+                #define MQTT_CONNECTION_LOST        -3
+                #define MQTT_CONNECT_FAILED         -2
+                #define MQTT_DISCONNECTED           -1
+                #define MQTT_CONNECTED               0
+                #define MQTT_CONNECT_BAD_PROTOCOL    1
+                #define MQTT_CONNECT_BAD_CLIENT_ID   2
+                #define MQTT_CONNECT_UNAVAILABLE     3
+                #define MQTT_CONNECT_BAD_CREDENTIALS 4
+                #define MQTT_CONNECT_UNAUTHORIZED    5
                 
                 if result.rc != 0:
                     logging.error('Error {} during publishing {}'.format(result.rc, data))
