@@ -53,6 +53,7 @@ class YoLinkInitPAC(object):
         yoAccess.nbrTTS = 0
         yoAccess.temp_unit = 0
         yoAccess.online = False
+        yoAccess.deviceList = []
         
         #yoAccess.TSSfile = 'TSSmessages.json'
         #yoAccess.readTssFile()
@@ -71,7 +72,7 @@ class YoLinkInitPAC(object):
             yoAccess.STOP = Event()
 
             logging.info('Connecting to YoLink MQTT server')
-
+            yoAccess.retrieve_homeID()      
             #if yoAccess.client == None:    
       
             #logging.debug('initialize MQTT' )
@@ -254,7 +255,7 @@ class YoLinkInitPAC(object):
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
             yoAccess.retrieve_device_list()
-            yoAccess.retrieve_homeID()
+            #yoAccess.retrieve_homeID()
             time.sleep(1)
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
             yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
