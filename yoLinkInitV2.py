@@ -539,16 +539,19 @@ class YoLinkInitPAC(object):
             logging.error('Unintentional disconnect - Reacquiring connection')
 
             try:
-                #netid = yoAccess.check_connection(yoAccess.mqttPort)
-                #if None == netid:
-                #    restart = True
-                #elif netid.status.__contains__('ESTABLISHED'):
-                #    restart = False
-                #else:
-                #    restart = False
+                netid = yoAccess.check_connection(yoAccess.mqttPort)
+                if None == netid:      
+                    yoAccess.connectedToBroker = False
+                elif netid.status.__contains__('ESTABLISHED'):
+                    yoAccess.connectedToBroker = True
+                else:
+                    yoAccess.connectedToBroker = False
+                logging.debug('on_disconnect - connectedToBroker = {}'.format(yoAccess.connectedToBroker))
                 if not yoAccess.connectedToBroker:
+
+                    logging.debug('on_disconnect - restarting broker')
                     #yoAccess.client.loop_stop() 
-                    #yoAccess.client.disconnect()     
+                    yoAccess.client.disconnect()     
                     #yoAccess.get_access_token()               
                     time.sleep(2)
                     #yoAccess.connectedToBroker = False
@@ -556,7 +559,8 @@ class YoLinkInitPAC(object):
                     yoAccess.connect_to_broker()
                     yoAccess.connectedToBroker = True
                 yoAccess.online = False
-                time.sleep(3)   
+                #time.sleep(3)   
+
 
             except Exception as e:
                 logging.error('Exeption occcured during on_ disconnect : {}'.format(e))
@@ -571,14 +575,14 @@ class YoLinkInitPAC(object):
         logging.debug('userdata = ' + str(userdata))
         logging.debug('mID = '+str(mID))
         logging.debug('Granted QoS: ' +  str(granted_QOS))
-        logging.debug('\n')
+        #logging.debug('\n')
 
     def on_publish(yoAccess, client, userdata, mID):
         logging.debug('on_publish')
-        logging.debug('client = ' + str(client))
-        logging.debug('userdata = ' + str(userdata))
-        logging.debug('mID = '+str(mID))
-        logging.debug('\n')
+        #logging.debug('client = ' + str(client))
+        #logging.debug('userdata = ' + str(userdata))
+        #logging.debug('mID = '+str(mID))
+        #logging.debug('\n')
 
 
     def transfer_data(yoAccess):
