@@ -92,7 +92,7 @@ class YoLinkInitPAC(object):
             yoAccess.client.on_disconnect = yoAccess.on_disconnect
             yoAccess.client.on_publish = yoAccess.on_publish
             #logging.debug('finish subscribing ')
-
+            time.sleep(1)
             yoAccess.connect_to_broker()
             #yoAccess.connectionMonitorThread.start()
             
@@ -152,7 +152,6 @@ class YoLinkInitPAC(object):
                 logging.error('Exeption occcured during request_new_token : {}'.format(e))
                 return(False)
         else:
-
             return(True) # use existing Token 
 
     def refresh_token(yoAccess):
@@ -258,6 +257,7 @@ class YoLinkInitPAC(object):
             yoAccess.retrieve_homeID()
             time.sleep(1)
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
+            time.sleep(3)
             yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec
             yoAccess.connectedToBroker = True
             time.sleep(5)              
@@ -407,7 +407,7 @@ class YoLinkInitPAC(object):
         """
         netstate = []
         try:
-            logging.debug('on_connect -Connected with result code {}'.format(rc))
+            logging.debug('on_connect - Connected with result code {}'.format(rc))
 
             if (rc == 0):
                 yoAccess.online = True
@@ -421,8 +421,21 @@ class YoLinkInitPAC(object):
                     yoAccess.connectedToBroker = True
                     #yoAccess.clean_up_pending_Dict()
                     time.sleep(5)
-            elif (rc >= 5):
-               
+                #// Possible values for client.state()
+                #define MQTT_CONNECTION_TIMEOUT     -4
+                #define MQTT_CONNECTION_LOST        -3
+                #define MQTT_CONNECT_FAILED         -2
+                #define MQTT_DISCONNECTED           -1
+                #define MQTT_CONNECTED               0
+                #define MQTT_CONNECT_BAD_PROTOCOL    1
+                #define MQTT_CONNECT_BAD_CLIENT_ID   2
+                #define MQTT_CONNECT_UNAVAILABLE     3
+                #define MQTT_CONNECT_BAD_CREDENTIALS 4
+                #define MQTT_CONNECT_UNAUTHORIZED    5
+
+
+
+            elif (rc >= 4):
                 if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
                     logging.error('Authentication error 5 - Token no longer valid - Need to reconnect ')
                     netid = yoAccess.check_connection(yoAccess.mqttPort)
@@ -433,6 +446,7 @@ class YoLinkInitPAC(object):
                         yoAccess.disconnect = True
                         yoAccess.client.disconnect()
                         time.sleep(2)
+                        yoAccess.token = None
                         yoAccess.connect_to_broker()
                     else: # still connected - needs new token - disconnect should automatically reconnect
                         yoAccess.connectedToBroker = False
@@ -461,6 +475,19 @@ class YoLinkInitPAC(object):
                     logging.debug('Connection status = {}'.format(netid.status))
                 yoAccess.online = False
                 '''
+            elif (rc == 2):
+                if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
+                    logging.error('Authentication error 5 - Token no longer valid - Need to reconnect ')
+                    #netid = yoAccess.check_connection(yoAccess.mqttPort)
+                    #logging.debug('netid = {}'.format(netid))
+                    yoAccess.connectedToBroker = False
+                    yoAccess.disconnect = True
+                    yoAccess.client.disconnect()
+                    yoAccess.token = None
+                    time.sleep(2)
+                    yoAccess.connect_to_broker()
+
+
             else:
                 logging.error('Broker connection failed with result code {}'.format(rc))
                 yoAccess.connectedToBroker = True
@@ -557,17 +584,7 @@ class YoLinkInitPAC(object):
                 #    fileData['type'] = 'REQ'
                 #    fileData['data'] = data
                 #    yoAccess.fileQueue.put(fileData)
-                #// Possible values for client.state()
-                #define MQTT_CONNECTION_TIMEOUT     -4
-                #define MQTT_CONNECTION_LOST        -3
-                #define MQTT_CONNECT_FAILED         -2
-                #define MQTT_DISCONNECTED           -1
-                #define MQTT_CONNECTED               0
-                #define MQTT_CONNECT_BAD_PROTOCOL    1
-                #define MQTT_CONNECT_BAD_CLIENT_ID   2
-                #define MQTT_CONNECT_UNAVAILABLE     3
-                #define MQTT_CONNECT_BAD_CREDENTIALS 4
-                #define MQTT_CONNECT_UNAUTHORIZED    5
+
                 
                 if result.rc != 0:
                     logging.error('Error {} during publishing {}'.format(result.rc, data))
