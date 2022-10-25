@@ -445,7 +445,7 @@ class YoLinkInitPAC(object):
                         yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['report'],2)
                     yoAccess.connectedToBroker = True
                     #yoAccess.clean_up_pending_Dict()
-                    time.sleep(5)
+                    #time.sleep(5)
                 #// Possible values for client.state()
                 #define MQTT_CONNECTION_TIMEOUT     -4
                 #define MQTT_CONNECTION_LOST        -3
@@ -502,7 +502,7 @@ class YoLinkInitPAC(object):
                 '''
             elif (rc == 2):
                 if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
-                    logging.error('Authentication error 5 - Token no longer valid - Need to reconnect ')
+                    logging.error('Authentication error 2 - Token no longer valid - Need to reconnect ')
                     #netid = yoAccess.check_connection(yoAccess.mqttPort)
                     #logging.debug('netid = {}'.format(netid))
                     yoAccess.connectedToBroker = False
@@ -536,7 +536,7 @@ class YoLinkInitPAC(object):
             yoAccess.client.loop_stop()
             
         else:
-            logging.debug('Unintentional disconnect - Reacquiring connection')
+            logging.error('Unintentional disconnect - Reacquiring connection')
 
             try:
                 #netid = yoAccess.check_connection(yoAccess.mqttPort)
