@@ -159,21 +159,29 @@ class YoLinkInitPAC(object):
         try:
             logging.info('Refreshing Token ')
             now = int(time.time())
-            #if yoAccess.token == None:
-            response = requests.post( yoAccess.tokenURL,
-                data={"grant_type": "refresh_token",
-                    "client_id" :  yoAccess.uaID,
-                    "refresh_token":yoAccess.token['refresh_token'],
-                    }
-            )
-            yoAccess.token =  response.json()
-            yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now 
+            if yoAccess.token != None:
+                if now < yoAccess.token['expirationTime']:
+                    response = requests.post( yoAccess.tokenURL,
+                        data={"grant_type": "refresh_token",
+                            "client_id" :  yoAccess.uaID,
+                            "refresh_token":yoAccess.token['refresh_token'],
+                            }
+                    )
+                else:
+                    response = requests.post( yoAccess.tokenURL,
+                        data={"grant_type": "client_credentials",
+                            "client_id" : yoAccess.uaID,
+                            "client_secret" : yoAccess.secID },
+                    )
+                if response.ok:
+                    yoAccess.token =  response.json()
+                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
+                    return(True)
+                else:
+                    return(False)
+            else:
+                return(yoAccess.request_new_token())
 
-            #if temp['access_token'] != yoAccess.token['access_token'] :
-            #    yoAccess.token = temp
-            #    yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-            #    #need to check if device tokens change with new access token
-            return(True)
 
         except Exception as e:
             logging.debug('Exeption occcured during refresh_token : {}'.format(e))
@@ -483,7 +491,7 @@ class YoLinkInitPAC(object):
                     yoAccess.connectedToBroker = False
                     yoAccess.disconnect = True
                     yoAccess.client.disconnect()
-                    yoAccess.token = None
+                    yoAccess.token = yoAccess.refresh_token()
                     time.sleep(2)
                     yoAccess.connect_to_broker()
 
