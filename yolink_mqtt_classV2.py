@@ -119,6 +119,9 @@ class YoLinkMQTTDevice(object):
 
     def publish_data(yolink, data):
         logging.debug( 'Publish Data to Queue: {}'.format(data))
+        while not yolink.yoAccess.connectedToBroker:
+            logging.debug('Connection to Broker not established - waiting')
+            time.sleep(1)
         yolink.yoAccess.publishQueue.put(data, timeout = 2)
         if yolink.yoAccess.publishQueue.full():
             return(False)
@@ -801,7 +804,7 @@ class YoLinkMQTTDevice(object):
 
     
     def setOnline(yolink, data):
-        logging.debug('SetOnline: {}'.format(data))
+        logging.debug('SetOnline:')
         if yolink.dOnline in data[yolink.dData]:
             yolink.dataAPI[yolink.dOnline] = data[yolink.dData][yolink.dOnline]
         elif data[yolink.dData] == {}:
@@ -824,7 +827,7 @@ class YoLinkMQTTDevice(object):
 
     def updateStatusData  (yolink, data):
         try:
-            #logging.debug('{} - updateStatusData : {}'.format(yolink.type , data))
+            logging.debug('{} - updateStatusData : {}'.format(yolink.type , data))
             yolink.setOnline(data)
             if 'reportAt' in data[yolink.dData] :
                 reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')

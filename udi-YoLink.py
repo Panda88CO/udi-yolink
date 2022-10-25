@@ -366,9 +366,9 @@ class YoLinkSetup (udi_interface.Node):
                 #Keep token current
                 #self.node.setDriver('GV0', self.temp_unit, True, True)
                 try:
-                    if not self.yoAccess.refresh_token(): #refresh failed
-                        while not self.yoAccess.request_new_token():
-                                time.sleep(60)
+                    #if not self.yoAccess.refresh_token(): #refresh failed
+                    #    while not self.yoAccess.request_new_token():
+                    #            time.sleep(60)
                     #logging.info('Updating device status')
                     nodes = self.poly.getNodes()
                     for nde in nodes:
