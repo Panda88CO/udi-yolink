@@ -325,18 +325,19 @@ class YoLinkInitPAC(object):
         #topicReportAll = 'yl-home/'+yoAccess.homeID+'/+/report'
         
         if  deviceId in yoAccess.mqttList :
-            yoAccess.client.subscribe(topicReq)
-            yoAccess.client.subscribe(topicResp)
-            yoAccess.client.subscribe(topicReport)
-
+            logging.debug('unsubscribe {}'.format(deviceId))
             yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['request'] )
             yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['response'] )
             yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['report'] )
-
+            
+            logging.debug('re-subscribe {}'.format(deviceId))
+            yoAccess.client.subscribe(topicReq,2)
+            yoAccess.client.subscribe(topicResp,2)
+            yoAccess.client.subscribe(topicReport,2)
             yoAccess.mqttList[deviceId]['request'] =  topicReq
             yoAccess.mqttList[deviceId]['response'] = topicResp
             yoAccess.mqttList[deviceId]['report'] = topicReport
-        logging.debug('mqtt.list:{}.'.format(yoAccess.mqttList))
+        #logging.debug('mqtt.list:{}.'.format(yoAccess.mqttList))
 
     def process_message(yoAccess):
 
@@ -437,15 +438,15 @@ class YoLinkInitPAC(object):
             if (rc == 0):
                 yoAccess.online = True
                 logging.info('Successfully connected to broker {} '.format(yoAccess.mqttURL))
-                if not yoAccess.connectedToBroker:
-                    logging.debug('Re-subscribing devices after after disconnect')
-                    for deviceId in yoAccess.mqttList:
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['request'],2)
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['response'],2)
-                        yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['report'],2)
-                    yoAccess.connectedToBroker = True
-                    #yoAccess.clean_up_pending_Dict()
-                    #time.sleep(5)
+                logging.debug('Re-subscribing devices after after disconnect')
+                for deviceId in yoAccess.mqttList:
+                    yoAccess.update_mqtt_subscription(deviceId)
+                    #yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['request'],2)
+                    #yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['response'],2)
+                    #yoAccess.client.subscribe(yoAccess.mqttList[deviceId]['report'],2)
+                yoAccess.connectedToBroker = True
+                #yoAccess.clean_up_pending_Dict()
+                #time.sleep(5)
                 #// Possible values for client.state()
                 #define MQTT_CONNECTION_TIMEOUT     -4
                 #define MQTT_CONNECTION_LOST        -3
