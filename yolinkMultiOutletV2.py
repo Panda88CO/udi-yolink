@@ -4,7 +4,7 @@ import time
 import re
 
 from yolink_mqtt_classV2 import YoLinkMQTTDevice
-from yolinkDelayTimer import CountdownTimer
+from yolink_delay_timer import CountdownTimer
 try:
     import udi_interface
     logging = udi_interface.LOGGER

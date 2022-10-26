@@ -19,7 +19,7 @@ except ImportError:
 
 
 from queue import Queue
-from yolinkDelayTimer import CountdownTimer
+from yolink_delay_timer import CountdownTimer
 """
 Object representation for YoLink MQTT Client
 """
@@ -106,9 +106,10 @@ class YoLinkMQTTDevice(object):
         yolink.messagePending = False
     
     def delayTimerCallback(yolink, callback, updateTime=5):
+
         yolink.extDelayTimer.timerReportInterval(updateTime)
         yolink.extDelayTimer.timerCallback(callback, updateTime)
-       
+        #logging.debug('delayTimerCallback: '.format(updateTime))
        
     
     def initDevice(yolink):

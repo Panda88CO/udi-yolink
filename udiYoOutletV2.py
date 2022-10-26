@@ -54,6 +54,8 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet = None
         self.powerSupported = True # assume 
         self.last_state = ''
+        self.timer_update = 5
+        self.timer_expires = 0
 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -83,7 +85,7 @@ class udiYoOutlet(udi_interface.Node):
         time.sleep(2)
         self.yoOutlet.initNode()
         time.sleep(2)
-        self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         #self.node.setDriver('ST', 1, True, True)
     
     def stop (self):
@@ -96,37 +98,47 @@ class udiYoOutlet(udi_interface.Node):
     def checkDataUpdate(self):
         if self.yoOutlet.data_updated():
             self.updateData()
+        if time.time() >= self.timer_expires - self.timer_update:
+            self.node.setDriver('GV1', 0, True, False)
+            self.node.setDriver('GV2', 0, True, False)
 
-
-    def updateData(self):
+    def updateData(self, force_update = True):
+        logging.info('udiYoOutlet updateData')
         if self.node is not None:
             if  self.yoOutlet.online:
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
-                    self.node.setDriver('GV0',1 , True, True)
+                    self.node.setDriver('GV0',1 , True, force_update)
                     if self.last_state != state:
                         self.node.reportCmd('DON')  
                 elif state == 'OFF' :
-                    self.node.setDriver('GV0', 0, True, True)
+                    self.node.setDriver('GV0', 0, True, force_update)
                     if self.last_state != state:
                         self.node.reportCmd('DOF')  
                 else:
-                    self.node.setDriver('GV0', 99, True, True)
+                    self.node.setDriver('GV0', 99, True, force_update)
                 self.last_state = state
-                self.node.setDriver('GV8',1, True, True)
+                self.node.setDriver('GV8',1, True, force_update)
                 tmp =  self.yoOutlet.getEnergy()
                 if tmp != None:
                     power = tmp['power']
                     watt = tmp['watt']
-                    self.node.setDriver('GV3', power, True, True)
-                    self.node.setDriver('GV4', watt, True, True)
+                    self.node.setDriver('GV3', power, True, force_update)
+                    self.node.setDriver('GV4', watt, True, force_update)
+                logging.debug('Timer info : {} {}'. format(time.time() - self.timer_expires))
+                if time.time() >= self.timer_expires - self.timer_update:
+                    self.node.setDriver('GV1', 0, True, False)
+                    self.node.setDriver('GV2', 0, True, False)
+
 
             else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV3', -1, True, True)
-                self.node.setDriver('GV4', -1, True, True)
-                self.node.setDriver('GV8',0, True, True)
-            
+                self.node.setDriver('GV0', 99, True, force_update)
+                self.node.setDriver('GV1', 0, True, force_update)
+                self.node.setDriver('GV2', 0, True, force_update)
+                self.node.setDriver('GV3', -1, True, force_update)
+                self.node.setDriver('GV4', -1, True, force_update)
+                self.node.setDriver('GV8',0, True, force_update)
+        
 
 
 
@@ -137,15 +149,22 @@ class udiYoOutlet(udi_interface.Node):
 
 
     def updateDelayCountdown( self, timeRemaining):
+        max_delay = 0
+        
         logging.debug('udiYoOutlet updateDelayCountDown:  delays {}'.format(timeRemaining))
         for delayInfo in range(0, len(timeRemaining)):
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
                     if 'on' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                        if max_delay < timeRemaining[delayInfo]['on']:
+                            max_delay = timeRemaining[delayInfo]['on']
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
-
+                        if max_delay < timeRemaining[delayInfo]['off']:
+                            max_delay = timeRemaining[delayInfo]['off']
+        self.timer_expires = time.time()+max_delay
+        self.updateData(False)  
     
     def checkOnline(self):
         self.yoOutlet.refreshDevice()

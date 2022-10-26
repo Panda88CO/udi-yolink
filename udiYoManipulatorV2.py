@@ -47,7 +47,7 @@ class udiYoManipulator(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoManipulator = None
         self.last_state = ''
-
+        self.timer_cleared = True
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -132,13 +132,17 @@ class udiYoManipulator(udi_interface.Node):
     def updateDelayCountdown( self, timeRemaining):
         logging.debug('Manipulator updateDelayCountDown:  delays {}'.format(timeRemaining))
         for delayInfo in range(0, len(timeRemaining)):
+            self.timer_cleared = False
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
                     if 'on' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
-
+        if not self.timer_cleared and len(timeRemaining) == 0:
+            self.node.setDriver('GV1', 0, True, False)
+            self.node.setDriver('GV2', 0, True, False)
+            self.timer_cleared = True
   
     def switchControl(self, command):
         logging.info('Manipulator switchControl')

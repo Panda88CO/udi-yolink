@@ -55,10 +55,6 @@ class YoLinkInitPAC(object):
         yoAccess.temp_unit = 0
         yoAccess.online = False
         yoAccess.deviceList = []
-        
-        #yoAccess.TSSfile = 'TSSmessages.json'
-        #yoAccess.readTssFile()
-
         yoAccess.token = None
         try:
             #while not yoAccess.request_new_token( ):
@@ -87,7 +83,9 @@ class YoLinkInitPAC(object):
                 time.sleep(35) # Wait 35 sec and try again - 35 sec ensures less than 10 attemps in 5min - API restriction
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
-            yoAccess.retrieve_homeID()      
+            time.sleep(1)
+            if yoAccess.token != None:
+                yoAccess.retrieve_homeID()      
             #if yoAccess.client == None:    
       
             #logging.debug('initialize MQTT' )
@@ -145,9 +143,12 @@ class YoLinkInitPAC(object):
                             "client_id" : yoAccess.uaID,
                             "client_secret" : yoAccess.secID },
                     )
-                
-                temp = response.json()
-                #logging.debug('yoAccess Token : {}'.format(temp))
+                if response.ok:
+                    temp = response.json()
+                    logging.debug('yoAccess Token : {}'.format(temp))
+                else:
+                    logging.error('Error occured obtaining token - check credentials')
+                    return(False)
                 if 'state' not in temp:
                     yoAccess.token = temp
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in'] + now )
@@ -240,6 +241,7 @@ class YoLinkInitPAC(object):
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
 
             r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1) 
+            logging.debug('Obtaining  homeID : {}'.format(r.ok))
             if r.ok:
                 homeId = r.json()
                 yoAccess.homeID = homeId['data']['id']
@@ -254,10 +256,12 @@ class YoLinkInitPAC(object):
 
 
     def shut_down(yoAccess):
-        yoAccess.STOP.set()
+
         yoAccess.disconnect = True
-        yoAccess.client.disconnect()
-        yoAccess.client.loop_stop()
+        if yoAccess.client:
+            yoAccess.STOP.set()
+            yoAccess.client.disconnect()
+            yoAccess.client.loop_stop()
         
     ########################################
     # MQTT stuff

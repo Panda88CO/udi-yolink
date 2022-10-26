@@ -20,7 +20,7 @@ class RepeatTimer(Timer):
 
 
 """
-Object for handling Delay - cbackground countdowm timer 
+Object for handling Delay - background countdown timer 
 Requires call back to handle updates
 """
 class CountdownTimer(object):
@@ -29,6 +29,7 @@ class CountdownTimer(object):
         self.updateInterval = 5
         self.timeRemain = []
         self.timerRunning = False
+        self.timer_cleared = True
         self.lock = Lock()
         self.callback = None
         #self.timer = RepeatTimer(self.updateInterval, self.timeUpdate )
@@ -106,10 +107,22 @@ class CountdownTimer(object):
                 if self.timeRemain[delay]['off'] > 0:
                     activeDelays = True
                 else:
-                    self.timeRemain[delay]['off'] = 0           
+                    self.timeRemain[delay]['off'] = 0
 
-        if self.callback and activeDelays:
-            self.callback(self.timeRemain)
+        #if self.callback and activeDelays:
+        self.callback(self.timeRemain)     
+        
+        
+        #logging.debug('timeUpdate: {} {} {}'.format(activeDelays, self.timer_cleared,  self.timeRemain))
+        #if self.callback:
+        #    if activeDelays:
+        #        self.callback(self.timeRemain)
+        #        self.timer_cleared = False
+        #    elif not self.timer_cleared: # makes sure 0 is sent to display
+        #        self.callback(self.timeRemain)
+        #        self.timer_cleared = True
+
+            
         self.lock.release()
     
     def stop(self):

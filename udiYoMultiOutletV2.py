@@ -43,6 +43,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.port  = int(portStr.pop())
         #self.port = int(port )
         self.last_state = 99
+        self.timer_cleared = True
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
         self.n_queue = [] 
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -117,9 +118,8 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.debug('udiYoSubOutlet updateDelayCountDown: port: {} delays: {}'.format(self.port, timeRemaining))
         #ch = self.port - 1 # 0 based vs 1 based 
         for delayInfo in range(0, len(timeRemaining)):
-
+            self.timer_cleared = False 
             if 'ch' in timeRemaining[delayInfo]:
-                
                 if timeRemaining[delayInfo]['ch'] == (self.port):
                     #logging.debug('debug port: {} timeRemain: {} '.format(self.port, timeRemaining[delayInfo] ))
                     if 'on' in timeRemaining[delayInfo]:
@@ -127,7 +127,10 @@ class udiYoSubOutlet(udi_interface.Node):
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, True)
                 #logging.debug('display update {}'.format(timeRemaining))
-
+        if not self.timer_cleared and len(timeRemaining) == 0:
+            self.node.setDriver('GV1', 0, True, False)
+            self.node.setDriver('GV2', 0, True, False)
+            self.timer_cleared = True
    
    
     def set_port_on(self, command = None):

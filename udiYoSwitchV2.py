@@ -50,6 +50,7 @@ class udiYoSwitch(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSwitch = None
+        self.timer_cleared = True
         self.n_queue = [] 
         self.last_state = ''
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -90,13 +91,17 @@ class udiYoSwitch(udi_interface.Node):
     def updateDelayCountdown (self, timeRemaining ) :
         logging.debug('updateDelayCountdown {}'.format(timeRemaining))
         for delayInfo in range(0, len(timeRemaining)):
+            self.timer_cleared = False
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
                     if 'on' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
-
+        if not self.timer_cleared and len(timeRemaining) == 0:
+            self.node.setDriver('GV1', 0, True, False)
+            self.node.setDriver('GV2', 0, True, False)
+            self.timer_cleared = True
       
 
     def stop (self):
