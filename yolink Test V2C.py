@@ -17,7 +17,7 @@ except ImportError:
 
 
 
-from yoLinkInitV2 import YoLinkInitPAC
+from yoLink_init_V2 import YoLinkInitPAC
 from yolinkHubV2 import YoLinkHub
 from yolinkSpeakerHubV2 import YoLinkSpeakerHub
 from yolinkMultiOutletV2 import YoLinkMultiOutlet

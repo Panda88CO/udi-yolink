@@ -18,7 +18,7 @@ except ImportError:
         os.remove('./debug1.log')
     import logging
     import sys
-    #logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s [%(levelname)s] [%(threadName)s] %(message)s",
@@ -47,6 +47,10 @@ from yolinkMotionSensorV2 import YoLinkMotionSensor
 from yolinkVibrationSensorV2 import YoLinkVibrationSensor
 from yolinkOutletV2 import YoLinkOutlet
 from yolinkDoorSensorV2 import YoLinkDoorSensor
+from yolinkLockV2 import YoLinkLock
+#from yolinkInfraredRemoterV2 import YoLinkInfraredRemoter
+
+
 from yolinkHubV2 import YoLinkHub
 
 
@@ -68,7 +72,10 @@ if (os.path.exists('./loginInfo.json')):
     WiFissid = tmp['WiFissid']
     WiFipwd = tmp['WiFipassword']
 
-deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub']
+#deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'Lock', 'InfraredRemoter']
+#deviceTestList = ['Lock', 'InfraredRemoter',  'VibrationSensor', ]
+#deviceTestList = ['InfraredRemoter',  'VibrationSensor']
+deviceTestList = ['VibrationSensor',  'Outlet']
 #deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor', 'MotionSensor', 'Outlet', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationsSensor']
 #deviceTestList = ['SpeakerHub', 'VibrationSensor']
 #deviceTestList = ['Hub', 'DoorSensor', 'MultiOutlet' ]
@@ -410,6 +417,64 @@ for i in range(0,10):
                         print('{} - setMultiOutOffDelay(): {}'.format(deviceList[dev]['name'], devices[dev].getDataAll()))
                 print( '\n')
 
+
+
+            elif deviceList[dev]['type'] == 'Lock' and 'Lock' in deviceTestList:
+                print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+                if dev not in devices:
+                    devices[dev] = YoLinkLock(yoAccess, deviceList[dev])   
+                else:     
+                    print('{} - refreshDevice(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
+                    print('{} - getLastUpdate(): {} = {}'.format(deviceList[dev]['name'], timeSec, str(datetime.fromtimestamp(timeSec).strftime("%m/%d/%Y, %H:%M:%S"))))
+                    print('{} - getDataAll(): {}'.format(deviceList[dev]['name'], devices[dev].getDataAll()))
+                    print('{} - getLastDataPacket(): {}'.format(deviceList[dev]['name'], devices[dev].getLastDataPacket()))
+                    print('{} - getState(): {}'.format(deviceList[dev]['name'], devices[dev].getState()))
+                    print('{} - fetchState(): {}'.format(deviceList[dev]['name'], devices[dev].fetchState()))
+                    print('{} - setState(): {}'.format(deviceList[dev]['name'], devices[dev].setState('unlock')))
+                    time.sleep(10)
+                    print('{} - setState(): {}'.format(deviceList[dev]['name'], devices[dev].setState('lock')))
+                    #print('{} - getStateValue({}): {}'.format(deviceList[dev]['name'],'state' , devices[dev].getStateValue('state'))) 
+                    print('{} - getBattery(): {}'.format(deviceList[dev]['name'], devices[dev].getBattery()))
+                    #print('{} - getAlarms(): {}'.format(deviceList[dev]['name'], devices[dev].getAlarms()))     
+
+            elif deviceList[dev]['type'] == 'InfraredRemoter' and 'InfraredRemoter' in deviceTestList:
+                print('{} - {} : {}'.format(deviceList[dev]['type'], deviceList[dev]['name'], dev))
+                if dev not in devices:
+                    devices[dev] = YoLinkInfraredRemoter(yoAccess, deviceList[dev])   
+                else:     
+                    print('{} - refreshDevice(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
+                    #print('{} - dataAPI: {}'.format(deviceList[dev]['name'], devices[dev].dataAPI))
+                    #print('{} - get_code_dict(): {}'.format(deviceList[dev]['name'], devices[dev].get_code_dict()))
+
+                    print('{} - get_nbr_keys({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_nbr_keys()))
+                    print('{} - get_last_message_type({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_last_message_type()))
+                    '''
+                    print('{} - send({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].send(dev)))
+                    print('{} - get_last_message_type({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_last_message_type()))
+                    print('{} - get_send_status({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_send_status()))
+                    time.sleep(5)
+                    print('{} - send({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].send(dev+1)))
+                    print('{} - get_last_message_type({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_last_message_type()))
+                    print('{} - get_send_status({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_send_status()))
+                    time.sleep(5)
+                    '''
+                    print('{} - learn({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].learn(i+3)))
+                    time.sleep(1)
+                    time.sleep(1)
+                    time.sleep(1)
+                    time.sleep(1)
+                    time.sleep(1)
+                    time.sleep(1)
+                    time.sleep(1)
+                    time.sleep(1)
+                    time.sleep(1)
+                    time.sleep(1)
+                    print('{} - get_last_message_type({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_last_message_type()))
+                    time.sleep(1)
+                    #print('{} - get_learn_status({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_learn_status()))
+                    #print('{} - get_send_status({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_send_status()))
+                    #print('{} - get_nbr_keys({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_nbr_keys()))
+                    #time.sleep(2)
             else:
                 print('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
 

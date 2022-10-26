@@ -8,7 +8,7 @@ import sys
 import time
 
 
-from yoLinkInitV2 import YoLinkInitPAC
+from yoLink_init_V2 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoTHsensorV2 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
@@ -366,18 +366,18 @@ class YoLinkSetup (udi_interface.Node):
                 #Keep token current
                 #self.node.setDriver('GV0', self.temp_unit, True, True)
                 try:
-                    if not self.yoAccess.refresh_token(): #refresh failed
-                        while not self.yoAccess.request_new_token():
-                                time.sleep(60)
+                    #if not self.yoAccess.refresh_token(): #refresh failed
+                    #    while not self.yoAccess.request_new_token():
+                    #            time.sleep(60)
                     #logging.info('Updating device status')
                     nodes = self.poly.getNodes()
                     for nde in nodes:
                         if nde != 'setup':   # but not the controller node
                             nodes[nde].checkOnline()
                 except Exception as e:
-                    logging.debug('Exeption occcured during request_new_token : {}'.format(e))
-                    self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
-                    self.deviceList = self.yoAccess.getDeviceList()           
+                    logging.debug('Exeption occcured during systemPoll : {}'.format(e))
+                    #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
+                    #self.deviceList = self.yoAccess.getDeviceList()           
                 
             if 'shortPoll' in polltype:
                 self.heartbeat()
