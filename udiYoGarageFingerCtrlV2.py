@@ -32,7 +32,7 @@ class udiYoGarageFinger(udi_interface.Node):
         
     drivers = [
             {'driver': 'GV8', 'value': 1, 'uom': 25},
-            {'driver': 'ST', 'value': 1, 'uom': 25},
+            #{'driver': 'ST', 'value': 1, 'uom': 25},
 
             ]
 
@@ -43,7 +43,7 @@ class udiYoGarageFinger(udi_interface.Node):
         
         self.yoAccess=yoAccess
         self.devInfo =  deviceInfo   
-        self.yoTHsensor  = None
+        self.yoDoorControl  = None
         logging.debug('udiYoGarageFinger INIT - {}'.format(deviceInfo['name']))
         self.n_queue = []
         #polyglot.subscribe(polyglot.POLL, self.poll)
@@ -72,7 +72,7 @@ class udiYoGarageFinger(udi_interface.Node):
         logging.info('start - udiYoGarageFinger')
         self.yoDoorControl = YoLinkGarageFingerCtrl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
 
@@ -88,7 +88,7 @@ class udiYoGarageFinger(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoGarageFinger')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoDoorControl.shut_down()
 
     

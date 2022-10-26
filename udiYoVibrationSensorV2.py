@@ -35,7 +35,7 @@ class udiYoVibrationSensor(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -46,7 +46,8 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.adress = address
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
-        self.yoTHsensor  = None
+        self.yoVibrationSensor  = None
+        self.last_state = 99
         self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -79,12 +80,12 @@ class udiYoVibrationSensor(udi_interface.Node):
         time.sleep(2)
         self.yoVibrationSensor.initNode()
         time.sleep(2)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
 
     
     def stop (self):
         logging.info('Stop udiYoVibrationSensor')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoVibrationSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -103,12 +104,15 @@ class udiYoVibrationSensor(udi_interface.Node):
                 vib_state = self.getVibrationState()
                 if vib_state == 1:
                     self.node.setDriver('GV0', 1, True, True)
-                    self.node.reportCmd('DON')   
+                    if self.last_state != vib_state:
+                        self.node.reportCmd('DON')   
                 elif vib_state == 0:
                     self.node.setDriver('GV0', 0, True, True)
-                    self.node.reportCmd('DOF')  
+                    if self.last_state != vib_state:
+                        self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True) 
+                self.last_state = vib_state
                 self.node.setDriver('GV1', self.yoVibrationSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)
             else:

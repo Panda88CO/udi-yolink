@@ -32,7 +32,7 @@ class udiYoSubOutlet(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV4', 'value': 0, 'uom': 25},           
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
     
@@ -42,6 +42,7 @@ class udiYoSubOutlet(udi_interface.Node):
         portStr = re.findall('[0-9]+', str(port))
         self.port  = int(portStr.pop())
         #self.port = int(port )
+        self.last_state = 99
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
         self.n_queue = [] 
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -69,7 +70,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutPortState(self.port)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -84,7 +85,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def stop (self):
         logging.debug('udiYoSubOutlet - stop')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
        
     def checkOnline(self):
         pass
@@ -97,15 +98,17 @@ class udiYoSubOutlet(udi_interface.Node):
         if outletstate == 1:
             self.portState = 1
             self.node.setDriver('GV0', 1, True, True)
-            self.node.reportCmd('DON')
+            if self.last_state != outletstate:
+                self.node.reportCmd('DON')
         elif outletstate == 0:
             self.portState = 0
             self.node.setDriver('GV0', 0, True, True)
-            self.node.reportCmd('DOF')        
+            if self.last_state != outletstate:
+                self.node.reportCmd('DOF')        
         else:
             self.portState = 99
             self.node.setDriver('GV0', 99, True, True)
-
+        self.last_state = outletstate
         self.node.setDriver('GV1', onDelay, True, False)
         self.node.setDriver('GV2', offDelay, True, False)
 
@@ -211,7 +214,7 @@ class udiYoSubUSB(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},    
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
     def  __init__(self, polyglot, primary, address, name, usbPort, yolink):
@@ -220,7 +223,7 @@ class udiYoSubUSB(udi_interface.Node):
         
         portStr = re.findall('[0-9]+', str(usbPort))
         self.usbPort = int(portStr.pop())
-
+        self.last_state = 99
 
         #self.port = port
         logging.debug('udiYoSubUSB - init - port {}'.format(self.usbPort))
@@ -252,7 +255,7 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB - start')
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -268,7 +271,7 @@ class udiYoSubUSB(udi_interface.Node):
 
     def stop (self):
         logging.info('udiYoSubUSB - stop')
-        self.node.setDriver('ST', 0, True, True) 
+        #self.node.setDriver('ST', 0, True, True) 
     
     def checkOnline(self):
         pass
@@ -280,6 +283,12 @@ class udiYoSubUSB(udi_interface.Node):
     def updateUsbNode(self, gv0):
         logging.info('udiYoSubUSB - updateUsbNode: {}'.format(gv0))
         self.node.setDriver('GV0', gv0, True, True)
+        if self.last_state != gv0:
+            if 1 == gv0:
+                self.node.reportCmd('DON')
+            elif 0 == gv0:
+                self.node.reportCmd('DON')
+        self.last_state = gv0
         self.portState = gv0
 
     def usbControl(self, command):
@@ -346,7 +355,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25}
+            #{'driver': 'ST', 'value': 0, 'uom': 25}
             ]
     
 
@@ -364,6 +373,9 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.ports = -1
         self.devInfo =  deviceInfo   
         self.yoMultiOutlet = None
+        self.subUsb = []
+        self.subOutlet = []
+
         self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -395,7 +407,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
 
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         time.sleep(5)
         self.yoMultiOutlet.initNode()
         time.sleep(2)
@@ -471,7 +483,7 @@ class udiYoMultiOutlet(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoMultiOutlet ')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoMultiOutlet.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)

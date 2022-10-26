@@ -36,7 +36,7 @@ class udiYoLeakSensor(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -47,7 +47,8 @@ class udiYoLeakSensor(udi_interface.Node):
         logging.debug('udiYoLeakSensor  INIT - {}'.format(deviceInfo['name']))
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
-        self.yoTHsensor  = None
+        self.yoLeakSensor  = None
+        self.last_state = 99
         self.n_queue = []   
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         #polyglot.subscribe(polyglot.POLL, self.poll)
@@ -78,7 +79,7 @@ class udiYoLeakSensor(udi_interface.Node):
         time.sleep(2)
         self.yoLeakSensor.initNode()
         time.sleep(1)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
 
         #time.sleep(3)
     
@@ -89,7 +90,7 @@ class udiYoLeakSensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoLeakSensor ')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoLeakSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)  
@@ -118,12 +119,15 @@ class udiYoLeakSensor(udi_interface.Node):
                 logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
                 if waterState == 1:
                     self.node.setDriver('GV0', 1, True, True)
-                    self.node.reportCmd('DON')
+                    if waterState != self.last_state:
+                        self.node.reportCmd('DON')
                 elif waterState == 0:
                     self.node.setDriver('GV0', 0, True, True)
-                    self.node.reportCmd('DOF')
+                    if waterState != self.last_state:
+                        self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99, True, True)
+                self.last_state = waterState
                 self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)
             else:

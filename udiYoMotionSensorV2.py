@@ -35,7 +35,7 @@ class udiYoMotionSensor(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -46,7 +46,8 @@ class udiYoMotionSensor(udi_interface.Node):
         self.adress = address
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
-        self.yoTHsensor  = None
+        self.yoMotionsSensor  = None
+        self.last_state = 99
         self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -81,12 +82,12 @@ class udiYoMotionSensor(udi_interface.Node):
         time.sleep(2)
         self.yoMotionsSensor.initNode()
         #time.sleep(2)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
 
     
     def stop (self):
         logging.info('Stop udiYoMotionSensor')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoMotionsSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -116,12 +117,15 @@ class udiYoMotionSensor(udi_interface.Node):
                 motion_state = self.getMotionState()
                 if motion_state == 1:
                     self.node.setDriver('GV0', 1, True, True)
-                    self.node.reportCmd('DON')
+                    if self.last_state != motion_state:
+                        self.node.reportCmd('DON')
                 elif motion_state == 0:
-                     self.node.setDriver('GV0', 0, True, True)
-                     self.node.reportCmd('DOF')
+                    self.node.setDriver('GV0', 0, True, True)
+                    if self.last_state != motion_state:
+                        self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99, True, True)
+                self.last_state = motion_state
                 self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', 1, True, True)
             else:

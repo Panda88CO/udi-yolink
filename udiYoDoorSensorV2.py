@@ -33,7 +33,7 @@ class udiYoDoorSensor(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -44,6 +44,8 @@ class udiYoDoorSensor(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.name = name
+        self.yoDoorSensor = None
+        self.last_state = 99
         logging.debug('udiYoDoorSensor INIT - {}'.format(deviceInfo['name']))
         self.n_queue = []
         
@@ -77,7 +79,7 @@ class udiYoDoorSensor(udi_interface.Node):
         time.sleep(2)
         self.yoDoorSensor.initNode()
         time.sleep(2)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         #if not self.yoDoorSensor.online:
         #    logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
 
@@ -92,7 +94,7 @@ class udiYoDoorSensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop - udiYoDoorSensor')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoDoorSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -122,12 +124,15 @@ class udiYoDoorSensor(udi_interface.Node):
                 doorstate = self.doorState()
                 if doorstate == 1:
                     self.node.setDriver('GV0', 1 , True, True)
-                    self.node.reportCmd('DON')
+                    if doorstate != self.last_state:
+                        self.node.reportCmd('DON')
                 elif doorstate == 0:
                     self.node.setDriver('GV0', 0 , True, True)
-                    self.node.reportCmd('DOF')   
+                    if doorstate != self.last_state:
+                        self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99 , True, True)
+                self.last_state = doorstate
                 self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
                 self.node.setDriver('GV8', self.yoDoorSensor.bool2Nbr(self.yoDoorSensor.online), True, True)
             else:

@@ -21,7 +21,7 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -61,7 +61,7 @@
          <st id="GV3" editor="watt" />
          <st id="GV4" editor="energy" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -91,7 +91,7 @@
       <editors />
       <sts>
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -112,7 +112,7 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -143,7 +143,7 @@
       <editors />
       <sts>
          <st id="GV0" editor="usbstate" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -171,7 +171,7 @@
          <st id="GV2" editor="delay" />
 
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -209,7 +209,7 @@
          <st id="BATLVL" editor="batlevel" />
          <st id="GV7" editor="alarm" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -227,7 +227,7 @@
          <st id="GV0" editor="doorstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -248,7 +248,7 @@
       <editors />
       <sts>
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -269,7 +269,7 @@
          <st id="GV0" editor="motionstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -292,7 +292,7 @@
          <st id="GV0" editor="waterstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -318,7 +318,7 @@
          <st id="GV0" editor="vibrastate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -346,7 +346,7 @@
          <st id="GV4" editor="messages" />
          <st id="GV5" editor="repeat" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>
@@ -388,7 +388,7 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="doorbell" />
          <st id="GV8" editor="online" />
-         <st id="ST"  editor="status" />
+         <!-- <st id="ST"  editor="status" /> -->
       </sts>
       <cmds>
          <sends>

@@ -39,7 +39,7 @@ class udiYoOutlet(udi_interface.Node):
             {'driver': 'GV3', 'value': -1, 'uom': 30},
             {'driver': 'GV4', 'value': -1, 'uom': 33},
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -53,6 +53,7 @@ class udiYoOutlet(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoOutlet = None
         self.powerSupported = True # assume 
+        self.last_state = ''
 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -64,7 +65,7 @@ class udiYoOutlet(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -83,11 +84,11 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.initNode()
         time.sleep(2)
         self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
     
     def stop (self):
         logging.info('Stop udiYoOutlet')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoOutlet.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -103,12 +104,15 @@ class udiYoOutlet(udi_interface.Node):
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
                     self.node.setDriver('GV0',1 , True, True)
-                    self.node.reportCmd('DON')  
+                    if self.last_state != state:
+                        self.node.reportCmd('DON')  
                 elif state == 'OFF' :
                     self.node.setDriver('GV0', 0, True, True)
-                    self.node.reportCmd('DOF')  
+                    if self.last_state != state:
+                        self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True)
+                self.last_state = state
                 self.node.setDriver('GV8',1, True, True)
                 tmp =  self.yoOutlet.getEnergy()
                 if tmp != None:

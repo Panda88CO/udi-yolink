@@ -47,7 +47,7 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'BATLVL', 'value': 5, 'uom': 25},
             {'driver': 'GV7', 'value': 2, 'uom': 25},
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -98,7 +98,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor.initNode()
         time.sleep(2)
         self.temp_unit = self.yoAccess.get_temp_unit()
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
 
     def initNode(self):
         self.yoTHsensor.refreshSensor()
@@ -106,7 +106,7 @@ class udiYoTHsensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoTHsensor')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)

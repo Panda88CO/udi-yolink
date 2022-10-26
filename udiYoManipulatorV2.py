@@ -35,7 +35,7 @@ class udiYoManipulator(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -46,7 +46,7 @@ class udiYoManipulator(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoManipulator = None
-
+        self.last_state = ''
 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -79,13 +79,13 @@ class udiYoManipulator(udi_interface.Node):
         time.sleep(2)
         self.yoManipulator.initNode()
         time.sleep(2)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
         #time.sleep(3)
 
     def stop (self):
         logging.info('Stop udiYoManipulator')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoManipulator.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -105,13 +105,15 @@ class udiYoManipulator(udi_interface.Node):
             if self.yoManipulator.online:
                 if state.upper() == 'OPEN':
                     self.node.setDriver('GV0', 1, True, True)
-                    self.node.reportCmd('DON')
+                    if self.last_state != state:
+                        self.node.reportCmd('DON')
                 elif state.upper() == 'CLOSED':
                     self.node.setDriver('GV0', 0, True, True)
-                    self.node.reportCmd('DOF')
+                    if self.last_state != state:
+                        self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99, True, True)
-                
+                self.last_state = state
                 self.node.setDriver('GV8', 1, True, True)
             else:
                 self.node.setDriver('GV0', 99, True, True)

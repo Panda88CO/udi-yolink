@@ -31,7 +31,7 @@ class udiYoSpeakerHub(udi_interface.Node):
             {'driver': 'GV4', 'value': 0, 'uom': 25}, 
             {'driver': 'GV5', 'value': 0, 'uom': 107},        
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
        drivers = [
@@ -97,7 +97,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.yoSpeakerHub.setMessageNbr(self.messageNbr )
         self.yoSpeakerHub.initNode()
         time.sleep(2)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 
  
@@ -121,7 +121,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoSpeakerHub')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoSpeakerHub.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)

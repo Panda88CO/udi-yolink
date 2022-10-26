@@ -24,22 +24,17 @@ class udiYoHub(udi_interface.Node):
   
     id = 'yohub'
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            #{'driver': 'GV3', 'value': 0, 'uom': 30},
-            #{'driver': 'GV4', 'value': 0, 'uom': 33},
+            #{'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV8', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
        drivers = [
             'GV0' =  switch State
             'GV1' = OnDelay
             'GV2' = OffDelay
-            'GV3' = Power
-            'GV4' = Energy
-            'GV5' = Online
+
+            'GV8' = Online
             ]
 
     ''' 
@@ -82,7 +77,7 @@ class udiYoHub(udi_interface.Node):
         self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoHub.initNode()
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         
         #if not self.yoHub.online:
         #    logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
@@ -95,7 +90,7 @@ class udiYoHub(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoHub')
-        self.node.setDriver('ST', 0, True, True)
+        #self.node.setDriver('ST', 0, True, True)
         self.yoHub.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -112,12 +107,12 @@ class udiYoHub(udi_interface.Node):
         if self.node is not None:
             state =  self.yoHub.getState().upper()
             if self.yoHub.online:
-                if state == 'ON':
-                    self.node.setDriver('GV0', 1, True, True)
-                elif  state == 'OFF':
-                    self.node.setDriver('GV0', 0, True, True)
-                else:
-                    self.node.setDriver('GV0', 99, True, True)
+                #if state == 'ON':
+                #    self.node.setDriver('GV0', 1, True, True)
+                #elif  state == 'OFF':
+                #    self.node.setDriver('GV0', 0, True, True)
+                #else:
+                #    self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV8', 1, True, True)
             else:
                 self.node.setDriver('GV8', 0, True, True)
@@ -170,7 +165,7 @@ class udiYoHub(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-
+                'QUERY' :update
                 }
 
 
