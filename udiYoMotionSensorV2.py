@@ -80,7 +80,7 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoMotionsSensor.initNode()
-        time.sleep(2)
+        #time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
 
     
@@ -92,7 +92,8 @@ class udiYoMotionSensor(udi_interface.Node):
         #    self.poly.delNode(self.node.address)
                 
     def checkOnline(self):
-        self.yoMotionsSensor.refreshDevice()   
+        self.yoMotionsSensor.refreshDevice()
+
     
 
     def getMotionState(self):
