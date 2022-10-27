@@ -381,7 +381,7 @@ class YoLinkInitPAC(object):
                         if payload['code'] == '000000':
                             tempCallback(payload)
                         else:
-                            logging.error('Non-000000 code {}: {}'.format(payload['desc'], str(json.dumps(payload))))
+                            logging.error('Non-000000 code {} : {}'.format(payload['desc'], str(json.dumps(payload))))
                             tempCallback(payload)
                         if yoAccess.debug:
                             fileData= {}
