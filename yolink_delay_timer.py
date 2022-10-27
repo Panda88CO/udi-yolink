@@ -109,8 +109,8 @@ class CountdownTimer(object):
                 else:
                     self.timeRemain[delay]['off'] = 0
 
-        #if self.callback and activeDelays:
-        self.callback(self.timeRemain)     
+        if self.callback and activeDelays:
+            self.callback(self.timeRemain)     
         
         
         #logging.debug('timeUpdate: {} {} {}'.format(activeDelays, self.timer_cleared,  self.timeRemain))

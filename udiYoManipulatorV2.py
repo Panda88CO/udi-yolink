@@ -48,6 +48,9 @@ class udiYoManipulator(udi_interface.Node):
         self.yoManipulator = None
         self.last_state = ''
         self.timer_cleared = True
+        self.timer_update = 5
+        self.timer_expires = 0
+
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -80,7 +83,7 @@ class udiYoManipulator(udi_interface.Node):
         self.yoManipulator.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
-        self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, 5)
+        self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         #time.sleep(3)
 
     def stop (self):
@@ -97,7 +100,9 @@ class udiYoManipulator(udi_interface.Node):
     def checkDataUpdate(self):
         if self.yoManipulator.data_updated():
             self.updateData()
-
+        #if time.time() >= self.timer_expires - self.timer_update:
+        #    self.node.setDriver('GV1', 0, True, False)
+        #    self.node.setDriver('GV2', 0, True, False)
 
     def updateData(self):
         if self.node is not None:
@@ -115,6 +120,10 @@ class udiYoManipulator(udi_interface.Node):
                     self.node.setDriver('GV0', 99, True, True)
                 self.last_state = state
                 self.node.setDriver('GV8', 1, True, True)
+                #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
+                if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
+                    self.node.setDriver('GV1', 0, True, False)
+                    self.node.setDriver('GV2', 0, True, False)                
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 0, True, True)     
@@ -130,19 +139,21 @@ class udiYoManipulator(udi_interface.Node):
 
 
     def updateDelayCountdown( self, timeRemaining):
+
         logging.debug('Manipulator updateDelayCountDown:  delays {}'.format(timeRemaining))
+        max_delay = 0
         for delayInfo in range(0, len(timeRemaining)):
-            self.timer_cleared = False
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
                     if 'on' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                        if max_delay < timeRemaining[delayInfo]['on']:
+                            max_delay = timeRemaining[delayInfo]['on']
                     if 'off' in timeRemaining[delayInfo]:
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
-        if not self.timer_cleared and len(timeRemaining) == 0:
-            self.node.setDriver('GV1', 0, True, False)
-            self.node.setDriver('GV2', 0, True, False)
-            self.timer_cleared = True
+                        if max_delay < timeRemaining[delayInfo]['off']:
+                            max_delay = timeRemaining[delayInfo]['off']
+        self.timer_expires = time.time()+max_delay
   
     def switchControl(self, command):
         logging.info('Manipulator switchControl')

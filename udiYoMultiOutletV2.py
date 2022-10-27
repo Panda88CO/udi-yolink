@@ -44,6 +44,9 @@ class udiYoSubOutlet(udi_interface.Node):
         #self.port = int(port )
         self.last_state = 99
         self.timer_cleared = True
+        self.timer_update = 5
+        self.timer_expires = 0
+
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
         self.n_queue = [] 
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -112,25 +115,27 @@ class udiYoSubOutlet(udi_interface.Node):
         self.last_state = outletstate
         self.node.setDriver('GV1', onDelay, True, False)
         self.node.setDriver('GV2', offDelay, True, False)
+        #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
+        if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
+            self.node.setDriver('GV1', 0, True, False)
+            self.node.setDriver('GV2', 0, True, False)
 
       
     def updateDelayCountdown(self, timeRemaining):
         logging.debug('udiYoSubOutlet updateDelayCountDown: port: {} delays: {}'.format(self.port, timeRemaining))
-        #ch = self.port - 1 # 0 based vs 1 based 
+        max_delay = 0
         for delayInfo in range(0, len(timeRemaining)):
-            self.timer_cleared = False 
             if 'ch' in timeRemaining[delayInfo]:
-                if timeRemaining[delayInfo]['ch'] == (self.port):
-                    #logging.debug('debug port: {} timeRemain: {} '.format(self.port, timeRemaining[delayInfo] ))
+                if timeRemaining[delayInfo]['ch'] == 1:
                     if 'on' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, True)
+                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                        if max_delay < timeRemaining[delayInfo]['on']:
+                            max_delay = timeRemaining[delayInfo]['on']
                     if 'off' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, True)
-                #logging.debug('display update {}'.format(timeRemaining))
-        if not self.timer_cleared and len(timeRemaining) == 0:
-            self.node.setDriver('GV1', 0, True, False)
-            self.node.setDriver('GV2', 0, True, False)
-            self.timer_cleared = True
+                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
+                        if max_delay < timeRemaining[delayInfo]['off']:
+                            max_delay = timeRemaining[delayInfo]['off']
+        self.timer_expires = time.time()+max_delay
    
    
     def set_port_on(self, command = None):
@@ -374,6 +379,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.nbrOutlets = -1
         self.nbrUsb = -1
         self.ports = -1
+        self.timer_update = 5
         self.devInfo =  deviceInfo   
         self.yoMultiOutlet = None
         self.subUsb = []
@@ -420,7 +426,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.nbrOutlets = 0
 
         else:
-            self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, 5)
+            self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
             time.sleep(2)
             logging.debug('multiOutlet past initNode')
             self.ports = self.yoMultiOutlet.getMultiOutStates()

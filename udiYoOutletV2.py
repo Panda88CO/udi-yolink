@@ -98,46 +98,46 @@ class udiYoOutlet(udi_interface.Node):
     def checkDataUpdate(self):
         if self.yoOutlet.data_updated():
             self.updateData()
-        if time.time() >= self.timer_expires - self.timer_update:
-            self.node.setDriver('GV1', 0, True, False)
-            self.node.setDriver('GV2', 0, True, False)
+        #if time.time() >= self.timer_expires - self.timer_update:
+        #    self.node.setDriver('GV1', 0, True, False)
+        #    self.node.setDriver('GV2', 0, True, False)
 
-    def updateData(self, force_update = True):
+    def updateData(self):
         logging.info('udiYoOutlet updateData')
         if self.node is not None:
             if  self.yoOutlet.online:
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
-                    self.node.setDriver('GV0',1 , True, force_update)
+                    self.node.setDriver('GV0',1 , True, True)
                     if self.last_state != state:
                         self.node.reportCmd('DON')  
                 elif state == 'OFF' :
-                    self.node.setDriver('GV0', 0, True, force_update)
+                    self.node.setDriver('GV0', 0, True, True)
                     if self.last_state != state:
                         self.node.reportCmd('DOF')  
                 else:
-                    self.node.setDriver('GV0', 99, True, force_update)
+                    self.node.setDriver('GV0', 99, True, True)
                 self.last_state = state
-                self.node.setDriver('GV8',1, True, force_update)
+                self.node.setDriver('GV8',1, True, True)
                 tmp =  self.yoOutlet.getEnergy()
                 if tmp != None:
                     power = tmp['power']
                     watt = tmp['watt']
-                    self.node.setDriver('GV3', power, True, force_update)
-                    self.node.setDriver('GV4', watt, True, force_update)
-                logging.debug('Timer info : {} {}'. format(time.time() - self.timer_expires))
-                if time.time() >= self.timer_expires - self.timer_update:
+                    self.node.setDriver('GV3', power, True, True)
+                    self.node.setDriver('GV4', watt, True, True)
+                #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
+                if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
                     self.node.setDriver('GV2', 0, True, False)
 
 
             else:
-                self.node.setDriver('GV0', 99, True, force_update)
-                self.node.setDriver('GV1', 0, True, force_update)
-                self.node.setDriver('GV2', 0, True, force_update)
-                self.node.setDriver('GV3', -1, True, force_update)
-                self.node.setDriver('GV4', -1, True, force_update)
-                self.node.setDriver('GV8',0, True, force_update)
+                self.node.setDriver('GV0', 99, True, True)
+                self.node.setDriver('GV1', 0, True, True)
+                self.node.setDriver('GV2', 0, True, True)
+                self.node.setDriver('GV3', -1, True, True)
+                self.node.setDriver('GV4', -1, True, True)
+                self.node.setDriver('GV8',0, True, True)
         
 
 
@@ -149,9 +149,8 @@ class udiYoOutlet(udi_interface.Node):
 
 
     def updateDelayCountdown( self, timeRemaining):
-        max_delay = 0
-        
         logging.debug('udiYoOutlet updateDelayCountDown:  delays {}'.format(timeRemaining))
+        max_delay = 0
         for delayInfo in range(0, len(timeRemaining)):
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
@@ -164,7 +163,7 @@ class udiYoOutlet(udi_interface.Node):
                         if max_delay < timeRemaining[delayInfo]['off']:
                             max_delay = timeRemaining[delayInfo]['off']
         self.timer_expires = time.time()+max_delay
-        self.updateData(False)  
+
     
     def checkOnline(self):
         self.yoOutlet.refreshDevice()
