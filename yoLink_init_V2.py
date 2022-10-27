@@ -188,6 +188,7 @@ class YoLinkInitPAC(object):
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
                     return(True)
                 else:
+                    logging.error('Was not able to refresh token')
                     return(False)
             else:
                 return(yoAccess.request_new_token())
