@@ -112,7 +112,7 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
-         <!-- <st id="ST"  editor="status" /> -->
+         <st id="ST"  editor="status" />
       </sts>
       <cmds>
          <sends>
@@ -143,7 +143,7 @@
       <editors />
       <sts>
          <st id="GV0" editor="usbstate" />
-         <!--<st id="ST"  editor="status" /> -->
+         <st id="ST"  editor="status" />
       </sts>
       <cmds>
          <sends>
