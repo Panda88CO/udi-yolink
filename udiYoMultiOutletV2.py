@@ -432,6 +432,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             logging.warning('Device {} not on-line -  Cannot determine number of outlets and USBs'.format(self.devInfo['name']))
             self.ports = 0
             self.nbrOutlets = 0
+            self.node.setDriver('ST', 0, True, True)
 
         else:
             self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
