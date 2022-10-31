@@ -30,7 +30,7 @@ class udiYoSpeakerHub(udi_interface.Node):
             {'driver': 'GV3', 'value': 0, 'uom': 25}, 
             {'driver': 'GV4', 'value': 0, 'uom': 25}, 
             {'driver': 'GV5', 'value': 0, 'uom': 107},        
-            {'driver': 'GV8', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
@@ -41,7 +41,7 @@ class udiYoSpeakerHub(udi_interface.Node):
             'GV3' = Tone
             'GV5' = Repeat
 
-            'GV8' = Online
+            'ST' = Online
             ]
 
     ''' 
@@ -144,9 +144,9 @@ class udiYoSpeakerHub(udi_interface.Node):
                 self.node.setDriver('GV3', self.tone2nbr(self.yoSpeakerHub.tone), True, True)
                 self.node.setDriver('GV4', self.messageNbr, True, True)
                 self.node.setDriver('GV5', self.yoSpeakerHub.repeat, True, True)
-                self.node.setDriver('GV8', self.bool2nbr(self.yoSpeakerHub.online), True, True)
+                self.node.setDriver('ST', self.bool2nbr(self.yoSpeakerHub.online), True, True)
             else:
-                self.node.setDriver('GV8', 0, True, True)
+                self.node.setDriver('ST', 0, True, True)
                 #self.pollDelays()
 
 

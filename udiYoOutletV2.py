@@ -38,7 +38,7 @@ class udiYoOutlet(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV3', 'value': -1, 'uom': 30},
             {'driver': 'GV4', 'value': -1, 'uom': 33},
-            {'driver': 'GV8', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -118,7 +118,7 @@ class udiYoOutlet(udi_interface.Node):
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 self.last_state = state
-                self.node.setDriver('GV8',1, True, True)
+                self.node.setDriver('ST',1, True, True)
                 tmp =  self.yoOutlet.getEnergy()
                 if tmp != None:
                     power = tmp['power']
@@ -137,7 +137,7 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV2', 0, True, True)
                 self.node.setDriver('GV3', -1, True, True)
                 self.node.setDriver('GV4', -1, True, True)
-                self.node.setDriver('GV8',0, True, True)
+                self.node.setDriver('ST',0, True, True)
         
 
 

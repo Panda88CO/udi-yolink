@@ -223,8 +223,8 @@ vibration-0 = No Vibration
 vibration-1 = Vibration
 vibration-99 = Unknown
 
-status-0 = Down
-status-1 = Up
+status-0 = Not Conneted
+status-1 = Connected
 
 swstate-0 = Off
 swstate-1 = On

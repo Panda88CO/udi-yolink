@@ -25,7 +25,7 @@ class udiYoHub(udi_interface.Node):
     id = 'yohub'
     drivers = [
             #{'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV8', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
@@ -34,7 +34,7 @@ class udiYoHub(udi_interface.Node):
             'GV1' = OnDelay
             'GV2' = OffDelay
 
-            'GV8' = Online
+            'ST' = Online
             ]
 
     ''' 
@@ -113,9 +113,9 @@ class udiYoHub(udi_interface.Node):
                 #    self.node.setDriver('GV0', 0, True, True)
                 #else:
                 #    self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV8', 1, True, True)
+                self.node.setDriver('ST', 1)
             else:
-                self.node.setDriver('GV8', 0, True, True)
+                self.node.setDriver('ST', 0)
                 #self.pollDelays()
 
     def updateStatus(self, data):

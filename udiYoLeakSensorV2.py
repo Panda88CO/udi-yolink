@@ -27,7 +27,7 @@ class udiYoLeakSensor(udi_interface.Node):
        drivers = [
             'GV0' = Water Alert
             'GV1' = Battery Level
-            'GV8' = Online
+            'ST' = Online
             ]
 
     ''' 
@@ -35,7 +35,7 @@ class udiYoLeakSensor(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV8', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -129,11 +129,11 @@ class udiYoLeakSensor(udi_interface.Node):
                     self.node.setDriver('GV0', 99, True, True)
                 self.last_state = waterState
                 self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
-                self.node.setDriver('GV8', 1, True, True)
+                self.node.setDriver('ST', 1)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV8', 0, True, True)
+                self.node.setDriver('ST', 0)
 
 
     def updateStatus(self, data):
