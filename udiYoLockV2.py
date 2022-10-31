@@ -84,7 +84,7 @@ class udiYoLock(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoOutlet')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
         self.yoLock.shut_down()
 
 

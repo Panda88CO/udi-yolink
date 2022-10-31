@@ -85,7 +85,7 @@ class udiYoVibrationSensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoVibrationSensor')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
         self.yoVibrationSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)

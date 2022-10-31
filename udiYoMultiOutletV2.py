@@ -74,7 +74,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-        #self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutPortState(self.port)
             self.node.setDriver('ST', 1, True, True) 
@@ -90,7 +90,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def stop (self):
         logging.debug('udiYoSubOutlet - stop')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
        
     def checkOnline(self):
         pass
@@ -267,7 +267,7 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB - start')
-        #self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
@@ -285,7 +285,7 @@ class udiYoSubUSB(udi_interface.Node):
 
     def stop (self):
         logging.info('udiYoSubUSB - stop')
-        #self.node.setDriver('ST', 0, True, True) 
+        self.node.setDriver('ST', 0, True, True) 
     
     def checkOnline(self):
         pass

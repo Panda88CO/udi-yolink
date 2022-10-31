@@ -121,7 +121,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoSpeakerHub')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
         self.yoSpeakerHub.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)

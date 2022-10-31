@@ -88,7 +88,7 @@ class udiYoManipulator(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoManipulator')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
         self.yoManipulator.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
