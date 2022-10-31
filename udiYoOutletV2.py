@@ -39,7 +39,7 @@ class udiYoOutlet(udi_interface.Node):
             {'driver': 'GV3', 'value': -1, 'uom': 30},
             {'driver': 'GV4', 'value': -1, 'uom': 33},
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+
             ]
 
 
@@ -105,20 +105,21 @@ class udiYoOutlet(udi_interface.Node):
     def updateData(self):
         logging.info('udiYoOutlet updateData')
         if self.node is not None:
+            
             if  self.yoOutlet.online:
+                self.node.setDriver('ST',1, True, True)
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
                     self.node.setDriver('GV0',1 , True, True)
-                    if self.last_state != state:
-                        self.node.reportCmd('DON')  
+                    #if self.last_state != state:
+                    #    self.node.reportCmd('DON')  
                 elif state == 'OFF' :
                     self.node.setDriver('GV0', 0, True, True)
-                    if self.last_state != state:
-                        self.node.reportCmd('DOF')  
+                    #if self.last_state != state:
+                    #    self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True)
-                self.last_state = state
-                self.node.setDriver('ST',1, True, True)
+                self.last_state = state                
                 tmp =  self.yoOutlet.getEnergy()
                 if tmp != None:
                     power = tmp['power']
