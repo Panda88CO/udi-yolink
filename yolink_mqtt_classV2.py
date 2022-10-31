@@ -403,6 +403,11 @@ class YoLinkMQTTDevice(object):
                         #if int(data['time']) > int(yolink.getLastUpdate()):
                         logging.debug('Do Nothing for now')
                         #yolink.updateStatusData(data)   
+                    elif  '.StatusChange' in data['method']:
+                        #if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)     
+
+
                     else:
                         logging.debug('Unsupported Method passed' + str(json.dumps(data))) 
                 #elif data['code'] == '000201': #Cannot connect to device - retry
@@ -437,6 +442,9 @@ class YoLinkMQTTDevice(object):
                 elif '.Alert' in data['event']:         
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)  
+                elif '.StatusChange' in data['event']:         
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)                          
                 elif '.setDelay' in data['event']:         
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)     
