@@ -273,7 +273,6 @@ class udiYoSubUSB(udi_interface.Node):
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
                 self.node.setDriver('GV0', 1, True, True) 
                 self.portState = 1
-                self.node.setDriver('ST', 1)
             else:
                 self.node.setDriver('GV0', 0, True, True) 
                 self.portState = 0
