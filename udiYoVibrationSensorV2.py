@@ -26,7 +26,7 @@ class udiYoVibrationSensor(udi_interface.Node):
        drivers = [
             'GV0' = Vibration Alert
             'GV1' = Battery Level
-            'GV8' = Online
+            'ST' = Online
             ]
 
     ''' 
@@ -34,7 +34,7 @@ class udiYoVibrationSensor(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV8', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -85,7 +85,7 @@ class udiYoVibrationSensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoVibrationSensor')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
         self.yoVibrationSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -114,11 +114,11 @@ class udiYoVibrationSensor(udi_interface.Node):
                     self.node.setDriver('GV0', 99, True, True) 
                 self.last_state = vib_state
                 self.node.setDriver('GV1', self.yoVibrationSensor.getBattery(), True, True)
-                self.node.setDriver('GV8', 1, True, True)
+                self.node.setDriver('ST', 1, True, True)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV8', 1, True, True)
+                self.node.setDriver('ST', 1, True, True)
 
 
 

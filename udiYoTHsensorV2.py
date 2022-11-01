@@ -32,7 +32,7 @@ class udiYoTHsensor(udi_interface.Node):
             'GV5' = High Humidity Alarm
             'GV6' = BatteryLevel
             'GV7' = BatteryAlarm
-            'GV8' = Online
+            'ST' = Online
             ]
 
     ''' 
@@ -46,7 +46,7 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'GV5', 'value': 2, 'uom': 25},
             {'driver': 'BATLVL', 'value': 5, 'uom': 25},
             {'driver': 'GV7', 'value': 2, 'uom': 25},
-            {'driver': 'GV8', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -106,7 +106,7 @@ class udiYoTHsensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoTHsensor')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -139,7 +139,7 @@ class udiYoTHsensor(udi_interface.Node):
                 self.node.setDriver('GV5', self.yoTHsensor.bool2Nbr(alarms['highHumidity']), True, True)
                 self.node.setDriver('BATLVL', self.yoTHsensor.getBattery(), True, True)
                 self.node.setDriver('GV7', self.yoTHsensor.bool2Nbr(alarms['lowBattery']), True, True)
-                self.node.setDriver('GV8', self.yoTHsensor.bool2Nbr(self.yoTHsensor.online), True, True)
+                self.node.setDriver('ST', self.yoTHsensor.bool2Nbr(self.yoTHsensor.online), True, True)
             else:
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('GV1',99, True, True)
@@ -149,7 +149,7 @@ class udiYoTHsensor(udi_interface.Node):
                 self.node.setDriver('GV5',99, True, True)
                 self.node.setDriver('BATLVL', 99, True, True)
                 self.node.setDriver('GV7',99, True, True)
-                self.node.setDriver('GV8', 0, True, True)
+                self.node.setDriver('ST', 0, True, True)
 
 
 

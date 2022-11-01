@@ -29,7 +29,7 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             #{'driver': 'GV3', 'value': 0, 'uom': 30},
             #{'driver': 'GV4', 'value': 0, 'uom': 33},
-            {'driver': 'GV8', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
@@ -109,7 +109,7 @@ class udiYoSwitch(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoSwitch')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
         self.yoSwitch.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -127,24 +127,25 @@ class udiYoSwitch(udi_interface.Node):
        if self.node is not None:
             state =  self.yoSwitch.getState().upper()
             if self.yoSwitch.online:
+                self.node.setDriver('ST', 1, True, True)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1, True, True)
-                    if self.last_state != state:
-                        self.node.reportCmd('DON')  
+                    #if self.last_state != state:
+                    #    self.node.reportCmd('DON')  
                 elif  state == 'OFF':
                     self.node.setDriver('GV0', 0, True, True)
-                    if self.last_state != state:
-                        self.node.reportCmd('DOF')  
+                    #if self.last_state != state:
+                    #    self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 self.last_state = state
-                self.node.setDriver('GV8', 1, True, True)
+                
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
                     self.node.setDriver('GV2', 0, True, False)                
             else:
-                self.node.setDriver('GV8', 0, True, True)
+                self.node.setDriver('ST', 0, True, True)
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 0, True, False)
                 self.node.setDriver('GV2', 0, True, False)    

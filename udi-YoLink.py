@@ -52,6 +52,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly=polyglot
         self.nodeDefineDone = False
         self.handleParamsDone = False
+        self.pollStart = False
         self.debug = False
         self.address = address
         self.name = name
@@ -307,10 +308,10 @@ class YoLinkSetup (udi_interface.Node):
 
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
-        #time.sleep(30)
+        time.sleep(5)
         # checking params for erassed nodes 
         self.poly.updateProfile()
-
+        self.pollStart = True
         ''''
         # check and remove for nodes that no longer exists
         logging.debug('Checking for old nodes ')
@@ -374,7 +375,7 @@ class YoLinkSetup (udi_interface.Node):
 
 
     def systemPoll (self, polltype):
-        if self.nodeDefineDone:
+        if self.pollStart:
             logging.debug('System Poll executing: {}'.format(polltype))
 
             if 'longPoll' in polltype:
@@ -501,7 +502,7 @@ class YoLinkSetup (udi_interface.Node):
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-        polyglot.start('0.6.1')
+        polyglot.start('0.6.14')
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
         # Just sit and wait for events
