@@ -87,7 +87,7 @@ class YoLinkSetup (udi_interface.Node):
         self.node = self.poly.getNode(self.address)
         self.node.setDriver('ST', 1, True, True)
         logging.debug('YoLinkSetup init DONE')
-        self.nodeDefineDone = True
+        #self.nodeDefineDone = True
 
 
     def node_queue(self, data):
@@ -307,10 +307,10 @@ class YoLinkSetup (udi_interface.Node):
 
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
-        #time.sleep(30)
+        time.sleep(5)
         # checking params for erassed nodes 
         self.poly.updateProfile()
-
+        self.nodeDefineDone = True
         ''''
         # check and remove for nodes that no longer exists
         logging.debug('Checking for old nodes ')
