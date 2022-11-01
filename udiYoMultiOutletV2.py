@@ -75,8 +75,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-        logging.debug('drivers Table: {}'.format(self.drivers) )
-        while self.node == None:
+        while 5 != len(self.drivers):
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
@@ -275,7 +274,7 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB {} - start'.format(self.name))
-        while self.node == None:
+        while 2 != len(self.drivers):
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
