@@ -75,9 +75,9 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-        while self.node == None:
-            logging.debug('Waiting for node {} to get created'.format(self.name))
-            time.sleep(1)
+        #while self.node == None:
+        #    logging.debug('Waiting for node {} to get created'.format(self.name))
+        #    time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
         self.node.setDriver('GV4', self.port, True, True)
         try:
@@ -257,7 +257,7 @@ class udiYoSubUSB(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = polyglot.getNode(self.address)
-        time.sleep(1)
+        #time.sleep(1)
         
 
 
@@ -273,10 +273,10 @@ class udiYoSubUSB(udi_interface.Node):
 
 
     def start (self):
-        logging.debug('udiYoSubUSB - start')
-        while self.node == None:
-            logging.debug('Waiting for node {} to get created'.format(self.name))
-            time.sleep(1)
+        logging.debug('udiYoSubUSB {} - start'.format(self.name))
+        #while self.node == None:
+        #    logging.debug('Waiting for node {} to get created'.format(self.name))
+        #    time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)
@@ -466,8 +466,8 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.subOutletAdr[port] =  self.address[0:11]+'_o' + str(port)
                     logging.debug('Adding Power outlet : {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1), port))
                     self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1),port, self.yoMultiOutlet)
-                    self.poly.addNode(self.subOutlet[port])
-                    self.wait_for_node_done()
+                    #self.poly.addNode(self.subOutlet[port])
+                    #self.wait_for_node_done()
                                     
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subOutletAdr[port], e))
@@ -477,8 +477,8 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.subUsbAdr[usb] = self.address[0:11]+'_u'+str(usb)
                     logging.debug('Adding USB outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
                     self.subUsb[usb] = udiYoSubUSB(self.poly, self.address, self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
-                    self.poly.addNode(self.subUsb[usb])
-                    self.wait_for_node_done()
+                    #self.poly.addNode(self.subUsb[usb])
+                    #self.wait_for_node_done()
                     self.usbExists = True
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subUsbAdr[usb], e))
@@ -587,7 +587,6 @@ class udiYoMultiOutlet(udi_interface.Node):
             #logging.debug('nbr ports {} , online {}'.format(self.nbrOutlets, self.yoMultiOutlet.online ))
             #logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
             self.delaysActive = False
-            
             self.updateData()
   
 
