@@ -46,7 +46,9 @@ class udiYoSubOutlet(udi_interface.Node):
         self.timer_cleared = True
         self.timer_update = 5
         self.timer_expires = 0
-
+        self.address = address
+        self.name = name
+        self.node = None
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
         self.n_queue = [] 
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -58,9 +60,8 @@ class udiYoSubOutlet(udi_interface.Node):
         self.poly.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = polyglot.getNode(self.address)
         time.sleep(1)
-        
         self.node.setDriver('GV4', self.port, True, True)
         
     def node_queue(self, data):
@@ -74,7 +75,11 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
+        while self.node == None:
+            logging.debug('Waiting for node {} to get created'.format(self.name))
+            time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('GV4', self.port, True, True)
         try:
             state = self.yolink.getMultiOutPortState(self.port)
             self.node.setDriver('ST', 1, True, True) 
@@ -236,7 +241,9 @@ class udiYoSubUSB(udi_interface.Node):
         portStr = re.findall('[0-9]+', str(usbPort))
         self.usbPort = int(portStr.pop())
         self.last_state = 99
-
+        self.address = address
+        self.name = name
+        self.node = None
         #self.port = port
         logging.debug('udiYoSubUSB - init - port {}'.format(self.usbPort))
         self.n_queue = []
@@ -249,7 +256,7 @@ class udiYoSubUSB(udi_interface.Node):
         self.poly.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(address)
+        self.node = polyglot.getNode(self.address)
         time.sleep(1)
         
 
@@ -267,6 +274,9 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB - start')
+        while self.node == None:
+            logging.debug('Waiting for node {} to get created'.format(self.name))
+            time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)
