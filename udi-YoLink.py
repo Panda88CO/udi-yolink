@@ -52,6 +52,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly=polyglot
         self.nodeDefineDone = False
         self.handleParamsDone = False
+        self.pollStart = False
         self.debug = False
         self.address = address
         self.name = name
@@ -87,7 +88,7 @@ class YoLinkSetup (udi_interface.Node):
         self.node = self.poly.getNode(self.address)
         self.node.setDriver('ST', 1, True, True)
         logging.debug('YoLinkSetup init DONE')
-        #self.nodeDefineDone = True
+        self.nodeDefineDone = True
 
 
     def node_queue(self, data):
@@ -310,7 +311,7 @@ class YoLinkSetup (udi_interface.Node):
         time.sleep(5)
         # checking params for erassed nodes 
         self.poly.updateProfile()
-        self.nodeDefineDone = True
+        self.pollStart = True
         ''''
         # check and remove for nodes that no longer exists
         logging.debug('Checking for old nodes ')
@@ -374,7 +375,7 @@ class YoLinkSetup (udi_interface.Node):
 
 
     def systemPoll (self, polltype):
-        if self.nodeDefineDone:
+        if self.pollStart:
             logging.debug('System Poll executing: {}'.format(polltype))
 
             if 'longPoll' in polltype:
