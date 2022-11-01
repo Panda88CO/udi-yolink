@@ -75,6 +75,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
+        logging.debug('drivers Table: {}'.format(self.drivers) )
         while self.node == None:
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
@@ -431,7 +432,6 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.subNodesReady = False
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
-
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
         self.node.setDriver('ST', 1, True, True)
         time.sleep(5)
