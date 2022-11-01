@@ -25,13 +25,13 @@ class udiYoGarageDoor(udi_interface.Node):
     
     '''
        drivers = [
-            'GV8' = Online
+            'ST' = Online
             ]
 
     ''' 
         
     drivers = [
-            {'driver': 'GV8', 'value': 1, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 1, 'uom': 25},
 
             ]
@@ -72,13 +72,13 @@ class udiYoGarageDoor(udi_interface.Node):
         logging.info('start - udiYoGarageDoor')
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        #self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
     
 
     def initNode(self):
         self.yoDoorControl.online = True
-        self.node.setDriver('GV8', self.yoDoorControl.bool2Nbr(self.yoDoorControl.online), True, True)
+        self.node.setDriver('ST', 1, True, True)
         
     def checkOnline(self):
         pass
@@ -88,7 +88,7 @@ class udiYoGarageDoor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoGarageDoor')
-        #self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0, True, True)
         self.yoDoorControl.shut_down()
 
     
@@ -97,7 +97,7 @@ class udiYoGarageDoor(udi_interface.Node):
         self.yoDoorControl.updateCallbackStatus(data)
         logging.debug(data)
         if self.node is not None:
-            self.node.setDriver('GV8', self.yoDoorControl.bool2Nbr(self.yoDoorControl.online), True, True)
+            self.node.setDriver('ST',1, True, True)
 
 
     def toggleDoor(self, command = None):
