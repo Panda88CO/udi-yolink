@@ -62,7 +62,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.wait_for_node_done()
         self.node = polyglot.getNode(self.address)
         time.sleep(1)
-        self.node.setDriver('GV4', self.port, True, True)
+        
         
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -75,9 +75,9 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-        #while self.node == None:
-        #    logging.debug('Waiting for node {} to get created'.format(self.name))
-        #    time.sleep(1)
+        while self.node == None:
+            logging.debug('Waiting for node {} to get created'.format(self.name))
+            time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
         self.node.setDriver('GV4', self.port, True, True)
         try:
@@ -274,9 +274,9 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB {} - start'.format(self.name))
-        #while self.node == None:
-        #    logging.debug('Waiting for node {} to get created'.format(self.name))
-        #    time.sleep(1)
+        while self.node == None:
+            logging.debug('Waiting for node {} to get created'.format(self.name))
+            time.sleep(1)
         self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)
