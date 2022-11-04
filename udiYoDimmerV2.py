@@ -18,7 +18,7 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-from yolinkSwitchV2 import YoLinkSW
+from yolinkDimmerV2 import YoLinkDim
 
 class udiYoSwitch(udi_interface.Node):
   

@@ -13,8 +13,9 @@ except ImportError:
 
 
 
+import time
 
-class YoLinkSW(YoLinkMQTTDevice):
+class YoLinkDim(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(yoAccess,  deviceInfo, callback)
         
@@ -22,7 +23,7 @@ class YoLinkSW(YoLinkMQTTDevice):
         yolink.eventList = ['StatusChange', 'Report', 'getState']
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.eventTime = 'Time'
-        yolink.type = 'Switch'
+        yolink.type = 'Dimmer'
         #time.sleep(2)
         #print('yolink.refreshState')
         #yolink.refreshState()
@@ -90,7 +91,7 @@ class YoLinkSW(YoLinkMQTTDevice):
         return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
     '''
 
-class YoLinkSwitch(YoLinkSW):
+class YoLinkDimmer(YoLinkDim):
     def __init__(yolink, yoAccess,  deviceInfo):
         super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)
         yolink.initNode()
