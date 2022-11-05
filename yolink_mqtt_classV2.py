@@ -36,8 +36,8 @@ class YoLinkMQTTDevice(object):
         yolink.deviceInfo = deviceInfo
         #yolink.deviceId = yolink.deviceInfo['deviceId']
         yolink.type = yolink.deviceInfo['type']
-        yolink.delaySupport = ['Outlet', 'MultiOutlet', 'Manipulator', 'Switch']
-        yolink.scheduleSupport = ['Outlet', 'MultiOutlet', 'Manipulator', 'Switch','InfraredRemoter','Sprinkler', 'Thermostat' ]
+        yolink.delaySupport = ['Outlet', 'MultiOutlet', 'Manipulator', 'Switch', 'Dimmer']
+        yolink.scheduleSupport = ['Outlet', 'MultiOutlet', 'Manipulator', 'Switch','InfraredRemoter','Sprinkler', 'Thermostat', 'Dimmer' ]
         yolink.online  = False 
         yolink.nbrPorts = 1
         yolink.nbrOutlets = 1
