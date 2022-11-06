@@ -123,6 +123,7 @@ class YoLinkMQTTDevice(object):
         while not yolink.yoAccess.connectedToBroker:
             logging.debug('Connection to Broker not established - waiting')
             time.sleep(1)
+        
         yolink.yoAccess.publishQueue.put(data, timeout = 2)
         if yolink.yoAccess.publishQueue.full():
             return(False)
