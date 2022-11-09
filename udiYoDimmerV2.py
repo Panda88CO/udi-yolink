@@ -27,19 +27,19 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            #{'driver': 'GV3', 'value': 0, 'uom': 30},
+            {'driver': 'GV3', 'value': 0, 'uom': 30},
             #{'driver': 'GV4', 'value': 0, 'uom': 33},
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+
             ]
     '''
        drivers = [
-            'GV0' =  switch State
+            'GV0' =  Dinner State
             'GV1' = OnDelay
             'GV2' = OffDelay
-            'GV3' = Power
+            'GV3' = Dimmer Brightness
             'GV4' = Energy
-            'GV5' = Online
+            'ST' = Online/Connected
             ]
 
     ''' 
@@ -55,6 +55,7 @@ class udiYoSwitch(udi_interface.Node):
         self.last_state = ''
         self.timer_update = 5
         self.timer_expires = 0
+        self.brightness = 50
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -170,7 +171,20 @@ class udiYoSwitch(udi_interface.Node):
         self.node.setDriver('GV0',0 , True, True)
         #self.node.reportCmd('DOF')
 
-
+    def set_dimmer_level(self, command = None):
+        brightness = int(command.get('value'))   
+        self.brughtness = brightness
+        logging.info('udiYoSwitch set_dimmer_level:{}'.format(brightness) )  
+        if 0 >= brightness:
+            self.yoSwitch.setState('OFF')
+            self.node.setDriver('GV0',0 , True, True)
+        elif 100>=  brightness:
+            self.yoSwitch.setState('ON')
+            self.node.setDriver('GV0',1 , True, True)
+        else:
+            self.setBrightness() #????
+            self.yoSwitch.setState('ON')
+            self.node.setDriver('GV0',1 , True, True)
     def switchControl(self, command):
         logging.info('udiYoSwitch switchControl') 
         ctrl = int(command.get('value'))     

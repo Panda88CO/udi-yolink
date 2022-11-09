@@ -465,7 +465,7 @@ class YoLinkInitPAC(object):
                     yoAccess.connectedToBroker = False
                     yoAccess.disconnect = True
                     yoAccess.client.disconnect()
-                    yoAccess.token = yoAccess.refresh_token()
+                    yoAccess.refresh_token()
                     time.sleep(2)
                     yoAccess.connect_to_broker()
 
@@ -571,7 +571,7 @@ class YoLinkInitPAC(object):
                 yoAccess.lastDataPacket[deviceId] = data
                 if deviceId in yoAccess.mqttList:
                     logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
-                    result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 1)
+                    result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
                 else:
                     logging.error('device {} not in mqtt list'.format(deviceId))
                     return (False)

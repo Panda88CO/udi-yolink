@@ -24,6 +24,7 @@ class YoLinkDim(YoLinkMQTTDevice):
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.eventTime = 'Time'
         yolink.type = 'Dimmer'
+
         #time.sleep(2)
         #print('yolink.refreshState')
         #yolink.refreshState()
@@ -51,7 +52,7 @@ class YoLinkDim(YoLinkMQTTDevice):
         return super().getDelays()
     '''
 
-    def setState(yolink, state):
+    def setState(yolink, state, brightness):
         logging.debug(yolink.type+' - setState')
         if 'setState'  in yolink.methodList:          
             if state.lower() not in yolink.stateList:
@@ -60,11 +61,11 @@ class YoLinkDim(YoLinkMQTTDevice):
             if state.lower() == 'on':
                 state = 'open'
             if state.lower() == 'off':
-                state = 'closed'
+                state = 'close'
             data = {}
             data['params'] = {}
             data['params']['state'] = state.lower()
-            data['params']['brightness'] = 50
+            data['params']['brightness'] =int(brightness)
             
             return(yolink.setDevice( data))
         else:
