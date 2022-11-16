@@ -22,7 +22,7 @@ from yolinkDimmerV2 import YoLinkDim
 
 class udiYoSwitch(udi_interface.Node):
   
-    id = 'yoswitch'
+    id = 'yodimmer'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
@@ -38,7 +38,7 @@ class udiYoSwitch(udi_interface.Node):
             'GV1' = OnDelay
             'GV2' = OffDelay
             'GV3' = Dimmer Brightness
-            'GV4' = Energy
+            #'GV4' = Energy
             'ST' = Online/Connected
             ]
 
@@ -82,7 +82,7 @@ class udiYoSwitch(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoSwitch')
-        self.yoSwitch  = YoLinkSW(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoSwitch  = YoLinkDim(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoSwitch.initNode()
         time.sleep(2)
@@ -173,18 +173,17 @@ class udiYoSwitch(udi_interface.Node):
 
     def set_dimmer_level(self, command = None):
         brightness = int(command.get('value'))   
-        self.brughtness = brightness
+        #self.brightness = brightness
         logging.info('udiYoSwitch set_dimmer_level:{}'.format(brightness) )  
-        if 0 >= brightness:
-            self.yoSwitch.setState('OFF')
-            self.node.setDriver('GV0',0 , True, True)
+        if 0 >= brightness :
+            #self.yoSwitch.setState('OFF')
+            brightness = 0            
         elif 100>=  brightness:
-            self.yoSwitch.setState('ON')
-            self.node.setDriver('GV0',1 , True, True)
-        else:
-            self.setBrightness() #????
-            self.yoSwitch.setState('ON')
-            self.node.setDriver('GV0',1 , True, True)
+            brightness = 100
+        self.setBrightness(brightness) #????
+        #self.yoSwitch.setState('ON')
+        self.node.setDriver('GV3',brightness , True, True)
+
     def switchControl(self, command):
         logging.info('udiYoSwitch switchControl') 
         ctrl = int(command.get('value'))     
@@ -234,6 +233,7 @@ class udiYoSwitch(udi_interface.Node):
                 'DON'   : set_switch_on,
                 'DOF'   : set_switch_off,
                 'SWCTRL': switchControl, 
+                'DIMLVL' : set_dimmer_level,
                 'ONDELAY' : setOnDelay,
                 'OFFDELAY' : setOffDelay 
                 }

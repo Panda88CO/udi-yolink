@@ -99,5 +99,11 @@
  <editor id = "doorbell" > 
      <range  uom="25" subset="0-1" nls="doorbell" />
   </editor>
+ <editor id = "dimlvl" > 
+     <range  uom="51" min="0" max="100" prec="0"/>
+  </editor>
+
+
+
 </editors> 
 
