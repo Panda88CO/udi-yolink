@@ -152,8 +152,6 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('GV2', 0, True, False)    
            
 
-
-
     def updateStatus(self, data):
         logging.info('updateStatus - Switch')
         self.yoSwitch.updateStatus(data)

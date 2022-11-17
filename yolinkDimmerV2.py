@@ -72,7 +72,7 @@ class YoLinkDim(YoLinkMQTTDevice):
             data = {}
             data['params'] = {}
             data['params']['state'] = state.lower()
-            data['params']['brightness'] =int(brightness)
+            data['params']['brightness'] = int(brightness)
             
             return(yolink.setDevice( data))
         else:
