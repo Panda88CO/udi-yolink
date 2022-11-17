@@ -181,7 +181,6 @@ class udiYoSwitch(udi_interface.Node):
         elif 100>=  brightness:
             brightness = 100
         self.setBrightness(brightness) #????
-        #self.yoSwitch.setState('ON')
         self.node.setDriver('GV3',brightness , True, True)
 
     def switchControl(self, command):
