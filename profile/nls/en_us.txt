@@ -191,11 +191,14 @@ CMD-nlslock-LOCKCTRL-NAME = Set Lock
 ND-yodimmer-NAME = YoLink Dimmer
 ND-yodimmer-ICON = Switch
 ST-nlsdimmer-GV0-NAME = Switch State
-ST-nlsdimmer-GV0-NAME = On Delay
-ST-nlsdimmer-GV0-NAME = Off Delay
-ST-nlsdimmer-GV0-NAME = Dimmer Level
+ST-nlsdimmer-GV1-NAME = On Delay
+ST-nlsdimmer-GV2-NAME = Off Delay
+ST-nlsdimmer-GV3-NAME = Dimmer Level
 ST-nlsdimmer-ST-NAME = Nodeserver Status
-
+CMD-nlsdimmer-DIMLVL-NAME = Dimming Level (%)
+CMD-nlsdimmer-SWCTRL-NAME = Switch Control
+CMD-nlsdimmer-ONDELAY-NAME = On Delay (min)
+CMD-nlsdimmer-OFFDELAY-NAME = Off Delay (min)
 
 lockstate-0 = Unlocked
 lockstate-1 = Locked
