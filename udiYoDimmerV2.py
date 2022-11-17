@@ -20,7 +20,7 @@ from os import truncate
 import time
 from yolinkDimmerV2 import YoLinkDim
 
-class udiYoSwitch(udi_interface.Node):
+class udiYoDimmer(udi_interface.Node):
   
     id = 'yodimmer'
     drivers = [
@@ -46,7 +46,7 @@ class udiYoSwitch(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('udiYoSwitch INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoDimmer INIT- {}'.format(deviceInfo['name']))
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSwitch = None
@@ -81,7 +81,7 @@ class udiYoSwitch(udi_interface.Node):
 
 
     def start(self):
-        logging.info('start - udiYoSwitch')
+        logging.info('start - udiYoDimmer')
         self.yoSwitch  = YoLinkDim(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoSwitch.initNode()
@@ -164,7 +164,7 @@ class udiYoSwitch(udi_interface.Node):
         #self.node.reportCmd('DON')
 
     def set_switch_off(self, command = None):
-        logging.info('udiYoSwitch set_switch_off')  
+        logging.info('udiYoDimmer set_switch_off')  
         self.yoSwitch.setState('OFF')
         self.node.setDriver('GV0',0 , True, True)
         #self.node.reportCmd('DOF')
@@ -172,7 +172,7 @@ class udiYoSwitch(udi_interface.Node):
     def set_dimmer_level(self, command = None):
         brightness = int(command.get('value'))   
         #self.brightness = brightness
-        logging.info('udiYoSwitch set_dimmer_level:{}'.format(brightness) )  
+        logging.info('udiYoDimmer set_dimmer_level:{}'.format(brightness) )  
         if 0 >= brightness :
             #self.yoSwitch.setState('OFF')
             brightness = 0            
@@ -182,7 +182,7 @@ class udiYoSwitch(udi_interface.Node):
         self.node.setDriver('GV3',brightness , True, True)
 
     def switchControl(self, command):
-        logging.info('udiYoSwitch switchControl') 
+        logging.info('udiYoDimmer switchControl') 
         ctrl = int(command.get('value'))     
         if ctrl == 1:
             self.yoSwitch.setState('ON')
@@ -206,20 +206,20 @@ class udiYoSwitch(udi_interface.Node):
     
 
     def setOnDelay(self, command ):
-        logging.info('udiYoSwitch setOnDelay')
+        logging.info('udiYoDimmer setOnDelay')
         delay =int(command.get('value'))
         self.yoSwitch.setOnDelay(delay)
         self.node.setDriver('GV1', delay*60, True, True)
 
     def setOffDelay(self, command):
-        logging.info('udiYoSwitch setOffDelay')
+        logging.info('udiYoDimmer setOffDelay')
         delay =int(command.get('value'))
         self.yoSwitch.setOffDelay(delay)
         self.node.setDriver('GV2', delay*60, True, True)
 
 
     def update(self, command = None):
-        logging.info('udiYoSwitch Update Status')
+        logging.info('udiYoDimmer Update Status')
         self.yoSwitch.refreshDevice()
         #self.yoSwitch.refreshSchedules()     
 
