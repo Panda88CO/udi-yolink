@@ -24,6 +24,7 @@ class YoLinkDim(YoLinkMQTTDevice):
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.eventTime = 'Time'
         yolink.type = 'Dimmer'
+        yolink.brightness = 50  #default
 
         #time.sleep(2)
         #print('yolink.refreshState')
@@ -53,13 +54,14 @@ class YoLinkDim(YoLinkMQTTDevice):
     '''
     def setBrightness (yolink, brightness):
         logging.debug('setBrightness : {}'.format(brightness))
+        yolink.brightness = brightness
         if 'on' == yolink.getState():
-            yolink.setState('on', brightness)
+            yolink.setState('on')
         else:
-            yolink.setState('off', brightness)
+            yolink.setState('off')
 
 
-    def setState(yolink, state, brightness):
+    def setState(yolink, state):
         logging.debug(yolink.type+' - setState')
         if 'setState'  in yolink.methodList:          
             if state.lower() not in yolink.stateList:
@@ -72,7 +74,7 @@ class YoLinkDim(YoLinkMQTTDevice):
             data = {}
             data['params'] = {}
             data['params']['state'] = state.lower()
-            data['params']['brightness'] = int(brightness)
+            data['params']['brightness'] = int(yolink.brightness)
             
             return(yolink.setDevice( data))
         else:
@@ -83,16 +85,19 @@ class YoLinkDim(YoLinkMQTTDevice):
         logging.debug(yolink.type+' - getState')
         attempts = 0
 
-        while yolink.dState not in yolink.dataAPI[yolink.dData] and attempts < 5:
+        while yolink.dState not in yolink.dataAPI[yolink.dData] and attempts < 3:
             time.sleep(1)
             attempts = attempts + 1
-        if attempts < 5 and 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
+        if attempts <3 and 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
+            if 'brightness' in  yolink.dataAPI[yolink.dData][yolink.dState]:
+                yolink.brightness = yolink.dataAPI[yolink.dData][yolink.dState]['brightness']
             if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                 return('on')
             elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
                 return('off')
             else:
                 return('Unkown')
+            
         else:
             return('Unkown')
     '''
