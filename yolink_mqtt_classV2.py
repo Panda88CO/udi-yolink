@@ -366,7 +366,7 @@ class YoLinkMQTTDevice(object):
         try:
             logging.debug('{} - updateCallbackStatus : {}'.format(yolink.type, data))
             
-            if 'method' in  data:
+            if 'method' in  data and 'event' not in data:
                 #logging.debug('Method detected')
                 if data['code'] == '000000':
                     yolink.online = yolink.checkOnlineStatus(data)
