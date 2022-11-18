@@ -54,7 +54,7 @@ class YoLinkDim(YoLinkMQTTDevice):
     '''
     def setBrightness (yolink, brightness):
         logging.debug('setBrightness : {}'.format(brightness))
-        yolink.brightness = brightness
+        yolink.brightness = int(brightness)
         if 'on' == yolink.getState():
             yolink.setState('on')
         else:
@@ -75,7 +75,7 @@ class YoLinkDim(YoLinkMQTTDevice):
             data['params'] = {}
             data['params']['state'] = state.lower()
             data['params']['brightness'] = int(yolink.brightness)
-            
+            logging.debug('Dimmer setState Data {}'.format(data))
             return(yolink.setDevice( data))
         else:
             return(False)

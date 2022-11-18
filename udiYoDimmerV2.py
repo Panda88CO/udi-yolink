@@ -176,7 +176,7 @@ class udiYoDimmer(udi_interface.Node):
         if 0 >= brightness :
             #self.yoDimmer.setState('OFF')
             brightness = 0            
-        elif 100>=  brightness:
+        elif 100 <=  brightness:
             brightness = 100
         self.yoDimmer.setBrightness(brightness) #????
         self.node.setDriver('GV3',brightness , True, True)
