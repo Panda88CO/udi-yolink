@@ -362,6 +362,7 @@ class YoLinkInitPAC(object):
 
                 logging.debug('process_message for {}: {} {}'.format(deviceId, payload, msg.topic))
                 #yoAccess.debug = logging.root.level <= logging.DEBUG
+                
                 if deviceId in yoAccess.mqttList:
 
                     tempCallback = yoAccess.mqttList[deviceId]['callback']
@@ -410,17 +411,16 @@ class YoLinkInitPAC(object):
 
             except Exception as e:
                 pass
-                #logging.error('message processing timeout - no new commands') 
+                logging.error('message processing timeout - no new commands') 
                 #yoAccess.messageLock.release()
 
     def on_message(yoAccess, client, userdata, msg):
         """
         Callback for broker published events
         """
-        logging.debug('Message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )
-        logging.debug('Message received and put in queue (size : {})'.format(yoAccess.messageQueue.qsize()))
-
+        logging.debug('Message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )        
         yoAccess.messageQueue.put(msg)
+        logging.debug('Message received and put in queue (size : {})'.format(yoAccess.messageQueue.qsize()))
 
 
     #def obtain_connection (yoAccess):

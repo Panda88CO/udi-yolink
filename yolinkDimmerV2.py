@@ -61,7 +61,7 @@ class YoLinkDim(YoLinkMQTTDevice):
         yolink.brightness = int(brightness)
         yolink.dataAPI[yolink.dData][yolink.dState]['brightness'] = yolink.brightness
 
-
+        logging.debug( 'SetBrightness getState(): {}'.format(yolink.getState()))
         if 'on' == yolink.getState():
             yolink.setState('on')
         else:
@@ -80,7 +80,7 @@ class YoLinkDim(YoLinkMQTTDevice):
             if state.lower() == 'on':
                 state = 'open'
             if state.lower() == 'off':
-                state = 'close'
+                state = 'closed'
             data = {}
             data['params'] = {}
             data['params']['state'] = state.lower()
@@ -109,6 +109,7 @@ class YoLinkDim(YoLinkMQTTDevice):
             
         else:
             return('Unkown')
+
     '''
     def getEnergy(yolink):
         logging.debug(yolink.type+' - getEnergy')
