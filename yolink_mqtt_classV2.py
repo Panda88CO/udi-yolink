@@ -216,6 +216,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = methodStr
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token']
+        logging.debug(yolink.type+' - setDevice -data {}'.format(data))
         if worked:
             while  not yolink.publish_data( data) and attempt <= maxAttempts:
                 time.sleep(1)
