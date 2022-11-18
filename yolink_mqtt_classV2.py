@@ -53,7 +53,7 @@ class YoLinkMQTTDevice(object):
         yolink.noconnect = 0 # number on consecutive no connect to device
         yolink.daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
         yolink.maxSchedules = 6
-        yolink.deviceSupportList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationSensor']
+        yolink.deviceSupportList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationSensor',  'Dimmer', 'InfraredRemoter' ]
         yolink.lastUpd = 'lastUpdTime'
         yolink.lastMessage = 'lastMessage'
         yolink.dOnline = 'online'

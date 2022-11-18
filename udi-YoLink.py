@@ -57,6 +57,7 @@ class YoLinkSetup (udi_interface.Node):
         self.debug = False
         self.address = address
         self.name = name
+        self.yoAccess = None
         self.TTSstr = 'TTS'
         self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]
         self.yolinkURL = 'https://api.yosmart.com/openApi'
@@ -510,7 +511,7 @@ class YoLinkSetup (udi_interface.Node):
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-        polyglot.start('0.6.24')
+        polyglot.start('0.6.25')
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
         # Just sit and wait for events
