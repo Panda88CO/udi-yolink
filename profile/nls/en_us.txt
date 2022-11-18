@@ -199,6 +199,7 @@ CMD-nlsdimmer-DIMLVL-NAME = Dimming Level (%)
 CMD-nlsdimmer-SWCTRL-NAME = Switch Control
 CMD-nlsdimmer-ONDELAY-NAME = On Delay (min)
 CMD-nlsdimmer-OFFDELAY-NAME = Off Delay (min)
+CMD-nlsdimmer-UPDATE-NAME = Update
 
 lockstate-0 = Unlocked
 lockstate-1 = Locked
