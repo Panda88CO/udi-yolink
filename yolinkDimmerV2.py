@@ -63,7 +63,7 @@ class YoLinkDim(YoLinkMQTTDevice):
 
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState')
-        logging.debug('Dimmer setState Brightness: {}'.format(yolink.brightness)))
+        logging.debug('Dimmer setState Brightness: {}'.format(yolink.brightness))
         if 'setState'  in yolink.methodList:          
             if state.lower() not in yolink.stateList:
                 logging.error('Unknows state passed')
