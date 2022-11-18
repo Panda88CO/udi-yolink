@@ -59,6 +59,7 @@ class YoLinkDim(YoLinkMQTTDevice):
             yolink.setState('on')
         else:
             yolink.setState('off')
+        logging.debug('setBrightness : {}'.format(yolink.brightness))    
 
 
     def setState(yolink, state):

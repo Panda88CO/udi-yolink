@@ -183,7 +183,7 @@ class udiYoSwitch(udi_interface.Node):
             self.node.setDriver('GV0',0 , True, True)
             self.node.reportCmd('DOF')
         else: #toggle
-            state = str(self.yoOutlet.getState()).upper() 
+            state = str(self.yoSwitch.getState()).upper() 
             if state == 'ON':
                 self.yoSwitch.setState('OFF')
                 self.node.setDriver('GV0',0 , True, True)

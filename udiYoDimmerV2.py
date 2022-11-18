@@ -192,7 +192,7 @@ class udiYoDimmer(udi_interface.Node):
             self.node.setDriver('GV0',0 , True, True)
             self.node.reportCmd('DOF')
         else: #toggle
-            state = str(self.yoOutlet.getState()).upper() 
+            state = str(self.yoDimmer.getState()).upper() 
             if state == 'ON':
                 self.yoDimmer.setState('OFF')
                 self.node.setDriver('GV0',0 , True, True)
