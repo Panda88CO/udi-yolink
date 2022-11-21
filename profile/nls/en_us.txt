@@ -106,7 +106,7 @@ CMD-nlsthsens-UPDATE-NAME = Update Status
 
 ND-yogarage-NAME = YoLink Garage Controller
 ND-yogarage-ICON = Switch
-S#T-nlsgarage-GV8-NAME = online
+#ST-nlsgarage-GV8-NAME = online
 ST-nlsgarage-ST-NAME = Nodeserver Status
 CMD-nlsgarage-TOGGLE-NAME = Toggle Door
 
