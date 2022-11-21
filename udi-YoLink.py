@@ -23,6 +23,7 @@ from udiYoHubV2 import udiYoHub
 from udiYoSpeakerHubV2 import udiYoSpeakerHub
 from udiYoLockV2 import udiYoLock
 #from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
+from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV2 import udiYoVibrationSensor
 
 import udiProfileHandler
@@ -56,6 +57,7 @@ class YoLinkSetup (udi_interface.Node):
         self.debug = False
         self.address = address
         self.name = name
+        self.yoAccess = None
         self.TTSstr = 'TTS'
         self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]
         self.yolinkURL = 'https://api.yosmart.com/openApi'
@@ -122,7 +124,7 @@ class YoLinkSetup (udi_interface.Node):
         #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'InfraredRemoter' ]
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock']
+                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter' ]
         #self.supportedYoTypes = [ 'THSensor' ]
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
@@ -221,6 +223,13 @@ class YoLinkSetup (udi_interface.Node):
                     udiYoSwitch(self.poly, name, name, self.deviceList[dev]['name'],  self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']
                     time.sleep(2) # add delay between adding devices
+
+                elif self.deviceList[dev]['type'] == 'Dimmer':
+                    name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
+                    udiYoDimmer(self.poly, name, name, self.deviceList[dev]['name'],  self.yoAccess, self.deviceList[dev] )
+                    self.Parameters[name] =  self.deviceList[dev]['name']
+                    time.sleep(2) # add delay between adding devices                    
 
                 elif self.deviceList[dev]['type'] == 'THSensor':      
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -502,7 +511,7 @@ class YoLinkSetup (udi_interface.Node):
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-        polyglot.start('0.6.15')
+        polyglot.start('0.6.29')
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
         # Just sit and wait for events

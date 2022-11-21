@@ -106,7 +106,7 @@ CMD-nlsthsens-UPDATE-NAME = Update Status
 
 ND-yogarage-NAME = YoLink Garage Controller
 ND-yogarage-ICON = Switch
-S#T-nlsgarage-GV8-NAME = online
+#ST-nlsgarage-GV8-NAME = online
 ST-nlsgarage-ST-NAME = Nodeserver Status
 CMD-nlsgarage-TOGGLE-NAME = Toggle Door
 
@@ -187,6 +187,19 @@ CMD-nlslock-QUERY-NAME = Query
 CMD-nlslock-LOCK-NAME = Lock Lock
 CMD-nlslock-UNLOCK-NAME = Unlock Lock
 CMD-nlslock-LOCKCTRL-NAME = Set Lock
+
+ND-yodimmer-NAME = YoLink Dimmer
+ND-yodimmer-ICON = Switch
+ST-nlsdimmer-GV0-NAME = Switch State
+ST-nlsdimmer-GV1-NAME = On Delay
+ST-nlsdimmer-GV2-NAME = Off Delay
+ST-nlsdimmer-GV3-NAME = Dimmer Level
+ST-nlsdimmer-ST-NAME = Nodeserver Status
+CMD-nlsdimmer-DIMLVL-NAME = Dimming Level (%)
+CMD-nlsdimmer-SWCTRL-NAME = Switch Control
+CMD-nlsdimmer-ONDELAY-NAME = On Delay (min)
+CMD-nlsdimmer-OFFDELAY-NAME = Off Delay (min)
+CMD-nlsdimmer-UPDATE-NAME = Update
 
 lockstate-0 = Unlocked
 lockstate-1 = Locked

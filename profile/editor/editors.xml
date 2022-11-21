@@ -6,7 +6,7 @@
      <range  uom="25" subset="0-1,99" nls="swstate" />
   </editor>     
   <editor id = "swctrl" > 
-     <range  uom="25" subset="0-4" nls="swctrl" />
+     <range  uom="25" subset="0-2" nls="swctrl" />
   </editor>
   <editor id = "watt" > 
      <range  uom="30" min="-1" max="2000" prec="2" />
@@ -99,5 +99,11 @@
  <editor id = "doorbell" > 
      <range  uom="25" subset="0-1" nls="doorbell" />
   </editor>
+ <editor id = "dimlvl" > 
+     <range  uom="51" min="0" max="100" prec="0"/>
+  </editor>
+
+
+
 </editors> 
 
