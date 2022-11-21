@@ -160,13 +160,27 @@ class udiYoDimmer(udi_interface.Node):
         logging.info('udiyoDimmer set_switch_on')  
         self.yoDimmer.setState('ON')
         self.node.setDriver('GV0',1 , True, True)
-        #self.node.reportCmd('DON')
+        self.node.reportCmd('DON')
 
     def set_switch_off(self, command = None):
         logging.info('udiYoDimmer set_switch_off')  
         self.yoDimmer.setState('OFF')
         self.node.setDriver('GV0',0 , True, True)
-        #self.node.reportCmd('DOF')
+        self.node.reportCmd('DOF')
+
+    def set_switch_fon(self, command = None):
+        logging.info('udiyoDimmer set_switch_on')  
+        self.yoDimmer.setState('ON')
+        self.node.setDriver('GV0',1 , True, True)
+        self.node.reportCmd('DFON')
+
+    def set_switch_foff(self, command = None):
+        logging.info('udiYoDimmer set_switch_off')  
+        self.yoDimmer.setState('OFF')
+        self.node.setDriver('GV0',0 , True, True)
+        self.node.reportCmd('DFOF')
+
+
 
     def set_dimmer_level(self, command = None):
         brightness = int(command.get('value'))   
