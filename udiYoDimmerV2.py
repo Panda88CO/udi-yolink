@@ -196,7 +196,8 @@ class udiYoDimmer(udi_interface.Node):
 
     def switchControl(self, command):
         logging.info('udiYoDimmer switchControl') 
-        ctrl = int(command.get('value'))     
+        ctrl = int(command.get('value'))   
+
         if ctrl == 1:
             self.yoDimmer.setState('ON')
             self.node.setDriver('GV0',1 , True, True)
@@ -207,6 +208,7 @@ class udiYoDimmer(udi_interface.Node):
             self.node.reportCmd('DOF')
         else: #toggle
             state = str(self.yoDimmer.getState()).upper() 
+            logging.debug('switchControl : {}, {}'.format(ctrl, state))
             if state == 'ON':
                 self.yoDimmer.setState('OFF')
                 self.node.setDriver('GV0',0 , True, True)
