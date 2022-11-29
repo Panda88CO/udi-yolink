@@ -94,6 +94,7 @@ class YoLinkDim(YoLinkMQTTDevice):
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
         attempts = 0
+        logging.debug('getState - {}'.format(yolink.dataAPI[yolink.dData] ))
         while yolink.dState not in yolink.dataAPI[yolink.dData] and attempts < 3:
             time.sleep(1)
             attempts = attempts + 1
