@@ -839,7 +839,7 @@ class YoLinkMQTTDevice(object):
     def updateStatusData  (yolink, data):
         try:
             logging.debug('{} - updateStatusData : {}'.format(yolink.type , data))
-            yolink.setOnline(data)
+            #yolink.setOnline(data)
             if 'reportAt' in data[yolink.dData] :
                 reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
                 yolink.dataAPI['lastStateTime'] = (reportAt.timestamp() -  yolink.timezoneOffsetSec)*1000
@@ -947,7 +947,7 @@ class YoLinkMQTTDevice(object):
                         yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                 
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts
-            yolink.online = yolink.check_system_online()
+            #yolink.online = yolink.check_system_online()
             yolink.updateLoraInfo(data)
             yolink.updateMessageInfo(data)
         except Exception as e:
