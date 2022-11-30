@@ -350,7 +350,7 @@ class YoLinkInitPAC(object):
                 msg = yoAccess.messageQueue.get(timeout = 10) 
                 logging.debug('Received message - Q size={}'.format(yoAccess.messageQueue.qsize()))
                 payload = json.loads(msg.payload.decode("utf-8"))
-                #logging.debug('process_message : {}'.format(payload))
+                logging.debug('process_message : {}'.format(payload))
                 
                 deviceId = 'unknown'
                 if 'targetDevice' in payload:
@@ -361,7 +361,7 @@ class YoLinkInitPAC(object):
                     logging.debug('Unknow device in payload : {}'.format(payload))
 
                 logging.debug('process_message for {}: {} {}'.format(deviceId, payload, msg.topic))
-                #yoAccess.debug = logging.root.level <= logging.DEBUG
+                
 
                 if deviceId in yoAccess.mqttList:
 
@@ -415,7 +415,7 @@ class YoLinkInitPAC(object):
 
             except Exception as e:
                 pass
-                #logging.debug('message processing timeout - no new commands') 
+                logging.debug('message processing timeout - no new commands') 
                 #yoAccess.messageLock.release()
 
     def on_message(yoAccess, client, userdata, msg):
@@ -568,7 +568,7 @@ class YoLinkInitPAC(object):
         while not yoAccess.STOP.is_set():
             try:
                 data = yoAccess.publishQueue.get(timeout = 10) 
-                #DEBUG = logging.getEffectiveLevel() == logging.DEBUG
+                
                 deviceId = data['targetDevice']
                 dataStr = str(json.dumps(data))
                 yoAccess.tmpData[deviceId] = dataStr
