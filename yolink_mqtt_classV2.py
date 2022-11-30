@@ -26,7 +26,7 @@ from yolink_delay_timer import CountdownTimer
 Object representation for YoLink MQTT Client
 """
 class YoLinkMQTTDevice(object):
-    def __init__(yolink, yoAccess, deviceInfo, callback, logging ):
+    def __init__(yolink, yoAccess, deviceInfo, callback ):
         #super().__init__( yolink_URL, csid, csseckey, deviceInfo)
         #yolink.callback = callback
         #yolink.build_device_api_request_data()
