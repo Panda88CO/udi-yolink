@@ -11,7 +11,7 @@ from dateutil.tz import *
 try:
     import udi_interface
     logging = udi_interface.LOGGER
-    logging = getlogger('yolink_mqtt_classV2')
+    #logging = getlogger('yolink_mqtt_classV2')
     Custom = udi_interface.Custom
 
 except ImportError:
