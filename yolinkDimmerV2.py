@@ -6,7 +6,9 @@ from yolink_mqtt_classV2 import YoLinkMQTTDevice
 try:
     import udi_interface
     logging = udi_interface.LOGGER
+    logging = getlogger('yolink Dimmer')
     Custom = udi_interface.Custom
+
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)

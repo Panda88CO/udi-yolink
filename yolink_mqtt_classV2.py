@@ -11,7 +11,9 @@ from dateutil.tz import *
 try:
     import udi_interface
     logging = udi_interface.LOGGER
+    logging = getlogger('yolink_mqtt_classV2')
     Custom = udi_interface.Custom
+
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
@@ -24,7 +26,7 @@ from yolink_delay_timer import CountdownTimer
 Object representation for YoLink MQTT Client
 """
 class YoLinkMQTTDevice(object):
-    def __init__(yolink, yoAccess, deviceInfo, callback ):
+    def __init__(yolink, yoAccess, deviceInfo, callback, logging ):
         #super().__init__( yolink_URL, csid, csseckey, deviceInfo)
         #yolink.callback = callback
         #yolink.build_device_api_request_data()

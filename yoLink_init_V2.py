@@ -9,6 +9,7 @@ from  datetime import datetime
 try:
     import udi_interface
     logging = udi_interface.LOGGER
+    logging = getlogger('yolink_init_V2')
     Custom = udi_interface.Custom
 except ImportError:
     import logging
