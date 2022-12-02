@@ -898,6 +898,7 @@ class YoLinkMQTTDevice(object):
                                 yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
                             else:
                                 yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
+                    logging.debug('updateStatusData - Method data : {}'.format(yolink.dataAPI))
                 else: # setDelay only returns data
                     yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                     if ".setDelay" in data['method']:
@@ -947,7 +948,8 @@ class YoLinkMQTTDevice(object):
                 else:
                     for key in data[yolink.dData]:
                         yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
-                
+                logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
+
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts
             #yolink.online = yolink.check_system_online()
             yolink.updateLoraInfo(data)
