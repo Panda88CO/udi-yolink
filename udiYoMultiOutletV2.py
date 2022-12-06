@@ -462,7 +462,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             for port in range(0,self.yoMultiOutlet.nbrOutlets):
                 try:
                     #logging.debug('Adding sub outlet : {}'.format(port))
-                    self.subOutletAdr[port] =  self.address[0:11]+'_o' + str(port)
+                    self.subOutletAdr[port] =  self.address[3:14]+'_o' + str(port)
                     logging.debug('Adding Power outlet : {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1), port))
                     self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1),port, self.yoMultiOutlet)
                     #self.poly.addNode(self.subOutlet[port])
@@ -473,7 +473,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             for usb in range(0, self.yoMultiOutlet.nbrUsb):
                         
                 try:
-                    self.subUsbAdr[usb] = self.address[0:11]+'_u'+str(usb)
+                    self.subUsbAdr[usb] = self.address[3:14]+'_u'+str(usb)
                     logging.debug('Adding USB outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
                     self.subUsb[usb] = udiYoSubUSB(self.poly, self.address, self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
                     #self.poly.addNode(self.subUsb[usb])
