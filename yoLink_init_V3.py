@@ -423,10 +423,16 @@ class YoLinkInitPAC(object):
         """
         Callback for broker published events
         """
-        logging.debug('Message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )        
+        logging.debug('on_message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )
         yoAccess.messageQueue.put(msg)
-        logging.debug('Message received and put in queue (size : {})'.format(yoAccess.messageQueue.qsize()))
-
+        qsize = yoAccess.messageQueue.qsize()
+        logging.debug('Message received and put in queue (size : {})'.format(qsize))
+        logging.debug('Creating threads to handle the received messages')
+        threads = []
+        for idx in range(0, qsize):
+            threads.append(Thread(target = yoAccess.process_message ))
+        [t.start() for t in threads]
+        #[t.join() for t in threads]
 
     #def obtain_connection (yoAccess):
     #    if not yoAccess.connectedToBroker:    
