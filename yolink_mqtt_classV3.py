@@ -119,7 +119,7 @@ class YoLinkMQTTDevice(object):
         #time.sleep(2) 
         #yolink.online = yolink.getOnlineStatus()
 
-    
+    '''
     def publish_data(yolink, data):
         logging.debug( 'Publish Data to Queue: {}'.format(data))
         while not yolink.yoAccess.connectedToBroker:
@@ -131,7 +131,8 @@ class YoLinkMQTTDevice(object):
             return(False)
         else:
             return(True)
-    
+    '''
+
     def shut_down(yolink):
         yolink.disconnect = True
         yolink.online = False
@@ -171,7 +172,7 @@ class YoLinkMQTTDevice(object):
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
             #logging.debug  ('refreshDevice')
-            while  not yolink.publish_data(data) and attempt <= maxAttempts:
+            while  not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
                 time.sleep(1)
                 attempt = attempt + 1
             yolink.lastControlPacket = data
@@ -220,10 +221,10 @@ class YoLinkMQTTDevice(object):
         data["token"]= yolink.deviceInfo['token']
         logging.debug(yolink.type+' - setDevice -data {}'.format(data))
         if worked:
-            while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
                 time.sleep(1)
                 attempt = attempt + 1
-            #yolink.publish_data(data)
+            #yolink.yoAccess.publish_data(data)
             return(True)
         else:
             return(False)
@@ -499,7 +500,7 @@ class YoLinkMQTTDevice(object):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
        
-        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
             time.sleep(1)
             attempt = attempt + 1
         
@@ -524,8 +525,8 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        #yolink.publish_data( data)
-        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+        #yolink.yoAccess.publish_data( data)
+        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
             time.sleep(1)
             attempt = attempt + 1
             
@@ -549,7 +550,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
             time.sleep(1)
             attempt = attempt + 1
 
@@ -586,7 +587,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
             time.sleep(1)
             attempt = attempt + 1
         delays['ch'] = 1
@@ -640,7 +641,7 @@ class YoLinkMQTTDevice(object):
             data['method'] = methodStr
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
-            while  not yolink.publish_data( data) and attempt <= maxAttempts:
+            while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
                 time.sleep(1)
                 attempt = attempt + 1
             
@@ -681,7 +682,7 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setSchedules'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token']
-        yolink.publish_data(data)
+        yolink.yoAccess.publish_data(data)
         time.sleep(1)
 
     

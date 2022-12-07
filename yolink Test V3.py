@@ -27,7 +27,7 @@ except ImportError:
         logging.StreamHandler(sys.stdout) ]
     )
 
-from yoLink_init_V2 import YoLinkInitPAC
+from yoLink_init_V3 import YoLinkInitPAC
 from yolinkHubV2 import YoLinkHub
 from yolinkSpeakerHubV2 import YoLinkSpeakerHub
 from yolinkMultiOutletV2 import YoLinkMultiOutlet
@@ -44,7 +44,7 @@ from yolinkDoorSensorV2 import YoLinkDoorSensor
 from yolinkLockV2 import YoLinkLock
 from yolinkInfraredRemoterV2 import YoLinkInfraredRemoter
 
-from yolinkDimmerV2 import YoLinkDimmer
+from yolinkDimmerV3 import YoLinkDimmer
 
 
 from yolinkHubV2 import YoLinkHub
