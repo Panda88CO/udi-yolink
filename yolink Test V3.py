@@ -18,13 +18,27 @@ except ImportError:
         os.remove('./debug1.log')
     import logging
     import sys
+    LOG_LEVEL = logging.DEBUG
+    LOGFORMAT = "  %(log_color)s%(levelname)-8s%(reset)s | %(log_color)s%(message)s%(reset)s"
+    from colorlog import ColoredFormatter
+    logging.root.setLevel(LOG_LEVEL)
+    formatter = ColoredFormatter(LOGFORMAT)
+    stream = logging.StreamHandler()
+    stream.setLevel(LOG_LEVEL)
+    stream.setFormatter(formatter)
+    log = logging.getLogger('pythonConfig')
+    log.setLevel(LOG_LEVEL)
+    log.addHandler(stream)
+
+
+   
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     logging.basicConfig(
     level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] [%(threadName)s] %(message)s",
-    handlers=[
-        logging.FileHandler("debug1.log"),
-        logging.StreamHandler(sys.stdout) ]
+    #format="%(asctime)s [%(levelname)s] [%(threadName)s] %(message)s",
+    #handlers=[
+    #    logging.FileHandler("debug1.log"),
+    #    logging.StreamHandler(sys.stdout) ]
     )
 
 from yoLink_init_V3 import YoLinkInitPAC
@@ -182,7 +196,7 @@ for i in range(0,10):
                     devices[dev] = YoLinkDimmer(yoAccess, deviceList[dev])      
                 else:
                     print('{} - refreshDevice(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
-
+                #input('press to continue ')
                 print('{} - refreshDelays(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDevice()))
                 print('{} - online: {}'.format(deviceList[dev]['name'], devices[dev].online))
                 if devices[dev].online:
@@ -196,7 +210,7 @@ for i in range(0,10):
                         print('{} - setState({}): {}'.format(deviceList[dev]['name'], 'on',devices[dev].setState('on')))
                         time.sleep(3)
                         print('{} - setState({}): {}'.format(deviceList[dev]['name'], 'off',devices[dev].setState('off')))
-                        #devices[dev].delayTimerCallback(printDelay, 10) #call print delay every 10 sec
+                        devices[dev].delayTimerCallback(printDelay, 10) #call print delay every 10 sec
                         print('{} - setDelayList({}): {}'.format(deviceList[dev]['name'], "[{'delayOn':2,'off':3}]",devices[dev].setDelayList([{'delayOn':2,'off':3}])))
                         print('{} - refreshDelays(): {}'.format(deviceList[dev]['name'], devices[dev].refreshDelays()) )
                         time.sleep(30)
@@ -511,6 +525,7 @@ for i in range(0,10):
                 print('Currently unsupported device : {}'.format(deviceList[dev]['type'] ))
 
     time.sleep(10)
+    #input('press any key to next loop')
     print('looping - {}'.format(i))
 print('end')
 

@@ -28,9 +28,10 @@ class YoLinkInitPAC(object):
     def __init__(yoAccess, uaID, secID, tokenURL='https://api.yosmart.com/open/yolink/token', pacURL = 'https://api.yosmart.com/open/yolink/v2/api' , mqttURL= 'api.yosmart.com', mqttPort = 8003):
         yoAccess.disconnect_occured = False 
         yoAccess.tokenLock = Lock()
-        yoAccess.messageLock = Lock()
+        yoAccess.fileLock = Lock()
         yoAccess.publishQueue = Queue()
         yoAccess.messageQueue = Queue()
+        yoAccess.fileQueue = Queue()
         yoAccess.debug = True
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
@@ -369,7 +370,6 @@ class YoLinkInitPAC(object):
                 
                 #if payload['msgid'] in yoAccess.pendingDict:
                 #    yoAccess.pendingDict.pop(payload['msgid'] )
-                logging.debug('POP {} yoAccess.pendingDict {}:{}'.format(payload['msgid'] ,len(yoAccess.pendingDict), yoAccess.pendingDict))
                 if  msg.topic == yoAccess.mqttList[deviceId]['report']: 
                     logging.debug('porcessing report: {}'.format(payload))                   
                     tempCallback(payload)
@@ -378,6 +378,10 @@ class YoLinkInitPAC(object):
                             fileData['type'] = 'EVENT'
                             fileData['data'] = payload 
                             yoAccess.fileQueue.put(fileData)
+                            event_fileThread = Thread(target = yoAccess.save_packet_info )
+                            event_fileThread.start()
+                            logging.debug('event_fileThread - starting')
+
 
                 elif msg.topic == yoAccess.mqttList[deviceId]['response']:
                     logging.debug('porcessing response: {}'.format(payload))                   
@@ -392,6 +396,9 @@ class YoLinkInitPAC(object):
                         fileData['type'] = 'RESP'
                         fileData['data'] = payload 
                         yoAccess.fileQueue.put(fileData)
+                        resp_fileThread = Thread(target = yoAccess.save_packet_info )
+                        resp_fileThread.start()
+                        logging.debug('resp_fileThread - starting')
                         
                 elif msg.topic == yoAccess.mqttList[deviceId]['request']:
                     logging.debug('porcessing request - no action: {}'.format(payload))                   
@@ -401,6 +408,9 @@ class YoLinkInitPAC(object):
                         fileData['type'] = 'REQ'
                         fileData['data'] = payload
                         yoAccess.fileQueue.put(fileData)
+                        req_fileThread = Thread(target = yoAccess.save_packet_info )
+                        req_fileThread.start()
+                        logging.debug('req_fileThread - starting')
 
                 else:
                     logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
@@ -408,7 +418,10 @@ class YoLinkInitPAC(object):
                         fileData= {}
                         fileData['type'] = 'MISC'
                         fileData['data'] = payload
-                        yoAccess.fileQueue.put(fileData)                
+                        yoAccess.fileQueue.put(fileData)   
+                        misc_fileThread = Thread(target = yoAccess.save_packet_info )
+                        misc_fileThread.start()
+                        logging.debug('misc_fileThread - starting')                                     
             else:
                 logging.error('Unsupported device: {}'.format(deviceId))
             #yoAccess.messageLock.release()
@@ -432,6 +445,7 @@ class YoLinkInitPAC(object):
             threads.append(Thread(target = yoAccess.process_message ))
         [t.start() for t in threads]
         #[t.join() for t in threads]
+        logging.debug('{} on_message threads starting'.format(qsize))
 
     #def obtain_connection (yoAccess):
     #    if not yoAccess.connectedToBroker:    
@@ -571,17 +585,19 @@ class YoLinkInitPAC(object):
 
     def publish_data(yoAccess, data):
         logging.debug( 'Publish Data to Queue: {}'.format(data))
-        while not yolink.yoAccess.connectedToBroker:
+        while not yoAccess.connectedToBroker:
             logging.debug('Connection to Broker not established - waiting')
             time.sleep(1)       
+
         yoAccess.publishQueue.put(data, timeout = 5)
-        publishThread = Thread(target = yoAccess.transfer_data )
         
+        publishThread = Thread(target = yoAccess.transfer_data )
+        publishThread.start()
+        logging.debug('publishThread - starting')
         return(True)
 
 
     def transfer_data(yoAccess):
-        errorCount = 0
         yoAccess.lastTransferTime = time.time()
         try:
             data = yoAccess.publishQueue.get(timeout = 10) 
@@ -612,31 +628,34 @@ class YoLinkInitPAC(object):
 
 
     def save_packet_info(yoAccess):
-        while not yoAccess.STOP.is_set():
-            try:
-                data = yoAccess.fileQueue.get(timeout = 10)
-                if 'targetDevice' in data['data']:
-                    deviceId = data['data']['targetDevice']
-                elif 'deviceId' in data['data']:
-                    deviceId = data['data']['deviceId']
-                if data['type'].upper() == 'REQ':
-                    f = open('TXpackets.txt', 'a')
-                elif data['type'].upper() == 'RESP':
-                    f = open('RXpackets.txt', 'a')
-                elif data['type'].upper() == 'EVENT':  
-                    f = open('EVENTpackets.txt', 'a')
-                else:
-                    f = open('MISCpackets.txt', 'a')
-                #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
-                f.write('{} - {}:  '.format( datetime.now(),deviceId))
-                f.write(str(json.dumps(data['data'])))
-                f.write('\n\n')
-                #json.dump(jsonStr, f)
-                f.close()
-                time.sleep(0.2)
-            except Exception as e:
-                # logging.debug('File Queue looping {}'.format(e))
-                pass # go wait again unless stop is called
+        yoAccess.fileLock.acquire()
+        try:
+            data = yoAccess.fileQueue.get(timeout = 10)
+            if 'targetDevice' in data['data']:
+                deviceId = data['data']['targetDevice']
+            elif 'deviceId' in data['data']:
+                deviceId = data['data']['deviceId']
+            if data['type'].upper() == 'REQ':
+                f = open('TXpackets.txt', 'a')
+            elif data['type'].upper() == 'RESP':
+                f = open('RXpackets.txt', 'a')
+            elif data['type'].upper() == 'EVENT':  
+                f = open('EVENTpackets.txt', 'a')
+            else:
+                f = open('MISCpackets.txt', 'a')
+            #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
+            f.write('{} - {}:  '.format( datetime.now(),deviceId))
+            f.write(str(json.dumps(data['data'])))
+            f.write('\n\n')
+            #json.dump(jsonStr, f)
+            f.close()
+            time.sleep(0.2)
+        
+        except Exception as e:
+            # logging.debug('File Queue looping {}'.format(e))
+            pass # go wait again unless stop is called
+        yoAccess.fileLock.release()
+
 
     def system_online(yoAccess):
         return(yoAccess.online)

@@ -21,7 +21,7 @@ except ImportError:
 
 
 from queue import Queue
-from yolink_delay_timer import CountdownTimer
+from yolink_delay_timerV2 import CountdownTimer
 """
 Object representation for YoLink MQTT Client
 """
@@ -39,7 +39,7 @@ class YoLinkMQTTDevice(object):
         #yolink.deviceId = yolink.deviceInfo['deviceId']
         yolink.type = yolink.deviceInfo['type']
         yolink.delaySupport = ['Outlet', 'MultiOutlet', 'Manipulator', 'Switch', 'Dimmer']
-        yolink.scheduleSupport = ['Outlet', 'MultiOutlet', 'Manipulator', 'Switch','InfraredRemoter','Sprinkler', 'Thermostat', 'Dimmer' ]
+        yolink.scheduleSupport = []#['Outlet', 'MultiOutlet', 'Manipulator', 'Switch','InfraredRemoter','Sprinkler', 'Thermostat', 'Dimmer' ]
         yolink.online  = False 
         yolink.nbrPorts = 1
         yolink.nbrOutlets = 1
@@ -147,13 +147,13 @@ class YoLinkMQTTDevice(object):
         count = 0
         maxCount = 2
         yolink.refreshDevice()
-        time.sleep(3)
+        #time.sleep(3)
         #yolink.online = yolink.getOnlineStatus()
-        while not yolink.online and count < maxCount and not yolink.disconnect:
-            time.sleep(10)
-            yolink.refreshDevice()
-            count = count + 1
-            print ('retry count : {}'.format(count))
+        #while not yolink.online and count < maxCount and not yolink.disconnect:
+        #    time.sleep(10)
+        #    yolink.refreshDevice()
+        #    count = count + 1
+        #    print ('retry count : {}'.format(count))
 
         if not yolink.online:    
             logging.error('{} not online'.format(yolink.type))
@@ -892,6 +892,8 @@ class YoLinkMQTTDevice(object):
                         for key in data[yolink.dData]:
                             if key == yolink.dDelay:
                                 temp = []
+                                if 'ch' not in data[yolink.dData][key]:
+                                    data[yolink.dData][key]['ch'] = 1
                                 temp.append(data[yolink.dData][key])
                                 yolink.extDelayTimer.addDelays(temp) 
                                 yolink.nbrOutlets = 1
