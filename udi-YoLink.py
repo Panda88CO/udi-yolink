@@ -8,7 +8,7 @@ import sys
 import time
 
 
-from yoLink_init_V2 import YoLinkInitPAC
+from yoLink_init_V3 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoTHsensorV2 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor

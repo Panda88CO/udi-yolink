@@ -3,7 +3,7 @@ import json
 import time
 import re
 
-from yolink_mqtt_classV2 import YoLinkMQTTDevice
+from yolink_mqtt_classV3 import YoLinkMQTTDevice
 from yolink_delay_timer import CountdownTimer
 try:
     import udi_interface
