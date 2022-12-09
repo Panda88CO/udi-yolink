@@ -245,6 +245,8 @@ class udiYoDimmer(udi_interface.Node):
                 'QUERY' : update,
                 'DON'   : set_switch_on,
                 'DOF'   : set_switch_off,
+                'DFON'   : set_switch_fon,
+                'DFOF'   : set_switch_foff,                
                 'SWCTRL': switchControl, 
                 'DIMLVL' : set_dimmer_level,
                 'ONDELAY' : setOnDelay,

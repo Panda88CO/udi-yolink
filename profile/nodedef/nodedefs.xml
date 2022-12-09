@@ -426,6 +426,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
    <nodeDef id="yolock" nls="nlslock">
       <editors />
       <sts>
@@ -453,6 +454,32 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
+   <nodeDef id="yoirremote" nls="nlsirremote">
+      <editors />
+      <sts>
+         <st id="GV0" editor="nbrcodes" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdstatus" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" editor="lock"  />               
+            <cmd id="DOF" editor="lock"  />    
+         </sends>
+         <accepts>
+            <!-- <cmd id="DON" />
+            <cmd id="DOF" />    -->
+            <cmd id="LOCK" /> 
+            <cmd id="UNLOCK" /> 
+            <cmd id="LOCKCTRL" >   
+               <p id="" editor="lock" init="GV0" />
+            </cmd > 
+            <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
    
 </nodeDefs> 
