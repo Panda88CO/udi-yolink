@@ -18,7 +18,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         #yolink.methodList = ['getState', 'learn', 'send'   ]
         yolink.methodList = ['getState', 'send'   ]
         yolink.eventList = ['StatusChange', 'Report', 'getState']
-        yolink.stateList = ['open', 'closed', 'on', 'off']
+        yolink.stateList = []#['open', 'closed', 'on', 'off']
         yolink.ManipulatorName = 'IREvent'
         yolink.eventTime = 'Time'
         yolink.type = 'InfraredRemoter'
@@ -62,6 +62,14 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                     if 'key' in data:
                         yolink.dataAPI[yolink.dData]['key'] = data['data']['key']     
                     yolink.learn_started = False  ## Not sure 
+            if 'getState' in data['method']:
+                if 'data' in data:
+                    if 'battery' in data['data']:
+                        yolink.learn_started = data['data']['battery']
+                    if 'keys' in data:
+                        yolink.dataAPI[yolink.dData]['keys'] = data['data']['keys']                 
+
+
         if 'event' in data:
             if '.learn' in data['event']:
                 if 'data' in data:

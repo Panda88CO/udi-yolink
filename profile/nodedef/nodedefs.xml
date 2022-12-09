@@ -454,6 +454,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
    <nodeDef id="yoirremote" nls="nlsirremote">
       <editors />
       <sts>
@@ -471,10 +472,8 @@
          <accepts>
             <!-- <cmd id="DON" />
             <cmd id="DOF" />    -->
-            <cmd id="LOCK" /> 
-            <cmd id="UNLOCK" /> 
-            <cmd id="LOCKCTRL" >   
-               <p id="" editor="lock" init="GV0" />
+            <cmd id="TXCODE" >   
+               <p id="" editor="txcode" />
             </cmd > 
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 

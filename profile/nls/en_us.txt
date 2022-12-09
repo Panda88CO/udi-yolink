@@ -15,6 +15,7 @@ ST-nlsswitch-GV2-NAME = Off Delay (min)
 #ST-nlsswitch-GV8-NAME = Device Online
 ST-nlsswitch-ST-NAME = Nodeserver Status
 CMD-nlsswitch-UPDATE-NAME = Update Status
+CMD-nlsswitch-QUERY-NAME = Query
 CMD-nlsswitch-SWCTRL-NAME =  Switch control
 CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
@@ -36,6 +37,7 @@ ST-nlsoutlet-GV4-NAME = Energy
 #ST-nlsoutlet-GV8-NAME = Device Online
 ST-nlsoutlet-ST-NAME = Nodeserver Status
 CMD-nlsoutlet-UPDATE-NAME = Update Status
+CMD-nlsoutlet-QUERY-NAME = Query
 CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
 CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
@@ -47,6 +49,7 @@ ND-yomultiout-ICON = Switch
 #ST-nlsmultiout-GV8-NAME = Device Online
 ST-nlsmultiout-ST-NAME = Nodeserver Status
 CMD-nlsmultiout-UPDATE-NAME = Update Status
+CMD-nlsmultiout-QUERY-NAME = Query
 
 
 ND-yosubout-NAME = YoLink subOutlet
@@ -82,6 +85,7 @@ ST-nlsmanipu-GV2-NAME = Off Delay Remaining
 #ST-nlsmanipu-GV8-NAME = Device Online
 ST-nlsmanipu-ST-NAME = Nodeserver Status
 CMD-nlsmanipu-UPDATE-NAME = Update Status
+CMD-nlsmanipu-QUERY-NAME = Query
 CMD-nlsmanipu-MANCTRL-NAME =  Switch control
 CMD-nlsmanipu-ONDELAY-NAME =  Set On Delay (min)
 CMD-nlsmanipu-OFFDELAY-NAME =  Set Off Delay (min)
@@ -101,6 +105,7 @@ ST-nlsthsens-GV7-NAME = Battery Alarm
 #ST-nlsthsens-GV8-NAME = Device Online
 ST-nlsthsens-ST-NAME = Nodeserver Status
 CMD-nlsthsens-UPDATE-NAME = Update Status
+CMD-nlsthsens-QUERY-NAME = Query
 
 
 
@@ -119,6 +124,7 @@ ST-nlsdoorsens-GV1-NAME = Sensor Battery Level
 #ST-nlsdoorsens-GV8-NAME = Device Online
 ST-nlsdoorsens-ST-NAME = Nodeserver Status
 CMD-nlsdoorsens-UPDATE-NAME = Update Door Status
+CMD-nlsdoorsens-QUERY-NAME = Query
 CMD-nlsdoorsens-DOM-NAME = No use
 CMD-nlsdoorsens-DOF-NAME = No use
 
@@ -130,6 +136,7 @@ ST-nlsmotionsens-GV1-NAME = Sensor Battery Level
 #ST-nlsmotionsens-GV8-NAME = Device Online
 ST-nlsmotionsens-ST-NAME = Nodeserver Status
 CMD-nlsmotionsens-UPDATE-NAME = Update Motion Status
+CMD-nlsmotionsens-QUERY-NAME = Query
 CMD-nlsmotionsens-DON-NAME = Motion
 CMD-nlsmotionsens-DOF-NAME = No Motion
 
@@ -140,6 +147,7 @@ ST-nlsleaksens-GV1-NAME = Sensor Battery Level
 #ST-nlsleaksens-GV8-NAME = Device Online
 ST-nlsleaksens-ST-NAME = Nodeserver Status
 CMD-nlsleaksens-UPDATE-NAME = Update Water Status
+CMD-nlsleaksens-QUERY-NAME = Query
 CMD-nlsleaksens-DON-NAME = Water Alert Detected
 CMD-nlsleaksens-DOF-NAME = Normal
 
@@ -150,6 +158,7 @@ ST-nlsvibrasens-GV1-NAME = Sensor Battery Level
 #ST-nlsvibrasens-GV8-NAME = Device Online
 ST-nlsvibrasens-ST-NAME = Nodeserver Status
 CMD-nlsvibrasens-UPDATE-NAME = Update Vibration Status
+CMD-nlsvibrasens-QUERY-NAME = Query
 CMD-nlsvibrasens-DON-NAME = Vibration Detected
 CMD-nlsvibrasens-DOF-NAME = Normal
 
@@ -164,6 +173,7 @@ ST-nlsspeakerh-GV5-NAME = Repeat
 #ST-nlsspeakerh-GV8-NAME = Device Online
 ST-nlsspeakerh-ST-NAME = Nodeserver Status
 CMD-nlsspeakerh-UPDATE-NAME = Update Status
+CMD-nlsspeakerh-QUERY-NAME = Query
 CMD-nlsspeakerh-PLAY-NAME = Play Message
 CMD-nlsspeakerh-VOLUME-NAME = Volume
 CMD-nlsspeakerh-BEEP-NAME = Beep
@@ -200,6 +210,20 @@ CMD-nlsdimmer-SWCTRL-NAME = Switch Control
 CMD-nlsdimmer-ONDELAY-NAME = On Delay (min)
 CMD-nlsdimmer-OFFDELAY-NAME = Off Delay (min)
 CMD-nlsdimmer-UPDATE-NAME = Update
+CMD-nlsdimmer-QUERY-NAME = Query
+
+ND-yoirremote-NAME = YoLink Ir Remoter
+ND-yoirremote-ICON = Output
+ST-nlsirremote-GV0-NAME = Number of Learned codes
+ST-nlsirremote-GV1-NAME = Battery LEvel
+ST-nlsirremote-GV2-NAME = Last Command Status
+ST-nlsirremote-ST-NAME = Nodeserver Status
+CMD-nlsirremote-TXCODE-NAME = Send Code
+CMD-nlsirremote-UPDATE-NAME = Update
+CMD-nlsirremote-QUERY-NAME = Query
+cmdstatus-0 = Code Not learn_code
+cmdstatus-1 = Success
+cmdstatus-2 = TX Key Wrong
 
 lockstate-0 = Unlocked
 lockstate-1 = Locked
