@@ -22,7 +22,7 @@ from udiYoManipulatorV2 import udiYoManipulator
 from udiYoHubV2 import udiYoHub
 from udiYoSpeakerHubV2 import udiYoSpeakerHub
 from udiYoLockV2 import udiYoLock
-#from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
+from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
 from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV2 import udiYoVibrationSensor
 
@@ -299,7 +299,7 @@ class YoLinkSetup (udi_interface.Node):
                 elif self.deviceList[dev]['type'] == 'InfraredRemoter': 
                     name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
-                    #udiYoInfraredRemoter(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
+                    udiYoInfraredRemoter(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']       
                     time.sleep(2) # add delay between adding devices                                    
 
@@ -506,7 +506,7 @@ class YoLinkSetup (udi_interface.Node):
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-        polyglot.start('0.6.40')
+        polyglot.start('0.6.41')
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
         # Just sit and wait for events
