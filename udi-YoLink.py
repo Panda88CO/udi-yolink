@@ -38,10 +38,6 @@ except ImportError:
 
 
 
-
-
-
-
 class YoLinkSetup (udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  

@@ -19,35 +19,6 @@ class RepeatTimer(Timer):
             self.function(*self.args, **self.kwargs)
 
 
-"""
-Object for handling Delay - background countdown timer 
-Requires call back to handle updates
-"""
-
-'''
-
-def dummyfn(msg="foo"):
-    print(msg)
-
-timer = RepeatTimer(1, dummyfn)
-timer.start()
-time.sleep(5)
-timer.cancel()
-produces the following output:
-
-foo
-foo
-foo
-foo
-and
-
-timer = RepeatTimer(1, dummyfn, args=("bar",))
-timer.start()
-time.sleep(5)
-timer.cancel()
-'''
-
-
 class CountdownTimer(object):
     def __init__ (self):
         self.delayTimes = []
