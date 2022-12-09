@@ -67,7 +67,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
             yolink.dataAPI[yolink.dData]['key'] = None
             yolink.dataAPI[yolink.dData]['success'] = None
             yolink.dataAPI[yolink.dData]['errorCode'] = None
-
+            logging.debug('{} - updateStatus after callback: {}'.format(yolink.type, yolink.dataAPI[yolink.dData]))
             if 'method' in data:
                 if '.learn' in data['method']:
                     if 'data' in data:
@@ -82,6 +82,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                     if 'data' in data:
                         if 'battery' in data['data']:
                             yolink.dataAPI[yolink.dData]['battery'] = data['data']['battery']
+                            logging.debug('battery: {}'.format(yolink.dataAPI[yolink.dData]['battery']))
                         if 'keys' in data:
                             yolink.dataAPI[yolink.dData]['keys'] = data['data']['keys']
                             nbr_codes = 0
@@ -89,6 +90,8 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                                 if yolink.dataAPI[yolink.dData]['keys'][indx]:
                                     nbr_codes = nbr_codes + 1
                             yolink.nbr_codes = nbr_codes
+                            logging.debug('keys: {} - {}'.format( yolink.nbr_codes, yolink.dataAPI[yolink.dData]['keys']))
+
                 if 'send' in data['method']:
                     if 'data' in data:
                         if 'success' in data['data']:
