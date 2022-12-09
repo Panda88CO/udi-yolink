@@ -108,7 +108,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                             yolink.dataAPI[yolink.dData]['key'] = data['data']['key']                                 
         except Exception as E:
             logging.error('{} - Exception - {} '.format(yolink.type, E))
-            logging.error (yolink.dataAPI[)
+            logging.error (yolink.dataAPI[yolink.dData])
 
 
     
