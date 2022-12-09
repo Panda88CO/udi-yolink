@@ -61,10 +61,12 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
 
 
     def updateStatus(yolink, data):
-        logging.debug('{} - updateStatus'.format(yolink.type))
+        logging.debug('{} - updateStatus: {}'.format(yolink.type, data))
+        yolink.updateCallbackStatus(data, False)
         yolink.dataAPI[yolink.dData]['key'] = None
         yolink.dataAPI[yolink.dData]['success'] = None
         yolink.dataAPI[yolink.dData]['errorCode'] = None
+
         if 'method' in data:
             if '.learn' in data['method']:
                 if 'data' in data:
@@ -103,7 +105,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                         yolink.dataAPI[yolink.dData]['errorCode'] = data['data']['errorCode']
                     if 'key' in data:
                         yolink.dataAPI[yolink.dData]['key'] = data['data']['key']                                 
-        yolink.updateCallbackStatus(data, False)
+
 
 
     
