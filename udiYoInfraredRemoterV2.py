@@ -31,9 +31,9 @@ class udiYoInfraredRemoter(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 0},
+            {'driver': 'GV0', 'value': 0, 'uom': 107},
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 25}, 
+            {'driver': 'GV2', 'value': 99, 'uom': 25}, 
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -103,18 +103,19 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
 
     def updateData(self):
-        if self.node is not None:
-            if  self.yoIRrem.online:
-                self.node.setDriver('ST', 1)
-                self.node.setDriver('GV0',self.yoIRrem.nbr_codes , True, True)                  
-                self.node.setDriver('GV1',self.yoIRrem.getBattery(), True, True)
-                self.node.setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()), True, True)
-            else:
-                self.node.setDriver('GV0', 0, True, True)
-                self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV2', 99, True, True)
-                self.node.setDriver('ST',0)
-            
+        logging.debug('updateData')
+
+        if  self.yoIRrem.online:
+            self.node.setDriver('ST', 1)
+            self.node.setDriver('GV0',self.yoIRrem.nbr_codes , True, True)                  
+            self.node.setDriver('GV1',self.yoIRrem.getBattery(), True, True)
+            self.node.setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()), True, True)
+        else:
+            self.node.setDriver('GV0', 0, True, True)
+            self.node.setDriver('GV1', 99, True, True)
+            self.node.setDriver('GV2', 99, True, True)
+            self.node.setDriver('ST', 0)
+        
 
 
 

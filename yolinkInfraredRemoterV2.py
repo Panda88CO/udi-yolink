@@ -61,51 +61,54 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
 
 
     def updateStatus(yolink, data):
-        logging.debug('{} - updateStatus: {}'.format(yolink.type, data))
-        yolink.updateCallbackStatus(data, False)
-        yolink.dataAPI[yolink.dData]['key'] = None
-        yolink.dataAPI[yolink.dData]['success'] = None
-        yolink.dataAPI[yolink.dData]['errorCode'] = None
+        try:
+            logging.debug('{} - updateStatus: {}'.format(yolink.type, data))
+            yolink.updateCallbackStatus(data, False)
+            yolink.dataAPI[yolink.dData]['key'] = None
+            yolink.dataAPI[yolink.dData]['success'] = None
+            yolink.dataAPI[yolink.dData]['errorCode'] = None
 
-        if 'method' in data:
-            if '.learn' in data['method']:
-                if 'data' in data:
-                    if 'success' in data['data']:
-                        yolink.dataAPI[yolink.dData]['success'] = data['data']['success']
-                    if 'errorCode' in data:
-                        yolink.dataAPI[yolink.dData]['errorCode']= data['data']['errorCode']
-                    if 'key' in data:
-                        yolink.dataAPI[yolink.dData]['key'] = data['data']['key']     
-                    yolink.learn_started = False  ## Not sure 
-            if 'getState' in data['method']:
-                if 'data' in data:
-                    if 'battery' in data['data']:
-                        yolink.dataAPI[yolink.dData]['battery'] = data['data']['battery']
-                    if 'keys' in data:
-                        yolink.dataAPI[yolink.dData]['keys'] = data['data']['keys']
-                        nbr_codes = 0
-                        for indx in range(0,64):
-                            if yolink.dataAPI[yolink.dData]['keys'][indx]:
-                                nbr_codes = nbr_codes + 1
-                        yolink.nbr_codes = nbr_codes
-            if 'send' in data['method']:
-                if 'data' in data:
-                    if 'success' in data['data']:
-                        yolink.dataAPI[yolink.dData]['success']  = data['data']['success']
-                    if 'keys' in data:
-                        yolink.dataAPI[yolink.dData]['errorCode'] = data['data']['errorCode']    
+            if 'method' in data:
+                if '.learn' in data['method']:
+                    if 'data' in data:
+                        if 'success' in data['data']:
+                            yolink.dataAPI[yolink.dData]['success'] = data['data']['success']
+                        if 'errorCode' in data:
+                            yolink.dataAPI[yolink.dData]['errorCode']= data['data']['errorCode']
+                        if 'key' in data:
+                            yolink.dataAPI[yolink.dData]['key'] = data['data']['key']     
+                        yolink.learn_started = False  ## Not sure 
+                if 'getState' in data['method']:
+                    if 'data' in data:
+                        if 'battery' in data['data']:
+                            yolink.dataAPI[yolink.dData]['battery'] = data['data']['battery']
+                        if 'keys' in data:
+                            yolink.dataAPI[yolink.dData]['keys'] = data['data']['keys']
+                            nbr_codes = 0
+                            for indx in range(0,64):
+                                if yolink.dataAPI[yolink.dData]['keys'][indx]:
+                                    nbr_codes = nbr_codes + 1
+                            yolink.nbr_codes = nbr_codes
+                if 'send' in data['method']:
+                    if 'data' in data:
+                        if 'success' in data['data']:
+                            yolink.dataAPI[yolink.dData]['success']  = data['data']['success']
+                        if 'keys' in data:
+                            yolink.dataAPI[yolink.dData]['errorCode'] = data['data']['errorCode']    
 
-        if 'event' in data:
-            if '.learn' in data['event']:
-                if 'data' in data:
-                    if 'success' in data['data']:
-                        yolink.learn_started = data['data']['success']
-                        yolink.dataAPI[yolink.dData]['success'] = yolink.learn_started
-                    if 'errorCode' in data:
-                        yolink.dataAPI[yolink.dData]['errorCode'] = data['data']['errorCode']
-                    if 'key' in data:
-                        yolink.dataAPI[yolink.dData]['key'] = data['data']['key']                                 
-
+            if 'event' in data:
+                if '.learn' in data['event']:
+                    if 'data' in data:
+                        if 'success' in data['data']:
+                            yolink.learn_started = data['data']['success']
+                            yolink.dataAPI[yolink.dData]['success'] = yolink.learn_started
+                        if 'errorCode' in data:
+                            yolink.dataAPI[yolink.dData]['errorCode'] = data['data']['errorCode']
+                        if 'key' in data:
+                            yolink.dataAPI[yolink.dData]['key'] = data['data']['key']                                 
+        except Exception as E:
+            logging.error('{} - Exception - {} '.format(yolink.type, E))
+            logging.error (yolink.dataAPI[)
 
 
     
