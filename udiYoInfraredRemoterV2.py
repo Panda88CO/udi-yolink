@@ -91,32 +91,30 @@ class udiYoInfraredRemoter(udi_interface.Node):
         if self.yoIRrem.data_updated():
             self.updateData()
 
+    def err_code2nbr(self, status_code):
+        if status_code == 'notLearn':
+            return(0)
+        elif status_code == 'success': 
+            return(1)
+        elif status_code == 'keyError': 
+            return(2)
+        else:
+            return(99)
+
 
     def updateData(self):
         if self.node is not None:
             if  self.yoIRrem.online:
                 self.node.setDriver('ST', 1)
                 state = str(self.yoIRrem.getState()).upper()
-                if state == 'ON':
-                    self.node.setDriver('GV0',1 , True, True)
+                self.node.setDriver('GV0',self.yoIRrem.nbr_codes , True, True)
                     #self.node.reportCmd('DON')  
-                elif state == 'OFF' :
-                    self.node.setDriver('GV0', 0, True, True)
-                    #self.node.reportCmd('DOF')  
-                else:
-                    self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('ST',1)
-                tmp =  self.yoIRrem.getEnergy()
-                if tmp != None:
-                    power = tmp['power']
-                    watt = tmp['watt']
-                    self.node.setDriver('GV3', power, True, True)
-                    self.node.setDriver('GV4', watt, True, True)
-
+                self.node.setDriver('GV1',self.yoIRrem.getBattery(), True, True)
+                self.node.setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()), True, True)
             else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV3', -1, True, True)
-                self.node.setDriver('GV4', -1, True, True)
+                self.node.setDriver('GV0', 0, True, True)
+                self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('GV2', 99, True, True)
                 self.node.setDriver('ST',0)
             
 
@@ -142,6 +140,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
         logging.info('udiIRremote send_IRcode')
         code = int(command.get('value'))
         self.yoIRrem.send_code(code)
+
     '''
     def learn_IRcode(self, command):
         logging.info('udiIRremote learn_IRcode')
@@ -156,7 +155,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
     commands = {
                 'UPDATE': update,
                 'QUERY' : update,
-                'SENDCODE': send_IRcode,
+                'TXCODE': send_IRcode,
                 #'LEARNCODE' : learn_IRcode,
                 }
 

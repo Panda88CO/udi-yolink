@@ -221,9 +221,11 @@ ST-nlsirremote-ST-NAME = Nodeserver Status
 CMD-nlsirremote-TXCODE-NAME = Send Code
 CMD-nlsirremote-UPDATE-NAME = Update
 CMD-nlsirremote-QUERY-NAME = Query
+
 cmdstatus-0 = Code Not learn_code
 cmdstatus-1 = Success
 cmdstatus-2 = TX Key Wrong
+cmdstatus-99 = Unknown
 
 lockstate-0 = Unlocked
 lockstate-1 = Locked
