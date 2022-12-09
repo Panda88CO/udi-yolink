@@ -106,9 +106,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
         if self.node is not None:
             if  self.yoIRrem.online:
                 self.node.setDriver('ST', 1)
-                state = str(self.yoIRrem.getState()).upper()
-                self.node.setDriver('GV0',self.yoIRrem.nbr_codes , True, True)
-                    #self.node.reportCmd('DON')  
+                self.node.setDriver('GV0',self.yoIRrem.nbr_codes , True, True)                  
                 self.node.setDriver('GV1',self.yoIRrem.getBattery(), True, True)
                 self.node.setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()), True, True)
             else:
