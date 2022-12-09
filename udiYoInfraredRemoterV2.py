@@ -103,7 +103,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
 
     def updateData(self):
-        logging.debug('updateData')
+        logging.debug('updateData - {}'.format(self.yoIRrem.online))
 
         if  self.yoIRrem.online:
             self.node.setDriver('ST', 1)
