@@ -112,8 +112,18 @@ class YoLinkMQTTDevice(object):
         yolink.extDelayTimer.timerReportInterval(updateTime)
         yolink.extDelayTimer.timerCallback(callback, updateTime)
         #logging.debug('delayTimerCallback: '.format(updateTime))
-       
-    
+
+    def measure_time(func):                                                                                                   
+                                                                                                                          
+        def wrapper(*arg):                                                                                                      
+            t = time.time()                                                                                                     
+            res = func(*arg)                                                                                                    
+            logging.debug ("Function took " + str(time.time()-t) + " seconds to run")                                                    
+            return res                                                                                                          
+        return wrapper                                                                                                                
+
+
+    @measure_time
     def initDevice(yolink):
         yolink.refreshDevice()
         #time.sleep(2) 
@@ -132,17 +142,19 @@ class YoLinkMQTTDevice(object):
         else:
             return(True)
     '''
-
+    @measure_time
     def shut_down(yolink):
         yolink.disconnect = True
         yolink.online = False
         #yolink.yoAccess.shut_down()
-   
+
+    @measure_time
     def deviceError(yolink, data):
         logging.debug(yolink.type+' - deviceError')
         yolink.dataAPI[yolink.dOnline] = False
         # may need to add more error handling 
 
+    @measure_time
     def initNode(yolink):
         count = 0
         maxCount = 2
@@ -158,7 +170,7 @@ class YoLinkMQTTDevice(object):
         if not yolink.online:    
             logging.error('{} not online'.format(yolink.type))
 
-
+    @measure_time
     def refreshDevice(yolink):
         logging.debug('{} - refreshDevice - supports {}'.format(yolink.type, yolink.methodList))
         attempt = 1
@@ -179,14 +191,14 @@ class YoLinkMQTTDevice(object):
             time.sleep(2)
             yolink.check_system_online()
               
-
+    @measure_time
     def lastUpdate(yolink):
         logging.debug('{} - Checking last update'.format(yolink.type))
         if yolink.dataAPI['lastStateTime']:
             return(yolink.dataAPI['lastStateTime'])
         else:
             return(0)
-
+    @measure_time
     def check_system_online(yolink):
         if yolink.yoAccess.online:
             yolink.online = yolink.dataAPI[yolink.dOnline]
@@ -194,6 +206,7 @@ class YoLinkMQTTDevice(object):
             yolink.online = False
         return(yolink.online)
 
+    @measure_time
     def data_updated(yolink):
         tmp = yolink.lastUpdate()
         if ( tmp > yolink.lastUpdateTime):
@@ -203,7 +216,7 @@ class YoLinkMQTTDevice(object):
         else:
             return(False)
 
-
+    @measure_time
     def setDevice(yolink,  data):
         attempt = 1
         maxAttempts = 3
@@ -229,6 +242,8 @@ class YoLinkMQTTDevice(object):
         else:
             return(False)
 
+
+    @measure_time
     def getValue(yolink,key): 
         logging.debug('{} -     def getValue {}: '.format(yolink.type, key))
         count = 1
@@ -242,6 +257,7 @@ class YoLinkMQTTDevice(object):
             yolink.online = False 
             return('NA')
 
+    @measure_time
     def getStateValue(yolink, key):
     
         logging.debug('{} - getStateValue, key:{}'.format(yolink.type, key))
@@ -262,20 +278,23 @@ class YoLinkMQTTDevice(object):
         except Exception as e:
             logging.debug('getData exceptiom: {}'.format(e) )
             return( )
- 
-
+    
+    @measure_time
     def getInfoAPI (yolink):
         return(yolink.dataAPI)
 
     #def sensorOnline(yolink):
     #    return(yolink.check_system_online() )       
 
+    @measure_time
     def getAlarms(yolink):
         return(yolink.getStateValue('alarm'))
 
+    @measure_time
     def getBattery(yolink):
         return(yolink.getStateValue('battery'))
 
+    @measure_time
     def getLastUpdate (yolink):
         try:
             if yolink.lastUpd in yolink.dataAPI:
@@ -296,7 +315,7 @@ class YoLinkMQTTDevice(object):
         logging.debug(str(yolink.type)+ ' - refreshState')
         yolink.refreshDevice()
     '''
-
+    @measure_time
     def getDataAll(yolink):
         try:
             logging.debug(yolink.type +' - getDataAll')
@@ -305,9 +324,11 @@ class YoLinkMQTTDevice(object):
             logging.debug('getData exceptiom: {}'.format(e) )
             return(None)
 
+    @measure_time
     def getLastDataPacket(yolink):
         return(yolink.dataAPI['lastMessage']) 
 
+    @measure_time
     def getState(yolink):
         try:
             logging.debug(yolink.type +' - getState')           
@@ -315,7 +336,7 @@ class YoLinkMQTTDevice(object):
         except Exception as e:
             logging.debug('getState exception: {}'.format(e) )
             return(None)
-
+    @measure_time
     def getData(yolink):
         try:
             logging.debug(yolink.type +' - getData')
@@ -338,7 +359,7 @@ class YoLinkMQTTDevice(object):
     def onlineStatus(yolink):
         return(yolink.getOnlineStatus())
     '''
-    
+    @measure_time
     def checkOnlineStatus(yolink, dataPacket):
 
         if 'code' in dataPacket:
@@ -365,6 +386,7 @@ class YoLinkMQTTDevice(object):
             logging.debug('checkOnlineStatus {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
         return(yolink.online)
 
+    @measure_time
     def updateCallbackStatus(yolink, data, eventSupport = False):
         try:
             logging.debug('{} - updateCallbackStatus : {}'.format(yolink.type, data))
@@ -485,6 +507,8 @@ class YoLinkMQTTDevice(object):
             logging.debug('Exception data: {}'.format(data))
     ####################################
 
+
+    @measure_time
     def setDelays(yolink,  onDelay, offDelay):
         attempt = 1
         maxAttempts = 3
@@ -537,6 +561,7 @@ class YoLinkMQTTDevice(object):
         yolink.online = yolink.check_system_online()
         return(True)
 
+    @measure_time
     def setOffDelay(yolink,  offDelay):
         attempt = 1
         maxAttempts = 3
@@ -561,6 +586,7 @@ class YoLinkMQTTDevice(object):
         yolink.online = yolink.check_system_online()
         return(True)
 
+    @measure_time
     def setDelayList(yolink, delayList):
         attempt = 1
         maxAttempts = 3
@@ -599,7 +625,7 @@ class YoLinkMQTTDevice(object):
         yolink.online = yolink.check_system_online()
         return(True)
 
-
+    @measure_time
     def updateDelayData(yolink, data):
         if 'event' in data:
             if  yolink.check_system_online():
@@ -617,7 +643,7 @@ class YoLinkMQTTDevice(object):
             yolink.updateMessageInfo(data)
     
 
- 
+    @measure_time
     def refreshDelays(yolink):
         logging.debug(yolink.type+' - refreshDelays')
         #yolink.refreshDevice()
@@ -838,7 +864,7 @@ class YoLinkMQTTDevice(object):
         yolink.dataAPI[yolink.lastUpd] = data[yolink.messageTime]
         yolink.dataAPI[yolink.lastMessage] = data
    
-
+    @measure_time
     def updateStatusData  (yolink, data):
         try:
             logging.debug('{} - updateStatusData : {}'.format(yolink.type , data))
@@ -997,6 +1023,7 @@ class YoLinkMQTTDevice(object):
         portStr = re.findall('[0-9]+', portStr)
         return(int(portStr.pop()))
 
+    @measure_time
     def timezoneOffsetSec(yolink):
         local = tzlocal()
         tnow = datetime.now()
