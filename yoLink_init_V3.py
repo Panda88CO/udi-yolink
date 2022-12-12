@@ -113,7 +113,16 @@ class YoLinkInitPAC(object):
 
     #######################################
     #check if connected to YoLink Cloud server
+    def measure_time(func):                                                                                                   
+                                                                                                                          
+        def wrapper(*arg):                                                                                                      
+            t = time.time()                                                                                                     
+            res = func(*arg)                                                                                                    
+            logging.debug ("Function took " + str(time.time()-t) + " seconds to run")                                                    
+            return res                                                                                                          
+        return wrapper                                                                                                                
 
+    @measure_time
     def check_connection(yoAccess, port):
         logging.debug( 'check_connection: port {}'.format(port))
         connectons = psutil.net_connections()
@@ -130,10 +139,12 @@ class YoLinkInitPAC(object):
 
 
     #####################################
-
+    @measure_time
     def getDeviceList(yoAccess):
         return(yoAccess.deviceList)
 
+
+    @measure_time
     def request_new_token(yoAccess):
         logging.debug('yoAccess Token exists : {}'.format(yoAccess.token != None))
         now = int(time.time())
@@ -166,6 +177,7 @@ class YoLinkInitPAC(object):
         else:
             return(True) # use existing Token 
 
+    @measure_time
     def refresh_token(yoAccess):
         
         try:
@@ -200,6 +212,7 @@ class YoLinkInitPAC(object):
             logging.debug('Exeption occcured during refresh_token : {}'.format(e))
             return(yoAccess.request_new_token())
 
+    @measure_time
     def get_access_token(yoAccess):
         yoAccess.tokenLock.acquire()
         now = int(time.time())
@@ -212,11 +225,11 @@ class YoLinkInitPAC(object):
         #    else:
         yoAccess.tokenLock.release() 
 
-                
+    @measure_time                
     def is_token_expired (yoAccess, accessToken):
         return(accessToken == yoAccess.token['access_token'])
         
-
+    @measure_time
     def retrieve_device_list(yoAccess):
         try:
             logging.debug('retrieve_device_list')
@@ -233,7 +246,7 @@ class YoLinkInitPAC(object):
         except Exception as e:
             logging.error('Exception  -  retrieve_device_list : {}'.format(e))             
 
-
+    @measure_time
     def retrieve_homeID(yoAccess):
         try:
             data= {}
@@ -252,12 +265,13 @@ class YoLinkInitPAC(object):
                 yoAccess.homeID = None
                 logging.error('Failed ot obtain HomeID')
         except Exception as e:
-            logging.error('Exception  - retrieve_homeID: {}'.format(e))            
+            logging.error('Exception  - retrieve_homeID: {}'.format(e))    
 
+    @measure_time
     def getDeviceList (yoAccess):
         return(yoAccess.deviceList)
 
-
+    @measure_time
     def shut_down(yoAccess):
 
         yoAccess.disconnect = True
@@ -270,6 +284,7 @@ class YoLinkInitPAC(object):
     # MQTT stuff
     ########################################
 
+    @measure_time
     def connect_to_broker(yoAccess):
         """
         Connect to MQTT broker
@@ -301,6 +316,7 @@ class YoLinkInitPAC(object):
             logging.error('Exception  - connect_to_broker: {}'.format(e))
             return(False)
 
+    @measure_time
     def subscribe_mqtt(yoAccess, deviceId, callback):
         logging.info('Subscribing deviceId {} to MQTT'.format(deviceId))
         topicReq = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/request'
@@ -321,7 +337,7 @@ class YoLinkInitPAC(object):
                                             }
             time.sleep(1)
 
-
+    @measure_time
     def update_mqtt_subscription (yoAccess, deviceId):
         logging.info('update_mqtt_subscription {} '.format(deviceId))
         topicReq = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/request'
@@ -344,8 +360,8 @@ class YoLinkInitPAC(object):
             yoAccess.mqttList[deviceId]['report'] = topicReport
         #logging.debug('mqtt.list:{}.'.format(yoAccess.mqttList))
 
+    @measure_time
     def process_message(yoAccess):
-
         try:
             #yoAccess.messageLock.acquire()
             msg = yoAccess.messageQueue.get(timeout = 10) 
@@ -431,6 +447,7 @@ class YoLinkInitPAC(object):
             logging.debug('message processing timeout - no new commands') 
             #yoAccess.messageLock.release()
 
+    @measure_time
     def on_message(yoAccess, client, userdata, msg):
         """
         Callback for broker published events
@@ -454,6 +471,7 @@ class YoLinkInitPAC(object):
     #        yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec                    
     #        time.sleep(5)
 
+    @measure_time
     def on_connect(yoAccess, client, userdata, flags, rc):
         """
         Callback for connection to broker
@@ -525,7 +543,7 @@ class YoLinkInitPAC(object):
         except Exception as e:
             logging.error('Exception  -  on_connect: ' + str(e))       
 
-
+    @measure_time
     def on_disconnect(yoAccess, client, userdata,rc=0):
         logging.debug('Disconnect - stop loop')
         #yoAccess.connectedToBroker = False
@@ -566,6 +584,7 @@ class YoLinkInitPAC(object):
                 else:
                     logging.error('Lost credential info - need to restart node server')
 
+    @measure_time
     def on_subscribe(yoAccess, client, userdata, mID, granted_QOS):        
         logging.debug('on_subscribe')
         #logging.debug('client = ' + str(client))
@@ -574,6 +593,7 @@ class YoLinkInitPAC(object):
         #logging.debug('Granted QoS: ' +  str(granted_QOS))
         #logging.debug('\n')
 
+    @measure_time
     def on_publish(yoAccess, client, userdata, mID):
         logging.debug('on_publish')
         #logging.debug('client = ' + str(client))
@@ -582,7 +602,7 @@ class YoLinkInitPAC(object):
         #logging.debug('\n')
 
 
-
+    @measure_time
     def publish_data(yoAccess, data):
         logging.debug( 'Publish Data to Queue: {}'.format(data))
         while not yoAccess.connectedToBroker:
@@ -596,7 +616,7 @@ class YoLinkInitPAC(object):
         logging.debug('publishThread - starting')
         return(True)
 
-
+    @measure_time
     def transfer_data(yoAccess):
         yoAccess.lastTransferTime = time.time()
         try:
@@ -626,7 +646,7 @@ class YoLinkInitPAC(object):
         except Exception as e:
             pass # go wait again unless stop is called
 
-
+    @measure_time
     def save_packet_info(yoAccess):
         yoAccess.fileLock.acquire()
         try:
@@ -656,7 +676,7 @@ class YoLinkInitPAC(object):
             pass # go wait again unless stop is called
         yoAccess.fileLock.release()
 
-
+    @measure_time
     def system_online(yoAccess):
         return(yoAccess.online)
 
@@ -664,6 +684,7 @@ class YoLinkInitPAC(object):
 ################
 #   Misc stuff
 ###############
+    @measure_time
     def set_temp_unit(yoAccess, unit):
         yoAccess.temp_unit = unit
 
