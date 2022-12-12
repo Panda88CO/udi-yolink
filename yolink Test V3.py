@@ -84,7 +84,7 @@ if (os.path.exists('./loginInfo.json')):
 
 #deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 'SpeakerHub', 'Lock', 'InfraredRemoter']
 #deviceTestList = ['Lock', 'InfraredRemoter',  'VibrationSensor', ]
-deviceTestList = ['Dimmer']
+deviceTestList = ['Dimmer', 'InfraredRemoter',  'VibrationSensor', ]
 #deviceTestList = ['VibrationSensor', ]
 #deviceTestList = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor', 'MotionSensor', 'Outlet', 'LeakSensor', 'Hub', 'SpeakerHub', 'VibrationsSensor']
 #deviceTestList = ['SpeakerHub', 'VibrationSensor']
@@ -504,16 +504,7 @@ for i in range(0,10):
                     print('{} - get_send_status({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_send_status()))
                     time.sleep(5)
                     '''
-                    print('{} - learn({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].learn(i+3)))
-                    time.sleep(1)
-                    time.sleep(1)
-                    time.sleep(1)
-                    time.sleep(1)
-                    time.sleep(1)
-                    time.sleep(1)
-                    time.sleep(1)
-                    time.sleep(1)
-                    time.sleep(1)
+                    #print('{} - learn({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].learn(i+3)))
                     time.sleep(1)
                     print('{} - get_last_message_type({}): {}'.format(deviceList[dev]['name'], dev, devices[dev].get_last_message_type()))
                     time.sleep(1)

@@ -902,6 +902,8 @@ class YoLinkMQTTDevice(object):
                             else:
                                 yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                     logging.debug('updateStatusData - Method data : {}'.format(yolink.dataAPI))
+                elif 'data' in data:
+                    yolink.dataAPI[yolink.dData] = data['data']
                 else: # setDelay only returns data
                     yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                     if ".setDelay" in data['method']:
