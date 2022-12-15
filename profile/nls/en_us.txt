@@ -278,7 +278,7 @@ swctrl-4 = Fast Off
 batlevel-0 = Low 
 batlevel-1 = Medium Low
 batlevel-2 = Medium
-batlevel-3 =  Medium High
+batlevel-3 = Medium High
 batlevel-4 = High
 batlevel-99 = Unknown
 
