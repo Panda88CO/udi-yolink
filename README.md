@@ -7,10 +7,10 @@
     
     'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-    'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 
+    'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
     
     Code uses MQTT communications
-    ###SHORT POLL sends a heart beat to the ISY - defauls in 60 sec - It will also chech if data was updated since last update - this can happen when a command has a very slow reply from the cloud - the server uses separate threads from sending commands and receiving results 
+    ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec - It will also chech if data was updated since last update - this can happen when a command has a very slow reply from the cloud - the server uses separate threads from sending commands and receiving results 
     
     ###LONG POLL check the online state of the devices (If a device goes off-line it will not be detected until this is called - for battery operated devices it may take even longer as data appear to be cached in the cloud - battery devices are not querried as part of the LONG POLL) 
     A device will redetected once it is back on-line. 

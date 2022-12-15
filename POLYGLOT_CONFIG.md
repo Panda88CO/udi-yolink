@@ -3,11 +3,13 @@
     
 ## Yolink Node server
     Current list of devices supported is as follows:
-    
-    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'SpeakerHub', 'VibrationSensor'
+
+    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+    'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
+    'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
     
     Code uses MQTT communications
-    ###SHORT POLL sends a heart beat to the ISY - defauls in 60 sec
+    ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec
     ###LONG POLL check the online state of the devices (If a device goes off-line it will not be detected until this is called - for battery operated devices it may take even longer as data appear to be cached in the cloud - battery devices are not querried as part of the LONG POLL) 
     A device will redetected once it is back on-line. 
     Default is 3600 (1 hour).  
