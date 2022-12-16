@@ -338,10 +338,11 @@ class YoLinkSetup (udi_interface.Node):
                 if adr.find(nde[0:11]) >=0 :
                     found = True
             if not found and nde != 'setup':
-                logging.debug('Node {} not in list - removing it'.format(nde))
+                logging.debug('Node {} not in list'.format(nde))
                 deleteList.append(nde)
-        for delnde in deleteList:
-                self.poly.delNode(delnde)
+        for nde in deleteList:
+                self.poly.delNode(nde)
+                logging.debug('Node {} not in list - removing it'.format(nde))
 
 
         # checking params for erassed nodes 
