@@ -337,7 +337,7 @@ class YoLinkSetup (udi_interface.Node):
             for adr in addressList:    
                 if adr.find(nde[0:11]) >=0 :
                     found = True
-            if not found:
+            if not found and nde != 'setup':
                 logging.debug('Node {} not in list - removing it'.format(nde))
                 deleteList.append(nde)
         for delnde in deleteList:
