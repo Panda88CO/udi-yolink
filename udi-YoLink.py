@@ -352,28 +352,6 @@ class YoLinkSetup (udi_interface.Node):
         # checking params for erassed nodes 
         self.poly.updateProfile()
         self.pollStart = True
-        ''''
-        # check and remove for nodes that no longer exists
-        logging.debug('Checking for old nodes ')
-        nodes = self.poly.getNodes()
-        logging.debug('nodelist {} : {}'.format(len(nodes), nodes))
-        for nde in nodes:
-            logging.debug('parsing node {}: {}'.format(nde, nodes[nde]))
-            if nde != 'setup':
-                nodeAddress = nodes[nde].address
-                primAddress = nodes[nde].primary
-                logging.debug('node{}:  {} {}'.format(nodes[nde].name, nodeAddress, primAddress ))
-                if nodeAddress == primAddress: # it is not a sub node
-                    found = False
-                    for dev in range(0,len(self.deviceList)):
-                        adr = self.deviceList[dev]['deviceId'][-14:]
-                        if adr == nodeAddress:
-                            found = True
-                    if not found:
-                        self.delNode(nde)
-                        logging.debug('delete node {}'.format(nde))
-        # checking params
-        '''
 
     def stop(self):
         logging.info('Stop Called:')
