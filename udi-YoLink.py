@@ -327,18 +327,21 @@ class YoLinkSetup (udi_interface.Node):
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         time.sleep(2)
+        deleteList = []
         nodes = self.poly.getNodes() 
         logging.debug('Checking for nodes that no longer exit')
         logging.debug('AddressList : {}'.format(addressList))
         for nde in nodes:
             logging.debug('Node address: {}'.format(nde[0:11]))
             found = False
-            for adr in addressList:         
-                if nde[0:11] not in adr:
+            for adr in addressList:    
+                if adr.find(nde[0:11]) >=0 :
                     found = True
             if not found:
                 logging.debug('Node {} not in list - removing it'.format(nde))
-                self.poly.delNode(nde)
+                deleteList.append(nde)
+        for delnde in deleteList:
+                self.poly.delNode(delnde)
 
 
         # checking params for erassed nodes 
@@ -535,7 +538,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.7.0')
+        polyglot.start('0.7.1')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
