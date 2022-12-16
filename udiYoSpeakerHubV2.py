@@ -18,7 +18,7 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-from yolinkSpeakerHubV2 import YoLinkSpeakerH
+from yolinkSpeakerHubV3 import YoLinkSpeakerH
 
 class udiYoSpeakerHub(udi_interface.Node):
   

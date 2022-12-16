@@ -81,7 +81,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
             data["token"]= yolink.deviceInfo['token']
             data['params']['ssid'] = SSID
             data['params']['password'] = password
-        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
                time.sleep(1)
                attempt = attempt + 1
         yolink.lastControlPacket = data
@@ -147,7 +147,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
             message = message[0:200]
         data['params']['message'] = message
         logging.debug('playAudio: {}'.format(data))
-        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
                time.sleep(1)
                attempt = attempt + 1
         yolink.lastControlPacket = data
@@ -166,7 +166,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         data['params']['enableBeep'] = yolink.beepEnabled
         data['params']['mute'] = yolink.mute
         print('dataStr: {}'.format(data))
-        while  not yolink.publish_data( data) and attempt <= maxAttempts:
+        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
                time.sleep(1)
                attempt = attempt + 1
         yolink.lastControlPacket = data

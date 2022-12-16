@@ -9,6 +9,7 @@ MIT License
 try:
     import udi_interface
     logging = udi_interface.LOGGER
+    #logging = getlogger('udiDimmerV2')
     Custom = udi_interface.Custom
 except ImportError:
     import logging
@@ -18,7 +19,7 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-from yolinkDimmerV2 import YoLinkDim
+from yolinkDimmerV3 import YoLinkDim
 
 class udiYoDimmer(udi_interface.Node):
   
@@ -196,8 +197,8 @@ class udiYoDimmer(udi_interface.Node):
 
     def switchControl(self, command):
         logging.info('udiYoDimmer switchControl') 
-        ctrl = int(command.get('value'))   
-
+        ctrl = command.get('value')   
+        logging.debug('switchControl : {}'.format(ctrl))
         if ctrl == 1:
             self.yoDimmer.setState('ON')
             self.node.setDriver('GV0',1 , True, True)
@@ -244,6 +245,8 @@ class udiYoDimmer(udi_interface.Node):
                 'QUERY' : update,
                 'DON'   : set_switch_on,
                 'DOF'   : set_switch_off,
+                'DFON'   : set_switch_fon,
+                'DFOF'   : set_switch_foff,                
                 'SWCTRL': switchControl, 
                 'DIMLVL' : set_dimmer_level,
                 'ONDELAY' : setOnDelay,

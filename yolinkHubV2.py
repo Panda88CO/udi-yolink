@@ -8,7 +8,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-from yolink_mqtt_classV2 import YoLinkMQTTDevice
+from yolink_mqtt_classV3 import YoLinkMQTTDevice
 
 
 class YoLinkHu(YoLinkMQTTDevice):

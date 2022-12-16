@@ -13,7 +13,7 @@ except ImportError:
 
 #import sys
 import time
-from yolinkMultiOutletV2 import YoLinkMultiOut
+from yolinkMultiOutletV3 import YoLinkMultiOut
 import re
 
 
@@ -61,6 +61,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = polyglot.getNode(self.address)
+        
         time.sleep(1)
         
         
@@ -78,6 +79,10 @@ class udiYoSubOutlet(udi_interface.Node):
         while 5 != len(self.drivers):
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
+        while self.node == None:
+            logging.debug('Waiting for node {} to get created'.format(self.name))
+            time.sleep(1)
+
         self.node.setDriver('ST', 1, True, True)
         self.node.setDriver('GV4', self.port, True, True)
         try:
@@ -277,6 +282,8 @@ class udiYoSubUSB(udi_interface.Node):
         while 2 != len(self.drivers):
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
+
+
         self.node.setDriver('ST', 1, True, True)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)

@@ -28,9 +28,10 @@ class YoLinkInitPAC(object):
     def __init__(yoAccess, uaID, secID, tokenURL='https://api.yosmart.com/open/yolink/token', pacURL = 'https://api.yosmart.com/open/yolink/v2/api' , mqttURL= 'api.yosmart.com', mqttPort = 8003):
         yoAccess.disconnect_occured = False 
         yoAccess.tokenLock = Lock()
-        yoAccess.messageLock = Lock()
+        yoAccess.fileLock = Lock()
         yoAccess.publishQueue = Queue()
         yoAccess.messageQueue = Queue()
+        yoAccess.fileQueue = Queue()
         yoAccess.debug = True
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
@@ -69,14 +70,14 @@ class YoLinkInitPAC(object):
             yoAccess.disconnect = False
             yoAccess.STOP = Event()
 
-            yoAccess.messageThread = Thread(target = yoAccess.process_message )
-            yoAccess.publishThread = Thread(target = yoAccess.transfer_data )
-            yoAccess.fileThread =  Thread(target = yoAccess.save_packet_info )
+            #yoAccess.messageThread = Thread(target = yoAccess.process_message )
+            #yoAccess.publishThread = Thread(target = yoAccess.transfer_data )
+            #yoAccess.fileThread =  Thread(target = yoAccess.save_packet_info )
             #yoAccess.connectionMonitorThread = Thread(target = yoAccess.connection_monitor)
 
-            yoAccess.messageThread.start()
-            yoAccess.publishThread.start()
-            yoAccess.fileThread.start()
+            #yoAccess.messageThread.start()
+            #yoAccess.publishThread.start()
+            #yoAccess.fileThread.start()
             
 
             logging.info('Connecting to YoLink MQTT server')
@@ -112,7 +113,16 @@ class YoLinkInitPAC(object):
 
     #######################################
     #check if connected to YoLink Cloud server
+    def measure_time(func):                                                                                                   
+                                                                                                                          
+        def wrapper(*arg):                                                                                                      
+            t = time.time()                                                                                                     
+            res = func(*arg)                                                                                                    
+            logging.debug ("Function took " + str(time.time()-t) + " seconds to run")                                                    
+            return res                                                                                                          
+        return wrapper                                                                                                                
 
+    #@measure_time
     def check_connection(yoAccess, port):
         logging.debug( 'check_connection: port {}'.format(port))
         connectons = psutil.net_connections()
@@ -129,10 +139,12 @@ class YoLinkInitPAC(object):
 
 
     #####################################
-
+    #@measure_time
     def getDeviceList(yoAccess):
         return(yoAccess.deviceList)
 
+
+    #@measure_time
     def request_new_token(yoAccess):
         logging.debug('yoAccess Token exists : {}'.format(yoAccess.token != None))
         now = int(time.time())
@@ -165,6 +177,7 @@ class YoLinkInitPAC(object):
         else:
             return(True) # use existing Token 
 
+    #@measure_time
     def refresh_token(yoAccess):
         
         try:
@@ -199,6 +212,7 @@ class YoLinkInitPAC(object):
             logging.debug('Exeption occcured during refresh_token : {}'.format(e))
             return(yoAccess.request_new_token())
 
+    #@measure_time
     def get_access_token(yoAccess):
         yoAccess.tokenLock.acquire()
         now = int(time.time())
@@ -211,11 +225,11 @@ class YoLinkInitPAC(object):
         #    else:
         yoAccess.tokenLock.release() 
 
-                
+    #@measure_time                
     def is_token_expired (yoAccess, accessToken):
         return(accessToken == yoAccess.token['access_token'])
         
-
+    #@measure_time
     def retrieve_device_list(yoAccess):
         try:
             logging.debug('retrieve_device_list')
@@ -232,7 +246,7 @@ class YoLinkInitPAC(object):
         except Exception as e:
             logging.error('Exception  -  retrieve_device_list : {}'.format(e))             
 
-
+    #@measure_time
     def retrieve_homeID(yoAccess):
         try:
             data= {}
@@ -251,12 +265,13 @@ class YoLinkInitPAC(object):
                 yoAccess.homeID = None
                 logging.error('Failed ot obtain HomeID')
         except Exception as e:
-            logging.error('Exception  - retrieve_homeID: {}'.format(e))            
+            logging.error('Exception  - retrieve_homeID: {}'.format(e))    
 
+    #@measure_time
     def getDeviceList (yoAccess):
         return(yoAccess.deviceList)
 
-
+    #@measure_time
     def shut_down(yoAccess):
 
         yoAccess.disconnect = True
@@ -269,6 +284,7 @@ class YoLinkInitPAC(object):
     # MQTT stuff
     ########################################
 
+    #@measure_time
     def connect_to_broker(yoAccess):
         """
         Connect to MQTT broker
@@ -300,6 +316,7 @@ class YoLinkInitPAC(object):
             logging.error('Exception  - connect_to_broker: {}'.format(e))
             return(False)
 
+    #@measure_time
     def subscribe_mqtt(yoAccess, deviceId, callback):
         logging.info('Subscribing deviceId {} to MQTT'.format(deviceId))
         topicReq = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/request'
@@ -320,7 +337,7 @@ class YoLinkInitPAC(object):
                                             }
             time.sleep(1)
 
-
+    #@measure_time
     def update_mqtt_subscription (yoAccess, deviceId):
         logging.info('update_mqtt_subscription {} '.format(deviceId))
         topicReq = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/request'
@@ -343,90 +360,109 @@ class YoLinkInitPAC(object):
             yoAccess.mqttList[deviceId]['report'] = topicReport
         #logging.debug('mqtt.list:{}.'.format(yoAccess.mqttList))
 
+    #@measure_time
     def process_message(yoAccess):
+        try:
+            #yoAccess.messageLock.acquire()
+            msg = yoAccess.messageQueue.get(timeout = 10) 
+            logging.debug('Received message - Q size={}'.format(yoAccess.messageQueue.qsize()))
+            payload = json.loads(msg.payload.decode("utf-8"))
+            logging.debug('process_message : {}'.format(payload))
+            
+            deviceId = 'unknown'
+            if 'targetDevice' in payload:
+                deviceId = payload['targetDevice']
+            elif 'deviceId' in payload:
+                deviceId = payload['deviceId']
+            else:
+                logging.debug('Unknow device in payload : {}'.format(payload))
 
-        while not yoAccess.STOP.is_set():
-            try:
-                #yoAccess.messageLock.acquire()
-                msg = yoAccess.messageQueue.get(timeout = 10) 
-                logging.debug('Received message - Q size={}'.format(yoAccess.messageQueue.qsize()))
-                payload = json.loads(msg.payload.decode("utf-8"))
-                logging.debug('process_message : {}'.format(payload))
+            logging.debug('process_message for {}: {} {}'.format(deviceId, payload, msg.topic))
+            
+
+            if deviceId in yoAccess.mqttList:
+
+                tempCallback = yoAccess.mqttList[deviceId]['callback']
                 
-                deviceId = 'unknown'
-                if 'targetDevice' in payload:
-                    deviceId = payload['targetDevice']
-                elif 'deviceId' in payload:
-                    deviceId = payload['deviceId']
-                else:
-                    logging.debug('Unknow device in payload : {}'.format(payload))
-
-                logging.debug('process_message for {}: {} {}'.format(deviceId, payload, msg.topic))
-                
-
-                if deviceId in yoAccess.mqttList:
-
-                    tempCallback = yoAccess.mqttList[deviceId]['callback']
-                    
-                    #if payload['msgid'] in yoAccess.pendingDict:
-                    #    yoAccess.pendingDict.pop(payload['msgid'] )
-                    #logging.debug('POP {} yoAccess.pendingDict {}:{}'.format(payload['msgid'] ,len(yoAccess.pendingDict), yoAccess.pendingDict))
-                    if  msg.topic == yoAccess.mqttList[deviceId]['report']: 
-                        logging.debug('porcessing report: {}'.format(payload))                   
-                        tempCallback(payload)
-                        if yoAccess.debug:
-                                fileData= {}
-                                fileData['type'] = 'EVENT'
-                                fileData['data'] = payload 
-                                yoAccess.fileQueue.put(fileData)
-
-                    elif msg.topic == yoAccess.mqttList[deviceId]['response']:
-                        logging.debug('porcessing response: {}'.format(payload))                   
-
-                        if payload['code'] == '000000':
-                            tempCallback(payload)
-                        else:
-                            logging.error('Non-000000 code {} : {}'.format(payload['desc'], str(json.dumps(payload))))
-                            tempCallback(payload)
-                        if yoAccess.debug:
+                #if payload['msgid'] in yoAccess.pendingDict:
+                #    yoAccess.pendingDict.pop(payload['msgid'] )
+                if  msg.topic == yoAccess.mqttList[deviceId]['report']: 
+                    logging.debug('porcessing report: {}'.format(payload))                   
+                    tempCallback(payload)
+                    if yoAccess.debug:
                             fileData= {}
-                            fileData['type'] = 'RESP'
+                            fileData['type'] = 'EVENT'
                             fileData['data'] = payload 
                             yoAccess.fileQueue.put(fileData)
-                            
-                    elif msg.topic == yoAccess.mqttList[deviceId]['request']:
-                        logging.debug('porcessing request - no action: {}'.format(payload))                   
-                        #transmitted message
-                        if yoAccess.debug:
-                            fileData= {}
-                            fileData['type'] = 'REQ'
-                            fileData['data'] = payload
-                            yoAccess.fileQueue.put(fileData)
+                            event_fileThread = Thread(target = yoAccess.save_packet_info )
+                            event_fileThread.start()
+                            logging.debug('event_fileThread - starting')
 
+
+                elif msg.topic == yoAccess.mqttList[deviceId]['response']:
+                    logging.debug('porcessing response: {}'.format(payload))                   
+
+                    if payload['code'] == '000000':
+                        tempCallback(payload)
                     else:
-                        logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
-                        if yoAccess.debug:
-                            fileData= {}
-                            fileData['type'] = 'MISC'
-                            fileData['data'] = payload
-                            yoAccess.fileQueue.put(fileData)                
+                        logging.error('Non-000000 code {} : {}'.format(payload['desc'], str(json.dumps(payload))))
+                        tempCallback(payload)
+                    if yoAccess.debug:
+                        fileData= {}
+                        fileData['type'] = 'RESP'
+                        fileData['data'] = payload 
+                        yoAccess.fileQueue.put(fileData)
+                        resp_fileThread = Thread(target = yoAccess.save_packet_info )
+                        resp_fileThread.start()
+                        logging.debug('resp_fileThread - starting')
+                        
+                elif msg.topic == yoAccess.mqttList[deviceId]['request']:
+                    logging.debug('porcessing request - no action: {}'.format(payload))                   
+                    #transmitted message
+                    if yoAccess.debug:
+                        fileData= {}
+                        fileData['type'] = 'REQ'
+                        fileData['data'] = payload
+                        yoAccess.fileQueue.put(fileData)
+                        req_fileThread = Thread(target = yoAccess.save_packet_info )
+                        req_fileThread.start()
+                        logging.debug('req_fileThread - starting')
+
                 else:
-                    logging.error('Unsupported device: {}'.format(deviceId))
-                #yoAccess.messageLock.release()
+                    logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
+                    if yoAccess.debug:
+                        fileData= {}
+                        fileData['type'] = 'MISC'
+                        fileData['data'] = payload
+                        yoAccess.fileQueue.put(fileData)   
+                        misc_fileThread = Thread(target = yoAccess.save_packet_info )
+                        misc_fileThread.start()
+                        logging.debug('misc_fileThread - starting')                                     
+            else:
+                logging.error('Unsupported device: {}'.format(deviceId))
+            #yoAccess.messageLock.release()
 
-            except Exception as e:
-                pass
-                logging.debug('message processing timeout - no new commands') 
-                #yoAccess.messageLock.release()
+        except Exception as e:
+            pass
+            logging.debug('message processing timeout - no new commands') 
+            #yoAccess.messageLock.release()
 
+    #@measure_time
     def on_message(yoAccess, client, userdata, msg):
         """
         Callback for broker published events
         """
-        logging.debug('Message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )        
+        logging.debug('on_message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )
         yoAccess.messageQueue.put(msg)
-        logging.debug('Message received and put in queue (size : {})'.format(yoAccess.messageQueue.qsize()))
-
+        qsize = yoAccess.messageQueue.qsize()
+        logging.debug('Message received and put in queue (size : {})'.format(qsize))
+        logging.debug('Creating threads to handle the received messages')
+        threads = []
+        for idx in range(0, qsize):
+            threads.append(Thread(target = yoAccess.process_message ))
+        [t.start() for t in threads]
+        #[t.join() for t in threads]
+        logging.debug('{} on_message threads starting'.format(qsize))
 
     #def obtain_connection (yoAccess):
     #    if not yoAccess.connectedToBroker:    
@@ -435,6 +471,7 @@ class YoLinkInitPAC(object):
     #        yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec                    
     #        time.sleep(5)
 
+    #@measure_time
     def on_connect(yoAccess, client, userdata, flags, rc):
         """
         Callback for connection to broker
@@ -506,7 +543,7 @@ class YoLinkInitPAC(object):
         except Exception as e:
             logging.error('Exception  -  on_connect: ' + str(e))       
 
-
+    #@measure_time
     def on_disconnect(yoAccess, client, userdata,rc=0):
         logging.debug('Disconnect - stop loop')
         #yoAccess.connectedToBroker = False
@@ -547,6 +584,7 @@ class YoLinkInitPAC(object):
                 else:
                     logging.error('Lost credential info - need to restart node server')
 
+    #@measure_time
     def on_subscribe(yoAccess, client, userdata, mID, granted_QOS):        
         logging.debug('on_subscribe')
         #logging.debug('client = ' + str(client))
@@ -555,6 +593,7 @@ class YoLinkInitPAC(object):
         #logging.debug('Granted QoS: ' +  str(granted_QOS))
         #logging.debug('\n')
 
+    #@measure_time
     def on_publish(yoAccess, client, userdata, mID):
         logging.debug('on_publish')
         #logging.debug('client = ' + str(client))
@@ -563,65 +602,81 @@ class YoLinkInitPAC(object):
         #logging.debug('\n')
 
 
+    #@measure_time
+    def publish_data(yoAccess, data):
+        logging.debug( 'Publish Data to Queue: {}'.format(data))
+        while not yoAccess.connectedToBroker:
+            logging.debug('Connection to Broker not established - waiting')
+            time.sleep(1)       
+
+        yoAccess.publishQueue.put(data, timeout = 5)
+        
+        publishThread = Thread(target = yoAccess.transfer_data )
+        publishThread.start()
+        logging.debug('publishThread - starting')
+        return(True)
+
+    #@measure_time
     def transfer_data(yoAccess):
-        errorCount = 0
         yoAccess.lastTransferTime = time.time()
-        while not yoAccess.STOP.is_set():
-            try:
-                data = yoAccess.publishQueue.get(timeout = 10) 
-                
-                deviceId = data['targetDevice']
-                dataStr = str(json.dumps(data))
-                yoAccess.tmpData[deviceId] = dataStr
-                yoAccess.lastDataPacket[deviceId] = data
-                if deviceId in yoAccess.mqttList:
-                    logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
-                    result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
-                else:
-                    logging.error('device {} not in mqtt list'.format(deviceId))
-                    return (False)
-                
-                if result.rc != 0:
-                    logging.error('Error {} during publishing {}'.format(result.rc, data))
-                    #errorCount = errorCount + 1
-                    if result.rc == 4 or result.rc == 3: #off line
-                        logging.debug('rc = {}'.format(result.rc))
-                        yoAccess.online = False
-                        #yoAccess.client.reconnect() # is this the right strategy 
-                else:
-                    yoAccess.lastTransferTime = time.time()
-                    yoAccess.online = True
-            except Exception as e:
-                pass # go wait again unless stop is called
+        try:
+            data = yoAccess.publishQueue.get(timeout = 10) 
+            
+            deviceId = data['targetDevice']
+            dataStr = str(json.dumps(data))
+            yoAccess.tmpData[deviceId] = dataStr
+            yoAccess.lastDataPacket[deviceId] = data
+            if deviceId in yoAccess.mqttList:
+                logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
+                result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
+            else:
+                logging.error('device {} not in mqtt list'.format(deviceId))
+                return (False)
+            
+            if result.rc != 0:
+                logging.error('Error {} during publishing {}'.format(result.rc, data))
+                #errorCount = errorCount + 1
+                if result.rc == 4 or result.rc == 3: #off line
+                    logging.debug('rc = {}'.format(result.rc))
+                    yoAccess.online = False
+                    #yoAccess.client.reconnect() # is this the right strategy 
+            else:
+                yoAccess.lastTransferTime = time.time()
+                yoAccess.online = True
+        except Exception as e:
+            pass # go wait again unless stop is called
 
-
+    #@measure_time
     def save_packet_info(yoAccess):
-        while not yoAccess.STOP.is_set():
-            try:
-                data = yoAccess.fileQueue.get(timeout = 10)
-                if 'targetDevice' in data['data']:
-                    deviceId = data['data']['targetDevice']
-                elif 'deviceId' in data['data']:
-                    deviceId = data['data']['deviceId']
-                if data['type'].upper() == 'REQ':
-                    f = open('TXpackets.txt', 'a')
-                elif data['type'].upper() == 'RESP':
-                    f = open('RXpackets.txt', 'a')
-                elif data['type'].upper() == 'EVENT':  
-                    f = open('EVENTpackets.txt', 'a')
-                else:
-                    f = open('MISCpackets.txt', 'a')
-                #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
-                f.write('{} - {}:  '.format( datetime.now(),deviceId))
-                f.write(str(json.dumps(data['data'])))
-                f.write('\n\n')
-                #json.dump(jsonStr, f)
-                f.close()
-                time.sleep(0.2)
-            except Exception as e:
-                # logging.debug('File Queue looping {}'.format(e))
-                pass # go wait again unless stop is called
+        yoAccess.fileLock.acquire()
+        try:
+            data = yoAccess.fileQueue.get(timeout = 10)
+            if 'targetDevice' in data['data']:
+                deviceId = data['data']['targetDevice']
+            elif 'deviceId' in data['data']:
+                deviceId = data['data']['deviceId']
+            if data['type'].upper() == 'REQ':
+                f = open('TXpackets.txt', 'a')
+            elif data['type'].upper() == 'RESP':
+                f = open('RXpackets.txt', 'a')
+            elif data['type'].upper() == 'EVENT':  
+                f = open('EVENTpackets.txt', 'a')
+            else:
+                f = open('MISCpackets.txt', 'a')
+            #jsonStr  = json.dumps(dataTemp, sort_keys=True, indent=4, separators=(',', ': '))
+            f.write('{} - {}:  '.format( datetime.now(),deviceId))
+            f.write(str(json.dumps(data['data'])))
+            f.write('\n\n')
+            #json.dump(jsonStr, f)
+            f.close()
+            time.sleep(0.2)
+        
+        except Exception as e:
+            # logging.debug('File Queue looping {}'.format(e))
+            pass # go wait again unless stop is called
+        yoAccess.fileLock.release()
 
+    #@measure_time
     def system_online(yoAccess):
         return(yoAccess.online)
 
@@ -629,6 +684,7 @@ class YoLinkInitPAC(object):
 ################
 #   Misc stuff
 ###############
+    #@measure_time
     def set_temp_unit(yoAccess, unit):
         yoAccess.temp_unit = unit
 
