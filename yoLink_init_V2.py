@@ -370,7 +370,7 @@ class YoLinkInitPAC(object):
                     
                     #if payload['msgid'] in yoAccess.pendingDict:
                     #    yoAccess.pendingDict.pop(payload['msgid'] )
-                    logging.debug('POP {} yoAccess.pendingDict {}:{}'.format(payload['msgid'] ,len(yoAccess.pendingDict), yoAccess.pendingDict))
+                    #logging.debug('POP {} yoAccess.pendingDict {}:{}'.format(payload['msgid'] ,len(yoAccess.pendingDict), yoAccess.pendingDict))
                     if  msg.topic == yoAccess.mqttList[deviceId]['report']: 
                         logging.debug('porcessing report: {}'.format(payload))                   
                         tempCallback(payload)
