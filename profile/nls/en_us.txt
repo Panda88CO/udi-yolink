@@ -131,7 +131,7 @@ CMD-nlsdoorsens-DOF-NAME = No use
 
 ND-yomotionsens-NAME = YoLink Motion Sensor
 ND-yomotionsens-ICON = MotionSensor
-ST-nlsmotionsens-GV0-NAME = Motoion State
+ST-nlsmotionsens-GV0-NAME = Motion State
 ST-nlsmotionsens-GV1-NAME = Sensor Battery Level
 #ST-nlsmotionsens-GV8-NAME = Device Online
 ST-nlsmotionsens-ST-NAME = Nodeserver Status
