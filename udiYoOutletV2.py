@@ -122,10 +122,10 @@ class udiYoOutlet(udi_interface.Node):
                 self.last_state = state                
                 tmp =  self.yoOutlet.getEnergy()
                 if tmp != None:
-                    power = tmp['power']
-                    watt = tmp['watt']
+                    power = round(tmp['power']/1000,3)
+                    kwatt = round(tmp['watt']/1000,3)
                     self.node.setDriver('GV3', power, True, True)
-                    self.node.setDriver('GV4', watt, True, True)
+                    self.node.setDriver('GV4', kwatt, True, True)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
