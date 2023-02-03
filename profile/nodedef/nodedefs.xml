@@ -484,9 +484,12 @@
    <nodeDef id="yopwralarm" nls="nlspwralarm">
       <editors />
       <sts>
-         <st id="GV0" editor="powerstate" />
+         <st id="GV0" editor="poweralert" />
          <st id="GV1" editor="batlevel" />
-         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV2" editor="alertstate" />
+         <st id="GV3" editor="powered" />
+         <st id="GV4" editor="mute" />
+
          <st id="ST"  editor="status" />
       </sts>
       <cmds>

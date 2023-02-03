@@ -222,6 +222,32 @@ CMD-nlsirremote-TXCODE-NAME = Send Code
 CMD-nlsirremote-UPDATE-NAME = Update
 CMD-nlsirremote-QUERY-NAME = Query
 
+ND-yopwralarm-NAME = YoLink Ir Remoter
+ND-yopwralarm-ICON = Output
+ST-nlspwralarm-GV0-NAME = Power Alert
+ST-nlspwralarm-GV1-NAME = Battery Level
+ST-nlspwralarm-GV2-NAME = Alert Pending
+ST-nlspwralarm-GV3-NAME = Power on Unit
+ST-nlspwralarm-GV4-NAME = Muted
+ST-nlspwralarm-ST-NAME = Nodeserver Status
+CMD-nlspwralarm-UPDATE-NAME = Update
+CMD-nlspwralarm-QUERY-NAME = Query
+
+poweralert-0 = Normal
+poweralert-1 = Alert
+poweralert-2 = Unit Off
+poweralert-99 = Unknown
+
+alertstate-0 = No Alert
+alertstate-1 = Alert Active
+alertstate-99 = Unknown
+
+powered-0 = No Power to Unit
+powered-1 = Unit powered
+powered-99 = Unknown
+
+
+
 cmdstatus-0 = Code Not learn_code
 cmdstatus-1 = Success
 cmdstatus-2 = TX Key Wrong

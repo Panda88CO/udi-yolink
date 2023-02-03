@@ -111,10 +111,15 @@
  <editor id = "txcode" > 
      <range  uom="107" min="0" max ="63" prec="0" />
   </editor>
- <editor id = "powerstate" > 
+ <editor id = "poweralert" > 
      <range  uom="25" subset="0-2,99" nls="cmdstatus" />
   </editor>
- <editor id = "tbd" > 
+ <editor id = "alertstate" > 
+     <range  uom="25" subset="0-1,99" nls="cmdstatus" />
+  </editor>
+ <editor id = "powered" > 
+     <range  uom="25" subset="0-1,99" nls="cmdstatus" />
+  </editor>
 
 </editors> 
 

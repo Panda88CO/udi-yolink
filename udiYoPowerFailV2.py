@@ -15,7 +15,7 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
 
 import time
-from yolinkPowerFailV2 import YoLinkPowerFailSensor
+from yolinkPowerFailV2 import YoLinkPowerFailSen
 
 
 
@@ -26,6 +26,10 @@ class udiYoPowerFailSenor(udi_interface.Node):
        drivers = [
             'GV0' = Power Failure Alert
             'GV1' = Battery Level
+            'GV2' = AlertState
+            'GV3' = Powered
+            'GV4' = Muted
+                        
             'ST' = Online
             ]
 
@@ -34,14 +38,18 @@ class udiYoPowerFailSenor(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV2', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV3', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV4', 'value': 99, 'uom': 25}, 
+
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+
             ]
 
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-
+        from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, bool2ISY
         logging.debug('udiYoPowerFailSenor INIT- {}'.format(deviceInfo['name']))
         self.adress = address
         self.yoAccess = yoAccess
@@ -63,6 +71,8 @@ class udiYoPowerFailSenor(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
+        self.node.setDriver('ST', 1, True, True)
+
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -76,9 +86,9 @@ class udiYoPowerFailSenor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoPowerFailSenor')
-        self.yoVibrationSensor  = YoLinkVibrationSen(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoPowerFail  = YoLinkPowerFailSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        self.yoVibrationSensor.initNode()
+        self.yoPowerFail.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
 
@@ -86,7 +96,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoPowerFailSenor')
         self.node.setDriver('ST', 0, True, True)
-        self.yoVibrationSensor.shut_down()
+        self.yoPowerFail.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
 
@@ -94,30 +104,34 @@ class udiYoPowerFailSenor(udi_interface.Node):
         self.yoVibrationSensor.refreshDevice()   
     
     def checkDataUpdate(self):
-        if self.yoVibrationSensor.data_updated():
+        if self.yoPowerFail.data_updated():
             self.updateData()
 
 
     def updateData(self):
         if self.node is not None:
-            if self.yoVibrationSensor.online:               
-                vib_state = self.getVibrationState()
-                if vib_state == 1:
-                    self.node.setDriver('GV0', 1, True, True)
-                    if self.last_state != vib_state:
-                        self.node.reportCmd('DON')   
-                elif vib_state == 0:
-                    self.node.setDriver('GV0', 0, True, True)
-                    if self.last_state != vib_state:
-                        self.node.reportCmd('DOF')  
-                else:
-                    self.node.setDriver('GV0', 99, True, True) 
-                self.last_state = vib_state
+            if self.yoPowerFail.online:               
+                state = self.getState()
+                logging.debug('state GV0 : {}'.format(state))
+                self.node.setDriver('GV0', state, True, True)
                 self.node.setDriver('GV1', self.yoVibrationSensor.getBattery(), True, True)
+                alert = self.getAlertType()
+                logging.debug('AlertState GV2 : {}'.format(alert))
+                self.node.setDriver('GV2', alert, True, True)
+                powered = self.getPowerSupplyConnected()
+                logging.debug('Powered  GV3 : {}'.format(alert))
+                self.node.setDriver('GV3', self.bool2ISY(powered), True, True)
+                muted = self.muted()
+                logging.debug('Muted GV4 : {}'.format(muted))
+                self.node.setDriver('GV4', self.bool2ISY(muted), True, True)                
                 self.node.setDriver('ST', 1, True, True)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('GV2', 99, True, True)
+                self.node.setDriver('GV3', 99, True, True)
+                self.node.setDriver('GV4', 99, True, True)
+
                 self.node.setDriver('ST', 1, True, True)
 
 
@@ -125,11 +139,11 @@ class udiYoPowerFailSenor(udi_interface.Node):
     def getPowerSupplyState(self):
         logging.debug('getPowerSupplyState')
 
-        
+
 
     def getVibrationState(self):
-        if self.yoVibrationSensor.online:
-            if  self.yoVibrationSensor.getVibrationState() == 'normal':
+        if self.yoPowerFail.online:
+            if  self.yoPowerFail.getVibrationState() == 'normal':
                 return(0)
             else:
                 return(1)
@@ -138,14 +152,14 @@ class udiYoPowerFailSenor(udi_interface.Node):
 
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoPowerFailSenor')
-        self.yoVibrationSensor.updateStatus(data)
+        self.yoPowerFail.updateStatus(data)
         self.updateData()
 
 
 
     def update(self, command = None):
         logging.info('udiYoPowerFailSenor Update  Executed')
-        self.yoVibrationSensor.refreshSensor()
+        self.yoPowerFail.refreshDevice()
        
 
     def noop(self, command = None):

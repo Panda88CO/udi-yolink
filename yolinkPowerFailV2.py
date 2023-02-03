@@ -29,16 +29,33 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         logging.debug('getPowerSupplyState: {}'.format(tmp))
         return(tmp)
 
+
     def getAlertType(yolink):
         tmp = yolink.getStateValue('alertType')
-        logging.debug('getAlertType: {}'.format(tmp))
-        return(tmp)        
+        logging.debug('{} getAlertType: {}'.format(yolink.type, tmp))
+        if None == tmp:
+            return(0)
+        else:
+            return(1)
+              
 
     def muted(yolink):
         tmp = yolink.getStateValue('alertType')
         logging.debug('getAlertType: {}'.format(tmp))
         return(tmp)        
 
+    def getState(yolink):
+        tmp = yolink.getState()
+        logging.debug('{} - getState: {}'.format(yolink.type, tmp))
+        if "normal"  == tmp:
+            return(0)
+        elif "alert" == tmp:
+            return(1)
+        elif "off" == tmp:
+            return(2)
+        else:
+            return(99)
+        
 
 
 
