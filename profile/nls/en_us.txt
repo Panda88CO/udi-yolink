@@ -222,8 +222,8 @@ CMD-nlsirremote-TXCODE-NAME = Send Code
 CMD-nlsirremote-UPDATE-NAME = Update
 CMD-nlsirremote-QUERY-NAME = Query
 
-ND-yopwralarm-NAME = YoLink Ir Remoter
-ND-yopwralarm-ICON = Output
+ND-yopwralarm-NAME = YoLink Power Failure Alarm
+ND-yopwralarm-ICON = Input
 ST-nlspwralarm-GV0-NAME = Power Alert
 ST-nlspwralarm-GV1-NAME = Battery Level
 ST-nlspwralarm-GV2-NAME = Alert Pending
@@ -246,7 +246,15 @@ powered-0 = No Power to Unit
 powered-1 = Unit powered
 powered-99 = Unknown
 
-
+ND-yosmremote-NAME = YoLink Smart Remoter
+ND-yosmremote-ICON = Input
+ST-nlssmremote-GV0-NAME = Power Alert
+ST-nlssmremote-GV1-NAME = Battery Level
+ST-nlssmremote-GV2-NAME = Alert Pending
+ST-nlssmremote-GV3-NAME = Power on Unit
+ST-nlssmremote-ST-NAME = Nodeserver Status
+CMD-nlssmremote-UPDATE-NAME = Update
+CMD-nlssmremote-QUERY-NAME = Query
 
 cmdstatus-0 = Code Not learn_code
 cmdstatus-1 = Success

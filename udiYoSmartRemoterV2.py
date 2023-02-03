@@ -15,6 +15,7 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
 
 import time
+import math
 from yolinkSmartRemoterV2 import YoLinkSmartRemote
 
 
@@ -35,6 +36,8 @@ class udiYoSmartRemoter(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV2', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV3', 'value': 99, 'uom': 25},            
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -50,6 +53,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.yoSmartRemote  = None
         self.last_state = 99
         self.n_queue = []
+        self.max_remore_keys = 8
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -98,6 +102,10 @@ class udiYoSmartRemoter(udi_interface.Node):
         if self.yoSmartRemote.data_updated():
             self.updateData()
 
+    def mask2key (self, mask):
+        logging.debug('mask2key : {}'.format(mask))
+        return(int(round(math.log2(mask),0)))
+
 
     def updateData(self):
         try:
@@ -107,12 +115,22 @@ class udiYoSmartRemoter(udi_interface.Node):
                     if event_data:
                         key_mask = event_data['keyMask']
                         press_type = event_data['type']
-                   
-                    self.node.setDriver('GV1', self.yoSmartRemote.getBattery(), True, True)
+                        remote_key = self.mask2key(key_mask)
+                        if press_type == 'LongPress':
+                            press = self.max_remore_keys
+                        else:
+                            press = 0
+                    self.node.setDriver('GV0', remote_key + press, True, True)
+                    self.node.setDriver('GV1', remote_key, True, True)
+                    self.node.setDriver('GV2', press, True, True)
+                    self.node.setDriver('GV3', self.yoSmartRemote.getBattery(), True, True)
+    
                     self.node.setDriver('ST', 1, True, True)
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                     self.node.setDriver('GV1', 99, True, True)
+                    self.node.setDriver('GV2', 99, True, True)
+                    self.node.setDriver('GV3', 99, True, True)
                     self.node.setDriver('ST', 1, True, True)
         except Exception as E:
             logging.error('Smart Remote get updateData exeption: {}'.format(E))
