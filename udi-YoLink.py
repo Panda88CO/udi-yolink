@@ -25,6 +25,9 @@ from udiYoLockV2 import udiYoLock
 from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
 from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV2 import udiYoVibrationSensor
+from udiYoSmartRemoterV2 import udiYoSmartRemoter
+from udiYoPowerFailV2 import udiYoPowerFailSenor
+
 
 import udiProfileHandler
 
@@ -325,6 +328,24 @@ class YoLinkSetup (udi_interface.Node):
                     addressList.append(name)         
                     time.sleep(2) # add delay between adding devices
 
+                elif self.deviceList[dev]['type'] == 'PowerFailureAlarm': 
+                    name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
+                    udiYoPowerFailSenor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
+                    self.Parameters[name]  =  self.deviceList[dev]['name']  
+                    addressList.append(name)         
+                    time.sleep(2) # add delay between adding devices
+
+
+                elif self.deviceList[dev]['type'] == 'SmartRemoter': 
+                    name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
+                    udiYoSmartRemoter(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
+                    self.Parameters[name]  =  self.deviceList[dev]['name']  
+                    addressList.append(name)         
+                    time.sleep(2) # add delay between adding devices
+
+
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         time.sleep(2)
@@ -528,7 +549,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.7.5')
+        polyglot.start('0.8.0')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
