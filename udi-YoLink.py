@@ -355,20 +355,25 @@ class YoLinkSetup (udi_interface.Node):
         self.pollStart = True
 
     def stop(self):
-        logging.info('Stop Called:')
-        #self.yoAccess.writeTtsFile() #save current TTS messages
-        if 'self.node' in locals():
-            self.node.setDriver('ST', 0, True, True)
-            #nodes = self.poly.getNodes()
-            #for node in nodes:
-            #    if node != 'setup':   # but not the controller node
-            #        nodes[node].setDriver('ST', 0, True, True)
-            time.sleep(2)
-        if self.yoAccess:
-            self.yoAccess.shut_down()
-        self.poly.stop()
-        exit()
- 
+        try:
+            logging.info('Stop Called:')
+            #self.yoAccess.writeTtsFile() #save current TTS messages
+            if 'self.node' in locals():
+                self.node.setDriver('ST', 0, True, True)
+                #nodes = self.poly.getNodes()
+                #for node in nodes:
+                #    if node != 'setup':   # but not the controller node
+                #        nodes[node].setDriver('ST', 0, True, True)
+                time.sleep(2)
+            if self.yoAccess:
+                self.yoAccess.shut_down()
+            self.poly.stop()
+            exit()
+        except Exception as E:
+            logging.error('Stop Exception : {}'.format(E))
+            if self.yoAccess:
+                self.yoAccess.shut_down()
+            self.poly.stop()
 
     def heartbeat(self):
         logging.debug('heartbeat: ' + str(self.hb))

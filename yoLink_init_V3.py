@@ -273,13 +273,15 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def shut_down(yoAccess):
-
-        yoAccess.disconnect = True
-        if yoAccess.client:
-            yoAccess.STOP.set()
-            yoAccess.client.disconnect()
-            yoAccess.client.loop_stop()
-        
+        try:
+            yoAccess.disconnect = True
+            if yoAccess.client:
+                yoAccess.STOP.set()
+                yoAccess.client.disconnect()
+                yoAccess.client.loop_stop()
+        except Exception as E:
+            logging.error('Shut down exception {}'.format(E))
+            
     ########################################
     # MQTT stuff
     ########################################
