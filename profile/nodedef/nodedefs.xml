@@ -507,7 +507,7 @@
    <nodeDef id="yosmremote" nls="nlssmremote">
       <editors />
       <sts>
-         <st id="GV0" editor="tbd" />
+         <st id="GV0" editor="keypress" />
          <st id="GV1" editor="batlevel" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />

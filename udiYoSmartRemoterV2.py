@@ -15,7 +15,7 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
 
 import time
-from yolinkSmartRemoterV2 import YoLinkVibrationSen
+from yolinkSmartRemoterV2 import YoLinkSmartRemote
 
 
 
@@ -24,8 +24,9 @@ class udiYoSmartRemoter(udi_interface.Node):
     
     '''
        drivers = [
-            'GV0' = Vibration Alert
+            'GV0' = RemoteKey 
             'GV1' = Battery Level
+
             'ST' = Online
             ]
 
@@ -46,7 +47,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.adress = address
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
-        self.yoVibrationSensor  = None
+        self.yoSmartRemote  = None
         self.last_state = 99
         self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -76,9 +77,9 @@ class udiYoSmartRemoter(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoSmartRemoter')
-        self.yoVibrationSensor  = YoLinkVibrationSen(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoSmartRemote  = YoLinkSmartRemote(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        self.yoVibrationSensor.initNode()
+        self.yoSmartRemote.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
 
@@ -86,47 +87,42 @@ class udiYoSmartRemoter(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoSmartRemoter')
         self.node.setDriver('ST', 0, True, True)
-        self.yoVibrationSensor.shut_down()
+        self.yoSmartRemote.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
 
     def checkOnline(self):
-        self.yoVibrationSensor.refreshDevice()   
+        self.yoSmartRemote.refreshDevice()   
     
     def checkDataUpdate(self):
-        if self.yoVibrationSensor.data_updated():
+        if self.yoSmartRemote.data_updated():
             self.updateData()
 
 
     def updateData(self):
-        if self.node is not None:
-            if self.yoVibrationSensor.online:               
-                vib_state = self.getVibrationState()
-                if vib_state == 1:
-                    self.node.setDriver('GV0', 1, True, True)
-                    if self.last_state != vib_state:
-                        self.node.reportCmd('DON')   
-                elif vib_state == 0:
-                    self.node.setDriver('GV0', 0, True, True)
-                    if self.last_state != vib_state:
-                        self.node.reportCmd('DOF')  
+        try:
+            if self.node is not None:
+                if self.yoSmartRemote.online:               
+                    event_data = self.getEventData()
+                    if event_data:
+                        key_mask = event_data['keyMask']
+                        press_type = event_data['type']
+                   
+                    self.node.setDriver('GV1', self.yoSmartRemote.getBattery(), True, True)
+                    self.node.setDriver('ST', 1, True, True)
                 else:
-                    self.node.setDriver('GV0', 99, True, True) 
-                self.last_state = vib_state
-                self.node.setDriver('GV1', self.yoVibrationSensor.getBattery(), True, True)
-                self.node.setDriver('ST', 1, True, True)
-            else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('ST', 1, True, True)
-
+                    self.node.setDriver('GV0', 99, True, True)
+                    self.node.setDriver('GV1', 99, True, True)
+                    self.node.setDriver('ST', 1, True, True)
+        except Exception as E:
+            logging.error('Smart Remote get updateData exeption: {}'.format(E))
 
 
 
 
     def getVibrationState(self):
-        if self.yoVibrationSensor.online:
-            if  self.yoVibrationSensor.getVibrationState() == 'normal':
+        if self.yoSmartRemote.online:
+            if  self.yoSmartRemote.getVibrationState() == 'normal':
                 return(0)
             else:
                 return(1)
@@ -135,14 +131,14 @@ class udiYoSmartRemoter(udi_interface.Node):
 
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoSmartRemoter')
-        self.yoVibrationSensor.updateStatus(data)
+        self.yoSmartRemote.updateStatus(data)
         self.updateData()
 
 
 
     def update(self, command = None):
         logging.info('udiYoSmartRemoter Update  Executed')
-        self.yoVibrationSensor.refreshSensor()
+        self.yoSmartRemote.refreshSensor()
        
 
     def noop(self, command = None):
