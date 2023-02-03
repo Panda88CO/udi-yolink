@@ -120,6 +120,15 @@
  <editor id = "powered" > 
      <range  uom="25" subset="0-1,99" nls="cmdstatus" />
   </editor>
+ <editor id = "keypress" > 
+     <range  uom="25" subset="0-15,99" nls="cmdstatus" />
+  </editor>
+ <editor id = "keynumber" > 
+     <range  uom="25" subset="0-7,99" nls="cmdstatus" />
+  </editor>
+ <editor id = "presstype" > 
+     <range  uom="25" subset="0-1,99" nls="cmdstatus" />
+  </editor>
 
 </editors> 
 
