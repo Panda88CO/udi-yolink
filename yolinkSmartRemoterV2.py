@@ -10,29 +10,34 @@ except ImportError:
 from yolink_mqtt_classV3 import YoLinkMQTTDevice
 
 
-class YoLinkVibrationSen(YoLinkMQTTDevice):
+class YoLinkSmartRemote(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(yoAccess,  deviceInfo, callback)
         yolink.methodList = ['getState' ]
         yolink.eventList = ['Alert' , 'getState', 'StatusChange']
-        yolink.eventName = 'VibrationEvent'
+        yolink.eventName = 'SmartRemoteEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'VibrationSensor'
+        yolink.type = 'SmartRemoter'
         #time.sleep(2)
        
     
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
+
+    def getDevTemperature(yolink):
+        logging.debug('getDevTemperature')
+        
+    '''
     def getVibrationState(yolink):
         return(yolink.getState())
     
     def refreshSensor(yolink):
         logging.debug(yolink.type+ ' - refreshSensor')
         return(yolink.refreshDevice( ))
+    '''
 
-
-class YoLinkVibrationSensor(YoLinkVibrationSen):
+class YoLinkSmartRemoter(YoLinkSmartRemote):
     def __init__(yolink, yoAccess,  deviceInfo):
         super().__init__( yoAccess,  deviceInfo, yolink.updateStatus)
         yolink.initNode()

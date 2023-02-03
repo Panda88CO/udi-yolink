@@ -15,11 +15,11 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
 
 import time
-from yolinkVibrationSensorV2 import YoLinkVibrationSen
+from yolinkPowerFailV2 import YoLinkPowerFailSensor
 
 
 
-class udiYoVibrationSensor(udi_interface.Node):
+class udiYoPowerFailSenor(udi_interface.Node):
     id = 'yopwralarm'
     
     '''
@@ -42,7 +42,7 @@ class udiYoVibrationSensor(udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
 
-        logging.debug('udiYoVibrationSensor INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoPowerFailSenor INIT- {}'.format(deviceInfo['name']))
         self.adress = address
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
@@ -75,7 +75,7 @@ class udiYoVibrationSensor(udi_interface.Node):
 
 
     def start(self):
-        logging.info('start - udiYoVibrationSensor')
+        logging.info('start - udiYoPowerFailSenor')
         self.yoVibrationSensor  = YoLinkVibrationSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoVibrationSensor.initNode()
@@ -84,7 +84,7 @@ class udiYoVibrationSensor(udi_interface.Node):
 
     
     def stop (self):
-        logging.info('Stop udiYoVibrationSensor')
+        logging.info('Stop udiYoPowerFailSenor')
         self.node.setDriver('ST', 0, True, True)
         self.yoVibrationSensor.shut_down()
         #if self.node:
@@ -122,7 +122,10 @@ class udiYoVibrationSensor(udi_interface.Node):
 
 
 
+    def getPowerSupplyState(self):
+        logging.debug('getPowerSupplyState')
 
+        
 
     def getVibrationState(self):
         if self.yoVibrationSensor.online:
@@ -134,14 +137,14 @@ class udiYoVibrationSensor(udi_interface.Node):
             return(99)
 
     def updateStatus(self, data):
-        logging.info('updateStatus - udiYoLinkVibrationSensor')
+        logging.info('updateStatus - udiYoPowerFailSenor')
         self.yoVibrationSensor.updateStatus(data)
         self.updateData()
 
 
 
     def update(self, command = None):
-        logging.info('udiYoVibrationSensor Update  Executed')
+        logging.info('udiYoPowerFailSenor Update  Executed')
         self.yoVibrationSensor.refreshSensor()
        
 

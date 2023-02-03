@@ -24,13 +24,32 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
+    def getPowerSupplyConnected(yolink):
+        tmp = yolink.getStateValue('PowerSupply')
+        logging.debug('getPowerSupplyState: {}'.format(tmp))
+        return(tmp)
+
+    def getAlertType(yolink):
+        tmp = yolink.getStateValue('alertType')
+        logging.debug('getAlertType: {}'.format(tmp))
+        return(tmp)        
+
+    def muted(yolink):
+        tmp = yolink.getStateValue('alertType')
+        logging.debug('getAlertType: {}'.format(tmp))
+        return(tmp)        
+
+
+
+
+    '''    
     def getVibrationState(yolink):
         return(yolink.getState())
     
     def refreshSensor(yolink):
         logging.debug(yolink.type+ ' - refreshSensor')
         return(yolink.refreshDevice( ))
-
+    '''
 
 class YoLinkPowerFailSensor(YoLinkPowerFailSen):
     def __init__(yolink, yoAccess,  deviceInfo):

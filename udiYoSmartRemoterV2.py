@@ -15,11 +15,11 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
 
 import time
-from yolinkVibrationSensorV2 import YoLinkVibrationSen
+from yolinkSmartRemoterV2 import YoLinkVibrationSen
 
 
 
-class udiYoVibrationSensor(udi_interface.Node):
+class udiYoSmartRemoter(udi_interface.Node):
     id = 'yosmremote'
     
     '''
@@ -42,7 +42,7 @@ class udiYoVibrationSensor(udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
 
-        logging.debug('udiYoVibrationSensor INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoSmartRemoter INIT- {}'.format(deviceInfo['name']))
         self.adress = address
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
@@ -75,7 +75,7 @@ class udiYoVibrationSensor(udi_interface.Node):
 
 
     def start(self):
-        logging.info('start - udiYoVibrationSensor')
+        logging.info('start - udiYoSmartRemoter')
         self.yoVibrationSensor  = YoLinkVibrationSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoVibrationSensor.initNode()
@@ -84,7 +84,7 @@ class udiYoVibrationSensor(udi_interface.Node):
 
     
     def stop (self):
-        logging.info('Stop udiYoVibrationSensor')
+        logging.info('Stop udiYoSmartRemoter')
         self.node.setDriver('ST', 0, True, True)
         self.yoVibrationSensor.shut_down()
         #if self.node:
@@ -134,14 +134,14 @@ class udiYoVibrationSensor(udi_interface.Node):
             return(99)
 
     def updateStatus(self, data):
-        logging.info('updateStatus - udiYoLinkVibrationSensor')
+        logging.info('updateStatus - udiYoSmartRemoter')
         self.yoVibrationSensor.updateStatus(data)
         self.updateData()
 
 
 
     def update(self, command = None):
-        logging.info('udiYoVibrationSensor Update  Executed')
+        logging.info('udiYoSmartRemoter Update  Executed')
         self.yoVibrationSensor.refreshSensor()
        
 
