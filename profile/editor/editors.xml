@@ -112,22 +112,22 @@
      <range  uom="107" min="0" max ="63" prec="0" />
   </editor>
  <editor id = "poweralert" > 
-     <range  uom="25" subset="0-2,99" nls="cmdstatus" />
+     <range  uom="25" subset="0-2,99" nls="poweralert" />
   </editor>
  <editor id = "alertstate" > 
-     <range  uom="25" subset="0-1,99" nls="cmdstatus" />
+     <range  uom="25" subset="0-1,99" nls="alertstate" />
   </editor>
  <editor id = "powered" > 
-     <range  uom="25" subset="0-1,99" nls="cmdstatus" />
+     <range  uom="25" subset="0-1,99" nls="powered" />
   </editor>
  <editor id = "keypress" > 
-     <range  uom="25" subset="0-15,99" nls="cmdstatus" />
+     <range  uom="25" subset="0-15,99" nls="keypress" />
   </editor>
  <editor id = "keynumber" > 
-     <range  uom="25" subset="0-7,99" nls="cmdstatus" />
+     <range  uom="25" subset="0-7,99" nls="keynumber" />
   </editor>
  <editor id = "presstype" > 
-     <range  uom="25" subset="0-1,99" nls="cmdstatus" />
+     <range  uom="25" subset="0-1,99" nls="presstype" />
   </editor>
 
 </editors> 

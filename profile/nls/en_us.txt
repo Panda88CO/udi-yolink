@@ -272,7 +272,6 @@ keypress-12 = Key5 - Long
 keypress-13 = Key6 - Long
 keypress-14 = Key7 - Long
 keypress-15 = Key8 - Long
-
 keypress-99 = Unknown
 
 keynumber-0 = Key1
@@ -290,7 +289,7 @@ presstype-1 = Long press
 presstype-99 = Unknown
 
 
-cmdstatus-0 = Code Not learn_code
+cmdstatus-0 = Code Not learn code
 cmdstatus-1 = Success
 cmdstatus-2 = TX Key Wrong
 cmdstatus-99 = Unknown

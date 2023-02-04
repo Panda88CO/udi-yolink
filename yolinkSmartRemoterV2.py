@@ -26,10 +26,12 @@ class YoLinkSmartRemote(YoLinkMQTTDevice):
 
 
     def getDevTemperature(yolink):
-        logging.debug('getDevTemperature')
+        temp = yolink.getStateValue('devTemperature')
+        logging.debug('getDevTemperature: {}'.format(temp))
+        return(temp)
 
     def getEventData(yolink):
-        temp = yolink.get_event_in_state()
+        temp = yolink.get_event_from_state()
         logging.debug('getEventData: {}'.format(temp))
         return(temp)
 
