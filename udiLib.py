@@ -21,7 +21,6 @@ def wait_for_node_done(self):
     self.n_queue.pop()
 
 def bool2ISY (self, data):
-    
     if data:
         return(1)
     else:

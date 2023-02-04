@@ -285,7 +285,7 @@ keynumber-7 = Key8
 keynumber-99 = Unknown
 
 presstype-0 = Normal
-presstype-1 = Long press
+presstype-8 = Long press
 presstype-99 = Unknown
 
 

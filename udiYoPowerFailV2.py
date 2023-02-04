@@ -49,7 +49,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, bool2ISY
+        #from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, bool2ISY
         logging.debug('udiYoPowerFailSenor INIT- {}'.format(deviceInfo['name']))
         self.adress = address
         self.yoAccess = yoAccess
@@ -82,6 +82,11 @@ class udiYoPowerFailSenor(udi_interface.Node):
             time.sleep(0.1)
         self.n_queue.pop()
 
+    def bool2ISY (self, data):
+        if data:
+            return(1)
+        else:
+            return(0)
 
 
     def start(self):

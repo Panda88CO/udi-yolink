@@ -127,7 +127,7 @@
      <range  uom="25" subset="0-7,99" nls="keynumber" />
   </editor>
  <editor id = "presstype" > 
-     <range  uom="25" subset="0-1,99" nls="presstype" />
+     <range  uom="25" subset="0,8,99" nls="presstype" />
   </editor>
 
 </editors> 
