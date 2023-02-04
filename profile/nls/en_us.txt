@@ -252,6 +252,7 @@ ST-nlssmremote-GV0-NAME = ComboPress
 ST-nlssmremote-GV1-NAME = Key presstype
 ST-nlssmremote-GV2-NAME = Press type
 ST-nlssmremote-GV3-NAME = Battery Level
+ST-nlssmremote-GV4-NAME = Remote Temperature
 ST-nlssmremote-ST-NAME = Nodeserver Status
 CMD-nlssmremote-UPDATE-NAME = Update
 CMD-nlssmremote-QUERY-NAME = Query

@@ -27,15 +27,12 @@ class YoLinkSmartRemote(YoLinkMQTTDevice):
 
     def getDevTemperature(yolink):
         logging.debug('getDevTemperature')
-        
-    '''
-    def getVibrationState(yolink):
-        return(yolink.getState())
-    
-    def refreshSensor(yolink):
-        logging.debug(yolink.type+ ' - refreshSensor')
-        return(yolink.refreshDevice( ))
-    '''
+
+    def getEventData(yolink):
+        temp = yolink.get_event_in_state()
+        logging.debug('getEventData: {}'.format(temp))
+        return(temp)
+
 
 class YoLinkSmartRemoter(YoLinkSmartRemote):
     def __init__(yolink, yoAccess,  deviceInfo):

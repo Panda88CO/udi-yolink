@@ -511,7 +511,7 @@
          <st id="GV1" editor="keynumber" />
          <st id="GV2" editor="presstype" />                  
          <st id="GV3" editor="batlevel" />
-
+         <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
       </sts>

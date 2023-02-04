@@ -37,8 +37,10 @@ class udiYoSmartRemoter(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV2', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV3', 'value': 99, 'uom': 25},            
+            {'driver': 'GV3', 'value': 99, 'uom': 25},     
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 25},            
             {'driver': 'ST', 'value': 0, 'uom': 25},
+
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -106,12 +108,14 @@ class udiYoSmartRemoter(udi_interface.Node):
         logging.debug('mask2key : {}'.format(mask))
         return(int(round(math.log2(mask),0)))
 
+    def getEventData(self):
+        logging.debug('getEventData')
 
     def updateData(self):
         try:
             if self.node is not None:
                 if self.yoSmartRemote.online:               
-                    event_data = self.getEventData()
+                    event_data = self.yoSmartRemote.getEventData()
                     if event_data:
                         key_mask = event_data['keyMask']
                         press_type = event_data['type']

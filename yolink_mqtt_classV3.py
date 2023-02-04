@@ -989,6 +989,13 @@ class YoLinkMQTTDevice(object):
             logging.debug('Exception updateStatusData - {}'.format(e))
             logging.debug('Exception Data - {}'.format(data))
 
+    def get_event_in_state(yolink):
+        logging.debug('get_event_in_state')
+        try:
+            return(yolink.dataAPI[yolink.dData][yolink.dState]['event'])
+        except Exception as E:
+            logging.error('Exception in get_event_in_state {} {}'.format(E,yolink.dataAPI[yolink.dData][yolink.dState] ))
+
     '''
     def updateScheduleStatus(yolink, data):
         logging.debug(yolink.type + 'updateScheduleStatus')
@@ -999,7 +1006,7 @@ class YoLinkMQTTDevice(object):
         yolink.dataAPI[yolink.dData][yolink.dSchedule] = data[yolink.dData]
         yolink.dataAPI[yolink.lastMessage] = data
 
-
+    
 
 
     def updateFWStatus(yolink, data):
