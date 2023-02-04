@@ -101,7 +101,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
         #    self.poly.delNode(self.node.address)
 
     def checkOnline(self):
-        self.yoVibrationSensor.refreshDevice()   
+        self.yoPowerFail.refreshDevice()   
     
     def checkDataUpdate(self):
         if self.yoPowerFail.data_updated():
@@ -111,14 +111,14 @@ class udiYoPowerFailSenor(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if self.yoPowerFail.online:               
-                state = self.getState()
+                state = self.yoPowerFail.getAlertState()
                 logging.debug('state GV0 : {}'.format(state))
                 self.node.setDriver('GV0', state, True, True)
-                self.node.setDriver('GV1', self.yoVibrationSensor.getBattery(), True, True)
+                self.node.setDriver('GV1', self.yoPowerFail.getBattery(), True, True)
                 alert = self.getAlertType()
                 logging.debug('AlertState GV2 : {}'.format(alert))
                 self.node.setDriver('GV2', alert, True, True)
-                powered = self.getPowerSupplyConnected()
+                powered = self.yoPowerFail.getPowerSupplyConnected()
                 logging.debug('Powered  GV3 : {}'.format(alert))
                 self.node.setDriver('GV3', self.bool2ISY(powered), True, True)
                 muted = self.muted()

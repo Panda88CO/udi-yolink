@@ -44,7 +44,7 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         logging.debug('getAlertType: {}'.format(tmp))
         return(tmp)        
 
-    def getState(yolink):
+    def getAlertState(yolink):
         tmp = yolink.getState()
         logging.debug('{} - getState: {}'.format(yolink.type, tmp))
         if "normal"  == tmp:
