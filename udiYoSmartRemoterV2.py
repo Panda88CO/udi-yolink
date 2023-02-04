@@ -85,11 +85,11 @@ class udiYoSmartRemoter(udi_interface.Node):
         logging.info('start - udiYoSmartRemoter')
         self.yoSmartRemote  = YoLinkSmartRemote(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
+        self.temp_unit = self.yoAccess.get_temp_unit()
         self.yoSmartRemote.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
 
-    
     def stop (self):
         logging.info('Stop udiYoSmartRemoter')
         self.node.setDriver('ST', 0, True, True)
@@ -108,8 +108,6 @@ class udiYoSmartRemoter(udi_interface.Node):
         logging.debug('mask2key : {}'.format(mask))
         return(int(round(math.log2(mask),0)))
 
-    def getEventData(self):
-        logging.debug('getEventData')
 
     def updateData(self):
         try:
@@ -128,28 +126,27 @@ class udiYoSmartRemoter(udi_interface.Node):
                     self.node.setDriver('GV1', remote_key, True, True)
                     self.node.setDriver('GV2', press, True, True)
                     self.node.setDriver('GV3', self.yoSmartRemote.getBattery(), True, True)
-    
+                    logging.debug("udiYoSmartRemoter temp: {}".format(self.yoSmartRemote.getDevTemperature()))
+                    if self.temp_unit == 0:
+                        self.node.setDriver('CLITEMP', round(self.yoSmartRemote.getDevTemperature(),1), True, True, 4)
+                    elif self.temp_unit == 1:
+                        self.node.setDriver('CLITEMP', round(self.yoSmartRemote.getDevTemperature()*9/5+32,1), True, True, 17)
+                    elif self.temp_unit == 2:
+                        self.node.setDriver('CLITEMP', round(self.yoSmartRemote.getDevTemperature()+273.15,1), True, True, 26)
+                    else:
+                        self.node.setDriver('CLITEMP', 99, True, True, 25)
                     self.node.setDriver('ST', 1, True, True)
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                     self.node.setDriver('GV1', 99, True, True)
                     self.node.setDriver('GV2', 99, True, True)
                     self.node.setDriver('GV3', 99, True, True)
+                    self.node.setDriver('CLITEMP', 99, True, True, 25)
                     self.node.setDriver('ST', 1, True, True)
         except Exception as E:
             logging.error('Smart Remote get updateData exeption: {}'.format(E))
 
 
-
-
-    def getVibrationState(self):
-        if self.yoSmartRemote.online:
-            if  self.yoSmartRemote.getVibrationState() == 'normal':
-                return(0)
-            else:
-                return(1)
-        else:
-            return(99)
 
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoSmartRemoter')
