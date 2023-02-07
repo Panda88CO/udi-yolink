@@ -232,7 +232,10 @@ ST-nlspwralarm-GV4-NAME = Muted
 ST-nlspwralarm-ST-NAME = Nodeserver Status
 CMD-nlspwralarm-UPDATE-NAME = Update
 CMD-nlspwralarm-QUERY-NAME = Query
+pfamute-0 = Not muted
+pfamute-1 = Muted
 
+pfa mute-99 = Unknown
 poweralert-0 = Normal
 poweralert-1 = Alert
 poweralert-2 = Unit Off
