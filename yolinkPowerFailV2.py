@@ -28,10 +28,10 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         packet = yolink.getLastDataPacket()
         logging.debug('getPowerSupplyConnected last packet : {}'.format(packet))
         if 'event' in packet:
-            tmp = yolink.getStateValue('powerSupply')
+            tmp = yolink.getDataStateValue('powerSupply')
             logging.debug('event detected - PowerSupply: {}'.format(tmp))
         else:
-            tmp = yolink.getValue('powerSupply') # from getStatus
+            tmp = yolink.getDataValue('powerSupply') # from getStatus
             logging.debug('NO event detected - PowerSupply: {}'.format(tmp))
         logging.debug('getPowerSupplyState: {}'.format(tmp))
         return(tmp)
@@ -41,10 +41,10 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         packet = yolink.getLastDataPacket()
         logging.debug('getAlertType last packet : {}'.format(packet))
         if 'event' in packet:
-            tmp = yolink.getStateValue('alertType')
+            tmp = yolink.getSDatatateValue('alertType')
             logging.debug('event detected - alertType: {}'.format(tmp))
         else:
-            tmp = yolink.getValue('alertType')
+            tmp = yolink.getDataValue('alertType')
             logging.debug('NO event detected - alertType: {}'.format(tmp))
         logging.debug('{} getAlertType: {}'.format(yolink.type, tmp))
         if None == tmp:
@@ -57,10 +57,10 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         packet = yolink.getLastDataPacket()
         logging.debug('muted last packet : {}'.format(packet))
         if 'event' in packet:
-            tmp = yolink.getStateValue('mute')
+            tmp = yolink.getDataStateValue('mute')
             logging.debug('event detected - muted: {}'.format(tmp))
         else:
-            tmp = yolink.getValue('mute')
+            tmp = yolink.getDataValue('mute')
             logging.debug('NO event detected - muted: {}'.format(tmp))
         logging.debug('getAlertType: {}'.format(tmp))
         return(tmp)        
@@ -69,10 +69,10 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         packet = yolink.getLastDataPacket()
         logging.debug('getAlertState last packet : {}'.format(packet))
         if 'event' in packet:
-            tmp = yolink.getStateValue('state')
+            tmp = yolink.getDataStateValue('state')
             logging.debug('event detected - getAlertState: {}'.format(tmp))
         else:
-            tmp = yolink.getState()
+            tmp = yolink.getDataValue('state')
             logging.debug('NO event detected - getAlertState: {}'.format(tmp))
         logging.debug('{} - getState: {}'.format(yolink.type, tmp))
         if "normal"  == tmp:
