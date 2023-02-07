@@ -1022,9 +1022,12 @@ class YoLinkMQTTDevice(object):
                         else:
                             #yolink.dataAPI[yolink.dData][yolink.dDelays] = []
                             yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState][0:yolink.nbrPorts+yolink.nbrUsb]
+                    else: #must be single key - add all keys but contains key = 'state
+                        for key in data[yolink.dData]:
+                            yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                 else:
                     for key in data[yolink.dData]:
-                        yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] # put data into state - doesnot seem correct but afraid to change it 
+                        yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] # sAdding all keys to state  
                         #yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                 logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
 
