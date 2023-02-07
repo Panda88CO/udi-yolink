@@ -157,7 +157,7 @@ class udiYoSmartRemoter(udi_interface.Node):
 
     def update(self, command = None):
         logging.info('udiYoSmartRemoter Update  Executed')
-        self.yoSmartRemote.refreshSensor()
+        self.yoSmartRemote.refreshDevice()
        
 
     def noop(self, command = None):
