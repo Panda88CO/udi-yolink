@@ -25,17 +25,23 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         yolink.updateCallbackStatus(data, False)
 
     def getPowerSupplyConnected(yolink):
-        test = yolink.getLastDataPacket()
-        logging.debug('getPowerSupplyConnected last packet : {}'.format(test))
-        tmp = yolink.getValue('PowerSupply')
+        packet = yolink.getLastDataPacket()
+        logging.debug('getPowerSupplyConnected last packet : {}'.format(packet))
+        if 'event' in packet:
+            tmp = yolink.getValue('PowerSupply')
+        else:
+            tmp = yolink.getStateValue('PowerSupply') # from getStatus
         logging.debug('getPowerSupplyState: {}'.format(tmp))
         return(tmp)
 
 
     def getAlertType(yolink):
-        test = yolink.getLastDataPacket()
-        logging.debug('getAlertType last packet : {}'.format(test))
-        tmp = yolink.getValue('alertType')
+        packet = yolink.getLastDataPacket()
+        logging.debug('getAlertType last packet : {}'.format(packet))
+        if 'event' in packet:
+            tmp = yolink.getValue('alertType')
+        else:
+            tmp = yolink.getStateValue('alertType')
         logging.debug('{} getAlertType: {}'.format(yolink.type, tmp))
         if None == tmp:
             return(0)
@@ -44,16 +50,22 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
               
 
     def muted(yolink):
-        test = yolink.getLastDataPacket()
-        logging.debug('muted last packet : {}'.format(test))
-        tmp = yolink.getValue('alertType')
+        packet = yolink.getLastDataPacket()
+        logging.debug('muted last packet : {}'.format(packet))
+        if 'event' in packet:
+            tmp = yolink.getValue('alertType')
+        else:
+            tmp = yolink.getStateValue('alertType')
         logging.debug('getAlertType: {}'.format(tmp))
         return(tmp)        
 
     def getAlertState(yolink):
-        test = yolink.getLastDataPacket()
-        logging.debug('getAlertState last packet : {}'.format(test))
-        tmp = yolink.getState()
+        packet = yolink.getLastDataPacket()
+        logging.debug('getAlertState last packet : {}'.format(packet))
+        if 'event' in packet:
+            tmp = yolink.getState()
+        else:
+            tmp = yolink.getStateValue('state')
         logging.debug('{} - getState: {}'.format(yolink.type, tmp))
         if "normal"  == tmp:
             return(0)
