@@ -224,7 +224,7 @@ CMD-nlsirremote-QUERY-NAME = Query
 
 ND-yopwralarm-NAME = YoLink Power Failure Alarm
 ND-yopwralarm-ICON = Input
-ST-nlspwralarm-GV0-NAME = Power Alert
+ST-nlspwralarm-GV0-NAME = Unit State
 ST-nlspwralarm-GV1-NAME = Battery Level
 ST-nlspwralarm-GV2-NAME = Alert Pending
 ST-nlspwralarm-GV3-NAME = Power on Unit
@@ -232,10 +232,11 @@ ST-nlspwralarm-GV4-NAME = Muted
 ST-nlspwralarm-ST-NAME = Nodeserver Status
 CMD-nlspwralarm-UPDATE-NAME = Update
 CMD-nlspwralarm-QUERY-NAME = Query
+
 pfamute-0 = Not muted
 pfamute-1 = Muted
+pfamute-99 = Unknown
 
-pfa mute-99 = Unknown
 poweralert-0 = Normal
 poweralert-1 = Alert
 poweralert-2 = Unit Off
@@ -245,7 +246,7 @@ alertstate-0 = No Alert
 alertstate-1 = Alert Active
 alertstate-99 = Unknown
 
-powered-0 = No Power to Unit
+powered-0 = No Power
 powered-1 = Unit powered
 powered-99 = Unknown
 

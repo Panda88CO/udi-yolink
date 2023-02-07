@@ -129,7 +129,7 @@
  <editor id = "presstype" > 
      <range  uom="25" subset="0,8,99" nls="presstype" />
   </editor>
-  <editor id = "fpamute" > 
+  <editor id = "pfamute" > 
      <range  uom="25" subset="0-1,99" nls="pfamute" />
   </editor>
 </editors> 
