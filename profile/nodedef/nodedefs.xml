@@ -480,4 +480,52 @@
       </cmds>
    </nodeDef> 
    
+
+   <nodeDef id="yopwralarm" nls="nlspwralarm">
+      <editors />
+      <sts>
+         <st id="GV0" editor="poweralert" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="alertstate" />
+         <st id="GV3" editor="powered" />
+         <st id="GV4" editor="pfamute" />
+
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         </sends>
+         <accepts>     
+            <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+   <nodeDef id="yosmremote" nls="nlssmremote">
+      <editors />
+      <sts>
+         <st id="GV0" editor="keypress" />
+         <st id="GV1" editor="keynumber" />
+         <st id="GV2" editor="presstype" />                  
+         <st id="GV3" editor="batlevel" />
+         <st id="CLITEMP" editor="tempC" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         </sends>
+         <accepts>     
+            <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+
 </nodeDefs> 

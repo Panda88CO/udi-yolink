@@ -222,7 +222,78 @@ CMD-nlsirremote-TXCODE-NAME = Send Code
 CMD-nlsirremote-UPDATE-NAME = Update
 CMD-nlsirremote-QUERY-NAME = Query
 
-cmdstatus-0 = Code Not learn_code
+ND-yopwralarm-NAME = YoLink Power Failure Alarm
+ND-yopwralarm-ICON = Input
+ST-nlspwralarm-GV0-NAME = Unit State
+ST-nlspwralarm-GV1-NAME = Battery Level
+ST-nlspwralarm-GV2-NAME = Alert Pending
+ST-nlspwralarm-GV3-NAME = Power on Unit
+ST-nlspwralarm-GV4-NAME = Muted
+ST-nlspwralarm-ST-NAME = Nodeserver Status
+CMD-nlspwralarm-UPDATE-NAME = Update
+CMD-nlspwralarm-QUERY-NAME = Query
+
+pfamute-0 = Not muted
+pfamute-1 = Muted
+pfamute-99 = Unknown
+
+poweralert-0 = Normal
+poweralert-1 = Alert
+poweralert-2 = Unit Off
+poweralert-99 = Unknown
+
+alertstate-0 = No Alert
+alertstate-1 = Alert Active
+alertstate-99 = Unknown
+
+powered-0 = No Power
+powered-1 = Unit powered
+powered-99 = Unknown
+
+ND-yosmremote-NAME = YoLink Smart Remoter
+ND-yosmremote-ICON = Input
+ST-nlssmremote-GV0-NAME = ComboPress
+ST-nlssmremote-GV1-NAME = Key presstype
+ST-nlssmremote-GV2-NAME = Press type
+ST-nlssmremote-GV3-NAME = Battery Level
+ST-nlssmremote-GV4-NAME = Remote Temperature
+ST-nlssmremote-ST-NAME = Nodeserver Status
+CMD-nlssmremote-UPDATE-NAME = Update
+CMD-nlssmremote-QUERY-NAME = Query
+keypress-0 = Key1 - Short
+keypress-1 = Key2 - Short
+keypress-2 = Key3 - Short
+keypress-3 = Key4 - Short
+keypress-4 = Key5 - Short
+keypress-5 = Key6 - Short
+keypress-6 = Key7 - Short
+keypress-7 = Key8 - Short
+keypress-8 = Key1 - Long
+keypress-9 = Key2 - Long 
+keypress-10 = Key3 - Long
+keypress-11 = Key4 - Long
+keypress-12 = Key5 - Long
+keypress-13 = Key6 - Long
+keypress-14 = Key7 - Long
+keypress-15 = Key8 - Long
+keypress-99 = Unknown
+
+keynumber-0 = Key1
+keynumber-1 = Key2
+keynumber-2 = Key3
+keynumber-3 = Key4
+keynumber-4 = Key5
+keynumber-5 = Key6
+keynumber-6 = Key7
+keynumber-7 = Key8
+keynumber-99 = Unknown
+
+presstype-0 = Normal
+presstype-8 = Long press
+presstype-99 = Unknown
+
+
+cmdstatus-0 = Code Not learn code
 cmdstatus-1 = Success
 cmdstatus-2 = TX Key Wrong
 cmdstatus-99 = Unknown

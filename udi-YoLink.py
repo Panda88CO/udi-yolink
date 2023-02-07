@@ -25,6 +25,9 @@ from udiYoLockV2 import udiYoLock
 from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
 from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV2 import udiYoVibrationSensor
+from udiYoSmartRemoterV2 import udiYoSmartRemoter
+from udiYoPowerFailV2 import udiYoPowerFailSenor
+
 
 import udiProfileHandler
 
@@ -118,7 +121,10 @@ class YoLinkSetup (udi_interface.Node):
         #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'InfraredRemoter' ]
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter' ]
+                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
+                                'PowerFailureAlarm', 'SmartRemoter' ]
+        #self.supportedYoTypes = ['PowerFailureAlarm', 'SmartRemoter' ]
+        
         #self.supportedYoTypes = [ 'THSensor' ]
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
@@ -324,6 +330,23 @@ class YoLinkSetup (udi_interface.Node):
                     addressList.append(name)         
                     time.sleep(2) # add delay between adding devices
 
+                elif self.deviceList[dev]['type'] == 'PowerFailureAlarm': 
+                    name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
+                    udiYoPowerFailSenor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
+                    self.Parameters[name]  =  self.deviceList[dev]['name']  
+                    addressList.append(name)         
+                    time.sleep(2) # add delay between adding devices
+
+                elif self.deviceList[dev]['type'] == 'SmartRemoter': 
+                    name = self.deviceList[dev]['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
+                    udiYoSmartRemoter(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
+                    self.Parameters[name]  =  self.deviceList[dev]['name']  
+                    addressList.append(name)         
+                    time.sleep(2) # add delay between adding devices
+
+
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         time.sleep(2)
@@ -354,20 +377,25 @@ class YoLinkSetup (udi_interface.Node):
         self.pollStart = True
 
     def stop(self):
-        logging.info('Stop Called:')
-        #self.yoAccess.writeTtsFile() #save current TTS messages
-        if 'self.node' in locals():
-            self.node.setDriver('ST', 0, True, True)
-            #nodes = self.poly.getNodes()
-            #for node in nodes:
-            #    if node != 'setup':   # but not the controller node
-            #        nodes[node].setDriver('ST', 0, True, True)
-            time.sleep(2)
-        if self.yoAccess:
-            self.yoAccess.shut_down()
-        self.poly.stop()
-        exit()
- 
+        try:
+            logging.info('Stop Called:')
+            #self.yoAccess.writeTtsFile() #save current TTS messages
+            if 'self.node' in locals():
+                self.node.setDriver('ST', 0, True, True)
+                #nodes = self.poly.getNodes()
+                #for node in nodes:
+                #    if node != 'setup':   # but not the controller node
+                #        nodes[node].setDriver('ST', 0, True, True)
+                time.sleep(2)
+            if self.yoAccess:
+                self.yoAccess.shut_down()
+            self.poly.stop()
+            exit()
+        except Exception as E:
+            logging.error('Stop Exception : {}'.format(E))
+            if self.yoAccess:
+                self.yoAccess.shut_down()
+            self.poly.stop()
 
     def heartbeat(self):
         logging.debug('heartbeat: ' + str(self.hb))
@@ -522,7 +550,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.7.5')
+        polyglot.start('0.8.20')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 

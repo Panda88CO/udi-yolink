@@ -8,6 +8,7 @@
     'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
+    'PowerFailureAlarm', 'SmartRemoter'
     
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec - It will also chech if data was updated since last update - this can happen when a command has a very slow reply from the cloud - the server uses separate threads from sending commands and receiving results 
@@ -25,15 +26,15 @@
     Coded in Python 3 - MIT license 
 
 ## Installation
-    Credentials needs to be added to configuration.  In YoLink app goto Settings->Account->Advanced Settings -> User Access Credentials and copy UAID and SecretKey (alternaltive path in app is Profile->Advanced Settings -> User Access Credentials )
+    Credentials needs to be added to configuration in YoLink node server under PG3.  In YoLink app goto Settings->Account->Advanced Settings -> User Access Credentials and copy UAID and SecretKey (alternaltive path in app is Profile->Advanced Settings -> User Access Credentials )
     It is possible to get credentials for each home that is defined but the nodes server can only handle one of them currently 
 
-    Enter both UAID and SecretKey under configuration - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
+    Enter both UAID and SecretKey under configuration in the node in PG#'s browser page (scroll down if you do not see the fields to enter) - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
     Sometimes a reboot of the ISY is required to make the node server show up correctly.  
      
 
 ## Notes 
-    One node server can only handle 1 home - you can get credential for each home in the APP by selecting the home and get credentials - multiple credentials can exist at the same time, but ther node server can only handle one
+    One node server can only handle 1 home - you can get credential for each home in the APP by selecting the home and get credentials - multiple credentials can exist at the same time, but the node server can only handle one
 
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
 

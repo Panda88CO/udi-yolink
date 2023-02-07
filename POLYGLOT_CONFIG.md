@@ -7,6 +7,7 @@
     'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
+    'PowerFailureAlarm', 'SmartRemoter'
 
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec
@@ -25,12 +26,14 @@
 ## Installation
     Credentials needs to be added to configuration.   In YoLink app goto Settings->Account->Advanced Settings -> User Access Credentials and copy UAID and SecretKey (alternaltive path in app is Profile->Advanced Settings -> User Access Credentials ).  It is also possible to set the temp unit (C/F/K)
 
-    Enter both UAID and SecretKey under configuration - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern).  Note If devices are off-line when restarting they will get removed (They will stay if off-line during normal operation)
+    Note, It is possible to create more than 1 home in the app - each home will have it own credentials.  if more than one home is to be supported, a separate node server must be used for each home.  
+
+    Enter both UAID and SecretKey under Yolink node (PG3) configuration in browser (scroll down for see fields) - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern).  Note If devices are off-line when restarting they will get removed (They will stay if off-line during normal operation)
 
     Speakerhub requires the desired sentences to be input in config (up to 10 are supported).  You will need to reboot the isy after runnign the node server for this to take effect (no way to update these while ISY is running)
 
 ## Notes 
     
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
-    Schedules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schdules)  
+    Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)  
     
