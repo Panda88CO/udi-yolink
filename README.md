@@ -8,7 +8,7 @@
     'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
-    PowerFailureAlarm, SmartRemoter
+    'PowerFailureAlarm', 'SmartRemoter'
     
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec - It will also chech if data was updated since last update - this can happen when a command has a very slow reply from the cloud - the server uses separate threads from sending commands and receiving results 

@@ -7,6 +7,7 @@
     'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
+    'PowerFailureAlarm', 'SmartRemoter'
 
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec
@@ -34,5 +35,5 @@
 ## Notes 
     
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
-    Schedules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schdules)  
+    Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)  
     
