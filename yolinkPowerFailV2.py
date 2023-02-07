@@ -25,13 +25,17 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         yolink.updateCallbackStatus(data, False)
 
     def getPowerSupplyConnected(yolink):
-        tmp = yolink.getStateValue('PowerSupply')
+        test = yolink.getLastDataPacket()
+        logging.debug('getPowerSupplyConnected last packet : {}'.format(test))
+        tmp = yolink.getValue('PowerSupply')
         logging.debug('getPowerSupplyState: {}'.format(tmp))
         return(tmp)
 
 
     def getAlertType(yolink):
-        tmp = yolink.getStateValue('alertType')
+        test = yolink.getLastDataPacket()
+        logging.debug('getAlertType last packet : {}'.format(test))
+        tmp = yolink.getValue('alertType')
         logging.debug('{} getAlertType: {}'.format(yolink.type, tmp))
         if None == tmp:
             return(0)
@@ -40,11 +44,15 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
               
 
     def muted(yolink):
-        tmp = yolink.getStateValue('alertType')
+        test = yolink.getLastDataPacket()
+        logging.debug('muted last packet : {}'.format(test))
+        tmp = yolink.getValue('alertType')
         logging.debug('getAlertType: {}'.format(tmp))
         return(tmp)        
 
     def getAlertState(yolink):
+        test = yolink.getLastDataPacket()
+        logging.debug('getAlertState last packet : {}'.format(test))
         tmp = yolink.getState()
         logging.debug('{} - getState: {}'.format(yolink.type, tmp))
         if "normal"  == tmp:
