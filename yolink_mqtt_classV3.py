@@ -249,7 +249,7 @@ class YoLinkMQTTDevice(object):
             while key not in yolink.dataAPI[yolink.dData] and count <3:
                 time.sleep(1)
                 count = count + 1
-            logging.debug('DEBUG! getDataValue {}-{} : {}'.format(yolink.type, key, yolink.dataAPI[yolink.dData] ))
+            logging.debug('DEBUGME getDataValue {}-{} : {}'.format(yolink.type, key, yolink.dataAPI[yolink.dData] ))
             if key in yolink.dataAPI[yolink.dData]:
                 yolink.online = yolink.check_system_online()
                 return(yolink.dataAPI[yolink.dData][key])
@@ -270,7 +270,7 @@ class YoLinkMQTTDevice(object):
                 while key not in yolink.dataAPI[yolink.dData][yolink.dState] and count <3:
                     time.sleep(1)
                     count = count + 1
-                logging.debug('DEBUG getDataStateValue {}-{} : {}'.format(yolink.type, key, yolink.dataAPI[yolink.dData]))
+                logging.debug('DEBUGME getDataStateValue {}-{} : {}'.format(yolink.type, key, yolink.dataAPI[yolink.dData][yolink.dState] ))
                 if key in yolink.dataAPI[yolink.dData][yolink.dState]:
                     return(yolink.dataAPI[yolink.dData][yolink.dState][key])
                 else:
@@ -505,12 +505,12 @@ class YoLinkMQTTDevice(object):
                 elif '.setState' in data['event']:
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)                      
-                elif '.getSchedules' in data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
-                        yolink.updateScheduleStatus(data)   
-                elif '.setSchedules' in data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
-                        yolink.updateScheduleStatus(data)   
+                #elif '.getSchedules' in data['event']:
+                #    if int(data['time']) > int(yolink.getLastUpdate()):
+                #        yolink.updateScheduleStatus(data)   
+                #elif '.setSchedules' in data['event']:
+                #    if int(data['time']) > int(yolink.getLastUpdate()):
+                #        yolink.updateScheduleStatus(data)   
                 elif '.Alert' in data['event']:         
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)  
@@ -1024,7 +1024,8 @@ class YoLinkMQTTDevice(object):
                             yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState][0:yolink.nbrPorts+yolink.nbrUsb]
                 else:
                     for key in data[yolink.dData]:
-                        yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
+                        yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] # put data into state - doesnot seem correct but afraid to change it 
+                        #yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                 logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
 
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts
