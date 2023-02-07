@@ -375,7 +375,7 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def getState(yolink):
         try:                
-            return(yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState]] )
+            return(yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState] )
         except Exception as e:
             logging.debug('getState exception: {}'.format(e) )
             return(None)
