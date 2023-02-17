@@ -121,10 +121,10 @@
      <range  uom="25" subset="0-1,99" nls="powered" />
   </editor>
  <editor id = "keypress" > 
-     <range  uom="25" subset="0-15,99" nls="keypress" />
+     <range  uom="25" subset="0-3,8-11,99" nls="keypress" />
   </editor>
  <editor id = "keynumber" > 
-     <range  uom="25" subset="0-7,99" nls="keynumber" />
+     <range  uom="25" subset="0-3,99" nls="keynumber" />
   </editor>
  <editor id = "presstype" > 
      <range  uom="25" subset="0,8,99" nls="presstype" />
@@ -132,5 +132,13 @@
   <editor id = "pfamute" > 
      <range  uom="25" subset="0-1,99" nls="pfamute" />
   </editor>
+    <editor id = "keyscenedef" > 
+     <range  uom="25" subset="0-5,99" nls="keyscenedef" />
+  </editor>
+    </editor>
+    <editor id = "keyscene" > 
+     <range  uom="25" subset="0-5" nls="keyscene" />
+  </editor>
+  
 </editors> 
 
