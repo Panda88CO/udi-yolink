@@ -82,6 +82,7 @@ class udiRemoteKey(udi_interface.Node):
             self.short_press_state, isy_val = self. get_new_state(self.short_cmd_type, self.short_press_state)
             self.node.reportCmd(self.long_press_state )
             self.node.setDriver('GV0', isy_val)
+        logging.debug('send command cmd:{} driver{}'.format(self.long_press_state, isy_val))
 
 
     def get_new_state(self, cmd_type, state):
@@ -130,7 +131,7 @@ class udiRemoteKey(udi_interface.Node):
                 new_state = "UNKNOWN"
                 isy_val = 99  
         else:
-            logging.info('No scene state defined for key {}'.format(self.key))
+            logging.info('No state defined for key {}'.format(self.key))
             new_state = "UNKNOWN"
             isy_val = 99
         return(new_state, isy_val)
