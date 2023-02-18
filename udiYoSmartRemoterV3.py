@@ -155,8 +155,6 @@ class udiRemoteKey(udi_interface.Node):
     }
 
 
-
-
 class udiYoSmartRemoter(udi_interface.Node):
     from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
 
