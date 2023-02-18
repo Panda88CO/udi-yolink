@@ -66,6 +66,8 @@ class udiRemoteKey(udi_interface.Node):
     def stop(self):
          logging.debug('stopsmremotekey : {}'.format(self.key))
     
+    def checkDataUpdate(self):
+        pass
     
     def noop(self, command = None):
         pass

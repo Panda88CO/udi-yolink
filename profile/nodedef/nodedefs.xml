@@ -543,10 +543,10 @@
             <cmd id="DFOF" /> 
          </sends>
          <accepts>                                          
-            <cmd id="KEYCMD" >   
+            <cmd id="KEYPRESS" >   
                <p id="" editor="keyscene" />
             </cmd > 
-            <cmd id="KEYLCMD" >   
+            <cmd id="KEYLPRESS" >   
                <p id="" editor="keyscene" />
             </cmd > 
          </accepts>
