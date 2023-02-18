@@ -271,7 +271,6 @@ class udiYoSmartRemoter(udi_interface.Node):
                         key_mask = event_data['keyMask']
                         press_type = event_data['type']
                         remote_key = self.mask2key(key_mask)
-                        self.keys[remote_key].send_command()
                         if press_type == 'LongPress':
                             press = self.max_remote_keys
                         else:
