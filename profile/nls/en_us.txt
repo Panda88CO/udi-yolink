@@ -260,6 +260,37 @@ ST-nlssmremote-GV4-NAME = Remote Temperature
 ST-nlssmremote-ST-NAME = Nodeserver Status
 CMD-nlssmremote-UPDATE-NAME = Update
 CMD-nlssmremote-QUERY-NAME = Query
+CMD-nlssmremote-KEY1DEF-NAME = Key1 Scene Function
+CMD-nlssmremote-KEY2DEF-NAME = Key2 Scene Function
+CMD-nlssmremote-KEY3DEF-NAME = Key3 Scene Function
+CMD-nlssmremote-KEY4DEF-NAME = Key4 Scene Function
+CMD-nlssmremote-KEY1LDEF-NAME = Key1 Long Scene Function
+CMD-nlssmremote-KEY2LDEF-NAME = Key2 Long Scene Function
+CMD-nlssmremote-KEY3LDEF-NAME = Key3 Long Scene Function
+CMD-nlssmremote-KEY4LDEF-NAME = Key4 LOng Scene Function
+
+keyscenedef-0 = OFF
+keyscenedef-1 = ON
+keyscenedef-2 = Fast OFF
+keyscenedef-3 = Fast ON
+keyscenedef-4 = TOGGLE DON/DOF
+keyscenedef-5 = TOGGLE DFON/DFOF
+keyscenedef-99 = UNKNOWN
+
+keyscene-0 = Send OFF (DOF)
+keyscene-1 = Send ON (DON)
+keyscene-2 = Send FAST OFF (DFOF)
+keyscene-3 = Send FAST ON (DFON)
+keyscene-4 = Toggle State (DON/DOF)
+keyscene-5 = Toggle State (DFON/DFOF)
+
+keycmd-0 = OFF
+keycmd-1 = ON
+keycmd-2 = FAST OFF
+keycmd-3 = FAST ONDELAY
+keycmd-99 - UNKNOWN
+
+
 keypress-0 = Key1 - Short
 keypress-1 = Key2 - Short
 keypress-2 = Key3 - Short

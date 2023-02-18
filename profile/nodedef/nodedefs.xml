@@ -527,5 +527,29 @@
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="smremotekey" nls="nlssmremotekey">
+      <editors />
+      <sts>
+         <st id="GV0" editor="keyscenedef" />
+         <st id="GV1" editor="keyscenedef" />
+         <st id="GV2" editor="keycmd" />
 
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="DFON" /> 
+            <cmd id="DFOF" /> 
+         </sends>
+         <accepts>                                          
+            <cmd id="KEYCMD" >   
+               <p id="" editor="keyscene" />
+            </cmd > 
+            <cmd id="KEYLCMD" >   
+               <p id="" editor="keyscene" />
+            </cmd > 
+         </accepts>
+      </cmds>
+   </nodeDef> 
 </nodeDefs> 
