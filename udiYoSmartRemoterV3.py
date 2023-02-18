@@ -193,7 +193,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         logging.debug('udiYoSmartRemoter INIT- {}'.format(deviceInfo['name']))
         self.address = address
         self.poly = polyglot
-        self.primary = primary
+        #self.primary = primary
         self.name = name
     
         self.yoAccess = yoAccess
@@ -239,9 +239,13 @@ class udiYoSmartRemoter(udi_interface.Node):
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
         for key in range(0, 4):
-            address = 'key'+str(key)
-            name = address
-            self.keys[address] = udiRemoteKey(self.poly, self.primary, address, name, key)
+            k_address =  self.address[3:12]+'key' + str(key)
+            k_address = self.getValidAddress(str(k_address))
+
+            k_name =  str(self.name) + ' key' + str(key)
+            k_name = self.getValidName(str(k_name))
+
+            self.keys[key] = udiRemoteKey(self.poly, self.address, k_address, k_name, key)
 
     def stop (self):
         logging.info('Stop udiYoSmartRemoter')
