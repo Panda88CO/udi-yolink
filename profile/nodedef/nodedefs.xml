@@ -527,7 +527,7 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="smremotekey" nls="nlssmremotekey">
+   <nodeDef id="smremotekey" nls="nlssmkey">
       <editors />
       <sts>
          <st id="GV0" editor="keyscenedef" />
