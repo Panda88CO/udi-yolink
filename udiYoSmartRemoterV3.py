@@ -77,11 +77,11 @@ class udiRemoteKey(udi_interface.Node):
         if press_type == 0: #short press
             self.short_press_state, isy_val = self. get_new_state(self.short_cmd_type, self.short_press_state)
             self.node.reportCmd(self.short_press_state )
-            self.node.self.node.setDriver('GV0', isy_val)
+            self.node.setDriver('GV0', isy_val)
         else:
             self.short_press_state, isy_val = self. get_new_state(self.short_cmd_type, self.short_press_state)
             self.node.reportCmd(self.long_press_state )
-            self.node.self.node.setDriver('GV0', isy_val)
+            self.node.setDriver('GV0', isy_val)
 
 
     def get_new_state(self, cmd_type, state):
@@ -139,7 +139,7 @@ class udiRemoteKey(udi_interface.Node):
         val = int(command.get('value'))   
         logging.debug('short_cmdtype {}'.format(val))
         self.short_cmd_type = val
-        self.node.self.node.setDriver('GV1', val, True, True)
+        self.node.setDriver('GV1', val, True, True)
 
 
   
@@ -147,7 +147,7 @@ class udiRemoteKey(udi_interface.Node):
         val = int(command.get('value'))   
         logging.debug('long_cmdype {}'.format(val))
         self.long_cmd_type = val
-        self.node.self.node.setDriver('GV2', val, True, True)
+        self.node.setDriver('GV2', val, True, True)
 
     commands = {
                 'KEYPRESS'  : short_cmdtype, 
