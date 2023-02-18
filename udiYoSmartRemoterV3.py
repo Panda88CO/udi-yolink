@@ -271,6 +271,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             if self.node is not None:
                 if self.yoSmartRemote.online:               
                     event_data = self.yoSmartRemote.getEventData()
+                    logging.debug('updateData - event data {}'.format(event_data))
                     if event_data:
                         key_mask = event_data['keyMask']
                         press_type = event_data['type']
