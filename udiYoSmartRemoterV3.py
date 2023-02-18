@@ -33,7 +33,11 @@ class udiRemoteKey(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         logging.debug('__init__ smremotekey : {}'.format(key))
         self.key = key
-        self.presstype = 99
+        self.poly = polyglot
+        self.address = address
+        self.name = name
+        self.primary = primary
+        #self.presstype = 99
         self.long_press_state = 99
         self.short_press_state = 99
         self.short_cmd_type = 99
@@ -131,7 +135,7 @@ class udiRemoteKey(udi_interface.Node):
 
     def short_cmdtype(self, command):
         val = int(command.get('value'))   
-        logging.debug('key_presstype {}'.format(val))
+        logging.debug('short_cmdtype {}'.format(val))
         self.short_cmd_type = val
         self.node.self.node.setDriver('GV1', val, True, True)
 
@@ -139,7 +143,7 @@ class udiRemoteKey(udi_interface.Node):
   
     def long_cmdype(self, command):
         val = int(command.get('value'))   
-        logging.debug('keyL_presstype {}'.format(val))
+        logging.debug('long_cmdype {}'.format(val))
         self.long_cmd_type = val
         self.node.self.node.setDriver('GV2', val, True, True)
 
