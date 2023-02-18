@@ -31,7 +31,7 @@ class udiRemoteKey(udi_interface.Node):
 
     def __init__(self, polyglot, primary, address, name, key):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('__init__ smremotekey : {}'.format(key))
+        logging.debug('__init__ smremotekey : {} {} {}'.format(address,name, key))
         self.key = key
         self.poly = polyglot
         self.address = address
@@ -68,7 +68,7 @@ class udiRemoteKey(udi_interface.Node):
     
     def checkDataUpdate(self):
         pass
-    
+
     def noop(self, command = None):
         pass
     
@@ -195,6 +195,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.poly = polyglot
         self.primary = primary
         self.name = name
+    
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoSmartRemote  = None
@@ -213,7 +214,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         
 
         # start processing events and create add our controller node
-        polyglot.ready()
+        self.poly.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
