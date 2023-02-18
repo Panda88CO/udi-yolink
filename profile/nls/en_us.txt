@@ -283,7 +283,7 @@ keyscenedef-2 = Fast OFF
 keyscenedef-3 = Fast ON
 keyscenedef-4 = TOGGLE DON/DOF
 keyscenedef-5 = TOGGLE DFON/DFOF
-keyscenedef-99 = UNKNOWN
+keyscenedef-99 = Unknown
 
 keyscene-0 = Send OFF (DOF)
 keyscene-1 = Send ON (DON)
@@ -296,7 +296,7 @@ keycmd-0 = OFF
 keycmd-1 = ON
 keycmd-2 = FAST OFF
 keycmd-3 = FAST ON
-keycmd-99 = UNKNOWN
+keycmd-99 = Unknown
 
 
 keypress-0 = Key1 - Short
