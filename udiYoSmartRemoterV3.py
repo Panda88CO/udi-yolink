@@ -79,14 +79,14 @@ class udiRemoteKey(udi_interface.Node):
             self.node.reportCmd(self.short_press_state )
             self.node.setDriver('GV0', isy_val)
         else:
-            self.short_press_state, isy_val = self. get_new_state(self.short_cmd_type, self.short_press_state)
+            self.short_press_state, isy_val = self. get_new_state(self.long_cmd_type, self.long_press_state)
             self.node.reportCmd(self.long_press_state )
             self.node.setDriver('GV0', isy_val)
         logging.debug('send command cmd:{} driver{}'.format(self.long_press_state, isy_val))
 
 
     def get_new_state(self, cmd_type, state):
-        logging.debug('key_pressed = key {} - cmd_type = {}'.format(self.key , cmd_type ))
+        logging.debug('key_pressed = key {} - cmd_type = {} state {}'.format(self.key , cmd_type, state ))
         if 0 == cmd_type:
             new_state = 'DOF'
             isy_val = 0
@@ -243,7 +243,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             k_address =  self.address[3:12]+'key' + str(key)
             k_address = self.getValidAddress(str(k_address))
 
-            k_name =  str(self.name) + ' key' + str(key)
+            k_name =  str(self.name) + ' key' + str(key+1)
             k_name = self.getValidName(str(k_name))
 
             self.keys[key] = udiRemoteKey(self.poly, self.address, k_address, k_name, key)
