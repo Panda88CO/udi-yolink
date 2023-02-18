@@ -237,7 +237,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         #self.node.setDriver('ST', 1, True, True)
         for key in range(0, 4):
             address = 'key'+str(key)
-            name = self.address
+            name = address
             self.keys[address] = udiRemoteKey(self.poly, self.primary, address, name, key)
 
     def stop (self):
