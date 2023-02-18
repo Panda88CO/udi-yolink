@@ -85,7 +85,7 @@ class udiRemoteKey(udi_interface.Node):
 
 
     def get_new_state(self, cmd_type, state):
-        logging.debug('key_pressed = key {} - cmd_type = {}'.format(self.key , self.cmd_type ))
+        logging.debug('key_pressed = key {} - cmd_type = {}'.format(self.key , cmd_type ))
         if 0 == cmd_type:
             new_state = 'DOF'
             isy_val = 0

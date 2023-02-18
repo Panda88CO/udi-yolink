@@ -296,7 +296,7 @@ keycmd-0 = OFF
 keycmd-1 = ON
 keycmd-2 = FAST OFF
 keycmd-3 = FAST ON
-keycmd-99 - UNKNOWN
+keycmd-99 = UNKNOWN
 
 
 keypress-0 = Key1 - Short
