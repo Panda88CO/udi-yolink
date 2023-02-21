@@ -40,8 +40,8 @@ class udiRemoteKey(udi_interface.Node):
         #self.presstype = 99
         self.long_press_state = 99
         self.short_press_state = 99
-        self.short_cmd_type = 99
-        self.long_cmd_type = 99
+        self.short_cmd_type = 0
+        self.long_cmd_type = 1
 
         self.n_queue = []
 
