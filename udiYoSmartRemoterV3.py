@@ -22,8 +22,8 @@ class udiRemoteKey(udi_interface.Node):
     id = 'smremotekey'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, # Command
-            {'driver': 'GV1', 'value': 99, 'uom': 25}, # Short Keypress setting
-            {'driver': 'GV2', 'value': 99, 'uom': 25}, # Long Keypress setting
+            {'driver': 'GV1', 'value': 0 'uom': 25}, # Short Keypress setting
+            {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
 
             ]
     from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
@@ -61,7 +61,11 @@ class udiRemoteKey(udi_interface.Node):
 
 
     def start(self):
-         logging.debug('start smremotekey : {}'.format(self.key))
+        logging.debug('start / initialize smremotekey : {}'.format(self.key))
+        self.node.setDriver('GV0', 99)
+        self.node.setDriver('GV1', self.short_cmd_type)
+        self.node.setDriver('GV2', self.long_cmd_type)
+
 
     def stop(self):
          logging.debug('stopsmremotekey : {}'.format(self.key))
