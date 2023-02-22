@@ -132,5 +132,14 @@
   <editor id = "pfamute" > 
      <range  uom="25" subset="0-1,99" nls="pfamute" />
   </editor>
+    <editor id = "keyscenedef" > 
+     <range  uom="25" subset="0-5,99" nls="keyscenedef" />
+  </editor>
+   <editor id = "keyscene" > 
+     <range  uom="25" subset="0-5" nls="keyscene" />
+   </editor>
+   <editor id = "keycmd" > 
+     <range  uom="25" subset="0-, 99" nls="keycmd" />
+   </editor>  
 </editors> 
 

@@ -522,7 +522,10 @@ class YoLinkMQTTDevice(object):
                         yolink.updateStatusData(data)     
                 elif '.openReminder' in data['event']:         
                     if int(data['time']) > int(yolink.getLastUpdate()):
-                        yolink.updateStatusData(data)                          
+                        yolink.updateStatusData(data)
+                elif '.DataRecord' in  data['event']:
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)
                 else:
                     logging.debug('Unsupported Event passed - trying anyway; {}'.format(data) )
                     if int(data['time']) > int(yolink.getLastUpdate()):
@@ -1001,7 +1004,30 @@ class YoLinkMQTTDevice(object):
                             yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
                     else: # multi outlet - need to getState 
                         yolink.refreshDevice()
-                        
+                elif '.DataRecord'in data['event']:
+                    logging.debug('.DataRecord : {}'.format(data))
+                    for key in data[yolink.dData]:
+                        if type(key) is list: # list of structs
+                            meas_time = -1 
+                            for index in key: # each struct 
+                                for element in index: 
+                                    if 'time' in element:
+                                        tmp_time = datetime.strptime(element['time'], '%Y-%m-%dT%H:%M:%S.%fZ')
+                                        if tmp_time >= meas_time: # more recent data
+                                            meas_time = tmp_time
+                                            if 'temperature' in element:
+                                                tmp_temp = element['temperature']
+                                            if 'humidity' in element:
+                                                tmp_hum = element['humidity']
+                            if tmp_temp:
+                                yolink.dataAPI[yolink.dData][yolink.dState]['temperature'] =  tmp_temp        
+                            if tmp_hum:
+                                yolink.dataAPI[yolink.dData][yolink.dState]['humidity'] =  tmp_hum                             
+                            if meas_time != -1:
+                                yolink.dataAPI[yolink.dData][yolink.dState]['time'] =  meas_time                                         
+                        else:
+                            yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] 
+
                 elif yolink.dState in data[yolink.dData]:
                     if type(data[yolink.dData][yolink.dState]) is dict:
                         for key in data[yolink.dData][yolink.dState]:
