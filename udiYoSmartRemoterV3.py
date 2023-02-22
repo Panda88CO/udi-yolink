@@ -22,7 +22,7 @@ class udiRemoteKey(udi_interface.Node):
     id = 'smremotekey'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, # Command
-            {'driver': 'GV1', 'value': 0 'uom': 25}, # Short Keypress setting
+            {'driver': 'GV1', 'value': 0, 'uom': 25}, # Short Keypress setting
             {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
 
             ]
