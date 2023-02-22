@@ -38,8 +38,8 @@ class udiRemoteKey(udi_interface.Node):
         self.name = name
         self.primary = primary
         #self.presstype = 99
-        self.long_press_state = 99
-        self.short_press_state = 99
+        self.long_press_state = 'UNKNOWN'
+        self.short_press_state = 'UNKNOWN'
         self.short_cmd_type = 0
         self.long_cmd_type = 1
 
@@ -84,7 +84,7 @@ class udiRemoteKey(udi_interface.Node):
                 self.node.reportCmd(self.short_press_state )
             self.node.setDriver('GV0', isy_val)
         else:
-            self.short_press_state, isy_val = self. get_new_state(self.long_cmd_type, self.long_press_state)
+            self.long_press_state, isy_val = self. get_new_state(self.long_cmd_type, self.long_press_state)
             if self.long_press_state  != 'UNKNOWN':
                 self.node.reportCmd(self.long_press_state )
             self.node.setDriver('GV0', isy_val)
