@@ -1007,18 +1007,18 @@ class YoLinkMQTTDevice(object):
                 elif '.DataRecord'in data['event']:
                     logging.debug('.DataRecord : {}'.format(data))
                     for key in data[yolink.dData]:
-                        if type(key) is list:
+                        if type(key) is list: # list of structs
                             meas_time = -1 
-                            for index in key:
-                                for item in index:
-                                    if 'time' in item:
-                                        tmp_time = datetime.strptime(item['time'], '%Y-%m-%dT%H:%M:%S.%fZ')
-                                        if tmp_time >= meas_time:
+                            for index in key: # each struct 
+                                for element in index: 
+                                    if 'time' in element:
+                                        tmp_time = datetime.strptime(element['time'], '%Y-%m-%dT%H:%M:%S.%fZ')
+                                        if tmp_time >= meas_time: # more recent data
                                             meas_time = tmp_time
-                                            if 'temperature' in item:
-                                                tmp_temp = item['temperature']
-                                            if 'humidity' in item:
-                                                tmp_hum = item['humidity']
+                                            if 'temperature' in element:
+                                                tmp_temp = element['temperature']
+                                            if 'humidity' in element:
+                                                tmp_hum = element['humidity']
                             if tmp_temp:
                                 yolink.dataAPI[yolink.dData][yolink.dState]['temperature'] =  tmp_temp        
                             if tmp_hum:
@@ -1027,7 +1027,7 @@ class YoLinkMQTTDevice(object):
                                 yolink.dataAPI[yolink.dData][yolink.dState]['time'] =  meas_time                                         
                         else:
                             yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] 
-                            
+
                 elif yolink.dState in data[yolink.dData]:
                     if type(data[yolink.dData][yolink.dState]) is dict:
                         for key in data[yolink.dData][yolink.dState]:
