@@ -25,7 +25,7 @@ from udiYoLockV2 import udiYoLock
 from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
 from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV2 import udiYoVibrationSensor
-from udiYoSmartRemoterV2 import udiYoSmartRemoter
+from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV2 import udiYoPowerFailSenor
 
 
@@ -550,7 +550,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.20')
+        polyglot.start('0.8.41')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
