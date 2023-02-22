@@ -139,7 +139,7 @@
      <range  uom="25" subset="0-5" nls="keyscene" />
    </editor>
    <editor id = "keycmd" > 
-     <range  uom="25" subset="0-3, 99" nls="keycmd" />
+     <range  uom="25" subset="0-, 99" nls="keycmd" />
    </editor>  
 </editors> 
 

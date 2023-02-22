@@ -290,7 +290,7 @@ keyscene-1 = Send ON (DON)
 keyscene-2 = Send FAST OFF (DFOF)
 keyscene-3 = Send FAST ON (DFON)
 keyscene-4 = Toggle State (DON/DOF)
-keyscene-5 = Toggle State (DFON/DFOF)
+keyscene-5 = Toggle Fast State (DFON/DFOF)
 
 keycmd-0 = OFF
 keycmd-1 = ON
