@@ -312,6 +312,7 @@
       <sts>
          <st id="GV0" editor="motionstate" />
          <st id="GV1" editor="batlevel" />
+          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
       </sts>
@@ -335,6 +336,7 @@
       <sts>
          <st id="GV0" editor="waterstate" />
          <st id="GV1" editor="batlevel" />
+         <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
       </sts>
@@ -354,13 +356,12 @@
    </nodeDef> 
 
 
-
-
    <nodeDef id="yovibrasens" nls="nlsvibrasens">
       <editors />
       <sts>
          <st id="GV0" editor="vibrastate" />
          <st id="GV1" editor="batlevel" />
+         <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
       </sts>

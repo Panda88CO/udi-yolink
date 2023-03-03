@@ -254,7 +254,7 @@ class YoLinkMQTTDevice(object):
                 yolink.online = yolink.check_system_online()
                 return(yolink.dataAPI[yolink.dData][key])
             else:
-                yolink.online = False 
+                yolink.online = False
                 return('NA')
         except Exception as E:
             logging.error('getDataValue Exception: {}'.format(E))
@@ -337,6 +337,10 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def getBattery(yolink):
         return(yolink.getStateValue('battery'))
+
+    #@measure_time
+    def getDeviceTemperature(yolink):
+        return(yolink.getDataValue('devTemperature'))
 
     #@measure_time
     def getLastUpdate (yolink):

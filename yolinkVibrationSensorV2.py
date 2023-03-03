@@ -27,9 +27,12 @@ class YoLinkVibrationSen(YoLinkMQTTDevice):
     def getVibrationState(yolink):
         return(yolink.getState())
     
+    
     def refreshSensor(yolink):
         logging.debug(yolink.type+ ' - refreshSensor')
         return(yolink.refreshDevice( ))
+    
+
 
 
 class YoLinkVibrationSensor(YoLinkVibrationSen):

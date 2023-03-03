@@ -61,6 +61,7 @@ class udiYoLeakSensor(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
+        self.temp_unit = self.yoAccess.get_temp_unit()
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -130,9 +131,20 @@ class udiYoLeakSensor(udi_interface.Node):
                 self.last_state = waterState
                 self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
                 self.node.setDriver('ST', 1)
+                devTemp =  self.yoLeakSensor.getDeviceTemperature()
+                if devTemp != 'NA':
+                    if self.temp_unit == 0:
+                        self.node.setDriver('CLITEMP', round(devTemp,0), True, True, 4)
+                    elif self.temp_unit == 1:
+                        self.node.setDriver('CLITEMP', round(devTemp*9/5+32,0), True, True, 17)
+                    elif self.temp_unit == 2:
+                        self.node.setDriver('CLITEMP', round(devTemp+273.15,0), True, True, 26)
+                else:
+                    self.node.setDriver('CLITEMP', 99, True, True, 25)                
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('ST', 0)
 
 
