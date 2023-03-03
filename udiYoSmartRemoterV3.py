@@ -21,20 +21,30 @@ from yolinkSmartRemoterV2 import YoLinkSmartRemote
 class udiRemoteKey(udi_interface.Node):
     id = 'smremotekey'
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 99, 'uom': 25},
+            {'driver': 'GV0', 'value': 99, 'uom': 25}, # Command
+            {'driver': 'GV1', 'value': 0, 'uom': 25}, # Short Keypress setting
+            {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
+
             ]
     from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
 
 
     def __init__(self, polyglot, primary, address, name, key):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('__init__ smremotekey : {}'.format(key))
+        logging.debug('__init__ smremotekey : {} {} {}'.format(address,name, key))
         self.key = key
-        self.presstype = 99
+        self.poly = polyglot
+        self.address = address
+        self.name = name
+        self.primary = primary
+        #self.presstype = 99
+        self.long_press_state = 'UNKNOWN'
+        self.short_press_state = 'UNKNOWN'
+        self.short_cmd_type = 0
+        self.long_cmd_type = 1
+
         self.n_queue = []
-        self.max_remote_keys = 8
-        self.nbr_keys = 4
+
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -51,74 +61,109 @@ class udiRemoteKey(udi_interface.Node):
 
 
     def start(self):
-         logging.debug('start smremotekey : {}'.format(self.key))
+        logging.debug('start / initialize smremotekey : {}'.format(self.key))
+        self.node.setDriver('GV0', 99)
+        self.node.setDriver('GV1', self.short_cmd_type)
+        self.node.setDriver('GV2', self.long_cmd_type)
+
 
     def stop(self):
          logging.debug('stopsmremotekey : {}'.format(self.key))
     
-    
+    def checkDataUpdate(self):
+        pass
+
     def noop(self, command = None):
         pass
     
-    def get_new_state(self, presstype, state):
-        logging.debug('key_pressed = key {} - presstype = {}'.format(self.key , self.presstype ))
-        if 0 == presstype:
+    def send_command (self, press_type):
+        logging.debug('send_command - press type : {}'.format(press_type))
+        if press_type == 0: #short press
+            self.short_press_state, isy_val = self. get_new_state(self.short_cmd_type, self.short_press_state)
+            if self.short_press_state  != 'UNKNOWN':
+                self.node.reportCmd(self.short_press_state )
+            self.node.setDriver('GV0', isy_val)
+        else:
+            self.long_press_state, isy_val = self. get_new_state(self.long_cmd_type, self.long_press_state)
+            if self.long_press_state  != 'UNKNOWN':
+                self.node.reportCmd(self.long_press_state )
+            self.node.setDriver('GV0', isy_val)
+        logging.debug('send command cmd:{} driver{}'.format(self.long_press_state, isy_val))
+
+
+    def get_new_state(self, cmd_type, state):
+        logging.debug('key_pressed = key {} - cmd_type = {} state {}'.format(self.key , cmd_type, state ))
+        if 0 == cmd_type:
             new_state = 'DOF'
-        elif 1 == presstype:
+            isy_val = 0
+        elif 1 == cmd_type:
             new_state = 'DON'
-        elif 2 == presstype:
+            isy_val = 1
+        elif 2 == cmd_type:
             new_state = 'DFOF'
-        elif 3 == presstype:
+            isy_val = 2
+        elif 3 == cmd_type:
             new_state = 'DFON'
-        elif 4 == presstype:
+            isy_val = 3
+        elif 4 == cmd_type:
             if 'DON' == state:
                 new_state = 'DOF'
-                #self.node.reportCmd(self.state)
-            elif 'DON' == state:
+                isy_val = 0
+            elif 'DOF' == state:
                 new_state = 'DON'
-                #self.node.reportCmd(self.state)
+                isy_val = 1
+            elif 'UNKNOWN' == state: # Force
+                new_state = 'DOF'
+                isy_val = 0
             else:
                 logging.error('Wrong state exists: {}'.format(self.state))
-        elif 5 == presstype :
+                new_state = "UNKNOWN"
+                isy_val = 99
+
+        elif 5 == cmd_type :
             if 'DFON' == state:
                 new_state = 'DFOF'
-                #self.node.reportCmd(state)
+                isy_val = 2
+
             elif 'DFON' == state:
                 new_state = 'DFON'
-                #self.node.reportCmd(state)
-            else:
-                logging.error('Wrong state exists: {}'.format(self.state))                
-        else:
-            logging.info('No scene state defined for key {}'.format(self.key))
-            new_state = "UNKNOWN"
-        return(new_state)
+                isy_val = 3
 
-    def key_presstype(self, command):
+            elif 'UNKNOWN' == state: #force a start value of off
+                new_state = 'DFOF'
+                isy_val = 2
+            else:
+                logging.error('Wrong state exists: {}'.format(self.state)) 
+                new_state = "UNKNOWN"
+                isy_val = 99  
+        else:
+            logging.info('No state defined for key {}'.format(self.key))
+            new_state = "UNKNOWN"
+            isy_val = 99
+        return(new_state, isy_val)
+
+    def short_cmdtype(self, command):
         val = int(command.get('value'))   
-        logging.debug('key_presstype {}'.format(val))
-        self.presstype = val
-        if 4 == self.presstype:
-            self.state = 'DOF'
-        elif 5 == self.presstype:
-            self.state = 'DFOF'
+        logging.debug('short_cmdtype {}'.format(val))
+        self.short_cmd_type = val
+        self.node.setDriver('GV1', val, True, True)
+
 
   
-    def long_key_presstype(self, command):
+    def long_cmdype(self, command):
         val = int(command.get('value'))   
-        logging.debug('keyL_presstype {}'.format(val))
-        #self.set_key_press_type(1, 'normal', val)
-        self.long_presstype = val
-        if 4 == self.long_presstype:
-            self.long_press_state = 'DOF'
-        elif 5 == self.long_presstype:
-            self.long_press_state = 'DFOF'
-    
+        logging.debug('long_cmdype {}'.format(val))
+        self.long_cmd_type = val
+        self.node.setDriver('GV2', val, True, True)
+
     commands = {
-                'KEYPRESS'  : key_presstype, 
-                'KEYLPRESS' : long_key_presstype,
+                'KEYPRESS'  : short_cmdtype, 
+                'KEYLPRESS' : long_cmdype,
                 'DON'       : noop,
                 'DOF'       : noop,    
     }
+
+
 class udiYoSmartRemoter(udi_interface.Node):
     from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
 
@@ -155,8 +200,9 @@ class udiYoSmartRemoter(udi_interface.Node):
         logging.debug('udiYoSmartRemoter INIT- {}'.format(deviceInfo['name']))
         self.address = address
         self.poly = polyglot
-        self.primary = primary
+        #self.primary = primary
         self.name = name
+    
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoSmartRemote  = None
@@ -175,7 +221,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         
 
         # start processing events and create add our controller node
-        polyglot.ready()
+        self.poly.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
@@ -199,10 +245,14 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.yoSmartRemote.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
-        for key in range(1, 4):
-            address = 'key'+str(key)
-            name = self.address
-            self.keys[address] = udiRemoteKey(self.poly, self.primary, address, name, key)
+        for key in range(0, 4):
+            k_address =  self.address[3:12]+'key' + str(key)
+            k_address = self.getValidAddress(str(k_address))
+
+            k_name =  str(self.name) + ' key' + str(key+1)
+            k_name = self.getValidName(str(k_name))
+
+            self.keys[key] = udiRemoteKey(self.poly, self.address, k_address, k_name, key)
 
     def stop (self):
         logging.info('Stop udiYoSmartRemoter')
@@ -228,6 +278,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             if self.node is not None:
                 if self.yoSmartRemote.online:               
                     event_data = self.yoSmartRemote.getEventData()
+                    logging.debug('updateData - event data {}'.format(event_data))
                     if event_data:
                         key_mask = event_data['keyMask']
                         press_type = event_data['type']
@@ -236,6 +287,8 @@ class udiYoSmartRemoter(udi_interface.Node):
                             press = self.max_remote_keys
                         else:
                             press = 0
+                        logging.debug('remote key {} press{}'.format(remote_key, press))
+                        self.keys[remote_key].send_command(press)
                     self.node.setDriver('GV0', remote_key + press, True, True)
                     self.node.setDriver('GV1', remote_key, True, True)
                     self.node.setDriver('GV2', press, True, True)

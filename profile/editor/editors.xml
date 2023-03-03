@@ -135,10 +135,11 @@
     <editor id = "keyscenedef" > 
      <range  uom="25" subset="0-5,99" nls="keyscenedef" />
   </editor>
-    </editor>
-    <editor id = "keyscene" > 
+   <editor id = "keyscene" > 
      <range  uom="25" subset="0-5" nls="keyscene" />
-  </editor>
-  
+   </editor>
+   <editor id = "keycmd" > 
+     <range  uom="25" subset="0-5, 99" nls="keycmd" />
+   </editor>  
 </editors> 
 

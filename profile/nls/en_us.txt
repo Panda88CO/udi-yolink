@@ -269,20 +269,34 @@ CMD-nlssmremote-KEY2LDEF-NAME = Key2 Long Scene Function
 CMD-nlssmremote-KEY3LDEF-NAME = Key3 Long Scene Function
 CMD-nlssmremote-KEY4LDEF-NAME = Key4 LOng Scene Function
 
+ND-smremotekey-NAME = YoLink Smart Remoter
+ND-smremotekey-ICON = Input
+ST-nlssmkey-GV0-NAME = Last Command
+ST-nlssmkey-GV1-NAME = Short Press Type
+ST-nlssmkey-GV2-NAME = Long Press Type
+CMD-nlssmkey-KEYPRESS-NAME = Short Press Type
+CMD-nlssmkey-KEYLPRESS-NAME = Long Press Type
+
 keyscenedef-0 = OFF
 keyscenedef-1 = ON
 keyscenedef-2 = Fast OFF
 keyscenedef-3 = Fast ON
 keyscenedef-4 = TOGGLE DON/DOF
 keyscenedef-5 = TOGGLE DFON/DFOF
-keyscenedef-99 = UNKNOWN
+keyscenedef-99 = Unknown
 
 keyscene-0 = Send OFF (DOF)
 keyscene-1 = Send ON (DON)
-keyscene-2 = Send OFF (DOF)
-keyscene-3 = Send ON (DON)
+keyscene-2 = Send FAST OFF (DFOF)
+keyscene-3 = Send FAST ON (DFON)
 keyscene-4 = Toggle State (DON/DOF)
-keyscene-5 = Toggle State (DFON/DFOF)
+keyscene-5 = Toggle Fast State (DFON/DFOF)
+
+keycmd-0 = OFF
+keycmd-1 = ON
+keycmd-2 = FAST OFF
+keycmd-3 = FAST ON
+keycmd-99 = Unknown
 
 
 keypress-0 = Key1 - Short

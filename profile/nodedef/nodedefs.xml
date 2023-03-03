@@ -526,11 +526,12 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="smremotekey" nls="nlssmremotekey">
+   <nodeDef id="smremotekey" nls="nlssmkey">
       <editors />
       <sts>
          <st id="GV0" editor="keyscenedef" />
          <st id="GV1" editor="keyscenedef" />
+         <st id="GV2" editor="keyscenedef" />
 
       </sts>
       <cmds>
@@ -541,10 +542,10 @@
             <cmd id="DFOF" /> 
          </sends>
          <accepts>                                          
-            <cmd id="KEYCMD" >   
+            <cmd id="KEYPRESS" >   
                <p id="" editor="keyscene" />
             </cmd > 
-            <cmd id="KDYLCMD" >   
+            <cmd id="KEYLPRESS" >   
                <p id="" editor="keyscene" />
             </cmd > 
          </accepts>
