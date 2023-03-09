@@ -288,6 +288,7 @@ class udiYoSmartRemoter(udi_interface.Node):
                         else:
                             press = 0
                         logging.debug('remote key {} press{}'.format(remote_key, press))
+                        
                         self.keys[remote_key].send_command(press)
                     self.node.setDriver('GV0', remote_key + press, True, True)
                     self.node.setDriver('GV1', remote_key, True, True)

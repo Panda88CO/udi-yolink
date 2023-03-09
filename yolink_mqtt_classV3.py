@@ -1086,6 +1086,7 @@ class YoLinkMQTTDevice(object):
     def get_event_from_state(yolink):
         logging.debug('get_event_from_state')
         try:
+            logging.debug('get_event_from_state: {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['event']))
             return(yolink.dataAPI[yolink.dData][yolink.dState]['event'])
         except Exception as E:
             logging.error('Exception in get_event_in_state {} {}'.format(E,yolink.dataAPI[yolink.dData][yolink.dState] ))
