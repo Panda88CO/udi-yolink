@@ -317,6 +317,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             if self.node is not None:
                 if self.yoSmartRemote.online:               
                     event_data = self.yoSmartRemote.getEventData()
+
                     logging.debug('updateData - event data {}'.format(event_data))
                     if event_data:
                         key_mask = event_data['keyMask']
@@ -330,9 +331,9 @@ class udiYoSmartRemoter(udi_interface.Node):
 
                         self.keys[remote_key].send_command(press)
                         self.yoSmartRemote.clearEventData()
-                    self.node.setDriver('GV0', remote_key + press, True, True)
-                    self.node.setDriver('GV1', remote_key, True, True)
-                    self.node.setDriver('GV2', press, True, True)
+                        self.node.setDriver('GV0', remote_key + press, True, True)
+                        self.node.setDriver('GV1', remote_key, True, True)
+                        self.node.setDriver('GV2', press, True, True)                        
                     self.node.setDriver('GV3', self.yoSmartRemote.getBattery(), True, True)
                     logging.debug("udiYoSmartRemoter temp: {}".format(self.yoSmartRemote.getDevTemperature()))
                     if self.temp_unit == 0:
