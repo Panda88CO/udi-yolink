@@ -116,7 +116,7 @@ class udiRemoteKey(udi_interface.Node):
     
     def send_command (self, press_type):
         logging.debug('send_command - press type : {}'.format(press_type))
-        if press_type == 0: #short press
+        if press_type == 0 or press_type == 'Press' : #short press
             self.short_press_state, isy_val = self. get_new_state(self.short_cmd_type, self.short_press_state)
             if self.short_press_state  != 'UNKNOWN':
                 self.node.reportCmd(self.short_press_state )
@@ -326,7 +326,7 @@ class udiYoSmartRemoter(udi_interface.Node):
                             press = self.max_remote_keys
                         else:
                             press = 0
-                        logging.debug('remote key {} press{}'.format(remote_key, press))
+                        logging.debug('remote key {} press {}'.format(remote_key, press))
 
                         self.keys[remote_key].send_command(press)
                         self.yoSmartRemote.clearEventData()
