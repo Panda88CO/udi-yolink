@@ -52,33 +52,33 @@ class udiRemoteKey(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.poly.subscribe(self.poly.CUSTOMDATA, self.dataHandler)
+        #self.poly.subscribe(self.poly.CUSTOMDATA, self.dataHandler)
         self.poly.subscribe(self.poly.CONFIGDONE, self.configHandler)
         # start processing events and create add our controller node
-        self.KeyOperation = Custom(self.poly, 'customdata')
+        self.KeyOperations = Custom(self.poly, 'customdata')
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
         self.LONG_CMD = self.address+'_L_CMD'
         self.SHORT_CMD = self.address+'_S_CMD'
-
+        self.KeyOperations.load(self.remoteKey)
 
     def start(self):
         logging.debug('start / initialize smremotekey : {}'.format(self.key))
         while not self.configDone:
             time.sleep(1)
 
-        if self.SHORT_CMD in self.KeyOperation:
-            self.short_cmd_type = self.KeyOperation[self.SHORT_CMD]
+        if self.SHORT_CMD in self.remoteKey:
+            self.short_cmd_type = self.remoteKey[self.SHORT_CMD]
         else:
-            self.KeyOperation[self.SHORT_CMD] = 0
+            self.remoteKey[self.SHORT_CMD] = 0
             self.short_cmd_type = 0
 
-        if self.LONG_CMD in self.KeyOperation:
-            self.long_cmd_type = self.KeyOperation[self.LONG_CMD]
+        if self.LONG_CMD in self.remoteKey:
+            self.long_cmd_type = self.remoteKey[self.LONG_CMD]
         else:
-            self.KeyOperation[self.LONG_CMD] = 1
+            self.remoteKey[self.LONG_CMD] = 1
             self.long_cmd_type = 1
      
         self.node.setDriver('GV0', 99)
@@ -171,7 +171,7 @@ class udiRemoteKey(udi_interface.Node):
         val = int(command.get('value'))   
         logging.debug('short_cmdtype {}'.format(val))
         self.short_cmd_type = val
-        self.KeyOperation[self.SHORT_CMD] = val
+        self.remoteKey[self.SHORT_CMD] = val  
         self.node.setDriver('GV1', val, True, True)
 
 
@@ -180,7 +180,7 @@ class udiRemoteKey(udi_interface.Node):
         val = int(command.get('value'))   
         logging.debug('long_cmdype {}'.format(val))
         self.long_cmd_type = val
-        self.KeyOperation[self.LONG_CMD] = val
+        self.remoteKey[self.LONG_CMD] = val
         self.node.setDriver('GV2', val, True, True)
 
     commands = {
