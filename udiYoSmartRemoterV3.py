@@ -63,14 +63,18 @@ class udiRemoteKey(udi_interface.Node):
 
     def start(self):
         logging.debug('start / initialize smremotekey : {}'.format(self.key))
+        
         if 'SHORT_CMD' in self.KeyOperation:
             self.short_cmd_type = self.KeyOperation['SHORT_CMD']
         else:
-            self.short_cmd_type['SHORT_CMD'] = 0
+            self.KeyOperation['SHORT_CMD'] = 0
+            self.short_cmd_type = 0
+
         if 'LONG_CMD' in self.KeyOperation:
             self.long_cmd_type = self.KeyOperation['LONG_CMD']
         else:
-            self.long_cmd_type['LONG_CMD'] = 1
+            self.KeyOperation['LONG_CMD'] = 1
+            self.long_cmd_type = 1
      
         self.node.setDriver('GV0', 99)
         self.node.setDriver('GV1', self.short_cmd_type)
