@@ -97,7 +97,7 @@ class udiRemoteKey(udi_interface.Node):
 
     def configHandler(self):
         self.configDone = True
-        
+
     def noop(self, command = None):
         pass
     
@@ -273,7 +273,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
         for key in range(0, 4):
-            k_address =  self.address[3:12]+'key' + str(key)
+            k_address =  self.address[4:13]+'key' + str(key)
             k_address = self.getValidAddress(str(k_address))
 
             k_name =  str(self.name) + ' key' + str(key+1)
