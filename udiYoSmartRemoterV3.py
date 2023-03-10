@@ -62,6 +62,8 @@ class udiRemoteKey(udi_interface.Node):
         self.node = self.poly.getNode(address)
         self.LONG_CMD = self.address+'_L_CMD'
         self.SHORT_CMD = self.address+'_S_CMD'
+        
+        self.remoteKey = {}
         self.KeyOperations.load(self.remoteKey)
 
     def start(self):
