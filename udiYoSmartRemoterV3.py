@@ -42,7 +42,7 @@ class udiRemoteKey(udi_interface.Node):
         self.short_press_state = 'UNKNOWN'
         self.short_cmd_type = 0
         self.long_cmd_type = 1
-
+        self.configDone = False
         self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -53,6 +53,7 @@ class udiRemoteKey(udi_interface.Node):
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.poly.subscribe(self.poly.CUSTOMDATA, self.dataHandler)
+        self.poly.subscribe(self.poly.CONFIGDONE, self.configHandler)
         # start processing events and create add our controller node
         self.KeyOperation = Custom(self.poly, 'customdata')
         polyglot.ready()
@@ -65,6 +66,8 @@ class udiRemoteKey(udi_interface.Node):
 
     def start(self):
         logging.debug('start / initialize smremotekey : {}'.format(self.key))
+        while not self.configDone:
+            time.sleep(1)
 
         if self.SHORT_CMD in self.KeyOperation:
             self.short_cmd_type = self.KeyOperation[self.SHORT_CMD]
@@ -92,6 +95,9 @@ class udiRemoteKey(udi_interface.Node):
     def dataHandler(self, data):
         self.KeyOperation.load(data, True)
 
+    def configHandler(self):
+        self.configDone = True
+        
     def noop(self, command = None):
         pass
     
@@ -334,7 +340,7 @@ class udiYoSmartRemoter(udi_interface.Node):
                     self.node.setDriver('CLITEMP', 99, True, True, 25)
                     self.node.setDriver('ST', 1, True, True)
         except Exception as E:
-            logging.error('Smart Remote get updateData exeption: {}'.format(E))
+            logging.error('Smart Remote  updateData exeption: {}'.format(E))
 
 
 
