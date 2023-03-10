@@ -52,8 +52,9 @@ class udiRemoteKey(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-    
+        self.poly.subscribe(self.poly.CUSTOMDATA, self.dataHandler)
         # start processing events and create add our controller node
+        self.KeyOperation = Custom(self.poly, 'customdata')
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
@@ -62,6 +63,15 @@ class udiRemoteKey(udi_interface.Node):
 
     def start(self):
         logging.debug('start / initialize smremotekey : {}'.format(self.key))
+        if 'SHORT_CMD' in self.KeyOperation:
+            self.short_cmd_type = self.KeyOperation['SHORT_CMD']
+        else:
+            self.short_cmd_type['SHORT_CMD'] = 0
+        if 'LONG_CMD' in self.KeyOperation:
+            self.long_cmd_type = self.KeyOperation['LONG_CMD']
+        else:
+            self.long_cmd_type['LONG_CMD'] = 1
+     
         self.node.setDriver('GV0', 99)
         self.node.setDriver('GV1', self.short_cmd_type)
         self.node.setDriver('GV2', self.long_cmd_type)
@@ -72,6 +82,9 @@ class udiRemoteKey(udi_interface.Node):
     
     def checkDataUpdate(self):
         pass
+
+    def dataHandler(self, data):
+        self.KeyOperation.load(data, True)
 
     def noop(self, command = None):
         pass
@@ -146,19 +159,21 @@ class udiRemoteKey(udi_interface.Node):
         val = int(command.get('value'))   
         logging.debug('short_cmdtype {}'.format(val))
         self.short_cmd_type = val
+        self.KeyOperation['SHORT_CMD'] = val
         self.node.setDriver('GV1', val, True, True)
 
 
   
-    def long_cmdype(self, command):
+    def long_cmdtype(self, command):
         val = int(command.get('value'))   
         logging.debug('long_cmdype {}'.format(val))
         self.long_cmd_type = val
+        self.KeyOperation['LONG_CMD'] = val
         self.node.setDriver('GV2', val, True, True)
 
     commands = {
                 'KEYPRESS'  : short_cmdtype, 
-                'KEYLPRESS' : long_cmdype,
+                'KEYLPRESS' : long_cmdtype,
                 'DON'       : noop,
                 'DOF'       : noop,    
     }
@@ -288,8 +303,9 @@ class udiYoSmartRemoter(udi_interface.Node):
                         else:
                             press = 0
                         logging.debug('remote key {} press{}'.format(remote_key, press))
-                        
+
                         self.keys[remote_key].send_command(press)
+                        self.yoSmartRemote.clearEventData()
                     self.node.setDriver('GV0', remote_key + press, True, True)
                     self.node.setDriver('GV1', remote_key, True, True)
                     self.node.setDriver('GV2', press, True, True)

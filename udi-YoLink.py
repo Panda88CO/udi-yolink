@@ -162,20 +162,6 @@ class YoLinkSetup (udi_interface.Node):
 
     def addNodes (self, deviceList):
         addressList = []
-        '''
-        logging.debug('Parsing Parameters for old elements')
-        delparams = []
-        for param in self.Parameters:
-            logging.debug( 'Parameters - checking {}'.format(param))
-            if param not in self.supportParams:             
-                if param.find(self.TTSstr) == -1:     
-                    logging.debug( 'Parameters - deleting {}'.format(param))               
-                    delparams.append(param)
-        for param in delparams:
-            self.Parameters.delete(param)
-            logging.debug( 'Parameters - deleting {}'.format(param))
-        '''
-
         for dev in range(0,len(self.deviceList)):
             if self.deviceList[dev]['type']  in self.supportedYoTypes:
                 logging.info('adding/checking device : {} - {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
@@ -350,27 +336,6 @@ class YoLinkSetup (udi_interface.Node):
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         time.sleep(2)
-        '''        
-        deleteList = []
-        nodes = self.poly.getNodes() 
-        logging.debug('Added nodes : '.format(nodes))
-        logging.debug('Checking for nodes that no longer exit')
-        logging.debug('AddressList : {}'.format(addressList))
-        for nde in nodes:
-            logging.debug('Node address: {}'.format(nde[0:11]))
-            found = False
-            for adr in addressList:    
-                if adr.find(nde[0:11]) >=0 :
-                    found = True
-            if not found and nde != 'setup':
-                logging.debug('Node {} not in list'.format(nde))
-                deleteList.append(nde)
-        logging.debug('Delete List {}'.format(deleteList))
-
-        for nde in deleteList:
-                self.poly.delNode(nde)
-                logging.debug('Node {} not in list - removing it'.format(nde))
-        '''
 
         # checking params for erassed nodes 
         self.poly.updateProfile()
@@ -550,7 +515,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.52')
+        polyglot.start('0.8.53')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
