@@ -332,11 +332,10 @@ class udiYoSmartRemoter(udi_interface.Node):
                         
                         while not self.nodesOK:
                             time.sleep(1)
-
-                        self.keys[remote_key].send_command(press)
-
-                        self.yoSmartRemote.clearEventData()
-                        logging.debug('clearEventData')
+                        if self.yoSmartRemote.isControlEvent():
+                            self.keys[remote_key].send_command(press)
+                            #self.yoSmartRemote.clearEventData()
+                            #logging.debug('clearEventData')
                         self.node.setDriver('GV0', remote_key + press, True, True)
                         self.node.setDriver('GV1', remote_key, True, True)
                         self.node.setDriver('GV2', press, True, True)                        

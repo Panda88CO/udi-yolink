@@ -1099,6 +1099,27 @@ class YoLinkMQTTDevice(object):
         except Exception as E:
             return(False)
 
+    def isControlEvent(yolink):
+        logging.debug('isControlEvent')
+        try:
+            data = yolink.dataAPI[yolink.lastMessage] 
+            if 'method' in data:
+                temp = data['method']
+                if '.getState' in temp:
+                    return(False)
+            if 'event' in data:
+                temp = data['event']
+                if 'StatusChange' in temp or '.Alert' in temp:
+                    return(True)
+                else:
+                    return(False)
+            else:
+                return(False)
+        except Exception as E:
+            logging.error('isControlEvent Exception: {}'.format(E))
+            return(False)
+
+                
     '''
     def updateScheduleStatus(yolink, data):
         logging.debug(yolink.type + 'updateScheduleStatus')
