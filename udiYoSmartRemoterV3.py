@@ -89,7 +89,7 @@ class udiRemoteKey(udi_interface.Node):
 
     def stop(self):
         logging.debug('stop smremotekey : {}'.format(self.key))
-        self.KeyOperations.load(self.remoteKey, True)
+       
 
 
     def checkDataUpdate(self):
@@ -264,6 +264,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
+        self.nodesOK = False
 
     '''
     def node_queue(self, data):
@@ -292,6 +293,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             k_name = self.getValidName(str(k_name))
 
             self.keys[key] = udiRemoteKey(self.poly, self.address, k_address, k_name, key)
+        self.nodesOK = True
 
     def stop (self):
         logging.info('Stop udiYoSmartRemoter')
@@ -317,7 +319,6 @@ class udiYoSmartRemoter(udi_interface.Node):
             if self.node is not None:
                 if self.yoSmartRemote.online:               
                     event_data = self.yoSmartRemote.getEventData()
-
                     logging.debug('updateData - event data {}'.format(event_data))
                     if event_data:
                         key_mask = event_data['keyMask']
@@ -328,9 +329,14 @@ class udiYoSmartRemoter(udi_interface.Node):
                         else:
                             press = 0
                         logging.debug('remote key {} press {}'.format(remote_key, press))
+                        
+                        while not self.nodesOK:
+                            time.sleep(1)
 
                         self.keys[remote_key].send_command(press)
+
                         self.yoSmartRemote.clearEventData()
+                        logging.debug('clearEventData')
                         self.node.setDriver('GV0', remote_key + press, True, True)
                         self.node.setDriver('GV1', remote_key, True, True)
                         self.node.setDriver('GV2', press, True, True)                        
