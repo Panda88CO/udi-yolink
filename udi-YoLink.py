@@ -73,6 +73,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.n_queue = []
+        self.registedNodes = []
 
         self.Parameters = Custom(self.poly, 'customparams')
         self.Notices = Custom(self.poly, 'notices')
@@ -161,7 +162,7 @@ class YoLinkSetup (udi_interface.Node):
 
 
     def addNodes (self, deviceList):
-        addressList = []
+        
         for dev in range(0,len(self.deviceList)):
             if self.deviceList[dev]['type']  in self.supportedYoTypes:
                 logging.info('adding/checking device : {} - {}'.format(self.deviceList[dev]['name'], self.deviceList[dev]['type']))
@@ -176,7 +177,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoSpeakerHub(self.poly, name, name, self.deviceList[dev]['name'],  self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     self.msgList=[]
                     logging.debug('Checking NBR_TTS')
                     if 'NBR_TTS' in self.Parameters:
@@ -217,7 +218,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoDimmer(self.poly, name, name, self.deviceList[dev]['name'],  self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                    
 
                 elif self.deviceList[dev]['type'] == 'THSensor':      
@@ -225,7 +226,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoTHsensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev])
                     self.Parameters[name] =  self.deviceList[dev]['name']
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                
 
                 elif self.deviceList[dev]['type'] == 'MultiOutlet':
@@ -233,7 +234,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoMultiOutlet(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']      
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                              
 
                 elif self.deviceList[dev]['type'] == 'DoorSensor':
@@ -241,7 +242,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoDoorSensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name'] 
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                               
 
                 elif self.deviceList[dev]['type'] == 'Manipulator':
@@ -249,7 +250,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoManipulator(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']  
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                                  
 
                 elif self.deviceList[dev]['type'] == 'MotionSensor':     
@@ -257,7 +258,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoMotionSensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']    
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                      
 
                 elif self.deviceList[dev]['type'] == 'VibrationSensor':     
@@ -265,7 +266,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoVibrationSensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name] =  self.deviceList[dev]['name']   
-                    addressList.append(name)  
+                    self.registedNodes.append(name)  
                     time.sleep(2) # add delay between adding devices                                   
 
                 elif self.deviceList[dev]['type'] == 'Outlet':     
@@ -273,7 +274,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoOutlet(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                    
 
                 elif self.deviceList[dev]['type'] == 'GarageDoor': 
@@ -281,7 +282,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoGarageDoor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']     
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                    
 
                 elif self.deviceList[dev]['type'] == 'Finger': 
@@ -289,7 +290,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoGarageFinger(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']   
-                    addressList.append(name)
+                    self.registedNodes.append(name)
                     time.sleep(2) # add delay between adding devices                                        
 
                 elif self.deviceList[dev]['type'] == 'Lock': 
@@ -297,7 +298,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoLock(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']    
-                    addressList.append(name)    
+                    self.registedNodes.append(name)    
                     time.sleep(2) # add delay between adding devices
 
                 elif self.deviceList[dev]['type'] == 'InfraredRemoter': 
@@ -305,7 +306,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoInfraredRemoter(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']    
-                    addressList.append(name)   
+                    self.registedNodes.append(name)   
                     time.sleep(2) # add delay between adding devices                                    
 
                 elif self.deviceList[dev]['type'] == 'LeakSensor': 
@@ -313,7 +314,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoLeakSensor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']  
-                    addressList.append(name)         
+                    self.registedNodes.append(name)         
                     time.sleep(2) # add delay between adding devices
 
                 elif self.deviceList[dev]['type'] == 'PowerFailureAlarm': 
@@ -321,7 +322,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoPowerFailSenor(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']  
-                    addressList.append(name)         
+                    self.registedNodes.append(name)         
                     time.sleep(2) # add delay between adding devices
 
                 elif self.deviceList[dev]['type'] == 'SmartRemoter': 
@@ -329,14 +330,21 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Adding device {} ({}) as {}'.format( self.deviceList[dev]['name'], self.deviceList[dev]['type'], str(name) ))                                        
                     udiYoSmartRemoter(self.poly, name, name, self.deviceList[dev]['name'], self.yoAccess, self.deviceList[dev] )
                     self.Parameters[name]  =  self.deviceList[dev]['name']  
-                    addressList.append(name)         
+                    self.registedNodes.append(name)         
                     time.sleep(2) # add delay between adding devices
 
 
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         time.sleep(2)
-
+        tempNodes = self.poly.getNodes()
+        logging.debug('registered Nodes : {}'.format(self.registedNodes))
+        logging.debug('Nodes inNodeserver - before cleanup: {}'.format(tempNodes))
+        for node in tempNodes:
+            if node not in self.registedNodes:
+                logging.debug('Removing node : {}'.format(node))
+                self.poly.delNode(node)
+                
         # checking params for erassed nodes 
         self.poly.updateProfile()
         self.pollStart = True
@@ -398,6 +406,7 @@ class YoLinkSetup (udi_interface.Node):
                     #            time.sleep(60)
                     #logging.info('Updating device status')
                     nodes = self.poly.getNodes()
+                    
                     for nde in nodes:
                         if nde != 'setup':   # but not the controller node
                             nodes[nde].checkOnline()
@@ -515,7 +524,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.71')
+        polyglot.start('0.8.72')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
