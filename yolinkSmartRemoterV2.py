@@ -36,7 +36,7 @@ class YoLinkSmartRemote(YoLinkMQTTDevice):
         return(temp)
     
     def isControlEvent(yolink):
-        test = yolink.get_last_message_type()
+        return(yolink.isControlEvent())
 
     def clearEventData(yolink):
         if yolink.clear_event_from_state():
