@@ -58,6 +58,7 @@ class YoLinkInitPAC(object):
         yoAccess.online = False
         yoAccess.deviceList = []
         yoAccess.token = None
+        yoAccess.unassigned_nodes = []
         try:
             #while not yoAccess.request_new_token( ):
             #    time.sleep(60)
@@ -695,6 +696,7 @@ class YoLinkInitPAC(object):
 
     def set_debug(yoAccess, debug):
         yoAccess.debug = debug
+
 
 class YoLinkInitCSID(object):
     def __init__(yoAccess,  csName, csid, csSeckey, yoAccess_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003 ):
