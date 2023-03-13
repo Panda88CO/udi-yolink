@@ -434,7 +434,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.n_queue.pop()
 
     def start(self):
-        global unassigned_nodes
+        global assigned_addresses
         self.subNodesReady = False
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
@@ -472,8 +472,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.subOutletAdr[port] =  self.address[3:14]+'_o' + str(port)
                     logging.debug('Adding Power outlet : {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1), port))
                     self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1),port, self.yoMultiOutlet)
-                    if self.subOutletAdr[port] in unassigned_nodes:
-                        unassigned_nodes.remove(self.subOutletAdr[port])  
+                    assigned_addresses.append(self.subOutletAdr[port])  
                     #self.registeredNodes.append(self.subOutletAdr[port])
                     #self.poly.addNode(self.subOutlet[port])
                     #self.wait_for_node_done()
@@ -486,8 +485,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.subUsbAdr[usb] = self.address[3:14]+'_u'+str(usb)
                     logging.debug('Adding USB outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
                     self.subUsb[usb] = udiYoSubUSB(self.poly, self.address, self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
-                    if self.subUsbAdr[usb] in unassigned_nodes:
-                        unassigned_nodes.remove(self.subUsbAdr[usb])  
+                    assigned_addresses.append(self.subUsbAdr[usb])  
                     #self.registeredNodes.append(self.subUsbAdr[usb])
                     #self.poly.addNode(self.subUsb[usb])
                     #self.wait_for_node_done()

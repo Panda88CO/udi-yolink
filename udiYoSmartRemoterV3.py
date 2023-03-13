@@ -26,12 +26,12 @@ class udiRemoteKey(udi_interface.Node):
             {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
 
             ]
-    global unassigned_nodes
+    global assigned_addresses
     from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
 
     def __init__(self, polyglot, primary, address, name, key):
         super().__init__( polyglot, primary, address, name)
-        global unassigned_nodes
+        global assigned_addresses
         logging.debug('__init__ smremotekey : {} {} {}'.format(address,name, key))
         self.key = key
         self.poly = polyglot
@@ -64,8 +64,7 @@ class udiRemoteKey(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        if address in unassigned_nodes:
-            unassigned_nodes.remove(address) 
+        assigned_addresses.append(address) 
         
     def start(self):
         logging.debug('start / initialize smremotekey : {}'.format(self.key))
@@ -281,7 +280,7 @@ class udiYoSmartRemoter(udi_interface.Node):
 
 
     def start(self):
-        global unassigned_nodes
+        global assigned_addresses
         logging.info('start - udiYoSmartRemoter')
         self.yoSmartRemote  = YoLinkSmartRemote(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
@@ -297,7 +296,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             k_name = self.poly.getValidName(str(k_name))
 
             self.keys[key] = udiRemoteKey(self.poly, self.address, k_address, k_name, key)
-            self.unassigned_nodes.pop(k_address)
+            self.assigned_addresses.pop(k_address)
         self.wait_for_node_done()
         self.nodesOK = True
 
