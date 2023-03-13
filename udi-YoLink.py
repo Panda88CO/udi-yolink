@@ -339,7 +339,7 @@ class YoLinkSetup (udi_interface.Node):
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         time.sleep(1)
         tempNodes = self.poly.getNodes()
-        logging.debug('registered Nodes :{} - {}'.format(len(self.registedNodes), self.registedNodes)))
+        logging.debug('registered Nodes :{} - {}'.format(len(self.registedNodes), self.registedNodes))
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(tempNodes),tempNodes))
         for node in tempNodes:
             if node not in self.registedNodes:
