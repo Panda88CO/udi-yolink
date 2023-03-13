@@ -51,7 +51,7 @@ class udiYoDimmer(udi_interface.Node):
         self.yoAccess = yoAccess
         self.yoDimmer = None
         self.timer_cleared = True
-        self.n_queue = [] 
+        #self.n_queue = [] # one queue for all
         self.last_state = ''
         self.timer_update = 5
         self.timer_expires = 0
