@@ -57,7 +57,7 @@ class YoLinkSetup (udi_interface.Node):
         self.address = address
         self.name = name
         self.yoAccess = None
-        self.TTSstr = 'TTS'address
+        self.TTSstr = 'TTS'
         self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]
         self.yolinkURL = 'https://api.yosmart.com/openApi'
         self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api' 
@@ -65,8 +65,6 @@ class YoLinkSetup (udi_interface.Node):
         self.tokenURL = 'https://api.yosmart.com/open/yolink/token'
         self.mqttURL = 'api.yosmart.com'
         self.mqttPort = 8003
-
-
 
 
         logging.setLevel(10)
@@ -561,7 +559,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.78')
+        polyglot.start('0.8.79')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
