@@ -45,7 +45,7 @@ class udiRemoteKey(udi_interface.Node):
         self.short_cmd_type = 0
         self.long_cmd_type = 1
         self.configDone = False
-        #self.n_queue = []
+        self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -246,7 +246,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoSmartRemote  = None
         self.last_state = 99
-        #self.n_queue = []
+        self.n_queue = []
         self.max_remote_keys = 8
         self.nbr_keys = 4
         self.keys = {}

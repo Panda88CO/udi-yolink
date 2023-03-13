@@ -65,6 +65,9 @@ class YoLinkSetup (udi_interface.Node):
         self.mqttURL = 'api.yosmart.com'
         self.mqttPort = 8003
 
+
+
+
         logging.setLevel(10)
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
@@ -332,15 +335,12 @@ class YoLinkSetup (udi_interface.Node):
                     self.Parameters[name]  =  self.deviceList[dev]['name']  
                     self.registedNodes.append(name)         
                     time.sleep(2) # add delay between adding devices
-
-
             else:
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
-        self.wait_for_node_done()
         time.sleep(1)
         tempNodes = self.poly.getNodes()
-        logging.debug('registered Nodes : {}'.format(self.registedNodes))
-        logging.debug('Nodes in Nodeserver - before cleanup: {}'.format(tempNodes))
+        logging.debug('registered Nodes :{} - {}'.format(len(self.registedNodes), self.registedNodes)))
+        logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(tempNodes),tempNodes))
         for node in tempNodes:
             if node not in self.registedNodes:
                 logging.debug('Removing node : {}'.format(node))
@@ -525,7 +525,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.74')
+        polyglot.start('0.8.75')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
