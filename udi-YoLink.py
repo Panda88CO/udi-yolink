@@ -339,13 +339,13 @@ class YoLinkSetup (udi_interface.Node):
         time.sleep(2)
         tempNodes = self.poly.getNodes()
         logging.debug('registered Nodes : {}'.format(self.registedNodes))
-        logging.debug('Nodes inNodeserver - before cleanup: {}'.format(tempNodes))
+        logging.debug('Nodes in Nodeserver - before cleanup: {}'.format(tempNodes))
         for node in tempNodes:
             if node not in self.registedNodes:
                 logging.debug('Removing node : {}'.format(node))
                 self.poly.delNode(node)
                 
-        # checking params for erassed nodes 
+        # checking params for erassed nodes
         self.poly.updateProfile()
         self.pollStart = True
 
@@ -524,7 +524,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.72')
+        polyglot.start('0.8.73')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
