@@ -358,7 +358,7 @@ class YoLinkSetup (udi_interface.Node):
                 logging.debug('Currently unsupported device : {}'.format(self.deviceList[dev]['type'] ))
         time.sleep(1)
         tempNodes = self.poly.getNodes()
-        logging.debug('assigned addresses  nodes  :{} - {}'.format(len(self.registedNodes), self.registedNodes))
+        logging.debug('assigned addresses  nodes  :{} - {}'.format(len(self.assigned_addresses), self.assigned_addresses))
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(tempNodes),tempNodes))
         for node in tempNodes:
             if node  not in self.assigned_addresses:
@@ -544,7 +544,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.82')
+        polyglot.start('0.8.83')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
