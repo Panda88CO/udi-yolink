@@ -298,7 +298,6 @@ class udiYoSmartRemoter(udi_interface.Node):
             k_name = self.poly.getValidName(str(k_name))
 
             self.keys[key] = udiRemoteKey(self.poly, self.address, k_address, k_name, key)
-            self.assigned_addresses.pop(k_address)
             self.adr_list.append(k_address)
             self.wait_for_node_done()
         self.nodesOK = True
