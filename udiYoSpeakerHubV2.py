@@ -62,17 +62,14 @@ class udiYoSpeakerHub(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-                
-        
-
-
-
+   
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        
+        self.adr_list = []
+        self.adr_list.append(address)
     
     def node_queue(self, data):
         self.n_queue.append(data['address'])

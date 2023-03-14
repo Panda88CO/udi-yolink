@@ -69,7 +69,10 @@ class udiYoSwitch(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-    
+        self.adr_list = []
+        self.adr_list.append(address)
+        
+            
     def node_queue(self, data):
         self.n_queue.append(data['address'])
 

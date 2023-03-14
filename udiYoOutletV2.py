@@ -68,6 +68,8 @@ class udiYoOutlet(udi_interface.Node):
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
         #self.node.setDriver('ST', 1, True, True)
+        self.adr_list = []
+        self.adr_list.append(address)
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
