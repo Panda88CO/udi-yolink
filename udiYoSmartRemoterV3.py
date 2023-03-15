@@ -246,6 +246,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoSmartRemote  = None
+        self.node_ready = False
         self.last_state = 99
         self.n_queue = []
         self.max_remote_keys = 8
@@ -301,6 +302,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             self.adr_list.append(k_address)
             self.wait_for_node_done()
         self.nodesOK = True
+        self.node_ready = True
 
     def stop (self):
         logging.info('Stop udiYoSmartRemoter')

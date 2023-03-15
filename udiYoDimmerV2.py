@@ -50,6 +50,7 @@ class udiYoDimmer(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoDimmer = None
+        self.node_ready = False
         self.timer_cleared = True
         self.n_queue = [] # one queue for all
         self.last_state = ''
@@ -90,7 +91,7 @@ class udiYoDimmer(udi_interface.Node):
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
         self.yoDimmer.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
-
+        self.node_ready = True
 
 
     def updateDelayCountdown (self, timeRemaining ) :

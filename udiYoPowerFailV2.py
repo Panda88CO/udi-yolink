@@ -53,9 +53,11 @@ class udiYoPowerFailSenor(udi_interface.Node):
         logging.debug('udiYoPowerFailSenor INIT- {}'.format(deviceInfo['name']))
         self.adress = address
         self.yoAccess = yoAccess
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoVibrationSensor  = None
+        self.node_ready = False
         self.last_state = 99
+        
         self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -95,7 +97,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
         self.yoPowerFail  = YoLinkPowerFailSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoPowerFail.initNode()
-        time.sleep(2)
+        self.node_ready = True
         #self.node.setDriver('ST', 1, True, True)
 
     

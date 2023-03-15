@@ -46,8 +46,9 @@ class udiYoMotionSensor(udi_interface.Node):
         logging.debug('YoLinkMotionSensor INIT- {}'.format(deviceInfo['name']))
         self.adress = address
         self.yoAccess = yoAccess
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoMotionsSensor  = None
+        self.node_ready = False
         self.last_state = 99
         self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -86,7 +87,7 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoMotionsSensor.initNode()
-        #time.sleep(2)
+        self.node_ready = True
         #self.node.setDriver('ST', 1, True, True)
 
     

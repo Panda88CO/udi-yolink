@@ -45,6 +45,7 @@ class udiYoDoorSensor(udi_interface.Node):
         self.yoAccess = yoAccess
         self.name = name
         self.yoDoorSensor = None
+        self.node_ready = False
         self.last_state = 99
         logging.debug('udiYoDoorSensor INIT - {}'.format(deviceInfo['name']))
         self.n_queue = []
@@ -79,7 +80,8 @@ class udiYoDoorSensor(udi_interface.Node):
         self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)   
         time.sleep(2)
         self.yoDoorSensor.initNode()
-        time.sleep(2)
+        self.node_ready = True
+
         #self.node.setDriver('ST', 1, True, True)
         #if not self.yoDoorSensor.online:
         #    logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))

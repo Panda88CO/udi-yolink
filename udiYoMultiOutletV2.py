@@ -49,6 +49,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.address = address
         self.name = name
         self.node = None
+        self.portState = 0
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
         self.n_queue = [] 
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -403,8 +404,9 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.nbrUsb = -1
         self.ports = -1
         self.timer_update = 5
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoMultiOutlet = None
+        self.node_ready = False
         self.subUsb = []
         self.subOutlet = []
 
@@ -491,10 +493,10 @@ class udiYoMultiOutlet(udi_interface.Node):
                     logging.error('Failed to create {}: {}'.format(self.subUsbAdr[usb], e))
            
             self.subNodesReady = True
-            self.createdNodes = self.poly.getNodes()
             logging.info('udiYoMultiOutlet - finished creating sub nodes')
+            self.node_ready = True
             #logging.debug(self.subnodeAdr)
-            #logging.debug(self.createdNodes)
+
     
             self.yoMultiOutlet.refreshMultiOutlet()
             #logging.debug('Finished  MultiOutlet start')

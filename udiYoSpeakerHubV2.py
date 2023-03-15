@@ -53,6 +53,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSpeakerHub = None
+        self.node_ready = False
         self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -93,7 +94,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.messageNbr = 0
         self.yoSpeakerHub.setMessageNbr(self.messageNbr )
         self.yoSpeakerHub.initNode()
-        time.sleep(2)
+        self.node_ready = True
         #self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 

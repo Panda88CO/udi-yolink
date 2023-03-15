@@ -44,8 +44,9 @@ class udiYoManipulator(udi_interface.Node):
         logging.debug('udiYoManipulator INIT- {}'.format(deviceInfo['name']))
         self.n_queue = []
         self.yoAccess = yoAccess
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoManipulator = None
+        self.node_ready = False
         self.last_state = ''
         self.timer_cleared = True
         self.timer_update = 5
@@ -62,7 +63,7 @@ class udiYoManipulator(udi_interface.Node):
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
         self.adr_list = []
-        self.adr_list.append(address)        
+        self.adr_list.append(address)
 
 
 
@@ -85,7 +86,7 @@ class udiYoManipulator(udi_interface.Node):
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
-        #time.sleep(3)
+        self.node_ready = True
 
     def stop (self):
         logging.info('Stop udiYoManipulator')

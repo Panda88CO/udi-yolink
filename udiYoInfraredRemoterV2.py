@@ -43,10 +43,10 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
         logging.debug('udiIRremote INIT- {}'.format(deviceInfo['name']))
 
-        
         self.yoAccess = yoAccess
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoIRrem = None
+        self.node_ready = False
         self.powerSupported = True # assume 
         self.n_queue = []     
 
@@ -80,6 +80,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
         self.yoIRrem.initNode()
         time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
+        self.node_ready = True
     
     def stop (self):
         logging.info('Stop udiIRremote')

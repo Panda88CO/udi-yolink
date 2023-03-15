@@ -45,6 +45,7 @@ class udiYoHub(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoHub = None
+        self.node_ready = False
         self.n_queue = [] 
         
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -84,7 +85,7 @@ class udiYoHub(udi_interface.Node):
         #    logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
         #else:
         #    self.node.setDriver('ST', 1, True, True)
-        time.sleep(3)
+        self.node_ready = True
 
     def updateDelayCountdown (self, delayRemaining ) :
         logging.debug('updateDelayCountdown {}'.format(delayRemaining))

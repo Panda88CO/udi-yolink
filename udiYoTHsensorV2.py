@@ -58,8 +58,9 @@ class udiYoTHsensor(udi_interface.Node):
         logging.debug('udiYoTHsensor INIT- {}'.format(deviceInfo['name']))
         self.n_queue = []  
         self.yoAccess = yoAccess
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoTHsensor  = None
+        self.node_ready = False
         self.temp_unit = self.yoAccess.get_temp_unit()
         #self.address = address
         #self.poly = polyglot
@@ -99,6 +100,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor.initNode()
         time.sleep(2)
         self.temp_unit = self.yoAccess.get_temp_unit()
+        self.node_ready = True
         #self.node.setDriver('ST', 1, True, True)
 
     def initNode(self):
