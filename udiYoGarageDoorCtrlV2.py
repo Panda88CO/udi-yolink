@@ -44,6 +44,7 @@ class udiYoGarageDoor(udi_interface.Node):
         self.yoAccess=yoAccess
         self.devInfo =  deviceInfo   
         self.yoDoorControl  = None
+        self.node_ready = False
         logging.debug('udiYoGarageDoor INIT - {}'.format(deviceInfo['name']))
         self.n_queue = []
         #polyglot.subscribe(polyglot.POLL, self.poll)
@@ -56,7 +57,8 @@ class udiYoGarageDoor(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-
+        self.adr_list = []
+        self.adr_list.append(address)
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -74,7 +76,7 @@ class udiYoGarageDoor(udi_interface.Node):
         time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
-    
+        self.node_ready = True
 
     def initNode(self):
         self.yoDoorControl.online = True

@@ -47,11 +47,12 @@ class udiYoOutlet(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
 
         logging.debug('udiYoOutlet INIT- {}'.format(deviceInfo['name']))
-        self.n_queue = [] 
-        
+        self.n_queue = []
+     
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo   
         self.yoOutlet = None
+        self.node_ready = False
         self.powerSupported = True # assume 
         self.last_state = ''
         self.timer_update = 5
@@ -68,6 +69,8 @@ class udiYoOutlet(udi_interface.Node):
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
         #self.node.setDriver('ST', 1, True, True)
+        self.adr_list = []
+        self.adr_list.append(address)
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -86,7 +89,7 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.initNode()
         time.sleep(2)
         self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
-        #self.node.setDriver('ST', 1, True, True)
+        self.node_ready = True
     
     def stop (self):
         logging.info('Stop udiYoOutlet')

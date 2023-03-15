@@ -16,7 +16,7 @@ import time
 from yolinkMultiOutletV3 import YoLinkMultiOut
 import re
 
-
+#assigned_addresses
 class udiYoSubOutlet(udi_interface.Node):
     id = 'yosubout'
     '''
@@ -49,6 +49,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.address = address
         self.name = name
         self.node = None
+        self.portState = 0
         logging.debug('udiYoSubOutlet - init - port {}'.format(self.port))
         self.n_queue = [] 
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -379,7 +380,7 @@ class udiYoSubUSB(udi_interface.Node):
 class udiYoMultiOutlet(udi_interface.Node):
     #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
     id = 'yomultiout'
- 
+
     '''
        drivers = [
             'ST' = online
@@ -390,11 +391,10 @@ class udiYoMultiOutlet(udi_interface.Node):
             #{'driver': 'ST', 'value': 0, 'uom': 25}
             ]
     
-
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
-        #  
+        
         logging.debug('MultiOutlet Node INIT')
  
         self.nodeName = address
@@ -404,8 +404,9 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.nbrUsb = -1
         self.ports = -1
         self.timer_update = 5
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoMultiOutlet = None
+        self.node_ready = False
         self.subUsb = []
         self.subOutlet = []
 
@@ -424,6 +425,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
+        self.adr_list = []
+        self.adr_list.append(address)
         
 
     def node_queue(self, data):
@@ -435,6 +438,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.n_queue.pop()
 
     def start(self):
+
         self.subNodesReady = False
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
@@ -472,41 +476,34 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.subOutletAdr[port] =  self.address[3:14]+'_o' + str(port)
                     logging.debug('Adding Power outlet : {} {} {} {}'.format( self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1), port))
                     self.subOutlet[port] = udiYoSubOutlet(self.poly, self.address, self.subOutletAdr[port], 'Outlet-'+str(port+1),port, self.yoMultiOutlet)
-                    #self.poly.addNode(self.subOutlet[port])
-                    #self.wait_for_node_done()
+                    self.adr_list.append(self.subOutletAdr[port])  
+
                                     
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subOutletAdr[port], e))
             for usb in range(0, self.yoMultiOutlet.nbrUsb):
-                        
                 try:
                     self.subUsbAdr[usb] = self.address[3:14]+'_u'+str(usb)
                     logging.debug('Adding USB outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
                     self.subUsb[usb] = udiYoSubUSB(self.poly, self.address, self.subUsbAdr[usb] , 'USB-'+str(usb),usb, self.yoMultiOutlet)
-                    #self.poly.addNode(self.subUsb[usb])
-                    #self.wait_for_node_done()
+                    self.adr_list.append(self.subUsbAdr[usb])  
+
                     self.usbExists = True
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subUsbAdr[usb], e))
            
             self.subNodesReady = True
-            self.createdNodes = self.poly.getNodes()
             logging.info('udiYoMultiOutlet - finished creating sub nodes')
+            self.node_ready = True
             #logging.debug(self.subnodeAdr)
-            #logging.debug(self.createdNodes)
+
     
             self.yoMultiOutlet.refreshMultiOutlet()
             #logging.debug('Finished  MultiOutlet start')
 
 
 
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
 
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
 
     def updateDelayCountdown(self, timeRemaining):
         logging.debug('updateDelayCountdown - time: {}'.format(timeRemaining))

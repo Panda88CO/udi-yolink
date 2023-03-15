@@ -47,8 +47,9 @@ class udiYoLeakSensor(udi_interface.Node):
         #  
         logging.debug('udiYoLeakSensor  INIT - {}'.format(deviceInfo['name']))
         self.yoAccess = yoAccess
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoLeakSensor  = None
+        self.node_ready = False
         self.last_state = 99
         self.n_queue = []   
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -63,7 +64,10 @@ class udiYoLeakSensor(udi_interface.Node):
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
         self.temp_unit = self.yoAccess.get_temp_unit()
+        self.adr_list = []
+        self.adr_list.append(address)
 
+        
     def node_queue(self, data):
         self.n_queue.append(data['address'])
 
@@ -80,7 +84,7 @@ class udiYoLeakSensor(udi_interface.Node):
         self.yoLeakSensor  = YoLinkLeakSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoLeakSensor.initNode()
-        time.sleep(1)
+        self.node_ready = True
         #self.node.setDriver('ST', 1, True, True)
 
         #time.sleep(3)
