@@ -104,7 +104,7 @@ class udiRemoteKey(udi_interface.Node):
         else:
             self.long_cmd_type = 0
         if self.SHORT_CMD in data:
-            self.short_cmd_type = data[self.LONG_CMD]
+            self.short_cmd_type = data[self.SHORT_CMD]
         else:
             self.short_cmd_type = 1
    
