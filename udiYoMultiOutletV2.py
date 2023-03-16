@@ -494,12 +494,12 @@ class udiYoMultiOutlet(udi_interface.Node):
            
             self.subNodesReady = True
             logging.info('udiYoMultiOutlet - finished creating sub nodes')
-            self.node_ready = True
-            #logging.debug(self.subnodeAdr)
+        self.node_ready = True
+        #logging.debug(self.subnodeAdr)
 
     
-            self.yoMultiOutlet.refreshMultiOutlet()
-            #logging.debug('Finished  MultiOutlet start')
+        self.yoMultiOutlet.refreshMultiOutlet()
+        #logging.debug('Finished  MultiOutlet start')
 
 
 
