@@ -1,4 +1,4 @@
-import json
+#import json
 import time
 
 from yolink_mqtt_classV3 import YoLinkMQTTDevice
@@ -153,6 +153,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     def setOptions(yolink):
         logging.debug(yolink.type+' - setOptions')
         maxAttempts = 3
+        attempt = 1
         #missing try
         data = {}
         data['method'] = yolink.type+'.setOption'
@@ -164,8 +165,8 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         data['params']['mute'] = yolink.mute
         print('dataStr: {}'.format(data))
         while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-               time.sleep(1)
-               attempt = attempt + 1
+            time.sleep(1)
+            attempt = attempt + 1
         yolink.lastControlPacket = data
 
     '''
@@ -186,8 +187,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         else:
             return('Unkown')
     '''
-   
-    
+ 
 
 class YoLinkSpeakerHub(YoLinkSpeakerH):
     def __init__(yolink, yoAccess,  deviceInfo):
