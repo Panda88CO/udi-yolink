@@ -180,6 +180,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoSpeakerHub(self.poly, address, address, dev['name'],  self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))                        
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)  
@@ -219,7 +220,9 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoSwitch(self.poly, address, address, dev['name'],  self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
+
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
 
@@ -231,6 +234,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoDimmer(self.poly, address, address, dev['name'],  self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                    
@@ -243,6 +247,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoTHsensor(self.poly, address, address, dev['name'], self.yoAccess, dev)
                     self.Parameters[name] =  dev['name']
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
@@ -255,6 +260,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoMultiOutlet(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']      
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                     
@@ -267,6 +273,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoDoorSensor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name'] 
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
@@ -279,6 +286,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoManipulator(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']  
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
@@ -291,6 +299,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoMotionSensor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']    
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
@@ -302,6 +311,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoVibrationSensor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']   
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                     
@@ -314,6 +324,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoOutlet(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
@@ -326,6 +337,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoGarageDoor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']     
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
@@ -338,6 +350,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoGarageFinger(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']   
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                                                       
@@ -349,6 +362,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoLock(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']    
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                        
@@ -361,6 +375,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoInfraredRemoter(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']    
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)      
@@ -373,6 +388,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoLeakSensor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']  
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                            
@@ -385,6 +401,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoPowerFailSenor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']  
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                  
@@ -397,6 +414,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoSmartRemoter(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']  
                     while not temp.node_ready:
+                        logging.debug( ' Node for  {}  {} not ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
@@ -591,7 +609,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.88')
+        polyglot.start('0.8.89')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
