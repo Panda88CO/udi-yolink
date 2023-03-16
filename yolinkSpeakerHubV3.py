@@ -1,7 +1,6 @@
 import json
 import time
 
-
 from yolink_mqtt_classV3 import YoLinkMQTTDevice
 try:
     import udi_interface
@@ -10,9 +9,6 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
-
-
-
 
 class YoLinkSpeakerH(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
