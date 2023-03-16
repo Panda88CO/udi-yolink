@@ -205,9 +205,9 @@ class YoLinkSetup (udi_interface.Node):
                         if index not in self.Parameters:
                             self.Parameters[index] = index
                         self.yoAccess.TtsMessages[nbr] = self.Parameters[index]
-                        
+
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))                        
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))                        
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)  
@@ -219,12 +219,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoSwitch(self.poly, address, address, dev['name'],  self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
 
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
-
 
                 elif dev['type'] == 'Dimmer':
                     name = dev['deviceId'][-14:]  #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -233,11 +232,10 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoDimmer(self.poly, address, address, dev['name'],  self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                    
-
 
                 elif dev['type'] == 'THSensor':      
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -246,12 +244,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoTHsensor(self.poly, address, address, dev['name'], self.yoAccess, dev)
                     self.Parameters[name] =  dev['name']
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
           
-
                 elif dev['type'] == 'MultiOutlet':
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
@@ -259,12 +256,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoMultiOutlet(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']      
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                     
                            
-
                 elif dev['type'] == 'DoorSensor':
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
@@ -272,12 +268,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoDoorSensor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name'] 
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
                          
-
                 elif dev['type'] == 'Manipulator':
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
@@ -285,12 +280,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoManipulator(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']  
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
                           
-
                 elif dev['type'] == 'MotionSensor':     
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
@@ -298,7 +292,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoMotionSensor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']    
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
@@ -310,12 +304,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoVibrationSensor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name] =  dev['name']   
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                     
                             
-
                 elif dev['type'] == 'Outlet':     
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
@@ -323,12 +316,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoOutlet(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
             
-
                 elif dev['type'] == 'GarageDoor': 
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
@@ -336,12 +328,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoGarageDoor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']     
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
             
-
                 elif dev['type'] == 'Finger': 
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
@@ -349,7 +340,7 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoGarageFinger(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']   
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                                                       
@@ -361,11 +352,10 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoLock(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']    
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                        
-
 
                 elif dev['type'] == 'InfraredRemoter': 
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -374,12 +364,11 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoInfraredRemoter(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']    
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)      
                                  
-
                 elif dev['type'] == 'LeakSensor': 
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
@@ -387,11 +376,10 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoLeakSensor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']  
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                            
-
 
                 elif dev['type'] == 'PowerFailureAlarm': 
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -400,11 +388,10 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoPowerFailSenor(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']  
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                  
-
 
                 elif dev['type'] == 'SmartRemoter': 
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -413,11 +400,10 @@ class YoLinkSetup (udi_interface.Node):
                     temp = udiYoSmartRemoter(self.poly, address, address, dev['name'], self.yoAccess, dev )
                     self.Parameters[name]  =  dev['name']  
                     while not temp.node_ready:
-                        logging.debug( 'Waiting for node   {}  {} to be ready'.format(dev['type'] , dev['name']))
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
-
             else:
                 logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
         time.sleep(1)
@@ -608,7 +594,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.882')
+        polyglot.start('0.8.88')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
