@@ -638,10 +638,13 @@ class YoLinkInitPAC(object):
             if result.rc != 0:
                 logging.error('Error {} during publishing {}'.format(result.rc, data))
                 #errorCount = errorCount + 1
-                if result.rc == 4 or result.rc == 3: #off line
+                if result.rc == 3: #off line
                     logging.debug('rc = {}'.format(result.rc))
                     yoAccess.online = False
-                    #yoAccess.client.reconnect() # is this the right strategy 
+                if result.rc == 4: #off line
+                    logging.debug('rc = {}'.format(result.rc))
+                    yoAccess.online = False    
+                    yoAccess.client.reconnect() # is this the right strategy 
             else:
                 yoAccess.lastTransferTime = time.time()
                 yoAccess.online = True
