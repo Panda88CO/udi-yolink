@@ -81,7 +81,7 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Start - udiYoManipulator')
         self.yoManipulator = YoLinkManipul(self.yoAccess, self.devInfo, self.updateStatus)
         
-        time.sleep(2)
+        time.sleep(4)
         self.yoManipulator.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)

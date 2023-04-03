@@ -631,6 +631,7 @@ class YoLinkInitPAC(object):
             yoAccess.lastDataPacket[deviceId] = data
             if deviceId in yoAccess.mqttList:
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
+                ### check if publish list is full 
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
             else:
                 logging.error('device {} not in mqtt list'.format(deviceId))
