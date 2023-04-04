@@ -32,6 +32,9 @@ class YoLinkInitPAC(object):
         yoAccess.publishQueue = Queue()
         yoAccess.messageQueue = Queue()
         yoAccess.fileQueue = Queue()
+        yoAccess.timeQueue = Queue()
+        yoAccess.MAX_MESSAGES = 10  # number of messages per yoAccess.MAX_TIME
+        yoAccess.MAX_TIME = 30      # Time Window
         yoAccess.debug = True
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
@@ -632,6 +635,13 @@ class YoLinkInitPAC(object):
             if deviceId in yoAccess.mqttList:
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 ### check if publish list is full 
+                timeNow_s = time.time()
+
+                if yoAccess.timeQueue.qsize >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
+                    first_TXtime = yoAccess.timeQueue.get()
+                    if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
+                        time.sleep(yoAccess.MAX_TIME - (timeNow_s - first_TXtime )) # wait until yoAccess.MAX_TIME has elapsed sine first element
+                yoAccess.timeQueue.put(timeNow_s)                
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
             else:
                 logging.error('device {} not in mqtt list'.format(deviceId))
