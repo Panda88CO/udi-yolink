@@ -640,6 +640,7 @@ class YoLinkInitPAC(object):
                 if yoAccess.timeQueue.qsize >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
                     first_TXtime = yoAccess.timeQueue.get()
                     if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
+                        logging.debug('Delaying command to ensure no overflow of commands to YoLink server')
                         time.sleep(yoAccess.MAX_TIME - (timeNow_s - first_TXtime )) # wait until yoAccess.MAX_TIME has elapsed sine first element
                 yoAccess.timeQueue.put(timeNow_s)                
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
