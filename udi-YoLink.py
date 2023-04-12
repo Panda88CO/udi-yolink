@@ -558,8 +558,20 @@ class YoLinkSetup (udi_interface.Node):
             if 'DEBUG_EN' in userParam:
                 self.debug = True
             
+            nodes = self.poly.getNodes()
+            for nde in nodes:
+                logging.debug('node : {}'.format(nde.address))
+                if nde.address in userParam:
 
-            #for param in userParam:
+                    user_param_name = userParam[nde.address]
+                    logging.debug('User param name : {}, node name {}'.format(user_param_name, nde.name))
+                    if user_param_name != nde.name:
+                        nde.rename(user_param_name)
+                        logging.debug('renaming node')
+
+
+
+
             #    if param not in supportParams:
             #        del self.Parameters[param]
             #        logging.debug ('erasing key: ' + str(param))
@@ -594,7 +606,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.90')
+        polyglot.start('0.8.91')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
