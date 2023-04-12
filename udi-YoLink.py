@@ -561,10 +561,10 @@ class YoLinkSetup (udi_interface.Node):
             nodes = self.poly.getNodes()
             logging.debug('nodes: {}'.format(nodes))
             for nde in nodes:
-                logging.debug('node : {}'.format(nde.address))
-                if nde.address in userParam:
+                logging.debug('node : {}'.format(nde))
+                if nde in userParam:
 
-                    user_param_name = userParam[nde.address]
+                    user_param_name = userParam[nde]
                     logging.debug('User param name : {}, node name {}'.format(user_param_name, nde.name))
                     if user_param_name != nde.name:
                         nde.rename(user_param_name)
