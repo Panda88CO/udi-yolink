@@ -565,10 +565,11 @@ class YoLinkSetup (udi_interface.Node):
                 if nde in userParam:
 
                     user_param_name = userParam[nde]
-                    logging.debug('User param name : {}, node name {}'.format(user_param_name, nde.name))
-                    if user_param_name != nde.name:
-                        nde.rename(user_param_name)
-                        logging.debug('renaming node')
+                    temp_node = nodes[nde]
+                    logging.debug('User param name : {}, node name {}'.format(user_param_name, temp_node.name))
+                    if user_param_name != temp_node.name:
+                        temp_node.rename(user_param_name)
+                        logging.debug('renaming node to{}'.format(temp_node.name))
 
 
 
@@ -607,7 +608,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.93')
+        polyglot.start('0.8.94')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
