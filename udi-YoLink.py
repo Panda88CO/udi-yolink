@@ -559,6 +559,7 @@ class YoLinkSetup (udi_interface.Node):
                 self.debug = True
             
             nodes = self.poly.getNodes()
+            logging.debug('nodes: {}'.format(nodes))
             for nde in nodes:
                 logging.debug('node : {}'.format(nde.address))
                 if nde.address in userParam:
@@ -606,7 +607,7 @@ if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
 
-        polyglot.start('0.8.91')
+        polyglot.start('0.8.92')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
