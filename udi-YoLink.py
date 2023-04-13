@@ -647,17 +647,17 @@ class YoLinkSetup (udi_interface.Node):
             
             
             nodes = self.poly.getNodes()
-            logging.debug('nodes: {}'.format(nodes))
+            #logging.debug('nodes: {}'.format(nodes))
             for nde in nodes:
-                logging.debug('node : {}'.format(nde))
+                #logging.debug('node : {}'.format(nde))
                 if nde in userParam:
 
                     user_param_name = userParam[nde]
                     temp_node = nodes[nde]
-                    logging.debug('User param name : {}, node name {}'.format(user_param_name, temp_node.name))
+                    #logging.debug('User param name : {}, node name {}'.format(user_param_name, temp_node.name))
                     if user_param_name != temp_node.name:
                         temp_node.rename(user_param_name)
-                        logging.debug('renaming node to{}'.format(temp_node.name))
+                        logging.info('Renaming node {} to {}'.format(nde, temp_node.name))
 
 
 
