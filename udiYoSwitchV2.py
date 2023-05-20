@@ -50,6 +50,7 @@ class udiYoSwitch(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSwitch = None
+        self.node_ready = False
         self.timer_cleared = True
         self.n_queue = [] 
         self.last_state = ''
@@ -69,7 +70,10 @@ class udiYoSwitch(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-    
+        self.adr_list = []
+        self.adr_list.append(address)
+        
+            
     def node_queue(self, data):
         self.n_queue.append(data['address'])
 
@@ -87,6 +91,7 @@ class udiYoSwitch(udi_interface.Node):
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
         self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
+        self.node_ready = True
 
 
 

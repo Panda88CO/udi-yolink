@@ -53,6 +53,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoSpeakerHub = None
+        self.node_ready = False
         self.n_queue = []
 
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -62,17 +63,14 @@ class udiYoSpeakerHub(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-                
-        
-
-
-
+   
         # start processing events and create add our controller node
         polyglot.ready()
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        
+        self.adr_list = []
+        self.adr_list.append(address)
     
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -96,7 +94,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.messageNbr = 0
         self.yoSpeakerHub.setMessageNbr(self.messageNbr )
         self.yoSpeakerHub.initNode()
-        time.sleep(2)
+        self.node_ready = True
         #self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
 

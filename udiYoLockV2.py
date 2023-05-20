@@ -46,10 +46,11 @@ class udiYoLock(udi_interface.Node):
         self.n_queue = []   
         
         self.yoAccess = yoAccess
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.yoLock = None
+        self.node_ready = False
         self.last_state = ''
-        self.powerSupported = True # assume 
+        self.powerSupported = True # assume
 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -61,7 +62,8 @@ class udiYoLock(udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        
+        self.adr_list = []
+        self.adr_list.append(address)        
 
     def node_queue(self, data):
         self.n_queue.append(data['address'])
@@ -78,7 +80,7 @@ class udiYoLock(udi_interface.Node):
         self.yoLock  = YoLink_lock(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoLock.initNode()
-        time.sleep(2)
+        self.node_ready = True
         #self.node.setDriver('ST', 1, True, True)
 
 

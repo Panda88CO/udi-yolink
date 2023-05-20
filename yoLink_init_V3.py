@@ -58,6 +58,7 @@ class YoLinkInitPAC(object):
         yoAccess.online = False
         yoAccess.deviceList = []
         yoAccess.token = None
+        yoAccess.unassigned_nodes = []
         try:
             #while not yoAccess.request_new_token( ):
             #    time.sleep(60)
@@ -641,9 +642,9 @@ class YoLinkInitPAC(object):
                 if result.rc == 3: #off line
                     logging.debug('rc = {}'.format(result.rc))
                     yoAccess.online = False
-                if result.rc == 4: #off line
+                if result.rc == 4 : #off line
                     logging.debug('rc = {}'.format(result.rc))
-                    yoAccess.online = False    
+                    yoAccess.online = False
                     yoAccess.client.reconnect() # is this the right strategy 
             else:
                 yoAccess.lastTransferTime = time.time()
@@ -698,6 +699,7 @@ class YoLinkInitPAC(object):
 
     def set_debug(yoAccess, debug):
         yoAccess.debug = debug
+
 
 class YoLinkInitCSID(object):
     def __init__(yoAccess,  csName, csid, csSeckey, yoAccess_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003 ):

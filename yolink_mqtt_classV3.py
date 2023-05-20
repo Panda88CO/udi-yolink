@@ -1086,10 +1086,43 @@ class YoLinkMQTTDevice(object):
     def get_event_from_state(yolink):
         logging.debug('get_event_from_state')
         try:
+            logging.debug('get_event_from_state: {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['event']))
             return(yolink.dataAPI[yolink.dData][yolink.dState]['event'])
         except Exception as E:
             logging.error('Exception in get_event_in_state {} {}'.format(E,yolink.dataAPI[yolink.dData][yolink.dState] ))
 
+    def clear_event_from_state(yolink):
+        logging.debug('clear_event_from_state and last message')
+        try:
+            yolink.dataAPI[yolink.dData][yolink.dState]['event'] =  None
+            if 'event' in yolink.dataAPI[yolink.lastMessage]:
+                yolink.dataAPI[yolink.lastMessage]['event'] = {}
+            return(True)
+        except Exception as E:
+            return(False)
+
+    def isControlEvent(yolink):
+        logging.debug('isControlEvent')
+        try:
+            data = yolink.dataAPI[yolink.lastMessage] 
+            logging.debug('isControlEvent - data {}'.format(data))
+            if 'method' in data:
+                temp = data['method']
+                if '.getState' in temp:
+                    return(False)
+            if 'event' in data:
+                temp = data['event']
+                if 'StatusChange' in temp or '.Alert' in temp:
+                    return(True)
+                else:
+                    return(False)
+            else:
+                return(False)
+        except Exception as E:
+            logging.error('isControlEvent Exception: {}'.format(E))
+            return(False)
+
+                
     '''
     def updateScheduleStatus(yolink, data):
         logging.debug(yolink.type + 'updateScheduleStatus')
