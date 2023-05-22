@@ -17,6 +17,7 @@ class YoLinkManipul(YoLinkMQTTDevice):
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
         yolink.eventList = ['StatusChange', 'Report']
+        yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.ManipulatorName = 'ManipulatorEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'Manipulator'
@@ -35,20 +36,24 @@ class YoLinkManipul(YoLinkMQTTDevice):
     ''' 
 
     
-    def updateStatus(self, data):
-        self.updateCallbackStatus(data, False)
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, False)
 
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState')
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
-            if state.lower() != 'open' and  state.lower() != 'closed':
+            if state.lower() not in yolink.stateList:
                 logging.error('Unknows state passed')
                 return(False)
+            if state.lower() == 'on':
+                state = 'open'
+            if state.lower() == 'off':
+                state = 'closed'
             data = {}
             data['params'] = {}
             data['params']['state'] = state.lower()
-            return(yolink.setDevice( data))
+            return(yolink.setDevice(data))
 
 
     def getState(yolink):

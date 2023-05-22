@@ -161,20 +161,20 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Manipulator switchControl')
         state = int(command.get('value'))     
         if state == 1:
-            self.yoManipulator.setState('ON')
+            self.yoManipulator.setState('open')
             self.node.reportCmd('DON')
         else:
-            self.yoManipulator.setState('OFF')
+            self.yoManipulator.setState('closed')
             self.node.reportCmd('DOF')
 
     def set_open(self, command = None):
         logging.info('Manipulator - set_open')
-        self.yoManipulator.setState('ON')
+        self.yoManipulator.setState('open')
         #self.node.reportCmd('DON')
 
     def set_close(self, command = None):
         logging.info('Manipulator - set_close')
-        self.yoManipulator.setState('OFF')
+        self.yoManipulator.setState('closed')
         #self.node.reportCmd('DOF')
 
     def setOnDelay(self, command ):
