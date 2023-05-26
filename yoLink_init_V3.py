@@ -637,8 +637,8 @@ class YoLinkInitPAC(object):
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 ### check if publish list is full 
                 timeNow_s = time.time()
-                logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize, yoAccess.MAX_MESSAGES))
-                if yoAccess.timeQueue.qsize >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
+                logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize(), yoAccess.MAX_MESSAGES))
+                if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
                     first_TXtime = yoAccess.timeQueue.get()
                     if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
                         logging.debug('Delaying command to ensure no overflow of commands to YoLink server')
