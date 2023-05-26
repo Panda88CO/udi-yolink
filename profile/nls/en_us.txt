@@ -82,6 +82,7 @@ ND-yomanipu-ICON = GenericCtrl
 ST-nlsmanipu-GV0-NAME = Manipulator State
 ST-nlsmanipu-GV1-NAME = On Delay Remaining
 ST-nlsmanipu-GV2-NAME = Off Delay Remaining
+ST-nlsmanipu-BATLVL-NAME = Battery Level
 #ST-nlsmanipu-GV8-NAME = Device Online
 ST-nlsmanipu-ST-NAME = Nodeserver Status
 CMD-nlsmanipu-UPDATE-NAME = Update Status

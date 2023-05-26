@@ -44,7 +44,7 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'CLIHUM', 'value': 0, 'uom': 51},
             {'driver': 'GV4', 'value': 2, 'uom': 25},
             {'driver': 'GV5', 'value': 2, 'uom': 25},
-            {'driver': 'BATLVL', 'value': 5, 'uom': 25},
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'GV7', 'value': 2, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
