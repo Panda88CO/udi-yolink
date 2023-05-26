@@ -128,7 +128,8 @@ class udiYoManipulator(udi_interface.Node):
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
-                    self.node.setDriver('GV2', 0, True, False)      
+                    self.node.setDriver('GV2', 0, True, False)  
+                logging.debug('udiYoManipulator - getBattery: () '.format(self.yoManipulator.getBattery()))    
                 self.node.setDriver('BATLVL', self.yoManipulator.getBattery(), True, True)          
             else:
                 self.node.setDriver('GV0', 99)
