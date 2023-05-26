@@ -36,8 +36,8 @@ class YoLinkManipul(YoLinkMQTTDevice):
     ''' 
 
     
-    def updateStatus(self, data):
-        self.updateCallbackStatus(data, False)
+    def updateStatus(yolink, data):
+        yolink.updateCallbackStatus(data, False)
 
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState')

@@ -27,13 +27,16 @@ class udiYoManipulator(udi_interface.Node):
             'GV0' = Manipulator State
             'GV1' = OnDelay
             'GV2' = OffDelay
-            'GV5' = Online
+            'BATLVL' = BatteryLevel
+            
+            'ST' = Online
             ]
     ''' 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25}, 
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -59,7 +62,7 @@ class udiYoManipulator(udi_interface.Node):
 
         # start processing events and create add our controller node
         polyglot.ready()
-        self.poly.addNode(self)
+        self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
         self.adr_list = []
@@ -81,7 +84,7 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Start - udiYoManipulator')
         self.yoManipulator = YoLinkManipul(self.yoAccess, self.devInfo, self.updateStatus)
         
-        time.sleep(2)
+        time.sleep(4)
         self.yoManipulator.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
@@ -125,11 +128,14 @@ class udiYoManipulator(udi_interface.Node):
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
-                    self.node.setDriver('GV2', 0, True, False)                
+                    self.node.setDriver('GV2', 0, True, False)  
+                logging.debug('udiYoManipulator - getBattery: () '.format(self.yoManipulator.getBattery()))    
+                self.node.setDriver('BATLVL', self.yoManipulator.getBattery(), True, True)          
             else:
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('GV1', 0)     
                 self.node.setDriver('GV2', 0)
+                self.node.setDriver('BATLVL', 99)
                 self.node.setDriver('ST', 0)   
                 
 

@@ -70,7 +70,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
 
         # start processing events and create add our controller node
         polyglot.ready()
-        self.poly.addNode(self)
+        self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
         self.node.setDriver('ST', 1, True, True)

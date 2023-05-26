@@ -213,7 +213,7 @@
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
-
+         <st id="BATLVL" editor="batlevel" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
       </sts>

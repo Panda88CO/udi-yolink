@@ -42,7 +42,7 @@ class udiYoGarageFinger(udi_interface.Node):
 
         
         self.yoAccess=yoAccess
-        self.devInfo =  deviceInfo   
+        self.devInfo =  deviceInfo
         self.node_ready = False
         self.yoDoorControl  = None
         logging.debug('udiYoGarageFinger INIT - {}'.format(deviceInfo['name']))
@@ -54,7 +54,7 @@ class udiYoGarageFinger(udi_interface.Node):
         
         # start processing events and create add our controller node
         polyglot.ready()
-        self.poly.addNode(self)
+        self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
         self.adr_list = []

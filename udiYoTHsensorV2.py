@@ -44,7 +44,7 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'CLIHUM', 'value': 0, 'uom': 51},
             {'driver': 'GV4', 'value': 2, 'uom': 25},
             {'driver': 'GV5', 'value': 2, 'uom': 25},
-            {'driver': 'BATLVL', 'value': 5, 'uom': 25},
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'GV7', 'value': 2, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
@@ -75,7 +75,7 @@ class udiYoTHsensor(udi_interface.Node):
                      
         # start processing events and create add our controller node
         polyglot.ready()
-        self.poly.addNode(self)
+        self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
 
         self.node = self.poly.getNode(address)
