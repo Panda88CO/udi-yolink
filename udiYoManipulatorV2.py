@@ -166,7 +166,7 @@ class udiYoManipulator(udi_interface.Node):
   
     def switchControl(self, command):
         logging.info('Manipulator switchControl')
-        state = int(command.get('value'))     
+        state = int(command.get('value'))
         if state == 1:
             self.yoManipulator.setState('open')
             self.node.reportCmd('DON')
