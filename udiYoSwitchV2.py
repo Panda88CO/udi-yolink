@@ -167,25 +167,25 @@ class udiYoSwitch(udi_interface.Node):
         logging.info('udiYoSwitch set_switch_on')  
         self.yoSwitch.setState('ON')
         self.node.setDriver('GV0',1 , True, True)
-        self.node.reportCmd('DON')
+        #self.node.reportCmd('DON')
 
     def set_switch_off(self, command = None):
         logging.info('udiYoSwitch set_switch_off')  
         self.yoSwitch.setState('OFF')
         self.node.setDriver('GV0',0 , True, True)
-        self.node.reportCmd('DOF')
+        #self.node.reportCmd('DOF')
 
     def set_switch_fon(self, command = None):
         logging.info('udiYoSwitch set_switch_on')  
         self.yoSwitch.setState('ON')
         self.node.setDriver('GV0',1 , True, True)
-        self.node.reportCmd('DFON')
+        #self.node.reportCmd('DFON')
 
     def set_switch_foff(self, command = None):
         logging.info('udiYoSwitch set_switch_off')  
         self.yoSwitch.setState('OFF')
         self.node.setDriver('GV0',0 , True, True)
-        self.node.reportCmd('DFOF')
+        #self.node.reportCmd('DFOF')
 
 
     def switchControl(self, command):
