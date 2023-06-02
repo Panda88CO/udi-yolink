@@ -55,7 +55,7 @@ class udiYoManipulator(udi_interface.Node):
         self.timer_cleared = True
         self.timer_update = 5
         self.timer_expires = 0
-
+        self.valveState = 99 # needed as class c device - keep value until online again 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -115,15 +115,18 @@ class udiYoManipulator(udi_interface.Node):
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
                 if state.upper() == 'OPEN':
-                    self.node.setDriver('GV0', 1, True, True)
+                    self.valveState = 1
+                    self.node.setDriver('GV0', self.valveState , True, True)
                     if self.last_state != state:
                         self.node.reportCmd('DON')
                 elif state.upper() == 'CLOSED':
-                    self.node.setDriver('GV0', 0, True, True)
+                    self.valveState = 0
+                    self.node.setDriver('GV0', self.valveState , True, True)
                     if self.last_state != state:
                         self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99, True, True)
+                    
                 self.last_state = state
                 self.node.setDriver('ST', 1)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
@@ -162,6 +165,7 @@ class udiYoManipulator(udi_interface.Node):
                         self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
                         if max_delay < timeRemaining[delayInfo]['off']:
                             max_delay = timeRemaining[delayInfo]['off']
+                    self.node.setDriver('GV0', self.valveState , True, True)
         self.timer_expires = time.time()+max_delay
   
     def switchControl(self, command):
@@ -169,24 +173,29 @@ class udiYoManipulator(udi_interface.Node):
         state = int(command.get('value'))
         if state == 1:
             self.yoManipulator.setState('open')
-            self.node.setDriver('GV0',1 , True, True)
+            self.valveState = 1
+            self.node.setDriver('GV0',self.valveState  , True, True)
+   
             #self.node.reportCmd('DON')
         else:
             self.yoManipulator.setState('closed')
-            self.node.setDriver('GV0',0 , True, True)
+            self.valveState  = 0
+            self.node.setDriver('GV0',self.valveState , True, True)
             #self.node.reportCmd('DOF')
 
     def set_open(self, command = None):
         logging.info('Manipulator - set_open')
         self.yoManipulator.setState('open')
-        self.node.setDriver('GV0',1 , True, True)
+        self.valveState  = 1
+        self.node.setDriver('GV0',self.valveState  , True, True)
 
         #self.node.reportCmd('DON')
 
     def set_close(self, command = None):
         logging.info('Manipulator - set_close')
         self.yoManipulator.setState('closed')
-        self.node.setDriver('GV0',0 , True, True)
+        self.valveState  = 0
+        self.node.setDriver('GV0',self.valveState  , True, True)
 
         #self.node.reportCmd('DOF')
 
@@ -196,12 +205,14 @@ class udiYoManipulator(udi_interface.Node):
         delay =int(command.get('value'))
         self.yoManipulator.setOnDelay(delay)
         self.node.setDriver('GV1', delay*60, True, True)
+        self.node.setDriver('GV0',self.valveState  , True, True)
 
     def setOffDelay(self, command):
         logging.info('setOnDelay Executed')
         delay =int(command.get('value'))
         self.yoManipulator.setOffDelay(delay)
         self.node.setDriver('GV2', delay*60, True, True)
+        self.node.setDriver('GV0',self.valveState  , True, True)
 
 
 
