@@ -169,24 +169,24 @@ class udiYoManipulator(udi_interface.Node):
         state = int(command.get('value'))
         if state == 1:
             self.yoManipulator.setState('open')
-            self.node.setsetDriver('GV0',1 , True, True)
+            self.node.setDriver('GV0',1 , True, True)
             #self.node.reportCmd('DON')
         else:
             self.yoManipulator.setState('closed')
-            self.node.setsetDriver('GV0',0 , True, True)
+            self.node.setDriver('GV0',0 , True, True)
             #self.node.reportCmd('DOF')
 
     def set_open(self, command = None):
         logging.info('Manipulator - set_open')
         self.yoManipulator.setState('open')
-        self.node.setsetDriver('GV0',1 , True, True)
+        self.node.setDriver('GV0',1 , True, True)
 
         #self.node.reportCmd('DON')
 
     def set_close(self, command = None):
         logging.info('Manipulator - set_close')
         self.yoManipulator.setState('closed')
-        self.node.setsetDriver('GV0',0 , True, True)
+        self.node.setDriver('GV0',0 , True, True)
 
         #self.node.reportCmd('DOF')
 
