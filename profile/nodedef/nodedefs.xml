@@ -344,7 +344,6 @@
          <sends>
             <cmd id="DON" editor="waterstate"  />               
             <cmd id="DOF" editor="waterstate"  />    
-
          </sends>
          <accepts>
             <cmd id="DON" /> 
@@ -356,6 +355,34 @@
    </nodeDef> 
 
 
+   <nodeDef id="yoCOSmokesens" nls="nlssmokesens">
+      <editors />
+      <sts>
+         <st id="ALARM" editor="deviceAlert" />
+         <st id="GV0" editor="SmokeAlert" />
+         <st id="GV1" editor="COAlert" />
+         <st id="GV2" editor="TempAlert" />
+         <st id="GV3" editor="BatteryAlert" />
+         <st id="GV4" editor="batlevel" />
+         <!--st id="GV6" editor="AlertInterval" /-->
+         <st id="GV5" editor="SelfcheckState" />
+         <st id="CLITEMP" editor="tempC" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" editor="deviceAlert"  />               
+            <cmd id="DOF" editor="deviceAlert"  />    
+         </sends>
+         <accepts>
+            <cmd id="DON" /> 
+            <cmd id="DOF" />          
+            <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
    <nodeDef id="yovibrasens" nls="nlsvibrasens">
       <editors />
       <sts>
