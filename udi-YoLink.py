@@ -729,5 +729,3 @@ if __name__ == "__main__":
         polyglot.runForever()
     except (KeyboardInterrupt, SystemExit):
         sys.exit(0)
-        
-

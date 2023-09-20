@@ -617,11 +617,12 @@ class udiYoMultiOutlet(udi_interface.Node):
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
         self.yoMultiOutlet.updateStatus(data)
+        self.updateData()
         if self.yoMultiOutlet.nbrOutlets == 0: # Device was never initialized
             logging.debug('Node server not fully configured yet')
             self.node_ready = True
-            self.yoMultiOutlet.refreshDevice()
-            time.sleep(3)
+            #self.yoMultiOutlet.refreshDevice()
+            time.sleep(60)
             self.start()
             time.sleep(3)
 
@@ -630,7 +631,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         #logging.debug('nbr ports {} , online {}'.format(self.nbrOutlets, self.yoMultiOutlet.online ))
         #logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
         self.delaysActive = False
-        self.updateData()
+        
   
 
 
