@@ -721,7 +721,7 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
 
 
-        polyglot.start('0.9.041')
+        polyglot.start('0.9.41')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
