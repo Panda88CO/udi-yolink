@@ -24,8 +24,10 @@ class udiYoMotionSensor(udi_interface.Node):
     
     '''
        drivers = [
-            'GV0' = Motin Alert
+            'GV0' = Motion Alert
             'GV1' = Battery Level
+            'GV2' = Command Setting
+
             'ST' = Online
             ]
 
@@ -34,6 +36,7 @@ class udiYoMotionSensor(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV2', 'value': 99, 'uom': 25},             
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
@@ -50,6 +53,7 @@ class udiYoMotionSensor(udi_interface.Node):
         self.yoMotionsSensor  = None
         self.node_ready = False
         self.last_state = 99
+        self.cmd_state = 0
         self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -77,10 +81,6 @@ class udiYoMotionSensor(udi_interface.Node):
         while len(self.n_queue) == 0:
             time.sleep(0.1)
         self.n_queue.pop()
-
-
-        
-
 
     def start(self):
         logging.info('start - udiYoLinkMotionSensor')
@@ -124,11 +124,13 @@ class udiYoMotionSensor(udi_interface.Node):
                 if motion_state == 1:
                     self.node.setDriver('GV0', 1, True, True)
                     if self.last_state != motion_state:
-                        self.node.reportCmd('DON')
+                        if self.cmd_state in [0,1]:
+                            self.node.reportCmd('DON')
                 elif motion_state == 0:
                     self.node.setDriver('GV0', 0, True, True)
                     if self.last_state != motion_state:
-                        self.node.reportCmd('DOF')
+                        if self.cmd_state in [0,2]:
+                            self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 self.last_state = motion_state
@@ -147,6 +149,7 @@ class udiYoMotionSensor(udi_interface.Node):
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('GV2', 0, True, True)
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('ST', 0, True, True)
 
@@ -159,8 +162,11 @@ class udiYoMotionSensor(udi_interface.Node):
         #time.sleep(1)
         self.updateData()
 
-
-
+    def set_cmd(self, command):
+        ctrl = int(command.get('value'))   
+        logging.info('udiYoMotionSensor  set_cmd - {}'.format(ctrl))
+        self.cmd_state = ctrl
+        self.node.setDriver('GV2', self.cmd_state, True, True)
 
     def update(self, command = None):
         logging.info('udiYoMotionSensor Update  Executed')
@@ -173,6 +179,7 @@ class udiYoMotionSensor(udi_interface.Node):
     commands = {
                 'UPDATE': update,
                 'QUERY' : update, 
+                'SETCMD': set_cmd,
                 'DON'   : noop,
                 'DOF'   : noop
                 }

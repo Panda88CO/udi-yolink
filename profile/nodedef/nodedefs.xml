@@ -312,6 +312,7 @@
       <sts>
          <st id="GV0" editor="motionstate" />
          <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />

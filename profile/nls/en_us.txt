@@ -134,6 +134,7 @@ ND-yomotionsens-NAME = YoLink Motion Sensor
 ND-yomotionsens-ICON = MotionSensor
 ST-nlsmotionsens-GV0-NAME = Motion State
 ST-nlsmotionsens-GV1-NAME = Sensor Battery Level
+ST-nlsmotionsens-GV2-NAME = Command Setting
 ST-nlsmotionsens-CLITEMP-NAME = Sensor Temperature
 #ST-nlsmotionsens-GV8-NAME = Device Online
 ST-nlsmotionsens-ST-NAME = Nodeserver Status
@@ -246,6 +247,11 @@ ST-nlssiren-ST-NAME = Nodeserver Status
 CMD-nlssiren-UPDATE-NAME = Update
 CMD-nlssiren-QUERY-NAME = Query
 CMD-nlssiren-SIRENCTRL-NAME = Set Sirent
+
+cmdsetting-0 = DON/DOF
+cmdsetting-1 = DON Only
+cmdsetting-2 = DOF Only
+cmdsetting-3 = None
 
 sirenstate-0 = Normal
 sirenstate-1 = Alert

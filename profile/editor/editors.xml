@@ -151,5 +151,8 @@
   <editor id = "sirenbatlevel" > 
      <range  uom="25" subset="0-4,98,99" nls="sirenbatlvl" />
   </editor>
+   <editor id = "cmdsetting" > 
+     <range  uom="25" subset="0-3" nls="cmdsetting" />
+  </editor> 
 </editors> 
 
