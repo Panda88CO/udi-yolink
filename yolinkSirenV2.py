@@ -75,6 +75,18 @@ class YoLinkSir(YoLinkMQTTDevice):
             else:
                 return('Unkown')
     
+    def getSupplyType(yolink):
+        logging.debug(yolink.type+' - getSupplyType')
+        try:
+            if 'powerSupply' in yolink.dataAPI[yolink.dData]:
+                if yolink.dataAPI[yolink.dData]['powerSupply'] == 'battery'
+                    return('battery')
+                else:
+                    return('ext_supply')            
+        except Exception as e:
+            logging.error('No supply type provided')
+            return(None)   
+
     def getData(yolink):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   

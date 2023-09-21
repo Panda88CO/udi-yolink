@@ -135,6 +135,7 @@ class udiYoMotionSensor(udi_interface.Node):
                     self.node.setDriver('GV0', 99, True, True)
                 self.last_state = motion_state
                 self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
+                self.node.setDriver('GV2', self.cmd_state)
                 self.node.setDriver('ST', 1, True, True)
                 devTemp =  self.yoMotionsSensor.getDeviceTemperature()
                 if devTemp != 'NA':
