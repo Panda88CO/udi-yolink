@@ -466,8 +466,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.n_queue.pop()
 
     def start(self):
-
-        self.subNodesReady = False
+        self.node_fully_config = False
         self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
@@ -523,9 +522,8 @@ class udiYoMultiOutlet(udi_interface.Node):
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subUsbAdr[usb], e))
            
-            self.subNodesReady = True
-            logging.info('udiYoMultiOutlet - finished creating sub nodes')
             self.node_fully_config = True
+            logging.info('udiYoMultiOutlet - finished creating sub nodes')
             #logging.debug(self.subnodeAdr)
 
     
@@ -562,7 +560,7 @@ class udiYoMultiOutlet(udi_interface.Node):
 
     def updateData(self):
         outletStates =  self.yoMultiOutlet.getMultiOutStates()
-        if self.subNodesReady:
+        if self.node_fully_config:
             for outlet in range(0,self.nbrOutlets):
                 portName = 'port'+str(outlet)
                 if self.yoMultiOutlet.online:
@@ -618,7 +616,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         #if self.yoMultiOutlet.online:
         self.yoMultiOutlet.updateStatus(data)
         self.updateData()
-        if self.yoMultiOutlet.nbrOutlets == 0: # Device was never initialized
+        if not self.node_fully_config: # Device was never initialized
             logging.debug('Node server not fully configured yet')
             self.node_ready = True
             #self.yoMultiOutlet.refreshDevice()
@@ -630,7 +628,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         #logging.debug(data)
         #logging.debug('nbr ports {} , online {}'.format(self.nbrOutlets, self.yoMultiOutlet.online ))
         #logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
-        self.delaysActive = False
+        #self.delaysActive = False
         
   
 
