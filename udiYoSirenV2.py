@@ -21,7 +21,7 @@ from yolinkSirenV2 import YoLinkSir
 
 
 class udiYoSiren(udi_interface.Node):
-    id = 'yomanipu'
+    id = 'yosiren'
     '''
        drivers = [
             'GV0' = Siren State
@@ -31,7 +31,7 @@ class udiYoSiren(udi_interface.Node):
             
             'ST' = Online
             ]
-    ''' 
+    '''  #Needs update 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
