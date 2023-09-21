@@ -16,7 +16,7 @@ class YoLinkSir(YoLinkMQTTDevice):
         super().__init__( yoAccess,  deviceInfo, callback)
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState']
-        yolink.stateList = [[]'on', 'off']
+        yolink.stateList = ['normal', 'alert', 'off' ]
         yolink.SirenName = 'SirenEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'Siren'

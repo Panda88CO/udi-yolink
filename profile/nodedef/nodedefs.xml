@@ -383,6 +383,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
    <nodeDef id="yovibrasens" nls="nlsvibrasens">
       <editors />
       <sts>
@@ -532,6 +533,31 @@
       </cmds>
    </nodeDef> 
 
+
+
+   <nodeDef id="yosiren" nls="nlssiren">
+      <editors />
+      <sts>
+         <st id="GV0" editor="sirenstate" />
+         <st id="GV1" editor="sirenduration" />
+         <st id="GV2" editor="sirenbatlevel" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         </sends>
+         <accepts> 
+            <cmd id="SIRENCTRL" > 
+               <p id="" editor="manctrl" init="1" /> 
+            </cmd >
+            <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
    <nodeDef id="yosmremote" nls="nlssmremote">
       <editors />
       <sts>
@@ -553,6 +579,8 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
+
 
    <nodeDef id="smremotekey" nls="nlssmkey">
       <editors />

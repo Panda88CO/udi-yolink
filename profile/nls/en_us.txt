@@ -237,6 +237,29 @@ ST-nlspwralarm-ST-NAME = Nodeserver Status
 CMD-nlspwralarm-UPDATE-NAME = Update
 CMD-nlspwralarm-QUERY-NAME = Query
 
+ND-yosiren-NAME = YoLink Power Failure Alarm
+ND-yosiren-ICON = getOnlineStatusput
+ST-nlssiren-GV0-NAME = Siren State
+ST-nlssiren-GV1-NAME = Siren Duration
+ST-nlssiren-GV2-NAME = Supply State
+ST-nlssiren-ST-NAME = Nodeserver Status
+CMD-nlssiren-UPDATE-NAME = Update
+CMD-nlssiren-QUERY-NAME = Query
+CMD-nlssiren-SIRENCTRL-NAME = Set Sirent
+
+sirenstate-0 = Normal
+sirenstate-1 = Alert
+sirenstate-2 = Off
+sirenstate-99 = Unknown 
+
+sirenbatlvl-0 = Low 
+sirenbatlvl-1 = Medium Low
+sirenbatlvl-2 = Medium
+sirenbatlvl-3 = Medium High
+sirenbatlvl-4 = High
+sirenbatlvl-98 = Extrnal Power
+sirenbatlvl-99 = Unknown
+
 pfamute-0 = Not muted
 pfamute-1 = Muted
 pfamute-99 = Unknown

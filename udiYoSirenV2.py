@@ -18,27 +18,22 @@ import time
 from yolinkSirenV2 import YoLinkSir
 
 
-
-
 class udiYoSiren(udi_interface.Node):
     id = 'yosiren'
     '''
        drivers = [
             'GV0' = Siren State
-            'GV1' = OnDelay
-            'GV2' = OffDelay
-            'BATLVL' = BatteryLevel
-            
+            'GV1' = Alarm Duration
+            'GV2' = BatteryLevel
             'ST' = Online
             ]
     '''  #Needs update 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 44}, # minutes
+            {'driver': 'GV2', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+
             ]
 
 
@@ -123,7 +118,7 @@ class udiYoSiren(udi_interface.Node):
                     if self.last_state != state:
                         self.node.reportCmd('DON')
                 elif state.upper() == 'OFF':
-                    self.valveState = 0
+                    self.valveState = 2
                     self.node.setDriver('GV0', self.valveState , True, True)
                 else:
                     self.node.setDriver('GV0', 99, True, True)
@@ -133,13 +128,11 @@ class udiYoSiren(udi_interface.Node):
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
-                    self.node.setDriver('GV2', 0, True, False)  
                 logging.debug('udiYoSiren - getBattery: () '.format(self.yoSiren.getBattery()))    
                 self.node.setDriver('BATLVL', self.yoSiren.getBattery(), True, True)          
             else:
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('GV1', 0)     
-                self.node.setDriver('GV2', 0)
                 self.node.setDriver('BATLVL', 99)
                 self.node.setDriver('ST', 0)   
                 
@@ -148,24 +141,20 @@ class udiYoSiren(udi_interface.Node):
         logging.info('updateStatus - udiYoSiren')
         self.yoSiren.updateStatus(data)
         self.updateData()
-      
+    
 
-
-
-    def switchControl(self, command):
-        logging.info('Siren switchControl')
+    def sirenControl(self, command):
+        logging.info('Siren Control')
         state = int(command.get('value'))
         if state == 1:
             self.yoSiren.setState('on')
             self.valveState = True
             self.node.setDriver('GV0',self.valveState  , True, True)
-   
-            #self.node.reportCmd('DON')
         else:
             self.yoSiren.setState('off')
             self.valveState  = False
             self.node.setDriver('GV0',self.valveState , True, True)
-            #self.node.reportCmd('DOF')
+
 
     def set_open(self, command = None):
         logging.info('Siren - set_alert')
@@ -192,10 +181,7 @@ class udiYoSiren(udi_interface.Node):
     commands = {
                 'UPDATE': update,
                 'QUERY' : update,
-                'DON'   : set_open,
-                'DOF'   : set_close,
-                'ALARMCTRL': switchControl, 
-
+                'SIRENCTRL': sirenControl, 
                 }
 
 
