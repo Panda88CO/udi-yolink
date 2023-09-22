@@ -133,7 +133,7 @@ class udiYoSiren(udi_interface.Node):
        
             else:
                 self.node.setDriver('GV0', 99)
-                self.node.setDriver('GV1', 0)     
+                self.node.setDriver('GV1', 0)
                 self.node.setDriver('GV2', 99)
                 self.node.setDriver('ST', 0)
                 

@@ -151,6 +151,10 @@
   <editor id = "sirenbatlevel" > 
      <range  uom="25" subset="0-4,98,99" nls="sirenbatlvl" />
   </editor>
+    </editor>
+    <editor id = "sirenctrl" > 
+     <range  uom="25" subset="0-1" nls="sirenctrl" />
+  </editor>
    <editor id = "cmdsetting" > 
      <range  uom="25" subset="0-3" nls="cmdsetting" />
   </editor> 

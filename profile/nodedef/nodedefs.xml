@@ -323,8 +323,12 @@
             <cmd id="DOF" editor="motionstate"  />    
          </sends>
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
             <cmd id="DON" /> 
-            <cmd id="DOF" />          
+            <cmd id="DOF" />      
+
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
             
@@ -551,7 +555,7 @@
          </sends>
          <accepts> 
             <cmd id="SIRENCTRL" > 
-               <p id="" editor="manctrl" init="1" /> 
+               <p id="" editor="sirenctrl" init="1" /> 
             </cmd >
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 

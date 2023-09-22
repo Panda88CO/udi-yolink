@@ -266,6 +266,9 @@ sirenbatlvl-4 = High
 sirenbatlvl-98 = Extrnal Power
 sirenbatlvl-99 = Unknown
 
+sirenctrl-0 = Normal
+sirenctrl-1 = Alert
+
 pfamute-0 = Not muted
 pfamute-1 = Muted
 pfamute-99 = Unknown
