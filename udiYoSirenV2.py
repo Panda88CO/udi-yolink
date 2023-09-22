@@ -30,7 +30,7 @@ class udiYoSiren(udi_interface.Node):
     '''  #Needs update 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 44}, # minutes
+            {'driver': 'GV1', 'value': 0, 'uom': 58}, # seconds
             {'driver': 'GV2', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
 

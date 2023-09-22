@@ -146,7 +146,7 @@
      <range  uom="25" subset="0-2, 99" nls="keycmd" />
    </editor>  
    <editor id = "sirenduration" > 
-     <range  uom="44" min="0" max ="1440" prec="0" />
+     <range  uom="58" min="0" max ="3600" prec="0" />
   </editor>
   <editor id = "sirenbatlevel" > 
      <range  uom="25" subset="0-4,98,99" nls="sirenbatlvl" />
