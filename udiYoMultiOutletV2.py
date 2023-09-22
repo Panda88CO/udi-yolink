@@ -620,7 +620,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             logging.debug('Node server not fully configured yet')
             self.node_ready = True
             #self.yoMultiOutlet.refreshDevice()
-            time.sleep(60)
+            time.sleep(10)
             self.start()
             time.sleep(3)
 
