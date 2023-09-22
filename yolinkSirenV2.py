@@ -87,6 +87,18 @@ class YoLinkSir(YoLinkMQTTDevice):
             logging.error('No supply type provided')
             return(None)   
 
+    def getSirenDuration(yolink):
+        logging.debug(yolink.type+' - getSirenDuration')
+        try:
+            if 'alarmDuration' in yolink.dataAPI[yolink.dData]:
+                return (yolink.dataAPI[yolink.dData]['alarmDuration'])
+            else:
+                return (0)          
+        except Exception as e:
+            logging.error('No alarmDuration provided')
+            return(None)   
+
+
     def getData(yolink):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   

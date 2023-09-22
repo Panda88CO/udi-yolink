@@ -110,31 +110,32 @@ class udiYoSiren(udi_interface.Node):
                 if state.upper() == 'NORMAL':
                     self.valveState = 1
                     self.node.setDriver('GV0', self.valveState , True, True)
-                    if self.last_state != state:
-                        self.node.reportCmd('DOF')
                 elif state.upper() == 'ALERT':
                     self.valveState = 0
                     self.node.setDriver('GV0', self.valveState , True, True)
-                    if self.last_state != state:
-                        self.node.reportCmd('DON')
                 elif state.upper() == 'OFF':
                     self.valveState = 2
                     self.node.setDriver('GV0', self.valveState , True, True)
                 else:
                     self.node.setDriver('GV0', 99, True, True)
-                    
-                self.last_state = state
+                if self.yoSiren.getSupplyType() == 'battery':
+                    logging.debug('udiYoSiren - getBattery: () '.format(self.yoSiren.getBattery()))    
+                    self.node.setDriver('GV2', self.yoSiren.getBattery(), True, True)
+                elif self.yoSiren.getSupplyType() == 'ext_supply':
+                    logging.debug('udiYoSiren - externalk Supply')    
+                    self.node.setDriver('GV2', 98)
+                else:
+                    self.node.setDriver('GV2', 99)
+
+                logging.debug('AlarmDuration : {}'.format(self.yoSiren.getSirenDuration()))
                 self.node.setDriver('ST', 1)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
-                if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
-                    self.node.setDriver('GV1', 0, True, False)
-                logging.debug('udiYoSiren - getBattery: () '.format(self.yoSiren.getBattery()))    
-                self.node.setDriver('BATLVL', self.yoSiren.getBattery(), True, True)          
+       
             else:
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('GV1', 0)     
-                self.node.setDriver('BATLVL', 99)
-                self.node.setDriver('ST', 0)   
+                self.node.setDriver('GV2', 99)
+                self.node.setDriver('ST', 0)
                 
 
     def updateStatus(self, data):
