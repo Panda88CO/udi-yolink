@@ -79,7 +79,7 @@ class YoLinkSir(YoLinkMQTTDevice):
         logging.debug(yolink.type+' - getSupplyType')
         try:
             if 'powerSupply' in yolink.dataAPI[yolink.dData]:
-                if yolink.dataAPI[yolink.dData]['powerSupply'] == 'battery'
+                if yolink.dataAPI[yolink.dData]['powerSupply'] == 'battery':
                     return('battery')
                 else:
                     return('ext_supply')            
