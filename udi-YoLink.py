@@ -125,8 +125,8 @@ class YoLinkSetup (udi_interface.Node):
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
                                 'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
-                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor' ]
-        self.supportedYoTypes = ['MultiOutlet' ]
+                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren' ]
+        self.supportedYoTypes = ['MultiOutlet', 'Siren', 'MotionSensor' ]
         
         #self.supportedYoTypes = [ 'THSensor' ]
 
@@ -510,6 +510,25 @@ class YoLinkSetup (udi_interface.Node):
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
+
+
+                elif dev['type'] == 'Siren': 
+                    name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    address = self.poly.getValidAddress(name)
+                    if address in self.Parameters:
+                        name = self.Parameters[address]
+                    else:
+                        name = dev['name']
+                        name = self.poly.getValidName(name)
+                        self.Parameters[name] =  dev['name']                    
+                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                    temp = udiYoSiren(self.poly, address, address, name, self.yoAccess, dev )
+                    while not temp.node_ready:
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
+                        time.sleep(1)
+                    for adr in temp.adr_list:
+                        self.assigned_addresses.append(adr)
+                                                
             else:
                 logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
         time.sleep(1)
@@ -721,7 +740,7 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
 
 
-        polyglot.start('0.9.44')
+        polyglot.start('0.9.45')
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
