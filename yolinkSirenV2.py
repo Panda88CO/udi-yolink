@@ -105,7 +105,7 @@ class YoLinkSir(YoLinkMQTTDevice):
             return(yolink.getData())
 
 
-class YoLinkSiren(YoLinkManipul):
+class YoLinkSiren(YoLinkSir):
     def __init__(yolink, yoAccess,  deviceInfo):
         super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)
         yolink.initNode()
