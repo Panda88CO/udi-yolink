@@ -80,7 +80,7 @@ class udiYoSiren(udi_interface.Node):
         logging.info('Start - udiYoSiren')
         self.yoSiren = YoLinkSir(self.yoAccess, self.devInfo, self.updateStatus)
         
-        time.sleep(4)
+        time.sleep(2)
         self.yoSiren.initNode()
         time.sleep(2)
         self.node_ready = True
