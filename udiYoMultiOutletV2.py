@@ -65,6 +65,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.node = polyglot.getNode(self.address)
         
         time.sleep(1)
+
         
         
     def node_queue(self, data):
@@ -466,8 +467,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.n_queue.pop()
 
     def start(self):
-        self.node_fully_config = False
-        self.usbExists = True
+        #self.node_fully_config = False
+        #self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
         self.node.setDriver('ST', 1, True, True)
@@ -502,6 +503,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.outletName = 'outlet'
             self.usbName = 'usb'
             self.node.setDriver('ST', 1, True, True)
+            logging.debug('Checking/creating  Outkletst  {}'.format(self.yoMultiOutlet.nbrOutlets))
             for port in range(0,self.yoMultiOutlet.nbrOutlets):
                 try:
                     #logging.debug('Adding sub outlet : {}'.format(port))
@@ -513,6 +515,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                                     
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subOutletAdr[port], e))
+            logging.debug('Checking/creating  USB  {}'.format(self.yoMultiOutlet.nbrUsb))
             for usb in range(0, self.yoMultiOutlet.nbrUsb):
                 try:
                     self.subUsbAdr[usb] = self.address[3:14]+'_u'+str(usb)
@@ -523,9 +526,10 @@ class udiYoMultiOutlet(udi_interface.Node):
                     self.usbExists = True
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subUsbAdr[usb], e))
-           
+            
             self.node_fully_config = True
-            logging.info('udiYoMultiOutlet - finished creating sub nodes')
+            logging.info('udiYoMultiOutlet - finished creating sub nodes - {} '.format(self.node_fully_config ))
+
             #logging.debug(self.subnodeAdr)
 
     
