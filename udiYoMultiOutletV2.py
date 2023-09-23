@@ -481,7 +481,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         #    self.node.setDriver('ST', 0, True, True)
         #    #self.node_fully_config = False
         if self.yoMultiOutlet.nbrOutlets == 0: 
-            self.node_fully_config = False
+            #self.node_fully_config = False
             self.node.setDriver('ST', 0, True, True)
         else:
             self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
@@ -616,6 +616,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         #if self.yoMultiOutlet.online:
         self.yoMultiOutlet.updateStatus(data)
         self.updateData()
+
+        logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         if not self.node_fully_config: # Device was never initialized
             logging.debug('Node server not fully configured yet')
             self.node_ready = True

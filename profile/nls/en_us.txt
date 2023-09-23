@@ -238,15 +238,15 @@ ST-nlspwralarm-ST-NAME = Nodeserver Status
 CMD-nlspwralarm-UPDATE-NAME = Update
 CMD-nlspwralarm-QUERY-NAME = Query
 
-ND-yosiren-NAME = YoLink Power Failure Alarm
-ND-yosiren-ICON = getOnlineStatusput
+ND-yosiren-NAME = YoLink Siren
+ND-yosiren-ICON = Output
 ST-nlssiren-GV0-NAME = Siren State
 ST-nlssiren-GV1-NAME = Siren Duration
 ST-nlssiren-GV2-NAME = Supply State
 ST-nlssiren-ST-NAME = Nodeserver Status
 CMD-nlssiren-UPDATE-NAME = Update
 CMD-nlssiren-QUERY-NAME = Query
-CMD-nlssiren-SIRENCTRL-NAME = Set Sirent
+CMD-nlssiren-SIRENCTRL-NAME = Set Control
 
 cmdsetting-0 = DON/DOF
 cmdsetting-1 = DON Only
