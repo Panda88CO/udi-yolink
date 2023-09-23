@@ -1073,6 +1073,7 @@ class YoLinkMQTTDevice(object):
                         #yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                 yolink.updateLoraInfo(data)
                 yolink.updateMessageInfo(data)
+                logging.debug('Nbr Outlets {}'.format(yolink.nbrOutlets ))
                 logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
 
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts

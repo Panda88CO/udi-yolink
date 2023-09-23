@@ -481,8 +481,8 @@ class udiYoMultiOutlet(udi_interface.Node):
         #    self.node.setDriver('ST', 0, True, True)
         #    #self.node_fully_config = False
 
-        logging.debug('beofre start {} {}'.format(self.yoMultiOutlet.nbrOutlets, self.node_fully_config ))
-        if self.yoMultiOutlet.nbrOutlets == 0: 
+        logging.debug('before start {} {}'.format(self.yoMultiOutlet.nbrOutlets, self.node_fully_config ))
+        if self.yoMultiOutlet.nbrOutlets == 0 and not self.yoMultiOutlet.online: 
             #self.node_fully_config = False
             self.node.setDriver('ST', 0, True, True)
         else:
