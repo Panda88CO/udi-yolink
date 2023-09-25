@@ -43,9 +43,9 @@ class YoLinkSir(YoLinkMQTTDevice):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:
             if state == 'on':
-                state = 'on'
+                state = 'alert'
             if state == 'off':
-                state = 'off'
+                state = 'normal'
             else:
                 logging.error('Unknows state passed')
                 return(False)
