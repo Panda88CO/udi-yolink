@@ -129,6 +129,7 @@ class udiYoSiren(udi_interface.Node):
                     self.node.setDriver('GV2', 99, True, True)
 
                 logging.debug('AlarmDuration : {}'.format(self.yoSiren.getSirenDuration()))
+                self.node.setDriver('GV1', self.yoSiren.getSirenDuration(), True, True)
                 self.node.setDriver('ST', 1)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
        

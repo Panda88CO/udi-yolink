@@ -60,38 +60,38 @@ class YoLinkSir(YoLinkMQTTDevice):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:
             attempts = 0
-            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
+            while yolink.dataAPI[yolink.dData] == {} and attempts < 3:
                 time.sleep(1)
                 attempts = attempts + 1
             if attempts <= 5:
-                if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'normal':
+                if  yolink.dataAPI[yolink.dData]['state'] == 'normal':
                     return('normal')
-                elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'alert':
+                elif yolink.dataAPI[yolink.dData]['state'] == 'alert':
                     return('alert')
-                elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'off':
-                    return('off')                
+                elif yolink.dataAPI[yolink.dData]['state'] == 'off':
+                    return('off')
                 else:
                     return('Unkown')
             else:
                 return('Unkown')
     
     def getSupplyType(yolink):
-        logging.debug(yolink.type+' - getSupplyType')
+        logging.debug(yolink.type+' - getSupplyType = {}'.format(yolink.dataAPI[yolink.dData]))
         try:
-            if 'powerSupply' in yolink.dataAPI[yolink.dData][yolink.dData]:
-                if yolink.dataAPI[yolink.dData][yolink.dData]['powerSupply'] == 'battery':
+            if 'powerSupply' in yolink.dataAPI[yolink.dData]:
+                if yolink.dataAPI[yolink.dData]['powerSupply'] == 'battery':
                     return('battery')
                 else:
-                    return('ext_supply')    
+                    return('ext_supply')
         except Exception as e:
             logging.error('No supply type provided')
             return(None)   
 
     def getSirenDuration(yolink):
-        logging.debug(yolink.type+' - getSirenDuration')
+        logging.debug(yolink.type+' - getSirenDuration:{}'.format(yolink.dataAPI[yolink.dData]))
         try:
-            if 'alarmDuration' in yolink.dataAPI[yolink.dData][yolink.dData]:
-                return (yolink.dataAPI[yolink.dData][yolink.dData]['alarmDuration'])
+            if 'alarmDuration' in yolink.dataAPI[yolink.dData]:
+                return (yolink.dataAPI[yolink.dData]['alarmDuration'])
             else:
                 return (0)          
         except Exception as e:
