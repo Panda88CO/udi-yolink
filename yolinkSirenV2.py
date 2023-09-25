@@ -90,8 +90,8 @@ class YoLinkSir(YoLinkMQTTDevice):
     def getSirenDuration(yolink):
         logging.debug(yolink.type+' - getSirenDuration:{}'.format(yolink.dataAPI[yolink.dData]))
         try:
-            if 'alarmDuration' in yolink.dataAPI[yolink.dData]:
-                return (yolink.dataAPI[yolink.dData]['alarmDuration'])
+            if 'alarmDuation' in yolink.dataAPI[yolink.dData]:
+                return (yolink.dataAPI[yolink.dData]['alarmDuation'])
             else:
                 return (0)          
         except Exception as e:
