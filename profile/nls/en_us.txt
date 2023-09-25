@@ -139,6 +139,7 @@ ST-nlsmotionsens-CLITEMP-NAME = Sensor Temperature
 #ST-nlsmotionsens-GV8-NAME = Device Online
 ST-nlsmotionsens-ST-NAME = Nodeserver Status
 CMD-nlsmotionsens-UPDATE-NAME = Update Motion Status
+CMD-nlsmotionsens-SETCMD-NAME = Select Command Action
 CMD-nlsmotionsens-QUERY-NAME = Query
 CMD-nlsmotionsens-DON-NAME = Motion
 CMD-nlsmotionsens-DOF-NAME = No Motion
