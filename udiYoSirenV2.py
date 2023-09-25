@@ -50,7 +50,7 @@ class udiYoSiren(udi_interface.Node):
         self.timer_cleared = True
         self.timer_update = 5
         self.timer_expires = 0
-        self.valveState = 99 # needed as class c device - keep value until online again 
+        self.sirenState = 99 # needed as class c device - keep value until online again 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -107,25 +107,26 @@ class udiYoSiren(udi_interface.Node):
         if self.node is not None:
             state =  self.yoSiren.getState()
             if self.yoSiren.online:
+                logging.debug('Siren state {}'.format(state))
                 if state.upper() == 'NORMAL':
-                    self.valveState = 1
-                    self.node.setDriver('GV0', self.valveState , True, True)
+                    self.sirenState = 1
+                    self.node.setDriver('GV0', self.sirenState , True, True)
                 elif state.upper() == 'ALERT':
-                    self.valveState = 0
-                    self.node.setDriver('GV0', self.valveState , True, True)
+                    self.sirenState = 0
+                    self.node.setDriver('GV0', self.sirenState , True, True)
                 elif state.upper() == 'OFF':
-                    self.valveState = 2
-                    self.node.setDriver('GV0', self.valveState , True, True)
+                    self.sirenState = 2
+                    self.node.setDriver('GV0', self.sirenState , True, True)
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 if self.yoSiren.getSupplyType() == 'battery':
                     logging.debug('udiYoSiren - getBattery: () '.format(self.yoSiren.getBattery()))    
                     self.node.setDriver('GV2', self.yoSiren.getBattery(), True, True)
                 elif self.yoSiren.getSupplyType() == 'ext_supply':
-                    logging.debug('udiYoSiren - externalk Supply')    
-                    self.node.setDriver('GV2', 98)
+                    logging.debug('udiYoSiren - external Supply')    
+                    self.node.setDriver('GV2', 98, True, True)
                 else:
-                    self.node.setDriver('GV2', 99)
+                    self.node.setDriver('GV2', 99, True, True)
 
                 logging.debug('AlarmDuration : {}'.format(self.yoSiren.getSirenDuration()))
                 self.node.setDriver('ST', 1)
@@ -149,12 +150,12 @@ class udiYoSiren(udi_interface.Node):
         state = int(command.get('value'))
         if state == 1:
             self.yoSiren.setState('on')
-            self.valveState = True
-            self.node.setDriver('GV0',self.valveState  , True, True)
+            self.sirenState = 1
+            self.node.setDriver('GV0',self.sirenState , True, True)
         else:
             self.yoSiren.setState('off')
-            self.valveState  = False
-            self.node.setDriver('GV0',self.valveState , True, True)
+            self.sirenState  = 0
+            self.node.setDriver('GV0', self.sirenState , True, True)
 
 
 
