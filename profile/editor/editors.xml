@@ -141,7 +141,7 @@
      <range  uom="25" subset="0-5, 99" nls="keycmd" />
    </editor>  
    <editor id = "sirenstate" > 
-     <range  uom="25" subset="0-2, 99" nls="keycmd" />
+     <range  uom="25" subset="0-2, 99" nls="sirenstate" />
    </editor>  
    <editor id = "sirenduration" > 
      <range  uom="58" min="0" max ="3600" prec="0" />
