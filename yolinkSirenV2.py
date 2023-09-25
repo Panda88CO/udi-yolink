@@ -39,19 +39,19 @@ class YoLinkSir(YoLinkMQTTDevice):
         yolink.updateCallbackStatus(data, False)
 
     def setState(yolink, state):
-        logging.debug(yolink.type+' - setState')
+        logging.debug(yolink.type+' - setState = {}'.format(state))
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
-            if state.lower() not in yolink.stateList:
-                logging.error('Unknows state passed')
-                return(False)
             if state.lower() == 'on':
                 state = True
             if state.lower() == 'off':
                 state = False
+            else:
+                logging.error('Unknows state passed')
+                return(False)
             data = {}
             data['params'] = {}
-            data['params']['state'] = state.lower()
+            data['params']['state'] = state
             return(yolink.setDevice(data))
 
 
@@ -82,7 +82,7 @@ class YoLinkSir(YoLinkMQTTDevice):
                 if yolink.dataAPI[yolink.dData]['powerSupply'] == 'battery':
                     return('battery')
                 else:
-                    return('ext_supply')            
+                    return('ext_supply')    
         except Exception as e:
             logging.error('No supply type provided')
             return(None)   

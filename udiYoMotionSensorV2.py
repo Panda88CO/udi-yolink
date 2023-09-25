@@ -120,6 +120,7 @@ class udiYoMotionSensor(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             if self.yoMotionsSensor.online:
+                logging.debug('Motion sensor CMD setting: {}'.format(self.cmd_state))
                 motion_state = self.getMotionState()
                 if motion_state == 1:
                     self.node.setDriver('GV0', 1, True, True)
