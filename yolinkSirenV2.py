@@ -64,11 +64,11 @@ class YoLinkSir(YoLinkMQTTDevice):
                 time.sleep(1)
                 attempts = attempts + 1
             if attempts <= 5:
-                if  yolink.dataAPI[yolink.dData]['state'] == 'normal':
+                if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'normal':
                     return('normal')
-                elif yolink.dataAPI[yolink.dData]['state'] == 'alert':
+                elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'alert':
                     return('alert')
-                elif yolink.dataAPI[yolink.dData]['state'] == 'off':
+                elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'off':
                     return('off')
                 else:
                     return('Unkown')
@@ -78,8 +78,8 @@ class YoLinkSir(YoLinkMQTTDevice):
     def getSupplyType(yolink):
         logging.debug(yolink.type+' - getSupplyType = {}'.format(yolink.dataAPI[yolink.dData]))
         try:
-            if 'powerSupply' in yolink.dataAPI[yolink.dData]:
-                if yolink.dataAPI[yolink.dData]['powerSupply'] == 'battery':
+            if 'powerSupply' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                if yolink.dataAPI[yolink.dData][yolink.dState]['powerSupply'] == 'battery':
                     return('battery')
                 else:
                     return('ext_supply')
@@ -90,8 +90,8 @@ class YoLinkSir(YoLinkMQTTDevice):
     def getSirenDuration(yolink):
         logging.debug(yolink.type+' - getSirenDuration:{}'.format(yolink.dataAPI[yolink.dData]))
         try:
-            if 'alarmDuation' in yolink.dataAPI[yolink.dData]:
-                return (yolink.dataAPI[yolink.dData]['alarmDuation'])
+            if 'alarmDuation' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                return (yolink.dataAPI[yolink.dData][yolink.dState]['alarmDuation'])
             else:
                 return (0)          
         except Exception as e:
