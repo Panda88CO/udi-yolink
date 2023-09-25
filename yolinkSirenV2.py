@@ -41,10 +41,10 @@ class YoLinkSir(YoLinkMQTTDevice):
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState = {}'.format(state))
         #yolink.online = yolink.getOnlineStatus()
-        if yolink.online:   
-            if state.lower() == 'on':
+        if yolink.online:
+            if state == 'on':
                 state = True
-            if state.lower() == 'off':
+            if state == 'off':
                 state = False
             else:
                 logging.error('Unknows state passed')
@@ -58,7 +58,7 @@ class YoLinkSir(YoLinkMQTTDevice):
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
         #yolink.online = yolink.getOnlineStatus()
-        if yolink.online:   
+        if yolink.online:
             attempts = 0
             while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
                 time.sleep(1)

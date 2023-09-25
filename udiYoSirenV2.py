@@ -157,21 +157,6 @@ class udiYoSiren(udi_interface.Node):
             self.node.setDriver('GV0',self.valveState , True, True)
 
 
-    def set_open(self, command = None):
-        logging.info('Siren - set_alert')
-        self.yoSiren.setState('on')
-        self.valveState  = True
-        self.node.setDriver('GV0',self.valveState  , True, True)
-
-        #self.node.reportCmd('DON')
-
-    def set_close(self, command = None):
-        logging.info('Siren - set_normal')
-        self.yoSiren.setState('off')
-        self.valveState  = False
-        self.node.setDriver('GV0',self.valveState  , True, True)
-
-
 
     def update(self, command = None):
         logging.info('Update Status Executed')
