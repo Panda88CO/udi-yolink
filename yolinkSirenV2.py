@@ -47,7 +47,7 @@ class YoLinkSir(YoLinkMQTTDevice):
             if state == 'off' or state == 'normal' or state == False:
                 state = 'normal'
             else:
-                logging.error('Unknows state passed')
+                logging.error('Unknows state passed - {}'.format(state))
                 return(False)
             data = {}
             data['params'] = {}
