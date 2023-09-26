@@ -555,7 +555,7 @@
          </sends>
          <accepts> 
             <cmd id="SIRENCTRL" > 
-               <p id="" editor="sirenctrl" init="0" /> 
+               <p id="" editor="sirenctrl" init="1" /> 
             </cmd >
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
