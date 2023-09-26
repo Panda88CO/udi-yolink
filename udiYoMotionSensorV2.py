@@ -36,7 +36,7 @@ class udiYoMotionSensor(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 99, 'uom': 25},             
+            {'driver': 'GV2', 'value': 0, 'uom': 25},      
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
