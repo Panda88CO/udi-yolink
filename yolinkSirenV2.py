@@ -52,6 +52,7 @@ class YoLinkSir(YoLinkMQTTDevice):
                 return(False)
             data = {}
             data['params'] = {}
+            data['params']['state'] = {}
             data['params']['state']['alarm'] = sirenState
             return(yolink.setDevice(data))
 
