@@ -148,6 +148,7 @@ ND-yoleaksens-NAME = YoLink Water Sensor
 ND-yoleaksens-ICON = Input
 ST-nlsleaksens-GV0-NAME = Water Sensor
 ST-nlsleaksens-GV1-NAME = Sensor Battery Level
+ST-nlsleaksens-GV2-NAME = Command Setting
 ST-nlsleaksens-CLITEMP-NAME = Sensor Temperature
 #ST-nlsleaksens-GV8-NAME = Device Online
 ST-nlsleaksens-ST-NAME = Nodeserver Status
@@ -227,6 +228,52 @@ ST-nlsirremote-ST-NAME = Nodeserver Status
 CMD-nlsirremote-TXCODE-NAME = Send Code
 CMD-nlsirremote-UPDATE-NAME = Update
 CMD-nlsirremote-QUERY-NAME = Query
+
+ND-yoCOSmokesens-NAME = YoLink COSmokeSensor
+ND-yoCOSmokesens-ICON = Input
+ST-nlssmokesens-ALARM-NAME = Alert Detected
+ST-nlssmokesens-GV0-NAME = Smoke Detection
+ST-nlssmokesens-GV1-NAME = CO Detection
+ST-nlssmokesens-GV2-NAME = High Temp Detection
+ST-nlssmokesens-GV3-NAME = Battery Problem Detection
+ST-nlssmokesens-GV5-NAME = Self-check 
+ST-nlssmokesens-GV4-NAME = Sensor Battery Level
+ST-nlssmokesens-GV7-NAME = Command Setting
+
+ST-nlssmokesens-CLITEMP-NAME = Sensor Temperature
+ST-nlssmokesens-ST-NAME = Nodeserver Status
+CMD-nlssmokesens-UPDATE-NAME = Update Sensor Status
+CMD-nlssmokesens-QUERY-NAME = Query
+CMD-nlssmokesens-DON-NAME = Alert Detected
+CMD-nlssmokesens-DOF-NAME = Normal
+
+deviceAlert-0 = Normal
+deviceAlert-1 = Alert
+deviceAlert-99 = Unknown
+
+SmokeAlert-0 = Normal
+SmokeAlert-1 = Smoke Alert
+SmokeAlert-98 = No Support
+SmokeAlert-99 = Unknown
+
+COAlert-0 = Normal
+COAlert-1 = CO Alret
+COAlert-98 = No Support
+COAlert-99 = Unknown
+
+TempAlert-0 = Normal
+TempAlert-1 = High Temp Alert
+TempAlert-98 = No Support
+TempAlert-99 = Unknown
+
+BatteryAlert-0 = Normal
+BatteryAlert-1 = Low Bettery Alert
+BatteryAlert-98 = No Support
+BatteryAlert-99 = Unknown
+
+SelfcheckState-0 = Not recommended
+SelfcheckState-1 = Recommended
+SelfcheckState-99 = Unknown
 
 ND-yopwralarm-NAME = YoLink Power Failure Alarm
 ND-yopwralarm-ICON = Input
