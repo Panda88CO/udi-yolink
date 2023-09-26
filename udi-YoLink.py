@@ -126,7 +126,7 @@ class YoLinkSetup (udi_interface.Node):
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
                                 'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
                                 'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren' ]
-        self.supportedYoTypes = ['MultiOutlet', 'Siren', 'MotionSensor' ]
+        self.supportedYoTypes = ['MultiOutlet', 'Siren', 'MotionSensor','LeakSensor' ]
         
         #self.supportedYoTypes = [ 'THSensor' ]
 
