@@ -34,8 +34,8 @@ class udiYoCOSmokeSensor(udi_interface.Node):
             
             
             'GV5' = selfcheck result
-            'GV6' = Self Check Needed
-          
+
+            'GV7' = Command setting 
             'CLITEMP' = Device Temp
             'ST' = Online
             ]
@@ -50,8 +50,8 @@ class udiYoCOSmokeSensor(udi_interface.Node):
             {'driver': 'GV3', 'value': 99, 'uom': 25}, 
             {'driver': 'GV4', 'value': 99, 'uom': 25}, 
             {'driver': 'GV5', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV6', 'value': 0,  'uom': 25}, 
 
+            {'driver': 'GV7', 'value': 0,  'uom': 25}, 
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
 
@@ -68,6 +68,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         self.yoCOSmokeSensor  = None
         self.node_ready = False
         self.last_state = 99
+        self.cmd_state = 0
         self.last_alert = False
         self.n_queue = []   
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -172,14 +173,15 @@ class udiYoCOSmokeSensor(udi_interface.Node):
                     elif self.temp_unit == 2:
                         self.node.setDriver('CLITEMP', round(devTemp+273.15,0), True, True, 26)
                 else:
-                    self.node.setDriver('CLITEMP', 99, True, True, 25)                
+                    self.node.setDriver('CLITEMP', 99, True, True, 25)
+                self.node.setDriver('GV7', self.cmd_state)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('GV2', 99, True, True)
                 self.node.setDriver('GV3', 99, True, True)
                 self.node.setDriver('GV4', 99, True, True)
-                self.node.setDriver('GV5', 99, True, True)                
+                self.node.setDriver('GV5', 99, True, True)              
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('ALARM', 99, True, True)     
                 self.node.setDriver('ST', 0)
@@ -191,7 +193,11 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         self.yoCOSmokeSensor.updateStatus(data)
         self.updateData()
 
-
+    def set_cmd(self, command):
+        ctrl = int(command.get('value'))   
+        logging.info('udiYoMotionSensor  set_cmd - {}'.format(ctrl))
+        self.cmd_state = ctrl
+        self.node.setDriver('GV2', self.cmd_state, True, True)
 
 
     def update(self, command = None):
@@ -202,6 +208,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         pass
 
     commands = {
+                'SETCMD': set_cmd,
                 'UPDATE': update,
                 'QUERY' : update, 
                 'DON'   : noop,
