@@ -44,9 +44,9 @@ class YoLinkSir(YoLinkMQTTDevice):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:
             if state == 'on' or state == 'alert' or state == True:
-                sirenState = True
+                sirenState = 'on'
             elif state == 'off' or state == 'normal' or state == False:
-                sirenState = False
+                sirenState = 'off'
             else:
                 logging.error('Unknows state passed - {}'.format(state))
                 return(False)

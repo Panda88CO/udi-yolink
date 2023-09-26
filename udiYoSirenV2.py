@@ -109,10 +109,10 @@ class udiYoSiren(udi_interface.Node):
             if self.yoSiren.online:
                 logging.debug('Siren state {}'.format(state))
                 if state.upper() == 'NORMAL':
-                    self.sirenState = 1
+                    self.sirenState = 0
                     self.node.setDriver('GV0', self.sirenState , True, True)
                 elif state.upper() == 'ALERT':
-                    self.sirenState = 0
+                    self.sirenState = 1
                     self.node.setDriver('GV0', self.sirenState , True, True)
                 elif state.upper() == 'OFF':
                     self.sirenState = 2
