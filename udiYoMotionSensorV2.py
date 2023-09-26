@@ -179,9 +179,10 @@ class udiYoMotionSensor(udi_interface.Node):
         pass
 
     commands = {
+                'SETCMD': set_cmd,
                 'UPDATE': update,
                 'QUERY' : update, 
-                'SETCMD': set_cmd,
+   
                 'DON'   : noop,
                 'DOF'   : noop
                 }

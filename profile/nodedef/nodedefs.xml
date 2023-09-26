@@ -270,6 +270,7 @@
       <sts>
          <st id="GV0" editor="doorstate" />
          <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
       </sts>
@@ -278,7 +279,11 @@
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
          </sends>
+         
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd > 
             <cmd id="DON" /> 
             <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
@@ -341,6 +346,7 @@
       <sts>
          <st id="GV0" editor="waterstate" />
          <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
@@ -351,6 +357,9 @@
             <cmd id="DOF" editor="waterstate"  />    
          </sends>
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
             <cmd id="DON" /> 
             <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
@@ -394,6 +403,7 @@
       <sts>
          <st id="GV0" editor="vibrastate" />
          <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
@@ -405,6 +415,9 @@
 
          </sends>
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
             <cmd id="DON" /> 
             <cmd id="DOF" />          
             <cmd id="UPDATE" /> 

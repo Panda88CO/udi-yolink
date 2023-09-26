@@ -158,8 +158,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
 
     def setMultiOutDelayList (yolink, delayList):
-        attempt = 1
-        maxAttempts = 3
+
         logging.info('outletSetDelayList')
         data = {}
         delTemp = []
@@ -197,8 +196,6 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
 
     def setMultiOutDelay (yolink, port, onDelay, offDelay):
-        attempt = 1
-        maxAttempts = 3
         logging.info('outletSetDelay')
         data = {}
         data['params'] = {}
@@ -219,8 +216,6 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
     def setMultiOutOnDelay (yolink, port, onDelay):
-        attempt = 1
-        maxAttempts = 3
         logging.info('outletSetDelay')
         data = {}
         data['params'] = {}
@@ -241,8 +236,6 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.online = yolink.dataAPI[yolink.dOnline]
     
     def setMultiOutOffDelay (yolink, port, offDelay):
-        attempt = 1
-        maxAttempts = 3
         logging.info('outletSetDelay')
         data = {}
         data['params'] = {}

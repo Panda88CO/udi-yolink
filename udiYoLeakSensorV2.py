@@ -35,6 +35,7 @@ class udiYoLeakSensor(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 25}, 
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
@@ -51,6 +52,7 @@ class udiYoLeakSensor(udi_interface.Node):
         self.yoLeakSensor  = None
         self.node_ready = False
         self.last_state = 99
+        self.cmd_state = 0
         self.n_queue = []   
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         #polyglot.subscribe(polyglot.POLL, self.poll)
@@ -75,8 +77,6 @@ class udiYoLeakSensor(udi_interface.Node):
         while len(self.n_queue) == 0:
             time.sleep(0.1)
         self.n_queue.pop()
-
-
 
 
     def start(self):
@@ -126,15 +126,18 @@ class udiYoLeakSensor(udi_interface.Node):
                 if waterState == 1:
                     self.node.setDriver('GV0', 1, True, True)
                     if waterState != self.last_state:
-                        self.node.reportCmd('DON')
+                        if self.cmd_state in [0,1]:
+                            self.node.reportCmd('DON')
                 elif waterState == 0:
                     self.node.setDriver('GV0', 0, True, True)
                     if waterState != self.last_state:
-                        self.node.reportCmd('DOF')
+                        if self.cmd_state in [0,2]:
+                            self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                 self.last_state = waterState
                 self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
+                self.node.setDriver('GV2', self.cmd_state)
                 self.node.setDriver('ST', 1)
                 devTemp =  self.yoLeakSensor.getDeviceTemperature()
                 if devTemp != 'NA':
@@ -158,16 +161,21 @@ class udiYoLeakSensor(udi_interface.Node):
         self.yoLeakSensor.updateStatus(data)
         self.updateData()
 
-
+    def set_cmd(self, command):
+        ctrl = int(command.get('value'))   
+        logging.info('Leak Sensor  set_cmd - {}'.format(ctrl))
+        self.cmd_state = ctrl
+        self.node.setDriver('GV2', self.cmd_state, True, True)
 
     def update(self, command = None):
-        logging.info('THsensor Update Status Executed')
+        logging.info('Leak Sensor Update Status Executed')
         self.yoLeakSensor.refreshDevice()
        
     def noop(self, command = None):
         pass
 
     commands = {
+                'SETCMD': set_cmd,        
                 'UPDATE': update,
                 'QUERY' : update, 
                 'DON'   : noop,
