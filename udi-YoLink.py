@@ -548,13 +548,9 @@ class YoLinkSetup (udi_interface.Node):
         try:
             logging.info('Stop Called:')
             #self.yoAccess.writeTtsFile() #save current TTS messages
-            if 'self.node' in locals():
-                self.node.setDriver('ST', 0, True, True)
-                #nodes = self.poly.getNodes()
-                #for node in nodes:
-                #    if node != 'setup':   # but not the controller node
-                #        nodes[node].setDriver('ST', 0, True, True)
-                time.sleep(2)
+
+            self.node.setDriver('ST', 0, True, True)
+
             if self.yoAccess:
                 self.yoAccess.shut_down()
             self.poly.stop()
