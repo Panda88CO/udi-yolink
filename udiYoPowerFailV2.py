@@ -41,7 +41,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
             {'driver': 'GV2', 'value': 99, 'uom': 25}, 
             {'driver': 'GV3', 'value': 99, 'uom': 25}, 
             {'driver': 'GV4', 'value': 99, 'uom': 25}, 
-
+            {'driver': 'GV7', 'value': 0, 'uom': 25},      
             {'driver': 'ST', 'value': 0, 'uom': 25},
 
             ]
@@ -57,7 +57,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
         self.yoVibrationSensor  = None
         self.node_ready = False
         self.last_state = 99
-        
+        self.cmd_state = 3
         self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -122,6 +122,12 @@ class udiYoPowerFailSenor(udi_interface.Node):
                 state = self.yoPowerFail.getAlertState()
                 logging.debug('state GV0 : {}'.format(state))
                 self.node.setDriver('GV0', state, True, True)
+                if state != self.last_state:
+                    if state ==1 and self.cmd_state in [0,1]:
+                        self.node.reportCmd('DON')
+                    elif state == 0 and self.cmd_state in [0,2]:
+                        self.node.reportCmd('DOF')
+                    
                 self.node.setDriver('GV1', self.yoPowerFail.getBattery(), True, True)
                 alert = self.yoPowerFail.getAlertType()
                 logging.debug('AlertState GV2 : {}'.format(alert))
@@ -155,7 +161,11 @@ class udiYoPowerFailSenor(udi_interface.Node):
         self.yoPowerFail.updateStatus(data)
         self.updateData()
 
-
+    def set_cmd(self, command):
+        ctrl = int(command.get('value'))   
+        logging.info('udiYoMotionSensor  set_cmd - {}'.format(ctrl))
+        self.cmd_state = ctrl
+        self.node.setDriver('GV7', self.cmd_state, True, True)
 
     def update(self, command = None):
         logging.info('udiYoPowerFailSenor Update  Executed')
@@ -166,6 +176,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
         pass
 
     commands = {
+                'SETCMD': set_cmd,
                 'UPDATE': update,
                 'QUERY' : update, 
                 'DON'   : noop,

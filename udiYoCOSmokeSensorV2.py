@@ -157,10 +157,12 @@ class udiYoCOSmokeSensor(udi_interface.Node):
                 alert = smoke_alert or CO_alert or hight_alert or bat_alert
                 self.node.setDriver('ALARM', self.bool2nbr(alert), True, True)
                 if alert != self.last_alert:
-                    if alert is True:
-                        self.node.reportCmd('DON')
+                    if alert:
+                        if self.cmd_state in [0,1]:
+                            self.node.reportCmd('DON')
                     else:
-                        self.node.reportCmd('DOF')
+                        if self.cmd_state in [0,2]:
+                            self.node.reportCmd('DOF')
                     self.last_alert = alert
                 self.node.setDriver('GV5', self.bool2nbr(self.yoCOSmokeSensor.get_self_ckheck_state()), True, True)
                 self.node.setDriver('ST', 1)

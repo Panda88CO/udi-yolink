@@ -128,11 +128,11 @@ class udiYoDoorSensor(udi_interface.Node):
                 doorstate = self.doorState()
                 if doorstate == 1:
                     self.node.setDriver('GV0', 1 , True, True)
-                    if doorstate != self.last_state:
+                    if doorstate != self.last_state and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')
                 elif doorstate == 0:
                     self.node.setDriver('GV0', 0 , True, True)
-                    if doorstate != self.last_state:
+                    if doorstate != self.last_state and self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99 , True, True)

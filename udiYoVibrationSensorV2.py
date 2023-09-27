@@ -112,11 +112,11 @@ class udiYoVibrationSensor(udi_interface.Node):
                 vib_state = self.getVibrationState()
                 if vib_state == 1:
                     self.node.setDriver('GV0', 1, True, True)
-                    if self.last_state != vib_state:
+                    if self.last_state != vib_state and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')   
                 elif vib_state == 0:
                     self.node.setDriver('GV0', 0, True, True)
-                    if self.last_state != vib_state:
+                    if self.last_state != vib_state and self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True) 

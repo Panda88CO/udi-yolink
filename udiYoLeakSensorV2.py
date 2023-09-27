@@ -122,7 +122,7 @@ class udiYoLeakSensor(udi_interface.Node):
         if self.node is not None:
             if self.yoLeakSensor.online:
                 waterState =   self.waterState()  
-                logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
+                #logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
                 if waterState == 1:
                     self.node.setDriver('GV0', 1, True, True)
                     if waterState != self.last_state:
