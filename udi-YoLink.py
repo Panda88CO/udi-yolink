@@ -126,9 +126,8 @@ class YoLinkSetup (udi_interface.Node):
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
                                 'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
                                 'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren' ]
-        self.supportedYoTypes = ['MultiOutlet', 'Siren', 'MotionSensor','LeakSensor' ]
+        #self.supportedYoTypes = ['MultiOutlet', 'Siren', 'MotionSensor','LeakSensor' ]
         
-        #self.supportedYoTypes = [ 'THSensor' ]
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')
