@@ -32,6 +32,8 @@ class udiYoTHsensor(udi_interface.Node):
             'GV5' = High Humidity Alarm
             'GV6' = BatteryLevel
             'GV7' = BatteryAlarm
+            'GV8' = ALARM
+            'GV9' = command setting 
             'ST' = Online
             ]
 
@@ -161,6 +163,11 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor.updateStatus(data)
         self.updateData()
 
+    def set_cmd(self, command):
+        ctrl = int(command.get('value'))   
+        logging.info('udiYoTHsensor  set_cmd - {}'.format(ctrl))
+        self.cmd_state = ctrl
+        self.node.setDriver('GV9', self.cmd_state, True, True)
 
 
     def update(self, command = None):
@@ -170,6 +177,7 @@ class udiYoTHsensor(udi_interface.Node):
 
 
     commands = {
+                'SETCMD': set_cmd,             
                 'UPDATE': update,
                 'QUERY' : update, 
                 }

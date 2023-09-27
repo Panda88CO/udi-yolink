@@ -103,8 +103,10 @@ ST-nlsthsens-GV4-NAME = Low Humidity Alarm
 ST-nlsthsens-GV5-NAME = High Humidity Alarm
 ST-nlsthsens-BATLVL-NAME = Battery Level
 ST-nlsthsens-GV7-NAME = Battery Alarm
-#ST-nlsthsens-GV8-NAME = Device Online
+ST-nlsthsens-GV8-NAME = Alarm triggered
+ST-nlsthsens-GV9-NAME = Command Setting
 ST-nlsthsens-ST-NAME = Nodeserver Status
+CMD-nlsthsens-SETCMD-NAME = Select Command Action
 CMD-nlsthsens-UPDATE-NAME = Update Status
 CMD-nlsthsens-QUERY-NAME = Query
 
@@ -253,6 +255,30 @@ CMD-nlssmokesens-QUERY-NAME = Query
 CMD-nlssmokesens-DON-NAME = Alert Detected
 CMD-nlssmokesens-DOF-NAME = Normal
 
+ND-yopwralarm-NAME = YoLink Power Failure Alarm
+ND-yopwralarm-ICON = Input
+ST-nlspwralarm-GV0-NAME = Unit State
+ST-nlspwralarm-GV1-NAME = Battery Level
+ST-nlspwralarm-GV2-NAME = Alert Pending
+ST-nlspwralarm-GV3-NAME = Power on Unit
+ST-nlspwralarm-GV4-NAME = Muted
+ST-nlspwralarm-GV7-NAME = Command Setting
+ST-nlspwralarm-ST-NAME = Nodeserver Status
+CMD-nlspwralarm-SETCMD-NAME = Select Command Action
+CMD-nlspwralarm-UPDATE-NAME = Update
+CMD-nlspwralarm-QUERY-NAME = Query
+
+ND-yosiren-NAME = YoLink Siren
+ND-yosiren-ICON = Output
+ST-nlssiren-GV0-NAME = Siren State
+ST-nlssiren-GV1-NAME = Siren Duration
+ST-nlssiren-GV2-NAME = Supply State
+ST-nlssiren-ST-NAME = Nodeserver Status
+CMD-nlssiren-UPDATE-NAME = Update
+CMD-nlssiren-QUERY-NAME = Query
+CMD-nlssiren-SIRENCTRL-NAME = Set Control
+
+
 deviceAlert-0 = Normal
 deviceAlert-1 = Alert
 deviceAlert-99 = Unknown
@@ -281,26 +307,6 @@ SelfcheckState-0 = Not recommended
 SelfcheckState-1 = Recommended
 SelfcheckState-99 = Unknown
 
-ND-yopwralarm-NAME = YoLink Power Failure Alarm
-ND-yopwralarm-ICON = Input
-ST-nlspwralarm-GV0-NAME = Unit State
-ST-nlspwralarm-GV1-NAME = Battery Level
-ST-nlspwralarm-GV2-NAME = Alert Pending
-ST-nlspwralarm-GV3-NAME = Power on Unit
-ST-nlspwralarm-GV4-NAME = Muted
-ST-nlspwralarm-ST-NAME = Nodeserver Status
-CMD-nlspwralarm-UPDATE-NAME = Update
-CMD-nlspwralarm-QUERY-NAME = Query
-
-ND-yosiren-NAME = YoLink Siren
-ND-yosiren-ICON = Output
-ST-nlssiren-GV0-NAME = Siren State
-ST-nlssiren-GV1-NAME = Siren Duration
-ST-nlssiren-GV2-NAME = Supply State
-ST-nlssiren-ST-NAME = Nodeserver Status
-CMD-nlssiren-UPDATE-NAME = Update
-CMD-nlssiren-QUERY-NAME = Query
-CMD-nlssiren-SIRENCTRL-NAME = Set Control
 
 cmdsetting-0 = DON/DOF
 cmdsetting-1 = DON Only

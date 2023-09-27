@@ -163,7 +163,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
 
     def set_cmd(self, command):
         ctrl = int(command.get('value'))   
-        logging.info('udiYoMotionSensor  set_cmd - {}'.format(ctrl))
+        logging.info('udiYoPowerFailSenor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
         self.node.setDriver('GV7', self.cmd_state, True, True)
 

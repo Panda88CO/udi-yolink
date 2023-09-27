@@ -160,7 +160,7 @@ class udiYoVibrationSensor(udi_interface.Node):
 
     def set_cmd(self, command):
         ctrl = int(command.get('value'))   
-        logging.info('udiYoMotionSensor  set_cmd - {}'.format(ctrl))
+        logging.info('udiYoVibrationSensor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
         self.node.setDriver('GV2', self.cmd_state, True, True)
 

@@ -252,13 +252,19 @@
          <st id="GV5" editor="alarm" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV7" editor="alarm" />
-         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV8" editor="alarm" />
+         <st id="GV9" editor="cmdsetting" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
          </sends>
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >          
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" />             
          </accepts>
@@ -540,7 +546,7 @@
          <st id="GV2" editor="alertstate" />
          <st id="GV3" editor="powered" />
          <st id="GV4" editor="pfamute" />
-
+         <st id="GV7" editor="cmdstatus" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -549,6 +555,9 @@
             <cmd id="DOF"   />    
          </sends>
          <accepts>     
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV7" /> 
+            </cmd >           
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
