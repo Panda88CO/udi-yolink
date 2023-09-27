@@ -392,7 +392,7 @@
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
-               <p id="" editor="cmdsetting" init="GV2" /> 
+               <p id="" editor="cmdsetting" init="GV7" /> 
             </cmd >          
             <cmd id="DON" /> 
             <cmd id="DOF" />          
