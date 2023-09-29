@@ -56,6 +56,8 @@ class udiYoSwitch(udi_interface.Node):
         self.last_state = ''
         self.timer_update = 5
         self.timer_expires = 0
+        self.onDelay = 0
+        self.offDdelay = 0
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -199,7 +201,7 @@ class udiYoSwitch(udi_interface.Node):
             self.yoSwitch.setState('OFF')
             self.node.setDriver('GV0',0 , True, True)
             self.node.reportCmd('DOF')
-        else: #toggle
+        elif ctrl == 2: #toggle
             state = str(self.yoSwitch.getState()).upper() 
             if state == 'ON':
                 self.yoSwitch.setState('OFF')
@@ -209,20 +211,29 @@ class udiYoSwitch(udi_interface.Node):
                 self.yoSwitch.setState('ON')
                 self.node.setDriver('GV0',1 , True, True)
                 self.node.reportCmd('DON')
+        elif ctrl == 5:
+            logging.info('switchControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
+            #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)
+            self.node.setDriver('GV1', self.onDelay * 60, True, True)
+            self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+            self.yolink.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+
             #Unknown remains unknown
     
 
-    def setOnDelay(self, command ):
-        logging.info('udiYoSwitch setOnDelay')
-        delay =int(command.get('value'))
-        self.yoSwitch.setOnDelay(delay)
-        self.node.setDriver('GV1', delay*60, True, True)
+    def prepOnDelay(self, command ):
+        
+        self.onDelay =int(command.get('value'))
+        logging.info('udiYoSwitch prepOnDelay {}'.format(self.onDelay))
+        #self.yoSwitch.setOnDelay(delay)
+        #self.node.setDriver('GV1', delay*60, True, True)
 
-    def setOffDelay(self, command):
-        logging.info('udiYoSwitch setOffDelay')
-        delay =int(command.get('value'))
-        self.yoSwitch.setOffDelay(delay)
-        self.node.setDriver('GV2', delay*60, True, True)
+    def prepOffDelay(self, command):
+
+        self.offDdelay =int(command.get('value'))
+        logging.info('udiYoSwitch prepOffDelay {}'.format(self.offDdelay))
+        #self.yoSwitch.setOffDelay(delay)
+        #self.node.setDriver('GV2', delay*60, True, True)
 
 
     def update(self, command = None):
@@ -239,8 +250,8 @@ class udiYoSwitch(udi_interface.Node):
                 'DFON'   : set_switch_fon,
                 'DFOF'   : set_switch_foff,                         
                 'SWCTRL': switchControl, 
-                'ONDELAY' : setOnDelay,
-                'OFFDELAY' : setOffDelay 
+                'ONDELAY' : prepOnDelay,
+                'OFFDELAY' : prepOffDelay 
                 }
 
 
