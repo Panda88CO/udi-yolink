@@ -57,6 +57,8 @@ class udiYoOutlet(udi_interface.Node):
         self.last_state = ''
         self.timer_update = 5
         self.timer_expires = 0
+        self.onDelay = 0
+        self.offDelay = 0
 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -187,9 +189,9 @@ class udiYoOutlet(udi_interface.Node):
 
 
 
-    def switchControl(self, command):
+    def outletControl(self, command):
         ctrl = int(command.get('value'))   
-        logging.info('udiYoOutlet switchControl - {}'.format(ctrl))
+        logging.info('udiYoOutlet outletControl - {}'.format(ctrl))
         ctrl = int(command.get('value'))     
         if ctrl == 1:
             self.yoOutlet.setState('ON')
@@ -199,7 +201,7 @@ class udiYoOutlet(udi_interface.Node):
             self.yoOutlet.setState('OFF')
             self.node.setDriver('GV0',0 , True, True)
             self.node.reportCmd('DOF')
-        else: #toggle
+        elif ctrl == 2: #toggle
             state = str(self.yoOutlet.getState()).upper() 
             if state == 'ON':
                 self.yoOutlet.setState('OFF')
@@ -209,20 +211,29 @@ class udiYoOutlet(udi_interface.Node):
                 self.yoOutlet.setState('ON')
                 self.node.setDriver('GV0',1 , True, True)
                 self.node.reportCmd('DON')
+        elif ctrl == 5:
+            logging.info('outletControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
+            #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)
+            self.node.setDriver('GV1', self.onDelay * 60, True, True)
+            self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+            self.yolink.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+
+
             #Unknown remains unknown
         
         
-    def setOnDelay(self, command ):
-        logging.info('udiYoOutlet setOnDelay')
-        delay =int(command.get('value'))
-        self.yoOutlet.setOnDelay(delay)
-        self.node.setDriver('GV1', delay*60, True, True)
+    def prepOnDelay(self, command ):
+        self.onDelay =int(command.get('value'))
+        logging.info('udiYoOutlet prepOnDelay {}'.format(self.onDelay))
+        #self.yoOutlet.setOnDelay(delay)
+        #self.node.setDriver('GV1', self.onDelay*60, True, True)
 
-    def setOffDelay(self, command):
-        logging.info('udiYoOutlet setOnDelay Executed')
-        delay =int(command.get('value'))
-        self.yoOutlet.setOffDelay(delay)
-        self.node.setDriver('GV2', delay*60, True, True)
+    def prepOffDelay(self, command):
+
+        self.offDelay =int(command.get('value'))
+        logging.info('udiYoOutlet prefOffDelay Executed {}'.format(self.offDelay ))
+        #self.yoOutlet.setOffDelay(delay)
+        #self.node.setDriver('GV2', self.offDelay*60, True, True)
 
     def update(self, command = None):
         logging.info('Update Status Executed')
@@ -234,9 +245,9 @@ class udiYoOutlet(udi_interface.Node):
                 'UPDATE': update,
                 'DON'   : set_outlet_on,
                 'DOF'   : set_outlet_off,
-                'SWCTRL': switchControl, 
-                'ONDELAY' : setOnDelay,
-                'OFFDELAY' : setOffDelay 
+                'SWCTRL': outletControl, 
+                'ONDELAY' : prepOnDelay,
+                'OFFDELAY' : prepOffDelay 
                 }
 
 
