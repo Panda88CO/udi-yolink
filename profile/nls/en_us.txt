@@ -278,6 +278,33 @@ CMD-nlssiren-UPDATE-NAME = Update
 CMD-nlssiren-QUERY-NAME = Query
 CMD-nlssiren-SIRENCTRL-NAME = Set Control
 
+ND-yosmremote-NAME = YoLink Smart Remoter
+ND-yosmremote-ICON = Input
+ST-nlssmremote-GV0-NAME = ComboPress
+ST-nlssmremote-GV1-NAME = Key presstype
+ST-nlssmremote-GV2-NAME = Press type
+ST-nlssmremote-GV3-NAME = Battery Level
+ST-nlssmremote-GV4-NAME = Remote Temperature
+ST-nlssmremote-ST-NAME = Nodeserver Status
+CMD-nlssmremote-UPDATE-NAME = Update
+CMD-nlssmremote-QUERY-NAME = Query
+CMD-nlssmremote-KEY1DEF-NAME = Key1 Scene Function
+CMD-nlssmremote-KEY2DEF-NAME = Key2 Scene Function
+CMD-nlssmremote-KEY3DEF-NAME = Key3 Scene Function
+CMD-nlssmremote-KEY4DEF-NAME = Key4 Scene Function
+CMD-nlssmremote-KEY1LDEF-NAME = Key1 Long Scene Function
+CMD-nlssmremote-KEY2LDEF-NAME = Key2 Long Scene Function
+CMD-nlssmremote-KEY3LDEF-NAME = Key3 Long Scene Function
+CMD-nlssmremote-KEY4LDEF-NAME = Key4 LOng Scene Function
+
+ND-smremotekey-NAME = YoLink Smart Remoter
+ND-smremotekey-ICON = Input
+ST-nlssmkey-GV0-NAME = Last Command
+ST-nlssmkey-GV1-NAME = Short Press Type
+ST-nlssmkey-GV2-NAME = Long Press Type
+CMD-nlssmkey-KEYPRESS-NAME = Short Press Type
+CMD-nlssmkey-KEYLPRESS-NAME = Long Press Type
+
 
 deviceAlert-0 = Normal
 deviceAlert-1 = Alert
@@ -346,32 +373,7 @@ powered-0 = No Power
 powered-1 = Unit powered
 powered-99 = Unknown
 
-ND-yosmremote-NAME = YoLink Smart Remoter
-ND-yosmremote-ICON = Input
-ST-nlssmremote-GV0-NAME = ComboPress
-ST-nlssmremote-GV1-NAME = Key presstype
-ST-nlssmremote-GV2-NAME = Press type
-ST-nlssmremote-GV3-NAME = Battery Level
-ST-nlssmremote-GV4-NAME = Remote Temperature
-ST-nlssmremote-ST-NAME = Nodeserver Status
-CMD-nlssmremote-UPDATE-NAME = Update
-CMD-nlssmremote-QUERY-NAME = Query
-CMD-nlssmremote-KEY1DEF-NAME = Key1 Scene Function
-CMD-nlssmremote-KEY2DEF-NAME = Key2 Scene Function
-CMD-nlssmremote-KEY3DEF-NAME = Key3 Scene Function
-CMD-nlssmremote-KEY4DEF-NAME = Key4 Scene Function
-CMD-nlssmremote-KEY1LDEF-NAME = Key1 Long Scene Function
-CMD-nlssmremote-KEY2LDEF-NAME = Key2 Long Scene Function
-CMD-nlssmremote-KEY3LDEF-NAME = Key3 Long Scene Function
-CMD-nlssmremote-KEY4LDEF-NAME = Key4 LOng Scene Function
 
-ND-smremotekey-NAME = YoLink Smart Remoter
-ND-smremotekey-ICON = Input
-ST-nlssmkey-GV0-NAME = Last Command
-ST-nlssmkey-GV1-NAME = Short Press Type
-ST-nlssmkey-GV2-NAME = Long Press Type
-CMD-nlssmkey-KEYPRESS-NAME = Short Press Type
-CMD-nlssmkey-KEYLPRESS-NAME = Long Press Type
 
 keyscenedef-0 = OFF
 keyscenedef-1 = ON
@@ -469,6 +471,7 @@ swctrl-1 = On
 swctrl-2 = Toggle
 swctrl-3 = Fast On
 swctrl-4 = Fast Off
+swctrl-5 = Fast Off
 
 batlevel-0 = Low 
 batlevel-1 = Medium Low

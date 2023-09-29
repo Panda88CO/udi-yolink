@@ -143,6 +143,7 @@ class udiYoDoorSensor(udi_interface.Node):
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('GV2', self.cmd_state, True, True)
                 self.node.setDriver('ST', 0)
 
 
