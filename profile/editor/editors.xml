@@ -57,7 +57,7 @@
      <range  uom="25" subset="0-1,99" nls="manstate" />
   </editor>
     <editor id = "manctrl" > 
-     <range  uom="25" subset="0-1" nls="manctrl" />
+     <range  uom="25" subset="0-1,5" nls="manctrl" />
   </editor>
   <editor id = "usbstate" > 
      <range  uom="25" subset="0-1,99" nls="usbstate" />
