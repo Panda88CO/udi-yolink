@@ -469,9 +469,9 @@ swstate-99 = Unknown
 swctrl-0 = Off
 swctrl-1 = On
 swctrl-2 = Toggle
-swctrl-3 = Fast On
-swctrl-4 = Fast Off
-swctrl-5 = Fast Off
+swctrl-3 = Fast Off
+swctrl-4 = Fast On
+swctrl-5 = Set Delays
 
 batlevel-0 = Low 
 batlevel-1 = Medium Low
@@ -509,6 +509,8 @@ manstate-99 = Unknown
 
 manctrl-0 = Close
 manctrl-1 = Open
+manctrl-5 = Set Delays
+
 
 usbstate-0 = Disabled
 usbstate-1 = Enabled
