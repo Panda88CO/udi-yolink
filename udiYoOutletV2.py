@@ -211,6 +211,8 @@ class udiYoOutlet(udi_interface.Node):
                 self.yoOutlet.setState('ON')
                 self.node.setDriver('GV0',1 , True, True)
                 self.node.reportCmd('DON')
+
+                
         elif ctrl == 5:
             logging.info('outletControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
             #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)

@@ -209,7 +209,7 @@ class udiYoSubOutlet(udi_interface.Node):
         #    self.node.reportCmd('DFON')
         #    self.portState = 1
         
-        elif ctrl == 5: # Delay set delays
+        elif ctrl == 5: # Delay sets delays
             logging.info('udiYoSubOutlet set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
             #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)
             self.node.setDriver('GV1', self.onDelay * 60, True, True)
