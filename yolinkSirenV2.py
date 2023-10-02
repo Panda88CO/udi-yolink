@@ -20,6 +20,7 @@ class YoLinkSir(YoLinkMQTTDevice):
         yolink.SirenName = 'SirenEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'Siren'
+        yolink.MQTT_type = 'c'
         #time.sleep(1)
 
     '''

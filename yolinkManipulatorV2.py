@@ -21,6 +21,7 @@ class YoLinkManipul(YoLinkMQTTDevice):
         yolink.ManipulatorName = 'ManipulatorEvent'
         yolink.eventTime = 'Time'
         yolink.type = 'Manipulator'
+        yolink.MQTT_type = 'c'
         #time.sleep(1)
 
     '''
