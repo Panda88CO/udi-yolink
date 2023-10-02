@@ -220,7 +220,7 @@ class YoLinkMQTTDevice(object):
     def send_data(yolink,  data):
         logging.debug('send_data {}'.format(data))
         yolink.yoAccess.publish_data( data)
-        if yolink.mqtt_type == 'c':
+        if yolink.MQTT_type == 'c':
             time.sleep(1)
         
         return (True)
