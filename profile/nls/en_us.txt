@@ -103,8 +103,10 @@ ST-nlsthsens-GV4-NAME = Low Humidity Alarm
 ST-nlsthsens-GV5-NAME = High Humidity Alarm
 ST-nlsthsens-BATLVL-NAME = Battery Level
 ST-nlsthsens-GV7-NAME = Battery Alarm
-#ST-nlsthsens-GV8-NAME = Device Online
+ST-nlsthsens-GV8-NAME = Alarm triggered
+ST-nlsthsens-GV9-NAME = Command Setting
 ST-nlsthsens-ST-NAME = Nodeserver Status
+CMD-nlsthsens-SETCMD-NAME = Select Command Action
 CMD-nlsthsens-UPDATE-NAME = Update Status
 CMD-nlsthsens-QUERY-NAME = Query
 
@@ -122,8 +124,10 @@ ND-yodoorsens-NAME = YoLink Door Sensor
 ND-yodoorsens-ICON = Input
 ST-nlsdoorsens-GV0-NAME = Door State
 ST-nlsdoorsens-GV1-NAME = Sensor Battery Level
+ST-nlsdoorsens-GV2-NAME = Command Setting
 #ST-nlsdoorsens-GV8-NAME = Device Online
 ST-nlsdoorsens-ST-NAME = Nodeserver Status
+CMD-nlsdoorsens-SETCMD-NAME = Select Command Action
 CMD-nlsdoorsens-UPDATE-NAME = Update Door Status
 CMD-nlsdoorsens-QUERY-NAME = Query
 CMD-nlsdoorsens-DOM-NAME = No use
@@ -134,10 +138,12 @@ ND-yomotionsens-NAME = YoLink Motion Sensor
 ND-yomotionsens-ICON = MotionSensor
 ST-nlsmotionsens-GV0-NAME = Motion State
 ST-nlsmotionsens-GV1-NAME = Sensor Battery Level
+ST-nlsmotionsens-GV2-NAME = Command Setting
 ST-nlsmotionsens-CLITEMP-NAME = Sensor Temperature
 #ST-nlsmotionsens-GV8-NAME = Device Online
 ST-nlsmotionsens-ST-NAME = Nodeserver Status
 CMD-nlsmotionsens-UPDATE-NAME = Update Motion Status
+CMD-nlsmotionsens-SETCMD-NAME = Select Command Action
 CMD-nlsmotionsens-QUERY-NAME = Query
 CMD-nlsmotionsens-DON-NAME = Motion
 CMD-nlsmotionsens-DOF-NAME = No Motion
@@ -146,10 +152,12 @@ ND-yoleaksens-NAME = YoLink Water Sensor
 ND-yoleaksens-ICON = Input
 ST-nlsleaksens-GV0-NAME = Water Sensor
 ST-nlsleaksens-GV1-NAME = Sensor Battery Level
+ST-nlsleaksens-GV2-NAME = Command Setting
 ST-nlsleaksens-CLITEMP-NAME = Sensor Temperature
 #ST-nlsleaksens-GV8-NAME = Device Online
 ST-nlsleaksens-ST-NAME = Nodeserver Status
 CMD-nlsleaksens-UPDATE-NAME = Update Water Status
+CMD-nlsleaksens-SETCMD-NAME = Select Command Action
 CMD-nlsleaksens-QUERY-NAME = Query
 CMD-nlsleaksens-DON-NAME = Water Alert Detected
 CMD-nlsleaksens-DOF-NAME = Normal
@@ -158,10 +166,12 @@ ND-yovibrasens-NAME = YoLink Vibrations Sensor
 ND-yovibrasens-ICON = MotionSensor
 ST-nlsvibrasens-GV0-NAME = Vibration State
 ST-nlsvibrasens-GV1-NAME = Sensor Battery Level
+ST-nlsvibrasens-GV2-NAME = Command Setting
 ST-nlsvibrasens-CLITEMP-NAME = Sensor Temperature
 #ST-nlsvibrasens-GV8-NAME = Device Online
 ST-nlsvibrasens-ST-NAME = Nodeserver Status
 CMD-nlsvibrasens-UPDATE-NAME = Update Vibration Status
+CMD-nlsvibrasens-SETCMD-NAME = Select Command Action
 CMD-nlsvibrasens-QUERY-NAME = Query
 CMD-nlsvibrasens-DON-NAME = Vibration Detected
 CMD-nlsvibrasens-DOF-NAME = Normal
@@ -226,6 +236,25 @@ CMD-nlsirremote-TXCODE-NAME = Send Code
 CMD-nlsirremote-UPDATE-NAME = Update
 CMD-nlsirremote-QUERY-NAME = Query
 
+ND-yoCOSmokesens-NAME = YoLink COSmokeSensor
+ND-yoCOSmokesens-ICON = Input
+ST-nlssmokesens-ALARM-NAME = Alert Detected
+ST-nlssmokesens-GV0-NAME = Smoke Detection
+ST-nlssmokesens-GV1-NAME = CO Detection
+ST-nlssmokesens-GV2-NAME = High Temp Detection
+ST-nlssmokesens-GV3-NAME = Battery Problem Detection
+ST-nlssmokesens-GV5-NAME = Self-check 
+ST-nlssmokesens-GV4-NAME = Sensor Battery Level
+ST-nlssmokesens-GV7-NAME = Command Setting
+
+ST-nlssmokesens-CLITEMP-NAME = Sensor Temperature
+ST-nlssmokesens-ST-NAME = Nodeserver Status
+CMD-nlssmokesens-UPDATE-NAME = Update Sensor Status
+CMD-nlssmokesens-SETCMD-NAME = Select Command Action
+CMD-nlssmokesens-QUERY-NAME = Query
+CMD-nlssmokesens-DON-NAME = Alert Detected
+CMD-nlssmokesens-DOF-NAME = Normal
+
 ND-yopwralarm-NAME = YoLink Power Failure Alarm
 ND-yopwralarm-ICON = Input
 ST-nlspwralarm-GV0-NAME = Unit State
@@ -233,26 +262,21 @@ ST-nlspwralarm-GV1-NAME = Battery Level
 ST-nlspwralarm-GV2-NAME = Alert Pending
 ST-nlspwralarm-GV3-NAME = Power on Unit
 ST-nlspwralarm-GV4-NAME = Muted
+ST-nlspwralarm-GV7-NAME = Command Setting
 ST-nlspwralarm-ST-NAME = Nodeserver Status
+CMD-nlspwralarm-SETCMD-NAME = Select Command Action
 CMD-nlspwralarm-UPDATE-NAME = Update
 CMD-nlspwralarm-QUERY-NAME = Query
 
-pfamute-0 = Not muted
-pfamute-1 = Muted
-pfamute-99 = Unknown
-
-poweralert-0 = Normal
-poweralert-1 = Alert
-poweralert-2 = Unit Off
-poweralert-99 = Unknown
-
-alertstate-0 = No Alert
-alertstate-1 = Alert Active
-alertstate-99 = Unknown
-
-powered-0 = No Power
-powered-1 = Unit powered
-powered-99 = Unknown
+ND-yosiren-NAME = YoLink Siren
+ND-yosiren-ICON = Output
+ST-nlssiren-GV0-NAME = Siren State
+ST-nlssiren-GV1-NAME = Siren Duration
+ST-nlssiren-GV2-NAME = Supply State
+ST-nlssiren-ST-NAME = Nodeserver Status
+CMD-nlssiren-UPDATE-NAME = Update
+CMD-nlssiren-QUERY-NAME = Query
+CMD-nlssiren-SIRENCTRL-NAME = Set Control
 
 ND-yosmremote-NAME = YoLink Smart Remoter
 ND-yosmremote-ICON = Input
@@ -280,6 +304,76 @@ ST-nlssmkey-GV1-NAME = Short Press Type
 ST-nlssmkey-GV2-NAME = Long Press Type
 CMD-nlssmkey-KEYPRESS-NAME = Short Press Type
 CMD-nlssmkey-KEYLPRESS-NAME = Long Press Type
+
+
+deviceAlert-0 = Normal
+deviceAlert-1 = Alert
+deviceAlert-99 = Unknown
+
+SmokeAlert-0 = Normal
+SmokeAlert-1 = Smoke Alert
+SmokeAlert-98 = No Support
+SmokeAlert-99 = Unknown
+
+COAlert-0 = Normal
+COAlert-1 = CO Alret
+COAlert-98 = No Support
+COAlert-99 = Unknown
+
+TempAlert-0 = Normal
+TempAlert-1 = High Temp Alert
+TempAlert-98 = No Support
+TempAlert-99 = Unknown
+
+BatteryAlert-0 = Normal
+BatteryAlert-1 = Low Bettery Alert
+BatteryAlert-98 = No Support
+BatteryAlert-99 = Unknown
+
+SelfcheckState-0 = Not recommended
+SelfcheckState-1 = Recommended
+SelfcheckState-99 = Unknown
+
+
+cmdsetting-0 = DON/DOF
+cmdsetting-1 = DON Only
+cmdsetting-2 = DOF Only
+cmdsetting-3 = None
+
+sirenstate-0 = Normal
+sirenstate-1 = Alert
+sirenstate-2 = Off
+sirenstate-99 = Unknown 
+
+sirenbatlvl-0 = Low 
+sirenbatlvl-1 = Medium Low
+sirenbatlvl-2 = Medium
+sirenbatlvl-3 = Medium High
+sirenbatlvl-4 = High
+sirenbatlvl-98 = Extrnal Power
+sirenbatlvl-99 = Unknown
+
+sirenctrl-0 = Normal
+sirenctrl-1 = Alert
+
+pfamute-0 = Not muted
+pfamute-1 = Muted
+pfamute-99 = Unknown
+
+poweralert-0 = Normal
+poweralert-1 = Alert
+poweralert-2 = Unit Off
+poweralert-99 = Unknown
+
+alertstate-0 = No Alert
+alertstate-1 = Alert Active
+alertstate-99 = Unknown
+
+powered-0 = No Power
+powered-1 = Unit powered
+powered-99 = Unknown
+
+
 
 keyscenedef-0 = OFF
 keyscenedef-1 = ON
@@ -375,8 +469,9 @@ swstate-99 = Unknown
 swctrl-0 = Off
 swctrl-1 = On
 swctrl-2 = Toggle
-swctrl-3 = Fast On
-swctrl-4 = Fast Off
+swctrl-3 = Fast Off
+swctrl-4 = Fast On
+swctrl-5 = Set Delays
 
 batlevel-0 = Low 
 batlevel-1 = Medium Low
@@ -414,6 +509,8 @@ manstate-99 = Unknown
 
 manctrl-0 = Close
 manctrl-1 = Open
+manctrl-5 = Set Delays
+
 
 usbstate-0 = Disabled
 usbstate-1 = Enabled

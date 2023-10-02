@@ -15,6 +15,7 @@ from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
 from udiYoMotionSensorV2 import udiYoMotionSensor
 from udiYoLeakSensorV2 import udiYoLeakSensor
+from udiYoCOSmokeSensorV2 import udiYoCOSmokeSensor
 from udiYoDoorSensorV2 import udiYoDoorSensor
 from udiYoOutletV2 import udiYoOutlet
 from udiYoMultiOutletV2 import udiYoMultiOutlet
@@ -27,7 +28,7 @@ from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV2 import udiYoVibrationSensor
 from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV2 import udiYoPowerFailSenor
-
+from udiYoSirenV2 import udiYoSiren
 
 import udiProfileHandler
 
@@ -124,10 +125,9 @@ class YoLinkSetup (udi_interface.Node):
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
                                 'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
-                                'PowerFailureAlarm', 'SmartRemoter' ]
-        #self.supportedYoTypes = ['PowerFailureAlarm', 'SmartRemoter' ]
+                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren' ]
+        #self.supportedYoTypes = ['MultiOutlet', 'Siren', 'MotionSensor','LeakSensor' ]
         
-        #self.supportedYoTypes = [ 'THSensor' ]
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')
@@ -455,7 +455,25 @@ class YoLinkSetup (udi_interface.Node):
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
-                        self.assigned_addresses.append(adr)                            
+                        self.assigned_addresses.append(adr)       
+
+                elif dev['type'] == 'COSmokeSensor': 
+                    name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    address = self.poly.getValidAddress(name)
+                    if address in self.Parameters:
+                        name = self.Parameters[address]
+                    else:
+                        name = dev['name']
+                        name = self.poly.getValidName(name)
+                        self.Parameters[name] =  dev['name']                    
+                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                    temp = udiYoCOSmokeSensor(self.poly, address, address, name, self.yoAccess, dev )
+                    while not temp.node_ready:
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
+                        time.sleep(1)
+                    for adr in temp.adr_list:
+                        self.assigned_addresses.append(adr)       
+
 
                 elif dev['type'] == 'PowerFailureAlarm': 
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
@@ -491,6 +509,25 @@ class YoLinkSetup (udi_interface.Node):
                         time.sleep(1)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
+
+
+                elif dev['type'] == 'Siren': 
+                    name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    address = self.poly.getValidAddress(name)
+                    if address in self.Parameters:
+                        name = self.Parameters[address]
+                    else:
+                        name = dev['name']
+                        name = self.poly.getValidName(name)
+                        self.Parameters[name] =  dev['name']                    
+                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                    temp = udiYoSiren(self.poly, address, address, name, self.yoAccess, dev )
+                    while not temp.node_ready:
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
+                        time.sleep(1)
+                    for adr in temp.adr_list:
+                        self.assigned_addresses.append(adr)
+                                                
             else:
                 logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
         time.sleep(1)
@@ -510,13 +547,9 @@ class YoLinkSetup (udi_interface.Node):
         try:
             logging.info('Stop Called:')
             #self.yoAccess.writeTtsFile() #save current TTS messages
-            if 'self.node' in locals():
-                self.node.setDriver('ST', 0, True, True)
-                #nodes = self.poly.getNodes()
-                #for node in nodes:
-                #    if node != 'setup':   # but not the controller node
-                #        nodes[node].setDriver('ST', 0, True, True)
-                time.sleep(2)
+
+            self.node.setDriver('ST', 0, True, True)
+
             if self.yoAccess:
                 self.yoAccess.shut_down()
             self.poly.stop()
@@ -578,7 +611,12 @@ class YoLinkSetup (udi_interface.Node):
                 for nde in nodes:
                     if nde != 'setup':   # but not the controller node
                         nodes[nde].checkDataUpdate()
-    
+            
+            if self.yoAccess.online:
+                self.node.setDriver('ST', 1, True, True)
+            else:
+                self.node.setDriver('ST', 0, True, True)
+                
 
 
     def handleLevelChange(self, level):
@@ -697,7 +735,7 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
 
 
-        polyglot.start('0.8.99')
+        polyglot.start('0.9.63' )
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
@@ -705,5 +743,3 @@ if __name__ == "__main__":
         polyglot.runForever()
     except (KeyboardInterrupt, SystemExit):
         sys.exit(0)
-        
-

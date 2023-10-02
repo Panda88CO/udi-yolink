@@ -34,6 +34,7 @@ class udiYoVibrationSensor(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25},
+            {'driver': 'GV2', 'value': 0, 'uom': 25},            
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
@@ -50,6 +51,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.yoVibrationSensor  = None
         self.node_ready = False
         self.last_state = 99
+        self.cmd_state = 0
         self.n_queue = []
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -110,11 +112,11 @@ class udiYoVibrationSensor(udi_interface.Node):
                 vib_state = self.getVibrationState()
                 if vib_state == 1:
                     self.node.setDriver('GV0', 1, True, True)
-                    if self.last_state != vib_state:
+                    if self.last_state != vib_state and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')   
                 elif vib_state == 0:
                     self.node.setDriver('GV0', 0, True, True)
-                    if self.last_state != vib_state:
+                    if self.last_state != vib_state and self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99, True, True) 
@@ -156,7 +158,11 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.yoVibrationSensor.updateStatus(data)
         self.updateData()
 
-
+    def set_cmd(self, command):
+        ctrl = int(command.get('value'))   
+        logging.info('udiYoVibrationSensor  set_cmd - {}'.format(ctrl))
+        self.cmd_state = ctrl
+        self.node.setDriver('GV2', self.cmd_state, True, True)
 
     def update(self, command = None):
         logging.info('udiYoVibrationSensor Update  Executed')
@@ -167,6 +173,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         pass
 
     commands = {
+                'SETCMD': set_cmd,        
                 'UPDATE': update,
                 'QUERY' : update, 
                 'DON'   : noop,

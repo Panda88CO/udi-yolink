@@ -210,7 +210,7 @@ class udiYoDimmer(udi_interface.Node):
             self.yoDimmer.setState('OFF')
             self.node.setDriver('GV0',0 , True, True)
             self.node.reportCmd('DOF')
-        else: #toggle
+        elif ctrl == 2: #toggle
             state = str(self.yoDimmer.getState()).upper() 
             logging.debug('switchControl : {}, {}'.format(ctrl, state))
             if state == 'ON':
@@ -222,7 +222,12 @@ class udiYoDimmer(udi_interface.Node):
                 self.node.setDriver('GV0',1 , True, True)
                 self.node.reportCmd('DON')
             #Unknown remains unknown
-    
+        elif ctrl == 5:
+            logging.info('switchControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
+            #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)
+            self.node.setDriver('GV1', self.onDelay * 60, True, True)
+            self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+            self.yolink.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
     def setOnDelay(self, command ):
         logging.info('udiYoDimmer setOnDelay')

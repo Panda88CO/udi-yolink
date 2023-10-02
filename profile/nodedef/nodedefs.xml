@@ -252,13 +252,19 @@
          <st id="GV5" editor="alarm" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV7" editor="alarm" />
-         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV8" editor="alarm" />
+         <st id="GV9" editor="cmdsetting" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
          </sends>
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >          
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" />             
          </accepts>
@@ -270,6 +276,7 @@
       <sts>
          <st id="GV0" editor="doorstate" />
          <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
       </sts>
@@ -278,7 +285,11 @@
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
          </sends>
+         
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd > 
             <cmd id="DON" /> 
             <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
@@ -312,6 +323,7 @@
       <sts>
          <st id="GV0" editor="motionstate" />
          <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
@@ -322,8 +334,12 @@
             <cmd id="DOF" editor="motionstate"  />    
          </sends>
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
             <cmd id="DON" /> 
-            <cmd id="DOF" />          
+            <cmd id="DOF" />      
+
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
             
@@ -336,6 +352,7 @@
       <sts>
          <st id="GV0" editor="waterstate" />
          <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
@@ -344,9 +361,11 @@
          <sends>
             <cmd id="DON" editor="waterstate"  />               
             <cmd id="DOF" editor="waterstate"  />    
-
          </sends>
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
             <cmd id="DON" /> 
             <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
@@ -356,11 +375,45 @@
    </nodeDef> 
 
 
+   <nodeDef id="yoCOSmokesens" nls="nlssmokesens">
+      <editors />
+      <sts>
+         <st id="ALARM" editor="deviceAlert" />
+         <st id="GV0" editor="SmokeAlert" />
+         <st id="GV1" editor="COAlert" />
+         <st id="GV2" editor="TempAlert" />
+         <st id="GV3" editor="BatteryAlert" />
+         <st id="GV4" editor="batlevel" />
+         <!--st id="GV6" editor="AlertInterval" /-->
+         <st id="GV5" editor="SelfcheckState" />
+         <st id="GV7" editor="cmdsetting" />
+         <st id="CLITEMP" editor="tempC" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" editor="deviceAlert"  />               
+            <cmd id="DOF" editor="deviceAlert"  />    
+         </sends>
+         <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV7" /> 
+            </cmd >          
+            <cmd id="DON" /> 
+            <cmd id="DOF" />          
+            <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
    <nodeDef id="yovibrasens" nls="nlsvibrasens">
       <editors />
       <sts>
          <st id="GV0" editor="vibrastate" />
          <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
@@ -372,6 +425,9 @@
 
          </sends>
          <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
             <cmd id="DON" /> 
             <cmd id="DOF" />          
             <cmd id="UPDATE" /> 
@@ -490,7 +546,7 @@
          <st id="GV2" editor="alertstate" />
          <st id="GV3" editor="powered" />
          <st id="GV4" editor="pfamute" />
-
+         <st id="GV7" editor="cmdstatus" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -499,6 +555,34 @@
             <cmd id="DOF"   />    
          </sends>
          <accepts>     
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV7" /> 
+            </cmd >           
+            <cmd id="UPDATE" /> 
+            <cmd id="QUERY" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+
+
+   <nodeDef id="yosiren" nls="nlssiren">
+      <editors />
+      <sts>
+         <st id="GV0" editor="sirenstate" />
+         <st id="GV1" editor="sirenduration" />
+         <st id="GV2" editor="sirenbatlevel" />
+         <st id="ST"  editor="status" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         </sends>
+         <accepts> 
+            <cmd id="SIRENCTRL" > 
+               <p id="" editor="sirenctrl" init="1" /> 
+            </cmd >
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
@@ -526,6 +610,8 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
+
 
    <nodeDef id="smremotekey" nls="nlssmkey">
       <editors />

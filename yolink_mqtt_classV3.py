@@ -38,6 +38,7 @@ class YoLinkMQTTDevice(object):
         yolink.deviceInfo = deviceInfo
         #yolink.deviceId = yolink.deviceInfo['deviceId']
         yolink.type = yolink.deviceInfo['type']
+        yolink.MQTT_type = 'default'
         yolink.delaySupport = ['Outlet', 'MultiOutlet', 'Manipulator', 'Switch', 'Dimmer']
         yolink.scheduleSupport = []#['Outlet', 'MultiOutlet', 'Manipulator', 'Switch','InfraredRemoter','Sprinkler', 'Thermostat', 'Dimmer' ]
         yolink.online  = False 
@@ -156,8 +157,7 @@ class YoLinkMQTTDevice(object):
 
     #@measure_time
     def initNode(yolink):
-        count = 0
-        maxCount = 2
+
         yolink.refreshDevice()
         #time.sleep(3)
         #yolink.online = yolink.getOnlineStatus()
@@ -215,7 +215,15 @@ class YoLinkMQTTDevice(object):
             return(True)
         else:
             return(False)
-
+        
+    #@measure_time
+    def send_data(yolink,  data):
+        logging.debug('send_data {}'.format(data))
+        yolink.yoAccess.publish_data( data)
+        if yolink.MQTT_type == 'c':
+            time.sleep(1)
+        
+        return (True)
     #@measure_time
     def setDevice(yolink,  data):
         attempt = 1
@@ -1073,6 +1081,7 @@ class YoLinkMQTTDevice(object):
                         #yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                 yolink.updateLoraInfo(data)
                 yolink.updateMessageInfo(data)
+                logging.debug('Nbr Outlets {}'.format(yolink.nbrOutlets ))
                 logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
 
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts

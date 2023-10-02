@@ -20,6 +20,7 @@ class YoLink_lock(YoLinkMQTTDevice):
         yolink.stateList = ['open', 'closed', 'lock', 'unlock']
         yolink.eventTime = 'Time'
         yolink.type = 'Lock'
+        yolink.MQTT_type = 'c'
         yolink.doorBellRing = False
         #time.sleep(2)
         

@@ -6,7 +6,7 @@
      <range  uom="25" subset="0-1,99" nls="swstate" />
   </editor>     
   <editor id = "swctrl" > 
-     <range  uom="25" subset="0-2" nls="swctrl" />
+     <range  uom="25" subset="0-2,5" nls="swctrl" />
   </editor>
   <editor id = "watt" > 
      <range  uom="30" min="-1" max="2000" prec="2" />
@@ -57,7 +57,7 @@
      <range  uom="25" subset="0-1,99" nls="manstate" />
   </editor>
     <editor id = "manctrl" > 
-     <range  uom="25" subset="0-1" nls="manctrl" />
+     <range  uom="25" subset="0-1,5" nls="manctrl" />
   </editor>
   <editor id = "usbstate" > 
      <range  uom="25" subset="0-1,99" nls="usbstate" />
@@ -71,7 +71,6 @@
   <editor id = "vibrastate" > 
      <range  uom="25" subset="0-1,99" nls="vibration" />
   </editor>
-
   <editor id = "volume" > 
      <range  uom="107" min="0" max="16"  prec="0"/>
   </editor>
@@ -90,7 +89,6 @@
  <editor id = "messages" > 
      <range  uom="25" subset="0-9" nls="sphtts" />
   </editor>
-
  <editor id = "lockstate" > 
      <range  uom="25" subset="0-1,99" nls="lockstate" />
   </editor>
@@ -127,20 +125,35 @@
  <editor id = "keynumber" > 
      <range  uom="25" subset="0-3,99" nls="keynumber" />
   </editor>
- <editor id = "presstype" > 
+   <editor id = "presstype" > 
      <range  uom="25" subset="0,8,99" nls="presstype" />
-  </editor>
-  <editor id = "pfamute" > 
+   </editor>
+   <editor id = "pfamute" > 
      <range  uom="25" subset="0-1,99" nls="pfamute" />
-  </editor>
+   </editor>
     <editor id = "keyscenedef" > 
      <range  uom="25" subset="0-5,99" nls="keyscenedef" />
-  </editor>
+   </editor>
    <editor id = "keyscene" > 
      <range  uom="25" subset="0-5" nls="keyscene" />
    </editor>
    <editor id = "keycmd" > 
      <range  uom="25" subset="0-5, 99" nls="keycmd" />
    </editor>  
+   <editor id = "sirenstate" > 
+     <range  uom="25" subset="0-2, 99" nls="sirenstate" />
+   </editor>  
+   <editor id = "sirenduration" > 
+     <range  uom="58" min="0" max ="3600" prec="0" />
+   </editor>
+   <editor id = "sirenbatlevel" > 
+     <range  uom="25" subset="0-4,98,99" nls="sirenbatlvl" />
+   </editor>
+   <editor id = "sirenctrl" > 
+     <range  uom="25" subset="0-1" nls="sirenctrl" />
+   </editor>
+   <editor id = "cmdsetting" > 
+     <range  uom="25" subset="0-3" nls="cmdsetting" />
+   </editor> 
 </editors> 
 
