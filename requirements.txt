@@ -1,4 +1,4 @@
 udi_interface>=3.0.51
 paho-mqtt>=1.6.1
-requests>=2.25
+requests>=2.28.2
 psutil>=5.9.2
