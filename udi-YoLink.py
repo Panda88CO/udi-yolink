@@ -146,7 +146,7 @@ class YoLinkSetup (udi_interface.Node):
         self.yoAccess.set_temp_unit(self.temp_unit )
 
         if 'DEBUG_EN' in self.Parameters:
-            self.debug = self.Parameters['TEMP_UNIT']
+            self.debug = self.Parameters['DEBUG_EN']
             self.yoAccess.set_debug(self.debug)
         else:
             self.debug = False
