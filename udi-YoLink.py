@@ -455,7 +455,6 @@ class YoLinkSetup (udi_interface.Node):
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(1)
                     for adr in temp.adr_list:
-<<<<<<< Updated upstream
                         self.assigned_addresses.append(adr)       
 
                 elif dev['type'] == 'COSmokeSensor': 
@@ -475,9 +474,6 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)       
 
-=======
-                        self.assigned_addresses.append(adr)                                                 
->>>>>>> Stashed changes
 
                 elif dev['type'] == 'PowerFailureAlarm': 
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
