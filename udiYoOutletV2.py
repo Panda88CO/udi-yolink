@@ -218,7 +218,7 @@ class udiYoOutlet(udi_interface.Node):
             #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)
             self.node.setDriver('GV1', self.onDelay * 60, True, True)
             self.node.setDriver('GV2', self.offDelay * 60 , True, True)
-            self.yolink.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+            self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
 
             #Unknown remains unknown

@@ -189,7 +189,7 @@ class udiYoManipulator(udi_interface.Node):
             #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)
             self.node.setDriver('GV1', self.onDelay * 60, True, True)
             self.node.setDriver('GV2', self.offDelay * 60 , True, True)
-            self.yolink.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+            self.yoManipulator.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
 
     def set_open(self, command = None):
