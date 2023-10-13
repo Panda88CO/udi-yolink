@@ -56,6 +56,9 @@ class udiYoDimmer(udi_interface.Node):
         self.last_state = ''
         self.timer_update = 5
         self.timer_expires = 0
+        self.onDelay = 0
+        self.offDelay = 0
+
         self.brightness = 50
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -231,15 +234,15 @@ class udiYoDimmer(udi_interface.Node):
 
     def setOnDelay(self, command ):
         logging.info('udiYoDimmer setOnDelay')
-        delay =int(command.get('value'))
-        self.yoDimmer.setOnDelay(delay)
-        self.node.setDriver('GV1', delay*60, True, True)
+        self.onDelay =int(command.get('value'))
+        self.yoDimmer.setOnDelay(self.onDelay )
+        self.node.setDriver('GV1', self.onDelay *60, True, True)
 
     def setOffDelay(self, command):
         logging.info('udiYoDimmer setOffDelay')
-        delay =int(command.get('value'))
-        self.yoDimmer.setOffDelay(delay)
-        self.node.setDriver('GV2', delay*60, True, True)
+        self.offDelay  =int(command.get('value'))
+        self.yoDimmer.setOffDelay(self.offDelay)
+        self.node.setDriver('GV2', self.offDelay*60, True, True)
 
 
     def update(self, command = None):

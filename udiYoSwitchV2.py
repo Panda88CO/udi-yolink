@@ -57,7 +57,7 @@ class udiYoSwitch(udi_interface.Node):
         self.timer_update = 5
         self.timer_expires = 0
         self.onDelay = 0
-        self.offDdelay = 0
+        self.offDelay = 0
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -230,8 +230,8 @@ class udiYoSwitch(udi_interface.Node):
 
     def prepOffDelay(self, command):
 
-        self.offDdelay =int(command.get('value'))
-        logging.info('udiYoSwitch prepOffDelay {}'.format(self.offDdelay))
+        self.offDelay =int(command.get('value'))
+        logging.info('udiYoSwitch prepOffDelay {}'.format(self.offDelay))
         #self.yoSwitch.setOffDelay(delay)
         #self.node.setDriver('GV2', delay*60, True, True)
 
