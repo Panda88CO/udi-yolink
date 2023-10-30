@@ -611,7 +611,7 @@ class YoLinkSetup (udi_interface.Node):
                 for nde in nodes:
                     if nde != 'setup':   # but not the controller node
                         nodes[nde].checkDataUpdate()
-            
+             
             if self.yoAccess.online:
                 self.node.setDriver('ST', 1, True, True)
             else:

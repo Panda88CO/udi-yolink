@@ -273,6 +273,7 @@ class udiYoSubUSB(udi_interface.Node):
         self.usbPort = int(portStr.pop())
         self.last_state = 99
         self.address = address
+        self.portState = -1
         self.name = name
         self.node = None
         #self.port = port
