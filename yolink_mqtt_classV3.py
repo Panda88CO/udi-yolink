@@ -185,7 +185,7 @@ class YoLinkMQTTDevice(object):
             data["token"]= yolink.deviceInfo['token']
             #logging.debug  ('refreshDevice')
             while  not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
-                time.sleep(1)
+                time.sleep(2)
                 attempt = attempt + 1
             yolink.lastControlPacket = data
             time.sleep(2)
@@ -424,7 +424,7 @@ class YoLinkMQTTDevice(object):
     '''
     #@measure_time
     def checkOnlineStatus(yolink, dataPacket):
-
+        yolink.susspend = False
         if 'code' in dataPacket:
             if dataPacket['code'] == '000000':
                 if 'data' in dataPacket:
@@ -432,8 +432,13 @@ class YoLinkMQTTDevice(object):
                         yolink.online = dataPacket['data']['online']
                     else:
                         yolink.online = True
-            else:
+            elif dataPacket['code'].find('00020') == 0: # Offline
                 yolink.online = False
+            elif  dataPacket['code'] == '010301': # need to add a wait
+                yolink.online = True
+                yolink.susspend = True
+                time.sleep(1)
+
         elif 'event' in dataPacket:
             if 'data' in dataPacket:
                     if 'online' in dataPacket['data']:
@@ -443,7 +448,6 @@ class YoLinkMQTTDevice(object):
             else:
                 yolink.online = True 
         else:
-            
             yolink.online = False    
         if not yolink.online:
             logging.debug('checkOnlineStatus {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
@@ -507,7 +511,10 @@ class YoLinkMQTTDevice(object):
                 #        logging.debug('Device not connected - trying agian ')
                 else:
                     yolink.deviceError(data)
+
+
                     yolink.online = yolink.checkOnlineStatus(data)
+
                     logging.error(yolink.type+ ': ' + data['desc'])
             elif 'event' in data:
                 #logging.debug('Event deteced')
@@ -600,7 +607,7 @@ class YoLinkMQTTDevice(object):
         delays['off'] = data['params']['delayOff']
         temp.append(delays)
         yolink.extDelayTimer.addDelays(temp)
-        yolink.online = yolink.check_system_online()
+        #yolink.online = yolink.check_system_online()
         return(True)
 
     def setOnDelay(yolink,  onDelay):
@@ -625,7 +632,7 @@ class YoLinkMQTTDevice(object):
         delays['on'] = data['params']['delayOn']
         temp.append(delays)
         yolink.extDelayTimer.addDelays(temp)
-        yolink.online = yolink.check_system_online()
+        #yolink.online = yolink.check_system_online()
         return(True)
 
     #@measure_time
@@ -650,7 +657,7 @@ class YoLinkMQTTDevice(object):
         delays['off'] = data['params']['delayOff']
         temp.append(delays)
         yolink.extDelayTimer.addDelays(temp)
-        yolink.online = yolink.check_system_online()
+        #yolink.online = yolink.check_system_online()
         return(True)
 
     #@measure_time
@@ -689,7 +696,7 @@ class YoLinkMQTTDevice(object):
         temp.append(delays)
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays(temp)
-        yolink.online = yolink.check_system_online()
+        #yolink.online = yolink.check_system_online()
         return(True)
 
     #@measure_time

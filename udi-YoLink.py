@@ -600,6 +600,8 @@ class YoLinkSetup (udi_interface.Node):
                     for nde in nodes:
                         if nde != 'setup':   # but not the controller node
                             nodes[nde].checkOnline()
+                            logging.debug('longpoll {}'.format(nde))
+                            time.sleep(4) # need to limit calls to 20 per min - using 4 to allow otehr calls 
                 except Exception as e:
                     logging.debug('Exeption occcured during systemPoll : {}'.format(e))
                     #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
@@ -607,11 +609,14 @@ class YoLinkSetup (udi_interface.Node):
                 
             if 'shortPoll' in polltype:
                 self.heartbeat()
+
                 nodes = self.poly.getNodes()
                 for nde in nodes:
                     if nde != 'setup':   # but not the controller node
                         nodes[nde].checkDataUpdate()
-            
+                        logging.debug('shortpoll {}'.format(nde))
+                        time.sleep(4)  # need to limit calls to 20 per min - using 4 to allow otehr calls 
+
             if self.yoAccess.online:
                 self.node.setDriver('ST', 1, True, True)
             else:
@@ -735,7 +740,7 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
 
 
-        polyglot.start('0.9.66' )
+        polyglot.start('0.9.70' )
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
