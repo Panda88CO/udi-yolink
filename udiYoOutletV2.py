@@ -190,9 +190,10 @@ class udiYoOutlet(udi_interface.Node):
 
 
     def outletControl(self, command):
-        ctrl = int(command.get('value'))   
+        
+        ctrl = int(command.get('value'))  
         logging.info('udiYoOutlet outletControl - {}'.format(ctrl))
-        ctrl = int(command.get('value'))     
+        ctrl = int(command.get('value'))
         if ctrl == 1:
             self.yoOutlet.setState('ON')
             self.node.setDriver('GV0',1 , True, True)

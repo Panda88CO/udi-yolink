@@ -243,7 +243,7 @@ class YoLinkMQTTDevice(object):
         logging.debug(yolink.type+' - setDevice -data {}'.format(data))
         if worked:
             while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-                time.sleep(1)
+                time.sleep(10.1) # we can only try 6 timer per minute per device 
                 attempt = attempt + 1
             #yolink.yoAccess.publish_data(data)
             return(True)

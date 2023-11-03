@@ -473,7 +473,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
         self.node.setDriver('ST', 1, True, True)
-        time.sleep(3)
+        time.sleep(10)
         self.yoMultiOutlet.initNode()
         time.sleep(3)
         #if not self.yoMultiOutlet.online:
@@ -608,7 +608,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.node.setDriver('ST', 0)
             if self.yoMultiOutlet.get_nbr_attempts() < 3:
                 logging.debug ('Device not on-line retrying ')
-                time.sleep(1)
+                time.sleep(10.1)
                 self.yoMultiOutlet.retry_send_data()
         else:
             self.node.setDriver('ST', 1)
@@ -629,7 +629,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             logging.debug('Node server not fully configured yet')
             self.node_ready = True
             #self.yoMultiOutlet.refreshDevice()
-            time.sleep(10)
+            time.sleep(10.1)
             self.start()
             time.sleep(3)
 

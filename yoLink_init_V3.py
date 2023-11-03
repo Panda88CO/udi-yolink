@@ -33,8 +33,9 @@ class YoLinkInitPAC(object):
         yoAccess.messageQueue = Queue()
         yoAccess.fileQueue = Queue()
         yoAccess.timeQueue = Queue()
-        yoAccess.MAX_MESSAGES = 10  # number of messages per yoAccess.MAX_TIME
+        yoAccess.MAX_MESSAGES = 100  # number of messages per yoAccess.MAX_TIME
         yoAccess.MAX_TIME = 30      # Time Window
+        yoAccess.time_tracking_dict = {} # structure to track time so we do not violate yolink publishing requirements
         yoAccess.debug = True
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
@@ -61,6 +62,7 @@ class YoLinkInitPAC(object):
         yoAccess.online = False
         yoAccess.deviceList = []
         yoAccess.token = None
+
         yoAccess.unassigned_nodes = []
         try:
             #while not yoAccess.request_new_token( ):
@@ -623,8 +625,52 @@ class YoLinkInitPAC(object):
         return(True)
 
     #@measure_time
+    def time_track_publish(yoAccess, t_now, dev_id):
+        '''time_track_publish'''
+        ''' make 20 overall calls per min and 6 per dev per min'''
+        logging.debug('time_track_going in: {}, {}, {}'.format(time, dev_id, yoAccess.time_tracking_dict))
+        max_dev_id_min = 6
+        max_dev_all = 20
+        t_wait = 0
+        if dev_id not in yoAccess.time_tracking_dict:
+            yoAccess.time_tracking_dict[dev_id] = []
+        total_dev_calls = 0
+        t_oldest = t_now
+        t_oldest_dev = t_now
+
+        for dev in yoAccess.time_tracking_dict:
+            for t_call in yoAccess.time_tracking_dict[dev].items():
+                t_old_dev_tmp = t_now
+                if t_call  < tit_nowme - 60: # more than 1 min ago
+                    yoAccess.time_tracking_dict[dev].pop(t_call)
+                else:
+                    if t_call < t_oldest:
+                        t_oldest = t_call
+                    if t_call < t_old_dev_tmp:
+                        t_old_dev_tmp = t_call
+                    
+
+            if dev == dev_id: # check if max_dev_id_min is in play
+                yoAccess.time_tracking_dict[dev].append(t_now)
+                t_oldest_dev = t_old_dev_tmp # only test for selected dev_id
+                if len(yoAccess.time_tracking_dict[dev]) <= max_dev_id_min:
+                    t_wait = 0
+                else:
+                    t_wait= (60 - t_now-t_oldest_dev) # need to wait t_max before issuing command
+                total_dev_calls = total_dev_calls + len(yoAccess.time_tracking_dict[dev])
+        if total_dev_calls >  max_dev_all:
+            tmp_t =(60 - t_now-t_oldest)
+            t_wait = max(tmp_t, t_wait)
+        logging.debug('TimeTrack: {}, {}, {}'.format(t_wait, t_oldest, t_oldest_dev))
+        return(t_wait)
+        
+        #yoAccess.time_tracking_dict[dev_id].append(time)
+
+    #@measure_time
     def transfer_data(yoAccess):
+        '''transfer_data'''
         yoAccess.lastTransferTime = time.time()
+        
         try:
             data = yoAccess.publishQueue.get(timeout = 10) 
             
@@ -635,14 +681,18 @@ class YoLinkInitPAC(object):
             #logging.debug('mqttList : {}'.format(yoAccess.mqttList))
             if deviceId in yoAccess.mqttList:
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
-                ### check if publish list is full 
+                ### check if publish list is full
                 timeNow_s = time.time()
+                delay =  yoAccess.time_track_publish(timeNow_s, deviceId)
+                logging.info('delaying call by {}sec due to too many calls'.format(delay))
+                time.sleep(delay)
                 #logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize(), yoAccess.MAX_MESSAGES))
                 if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
-                    first_TXtime = yoAccess.timeQueue.get()
-                    if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
-                        logging.debug('Delaying command to ensure no overflow of commands to YoLink server')
-                        time.sleep(yoAccess.MAX_TIME - (timeNow_s - first_TXtime )) # wait until yoAccess.MAX_TIME has elapsed sine first element
+                    logging.Info('Too many calls are issued - messages are pileing up (more than {} are waiting )'.format(yoAccess.timeQueue.qsize()))
+                #    first_TXtime = yoAccess.timeQueue.get()
+                #    if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
+                #        logging.debug('Delaying command to ensure no overflow of commands to YoLink server')
+                #        time.sleep(yoAccess.MAX_TIME - (timeNow_s - first_TXtime )) # wait until yoAccess.MAX_TIME has elapsed sine first element
                 yoAccess.timeQueue.put(timeNow_s)    
                 #logging.debug('getting to publish')            
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
