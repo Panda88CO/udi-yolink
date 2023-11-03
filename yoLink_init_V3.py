@@ -641,7 +641,7 @@ class YoLinkInitPAC(object):
         for dev in yoAccess.time_tracking_dict:
             for t_call in yoAccess.time_tracking_dict[dev].items():
                 t_old_dev_tmp = t_now
-                if t_call  < tit_nowme - 60: # more than 1 min ago
+                if t_call  < t_now- 60: # more than 1 min ago
                     yoAccess.time_tracking_dict[dev].pop(t_call)
                 else:
                     if t_call < t_oldest:
