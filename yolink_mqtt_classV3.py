@@ -160,14 +160,19 @@ class YoLinkMQTTDevice(object):
 
         yolink.refreshDevice()
         time.sleep(4)
-        #yolink.online = yolink.getOnlineStatus()
-        #while not yolink.online and count < maxCount and not yolink.disconnect:
+
+        #yolink.online = yolink.check_system_online()
+        while yolink.suspend and yolink.online :
+            logging.debug( 'Yolink servers may be overloaded so sleep ') 
+            time.sleep(10)
+            yolink.refreshDevice()
+
+        # while not yolink.online  and count < maxCount and not yolink.disconnect:
         #    time.sleep(10)
         #    yolink.refreshDevice()
         #    count = count + 1
         #    print ('retry count : {}'.format(count))
-
-        if not yolink.online:    
+        if not yolink.online:
             logging.error('{} not online'.format(yolink.type))
 
     #@measure_time
@@ -422,9 +427,11 @@ class YoLinkMQTTDevice(object):
     def onlineStatus(yolink):
         return(yolink.getOnlineStatus())
     '''
+
+
     #@measure_time
     def checkOnlineStatus(yolink, dataPacket):
-        yolink.susspend = False
+        yolink.suspend = False
         if 'code' in dataPacket:
             if dataPacket['code'] == '000000':
                 if 'data' in dataPacket:
@@ -436,7 +443,7 @@ class YoLinkMQTTDevice(object):
                 yolink.online = False
             elif  dataPacket['code'] == '010301': # need to add a wait
                 yolink.online = True
-                yolink.susspend = True
+                yolink.suspend = True
                 time.sleep(1)
 
         elif 'event' in dataPacket:
