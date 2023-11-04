@@ -640,7 +640,8 @@ class YoLinkInitPAC(object):
         logging.debug('time_tracking0 - {}'.format(yoAccess.time_tracking_dict))
         for dev in yoAccess.time_tracking_dict:
             logging.debug('time_tracking1 - {}'.format(dev))
-            for t_call in yoAccess.time_tracking_dict[dev]:
+            for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
+                t_call = yoAccess.time_tracking_dict[dev][call_nbr]
                 t_old_dev_tmp = t_now
                 if t_call  < t_now- 60: # more than 1 min ago
                     logging.debug('removing {}'.format(t_call))
