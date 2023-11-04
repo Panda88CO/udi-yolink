@@ -504,7 +504,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.outletName = 'outlet'
             self.usbName = 'usb'
             self.node.setDriver('ST', 1, True, True)
-            logging.debug('Checking/creating  Outkletst  {}'.format(self.yoMultiOutlet.nbrOutlets))
+            logging.debug('Checking/creating  Outlets  {}'.format(self.yoMultiOutlet.nbrOutlets))
             for port in range(0,self.yoMultiOutlet.nbrOutlets):
                 try:
                     #logging.debug('Adding sub outlet : {}'.format(port))

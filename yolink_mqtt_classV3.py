@@ -159,7 +159,7 @@ class YoLinkMQTTDevice(object):
     def initNode(yolink):
 
         yolink.refreshDevice()
-        #time.sleep(3)
+        time.sleep(4)
         #yolink.online = yolink.getOnlineStatus()
         #while not yolink.online and count < maxCount and not yolink.disconnect:
         #    time.sleep(10)
