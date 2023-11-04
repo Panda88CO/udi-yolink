@@ -652,7 +652,7 @@ class YoLinkInitPAC(object):
                     if t_call < t_old_dev_tmp:
                         t_old_dev_tmp = t_call
             
-
+            logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
             if dev == dev_id: # check if max_dev_id_min is in play
                 logging.debug('time_tracking2 - dev found')
                 yoAccess.time_tracking_dict[dev].append(t_now)
