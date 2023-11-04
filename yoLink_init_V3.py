@@ -51,7 +51,7 @@ class YoLinkInitPAC(object):
         yoAccess.apiType = 'UAC'
         yoAccess.tokenExpTime = 0
         yoAccess.timeExpMarging = 3600 # 1 hour - most devices report once per hour
-        yoAccess.lastTransferTime = time.time()
+        yoAccess.lastTransferTime = int(time.time())
         #yoAccess.timeExpMarging = 7170 #min for testing 
         yoAccess.tmpData = {}
         yoAccess.lastDataPacket = {}
@@ -221,7 +221,7 @@ class YoLinkInitPAC(object):
     #@measure_time
     def get_access_token(yoAccess):
         yoAccess.tokenLock.acquire()
-        now = int(time.time())
+        #now = int(time.time())
         if yoAccess.token == None:
             yoAccess.request_new_token()
         #if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
@@ -637,7 +637,7 @@ class YoLinkInitPAC(object):
         total_dev_calls = 0
         t_oldest = t_now
         t_oldest_dev = t_now
-
+        logging.debug('time_tracking0 - {}'.format(yoAccess.time_tracking_dict))
         for dev in yoAccess.time_tracking_dict:
             logging.debug('time_tracking1 - {}'.format(dev))
             for t_call in yoAccess.time_tracking_dict[dev]:
@@ -671,7 +671,7 @@ class YoLinkInitPAC(object):
     #@measure_time
     def transfer_data(yoAccess):
         '''transfer_data'''
-        yoAccess.lastTransferTime = time.time()
+        yoAccess.lastTransferTime = int(time.time())
         
         try:
             data = yoAccess.publishQueue.get(timeout = 10) 
@@ -684,7 +684,7 @@ class YoLinkInitPAC(object):
             if deviceId in yoAccess.mqttList:
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 ### check if publish list is full
-                timeNow_s = time.time()
+                timeNow_s = int(time.time())
                 delay =  yoAccess.time_track_publish(timeNow_s, deviceId)
                 logging.info('delaying call by {}sec due to too many calls'.format(delay))
                 time.sleep(delay)
@@ -713,7 +713,7 @@ class YoLinkInitPAC(object):
                     yoAccess.online = False
                     yoAccess.client.reconnect() # is this the right strategy 
             else:
-                yoAccess.lastTransferTime = time.time()
+                yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True
         except Exception as e:
             pass # go wait again unless stop is called
