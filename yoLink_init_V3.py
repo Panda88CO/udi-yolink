@@ -665,7 +665,7 @@ class YoLinkInitPAC(object):
         if total_dev_calls >  max_dev_all:
             tmp_t =(60 - t_now-t_oldest)
             t_wait = max(tmp_t, t_wait)
-        logging.debug('TimeTrack: {}, {}, {}'.format(t_wait, t_oldest, t_oldest_dev))
+        logging.debug('TimeTrack: {} {}, {}, {}'.format(t_now, t_wait, t_oldest, t_oldest_dev))
         return(t_wait)
         
         #yoAccess.time_tracking_dict[dev_id].append(time)
@@ -688,11 +688,13 @@ class YoLinkInitPAC(object):
                 ### check if publish list is full
                 timeNow_s = int(time.time())
                 delay =  yoAccess.time_track_publish(timeNow_s, deviceId)
-                logging.info('delaying call by {}sec due to too many calls'.format(delay))
-                time.sleep(delay)
+               
+                if delay > 0:
+                    logging.info('delaying call by {}sec due to too many calls'.format(delay))
+                    time.sleep(delay)
                 #logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize(), yoAccess.MAX_MESSAGES))
-                if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
-                    logging.Info('Too many calls are issued - messages are pileing up (more than {} are waiting )'.format(yoAccess.timeQueue.qsize()))
+                #if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
+                #    logging.Info('Too many calls are issued - messages are pileing up (more than {} are waiting )'.format(yoAccess.timeQueue.qsize()))
                 #    first_TXtime = yoAccess.timeQueue.get()
                 #    if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
                 #        logging.debug('Delaying command to ensure no overflow of commands to YoLink server')
