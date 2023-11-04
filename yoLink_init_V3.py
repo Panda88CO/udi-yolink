@@ -628,7 +628,7 @@ class YoLinkInitPAC(object):
     def time_track_publish(yoAccess, t_now, dev_id):
         '''time_track_publish'''
         ''' make 20 overall calls per min and 6 per dev per min'''
-        logging.debug('time_track_going in: {}, {}, {}'.format(time, dev_id, yoAccess.time_tracking_dict))
+        logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
         max_dev_id_min = 6
         max_dev_all = 20
         t_wait = 0
@@ -639,7 +639,8 @@ class YoLinkInitPAC(object):
         t_oldest_dev = t_now
 
         for dev in yoAccess.time_tracking_dict:
-            for t_call in yoAccess.time_tracking_dict[dev].items():
+            logging.debug('time_tracking1 - {}'.format(dev))
+            for t_call in yoAccess.time_tracking_dict[dev]:
                 t_old_dev_tmp = t_now
                 if t_call  < t_now- 60: # more than 1 min ago
                     yoAccess.time_tracking_dict[dev].pop(t_call)
@@ -648,9 +649,10 @@ class YoLinkInitPAC(object):
                         t_oldest = t_call
                     if t_call < t_old_dev_tmp:
                         t_old_dev_tmp = t_call
-                    
+            
 
             if dev == dev_id: # check if max_dev_id_min is in play
+                logging.debug('time_tracking2 - dev found')
                 yoAccess.time_tracking_dict[dev].append(t_now)
                 t_oldest_dev = t_old_dev_tmp # only test for selected dev_id
                 if len(yoAccess.time_tracking_dict[dev]) <= max_dev_id_min:

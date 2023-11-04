@@ -158,7 +158,7 @@ class YoLinkMQTTDevice(object):
 
     #@measure_time
     def initNode(yolink):
-
+        maxCount = 3
         yolink.refreshDevice()
         time.sleep(4)
 
@@ -167,12 +167,13 @@ class YoLinkMQTTDevice(object):
             logging.debug( 'Yolink servers may be overloaded so sleep ') 
             time.sleep(10)
             yolink.refreshDevice()
+        count = 0
 
-        # while not yolink.online  and count < maxCount and not yolink.disconnect:
-        #    time.sleep(10)
-        #    yolink.refreshDevice()
-        #    count = count + 1
-        #    print ('retry count : {}'.format(count))
+        while not yolink.online  and count < maxCount and not yolink.disconnect:
+            time.sleep(10)
+            yolink.refreshDevice()
+            count = count + 1
+            print ('retry count : {}'.format(count))
         if not yolink.online:
             logging.error('{} not online'.format(yolink.type))
 
