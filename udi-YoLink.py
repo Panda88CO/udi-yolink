@@ -208,7 +208,7 @@ class YoLinkSetup (udi_interface.Node):
                     self.poly.updateProfile()   
                     for nbr in range(0,self.nbrTTS):
                         index = 'TTS'+str(nbr)
-                        if index not in self.Partime_tracking_dict logging.info('delaying call by {}sec due to too many calls'.format(delay))ameters:
+                        if index not in self.Parameters:
                             self.Parameters[index] = index
                         self.yoAccess.TtsMessages[nbr] = self.Parameters[index]
 
@@ -530,7 +530,7 @@ class YoLinkSetup (udi_interface.Node):
                                                 
             else:
                 logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
-        time.sleep(4)
+        time.sleep(1)
         
         logging.debug('assigned addresses nodes  :{} - {}'.format(len(self.assigned_addresses), self.assigned_addresses))
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
