@@ -32,7 +32,7 @@ class YoLinkInitPAC(object):
         yoAccess.publishQueue = Queue()
         yoAccess.messageQueue = Queue()
         yoAccess.fileQueue = Queue()
-        yoAccess.timeQueue = Queue()
+        #yoAccess.timeQueue = Queue()
         yoAccess.MAX_MESSAGES = 100  # number of messages per yoAccess.MAX_TIME
         yoAccess.MAX_TIME = 30      # Time Window
         yoAccess.time_tracking_dict = {} # structure to track time so we do not violate yolink publishing requirements
@@ -699,7 +699,7 @@ class YoLinkInitPAC(object):
                 #    if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
                 #        logging.debug('Delaying command to ensure no overflow of commands to YoLink server')
                 #        time.sleep(yoAccess.MAX_TIME - (timeNow_s - first_TXtime )) # wait until yoAccess.MAX_TIME has elapsed sine first element
-                yoAccess.timeQueue.put(timeNow_s)    
+                #yoAccess.timeQueue.put(timeNow_s)    
                 #logging.debug('getting to publish')            
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
             else:

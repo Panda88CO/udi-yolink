@@ -562,13 +562,16 @@ class YoLinkSetup (udi_interface.Node):
 
     def heartbeat(self):
         logging.debug('heartbeat: ' + str(self.hb))
-        
-        if self.hb == 0:
-            self.reportCmd('DON',2)
-            self.hb = 1
+        if self.yoAccess.online:
+            self.node.setDriver('ST', 1)
+            if self.hb == 0:
+                self.reportCmd('DON',2)
+                self.hb = 1
+            else:
+                self.reportCmd('DOF',2)
+                self.hb = 0
         else:
-            self.reportCmd('DOF',2)
-            self.hb = 0
+            self.node.setDriver('ST', 0)
 
     def checkNodes(self):
         logging.info('Updating Nodes')
@@ -586,39 +589,37 @@ class YoLinkSetup (udi_interface.Node):
     def systemPoll (self, polltype):
         if self.pollStart:
             logging.debug('System Poll executing: {}'.format(polltype))
-
-            if 'longPoll' in polltype:
-                #Keep token current
-                #self.node.setDriver('GV0', self.temp_unit, True, True)
-                try:
-                    #if not self.yoAccess.refresh_token(): #refresh failed
-                    #    while not self.yoAccess.request_new_token():
-                    #            time.sleep(60)
-                    #logging.info('Updating device status')
-                    nodes = self.poly.getNodes()
+            if self.yoAccess.online:
+                self.node.setDriver('ST', 1)
+                if 'longPoll' in polltype:
+                    #Keep token current
+                    #self.node.setDriver('GV0', self.temp_unit, True, True)
+                    try:
+                        #if not self.yoAccess.refresh_token(): #refresh failed
+                        #    while not self.yoAccess.request_new_token():
+                        #            time.sleep(60)
+                        #logging.info('Updating device status')
+                        nodes = self.poly.getNodes()
+                        
+                        for nde in nodes:
+                            if nde != 'setup':   # but not the controller node
+                                nodes[nde].checkOnline()
+                                logging.debug('longpoll {}'.format(nde))
+                                time.sleep(4) # need to limit calls to 20 per min - using 4 to allow otehr calls 
+                    except Exception as e:
+                        logging.debug('Exeption occcured during systemPoll : {}'.format(e))
+                        #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
+                        #deviceList = self.yoAccess.getDeviceList()           
                     
+                if 'shortPoll' in polltype:
+                    self.heartbeat()
+
+                    nodes = self.poly.getNodes()
                     for nde in nodes:
                         if nde != 'setup':   # but not the controller node
-                            nodes[nde].checkOnline()
-                            logging.debug('longpoll {}'.format(nde))
-                            time.sleep(4) # need to limit calls to 20 per min - using 4 to allow otehr calls 
-                except Exception as e:
-                    logging.debug('Exeption occcured during systemPoll : {}'.format(e))
-                    #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
-                    #deviceList = self.yoAccess.getDeviceList()           
-                
-            if 'shortPoll' in polltype:
-                self.heartbeat()
-
-                nodes = self.poly.getNodes()
-                for nde in nodes:
-                    if nde != 'setup':   # but not the controller node
-                        nodes[nde].checkDataUpdate()
-                        logging.debug('shortpoll {}'.format(nde))
-                        time.sleep(4)  # need to limit calls to 20 per min - using 4 to allow otehr calls 
-
-            if self.yoAccess.online:
-                self.node.setDriver('ST', 1, True, True)
+                            nodes[nde].checkDataUpdate()
+                            logging.debug('shortpoll {}'.format(nde))
+                            time.sleep(4)  # need to limit calls to 20 per min - using 4 to allow otehr calls
             else:
                 self.node.setDriver('ST', 0, True, True)
                 

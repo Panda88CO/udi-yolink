@@ -130,6 +130,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     def playAudio(yolink):
         logging.debug(yolink.type+' - playAudio')
         maxAttempts = 3
+        attempt = 0
         #missing try
         message = yolink.yoAccess.TtsMessages[yolink.TtsMessageNbr]
         data = {}
@@ -145,7 +146,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         data['params']['message'] = message
         logging.debug('playAudio: {}'.format(data))
         while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-               time.sleep(1)
+               time.sleep(4)
                attempt = attempt + 1
         yolink.lastControlPacket = data
 
@@ -165,7 +166,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         data['params']['mute'] = yolink.mute
         print('dataStr: {}'.format(data))
         while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-            time.sleep(1)
+            time.sleep(4)
             attempt = attempt + 1
         yolink.lastControlPacket = data
 

@@ -430,9 +430,14 @@ class YoLinkMQTTDevice(object):
         return(yolink.getOnlineStatus())
     '''
 
+    #@measure_time
+    def checkSuspendedStatus(yolink):
+        '''checkSuspendedStatus'''
+        return(yolink.suspended)
 
     #@measure_time
     def checkOnlineStatus(yolink, dataPacket):
+        '''checkOnlineStatus'''
         yolink.suspended= False
         if 'code' in dataPacket:
             if dataPacket['code'] == '000000':
@@ -457,7 +462,7 @@ class YoLinkMQTTDevice(object):
             else:
                 yolink.online = True 
         else:
-            yolink.online = False    
+            yolink.online = False
         if not yolink.online:
             logging.debug('checkOnlineStatus {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
         return(yolink.online)
