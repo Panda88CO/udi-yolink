@@ -174,8 +174,8 @@ class YoLinkMQTTDevice(object):
         #    yolink.refreshDevice()
         #    count = count + 1
         #    print ('retry count : {}'.format(count))
-        if not yolink.online:
-            logging.error('{} not online'.format(yolink.type))
+        #if not yolink.online:
+        #    logging.error('{} not online'.format(yolink.type))
 
     #@measure_time
     def refreshDevice(yolink):
@@ -191,7 +191,7 @@ class YoLinkMQTTDevice(object):
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
             #logging.debug  ('refreshDevice')
-            while  not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
+            while not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
                 time.sleep(2)
                 attempt = attempt + 1
             yolink.lastControlPacket = data
@@ -207,11 +207,12 @@ class YoLinkMQTTDevice(object):
             return(0)
     #@measure_time
     def check_system_online(yolink):
-        if yolink.yoAccess.online:
-            yolink.online = yolink.dataAPI[yolink.dOnline]
-        else:
-            yolink.online = False
-        return(yolink.online)
+        return(yolink.yoAccess.online)
+        #if yolink.yoAccess.online:
+        #    yolink.online = yolink.dataAPI[yolink.dOnline]
+        #else:
+        #    yolink.online = False
+        #return(yolink.online)
 
     #@measure_time
     def data_updated(yolink):

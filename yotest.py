@@ -37,34 +37,43 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
+
 
 
 
 
 
 class testmout (object):
-    def init(self):
-        ''''''
-        self.uaid = 'ua_05E8E07C48EC4639BB2CE61CAFCC551A'
-        self.secretKey = 'sec_v1_uufF2C3GIb+kcV5ipS+9tg=='
 
-    def init (self):
+    def __init__ (self):
+        '''   '''
+        self.uaid = 'ua_05E8E07C48EC4639BB2CE61CAFCC551A'
+        self.secretKey = 'sec_v1_uufF2C3GIb+kcV5ipS+9tg=='        
         self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
         self.deviceList = self.yoAccess.getDeviceList()
         for dev in self.deviceList:
-            if dev['type'] == 'MultiOutlet': 
-                self.mout = YoLinkMultiOut(self.yoAccess, dev, self.updateStatusmOut)
-                
-                time.sleep(4)
+            if dev['type'] == 'MultiOutlet':
+                self.mout = YoLinkMultiOut(self.yoAccess, dev, self.updateStatusmout)
+                time.sleep(1)
+                self.mout.initNode()
+                time.sleep(3)
+                #self.mout.start()
             
     def updateStatusmout(self, data):
         
-        logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
+        #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
         self.mout.updateStatus(data)
-        self.updateData()
-
+        self.updateDatamOut
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
         ##    logging.debug('Node server not fully configured yet')
@@ -82,5 +91,5 @@ class testmout (object):
         self.mout.setMultiOutPortState(port, state)
 
 testing = testmout()
-testing.set_mOut(0, 'open')
-testing.set_mOut(0, 'closed')
+testing.set_mOut( 'open', {'port0'})
+testing.set_mOut( 'closed',{ 0})

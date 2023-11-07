@@ -126,7 +126,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         # value is state that need to change 2 (ON/OFF)
         status = True
         port = 0
-        for i in portList:            
+        for i in portList:        
             portNbr = yolink.extractStrNbr(i)
             portNbr = portNbr + yolink.nbrUsb  # Ports start after USB control ports
             if portNbr <= yolink.nbrPorts and portNbr >= 0 :

@@ -638,6 +638,8 @@ class YoLinkInitPAC(object):
         total_dev_calls = 0
         t_oldest = t_now
         t_oldest_dev = t_now
+        t_call = t_now
+        t_old_dev_tmp = t_now
         logging.debug('time_tracking0 - {}'.format(yoAccess.time_tracking_dict))
         for dev in yoAccess.time_tracking_dict:
             logging.debug('time_tracking1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
@@ -670,6 +672,9 @@ class YoLinkInitPAC(object):
             tmp_t =(60 - t_now-t_oldest)
             t_wait = max(tmp_t, t_wait, 0)
             yoAccess.time_tracking_dict[dev_id].append(t_now + t_wait)
+        else:
+            yoAccess.time_tracking_dict[dev_id].append(t_now)
+        
         logging.debug('TimeTrack: {} {}, {}, {}'.format(t_now, t_wait, t_oldest, t_oldest_dev, yoAccess.time_tracking_dict))
         return(t_wait)
         
@@ -681,7 +686,7 @@ class YoLinkInitPAC(object):
         yoAccess.lastTransferTime = int(time.time())
         
         try:
-            data = yoAccess.publishQueue.get(timeout = 10) 
+            data = yoAccess.publishQueue.get(timeout = 100) 
             
             deviceId = data['targetDevice']
             dataStr = str(json.dumps(data))
