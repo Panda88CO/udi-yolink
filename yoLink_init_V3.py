@@ -628,55 +628,59 @@ class YoLinkInitPAC(object):
     def time_track_publish(yoAccess, t_now, dev_id):
         '''time_track_publish'''
         ''' make 20 overall calls per min and 6 per dev per min'''
-        logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
-        max_dev_id_min = 6
-        max_dev_all = 20
-        t_wait = 0
-        if dev_id not in yoAccess.time_tracking_dict:
-            yoAccess.time_tracking_dict[dev_id] = []
-            logging.debug('Adding timetrack for {}'.format(dev_id))
-        total_dev_calls = 0
-        t_oldest = t_now
-        t_oldest_dev = t_now
-        t_call = t_now
-        t_old_dev_tmp = t_now
-        logging.debug('time_tracking0 - {}'.format(yoAccess.time_tracking_dict))
-        for dev in yoAccess.time_tracking_dict:
-            logging.debug('time_tracking1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
-            for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
-                logging.debug('time_tracking1.5 - {}'.format(call_nbr))
-                t_call = yoAccess.time_tracking_dict[dev][call_nbr]
-                t_old_dev_tmp = t_now
-                logging('Loop info : {} - {} - {}'.format(dev, call_nbr, t_now - t_call))
-                if t_call  < t_now- 60: # more than 1 min ago
-                    logging.debug('removing {}  {}'.format(t_call, yoAccess.time_tracking_dict[dev]))
-                    yoAccess.time_tracking_dict[dev].pop(t_call)
-                    logging.debug('after removing {}  {}'.format(t_call, yoAccess.time_tracking_dict[dev]))
-                else:
-                    if t_call < t_oldest:
-                        t_oldest = t_call
-                    if t_call < t_old_dev_tmp:
-                        t_old_dev_tmp = t_call
-            logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, t_old_dev_tmp, yoAccess.time_tracking_dict ))
-            logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
-            if dev == dev_id: # check if max_dev_id_min is in play
-                logging.debug('time_tracking2 - dev found')
-                #yoAccess.time_tracking_dict[dev].append(t_now)
-                t_oldest_dev = t_old_dev_tmp # only test for selected dev_id
-                if len(yoAccess.time_tracking_dict[dev]) <= max_dev_id_min:
-                    t_wait = 0
-                else:
-                    t_wait= (60 - t_now-t_oldest_dev) # need to wait t_max before issuing command
-                total_dev_calls = total_dev_calls + len(yoAccess.time_tracking_dict[dev])
-        if total_dev_calls >  max_dev_all:
-            tmp_t =(60 - t_now-t_oldest)
-            t_wait = max(tmp_t, t_wait, 0)
-            yoAccess.time_tracking_dict[dev_id].append(t_now + t_wait)
-        else:
-            yoAccess.time_tracking_dict[dev_id].append(t_now)
-        
-        logging.debug('TimeTrack: {} {}, {}, {}'.format(t_now, t_wait, t_oldest, t_oldest_dev, yoAccess.time_tracking_dict))
-        return(t_wait)
+        try:
+            logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
+            max_dev_id_min = 6
+            max_dev_all = 20
+            t_wait = 0
+            if dev_id not in yoAccess.time_tracking_dict:
+                yoAccess.time_tracking_dict[dev_id] = []
+                logging.debug('Adding timetrack for {}'.format(dev_id))
+            total_dev_calls = 0
+            t_oldest = t_now
+            t_oldest_dev = t_now
+            t_call = t_now
+            t_old_dev_tmp = t_now
+            logging.debug('time_tracking 0 - {}'.format(yoAccess.time_tracking_dict))
+            for dev in yoAccess.time_tracking_dict:
+                logging.debug('time_tracking 1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
+                for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
+                    logging.debug('time_tracking 1.5 - {}'.format(call_nbr))
+                    t_call = yoAccess.time_tracking_dict[dev][call_nbr]
+                    t_old_dev_tmp = t_now
+                    logging('Loop info : {} - {} - {}'.format(dev, call_nbr, t_now - t_call))
+                    if t_call  < t_now- 60: # more than 1 min ago
+                        logging.debug('removing {}  {}'.format(t_call, yoAccess.time_tracking_dict[dev]))
+                        yoAccess.time_tracking_dict[dev].pop(t_call)
+                        logging.debug('after removing {}  {}'.format(t_call, yoAccess.time_tracking_dict[dev]))
+                    else:
+                        if t_call < t_oldest:
+                            t_oldest = t_call
+                        if t_call < t_old_dev_tmp:
+                            t_old_dev_tmp = t_call
+                logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, t_old_dev_tmp, yoAccess.time_tracking_dict ))
+                logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
+                if dev == dev_id: # check if max_dev_id_min is in play
+                    logging.debug('time_tracking2 - dev found')
+                    #yoAccess.time_tracking_dict[dev].append(t_now)
+                    t_oldest_dev = t_old_dev_tmp # only test for selected dev_id
+                    if len(yoAccess.time_tracking_dict[dev]) <= max_dev_id_min:
+                        t_wait = 0
+                    else:
+                        t_wait= (60 - t_now-t_oldest_dev) # need to wait t_max before issuing command
+                    total_dev_calls = total_dev_calls + len(yoAccess.time_tracking_dict[dev])
+            
+            if total_dev_calls >  max_dev_all:
+                tmp_t =(60 - t_now-t_oldest)
+                t_wait = max(tmp_t, t_wait, 0)
+                yoAccess.time_tracking_dict[dev_id].append(t_now + t_wait)
+            else:
+                yoAccess.time_tracking_dict[dev_id].append(t_now)
+            
+            logging.debug('TimeTrack: {} {}, {}, {}'.format(t_now, t_wait, t_oldest, t_oldest_dev, yoAccess.time_tracking_dict))
+            return(t_wait)
+        except Exception as e:
+            logging.debug(' Excemption Timetrack : {}'.format(e))
         
         #yoAccess.time_tracking_dict[dev_id].append(time)
 
