@@ -688,13 +688,13 @@ class YoLinkInitPAC(object):
             yoAccess.lastDataPacket[deviceId] = data
             #logging.debug('mqttList : {}'.format(yoAccess.mqttList))
             if deviceId in yoAccess.mqttList:
-                logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
+                logging.debug( 'Starting publish_data:')
                 ### check if publish list is full
                 timeNow_s = int(time.time())
                 delay =  yoAccess.time_track_publish(timeNow_s, deviceId)
-               
+                logging.debug( 'Needed delay: {} - {}'.format(delay, timeNow_s))
                 if delay > 0:
-                    logging.info('delaying call by {}sec due to too many calls'.format(delay))
+                    logging.info('Delaying call by {}sec due to too many calls'.format(delay))
                     time.sleep(delay)
                 #logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize(), yoAccess.MAX_MESSAGES))
                 #if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
@@ -705,6 +705,7 @@ class YoLinkInitPAC(object):
                 #        time.sleep(yoAccess.MAX_TIME - (timeNow_s - first_TXtime )) # wait until yoAccess.MAX_TIME has elapsed sine first element
                 #yoAccess.timeQueue.put(timeNow_s)    
                 #logging.debug('getting to publish')            
+                logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
             else:
                 logging.error('device {} not in mqtt list'.format(deviceId))
