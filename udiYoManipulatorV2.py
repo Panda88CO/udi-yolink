@@ -137,18 +137,25 @@ class udiYoManipulator(udi_interface.Node):
                     self.node.setDriver('GV2', 0, True, False)  
                 logging.debug('udiYoManipulator - getBattery: () '.format(self.yoManipulator.getBattery()))    
                 self.node.setDriver('BATLVL', self.yoManipulator.getBattery(), True, True)          
+                if self.yoManipulator.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
+
             else:
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('GV1', 0)     
                 self.node.setDriver('GV2', 0)
                 self.node.setDriver('BATLVL', 99)
-                self.node.setDriver('ST', 0)   
+                self.node.setDriver('ST', 0)
+                self.node.setDriver('GV20', 2, True, True)
                 
 
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoManipulator')
         self.yoManipulator.updateStatus(data)
         self.updateData()
+
       
 
 

@@ -33,6 +33,7 @@ class udiYoSiren(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 58}, # seconds
             {'driver': 'GV2', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},
 
             ]
 
@@ -132,12 +133,16 @@ class udiYoSiren(udi_interface.Node):
                 self.node.setDriver('GV1', self.yoSiren.getSirenDuration(), True, True)
                 self.node.setDriver('ST', 1)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
-       
+                if self.yoSiren.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
             else:
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('GV1', 0)
                 self.node.setDriver('GV2', 99)
                 self.node.setDriver('ST', 0)
+                self.node.setDriver('GV20', 2)
                 
 
     def updateStatus(self, data):

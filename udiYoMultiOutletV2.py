@@ -349,6 +349,7 @@ class udiYoSubUSB(udi_interface.Node):
         self.node.setDriver('GV0', gv0)
         self.last_state = gv0
         self.portState = gv0
+        
 
     def usbControl(self, command):
         logging.info('udiYoSubUSB - usbControl')
@@ -414,7 +415,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25}
+            {'driver': 'GV20', 'value': 0, 'uom': 25}
             ]
     
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -592,6 +593,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                     offDelay = 0
                 logging.debug('Updating subnode {}: {} {} {}'.format(outlet, state, onDelay, offDelay))
                 self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
+
             for usb in range(0,self.nbrUsb):       
                 usbName = 'usb'+str(usb)
                 if self.yoMultiOutlet.online:
@@ -610,8 +612,13 @@ class udiYoMultiOutlet(udi_interface.Node):
                 logging.debug ('Device not on-line retrying ')
                 time.sleep(10.1)
                 self.yoMultiOutlet.retry_send_data()
+                self.node.setDriver('GV20', 2, True, True)
         else:
             self.node.setDriver('ST', 1)
+            if self.yoMultiOutlet.suspended:
+                self.node.setDriver('GV20', 1, True, True)
+            else:
+                self.node.setDriver('GV20', 0)
 
 
 

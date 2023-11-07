@@ -39,6 +39,7 @@ class udiYoOutlet(udi_interface.Node):
             {'driver': 'GV3', 'value': -1, 'uom': 30},
             {'driver': 'GV4', 'value': -1, 'uom': 33},
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},              
 
             ]
 
@@ -135,6 +136,10 @@ class udiYoOutlet(udi_interface.Node):
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
                     self.node.setDriver('GV2', 0, True, False)
+                if self.yoOutlet.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
 
 
             else:
@@ -144,6 +149,7 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV3', -1, True, True)
                 self.node.setDriver('GV4', -1, True, True)
                 self.node.setDriver('ST',0, True, True)
+                self.node.setDriver('GV20', 2, True, True)
         
 
 

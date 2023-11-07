@@ -35,6 +35,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV2', 'value': 99, 'uom': 25}, 
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},            
             ]
 
 
@@ -112,12 +113,16 @@ class udiYoInfraredRemoter(udi_interface.Node):
             self.node.setDriver('GV0',self.yoIRrem.nbr_codes , True, True)                  
             self.node.setDriver('GV1',self.yoIRrem.getBattery(), True, True)
             self.node.setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()), True, True)
+            if self.yoIRrem.suspended:
+                self.node.setDriver('GV20', 1, True, True)
+            else:
+                self.node.setDriver('GV20', 0)
         else:
             self.node.setDriver('GV0', 0, True, True)
             self.node.setDriver('GV1', 99, True, True)
             self.node.setDriver('GV2', 99, True, True)
             self.node.setDriver('ST', 0)
-        
+            self.node.setDriver('GV20', 2, True, True)
 
 
 

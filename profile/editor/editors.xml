@@ -155,5 +155,9 @@
    <editor id = "cmdsetting" > 
      <range  uom="25" subset="0-3" nls="cmdsetting" />
    </editor> 
+   <editor id = "suspendstate" > 
+     <range  uom="25" subset="0-2, 99" nls="suspended" />
+   </editor> 
+
 </editors> 
 

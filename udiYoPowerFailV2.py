@@ -43,6 +43,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
             {'driver': 'GV4', 'value': 99, 'uom': 25}, 
             {'driver': 'GV7', 'value': 0, 'uom': 25},      
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25}, 
 
             ]
 
@@ -139,6 +140,10 @@ class udiYoPowerFailSenor(udi_interface.Node):
                 logging.debug('Muted GV4 : {}'.format(muted))
                 self.node.setDriver('GV4', self.bool2ISY(muted), True, True)                
                 self.node.setDriver('ST', 1, True, True)
+                if self.yoPowerFail.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
@@ -147,6 +152,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
                 self.node.setDriver('GV4', 99, True, True)
 
                 self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('GV20', 99, True, True)
 
 
 

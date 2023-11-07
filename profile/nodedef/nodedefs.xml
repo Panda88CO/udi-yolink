@@ -3,6 +3,7 @@
       <editors />
       <sts>
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />
       </sts>
       <cmds>
          <sends>
@@ -22,6 +23,7 @@
          <st id="GV2" editor="delay" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -61,6 +63,7 @@
          <st id="GV3" editor="dimlvl" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />
       </sts>
       <cmds>
          <sends>
@@ -106,6 +109,7 @@
          <st id="GV4" editor="energy" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -136,6 +140,7 @@
       <sts>
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -187,7 +192,7 @@
       <editors />
       <sts>
          <st id="GV0" editor="usbstate" />
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="status" />   
       </sts>
       <cmds>
          <sends>
@@ -216,6 +221,7 @@
          <st id="BATLVL" editor="batlevel" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -304,6 +310,7 @@
       <sts>
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -448,6 +455,7 @@
          <st id="GV5" editor="repeat" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -491,6 +499,7 @@
          <st id="GV2" editor="doorbell" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -519,6 +528,7 @@
          <st id="GV2" editor="cmdstatus" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -548,6 +558,8 @@
          <st id="GV4" editor="pfamute" />
          <st id="GV7" editor="cmdstatus" />
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
+
       </sts>
       <cmds>
          <sends>
@@ -573,6 +585,7 @@
          <st id="GV1" editor="sirenduration" />
          <st id="GV2" editor="sirenbatlevel" />
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />
       </sts>
       <cmds>
          <sends>
@@ -600,6 +613,7 @@
 
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
@@ -619,7 +633,6 @@
          <st id="GV0" editor="keyscenedef" />
          <st id="GV1" editor="keyscenedef" />
          <st id="GV2" editor="keyscenedef" />
-
       </sts>
       <cmds>
          <sends>
