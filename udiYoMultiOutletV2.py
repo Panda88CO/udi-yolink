@@ -474,7 +474,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
         self.node.setDriver('ST', 1, True, True)
-        time.sleep(10)
+        time.sleep(1)
         self.yoMultiOutlet.initNode()
         time.sleep(3)
         #if not self.yoMultiOutlet.online:

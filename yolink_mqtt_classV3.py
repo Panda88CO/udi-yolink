@@ -160,7 +160,7 @@ class YoLinkMQTTDevice(object):
     def initNode(yolink):
         #maxCount = 3
         yolink.refreshDevice()
-        time.sleep(4)
+        #time.sleep(4)
 
         #yolink.online = yolink.check_system_online()
         while yolink.suspended and yolink.online :
@@ -191,7 +191,8 @@ class YoLinkMQTTDevice(object):
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
             #logging.debug  ('refreshDevice')
-            while  not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
+            while  not yolink.yoAccess.publis
+            h_data(data) and attempt <= maxAttempts:
                 time.sleep(2)
                 attempt = attempt + 1
             yolink.lastControlPacket = data
@@ -436,8 +437,8 @@ class YoLinkMQTTDevice(object):
         return(yolink.suspended)
 
     #@measure_time
-    def checkOnlineStatus(yolink, dataPacket):
-        '''checkOnlineStatus'''
+    def Status(yolink, dataPacket):
+        '''Status'''
         yolink.suspended= False
         if 'code' in dataPacket:
             if dataPacket['code'] == '000000':
@@ -464,7 +465,7 @@ class YoLinkMQTTDevice(object):
         else:
             yolink.online = False
         if not yolink.online:
-            logging.debug('checkOnlineStatus {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
+            logging.debug('Status {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
         return(yolink.online)
 
     #@measure_time
@@ -476,7 +477,7 @@ class YoLinkMQTTDevice(object):
                 logging.debug('Method detected')
                 if data['code'] == '000000':
 
-                    yolink.online = yolink.checkOnlineStatus(data)
+                    yolink.online = yolink.Status(data)
                     yolink.noconnect = 0
                     if  '.getState' in data['method'] :
                         #if int(data['time']) > int(yolink.getLastUpdate()):
@@ -527,7 +528,7 @@ class YoLinkMQTTDevice(object):
                     yolink.deviceError(data)
 
 
-                    yolink.online = yolink.checkOnlineStatus(data)
+                    yolink.online = yolink.Status(data)
 
                     logging.error(yolink.type+ ': ' + data['desc'])
             elif 'event' in data:
@@ -587,7 +588,7 @@ class YoLinkMQTTDevice(object):
                     yolink.eventQueue.put(data['event']) 
                 yolink.lastDataPacket = data
             else:
-                yolink.online = yolink.checkOnlineStatus(data) and yolink.check_system_online()
+                yolink.online = yolink.Status(data) and yolink.check_system_online()
                 logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
             yolink.dataAPI[yolink.dOnline] = yolink.online 
         except Exception as e:
