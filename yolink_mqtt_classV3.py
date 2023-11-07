@@ -191,8 +191,7 @@ class YoLinkMQTTDevice(object):
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
             #logging.debug  ('refreshDevice')
-            while  not yolink.yoAccess.publis
-            h_data(data) and attempt <= maxAttempts:
+            while  not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
                 time.sleep(2)
                 attempt = attempt + 1
             yolink.lastControlPacket = data
