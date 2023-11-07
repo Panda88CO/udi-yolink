@@ -640,9 +640,9 @@ class YoLinkInitPAC(object):
         t_oldest_dev = t_now
         logging.debug('time_tracking0 - {}'.format(yoAccess.time_tracking_dict))
         for dev in yoAccess.time_tracking_dict:
-            logging.debug('time_tracking1 - {} - {}'.format(dev, len(dev)))
+            logging.debug('time_tracking1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
             for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
-
+                logging.debug('time_tracking1.5 - {}'.format(call_nbr))
                 t_call = yoAccess.time_tracking_dict[dev][call_nbr]
                 t_old_dev_tmp = t_now
                 logging('Loop info : {} - {} - {}'.format(dev, call_nbr, t_now - t_call))
@@ -655,11 +655,11 @@ class YoLinkInitPAC(object):
                         t_oldest = t_call
                     if t_call < t_old_dev_tmp:
                         t_old_dev_tmp = t_call
-            logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, ))
-            logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id, t_old_dev_tmp,yoAccess.time_tracking_dict))
+            logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, t_old_dev_tmp, yoAccess.time_tracking_dict ))
+            logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
             if dev == dev_id: # check if max_dev_id_min is in play
                 logging.debug('time_tracking2 - dev found')
-                yoAccess.time_tracking_dict[dev].append(t_now)
+                #yoAccess.time_tracking_dict[dev].append(t_now)
                 t_oldest_dev = t_old_dev_tmp # only test for selected dev_id
                 if len(yoAccess.time_tracking_dict[dev]) <= max_dev_id_min:
                     t_wait = 0
@@ -668,8 +668,9 @@ class YoLinkInitPAC(object):
                 total_dev_calls = total_dev_calls + len(yoAccess.time_tracking_dict[dev])
         if total_dev_calls >  max_dev_all:
             tmp_t =(60 - t_now-t_oldest)
-            t_wait = max(tmp_t, t_wait)
-        logging.debug('TimeTrack: {} {}, {}, {}'.format(t_now, t_wait, t_oldest, t_oldest_dev))
+            t_wait = max(tmp_t, t_wait, 0)
+            yoAccess.time_tracking_dict[dev_id].append(t_now + t_wait)
+        logging.debug('TimeTrack: {} {}, {}, {}'.format(t_now, t_wait, t_oldest, t_oldest_dev, yoAccess.time_tracking_dict))
         return(t_wait)
         
         #yoAccess.time_tracking_dict[dev_id].append(time)
