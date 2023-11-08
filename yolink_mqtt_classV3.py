@@ -16,7 +16,16 @@ try:
 
 except ImportError:
     import logging
+    import sys
     logging.basicConfig(level=logging.DEBUG)
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
 
 
 
@@ -180,8 +189,8 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def refreshDevice(yolink):
         logging.debug('{} - refreshDevice - supports {}'.format(yolink.type, yolink.methodList))
-        attempt = 1
-        maxAttempts = 3
+        #attempt = 1
+        #maxAttempts = 3
         if 'getState' in yolink.methodList:
             methodStr = yolink.type+'.getState'
             #logging.debug(methodStr)  
@@ -191,9 +200,10 @@ class YoLinkMQTTDevice(object):
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
             #logging.debug  ('refreshDevice')
-            while not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
-                time.sleep(2)
-                attempt = attempt + 1
+            yolink.yoAccess.publish_data(data) 
+            #while not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
+            #    time.sleep(2)
+            #    attempt = attempt + 1
             yolink.lastControlPacket = data
             time.sleep(2)
             yolink.check_system_online()
@@ -250,9 +260,10 @@ class YoLinkMQTTDevice(object):
         data["token"]= yolink.deviceInfo['token']
         logging.debug(yolink.type+' - setDevice -data {}'.format(data))
         if worked:
-            while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-                time.sleep(10.1) # we can only try 6 timer per minute per device 
-                attempt = attempt + 1
+            yolink.yoAccess.publish_data(data)
+            #while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
+            #    time.sleep(10.1) # we can only try 6 timer per minute per device 
+            #    attempt = attempt + 1
             #yolink.yoAccess.publish_data(data)
             return(True)
         else:
@@ -612,10 +623,10 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-       
-        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-            time.sleep(1)
-            attempt = attempt + 1
+        yolink.yoAccess.publish_data(data) 
+        #while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
+        #    time.sleep(1)
+        #    attempt = attempt + 1
         
         delays['ch'] = 1
         delays['on'] = data['params']['delayOn']
@@ -638,10 +649,10 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        #yolink.yoAccess.publish_data( data)
-        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-            time.sleep(1)
-            attempt = attempt + 1
+        yolink.yoAccess.publish_data( data)
+        #while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
+        #    time.sleep(1)
+        #    attempt = attempt + 1
             
         delays['ch'] = 1
         delays['on'] = data['params']['delayOn']
@@ -664,9 +675,10 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-            time.sleep(1)
-            attempt = attempt + 1
+        yolink.yoAccess.publish_data(data) 
+        #while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
+        #    time.sleep(1)
+        #    attempt = attempt + 1
 
         delays['ch'] = 1
         delays['off'] = data['params']['delayOff']
@@ -702,9 +714,10 @@ class YoLinkMQTTDevice(object):
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
-        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-            time.sleep(1)
-            attempt = attempt + 1
+        yolink.yoAccess.publish_data(data) 
+        #while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
+        #    time.sleep(1)
+        #    attempt = attempt + 1
         delays['ch'] = 1
         delays['on'] = data['params']['delayOn']
         delays['off'] = data['params']['delayOff']
@@ -756,6 +769,7 @@ class YoLinkMQTTDevice(object):
             data['method'] = methodStr
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
+            yolink.yoAccess.publish_data(data) 
             while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
                 time.sleep(1)
                 attempt = attempt + 1

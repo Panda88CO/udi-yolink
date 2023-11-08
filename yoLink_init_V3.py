@@ -3,7 +3,7 @@ import requests
 import time
 import json
 import psutil
-
+import sys
 from threading import Lock
 from  datetime import datetime
 try:
@@ -14,6 +14,14 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    root.addHandler(handler)
 
 countdownTimerUpdateInterval_G = 10
 
@@ -630,8 +638,8 @@ class YoLinkInitPAC(object):
         ''' make 20 overall calls per min and 6 per dev per min'''
         try:
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
-            max_dev_id_min = 6
-            max_dev_all = 20
+            max_dev_id_min = 5
+            max_dev_all = 19
             t_wait = 0
             if dev_id not in yoAccess.time_tracking_dict:
                 yoAccess.time_tracking_dict[dev_id] = []
@@ -641,17 +649,18 @@ class YoLinkInitPAC(object):
             t_oldest_dev = t_now
             t_call = t_now
             t_old_dev_tmp = t_now
-            logging.debug('time_tracking 0 - {}'.format(yoAccess.time_tracking_dict))
+            t_wait = 0
+            #logging.debug('time_tracking 0 - {}'.format(yoAccess.time_tracking_dict))
             discard_list = {}
             for dev in yoAccess.time_tracking_dict:
-                logging.debug('time_tracking 1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
+                #logging.debug('time_tracking 1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
                 for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
-                    logging.debug('time_tracking 1.5 - {}'.format(t_call))
+                    #logging.debug('time_tracking 1.5 - {}'.format(t_call))
                     t_call = yoAccess.time_tracking_dict[dev][call_nbr]
                     t_old_dev_tmp = t_now
-                    logging.debug('Loop info : {} - {} - {} '.format(dev, call_nbr, (t_now - t_call)))
-                    if t_call  < t_now- 60: # more than 1 min ago
-                        logging.debug('adding to discard_list {}  {}'.format(dev, t_call))
+                    #logging.debug('Loop info : {} - {} - {} '.format(dev, call_nbr, (t_now - t_call)))
+                    if t_call  < t_now- 60000: # more than 1 min ago
+                        #logging.debug('adding to discard_list {}  {}'.format(dev, t_call))
                         #yoAccess.time_tracking_dict[dev].discard(t_call)
                         discard_list[t_call] = dev
                        
@@ -660,29 +669,31 @@ class YoLinkInitPAC(object):
                             t_oldest = t_call
                         if t_call < t_old_dev_tmp:
                             t_old_dev_tmp = t_call
-                logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, t_old_dev_tmp, yoAccess.time_tracking_dict ))
-                logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
+                #logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, t_old_dev_tmp, yoAccess.time_tracking_dict ))
+                #logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
                 if dev == dev_id: # check if max_dev_id_min is in play
-                    logging.debug('time_tracking2 - dev found')
+                    #logging.debug('time_tracking2 - dev found')
                     #yoAccess.time_tracking_dict[dev].append(t_now)
                     t_oldest_dev = t_old_dev_tmp # only test for selected dev_id
                     if len(yoAccess.time_tracking_dict[dev]) <= max_dev_id_min:
                         t_wait = 0
                     else:
-                        t_wait= (60 - t_now-t_oldest_dev) # need to wait t_max before issuing command
+                        t_wait= (60100 - t_now-t_oldest_dev) # need to wait t_max before issuing command
                     total_dev_calls = total_dev_calls + len(yoAccess.time_tracking_dict[dev])
             for times in discard_list:
                 yoAccess.time_tracking_dict[discard_list[times]].remove(times)
                 
             if total_dev_calls >  max_dev_all:
-                tmp_t =(60 - t_now-t_oldest)
+                tmp_t =(60100 - t_now-t_oldest)
                 t_wait = max(tmp_t, t_wait, 0)
                 yoAccess.time_tracking_dict[dev_id].append(t_now + t_wait)
+                logging.debug('Adding w. delay {}'.format(t_now + t_wait))
             else:
                 yoAccess.time_tracking_dict[dev_id].append(t_now)
-            
-            logging.debug('TimeTrack: {} {}, {}, {} {}'.format(t_now, t_wait, t_oldest, t_oldest_dev, yoAccess.time_tracking_dict))
-            return(t_wait)
+                logging.debug('Adding wo delay {}'.format(t_now))
+            logging.debug('TimeTrack after: delay:{} dev_old:{} total old:{} times{} {} {}'.format(t_wait, t_now-t_oldest_dev,  t_now-t_oldest,t_now, t_oldest_dev, t_oldest))
+            logging.debug('TimeTrack after2: {}'.format(yoAccess.time_tracking_dict))
+            return(int(t_wait/1000))
         except Exception as e:
             logging.debug(' Exception Timetrack : {}'.format(e))
         
@@ -704,12 +715,12 @@ class YoLinkInitPAC(object):
             if deviceId in yoAccess.mqttList:
                 logging.debug( 'Starting publish_data:')
                 ### check if publish list is full
-                timeNow_s = int(time.time())
-                delay =  yoAccess.time_track_publish(timeNow_s, deviceId)
-                logging.debug( 'Needed delay: {} - {}'.format(delay, timeNow_s))
+                timeNow_ms = int(time.time_ns()//1e6)
+                delay_s =  yoAccess.time_track_publish(timeNow_ms, deviceId)
+                #logging.debug( 'Needed delay: {} - {}'.format(delay, timeNow_s))
                 if delay > 0:
                     logging.info('Delaying call by {}sec due to too many calls'.format(delay))
-                    time.sleep(delay)
+                    time.sleep(delay_s)
                 #logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize(), yoAccess.MAX_MESSAGES))
                 #if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
                 #    logging.Info('Too many calls are issued - messages are pileing up (more than {} are waiting )'.format(yoAccess.timeQueue.qsize()))
