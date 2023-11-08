@@ -642,17 +642,19 @@ class YoLinkInitPAC(object):
             t_call = t_now
             t_old_dev_tmp = t_now
             logging.debug('time_tracking 0 - {}'.format(yoAccess.time_tracking_dict))
+            discard_list = {}
             for dev in yoAccess.time_tracking_dict:
                 logging.debug('time_tracking 1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
                 for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
-                    logging.debug('time_tracking 1.5 - {}'.format(call_nbr))
+                    logging.debug('time_tracking 1.5 - {}'.format(t_call))
                     t_call = yoAccess.time_tracking_dict[dev][call_nbr]
                     t_old_dev_tmp = t_now
-                    logging('Loop info : {} - {} - {}'.format(dev, call_nbr, t_now - t_call))
+                    logging.debug('Loop info : {} - {} - {} '.format(dev, call_nbr, (t_now - t_call)))
                     if t_call  < t_now- 60: # more than 1 min ago
-                        logging.debug('removing {}  {}'.format(t_call, yoAccess.time_tracking_dict[dev]))
-                        yoAccess.time_tracking_dict[dev].pop(t_call)
-                        logging.debug('after removing {}  {}'.format(t_call, yoAccess.time_tracking_dict[dev]))
+                        logging.debug('adding to discard_list {}  {}'.format(dev, t_call))
+                        #yoAccess.time_tracking_dict[dev].discard(t_call)
+                        discard_list[t_call] = dev
+                       
                     else:
                         if t_call < t_oldest:
                             t_oldest = t_call
@@ -669,7 +671,9 @@ class YoLinkInitPAC(object):
                     else:
                         t_wait= (60 - t_now-t_oldest_dev) # need to wait t_max before issuing command
                     total_dev_calls = total_dev_calls + len(yoAccess.time_tracking_dict[dev])
-            
+            for times in discard_list:
+                yoAccess.time_tracking_dict[discard_list[times]].remove(times)
+                
             if total_dev_calls >  max_dev_all:
                 tmp_t =(60 - t_now-t_oldest)
                 t_wait = max(tmp_t, t_wait, 0)
@@ -677,10 +681,10 @@ class YoLinkInitPAC(object):
             else:
                 yoAccess.time_tracking_dict[dev_id].append(t_now)
             
-            logging.debug('TimeTrack: {} {}, {}, {}'.format(t_now, t_wait, t_oldest, t_oldest_dev, yoAccess.time_tracking_dict))
+            logging.debug('TimeTrack: {} {}, {}, {} {}'.format(t_now, t_wait, t_oldest, t_oldest_dev, yoAccess.time_tracking_dict))
             return(t_wait)
         except Exception as e:
-            logging.debug(' Excemption Timetrack : {}'.format(e))
+            logging.debug(' Exception Timetrack : {}'.format(e))
         
         #yoAccess.time_tracking_dict[dev_id].append(time)
 

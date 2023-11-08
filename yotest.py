@@ -48,13 +48,13 @@ class test_test (object):
             if dev['type'] == 'MultiOutlet':
                 self.mout = YoLinkMultiOut(self.yoAccess, dev, self.updateStatus_mout)
                 time.sleep(1)
-                self._mout.initNode()
+                self.mout.initNode()
                 time.sleep(3)
                 #self._mout.start()
             if dev['type'] == 'VibrationSensor':
                 self.vibra = YoLinkVibrationSen(self.yoAccess, dev, self.updateStatus_vibra)
                 time.sleep(1)
-                self._mout.initNode()
+                self.vibra.initNode()
                 time.sleep(3)
 
             if dev['type'] == 'LeakSensor':
@@ -74,7 +74,7 @@ class test_test (object):
         #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
-        self._mout.updateStatus(data)
+        self.mout.updateStatus(data)
         self.updateDatamOut()
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
@@ -91,7 +91,7 @@ class test_test (object):
         #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
-        self._mout.updateStatus(data)
+        self.vibra.updateStatus(data)
         self.updateStatus_vibraupdateData_leak
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
@@ -107,7 +107,7 @@ class test_test (object):
         #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
-        self._mout.updateStatus(data)
+        self.leak.updateStatus(data)
         self.updateStatus_leak()
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
@@ -119,12 +119,12 @@ class test_test (object):
         #    time.sleep(3)
         # 
 
-    def updateStatus_mout(self, data):
+    def updateStatus_motion(self, data):
         
         #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
-        self._mout.updateStatus(data)
+        self.motion.updateStatus(data)
         self.updateStatus_motion()
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
@@ -138,7 +138,7 @@ class test_test (object):
 
 
     def updateDatamOut(self):
-        self.m_outlet_s =  self._mout.getMultiOutStates()
+        self.m_outlet_s =  self.mout.getMultiOutStates()
 
     def updateStatus_vibra(self):
         self.vibra_s =  self.vibra.getState()
@@ -152,14 +152,18 @@ class test_test (object):
 
 
     def set_mOut(self, state, port):
-        self._mout.setMultiOutPortState(port, state)
+        self.mout.setMultiOutPortState(port, state)
 
 test = test_test()
+test.leak.refreshDevice()
 tmp1 = test.leak.getState()
+test.motion.refreshDevice()
 tmp2 = test.motion.getState()
-tmp3 = test.vibra.getState
-tmp4 = test.mout.setMultiOutPortState( 'open', {'port0'})
-tmp5 = test.mout.setMultiOutPortState( 'closed',{ 0})
+test.vibra.refreshDevice()
+tmp2 = test.vibra.getState()
+
+tmp4 = test.mout.setMultiOutPortState(  {'port0'}, 'open')
+tmp5 = test.mout.setMultiOutPortState( {0}, 'closed')
 tmp6 = test.mout.getMultiOutPortState({'port1'})
 tmp7 = test.mout.getMultiOutStates()
 
