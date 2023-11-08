@@ -32,12 +32,7 @@ except ImportError:
     root.addHandler(handler)
 
 
-
-
-
-
 class test_test (object):
-
     def __init__ (self):
         '''   '''
         self.uaid = 'ua_05E8E07C48EC4639BB2CE61CAFCC551A'
@@ -70,12 +65,11 @@ class test_test (object):
                 time.sleep(3)
             
     def updateStatus_mout(self, data):
-        
         #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
         self.mout.updateStatus(data)
-        self.updateDatamOut()
+        #self.updateDatamOut()
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
         ##    logging.debug('Node server not fully configured yet')
@@ -87,12 +81,11 @@ class test_test (object):
 
 
     def updateStatus_vibra(self, data):
-        
         #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
         self.vibra.updateStatus(data)
-        self.updateStatus_vibraupdateData_leak
+        #self.updateStatus_vibraupdateData_leak
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
         ##    logging.debug('Node server not fully configured yet')
@@ -103,12 +96,11 @@ class test_test (object):
         #    time.sleep(3)
 
     def updateStatus_leak(self, data):
-        
         #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
         self.leak.updateStatus(data)
-        self.updateStatus_leak()
+        #self.updateStatus_leak()
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
         ##    logging.debug('Node server not fully configured yet')
@@ -120,12 +112,11 @@ class test_test (object):
         # 
 
     def updateStatus_motion(self, data):
-        
         #logging.debug('updateStatus - udiYoMultiOutlet: {}'.format(self.dev['name']))
         #self.yoMultiOutlet.online =  self.yoMultiOutlet.checkOnlineStatus(data)
         #if self.yoMultiOutlet.online:
         self.motion.updateStatus(data)
-        self.updateStatus_motion()
+        #self.updateStatus_motion()
         #logging.debug( 'updateStatus data: {} {}'.format(self.node_fully_config, self.yoMultiOutlet.nbrOutlets ))
         #if not self.node_fully_config: # Device was never initialized
         ##    logging.debug('Node server not fully configured yet')
@@ -134,8 +125,6 @@ class test_test (object):
         #    time.sleep(10.1)
         #    self.start()
         #    time.sleep(3)#         
-
-
 
     def updateDatamOut(self):
         self.m_outlet_s =  self.mout.getMultiOutStates()
@@ -148,8 +137,6 @@ class test_test (object):
 
     def updateStatus_motion(self):
         self.motion_s =  self.motion.getState()                
-
-
 
     def set_mOut(self, state, port):
         self.mout.setMultiOutPortState(port, state)
