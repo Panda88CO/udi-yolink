@@ -2,7 +2,6 @@
 ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
 ST-nlssetup-ST-NAME = Nodeserver Status
-ST-nlssetup-GV20-NAME = Connection State
 CMD-nlssetup-DON-NAME = Heart Beat On
 CMD-nlssetup-DOF-NAME = Heart Beat Off
 
