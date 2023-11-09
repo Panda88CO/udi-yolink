@@ -172,10 +172,10 @@ class YoLinkMQTTDevice(object):
         #time.sleep(4)
 
         #yolink.online = yolink.check_system_online()
-        while yolink.suspended and yolink.online :
-            logging.debug( 'Yolink servers may be overloaded so sleep ') 
-            time.sleep(10)
-            yolink.refreshDevice()
+        #while yolink.suspended and yolink.online :
+        #    logging.debug( 'Yolink servers may be overloaded so sleep ') 
+         #   time.sleep(10)
+         #   yolink.refreshDevice()
         #count = 0
         time.sleep(2)
         #while not yolink.online  and count < maxCount and not yolink.disconnect:

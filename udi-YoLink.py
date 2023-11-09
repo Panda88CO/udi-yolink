@@ -57,6 +57,8 @@ class YoLinkSetup (udi_interface.Node):
         self.name = name
         self.yoAccess = None
         self.TTSstr = 'TTS'
+        self.nbr_API_calls = 19
+        self.nbr_dev_API_calls = 5
         self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]
         self.yolinkURL = 'https://api.yosmart.com/openApi'
         self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api' 
@@ -152,6 +154,10 @@ class YoLinkSetup (udi_interface.Node):
             self.debug = False
             self.yoAccess.set_debug(self.debug)
         
+        if 'CALLS_PER_MIN' in self.Parameters:
+            self.nbr_API_calls = self.Parameters['CALLS_PER_MIN']
+            self.nbr_dev_API_calls = self.Parameters['DEV_CALLS_PER_MIN']
+            self.yoAccess.set_api_limits(self.nbr_API_calls, self.nbr_dev_API_calls)
         self.deviceList = self.yoAccess.getDeviceList()
 
 
@@ -688,7 +694,12 @@ class YoLinkSetup (udi_interface.Node):
                 
             if 'DEBUG_EN' in userParam:
                 self.debug = True
-            
+
+            if 'CALLS_PER_MIN' in userParam:
+                self.nbr_API_calls = int(userParam['CALLS_PER_MIN'])
+         
+            if 'DEV_CALLS_PER_MIN' in userParam:
+                self.nbr_dev_API_calls = int(userParam['DEV_CALLS_PER_MIN'])   
             
             nodes = self.poly.getNodes()
             #logging.debug('nodes: {}'.format(nodes))
@@ -741,7 +752,7 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
 
 
-        polyglot.start('0.9.79' )
+        polyglot.start('0.9.80' )
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 

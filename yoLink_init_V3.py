@@ -71,6 +71,9 @@ class YoLinkInitPAC(object):
         yoAccess.deviceList = []
         yoAccess.token = None
 
+        yoAccess.nbr_api_calls = 19
+        yoAccess.nbr_api_dev_calls = 5
+
         yoAccess.unassigned_nodes = []
         try:
             #while not yoAccess.request_new_token( ):
@@ -633,17 +636,24 @@ class YoLinkInitPAC(object):
         return(True)
 
     #@measure_time
+    def set_api_limits(yoAccess, api_calls, api_dev_calls):
+        ''''''
+        yoAccess.nbr_api_calls = api_calls
+        yoAccess.nbr_api_dev_calls = api_dev_calls
+
+
+    #@measure_time
     def time_tracking(yoAccess, t_now, dev_id):
         '''time_track_publish'''
         ''' make 20 overall calls per min and 6 per dev per min'''
         try:
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
-            max_dev_id = 5
-            max_dev_all = 19
-            time_limit = 60000
+            max_dev_id = yoAccess.nbr_api_dev_calls
+            max_dev_all = yoAccess.nbr_api_calls
+            time_limit = 60000 # 1 min =  60 sec = 60000 ms
             if dev_id not in yoAccess.time_tracking_dict:
                 yoAccess.time_tracking_dict[dev_id] = []
-                logging.debug('Adding timetrack for {}'.format(dev_id))
+                #logging.debug('Adding timetrack for {}'.format(dev_id))
             total_dev_calls = 0
             total_dev_id_calls = 0
             t_oldest = t_now
@@ -661,7 +671,7 @@ class YoLinkInitPAC(object):
             for tim in discard_list:
                 yoAccess.time_tracking_dict[discard_list[tim]].remove(tim)
             # find oldest data in dict and for devices of the dev
-            logging.debug('time_track AFTER >1MIN REMOVAL: {}'.format(yoAccess.time_tracking_dict))
+            #logging.debug('time_track AFTER >1MIN REMOVAL: {}'.format(yoAccess.time_tracking_dict))
             for dev in yoAccess.time_tracking_dict:
                 #logging.debug('time_tracking 1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
                 for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
@@ -689,9 +699,9 @@ class YoLinkInitPAC(object):
                 t_dev_delay = 0
             else:
                 t_dev_delay = time_limit - (t_now- t_oldest_dev)
-            logging.debug('total_calls = {}, total_dev_calls = {}'.format(total_dev_calls, total_dev_id_calls))
+            #logging.debug('total_calls = {}, total_dev_calls = {}'.format(total_dev_calls, total_dev_id_calls))
             t_delay = max(t_all_delay,t_dev_delay, 0 )
-            logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
+            #logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
             yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
 
             logging.debug('TimeTrack after2: {}'.format(yoAccess.time_tracking_dict))
