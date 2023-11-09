@@ -78,6 +78,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoDoorSensor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)   
         time.sleep(2)
         self.yoDoorSensor.initNode()

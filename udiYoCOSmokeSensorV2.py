@@ -100,6 +100,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - YoLinkCOSmokeSensor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoCOSmokeSensor  = YoLinkCOSmokeSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoCOSmokeSensor.initNode()

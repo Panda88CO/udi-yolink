@@ -76,11 +76,12 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
     def start(self):
         logging.info('start - YoLinkOutlet')
+        self.node.setDriver('ST', 0, True, True)
         self.yoIRrem  = YoLinkInfraredRem(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoIRrem.initNode()
         time.sleep(2)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         self.node_ready = True
     
     def stop (self):

@@ -88,6 +88,7 @@ class udiYoSwitch(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoSwitch')
+        self.node.setDriver('ST', 0, True, True)
         self.yoSwitch  = YoLinkSW(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(10.1)
         self.yoSwitch.initNode()

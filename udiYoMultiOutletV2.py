@@ -472,8 +472,9 @@ class udiYoMultiOutlet(udi_interface.Node):
         #self.node_fully_config = False
         #self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
+        self.node.setDriver('ST', 0, True, True)
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
-        self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1, True, True)
         time.sleep(1)
         self.yoMultiOutlet.initNode()
         time.sleep(3)

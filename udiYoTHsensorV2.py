@@ -97,6 +97,7 @@ class udiYoTHsensor(udi_interface.Node):
 
     def start(self):
         logging.info('Start udiYoTHsensor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor  = YoLinkTHSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoTHsensor.initNode()

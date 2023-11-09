@@ -84,6 +84,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoLinkMotionSensor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoMotionsSensor.initNode()

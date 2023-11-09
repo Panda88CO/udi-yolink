@@ -85,6 +85,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoSpeakerHub')
+        self.node.setDriver('ST', 0, True, True)
         self.yoSpeakerHub  = YoLinkSpeakerH(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoSpeakerHub.volume = 5

@@ -285,6 +285,7 @@ class udiYoSmartRemoter(udi_interface.Node):
     def start(self):
 
         logging.info('start - udiYoSmartRemoter')
+        self.node.setDriver('ST', 0, True, True)
         self.yoSmartRemote  = YoLinkSmartRemote(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.temp_unit = self.yoAccess.get_temp_unit()

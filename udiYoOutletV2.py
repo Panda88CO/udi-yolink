@@ -87,6 +87,7 @@ class udiYoOutlet(udi_interface.Node):
 
     def start(self):
         logging.info('start - YoLinkOutlet')
+        self.node.setDriver('ST', 0, True, True)
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoOutlet.initNode()

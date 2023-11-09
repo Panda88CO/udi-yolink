@@ -95,6 +95,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoPowerFailSenor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoPowerFail  = YoLinkPowerFailSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoPowerFail.initNode()

@@ -73,6 +73,7 @@ class udiYoGarageDoor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoGarageDoor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.node.setDriver('ST', 1, True, True)

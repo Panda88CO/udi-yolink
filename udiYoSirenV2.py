@@ -79,6 +79,7 @@ class udiYoSiren(udi_interface.Node):
 
     def start(self):
         logging.info('Start - udiYoSiren')
+        self.node.setDriver('ST', 0, True, True)
         self.yoSiren = YoLinkSir(self.yoAccess, self.devInfo, self.updateStatus)
         
         time.sleep(2)
