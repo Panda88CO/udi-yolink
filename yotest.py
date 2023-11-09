@@ -9,10 +9,10 @@ from yoLink_init_V3 import YoLinkInitPAC
 '''
 
 from yoLink_init_V3 import YoLinkInitPAC
-from yolinkMultiOutletV3 import YoLinkMultiOut
-from yolinkVibrationSensorV2 import YoLinkVibrationSen
-from yolinkLeakSensorV2 import YoLinkLeakSen
-from yolinkMotionSensorV2 import YoLinkMotionSen
+from yolinkMultiOutletV3 import YoLinkMultiOutlet
+from yolinkVibrationSensorV2 import YoLinkVibrationSensor
+from yolinkLeakSensorV2 import YoLinkLeakSensor
+from yolinkMotionSensorV2 import YoLinkMotionSensor
 import udiProfileHandler
 #from yolink_mqtt_classV3 import YoLinkMQTTDevice
 
@@ -36,7 +36,7 @@ except ImportError:
 class LeakSens (object):
     def __init__ (self, access, dev):
         self.yoAccess = access
-        self.leak = self.mout = YoLinkLeakSen(self.yoAccess, dev, self.updateStatus)
+        self.leak = self.mout = YoLinkLeakSensor(self.yoAccess, dev)
         time.sleep(1)
         self.leak.initNode()
         time.sleep(3)
@@ -66,7 +66,7 @@ class LeakSens (object):
 class VibrationSens (object):
     def __init__ (self, access, dev):
         self.yoAccess = access
-        self.vibra = self.mout = YoLinkVibrationSen(self.yoAccess, dev, self.updateStatus)
+        self.vibra = self.mout = YoLinkVibrationSensor(self.yoAccess, dev)
         time.sleep(1)
         self.vibra.initNode()
         time.sleep(3)
@@ -95,7 +95,7 @@ class VibrationSens (object):
 class MotionSens (object):
     def __init__ (self, access, dev):
         self.yoAccess = access
-        self.motion = self.motion = YoLinkMotionSen(self.yoAccess, dev, self.updateStatus)
+        self.motion = self.motion = YoLinkMotionSensor(self.yoAccess, dev)
         time.sleep(1)
         self.motion.initNode()
         time.sleep(3)
@@ -125,7 +125,7 @@ class MotionSens (object):
 class MultiOut (object):
     def __init__ (self, access, dev):
         self.yoAccess = access
-        self.mout = self.mout = YoLinkMultiOut(self.yoAccess, dev, self.updateStatus)
+        self.mout = self.mout = YoLinkMultiOutlet(self.yoAccess, dev)
         time.sleep(1)
         self.mout.initNode()
         time.sleep(3)
@@ -194,30 +194,31 @@ class test_test (object):
        
         self.leak.refreshDevice()
         tmp1 = self.leak.getState()
-        time.sleep(2)
+        #time.sleep(2)
         self.motion.refreshDevice()
 
         tmp2 = self.motion.getState()
-        time.sleep(2)
+        #time.sleep(2)
         self.vibra.refreshDevice()
         tmp3 = self.vibra.getState()
 
-        tmp4 = self.mout.set_mOut(  {'port0'}, 'open')
-        time.sleep(2)        
-        tmp5 = self.mout.set_mOut( {1}, 'closed')
-        time.sleep(2)        
+        #tmp4 = self.mout.set_mOut(  {'port0'}, 'open')
+        #time.sleep(2)        
+        #tmp5 = self.mout.set_mOut( {1}, 'closed')
+        #time.sleep(2)        
         tmp5a = self.mout.refreshDevice()
-        time.sleep(2)        
-        tmp6 = self.mout.getStates()
-        time.sleep(2)        
-        tmp4a = self.mout.set_mOut(  {'port1'}, 'open')
-        time.sleep(2)        
-        tmp4 = self.mout.set_mOut(  {'port0'}, 'closed')
-        time.sleep(2)        
-        tmp5a = self.mout.refreshDevice()
-        time.sleep(2)        
-        tmp7 = self.mout.getStates()
+        #time.sleep(2)        
+        #tmp6 = self.mout.getStates()
+        #time.sleep(2)        
+        #tmp4a = self.mout.set_mOut(  {'port1'}, 'open')
+        #time.sleep(2)        
+        #tmp4 = self.mout.set_mOut(  {'port0'}, 'closed')
+        #time.sleep(2)        
+        #tmp5a = self.mout.refreshDevice()
+        #time.sleep(2)        
+        #tmp7 = self.mout.getStates()
 
 test = test_test()
-test.run_tests()
+for i in range (0, 10):
+    test.run_tests()
 test1 = input('Press any key') 

@@ -4,6 +4,7 @@ import time
 import json
 import psutil
 import sys
+import math
 from threading import Lock
 from  datetime import datetime
 try:
@@ -43,7 +44,7 @@ class YoLinkInitPAC(object):
         yoAccess.MAX_MESSAGES = 100  # number of messages per yoAccess.MAX_TIME
         yoAccess.MAX_TIME = 30      # Time Window
         yoAccess.time_tracking_dict = {} # structure to track time so we do not violate yolink publishing requirements
-        yoAccess.debug = True
+        yoAccess.debug = False
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
         yoAccess.time_since_last_message_RX = 0
@@ -632,67 +633,69 @@ class YoLinkInitPAC(object):
         return(True)
 
     #@measure_time
-    def time_track_publish(yoAccess, t_now, dev_id):
+    def time_tracking(yoAccess, t_now, dev_id):
         '''time_track_publish'''
         ''' make 20 overall calls per min and 6 per dev per min'''
         try:
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
-            max_dev_id_min = 5
+            max_dev_id = 5
             max_dev_all = 19
-            t_wait = 0
+            time_limit = 60000
             if dev_id not in yoAccess.time_tracking_dict:
                 yoAccess.time_tracking_dict[dev_id] = []
                 logging.debug('Adding timetrack for {}'.format(dev_id))
             total_dev_calls = 0
+            total_dev_id_calls = 0
             t_oldest = t_now
             t_oldest_dev = t_now
             t_call = t_now
-            t_old_dev_tmp = t_now
-            t_wait = 0
+
             #logging.debug('time_tracking 0 - {}'.format(yoAccess.time_tracking_dict))
             discard_list = {}
+            #remove data older than time_limit
+            for dev in yoAccess.time_tracking_dict:
+                for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
+                    t_call = yoAccess.time_tracking_dict[dev][call_nbr]
+                    if t_call  < (t_now - time_limit): # more than 1 min ago
+                        discard_list[t_call] = dev   
+            for tim in discard_list:
+                yoAccess.time_tracking_dict[discard_list[tim]].remove(tim)
+            # find oldest data in dict and for devices of the dev
+            logging.debug('time_track AFTER >1MIN REMOVAL: {}'.format(yoAccess.time_tracking_dict))
             for dev in yoAccess.time_tracking_dict:
                 #logging.debug('time_tracking 1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
                 for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
                     #logging.debug('time_tracking 1.5 - {}'.format(t_call))
+                    total_dev_calls = total_dev_calls + 1
                     t_call = yoAccess.time_tracking_dict[dev][call_nbr]
-                    t_old_dev_tmp = t_now
-                    #logging.debug('Loop info : {} - {} - {} '.format(dev, call_nbr, (t_now - t_call)))
-                    if t_call  < t_now- 60000: # more than 1 min ago
-                        #logging.debug('adding to discard_list {}  {}'.format(dev, t_call))
-                        #yoAccess.time_tracking_dict[dev].discard(t_call)
-                        discard_list[t_call] = dev
-                       
-                    else:
-                        if t_call < t_oldest:
-                            t_oldest = t_call
-                        if t_call < t_old_dev_tmp:
-                            t_old_dev_tmp = t_call
-                #logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, t_old_dev_tmp, yoAccess.time_tracking_dict ))
-                #logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
-                if dev == dev_id: # check if max_dev_id_min is in play
-                    #logging.debug('time_tracking2 - dev found')
-                    #yoAccess.time_tracking_dict[dev].append(t_now)
-                    t_oldest_dev = t_old_dev_tmp # only test for selected dev_id
-                    if len(yoAccess.time_tracking_dict[dev]) <= max_dev_id_min:
-                        t_wait = 0
-                    else:
-                        t_wait= (60100 - t_now-t_oldest_dev) # need to wait t_max before issuing command
-                    total_dev_calls = total_dev_calls + len(yoAccess.time_tracking_dict[dev])
-            for times in discard_list:
-                yoAccess.time_tracking_dict[discard_list[times]].remove(times)
-                
-            if total_dev_calls >  max_dev_all:
-                tmp_t =(60100 - t_now-t_oldest)
-                t_wait = max(tmp_t, t_wait, 0)
-                yoAccess.time_tracking_dict[dev_id].append(t_now + t_wait)
-                logging.debug('Adding w. delay {}'.format(t_now + t_wait))
+                    #logging.debug('Loop info : {} - {} - {} '.format(dev, call_nbr, (t_now - t_call)))  
+                    if t_call < t_oldest:
+                        t_oldest = t_call
+                    #logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, t_old_dev_tmp, yoAccess.time_tracking_dict ))
+                    #logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
+                    if dev == dev_id: # check if max_dev_id is in play
+                        total_dev_id_calls = total_dev_id_calls + 1
+                        #logging.debug('time_tracking2 - dev found')
+                        #yoAccess.time_tracking_dict[dev].append(t_now)
+                        if t_call < t_oldest_dev: # only test for selected dev_id
+                            t_oldest_dev = t_call
+
+            if total_dev_calls <= max_dev_all:
+                t_all_delay = 0
             else:
-                yoAccess.time_tracking_dict[dev_id].append(t_now)
-                logging.debug('Adding wo delay {}'.format(t_now))
-            logging.debug('TimeTrack after: delay:{} dev_old:{} total old:{} times{} {} {}'.format(t_wait, t_now-t_oldest_dev,  t_now-t_oldest,t_now, t_oldest_dev, t_oldest))
+                t_all_delay = time_limit - (t_now - t_oldest )
+
+            if total_dev_id_calls <= max_dev_id:
+                t_dev_delay = 0
+            else:
+                t_dev_delay = time_limit - (t_now- t_oldest_dev)
+            logging.debug('total_calls = {}, total_dev_calls = {}'.format(total_dev_calls, total_dev_id_calls))
+            t_delay = max(t_all_delay,t_dev_delay, 0 )
+            logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
+            yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
+
             logging.debug('TimeTrack after2: {}'.format(yoAccess.time_tracking_dict))
-            return(int(t_wait/1000))
+            return(int(math.ceil(t_delay/1000)))
         except Exception as e:
             logging.debug(' Exception Timetrack : {}'.format(e))
         
@@ -704,7 +707,7 @@ class YoLinkInitPAC(object):
         yoAccess.lastTransferTime = int(time.time())
         
         try:
-            data = yoAccess.publishQueue.get(timeout = 100) 
+            data = yoAccess.publishQueue.get(timeout = 100)
             
             deviceId = data['targetDevice']
             dataStr = str(json.dumps(data))
@@ -715,10 +718,10 @@ class YoLinkInitPAC(object):
                 logging.debug( 'Starting publish_data:')
                 ### check if publish list is full
                 timeNow_ms = int(time.time_ns()//1e6)
-                delay_s =  yoAccess.time_track_publish(timeNow_ms, deviceId)
+                delay_s =  yoAccess.time_tracking(timeNow_ms, deviceId)
                 #logging.debug( 'Needed delay: {} - {}'.format(delay, timeNow_s))
-                if delay > 0:
-                    logging.info('Delaying call by {}sec due to too many calls'.format(delay))
+                if delay_s > 0:
+                    logging.info('Delaying call by {}sec due to too many calls'.format(delay_s))
                     time.sleep(delay_s)
                 #logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize(), yoAccess.MAX_MESSAGES))
                 #if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
