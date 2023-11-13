@@ -461,7 +461,7 @@ class YoLinkMQTTDevice(object):
             elif dataPacket['code'].find('00020') == 0: # Offline
                 yolink.online = False
             elif  dataPacket['code'] == '010301': # need to add a wait
-                yolink.online = True
+#               #yolink.online = True  There is a bug currently
                 yolink.suspended= True
                 time.sleep(1)
 
