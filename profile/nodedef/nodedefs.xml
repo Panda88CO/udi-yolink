@@ -261,6 +261,7 @@
          <st id="GV8" editor="alarm" />
          <st id="GV9" editor="cmdsetting" />
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />               
       </sts>
       <cmds>
          <sends>
@@ -285,6 +286,7 @@
          <st id="GV2" editor="cmdsetting" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />               
       </sts>
       <cmds>
          <sends>
@@ -334,6 +336,7 @@
           <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />               
       </sts>
       <cmds>
          <sends>
@@ -363,6 +366,7 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />               
       </sts>
       <cmds>
          <sends>
@@ -397,6 +401,7 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />               
       </sts>
       <cmds>
          <sends>
@@ -424,6 +429,7 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />               
       </sts>
       <cmds>
          <sends>
