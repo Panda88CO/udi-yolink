@@ -328,7 +328,8 @@ CMD-nlssmkey-KEYLPRESS-NAME = Long Press Type
 
 suspended-0 = Nornal
 suspended-1 = Suspended
-suspended-0 = Offline
+suspended-2 = Offline
+suspended-99 = Unknown
 
 deviceAlert-0 = Normal
 deviceAlert-1 = Alert

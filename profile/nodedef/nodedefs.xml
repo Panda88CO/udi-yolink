@@ -3,7 +3,7 @@
       <editors />
       <sts>
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />
+         <!--- st id="GV20" editor="suspendstate" /-->
       </sts>
       <cmds>
          <sends>

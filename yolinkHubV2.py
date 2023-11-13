@@ -42,7 +42,7 @@ class YoLinkHu(YoLinkMQTTDevice):
                 data['params']['ssid'] = SSID
                 data['params']['password'] = password
             
-            yolink.publish_data( data) a
+            yolink.publish_data( data)
             yolink.lastControlPacket = data
         else:
             logging.error('WiFi is not enabled so one cannot change ssid and password')

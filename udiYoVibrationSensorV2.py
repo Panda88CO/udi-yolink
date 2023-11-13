@@ -136,13 +136,16 @@ class udiYoVibrationSensor(udi_interface.Node):
                         self.node.setDriver('CLITEMP', round(devTemp+273.15,0), True, True, 26)
                 else:
                     self.node.setDriver('CLITEMP', 99, True, True, 25)
-
+                if self.yoVibrationSensor.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('ST', 1, True, True)
-
+                self.node.setDriver('GV20', 2, True, True)
 
 
 

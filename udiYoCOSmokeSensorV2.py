@@ -179,17 +179,23 @@ class udiYoCOSmokeSensor(udi_interface.Node):
                 else:
                     self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('GV7', self.cmd_state)
+                if self.yoCOSmokeSensor.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0, True, True)
+
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('GV2', 99, True, True)
                 self.node.setDriver('GV3', 99, True, True)
                 self.node.setDriver('GV4', 99, True, True)
-                self.node.setDriver('GV5', 99, True, True)  
+                self.node.setDriver('GV5', 99, True, True)
            
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('ALARM', 99, True, True)     
                 self.node.setDriver('ST', 0)
+                self.node.setDriver('GV20', 2, True, True)
 
 
     def updateStatus(self, data):
