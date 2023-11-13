@@ -703,7 +703,7 @@ class YoLinkInitPAC(object):
                 t_all_delay = call_time_limit - (t_now - t_oldest )
             
             if (t_now - t_newest_dev) <= dev_to_dev_limit:
-                time.sleep(int((t_now - t_newest_dev)/1000)) # calls to same device must be min dev_to_dev_limit (200ms) apart
+                time.sleep((dev_to_dev_limit-(t_now - t_newest_dev))/1000) # calls to same device must be min dev_to_dev_limit (200ms) apart
                 logging.debug('Sleeping {}ms due to too close dev calls '.format(t_now - t_newest_dev))
             if total_dev_id_calls <= max_dev_id:
                 t_dev_delay = 0
@@ -743,19 +743,9 @@ class YoLinkInitPAC(object):
                 delay_s =  yoAccess.time_tracking(timeNow_ms, deviceId)
                 #logging.debug( 'Needed delay: {} - {}'.format(delay, timeNow_s))
                 if delay_s > 0: # some delay needed
-                    #if dev_delay > 0 and all_delay == 0: # too many calls to same device - we can put data back in queue
-                        #raise Exception('we can handle other calls while waiting for dev to clear')
                     logging.info('Delaying call by {}sec due to too many calls'.format(delay_s))
                     time.sleep(delay_s)
-                #logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize(), yoAccess.MAX_MESSAGES))
-                #if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
-                #    logging.Info('Too many calls are issued - messages are pileing up (more than {} are waiting )'.format(yoAccess.timeQueue.qsize()))
-                #    first_TXtime = yoAccess.timeQueue.get()
-                #    if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
-                #        logging.debug('Delaying command to ensure no overflow of commands to YoLink server')
-                #        time.sleep(yoAccess.MAX_TIME - (timeNow_s - first_TXtime )) # wait until yoAccess.MAX_TIME has elapsed sine first element
-                #yoAccess.timeQueue.put(timeNow_s)    
-                #logging.debug('getting to publish')            
+                    # As this is multi threaded we can just sleep  - if another call is ready and can go though is will so in a differnt thread    
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
             else:
