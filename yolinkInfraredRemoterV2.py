@@ -200,9 +200,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token']
         if worked:
-            while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-                time.sleep(1)
-                attempt = attempt + 1
+            yolink.yoAccess.publish_data( data) 
             #yolink.publish_data(data)
   
     

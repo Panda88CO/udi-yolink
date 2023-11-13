@@ -165,9 +165,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         data['params']['enableBeep'] = yolink.beepEnabled
         data['params']['mute'] = yolink.mute
         print('dataStr: {}'.format(data))
-        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-            time.sleep(4)
-            attempt = attempt + 1
+        yolink.yoAccess.publish_data( data)
         yolink.lastControlPacket = data
 
     '''
