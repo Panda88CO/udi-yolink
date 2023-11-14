@@ -453,15 +453,11 @@ class YoLinkMQTTDevice(object):
         yolink.suspended= False
         if 'code' in dataPacket:
             if dataPacket['code'] == '000000':
-                if 'data' in dataPacket:
-                    if 'online' in dataPacket['data']:
-                        yolink.online = dataPacket['data']['online']
-                    else:
-                        yolink.online = True
+                yolink.online = True
             elif dataPacket['code'].find('00020') == 0: # Offline
                 yolink.online = False
             elif  dataPacket['code'] == '010301': # need to add a wait
-#               #yolink.online = True  There is a bug currently
+                yolink.online = True 
                 yolink.suspended= True
                 time.sleep(1)
 
@@ -486,9 +482,10 @@ class YoLinkMQTTDevice(object):
             
             if 'method' in  data and 'event' not in data:
                 logging.debug('Method detected')
+                yolink.online = yolink.Status(data)
                 if data['code'] == '000000':
 
-                    yolink.online = yolink.Status(data)
+                    
                     yolink.noconnect = 0
                     if  '.getState' in data['method'] :
                         #if int(data['time']) > int(yolink.getLastUpdate()):
@@ -537,14 +534,12 @@ class YoLinkMQTTDevice(object):
                 #        logging.debug('Device not connected - trying agian ')
                 else:
                     yolink.deviceError(data)
-
-
-                    yolink.online = yolink.Status(data)
-
+                    #yolink.online = yolink.Status(data)
                     logging.error(yolink.type+ ': ' + data['desc'])
             elif 'event' in data:
                 #logging.debug('Event deteced')
-                yolink.online = True #
+                yolink.online = yolink.Status(data)
+                #yolink.online = True #
                 if '.StatusChange' in data['event']:
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)              

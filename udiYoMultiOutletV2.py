@@ -608,12 +608,14 @@ class udiYoMultiOutlet(udi_interface.Node):
 
         if not self.yoMultiOutlet.online:
             logging.error( '{} - not on line'.format(self.nodeName))
-            self.node.setDriver('ST', 0)
-            if self.yoMultiOutlet.get_nbr_attempts() < 3:
-                logging.debug ('Device not on-line retrying ')
-                time.sleep(10.1)
-                self.yoMultiOutlet.retry_send_data()
-                self.node.setDriver('GV20', 2, True, True)
+            self.node.setDriver('ST', 0, True, True)
+            self.node.setDriver('GV20', 2, True, True)
+            # if device is offline - it will report when back online, so no need to try again
+            #if self.yoMultiOutlet.get_nbr_attempts() < 3:
+            #    logging.debug ('Device not on-line retrying ')
+            #    time.sleep(10.1)
+            #    self.yoMultiOutlet.retry_send_data()
+            #    self.node.setDriver('GV20', 2, True, True)
         else:
             self.node.setDriver('ST', 1)
             if self.yoMultiOutlet.suspended:
