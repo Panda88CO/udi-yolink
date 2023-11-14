@@ -703,8 +703,10 @@ class YoLinkInitPAC(object):
                 t_all_delay = call_time_limit - (t_now - t_oldest )
             
             if (t_now - t_newest_dev) <= dev_to_dev_limit:
-                time.sleep((dev_to_dev_limit-(t_now - t_newest_dev))/1000) # calls to same device must be min dev_to_dev_limit (200ms) apart
-                logging.debug('Sleeping {}ms due to too close dev calls '.format(t_now - t_newest_dev))
+                #time.sleep((dev_to_dev_limit-(t_now - t_newest_dev))/1000) # calls to same device must be min dev_to_dev_limit (200ms) apart
+                time.sleep(dev_to_dev_limit/1000) # sleep 200ms - Seems calculating the limit is not accurate enough
+                #logging.debug('Sleeping {}ms due to too close dev calls '.format(t_now - t_newest_dev))
+                logging.debug('Sleeping {}s due to too close dev calls '.format(dev_to_dev_limit/1000))
             if total_dev_id_calls <= max_dev_id:
                 t_dev_delay = 0
             else:

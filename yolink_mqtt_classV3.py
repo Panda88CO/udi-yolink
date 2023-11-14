@@ -161,7 +161,7 @@ class YoLinkMQTTDevice(object):
 
     #@measure_time
     def deviceError(yolink, data):
-        logging.debug(yolink.type+' - deviceError')
+        logging.debug(yolink.type+' - deviceError : {}'.format(data))
         yolink.dataAPI[yolink.dOnline] = False
         # may need to add more error handling 
 
@@ -484,8 +484,6 @@ class YoLinkMQTTDevice(object):
                 logging.debug('Method detected')
                 yolink.online = yolink.Status(data)
                 if data['code'] == '000000':
-
-                    
                     yolink.noconnect = 0
                     if  '.getState' in data['method'] :
                         #if int(data['time']) > int(yolink.getLastUpdate()):

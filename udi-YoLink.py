@@ -611,7 +611,7 @@ class YoLinkSetup (udi_interface.Node):
                             if nde != 'setup':   # but not the controller node
                                 nodes[nde].checkOnline()
                                 logging.debug('longpoll {}'.format(nde))
-                                time.sleep(4) # need to limit calls to 20 per min - using 4 to allow otehr calls 
+                                time.sleep(4) # need to limit calls to 100 per  5 min - using 4 to allow other calls
                     except Exception as e:
                         logging.debug('Exeption occcured during systemPoll : {}'.format(e))
                         #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
@@ -625,7 +625,7 @@ class YoLinkSetup (udi_interface.Node):
                         if nde != 'setup':   # but not the controller node
                             nodes[nde].checkDataUpdate()
                             logging.debug('shortpoll {}'.format(nde))
-                            time.sleep(4)  # need to limit calls to 20 per min - using 4 to allow otehr calls
+                            time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
             else:
                 self.node.setDriver('ST', 0, True, True)
                 
