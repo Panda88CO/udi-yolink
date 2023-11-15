@@ -644,10 +644,11 @@ class YoLinkInitPAC(object):
 
 
     #@measure_time
-    def time_tracking(yoAccess, t_now, dev_id):
+    def time_tracking(yoAccess, dev_id):
         '''time_track_publish'''
         ''' make 20 overall calls per min and 6 per dev per min'''
         try:
+            t_now = int(time.time_ns()//1e6)
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
             max_dev_id = yoAccess.nbr_api_dev_calls
             max_dev_all = yoAccess.nbr_api_calls
@@ -716,7 +717,7 @@ class YoLinkInitPAC(object):
             #logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
             yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
 
-            logging.debug('TimeTrack after2: {}'.format(yoAccess.time_tracking_dict))
+            logging.debug('TimeTrack after2: dev: {} -  {}'.format(dev_id, yoAccess.time_tracking_dict))
             return(int(math.ceil(t_delay/1000)))
             #return(int(math.ceil(t_delay/1000)), int(math.ceil(t_all_delay)), int(math.ceil(t_all_delay)))
         except Exception as e:
@@ -733,21 +734,24 @@ class YoLinkInitPAC(object):
             data = yoAccess.publishQueue.get(timeout = 10)
 
             deviceId = data['targetDevice']
-            dataStr = str(json.dumps(data))
-            yoAccess.tmpData[deviceId] = dataStr
-            yoAccess.lastDataPacket[deviceId] = data
+
             #logging.debug('mqttList : {}'.format(yoAccess.mqttList))
             if deviceId in yoAccess.mqttList:
                 logging.debug( 'Starting publish_data:')
                 ### check if publish list is full
-                timeNow_ms = int(time.time_ns()//1e6)
+                
                 #all_delay, dev_delay =  yoAccess.time_tracking(timeNow_ms, deviceId)
-                delay_s =  yoAccess.time_tracking(timeNow_ms, deviceId)
+                delay_s =  yoAccess.time_tracking(deviceId)
                 #logging.debug( 'Needed delay: {} - {}'.format(delay, timeNow_s))
                 if delay_s > 0: # some delay needed
                     logging.info('Delaying call by {}sec due to too many calls'.format(delay_s))
                     time.sleep(delay_s)
                     # As this is multi threaded we can just sleep  - if another call is ready and can go though is will so in a differnt thread    
+                data['time'] = str(int(time.time_ns()/1e6))  # update time to actual packet time (to include delays)
+                dataStr = str(json.dumps(data))
+                yoAccess.tmpData[deviceId] = dataStr
+                yoAccess.lastDataPacket[deviceId] = data
+
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
             else:
