@@ -537,7 +537,7 @@ class YoLinkSetup (udi_interface.Node):
             else:
                 logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
         time.sleep(1)
-        
+        # need to go through nodes to see if there are nodes that no longer exist in device list                
         logging.debug('assigned addresses nodes  :{} - {}'.format(len(self.assigned_addresses), self.assigned_addresses))
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
         for node in self.nodes_in_db:
