@@ -91,6 +91,8 @@ class YoLinkSetup (udi_interface.Node):
         self.node.setDriver('ST', 1, True, True)
         self.assigned_addresses = []
         self.assigned_addresses.append(self.address)   
+        self.nodes_in_db = self.poly.getNodesFromDb()
+        logging.debug('Nodes in db: {}'.format(self.nodes_in_db))
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
 
