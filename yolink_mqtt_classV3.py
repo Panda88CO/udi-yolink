@@ -572,10 +572,16 @@ class YoLinkMQTTDevice(object):
                 elif '.DataRecord' in  data['event']:
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
+                elif '.powerReport' in  data['event']:
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)
+                        logging.info('power report ignored')
+
                 else:
                     logging.debug('Unsupported Event passed - trying anyway; {}'.format(data) )
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
+                        '''
                         try:
                             if int(data['time']) > int(yolink.getLastUpdate()) and data['data'] != {}:
                                 if data['event'].find('chedule') >= 0 :
@@ -589,6 +595,7 @@ class YoLinkMQTTDevice(object):
                                 logging.error('Device appears offline: '+ data['desc'])
                         except logging.exception as E:
                             logging.error('Unsupported event detected: ' + str(E))
+                        '''    
                 if eventSupport:
                     yolink.eventQueue.put(data['event']) 
                 yolink.lastDataPacket = data
