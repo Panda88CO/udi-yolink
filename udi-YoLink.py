@@ -67,8 +67,8 @@ class YoLinkSetup (udi_interface.Node):
         self.mqttURL = 'api.yosmart.com'
         self.mqttPort = 8003
 
-        self.nodes_in_db = self.poly.getNodesFromDb()
-        logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
+       
+        
         logging.setLevel(10)
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
@@ -92,7 +92,7 @@ class YoLinkSetup (udi_interface.Node):
         self.assigned_addresses = []
         self.assigned_addresses.append(self.address)   
         self.nodes_in_db = self.poly.getNodesFromDb()
-        logging.debug('Nodes in db: {}'.format(self.nodes_in_db))
+        logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
 
@@ -542,9 +542,11 @@ class YoLinkSetup (udi_interface.Node):
         # need to go through nodes to see if there are nodes that no longer exist in device list                
         logging.debug('assigned addresses nodes  :{} - {}'.format(len(self.assigned_addresses), self.assigned_addresses))
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
-        for node in self.nodes_in_db:
-            if node  not in self.assigned_addresses:
-                logging.debug('Removing node : {}'.format(node))
+        for nde in range(0, len(self.nodes_in_db)):
+            node = self.nodes_in_db[nde]
+            logging.debug('Scanning db for extra nodes : {}'.format(node))
+            if node['address']  not in self.assigned_addresses:
+                logging.debug('Removing node : {} {}'.format(node['name'], node))
                 self.poly.delNode(node)
                 
         # checking params for erassed nodes
