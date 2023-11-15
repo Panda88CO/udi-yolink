@@ -646,18 +646,18 @@ class YoLinkInitPAC(object):
     #@measure_time
     def time_tracking(yoAccess, dev_id):
         '''time_track_publish'''
-        ''' make 20 overall calls per min and 6 per dev per min'''
+        ''' make 100 overall calls per 5 min and 6 per dev per min and 200ms between calls'''
         try:
-            
+            if dev_id not in yoAccess.time_tracking_dict:
+                yoAccess.time_tracking_dict[dev_id] = []
+                #logging.debug('Adding timetrack for {}'.format(dev_id))            
+            t_now = int(time.time_ns()/1e6)
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
             max_dev_id = yoAccess.nbr_api_dev_calls
             max_dev_all = yoAccess.nbr_api_calls
             dev_time_limit = 60000 # 1 min =  60 sec = 60000 ms
             call_time_limit = 300000 # 5min = 300 sec = 300000 ms
             dev_to_dev_limit = 200 # min 200ms between calls
-            if dev_id not in yoAccess.time_tracking_dict:
-                yoAccess.time_tracking_dict[dev_id] = []
-                #logging.debug('Adding timetrack for {}'.format(dev_id))
             total_dev_calls = 0
             total_dev_id_calls = 0
             t_oldest = t_now
@@ -666,7 +666,7 @@ class YoLinkInitPAC(object):
             t_dev_2_dev = 0
             t_call = t_now
 
-            t_now = int(time.time_ns()/1e6)
+            #t_now = int(time.time_ns()/1e6)
             #logging.debug('time_tracking 0 - {}'.format(yoAccess.time_tracking_dict))
             discard_list = {}
             #remove data older than time_limit
