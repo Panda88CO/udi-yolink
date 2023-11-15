@@ -253,7 +253,7 @@ class YoLinkInitPAC(object):
             logging.debug('retrieve_device_list')
             data= {}
             data['method'] = 'Home.getDeviceList'
-            data['time'] = str(int(time.time_ns()//1e6))
+            data['time'] = str(int(time.time_ns()/1e6))
             headers1 = {}
             headers1['Content-type'] = 'application/json'
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
@@ -269,7 +269,7 @@ class YoLinkInitPAC(object):
         try:
             data= {}
             data['method'] = 'Home.getGeneralInfo'
-            data['time'] = str(int(time.time_ns()//1e6))
+            data['time'] = str(int(time.time_ns()/1e6))
             headers1 = {}
             headers1['Content-type'] = 'application/json'
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
@@ -648,7 +648,7 @@ class YoLinkInitPAC(object):
         '''time_track_publish'''
         ''' make 20 overall calls per min and 6 per dev per min'''
         try:
-            t_now = int(time.time_ns()//1e6)
+            
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
             max_dev_id = yoAccess.nbr_api_dev_calls
             max_dev_all = yoAccess.nbr_api_calls
@@ -662,9 +662,11 @@ class YoLinkInitPAC(object):
             total_dev_id_calls = 0
             t_oldest = t_now
             t_oldest_dev = t_now
-            t_newest_dev = 0
+            t_previous_dev = 0
+            t_dev_2_dev = 0
             t_call = t_now
 
+            t_now = int(time.time_ns()/1e6)
             #logging.debug('time_tracking 0 - {}'.format(yoAccess.time_tracking_dict))
             discard_list = {}
             #remove data older than time_limit
@@ -695,29 +697,30 @@ class YoLinkInitPAC(object):
                             #yoAccess.time_tracking_dict[dev].append(t_now)
                             if t_call < t_oldest_dev: # only test for selected dev_id
                                 t_oldest_dev = t_call
-                            if t_call > t_newest_dev:
-                                t_newest_dev = t_call
+                            if t_call > t_previous_dev:
+                                t_previous_dev = t_call
 
             if total_dev_calls <= max_dev_all:
                 t_all_delay = 0
             else:
                 t_all_delay = call_time_limit - (t_now - t_oldest )
             
-            if (t_now - t_newest_dev) <= dev_to_dev_limit:
-                #time.sleep((dev_to_dev_limit-(t_now - t_newest_dev))/1000) # calls to same device must be min dev_to_dev_limit (200ms) apart
-                time.sleep(dev_to_dev_limit/1000) # sleep 200ms - Seems calculating the limit is not accurate enough
-                #logging.debug('Sleeping {}ms due to too close dev calls '.format(t_now - t_newest_dev))
-                logging.debug('Sleeping {}s due to too close dev calls '.format(dev_to_dev_limit/1000))
+            if (t_now - t_previous_dev) <= dev_to_dev_limit:
+                #time.sleep((dev_to_dev_limit + 10 -(t_now - t_previous_dev))/1000) # calls to same device must be min dev_to_dev_limit (200ms) apart
+                #t_dev_2_dev = dev_to_dev_limit) # sleep 200ms + 100 ms margin - Seems calculating the limit is not accurate enough
+                t_dev_2_dev = (dev_to_dev_limit + 100 -(t_now - t_previous_dev))
+                #logging.debug('Sleeping {}ms due to too close dev calls '.format(t_now - t_previous_dev))
+                #logging.debug('Sleeping {}s due to too close dev calls '.format(dev_to_dev_limit/1000))
             if total_dev_id_calls <= max_dev_id:
                 t_dev_delay = 0
             else:
-                t_dev_delay = dev_time_limit - (t_now- t_oldest_dev)
+                t_dev_delay = dev_time_limit  - (t_now- t_oldest_dev)
             #logging.debug('total_calls = {}, total_dev_calls = {}'.format(total_dev_calls, total_dev_id_calls))
-            t_delay = max(t_all_delay,t_dev_delay, 0 )
+            t_delay = max(t_all_delay,t_dev_delay, t_dev_2_dev, 0 )
             #logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
             yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
 
-            logging.debug('TimeTrack after2: dev: {} -  {}'.format(dev_id, yoAccess.time_tracking_dict))
+            logging.debug('TimeTrack after: dev: {} -  {}'.format(dev_id, yoAccess.time_tracking_dict))
             return(int(math.ceil(t_delay/1000)))
             #return(int(math.ceil(t_delay/1000)), int(math.ceil(t_all_delay)), int(math.ceil(t_all_delay)))
         except Exception as e:

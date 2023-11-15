@@ -195,7 +195,7 @@ class YoLinkMQTTDevice(object):
             methodStr = yolink.type+'.getState'
             #logging.debug(methodStr)  
             data = {}
-            data['time'] = str(int(time.time_ns()/1e6))
+            #data['time'] = str(int(time.time_ns()/1e6)) # we assign time just before publish
             data['method'] = methodStr
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
@@ -233,15 +233,16 @@ class YoLinkMQTTDevice(object):
             return(True)
         else:
             return(False)
-        
+    '''    
     #@measure_time
     def send_data(yolink,  data):
         logging.debug('send_data {}'.format(data))
         yolink.yoAccess.publish_data( data)
         if yolink.MQTT_type == 'c':
-            time.sleep(1)
-        
+            time.sleep(1) 
         return (True)
+    '''
+
     #@measure_time
     def setDevice(yolink,  data):
         attempt = 1
@@ -254,7 +255,7 @@ class YoLinkMQTTDevice(object):
         elif 'toggle' in yolink.methodList:
             methodStr = yolink.type+'.toggle'
             worked = True
-        data['time'] = str(int(time.time_ns()//1e6))
+        #data['time'] = str(int(time.time_ns()//1e6))# we assign time just before publish
         data['method'] = methodStr
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token']
@@ -612,7 +613,7 @@ class YoLinkMQTTDevice(object):
         data['params'] = {}
         data['params']['delayOn'] = onDelay
         data['params']['delayOff'] = offDelay
-        data['time'] = str(int(time.time_ns()//1e6))
+        #data['time'] = str(int(time.time_ns()//1e6)) # we assign time just before publish
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
@@ -638,7 +639,7 @@ class YoLinkMQTTDevice(object):
         temp = []
         data['params'] = {}
         data['params']['delayOn'] = onDelay
-        data['time'] = str(int(time.time_ns()//1e6))
+        #data['time'] = str(int(time.time_ns()//1e6)) # we assign time just before publish
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
@@ -664,7 +665,7 @@ class YoLinkMQTTDevice(object):
         temp = []
         data['params'] = {}
         data['params']['delayOff'] = offDelay
-        data['time'] = str(int(time.time_ns()//1e6))
+        #data['time'] = str(int(time.time_ns()//1e6)) # we assign time just before publish
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
@@ -703,7 +704,7 @@ class YoLinkMQTTDevice(object):
         else:
             logging.debug('Must overwrite to support multi devices for now')
             return(False)
-        data['time'] = str(int(time.time_ns()//1e6))
+        # = str(int(time.time_ns()//1e6)) # we assign time just before publish
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
@@ -1055,6 +1056,7 @@ class YoLinkMQTTDevice(object):
                             yolink.nbrUsb = 0
                             yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
                     else: # multi outlet - need to getState 
+                        logging.debug('EXTRA refresh device - data = {}'.format(data))
                         yolink.refreshDevice()
                 elif '.DataRecord'in data['event']:
                     logging.debug('.DataRecord : {}'.format(data))
