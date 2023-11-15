@@ -545,9 +545,9 @@ class YoLinkSetup (udi_interface.Node):
         for nde in range(0, len(self.nodes_in_db)):
             node = self.nodes_in_db[nde]
             logging.debug('Scanning db for extra nodes : {}'.format(node))
-            if node['address']  not in self.assigned_addresses:
+            if node['address']  not in self.assigned_addresses and node['isPrimary'] == 1: # do not remove sub-nodes
                 logging.debug('Removing node : {} {}'.format(node['name'], node))
-                self.poly.delNode(node)
+                self.poly.delNode(node['address'])
                 
         # checking params for erassed nodes
         self.poly.updateProfile()
