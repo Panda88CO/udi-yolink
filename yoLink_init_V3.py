@@ -37,6 +37,7 @@ class YoLinkInitPAC(object):
         yoAccess.disconnect_occured = False 
         yoAccess.tokenLock = Lock()
         yoAccess.fileLock = Lock()
+        yoAccess.TimeTableLock = Lock()
         yoAccess.publishQueue = Queue()
         #yoAccess.delayQueue = Queue()
         yoAccess.messageQueue = Queue()
@@ -648,6 +649,7 @@ class YoLinkInitPAC(object):
         '''time_track_publish'''
         ''' make 100 overall calls per 5 min and 6 per dev per min and 200ms between calls'''
         try:
+            yoAccess.TimeTableLock.acquire()
             if dev_id not in yoAccess.time_tracking_dict:
                 yoAccess.time_tracking_dict[dev_id] = []
                 #logging.debug('Adding timetrack for {}'.format(dev_id))            
@@ -719,13 +721,13 @@ class YoLinkInitPAC(object):
             t_delay = max(t_all_delay,t_dev_delay, t_dev_2_dev, 0 )
             #logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
             yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
-
+            yoAccess.TimeTableLock.release()
             logging.debug('TimeTrack after: time {} dev: {} delay;{} -  {}'.format(t_now, dev_id, int(math.ceil(t_delay/1000)), yoAccess.time_tracking_dict))
             return(int(math.ceil(t_delay/1000)))
             #return(int(math.ceil(t_delay/1000)), int(math.ceil(t_all_delay)), int(math.ceil(t_all_delay)))
         except Exception as e:
             logging.debug(' Exception Timetrack : {}'.format(e))
-        
+            yoAccess.TimeTableLock.release()
         #yoAccess.time_tracking_dict[dev_id].append(time)
 
     #@measure_time
