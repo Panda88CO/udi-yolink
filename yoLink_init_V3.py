@@ -73,8 +73,7 @@ class YoLinkInitPAC(object):
         yoAccess.deviceList = []
         yoAccess.token = None
 
-        yoAccess.nbr_api_calls = 19
-        yoAccess.nbr_api_dev_calls = 5
+
 
         yoAccess.unassigned_nodes = []
         try:
@@ -655,11 +654,11 @@ class YoLinkInitPAC(object):
                 #logging.debug('Adding timetrack for {}'.format(dev_id))            
             t_now = int(time.time_ns()/1e6)
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
-            max_dev_id = yoAccess.nbr_api_dev_calls
-            max_dev_all = yoAccess.nbr_api_calls
+            max_dev_id = 6 # commands per dev_time_limit to same dev
+            max_dev_all = 100 # commands per call_time_limit to same dev
             dev_time_limit = 60000 # 1 min =  60 sec = 60000 ms
             call_time_limit = 300000 # 5min = 300 sec = 300000 ms
-            dev_to_dev_limit = 200 # min 200ms between calls
+            dev_to_dev_limit = 200 # min 200ms between calls to same dev
             total_dev_calls = 0
             total_dev_id_calls = 0
             t_oldest = t_now
