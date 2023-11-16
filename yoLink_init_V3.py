@@ -720,7 +720,7 @@ class YoLinkInitPAC(object):
             #logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
             yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
 
-            logging.debug('TimeTrack after: dev: {} -  {}'.format(dev_id, yoAccess.time_tracking_dict))
+            logging.debug('TimeTrack after: time {} dev: {} delay;{} -  {}'.format(t_now, dev_id, int(math.ceil(t_delay/1000)), yoAccess.time_tracking_dict))
             return(int(math.ceil(t_delay/1000)))
             #return(int(math.ceil(t_delay/1000)), int(math.ceil(t_all_delay)), int(math.ceil(t_all_delay)))
         except Exception as e:
