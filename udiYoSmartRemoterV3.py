@@ -313,7 +313,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         #    self.poly.delNode(self.node.address)
 
     def checkOnline(self):
-        self.yoSmartRemote.refreshDevice()   
+        self.yoSmartRemote.refreshDevice()
     
     def checkDataUpdate(self):
         if self.yoSmartRemote.data_updated():

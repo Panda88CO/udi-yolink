@@ -654,8 +654,8 @@ class YoLinkInitPAC(object):
                 #logging.debug('Adding timetrack for {}'.format(dev_id))            
             t_now = int(time.time_ns()/1e6)
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
-            max_dev_id = 6 # commands per dev_time_limit to same dev
-            max_dev_all = 100 # commands per call_time_limit to same dev
+            max_dev_id = 5 # commands per dev_time_limit to same dev (add margin)
+            max_dev_all = 99 # commands per call_time_limit to same dev (add margin)
             dev_time_limit = 60000 # 1 min =  60 sec = 60000 ms
             call_time_limit = 300000 # 5min = 300 sec = 300000 ms
             dev_to_dev_limit = 200 # min 200ms between calls to same dev
