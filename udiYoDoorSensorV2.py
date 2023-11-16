@@ -34,6 +34,7 @@ class udiYoDoorSensor(udi_interface.Node):
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25},      
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},   
               ]
 
 
@@ -78,6 +79,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoDoorSensor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)   
         time.sleep(2)
         self.yoDoorSensor.initNode()
@@ -140,11 +142,17 @@ class udiYoDoorSensor(udi_interface.Node):
                 self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
                 self.node.setDriver('GV2', self.cmd_state)
                 self.node.setDriver('ST', self.yoDoorSensor.bool2Nbr(self.yoDoorSensor.online), True, True)
+                if self.yoDoorSensor.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0, True, True)
+
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('GV2', self.cmd_state, True, True)
                 self.node.setDriver('ST', 0)
+                self.node.setDriver('GV20', 2, True, True)
 
 
 

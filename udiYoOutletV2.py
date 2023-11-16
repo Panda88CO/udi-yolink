@@ -39,6 +39,7 @@ class udiYoOutlet(udi_interface.Node):
             {'driver': 'GV3', 'value': -1, 'uom': 30},
             {'driver': 'GV4', 'value': -1, 'uom': 33},
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},              
 
             ]
 
@@ -86,6 +87,7 @@ class udiYoOutlet(udi_interface.Node):
 
     def start(self):
         logging.info('start - YoLinkOutlet')
+        self.node.setDriver('ST', 0, True, True)
         self.yoOutlet  = YoLinkOutl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoOutlet.initNode()
@@ -135,6 +137,10 @@ class udiYoOutlet(udi_interface.Node):
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
                     self.node.setDriver('GV2', 0, True, False)
+                if self.yoOutlet.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
 
 
             else:
@@ -144,6 +150,7 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV3', -1, True, True)
                 self.node.setDriver('GV4', -1, True, True)
                 self.node.setDriver('ST',0, True, True)
+                self.node.setDriver('GV20', 2, True, True)
         
 
 
@@ -190,9 +197,10 @@ class udiYoOutlet(udi_interface.Node):
 
 
     def outletControl(self, command):
-        ctrl = int(command.get('value'))   
+        
+        ctrl = int(command.get('value'))  
         logging.info('udiYoOutlet outletControl - {}'.format(ctrl))
-        ctrl = int(command.get('value'))     
+        ctrl = int(command.get('value'))
         if ctrl == 1:
             self.yoOutlet.setState('ON')
             self.node.setDriver('GV0',1 , True, True)
@@ -210,9 +218,7 @@ class udiYoOutlet(udi_interface.Node):
             elif state == 'OFF':
                 self.yoOutlet.setState('ON')
                 self.node.setDriver('GV0',1 , True, True)
-                self.node.reportCmd('DON')
-
-                
+                self.node.reportCmd('DON')                
         elif ctrl == 5:
             logging.info('outletControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
             #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)

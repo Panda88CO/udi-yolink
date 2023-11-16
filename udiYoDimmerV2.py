@@ -30,6 +30,7 @@ class udiYoDimmer(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV3', 'value': 0, 'uom': 51},
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},            
 
             ]
     '''
@@ -40,6 +41,7 @@ class udiYoDimmer(udi_interface.Node):
             'GV3' = Dimmer Brightness
             #'GV4' = Energy
             'ST' = Online/Connected
+            'GV20' = Suspended state
             ]
 
     ''' 
@@ -88,6 +90,7 @@ class udiYoDimmer(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoDimmer')
+        self.node.setDriver('ST', 0, True, True)
         self.yoDimmer  = YoLinkDim(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoDimmer.initNode()
@@ -121,8 +124,8 @@ class udiYoDimmer(udi_interface.Node):
         #if self.node:
         #    self.poly.delNode(self.node.address)
             
-    def checkOnline(self):
-        self.yoDimmer.refreshDevice() 
+    #def checkOnline(self):
+    #    self.yoDimmer.refreshDevice()
     
     
     def checkDataUpdate(self):
@@ -150,12 +153,17 @@ class udiYoDimmer(udi_interface.Node):
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
-                    self.node.setDriver('GV2', 0, True, False)                
+                    self.node.setDriver('GV2', 0, True, False) 
+                if self.yoDimmer.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                     self.node.setDriver('GV20', 0)
             else:
                 self.node.setDriver('ST', 0, True, True)
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 0, True, False)
-                self.node.setDriver('GV2', 0, True, False)    
+                self.node.setDriver('GV2', 0, True, False)
+                self.node.setDriver('GV20', 2, True, True)
            
 
     def updateStatus(self, data):

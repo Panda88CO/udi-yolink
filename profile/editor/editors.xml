@@ -1,159 +1,162 @@
 <editors> 
-  <editor id = "status" > 
-     <range  uom="25" subset="0-1" nls="status" />
+  <editor id="status"> 
+     <range uom="25" subset="0-1" nls="status" />
   </editor>
-  <editor id = "swstate" > 
-     <range  uom="25" subset="0-1,99" nls="swstate" />
+  <editor id="swstate"> 
+     <range uom="25" subset="0-1,99" nls="swstate" />
   </editor>     
-  <editor id = "swctrl" > 
-     <range  uom="25" subset="0-2,5" nls="swctrl" />
+  <editor id="swctrl"> 
+     <range uom="25" subset="0-2,5" nls="swctrl" />
   </editor>
-  <editor id = "watt" > 
-     <range  uom="30" min="-1" max="2000" prec="2" />
+  <editor id="watt"> 
+     <range uom="30" min="-1" max="2000" prec="2" />
   </editor>
-  <editor id = "energy" > 
-     <range  uom="33" min="-1" max="2000" prec="2"/>
+  <editor id="energy"> 
+     <range uom="33" min="-1" max="2000" prec="2" />
   </editor>
-  <editor id = "delay" > 
-     <range  uom="57"  min="0" max="86400" prec="0" />
+  <editor id="delay"> 
+     <range uom="57" min="0" max="86400" prec="0" />
   </editor>     
-  <editor id = "delaymin" > 
-     <range  uom="44"  min="0" max="1440" prec="0" />
+  <editor id="delaymin"> 
+     <range uom="44" min="0" max="1440" prec="0" />
   </editor>
-  <editor id = "tempC" > 
-        <range uom="4" min="-40" max="105"  prec="1"/>
-        <range uom="17" min="-40" max="221"  prec="1"/>
-        <range uom="26" min="233" max="378"  prec="1"/>
-        <range uom="25" subset="0,99"  nls="error"/>
+  <editor id="tempC"> 
+        <range uom="4" min="-40" max="105" prec="1" />
+        <range uom="17" min="-40" max="221" prec="1" />
+        <range uom="26" min="233" max="378" prec="1" />
+        <range uom="25" subset="0,99" nls="error" />
   </editor>
   
-  <editor id = "tempunit" > 
-     <range  uom="25" subset="0-2,99" nls="tempunit" />
+  <editor id="tempunit"> 
+     <range uom="25" subset="0-2,99" nls="tempunit" />
   </editor>    
 
-  <editor id = "alarm" > 
-     <range  uom="25" subset="0-1,99" nls="alarm" />
+  <editor id="alarm"> 
+     <range uom="25" subset="0-1,99" nls="alarm" />
   </editor>
 
-  <editor id = "humidity" > 
-     <range  uom="51"  min="0" max="100" prec="1" />
+  <editor id="humidity"> 
+     <range uom="51" min="0" max="100" prec="1" />
   </editor>
-  <editor id = "batlevel" > 
-     <range  uom="25" subset="0-4,99" nls="batlevel" />
+  <editor id="batlevel"> 
+     <range uom="25" subset="0-4,99" nls="batlevel" />
   </editor>
-  <editor id = "doorstate" > 
-     <range  uom="25" subset="0-1,99" nls="doorstate" />
+  <editor id="doorstate"> 
+     <range uom="25" subset="0-1,99" nls="doorstate" />
   </editor>
-  <editor id = "online" > 
-     <range  uom="25" subset="0-1" nls="online" />
+  <editor id="online"> 
+     <range uom="25" subset="0-1" nls="online" />
   </editor>
-  <editor id = "motionstate" > 
-     <range  uom="25" subset="0-1,99" nls="motionstate" />
+  <editor id="motionstate"> 
+     <range uom="25" subset="0-1,99" nls="motionstate" />
   </editor>
-  <editor id = "waterstate" > 
-     <range  uom="25" subset="0-1,99" nls="waterstate" />
+  <editor id="waterstate"> 
+     <range uom="25" subset="0-1,99" nls="waterstate" />
   </editor>
-  <editor id = "manstate" > 
-     <range  uom="25" subset="0-1,99" nls="manstate" />
+  <editor id="manstate"> 
+     <range uom="25" subset="0-1,99" nls="manstate" />
   </editor>
-    <editor id = "manctrl" > 
-     <range  uom="25" subset="0-1,5" nls="manctrl" />
+    <editor id="manctrl"> 
+     <range uom="25" subset="0-1,5" nls="manctrl" />
   </editor>
-  <editor id = "usbstate" > 
-     <range  uom="25" subset="0-1,99" nls="usbstate" />
+  <editor id="usbstate"> 
+     <range uom="25" subset="0-1,99" nls="usbstate" />
   </editor>     
-  <editor id = "usbctrl" > 
-     <range  uom="25" subset="0-2" nls="usbctrl" />
+  <editor id="usbctrl"> 
+     <range uom="25" subset="0-2" nls="usbctrl" />
   </editor>
-  <editor id = "outletnbr" > 
-     <range  uom="25" subset="0-7" nls="portlist" /> 
+  <editor id="outletnbr"> 
+     <range uom="25" subset="0-7" nls="portlist" /> 
   </editor>
-  <editor id = "vibrastate" > 
-     <range  uom="25" subset="0-1,99" nls="vibration" />
+  <editor id="vibrastate"> 
+     <range uom="25" subset="0-1,99" nls="vibration" />
   </editor>
-  <editor id = "volume" > 
-     <range  uom="107" min="0" max="16"  prec="0"/>
+  <editor id="volume"> 
+     <range uom="107" min="0" max="16" prec="0" />
   </editor>
-  <editor id = "mute" > 
-     <range  uom="25" subset="0-1,99" nls="sphmute" />
+  <editor id="mute"> 
+     <range uom="25" subset="0-1,99" nls="sphmute" />
   </editor>
- <editor id = "repeat" > 
-     <range  uom="107" min="0" max ="10" prec="0" />
+ <editor id="repeat"> 
+     <range uom="107" min="0" max="10" prec="0" />
   </editor>
- <editor id = "beepEn" > 
-     <range  uom="25" subset="0-1,99" nls="sphbeepen" />
+ <editor id="beepEn"> 
+     <range uom="25" subset="0-1,99" nls="sphbeepen" />
   </editor>
- <editor id = "tone" > 
-     <range  uom="25" subset="0-4" nls="sphtones" />
+ <editor id="tone"> 
+     <range uom="25" subset="0-4" nls="sphtones" />
   </editor>
- <editor id = "messages" > 
-     <range  uom="25" subset="0-9" nls="sphtts" />
+ <editor id="messages"> 
+     <range uom="25" subset="0-5" nls="sphtts" />
   </editor>
- <editor id = "lockstate" > 
-     <range  uom="25" subset="0-1,99" nls="lockstate" />
+ <editor id="lockstate"> 
+     <range uom="25" subset="0-1,99" nls="lockstate" />
   </editor>
- <editor id = "lock" > 
-     <range  uom="25" subset="0-1" nls="lockstate" />
+ <editor id="lock"> 
+     <range uom="25" subset="0-1" nls="lockstate" />
   </editor>
- <editor id = "doorbell" > 
-     <range  uom="25" subset="0-1" nls="doorbell" />
+ <editor id="doorbell"> 
+     <range uom="25" subset="0-1" nls="doorbell" />
   </editor>
- <editor id = "dimlvl" > 
-     <range  uom="51" min="0" max="100" prec="0"/>
+ <editor id="dimlvl"> 
+     <range uom="51" min="0" max="100" prec="0" />
   </editor>
- <editor id = "nbrcodes" > 
-     <range  uom="107" min="0" max ="64" prec="0" />
+ <editor id="nbrcodes"> 
+     <range uom="107" min="0" max="64" prec="0" />
   </editor>
- <editor id = "cmdstatus" > 
-     <range  uom="25" subset="0-2,99" nls="cmdstatus" />
+ <editor id="cmdstatus"> 
+     <range uom="25" subset="0-2,99" nls="cmdstatus" />
   </editor>
- <editor id = "txcode" > 
-     <range  uom="107" min="0" max ="63" prec="0" />
+ <editor id="txcode"> 
+     <range uom="107" min="0" max="63" prec="0" />
   </editor>
- <editor id = "poweralert" > 
-     <range  uom="25" subset="0-2,99" nls="poweralert" />
+ <editor id="poweralert"> 
+     <range uom="25" subset="0-2,99" nls="poweralert" />
   </editor>
- <editor id = "alertstate" > 
-     <range  uom="25" subset="0-1,99" nls="alertstate" />
+ <editor id="alertstate"> 
+     <range uom="25" subset="0-1,99" nls="alertstate" />
   </editor>
- <editor id = "powered" > 
-     <range  uom="25" subset="0-1,99" nls="powered" />
+ <editor id="powered"> 
+     <range uom="25" subset="0-1,99" nls="powered" />
   </editor>
- <editor id = "keypress" > 
-     <range  uom="25" subset="0-3,8-11,99" nls="keypress" />
+ <editor id="keypress"> 
+     <range uom="25" subset="0-3,8-11,99" nls="keypress" />
   </editor>
- <editor id = "keynumber" > 
-     <range  uom="25" subset="0-3,99" nls="keynumber" />
+ <editor id="keynumber"> 
+     <range uom="25" subset="0-3,99" nls="keynumber" />
   </editor>
-   <editor id = "presstype" > 
-     <range  uom="25" subset="0,8,99" nls="presstype" />
+   <editor id="presstype"> 
+     <range uom="25" subset="0,8,99" nls="presstype" />
    </editor>
-   <editor id = "pfamute" > 
-     <range  uom="25" subset="0-1,99" nls="pfamute" />
+   <editor id="pfamute"> 
+     <range uom="25" subset="0-1,99" nls="pfamute" />
    </editor>
-    <editor id = "keyscenedef" > 
-     <range  uom="25" subset="0-5,99" nls="keyscenedef" />
+    <editor id="keyscenedef"> 
+     <range uom="25" subset="0-5,99" nls="keyscenedef" />
    </editor>
-   <editor id = "keyscene" > 
-     <range  uom="25" subset="0-5" nls="keyscene" />
+   <editor id="keyscene"> 
+     <range uom="25" subset="0-5" nls="keyscene" />
    </editor>
-   <editor id = "keycmd" > 
-     <range  uom="25" subset="0-5, 99" nls="keycmd" />
+   <editor id="keycmd"> 
+     <range uom="25" subset="0-5, 99" nls="keycmd" />
    </editor>  
-   <editor id = "sirenstate" > 
-     <range  uom="25" subset="0-2, 99" nls="sirenstate" />
+   <editor id="sirenstate"> 
+     <range uom="25" subset="0-2, 99" nls="sirenstate" />
    </editor>  
-   <editor id = "sirenduration" > 
-     <range  uom="58" min="0" max ="3600" prec="0" />
+   <editor id="sirenduration"> 
+     <range uom="58" min="0" max="3600" prec="0" />
    </editor>
-   <editor id = "sirenbatlevel" > 
-     <range  uom="25" subset="0-4,98,99" nls="sirenbatlvl" />
+   <editor id="sirenbatlevel"> 
+     <range uom="25" subset="0-4,98,99" nls="sirenbatlvl" />
    </editor>
-   <editor id = "sirenctrl" > 
-     <range  uom="25" subset="0-1" nls="sirenctrl" />
+   <editor id="sirenctrl"> 
+     <range uom="25" subset="0-1" nls="sirenctrl" />
    </editor>
-   <editor id = "cmdsetting" > 
-     <range  uom="25" subset="0-3" nls="cmdsetting" />
+   <editor id="cmdsetting"> 
+     <range uom="25" subset="0-3" nls="cmdsetting" />
    </editor> 
-</editors> 
+   <editor id="suspendstate"> 
+     <range uom="25" subset="0-2, 99" nls="suspended" />
+   </editor> 
 
+</editors>

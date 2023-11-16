@@ -37,6 +37,7 @@ class udiYoVibrationSensor(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 25},            
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -84,6 +85,7 @@ class udiYoVibrationSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoVibrationSensor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoVibrationSensor  = YoLinkVibrationSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoVibrationSensor.initNode()
@@ -134,13 +136,16 @@ class udiYoVibrationSensor(udi_interface.Node):
                         self.node.setDriver('CLITEMP', round(devTemp+273.15,0), True, True, 26)
                 else:
                     self.node.setDriver('CLITEMP', 99, True, True, 25)
-
+                if self.yoVibrationSensor.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('ST', 1, True, True)
-
+                self.node.setDriver('GV20', 2, True, True)
 
 
 

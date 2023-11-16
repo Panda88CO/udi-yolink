@@ -126,7 +126,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         # value is state that need to change 2 (ON/OFF)
         status = True
         port = 0
-        for i in portList:            
+        for i in portList:        
             portNbr = yolink.extractStrNbr(i)
             portNbr = portNbr + yolink.nbrUsb  # Ports start after USB control ports
             if portNbr <= yolink.nbrPorts and portNbr >= 0 :
@@ -184,12 +184,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
                 data['params']['delays'].append(temp)
                 delTemp.append(temp)
         logging.debug('Sending delay data: {}'.format( data['params']['delays']))
-        data['time'] = str(int(time.time_ns()//1e6))
+        #data['time'] = str(int(time.time_ns()//1e6)) # we set time wne publishing 
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.last_set_data = data
-        yolink.send_data( data)
+        yolink.yoAccess.publish_data( data)
+        #yolink.send_data( data)
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays(delTemp)
         yolink.online = yolink.dataAPI[yolink.dOnline]
@@ -205,12 +206,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         
         logging.debug('Sending delay data: {}'.format(delaySpec))
         data['params']['delays'].append(delaySpec)
-        data['time'] = str(int(time.time_ns()//1e6))
+        #data['time'] = str(int(time.time_ns()//1e6)) # we set time wne publishing 
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.last_set_data = data
-        yolink.send_data( data)
+        yolink.yoAccess.publish_data( data)
+        #yolink.send_data( data)
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay, 'off':offDelay}] )
         yolink.online = yolink.dataAPI[yolink.dOnline]
@@ -225,12 +227,13 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         
         logging.debug('Sending delay data: {}'.format(delaySpec))
         data['params']['delays'].append(delaySpec)
-        data['time'] = str(int(time.time_ns()//1e6))
+        # data['time'] = str(int(time.time_ns()//1e6)) # we set time wne publishing 
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.last_set_data = data
-        yolink.send_data( data)
+        #yolink.send_data( data)
+        yolink.yoAccess.publish_data( data)
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'on':onDelay}] )
         yolink.online = yolink.dataAPI[yolink.dOnline]
@@ -245,19 +248,20 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         
         logging.debug('Sending delay data: {}'.format(delaySpec))
         data['params']['delays'].append(delaySpec)
-        data['time'] = str(int(time.time_ns()//1e6))
+        #data['time'] = str(int(time.time_ns()//1e6)) # we set time wne publishing 
         data['method'] = yolink.type+'.setDelay'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token'] 
         yolink.last_set_data = data
-        yolink.send_data( data)
+        yolink.yoAccess.publish_data( data)
+        #yolink.send_data( data)
         #yolink.writeDelayData(data)
         yolink.extDelayTimer.addDelays([{'ch':portNbr+yolink.nbrUsb, 'off':offDelay}] )
         yolink.online = yolink.dataAPI[yolink.dOnline]
 
-    def retry_send_data(yolink):
-        logging.debug('retrying to send data')
-        yolink.send_data(yolink.last_set_data)
+    #def retry_send_data(yolink):
+    #    logging.debug('retrying to send data')
+    #    yolink.send_data(yolink.last_set_data)
 
     def getMultiOutStates(yolink):
         logging.debug(yolink.type+' - getMultiOutletState')

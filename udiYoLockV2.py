@@ -36,6 +36,7 @@ class udiYoLock(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 25}, 
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},
             ]
 
 
@@ -118,12 +119,17 @@ class udiYoLock(udi_interface.Node):
                 else:
                     self.node.setDriver('GV2', 1, True, True)
                 self.node.setDriver('ST', 1)
+                if self.yoLock.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
 
             else:
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', -1)
                 self.node.setDriver('GV2', 0, True, True)
                 self.node.setDriver('ST', 0)
+                self.node.setDriver('GV20', 2, True, True)
             
 
 

@@ -49,6 +49,7 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'GV7', 'value': 2, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -97,6 +98,7 @@ class udiYoTHsensor(udi_interface.Node):
 
     def start(self):
         logging.info('Start udiYoTHsensor')
+        self.node.setDriver('ST', 0, True, True)
         self.yoTHsensor  = YoLinkTHSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoTHsensor.initNode()
@@ -145,6 +147,11 @@ class udiYoTHsensor(udi_interface.Node):
                 self.node.setDriver('BATLVL', self.yoTHsensor.getBattery(), True, True)
                 self.node.setDriver('GV7', self.yoTHsensor.bool2Nbr(alarms['lowBattery']), True, True)
                 self.node.setDriver('ST', self.yoTHsensor.bool2Nbr(self.yoTHsensor.online), True, True)
+                if self.yoTHsensor.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
+                
             else:
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('GV1',99, True, True)
@@ -155,6 +162,7 @@ class udiYoTHsensor(udi_interface.Node):
                 self.node.setDriver('BATLVL', 99, True, True)
                 self.node.setDriver('GV7',99, True, True)
                 self.node.setDriver('ST', 0, True, True)
+                self.node.setDriver('GV20', 2, True, True)
 
 
 

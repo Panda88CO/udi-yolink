@@ -229,7 +229,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             {'driver': 'GV3', 'value': 99, 'uom': 25},
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
-
+            {'driver': 'GV20', 'value': 99, 'uom': 25},
             ]
 
 
@@ -285,6 +285,7 @@ class udiYoSmartRemoter(udi_interface.Node):
     def start(self):
 
         logging.info('start - udiYoSmartRemoter')
+        self.node.setDriver('ST', 0, True, True)
         self.yoSmartRemote  = YoLinkSmartRemote(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.temp_unit = self.yoAccess.get_temp_unit()
@@ -359,6 +360,10 @@ class udiYoSmartRemoter(udi_interface.Node):
                     else:
                         self.node.setDriver('CLITEMP', 99, True, True, 25)
                     self.node.setDriver('ST', 1, True, True)
+                    if self.yoSmartRemote.suspended:
+                        self.node.setDriver('GV20', 1, True, True)
+                    else:
+                        self.node.setDriver('GV20', 0, True, True)
                 else:
                     self.node.setDriver('GV0', 99, True, True)
                     self.node.setDriver('GV1', 99, True, True)
@@ -366,6 +371,7 @@ class udiYoSmartRemoter(udi_interface.Node):
                     self.node.setDriver('GV3', 99, True, True)
                     self.node.setDriver('CLITEMP', 99, True, True, 25)
                     self.node.setDriver('ST', 1, True, True)
+                    self.node.setDriver('GV20', 2, True, True)
         except Exception as E:
             logging.error('Smart Remote  updateData exeption: {}'.format(E))
 

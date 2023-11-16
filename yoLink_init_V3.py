@@ -3,7 +3,8 @@ import requests
 import time
 import json
 import psutil
-
+import sys
+import math
 from threading import Lock
 from  datetime import datetime
 try:
@@ -14,6 +15,13 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
+    #root = logging.getLogger()
+    #root.setLevel(logging.DEBUG)
+    #handler = logging.StreamHandler(sys.stdout)
+    #handler.setLevel(logging.DEBUG)
+    #formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    #handler.setFormatter(formatter)
+    #root.addHandler(handler)
 
 countdownTimerUpdateInterval_G = 10
 
@@ -30,12 +38,14 @@ class YoLinkInitPAC(object):
         yoAccess.tokenLock = Lock()
         yoAccess.fileLock = Lock()
         yoAccess.publishQueue = Queue()
+        #yoAccess.delayQueue = Queue()
         yoAccess.messageQueue = Queue()
         yoAccess.fileQueue = Queue()
-        yoAccess.timeQueue = Queue()
-        yoAccess.MAX_MESSAGES = 10  # number of messages per yoAccess.MAX_TIME
+        #yoAccess.timeQueue = Queue()
+        yoAccess.MAX_MESSAGES = 100  # number of messages per yoAccess.MAX_TIME
         yoAccess.MAX_TIME = 30      # Time Window
-        yoAccess.debug = True
+        yoAccess.time_tracking_dict = {} # structure to track time so we do not violate yolink publishing requirements
+        yoAccess.debug = False
         #yoAccess.pendingDict = {}
         yoAccess.pending_messages = 0
         yoAccess.time_since_last_message_RX = 0
@@ -50,7 +60,7 @@ class YoLinkInitPAC(object):
         yoAccess.apiType = 'UAC'
         yoAccess.tokenExpTime = 0
         yoAccess.timeExpMarging = 3600 # 1 hour - most devices report once per hour
-        yoAccess.lastTransferTime = time.time()
+        yoAccess.lastTransferTime = int(time.time())
         #yoAccess.timeExpMarging = 7170 #min for testing 
         yoAccess.tmpData = {}
         yoAccess.lastDataPacket = {}
@@ -61,6 +71,10 @@ class YoLinkInitPAC(object):
         yoAccess.online = False
         yoAccess.deviceList = []
         yoAccess.token = None
+
+        yoAccess.nbr_api_calls = 19
+        yoAccess.nbr_api_dev_calls = 5
+
         yoAccess.unassigned_nodes = []
         try:
             #while not yoAccess.request_new_token( ):
@@ -219,7 +233,7 @@ class YoLinkInitPAC(object):
     #@measure_time
     def get_access_token(yoAccess):
         yoAccess.tokenLock.acquire()
-        now = int(time.time())
+        #now = int(time.time())
         if yoAccess.token == None:
             yoAccess.request_new_token()
         #if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
@@ -239,7 +253,7 @@ class YoLinkInitPAC(object):
             logging.debug('retrieve_device_list')
             data= {}
             data['method'] = 'Home.getDeviceList'
-            data['time'] = str(int(time.time_ns()//1e6))
+            data['time'] = str(int(time.time_ns()/1e6))
             headers1 = {}
             headers1['Content-type'] = 'application/json'
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
@@ -255,7 +269,7 @@ class YoLinkInitPAC(object):
         try:
             data= {}
             data['method'] = 'Home.getGeneralInfo'
-            data['time'] = str(int(time.time_ns()//1e6))
+            data['time'] = str(int(time.time_ns()/1e6))
             headers1 = {}
             headers1['Content-type'] = 'application/json'
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
@@ -623,28 +637,125 @@ class YoLinkInitPAC(object):
         return(True)
 
     #@measure_time
-    def transfer_data(yoAccess):
-        yoAccess.lastTransferTime = time.time()
+    def set_api_limits(yoAccess, api_calls, api_dev_calls):
+        ''''''
+        yoAccess.nbr_api_calls = api_calls
+        yoAccess.nbr_api_dev_calls = api_dev_calls
+
+
+    #@measure_time
+    def time_tracking(yoAccess, dev_id):
+        '''time_track_publish'''
+        ''' make 100 overall calls per 5 min and 6 per dev per min and 200ms between calls'''
         try:
-            data = yoAccess.publishQueue.get(timeout = 10) 
+            if dev_id not in yoAccess.time_tracking_dict:
+                yoAccess.time_tracking_dict[dev_id] = []
+                #logging.debug('Adding timetrack for {}'.format(dev_id))            
+            t_now = int(time.time_ns()/1e6)
+            logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
+            max_dev_id = yoAccess.nbr_api_dev_calls
+            max_dev_all = yoAccess.nbr_api_calls
+            dev_time_limit = 60000 # 1 min =  60 sec = 60000 ms
+            call_time_limit = 300000 # 5min = 300 sec = 300000 ms
+            dev_to_dev_limit = 200 # min 200ms between calls
+            total_dev_calls = 0
+            total_dev_id_calls = 0
+            t_oldest = t_now
+            t_oldest_dev = t_now
+            t_previous_dev = 0
+            t_dev_2_dev = 0
+            t_call = t_now
+
+            #t_now = int(time.time_ns()/1e6)
+            #logging.debug('time_tracking 0 - {}'.format(yoAccess.time_tracking_dict))
+            discard_list = {}
+            #remove data older than time_limit
+            for dev in yoAccess.time_tracking_dict:
+                for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
+                    t_call = yoAccess.time_tracking_dict[dev][call_nbr]
+                    if t_call  < (t_now - call_time_limit): # more than 1 min ago
+                        discard_list[t_call] = dev
+            for tim in discard_list:
+                yoAccess.time_tracking_dict[discard_list[tim]].remove(tim)
+            # find oldest data in dict and for devices of the dev
+            #logging.debug('time_track AFTER >1MIN REMOVAL: {}'.format(yoAccess.time_tracking_dict))
+            for dev in yoAccess.time_tracking_dict:
+                #logging.debug('time_tracking 1 - {} - {}'.format(dev, len(yoAccess.time_tracking_dict[dev])))
+                for call_nbr  in range(0,len(yoAccess.time_tracking_dict[dev])):
+                    #logging.debug('time_tracking 1.5 - {}'.format(t_call))
+                    total_dev_calls = total_dev_calls + 1
+                    t_call = yoAccess.time_tracking_dict[dev][call_nbr]
+                    #logging.debug('Loop info : {} - {} - {} '.format(dev, call_nbr, (t_now - t_call)))  
+                    if t_call < t_oldest:
+                        t_oldest = t_call
+                    #logging.debug('After cleanup {} {} {} - {}'.format(t_call, t_oldest, t_old_dev_tmp, yoAccess.time_tracking_dict ))
+                    #logging.debug('devs {} {} {}'.format(dev==dev_id, dev, dev_id))
+                    if dev == dev_id: # check if max_dev_id is in play
+                        if t_call >= (t_now - dev_time_limit): # call is less than 1 min old
+                            total_dev_id_calls = total_dev_id_calls + 1
+                            #logging.debug('time_tracking2 - dev found')
+                            #yoAccess.time_tracking_dict[dev].append(t_now)
+                            if t_call < t_oldest_dev: # only test for selected dev_id
+                                t_oldest_dev = t_call
+                            if t_call > t_previous_dev:
+                                t_previous_dev = t_call
+
+            if total_dev_calls <= max_dev_all:
+                t_all_delay = 0
+            else:
+                t_all_delay = call_time_limit - (t_now - t_oldest )
             
+            if (t_now - t_previous_dev) <= dev_to_dev_limit:
+                #time.sleep((dev_to_dev_limit + 10 -(t_now - t_previous_dev))/1000) # calls to same device must be min dev_to_dev_limit (200ms) apart
+                #t_dev_2_dev = dev_to_dev_limit) # sleep 200ms + 100 ms margin - Seems calculating the limit is not accurate enough
+                t_dev_2_dev = (dev_to_dev_limit + 100 -(t_now - t_previous_dev))
+                #logging.debug('Sleeping {}ms due to too close dev calls '.format(t_now - t_previous_dev))
+                #logging.debug('Sleeping {}s due to too close dev calls '.format(dev_to_dev_limit/1000))
+            if total_dev_id_calls <= max_dev_id:
+                t_dev_delay = 0
+            else:
+                t_dev_delay = dev_time_limit  - (t_now- t_oldest_dev)
+            #logging.debug('total_calls = {}, total_dev_calls = {}'.format(total_dev_calls, total_dev_id_calls))
+            t_delay = max(t_all_delay,t_dev_delay, t_dev_2_dev, 0 )
+            #logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
+            yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
+
+            logging.debug('TimeTrack after: time {} dev: {} delay;{} -  {}'.format(t_now, dev_id, int(math.ceil(t_delay/1000)), yoAccess.time_tracking_dict))
+            return(int(math.ceil(t_delay/1000)))
+            #return(int(math.ceil(t_delay/1000)), int(math.ceil(t_all_delay)), int(math.ceil(t_all_delay)))
+        except Exception as e:
+            logging.debug(' Exception Timetrack : {}'.format(e))
+        
+        #yoAccess.time_tracking_dict[dev_id].append(time)
+
+    #@measure_time
+    def transfer_data(yoAccess):
+        '''transfer_data'''
+        yoAccess.lastTransferTime = int(time.time())
+        
+        try:
+            data = yoAccess.publishQueue.get(timeout = 10)
+
             deviceId = data['targetDevice']
-            dataStr = str(json.dumps(data))
-            yoAccess.tmpData[deviceId] = dataStr
-            yoAccess.lastDataPacket[deviceId] = data
+
             #logging.debug('mqttList : {}'.format(yoAccess.mqttList))
             if deviceId in yoAccess.mqttList:
+                logging.debug( 'Starting publish_data:')
+                ### check if publish list is full
+                
+                #all_delay, dev_delay =  yoAccess.time_tracking(timeNow_ms, deviceId)
+                delay_s =  yoAccess.time_tracking(deviceId)
+                #logging.debug( 'Needed delay: {} - {}'.format(delay, timeNow_s))
+                if delay_s > 0: # some delay needed
+                    logging.info('Delaying call by {}sec due to too many calls'.format(delay_s))
+                    time.sleep(delay_s)
+                    # As this is multi threaded we can just sleep  - if another call is ready and can go though is will so in a differnt thread    
+                data['time'] = str(int(time.time_ns()/1e6))  # update time to actual packet time (to include delays)
+                dataStr = str(json.dumps(data))
+                yoAccess.tmpData[deviceId] = dataStr
+                yoAccess.lastDataPacket[deviceId] = data
+
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
-                ### check if publish list is full 
-                timeNow_s = time.time()
-                #logging.debug('queue siize: {} , {}'.format(yoAccess.timeQueue.qsize(), yoAccess.MAX_MESSAGES))
-                if yoAccess.timeQueue.qsize() >= yoAccess.MAX_MESSAGES: #We have sent more than max messages total
-                    first_TXtime = yoAccess.timeQueue.get()
-                    if timeNow_s - first_TXtime < yoAccess.MAX_TIME:
-                        logging.debug('Delaying command to ensure no overflow of commands to YoLink server')
-                        time.sleep(yoAccess.MAX_TIME - (timeNow_s - first_TXtime )) # wait until yoAccess.MAX_TIME has elapsed sine first element
-                yoAccess.timeQueue.put(timeNow_s)    
-                #logging.debug('getting to publish')            
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
             else:
                 logging.error('device {} not in mqtt list'.format(deviceId))
@@ -661,7 +772,7 @@ class YoLinkInitPAC(object):
                     yoAccess.online = False
                     yoAccess.client.reconnect() # is this the right strategy 
             else:
-                yoAccess.lastTransferTime = time.time()
+                yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True
         except Exception as e:
             pass # go wait again unless stop is called

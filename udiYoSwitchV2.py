@@ -31,6 +31,7 @@ class udiYoSwitch(udi_interface.Node):
             #{'driver': 'GV4', 'value': 0, 'uom': 33},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},
             ]
     '''
        drivers = [
@@ -87,10 +88,11 @@ class udiYoSwitch(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoSwitch')
+        self.node.setDriver('ST', 0, True, True)
         self.yoSwitch  = YoLinkSW(self.yoAccess, self.devInfo, self.updateStatus)
-        time.sleep(2)
+        time.sleep(10.1)
         self.yoSwitch.initNode()
-        time.sleep(2)
+        time.sleep(10)
         #self.node.setDriver('ST', 1, True, True)
         self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
         self.node_ready = True
@@ -150,12 +152,18 @@ class udiYoSwitch(udi_interface.Node):
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
-                    self.node.setDriver('GV2', 0, True, False)                
+                    self.node.setDriver('GV2', 0, True, False)
+                if self.yoSwitch.suspended:
+                    self.node.setDriver('GV20', 1, True, True)
+                else:
+                    self.node.setDriver('GV20', 0)
+
             else:
                 self.node.setDriver('ST', 0, True, True)
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 0, True, False)
-                self.node.setDriver('GV2', 0, True, False)    
+                self.node.setDriver('GV2', 0, True, False)
+                self.node.setDriver('GV20', 2, True, True)   
            
 
 
