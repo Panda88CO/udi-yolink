@@ -615,7 +615,7 @@ class YoLinkSetup (udi_interface.Node):
                             if nde != 'setup':   # but not the controller node
                                 nodes[nde].checkOnline()
                                 logging.debug('longpoll {}'.format(nde))
-                                time.sleep(4) # need to limit calls to 100 per  5 min - using 4 to allow other calls
+                                time.sleep(5) # need to limit calls to 100 per  5 min - using 5 to allow other calls - updating is not critical
                     except Exception as e:
                         logging.debug('Exeption occcured during systemPoll : {}'.format(e))
                         #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
