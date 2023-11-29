@@ -418,7 +418,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             {'driver': 'GV20', 'value': 0, 'uom': 25}
             ]
     
-    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo, config):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         
@@ -427,9 +427,9 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.nodeName = address
         self.yoAccess = yoAccess
         self.delaysActive = False
-        self.nbrOutlets = -1
-        self.nbrUsb = -1
-        self.ports = -1
+        self.nbrOutlets = config['outlet']
+        self.nbrUsb = config['usb']
+        self.ports =self.nbrOutlets + self.nbrUsb
         self.timer_update = 5
         self.devInfo =  deviceInfo
         self.yoMultiOutlet = None
@@ -474,10 +474,13 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
         self.node.setDriver('ST', 0, True, True)
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoMultiOutlet.nbrOutlets = self.nbrOutlets
+        self.yoMultiOutlet.nbrUsb = self.nbrUsb
+        
         #self.node.setDriver('ST', 1, True, True)
-        time.sleep(1)
-        self.yoMultiOutlet.initNode()
-        time.sleep(3)
+        #time.sleep(1)
+        #self.yoMultiOutlet.initNode()
+        #time.sleep(3)
         #if not self.yoMultiOutlet.online:
         #    logging.warning('Device {} not on-line -  Cannot determine number of outlets and USBs'.format(self.devInfo['name']))
         #    self.ports = 0
@@ -493,9 +496,9 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.yoMultiOutlet.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
             time.sleep(2)
             logging.debug('multiOutlet past initNode')
-            self.ports = self.yoMultiOutlet.getMultiOutStates()
-            self.nbrOutlets = self.yoMultiOutlet.nbrOutlets
-            self.nbrUsb = self.yoMultiOutlet.nbrUsb
+            #self.ports = self.yoMultiOutlet.getMultiOutStates()
+            #self.nbrOutlets = self.yoMultiOutlet.nbrOutlets
+            #self.nbrUsb = self.yoMultiOutlet.nbrUsb
             #states = self.yoMultiOutlet.getMultiOutletstate()
             delays = self.yoMultiOutlet.refreshDelays()
             logging.debug('init data: outlets: {}, USB {}, delays{}'.format(self.nbrOutlets, self.nbrUsb, delays))
@@ -506,8 +509,8 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.outletName = 'outlet'
             self.usbName = 'usb'
             self.node.setDriver('ST', 1, True, True)
-            logging.debug('Checking/creating  Outlets  {}'.format(self.yoMultiOutlet.nbrOutlets))
-            for port in range(0,self.yoMultiOutlet.nbrOutlets):
+            logging.debug('Checking/creating  Outlets  {}'.format(self.nbrOutlets))
+            for port in range(0,self.nbrOutlets):
                 try:
                     #logging.debug('Adding sub outlet : {}'.format(port))
                     self.subOutletAdr[port] =  self.address[3:14]+'_o' + str(port)
@@ -519,7 +522,7 @@ class udiYoMultiOutlet(udi_interface.Node):
                 except Exception as e:
                     logging.error('Failed to create {}: {}'.format(self.subOutletAdr[port], e))
             logging.debug('Checking/creating  USB  {}'.format(self.yoMultiOutlet.nbrUsb))
-            for usb in range(0, self.yoMultiOutlet.nbrUsb):
+            for usb in range(0, self.nbrUsb): 
                 try:
                     self.subUsbAdr[usb] = self.address[3:14]+'_u'+str(usb)
                     logging.debug('Adding USB outlet : {} {} {} {}'.format( self.address, self.subUsbAdr[usb] , 'USB-'+str(usb), usb))
@@ -535,9 +538,12 @@ class udiYoMultiOutlet(udi_interface.Node):
             logging.info('udiYoMultiOutlet - finished creating sub nodes - {} '.format(self.node_fully_config ))
 
             #logging.debug(self.subnodeAdr)
-
+        time.sleep(1)
+        self.yoMultiOutlet.initNode()
+        time.sleep(3)
     
-            self.yoMultiOutlet.refreshMultiOutlet()
+        self.yoMultiOutlet.refreshMultiOutlet()
+        
         self.node_ready = True
         logging.debug('Finished  MultiOutlet start')
 

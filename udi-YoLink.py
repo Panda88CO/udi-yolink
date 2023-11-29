@@ -287,8 +287,17 @@ class YoLinkSetup (udi_interface.Node):
                         name = dev['name']
                         name = self.poly.getValidName(name)
                         self.Parameters[address]=  dev['name']
+                    config = {}
+                    if  'YS6802' in dev['modelName']:
+                        config['usb'] = 0
+                        config['outlet'] = 2
+                    elif 'YS6801' in dev['modelName']:
+                        config['usb'] = 1
+                        config['outlet'] = 4                        
+                    else:
+                        logging.error('Unsupported MultiOutlet devicve : {}'.format(dev['modelName']))
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev )
+                    temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev, config )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
