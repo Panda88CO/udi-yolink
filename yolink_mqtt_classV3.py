@@ -289,6 +289,10 @@ class YoLinkMQTTDevice(object):
             logging.error('getDataValue Exception: {}'.format(E))
     #@measure_time
 
+
+    def getState(yolink):
+        return(yolink.getStateValue('state'))
+
     def getDataStateValue(yolink, key):
         logging.debug('{} - getDataStateValue, key:{}'.format(yolink.type, key))
         try:
@@ -366,6 +370,17 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def getAlarms(yolink):
         return(yolink.getStateValue('alarm'))
+
+    def getLimits(yolink):
+        res = {}
+        tmp = yolink.getStateValue('tempLimit')
+        if tmp:
+            res['tempLimit'] = tmp
+        tmp = yolink.getStateValue('humidityLimit')
+        if tmp:
+            res['humidityLimit'] = tmp
+        return(res)
+
 
     #@measure_time
     def getBattery(yolink):
@@ -496,12 +511,12 @@ class YoLinkMQTTDevice(object):
                     elif  '.setDelay'  in data['method']:
                         #if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateDelayData(data)       
-                    #elif  '.getSchedules'  in data['method'] :
-                    #    #if int(data['time']) > int(yolink.getLastUpdate()):
-                    #    yolink.updateScheduleStatus(data)
-                    #elif  '.setSchedules' in data['method'] :
-                    #    #if int(data['time']) > int(yolink.getLastUpdate()):
-                    #    yolink.updateScheduleStatus(data)
+                    elif  '.getSchedules'  in data['method'] :
+                        if int(data['time']) > int(yolink.getLastUpdate()):
+                            yolink.updateScheduleStatus(data)
+                    elif  '.setSchedules' in data['method'] :
+                        if int(data['time']) > int(yolink.getLastUpdate()):
+                            yolink.updateScheduleStatus(data)
                     #elif  '.getVersion' in data['method']:
                     #    #if int(data['time']) > int(yolink.getLastUpdate()):
                     #    yolink.updateFWStatus(data)
@@ -551,12 +566,12 @@ class YoLinkMQTTDevice(object):
                 elif '.setState' in data['event']:
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)                      
-                #elif '.getSchedules' in data['event']:
-                #    if int(data['time']) > int(yolink.getLastUpdate()):
-                #        yolink.updateScheduleStatus(data)   
-                #elif '.setSchedules' in data['event']:
-                #    if int(data['time']) > int(yolink.getLastUpdate()):
-                #        yolink.updateScheduleStatus(data)   
+                elif '.getSchedules' in data['event']:
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateScheduleStatus(data)   
+                elif '.setSchedules' in data['event']:
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateScheduleStatus(data)   
                 elif '.Alert' in data['event']:         
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)  
@@ -757,7 +772,7 @@ class YoLinkMQTTDevice(object):
     ##############################################
 
 
-    '''
+    
     def refreshSchedules(yolink):
         logging.debug(yolink.type + '- refreshSchedules')
         attempt = 1
@@ -766,27 +781,23 @@ class YoLinkMQTTDevice(object):
             methodStr = yolink.type+'.getSchedules'
             #logging.debug(methodStr)  
             data = {}
-            data['time'] = str(int(time.time_ns()//1e6))
+            #data['time'] = str(int(time.time_ns()//1e6))
             data['method'] = methodStr
             data["targetDevice"] =  yolink.deviceInfo['deviceId']
             data["token"]= yolink.deviceInfo['token']
             yolink.yoAccess.publish_data(data) 
-            while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-                time.sleep(1)
-                attempt = attempt + 1
             
-
+    
     def getSchedules(yolink):
         logging.debug('{}- getSchedules: {}'.format(yolink.type, yolink.deviceInfo['name'] ))
         yolink.refreshSchedules()
-        test = 0 
-        while yolink.dSchedule not in yolink.dataAPI[yolink.dData] and test < 3:
+        while 'schedules' not in yolink.dataAPI[yolink.dData]:
             time.sleep(1)
-            test = test +1
             
-        nbrSchedules  = len(yolink.dataAPI[yolink.dData][yolink.dSchedule])
+        #nbrSchedules  = len(yolink.dataAPI[yolink.dData])
         temp = {}
         yolink.scheduleList = []
+
         for scheduleNbr in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
             temp[scheduleNbr] = {}
             for key in yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr]:
@@ -798,23 +809,44 @@ class YoLinkMQTTDevice(object):
                     pass
                 else:
                     temp[scheduleNbr][key] = yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr][key]
-            temp[scheduleNbr]['index'] = scheduleNbr   
+            #temp[scheduleNbr]['index'] = scheduleNbr   
             yolink.scheduleList.append(temp[scheduleNbr])
         return(temp)
-
+    
 
     
-    def setSchedules(yolink):
+    def setSchedule(yolink, active, params):
         logging.debug(yolink.type + '- setSchedule')
-        data = yolink.prepareScheduleData()        
-        
-        data['time'] = strint((time.time_ns()//1e6))
+        data = {}        
+        index= 5
+        #data['time'] = str(int((time.time_ns()//1e6)))
         data['method'] = yolink.type+'.setSchedules'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
         data["token"]= yolink.deviceInfo['token']
+        data['params'] = {}
+        data['params']['sches'] ={}
+        if 'ch' in params: # multiOutlet
+            index = index + params['ch']
+            data['params']['sches'][index] = {}
+            data['params']['sches'][index]['ch'] = params['ch']
+        else:
+            data['params']['sches'][index] = {}
+        data['params']['sches'][index]['index'] = index 
+        data['params']['sches'][index]['isValid'] = active
+        if 'on' in params:
+             data['params']['sches'][index]['on'] = params['on']
+        else:
+            data['params']['sches'][index]['on'] = "25:0"
+        if 'off' in params:
+             data['params']['sches'][index]['off'] = params['off']
+        else:
+            data['params']['sches'][index]['off'] = "25:0"
+        data['params']['sches'][index]['week'] = params['week']
+
+        logging.debug('setSchedule data = {}'.format(data))
         yolink.yoAccess.publish_data(data)
         time.sleep(1)
-
+    '''
     
     def activateSchedules(yolink, index, Activate):
         logging.debug(yolink.type + 'activateSchedules')
@@ -1170,7 +1202,7 @@ class YoLinkMQTTDevice(object):
             return(False)
 
                 
-    '''
+    
     def updateScheduleStatus(yolink, data):
         logging.debug(yolink.type + 'updateScheduleStatus')
 
@@ -1180,7 +1212,7 @@ class YoLinkMQTTDevice(object):
         yolink.dataAPI[yolink.dData][yolink.dSchedule] = data[yolink.dData]
         yolink.dataAPI[yolink.lastMessage] = data
 
-    
+    '''
 
 
     def updateFWStatus(yolink, data):

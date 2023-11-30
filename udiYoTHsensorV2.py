@@ -48,8 +48,15 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'GV5', 'value': 2, 'uom': 25},
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'GV7', 'value': 2, 'uom': 25},
+            {'driver': 'GV8', 'value': 2, 'uom': 25},
+            {'driver': 'GV9', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
+
+            {'driver': 'GV10', 'value': 0, 'uom': 4},
+            {'driver': 'GV11', 'value': 0, 'uom': 4},
+            {'driver': 'GV12', 'value': 0, 'uom': 51},
+            {'driver': 'GV13', 'value': 0, 'uom': 51},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},            
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -65,6 +72,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor  = None
         self.node_ready = False
         self.temp_unit = self.yoAccess.get_temp_unit()
+        self.cmd_state = 0
         #self.address = address
         #self.poly = polyglot
 
@@ -125,28 +133,53 @@ class udiYoTHsensor(udi_interface.Node):
         if self.yoTHsensor.data_updated():
             self.updateData()
 
+    def state2Nbr(self, val):
+        if val == 'normal':
+            return(0)
+        elif val == 'alert':
+            return(1)
+        else:
+            return(99)
 
     def updateData(self):
         alarms = self.yoTHsensor.getAlarms()
+        limits = self.yoTHsensor.getLimits()
+        
         if self.node is not None:
             if self.yoTHsensor.online:
                 logging.debug("yoTHsensor temp: {}".format(self.yoTHsensor.getTempValueC()))
                 if self.temp_unit == 0:
                     self.node.setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC(),1), True, True, 4)
+                    if 'tempLimit' in limits:
+                        self.node.setDriver('GV10', limits['tempLimit']['min'], True, True, 4)
+                        self.node.setDriver('GV11', limits['tempLimit']['max'], True, True, 4)
                 elif self.temp_unit == 1:
                     self.node.setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC()*9/5+32,1), True, True, 17)
+                    if 'tempLimit' in limits:
+                        self.node.setDriver('GV10', round(limits['tempLimit']['min']*9/5+32,1), True, True, 17)
+                        self.node.setDriver('GV11', round(limits['tempLimit']['max']*9/5+32,1), True, True, 17)                    
                 elif self.temp_unit == 2:
                     self.node.setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC()+273.15,1), True, True, 26)
+                    if 'tempLimit' in limits:
+                        self.node.setDriver('GV10', round(limits['tempLimit']['min']+273.15,1), True, True, 26)
+                        self.node.setDriver('GV11', round(limits['tempLimit']['max']+273.15,1), True, True, 26)    
                 else:
                     self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('GV1', self.yoTHsensor.bool2Nbr(alarms['lowTemp']), True, True)
                 self.node.setDriver('GV2', self.yoTHsensor.bool2Nbr(alarms['highTemp']), True, True)
                 self.node.setDriver('CLIHUM', self.yoTHsensor.getHumidityValue(), True, True)
+                if 'humidityLimit' in limits:
+                        self.node.setDriver('GV12', limits['humidityLimit']['min'], True, True)
+                        self.node.setDriver('GV13', limits['humidityLimit']['max'], True, True)
                 self.node.setDriver('GV4', self.yoTHsensor.bool2Nbr(alarms['lowHumidity']), True, True)
                 self.node.setDriver('GV5', self.yoTHsensor.bool2Nbr(alarms['highHumidity']), True, True)
                 self.node.setDriver('BATLVL', self.yoTHsensor.getBattery(), True, True)
                 self.node.setDriver('GV7', self.yoTHsensor.bool2Nbr(alarms['lowBattery']), True, True)
+                self.node.setDriver('GV8', self.state2Nbr(self.yoTHsensor.getState()), True, True)
+                self.node.setDriver('GV9', self.cmd_state, True, True)
+
                 self.node.setDriver('ST', self.yoTHsensor.bool2Nbr(self.yoTHsensor.online), True, True)
+
                 if self.yoTHsensor.suspended:
                     self.node.setDriver('GV20', 1, True, True)
                 else:
