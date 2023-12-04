@@ -37,6 +37,7 @@ class YoLinkInitPAC(object):
         yoAccess.disconnect_occured = False 
         yoAccess.tokenLock = Lock()
         yoAccess.fileLock = Lock()
+        yoAccess.TimeTableLock = Lock()
         yoAccess.publishQueue = Queue()
         #yoAccess.delayQueue = Queue()
         yoAccess.messageQueue = Queue()
@@ -72,8 +73,7 @@ class YoLinkInitPAC(object):
         yoAccess.deviceList = []
         yoAccess.token = None
 
-        yoAccess.nbr_api_calls = 19
-        yoAccess.nbr_api_dev_calls = 5
+
 
         yoAccess.unassigned_nodes = []
         try:
@@ -648,16 +648,17 @@ class YoLinkInitPAC(object):
         '''time_track_publish'''
         ''' make 100 overall calls per 5 min and 6 per dev per min and 200ms between calls'''
         try:
+            yoAccess.TimeTableLock.acquire()
             if dev_id not in yoAccess.time_tracking_dict:
                 yoAccess.time_tracking_dict[dev_id] = []
                 #logging.debug('Adding timetrack for {}'.format(dev_id))            
             t_now = int(time.time_ns()/1e6)
             logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
-            max_dev_id = yoAccess.nbr_api_dev_calls
-            max_dev_all = yoAccess.nbr_api_calls
+            max_dev_id = 5 # commands per dev_time_limit to same dev (add margin)
+            max_dev_all = 99 # commands per call_time_limit to same dev (add margin)
             dev_time_limit = 60000 # 1 min =  60 sec = 60000 ms
             call_time_limit = 300000 # 5min = 300 sec = 300000 ms
-            dev_to_dev_limit = 200 # min 200ms between calls
+            dev_to_dev_limit = 200 # min 200ms between calls to same dev
             total_dev_calls = 0
             total_dev_id_calls = 0
             t_oldest = t_now
@@ -717,15 +718,15 @@ class YoLinkInitPAC(object):
                 t_dev_delay = dev_time_limit  - (t_now- t_oldest_dev)
             #logging.debug('total_calls = {}, total_dev_calls = {}'.format(total_dev_calls, total_dev_id_calls))
             t_delay = max(t_all_delay,t_dev_delay, t_dev_2_dev, 0 )
-            #logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay))
+            logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}, dev2dev={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay, t_dev_2_dev))
             yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
-
-            logging.debug('TimeTrack after: time {} dev: {} delay;{} -  {}'.format(t_now, dev_id, int(math.ceil(t_delay/1000)), yoAccess.time_tracking_dict))
+            yoAccess.TimeTableLock.release()
+            logging.debug('TimeTrack after: time {} dev: {} delay: {} -  {}'.format(t_now, dev_id, int(math.ceil(t_delay/1000)), yoAccess.time_tracking_dict))
             return(int(math.ceil(t_delay/1000)))
             #return(int(math.ceil(t_delay/1000)), int(math.ceil(t_all_delay)), int(math.ceil(t_all_delay)))
         except Exception as e:
             logging.debug(' Exception Timetrack : {}'.format(e))
-        
+            yoAccess.TimeTableLock.release()
         #yoAccess.time_tracking_dict[dev_id].append(time)
 
     #@measure_time

@@ -63,6 +63,8 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         return(yolink.dataAPI['data']['delays'])  
     '''
 
+    def getMultiSchedules (yolink):
+        return(yolink.getSchedules())  
                                 
 
     def refreshMultiOutlet(yolink):

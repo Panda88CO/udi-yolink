@@ -40,6 +40,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
+version = '0.9.86'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -287,8 +288,17 @@ class YoLinkSetup (udi_interface.Node):
                         name = dev['name']
                         name = self.poly.getValidName(name)
                         self.Parameters[address]=  dev['name']
+                    config = {}
+                    if  'YS6802' in dev['modelName']:
+                        config['usb'] = 0
+                        config['outlet'] = 2
+                    elif 'YS6801' in dev['modelName']:
+                        config['usb'] = 1
+                        config['outlet'] = 4
+                    else:
+                        logging.error('Unsupported MultiOutlet devicve : {}'.format(dev['modelName']))
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev )
+                    temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev, config )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
@@ -615,7 +625,7 @@ class YoLinkSetup (udi_interface.Node):
                             if nde != 'setup':   # but not the controller node
                                 nodes[nde].checkOnline()
                                 logging.debug('longpoll {}'.format(nde))
-                                time.sleep(4) # need to limit calls to 100 per  5 min - using 4 to allow other calls
+                                time.sleep(5) # need to limit calls to 100 per  5 min - using 5 to allow other calls - updating is not critical
                     except Exception as e:
                         logging.debug('Exeption occcured during systemPoll : {}'.format(e))
                         #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
@@ -756,7 +766,7 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
 
 
-        polyglot.start('0.9.84' )
+        polyglot.start(version)
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
