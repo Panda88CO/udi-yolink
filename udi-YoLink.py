@@ -293,7 +293,7 @@ class YoLinkSetup (udi_interface.Node):
                         config['outlet'] = 2
                     elif 'YS6801' in dev['modelName']:
                         config['usb'] = 1
-                        config['outlet'] = 4                        
+                        config['outlet'] = 4
                     else:
                         logging.error('Unsupported MultiOutlet devicve : {}'.format(dev['modelName']))
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
