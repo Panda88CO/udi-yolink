@@ -814,7 +814,7 @@ class YoLinkMQTTDevice(object):
         return(temp)
     
 
-    
+    '''
     def setSchedule(yolink, active, params):
         logging.debug(yolink.type + '- setSchedule')
         data = {}        
@@ -846,7 +846,7 @@ class YoLinkMQTTDevice(object):
         logging.debug('setSchedule data = {}'.format(data))
         yolink.yoAccess.publish_data(data)
         time.sleep(1)
-    '''
+    
     
     def activateSchedules(yolink, index, Activate):
         logging.debug(yolink.type + 'activateSchedules')
@@ -1205,12 +1205,15 @@ class YoLinkMQTTDevice(object):
     
     def updateScheduleStatus(yolink, data):
         logging.debug(yolink.type + 'updateScheduleStatus')
-
-        yolink.setOnline(data)
-        #yolink.setNbrPorts(data)
-        yolink.updateLoraInfo(data)
-        yolink.dataAPI[yolink.dData][yolink.dSchedule] = data[yolink.dData]
-        yolink.dataAPI[yolink.lastMessage] = data
+        try:
+            yolink.setOnline(data)
+            #yolink.setNbrPorts(data)
+            yolink.updateLoraInfo(data)
+            yolink.dataAPI[yolink.dData][yolink.dSchedule] = data[yolink.dData]
+            yolink.dataAPI[yolink.lastMessage] = data
+        except Exception as e:
+            logging.debug(' Error schedules not fully supported yet {}'.format(e))
+            
 
     '''
 
