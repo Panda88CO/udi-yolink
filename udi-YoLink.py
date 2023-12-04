@@ -40,6 +40,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
+version = '0.9.86'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -765,7 +766,7 @@ if __name__ == "__main__":
         polyglot = udi_interface.Interface([])
 
 
-        polyglot.start('0.9.86' )
+        polyglot.start(version)
 
         YoLinkSetup(polyglot, 'setup', 'setup', 'YoLinkSetup')
 
