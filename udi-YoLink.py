@@ -407,7 +407,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
             
-                elif dev['type'] == 'Finger': 
+                elif dev['type'] == 'Finger':
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
                     if address in self.Parameters:
