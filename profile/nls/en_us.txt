@@ -330,6 +330,32 @@ ST-nlssmkey-GV2-NAME = Long Press Type
 CMD-nlssmkey-KEYPRESS-NAME = Short Press Type
 CMD-nlssmkey-KEYLPRESS-NAME = Long Press Type
 
+nosupport-0 = Not Supported
+nosupport-99 = Unknown
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 suspended-0 = Normal
 suspended-1 = Suspended
 suspended-2 = Offline
