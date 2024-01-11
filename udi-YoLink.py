@@ -130,7 +130,7 @@ class YoLinkSetup (udi_interface.Node):
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
                                 'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
-                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren' ]
+                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController']
         #self.supportedYoTypes = ['MultiOutlet' ]
         
 
@@ -545,6 +545,24 @@ class YoLinkSetup (udi_interface.Node):
                         time.sleep(4)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
+
+
+                elif dev['type'] == 'WaterMeterController': 
+                    name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    address = self.poly.getValidAddress(name)
+                    if address in self.Parameters:
+                        name = self.Parameters[address]
+                    else:
+                        name = dev['name']
+                        name = self.poly.getValidName(name)
+                        self.Parameters[address]=  dev['name']                    
+                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                    temp = udiYoWaterMeterController(self.poly, address, address, name, self.yoAccess, dev )
+                    while not temp.node_ready:
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
+                        time.sleep(4)
+                    for adr in temp.adr_list:
+                        self.assigned_addresses.append(adr)                        
                                                 
             else:
                 logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
