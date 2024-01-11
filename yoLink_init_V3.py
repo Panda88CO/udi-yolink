@@ -72,7 +72,9 @@ class YoLinkInitPAC(object):
         yoAccess.online = False
         yoAccess.deviceList = []
         yoAccess.token = None
-
+        
+        yoAccess.QoS = 1
+        yoAccess.keepAlive = 60
 
 
         yoAccess.unassigned_nodes = []
@@ -105,7 +107,7 @@ class YoLinkInitPAC(object):
             logging.info('Retrieving YoLink API info')
             time.sleep(1)
             if yoAccess.token != None:
-                yoAccess.retrieve_homeID()      
+                yoAccess.retrieve_homeID()
             #if yoAccess.client == None:    
       
             #logging.debug('initialize MQTT' )
@@ -319,7 +321,7 @@ class YoLinkInitPAC(object):
             #yoAccess.retrieve_homeID()
             time.sleep(1)
             yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-            logging.debug('yoAccess.client.connect: {}'.format(yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30))) # ping server every 30 sec
+            logging.debug('yoAccess.client.connect: {}'.format(yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= yoAccess.keepAlive))) # ping server every 30 sec
                 
             yoAccess.client.loop_start()
             time.sleep(2)
@@ -345,9 +347,9 @@ class YoLinkInitPAC(object):
         #topicReportAll = 'yl-home/'+yoAccess.homeID+'/+/report'
         
         if not deviceId in yoAccess.mqttList :
-            yoAccess.client.subscribe(topicReq)
-            yoAccess.client.subscribe(topicResp)
-            yoAccess.client.subscribe(topicReport)
+            yoAccess.client.subscribe(topicReq, yoAccess.QoS)
+            yoAccess.client.subscribe(topicResp, yoAccess.QoS)
+            yoAccess.client.subscribe(topicReport,  yoAccess.QoS)
 
             yoAccess.mqttList[deviceId] = { 'callback': callback, 
                                             'request': topicReq,
@@ -372,9 +374,9 @@ class YoLinkInitPAC(object):
             yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['report'] )
             
             logging.debug('re-subscribe {}'.format(deviceId))
-            yoAccess.client.subscribe(topicReq,2)
-            yoAccess.client.subscribe(topicResp,2)
-            yoAccess.client.subscribe(topicReport,2)
+            yoAccess.client.subscribe(topicReq, yoAccess.QoS)
+            yoAccess.client.subscribe(topicResp, yoAccess.QoS)
+            yoAccess.client.subscribe(topicReport, yoAccess.QoS)
             yoAccess.mqttList[deviceId]['request'] =  topicReq
             yoAccess.mqttList[deviceId]['response'] = topicResp
             yoAccess.mqttList[deviceId]['report'] = topicReport
@@ -533,7 +535,7 @@ class YoLinkInitPAC(object):
 
             elif (rc >= 4):
                 if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
-                    logging.error('Authentication error 5 - Token no longer valid - Need to reconnect ')
+                    logging.error('Authentication error {rc} - Token no longer valid - Need to reconnect ')
                     netid = yoAccess.check_connection(yoAccess.mqttPort)
                     logging.debug('netid = {}'.format(netid))
 
@@ -549,7 +551,7 @@ class YoLinkInitPAC(object):
                         yoAccess.client.disconnect()
 
                 else:
-                    logging.error('Authentication error 5 - check credentials and try again  ')
+                    logging.error('Authentication error {rc}} - check credentials and try again  ')
 
 
 
@@ -605,12 +607,12 @@ class YoLinkInitPAC(object):
                     logging.error('Lost credential info - need to restart node server')
 
     #@measure_time
-    def on_subscribe(yoAccess, client, userdata, mID, granted_QOS):        
+    def on_subscribe(yoAccess, client, userdata, mID, granted_QoS):        
         logging.debug('on_subscribe')
         #logging.debug('client = ' + str(client))
         #logging.debug('userdata = ' + str(userdata))
         #logging.debug('mID = '+str(mID))
-        #logging.debug('Granted QoS: ' +  str(granted_QOS))
+        #logging.debug('Granted QoS: ' +  str(granted_QoS))
         #logging.debug('\n')
 
     #@measure_time
@@ -757,7 +759,7 @@ class YoLinkInitPAC(object):
                 yoAccess.lastDataPacket[deviceId] = data
 
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
-                result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, 2)
+                result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, yoAccess.QoS)
             else:
                 logging.error('device {} not in mqtt list'.format(deviceId))
                 return (False)
