@@ -29,6 +29,7 @@ from udiYoVibrationSensorV2 import udiYoVibrationSensor
 from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV2 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
+from udiYoWaterMeterControllerV2 import udiYoWaterMeterController
 
 import udiProfileHandler
 
