@@ -11,16 +11,16 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-class YoLinkWaterCtrl(YoLinkMQTTDevice):
+class YoLinkWaterMeter(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__( yoAccess,  deviceInfo, callback)
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
         yolink.eventList = ['StatusChange', 'Report']
         yolink.stateList = ['open', 'closed', 'on', 'off']
-        yolink.ManipulatorName = 'ManipulatorEvent'
+        yolink.ManipulatorName = 'WaterMeterControllerEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'Manipulator'
+        yolink.type = 'WaterMeterController'
         yolink.MQTT_type = 'c'
         #time.sleep(1)
 
@@ -81,7 +81,7 @@ class YoLinkWaterCtrl(YoLinkMQTTDevice):
             return(yolink.getData())
 
 
-class YoLinkWaterCopntroller(YoLinkWaterCtrl):
+class YoLinkWaterMeterCtrl(YoLinkWaterMeter):
     def __init__(yolink, yoAccess,  deviceInfo):
         super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)
         yolink.initNode()
