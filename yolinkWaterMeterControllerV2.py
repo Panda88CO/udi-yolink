@@ -54,7 +54,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 state = 'closed'
             data = {}
             data['params'] = {}
-            data['params']['state'] = state.lower()
+            data['params']['valve'] = state.lower()
             return(yolink.setDevice(data))
 
     def getBattery(yolink):
