@@ -346,10 +346,14 @@ ST-nlswatermeter-GV9-NAME = Reminder
 ST-nlswatermeter-BATLVL-NAME = Power State
 ST-nlswatermeter-GV10-NAME = Supply Mode
 
-CMD-nlswatermeter-KEYPRESS-NAME = Short Press Type
-CMD-nlswatermeter-KEYLPRESS-NAME = Long Press Type
-
-
+CMD-nlswatermeter-UPDATE-NAME = Update
+CMD-nlswatermeter-QUERY-NAME = Query
+CMD-nlswatermeter-DON-NAME = Open Valve
+CMD-nlswatermeter-DOF-NAME = Close Valve
+CMD-nlswatermeter-VALVECTRL-NAME = Control Valve
+CMD-nlswatermeter-ONDELAY-NAME = Prepare on delay
+CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
+C
 nosupport-0 = Not Supported
 nosupport-99 = Unknown
 

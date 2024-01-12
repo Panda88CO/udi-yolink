@@ -200,8 +200,6 @@ class udiYoWaterMeterController(udi_interface.Node):
 
             else:
                 self.node.setDriver('GV0', 99)
-                self.node.setDriver('GV2', 99)     
-                self.node.setDriver('GV3', 99)
                 self.node.setDriver('GV4', 99)
                 self.node.setDriver('GV5', 99)
                 self.node.setDriver('GV6', 99)
@@ -309,7 +307,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                 'QUERY' : update,
                 'DON'   : set_open,
                 'DOF'   : set_close,
-                'MANCTRL': waterCtrlControl, 
+                'VALVECTRL': waterCtrlControl, 
                 'ONDELAY' : prepOnDelay,
                 'OFFDELAY' : prepOffDelay 
                 }
