@@ -25,10 +25,12 @@ class udiYoWaterMeterController(udi_interface.Node):
     '''
        drivers = [
             'GV0' = Manipulator State
-            'GV1' = OnDelay
-            'GV2' = OffDelay
+            'GV1' = Meter count
+            'GV2' = OnDelay
+            'GV3' = OffDelay
             'BATLVL' = BatteryLevel
-            
+            'GV4-9' = alarms
+            'GV10' = Supply type
             'ST' = Online
             ]
     ''' 
@@ -37,7 +39,6 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 69}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV3', 'value': 0, 'uom': 57}, 
-            
             {'driver': 'GV4', 'value': 99, 'uom': 25}, 
             {'driver': 'GV5', 'value': 99, 'uom': 25}, 
             {'driver': 'GV6', 'value': 99, 'uom': 25}, 
@@ -46,8 +47,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV9', 'value': 99, 'uom': 25}, 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'GV10', 'value': 99, 'uom': 25}, 
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},           
             {'driver': 'GV20', 'value': 0, 'uom': 25},
             ]
 
