@@ -247,6 +247,50 @@
       </cmds>
    </nodeDef> 
 
+  <nodeDef id="yowatermeter" nls="nlswatermeter">
+      <editors />
+      <sts>
+         <st id="GV0" editor="manstate" />
+         <st id="GV1" editor="watermeter" />
+         <st id="GV2" editor="delay" />
+         <st id="GV3" editor="delay" />
+         <st id="BATLVL" editor="batlevel" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV4" editor="alarm" />
+         <st id="GV5" editor="alarm" />
+         <st id="GV6" editor="alarm" />
+         <st id="GV7" editor="alarm" />
+         <st id="GV8" editor="alarm" />
+         <st id="GV9" editor="alarm" />         
+         <st id="GV10" editor="pwrmode" />  
+         <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />    
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
+
+            <cmd id="MANCTRL" > 
+               <p id="" editor="manctrl" init="1" /> 
+            </cmd >
+            <cmd id="ONDELAY" > 
+               <p id="" editor="delaymin" init="GV1" /> 
+             </cmd >   
+            <cmd id="OFFDELAY" > 
+               <p id="" editor="delaymin" init="GV2" /> 
+             </cmd >
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+
    <nodeDef id="yothsens" nls="nlsthsens">
       <editors />
       <sts>

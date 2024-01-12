@@ -34,12 +34,21 @@ class udiYoWaterMeterController(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 69}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV3', 'value': 0, 'uom': 57}, 
+            
+            {'driver': 'GV4', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV5', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV6', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV7', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV8', 'value': 99, 'uom': 25},                                              
+            {'driver': 'GV9', 'value': 99, 'uom': 25}, 
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
+            {'driver': 'GV10', 'value': 99, 'uom': 25}, 
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 0, 'uom': 25},
             ]
 
 
@@ -82,11 +91,16 @@ class udiYoWaterMeterController(udi_interface.Node):
             time.sleep(0.1)
         self.n_queue.pop()
 
-
+    def bin2ISY(self, val):
+        if val:
+            return(1)
+        else:
+            return(0)
 
     def start(self):
         logging.info('Start - udiYoWaterMeterController')
         self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('GV20', 0, True, True)
         self.yoWaterCtrl= YoLinkWaterMeter(self.yoAccess, self.devInfo, self.updateStatus)
         
         time.sleep(4)
@@ -116,7 +130,7 @@ class udiYoWaterMeterController(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            state =  self.yoWaterCtrl.getState()
+            state =  self.yoWaterCtrl.getValveState()
             if self.yoWaterCtrl.online:
                 if state.upper() == 'OPEN':
                     self.valveState = 1
@@ -133,12 +147,52 @@ class udiYoWaterMeterController(udi_interface.Node):
                     
                 self.last_state = state
                 self.node.setDriver('ST', 1)
+                meter  = self.yoWaterCtrl.getMeterReading()
+                if meter == 'Unknown':
+                    self.node.setDriver('GV1', 99, True, True, 25)
+                else:
+                    self.node.setDriver('GV1', meter, True, True, 69)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
-                    self.node.setDriver('GV1', 0, True, False)
-                    self.node.setDriver('GV2', 0, True, False)  
-                logging.debug('udiYoWaterMeterController - getBattery: () '.format(self.yoWaterCtrl.getBattery()))    
-                self.node.setDriver('BATLVL', self.yoWaterCtrl.getBattery(), True, True)          
+                    self.node.setDriver('GV2', 0, True, False)
+                    self.node.setDriver('GV3', 0, True, False)  
+
+                pwr_mode, bat_lvl =   self.yoWaterCtrl.getBattery()  
+                logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
+                self.node.setDriver('BATLVL', bat_lvl, True, True)          
+                if pwr_mode == 'Unknown':
+                    self.node.setDriver('GV10', 99)
+                elif pwr_mode == 'PowerLine':
+                    self.node.setDriver('GV10', 0)
+                else:
+                    self.node.setDriver('GV10', 1)
+
+                alarms = self.yoWaterCtrl.getAlarms()
+                if 'openReminder' in alarms:
+                    self.node.setDriver('GV4', self.bin2ISY(alarms['openReminder']))
+                else:
+                    self.node.setDriver('GV4', 99)
+                if 'leak' in alarms:
+                    self.node.setDriver('GV5', self.bin2ISY(alarms['leak']))
+                else:
+                    self.node.setDriver('GV5', 99)
+                if 'amountOverrun' in alarms:
+                    self.node.setDriver('GV6', self.bin2ISY(alarms['amountOverrun']))
+                else:
+                    self.node.setDriver('GV6', 99)
+                if 'durationOverrun' in alarms:
+                    self.node.setDriver('GV7', self.bin2ISY(alarms['durationOverrun']))
+                else:
+                    self.node.setDriver('GV7', 99)
+                if 'valveError' in alarms:
+                    self.node.setDriver('GV8', self.bin2ISY(alarms['valveError']))
+                else:
+                    self.node.setDriver('GV8', 99)
+                if 'reminder' in alarms:
+                    self.node.setDriver('GV9', self.bin2ISY(alarms['reminder']))
+                else:
+                    self.node.setDriver('GV9', 99)
+                    
                 if self.yoWaterCtrl.suspended:
                     self.node.setDriver('GV20', 1, True, True)
                 else:
@@ -146,8 +200,15 @@ class udiYoWaterMeterController(udi_interface.Node):
 
             else:
                 self.node.setDriver('GV0', 99)
-                self.node.setDriver('GV1', 0)     
-                self.node.setDriver('GV2', 0)
+                self.node.setDriver('GV2', 99)     
+                self.node.setDriver('GV3', 99)
+                self.node.setDriver('GV4', 99)
+                self.node.setDriver('GV5', 99)
+                self.node.setDriver('GV6', 99)
+                self.node.setDriver('GV7', 99)
+                self.node.setDriver('GV8', 99)
+                self.node.setDriver('GV9', 99)
+                self.node.setDriver('GV10', 99)
                 self.node.setDriver('BATLVL', 99)
                 self.node.setDriver('ST', 0)
                 self.node.setDriver('GV20', 2, True, True)
@@ -169,11 +230,11 @@ class udiYoWaterMeterController(udi_interface.Node):
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
                     if 'on' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                        self.node.setDriver('GV2', timeRemaining[delayInfo]['on'], True, False)
                         if max_delay < timeRemaining[delayInfo]['on']:
                             max_delay = timeRemaining[delayInfo]['on']
                     if 'off' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
+                        self.node.setDriver('GV3', timeRemaining[delayInfo]['off'], True, False)
                         if max_delay < timeRemaining[delayInfo]['off']:
                             max_delay = timeRemaining[delayInfo]['off']
                     self.node.setDriver('GV0', self.valveState , True, True)

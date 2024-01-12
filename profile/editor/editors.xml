@@ -41,7 +41,7 @@
      <range uom="51" min="0" max="100" prec="1" />
   </editor>
   <editor id="batlevel"> 
-     <range uom="25" subset="0-4,99" nls="batlevel" />
+     <range uom="25" subset="0-4,98,99" nls="batlevel" />
   </editor>
   <editor id="doorstate"> 
      <range uom="25" subset="0-1,99" nls="doorstate" />
@@ -160,5 +160,14 @@
    <editor id="suspendstate"> 
      <range uom="25" subset="0-2, 99" nls="suspended" />
    </editor> 
-
+   <editor id="alarm"> 
+     <range uom="25" subset="0-1, 99" nls="alarm" />
+   </editor> 
+   <editor id="watermeter"> 
+     <range uom="69" min="0" max="214748364" prec="1" />
+     <range uom="25" subset="0,99" nls="error"  />
+   </editor> 
+   <editor id="pwrmode"> 
+     <range uom="25" subset="0-1, 99" nls="pwrmode" />
+   </editor>    
 </editors>

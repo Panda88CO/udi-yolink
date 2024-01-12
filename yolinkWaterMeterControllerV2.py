@@ -40,6 +40,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
 
+
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState')
         #yolink.online = yolink.getOnlineStatus()
@@ -56,9 +57,43 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             data['params']['state'] = state.lower()
             return(yolink.setDevice(data))
 
+    def getBattery(yolink):
+        logging.debug(yolink.type+' - getBattery')
+        bat_lvl = 99
+        pwr_mode = 'Unknown'
+        if yolink.online:   
+            attempts = 0
+            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
+                time.sleep(1)
+                attempts = attempts + 1
+            if attempts <= 5:
+                if 'battery' in yolink.dataAPI[yolink.dData]:
+                    bat_lvl = yolink.dataAPI[yolink.dData]['battery']
+                if 'powerSupply' in yolink.dataAPI[yolink.dData]:
+                    pwr_mode = yolink.dataAPI[yolink.dData]['powerSupply']
+        return(pwr_mode, bat_lvl)
+    
 
-    def getState(yolink):
-        logging.debug(yolink.type+' - getState')
+    def getValveState(yolink):
+        logging.debug(yolink.type+' - getValveState')
+        #yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            attempts = 0
+            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
+                time.sleep(1)
+                attempts = attempts + 1
+            if attempts <= 5 and 'valve' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                if  yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'open':
+                    return('open')
+                elif yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'closed':
+                    return('closed')
+                else:
+                    return('Unkown')
+            else:
+                return('Unkown')
+    
+    def getMeterReading(yolink):
+        logging.debug(yolink.type+' - getMeterReading')
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
             attempts = 0
@@ -66,15 +101,26 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 time.sleep(1)
                 attempts = attempts + 1
             if attempts <= 5:
-                if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
-                    return('open')
-                elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
-                    return('closed')
+                if  'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    return(round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/10,1))
                 else:
-                    return('Unkown')
+                    return('Unknown')
             else:
-                return('Unkown')
-    
+                return('Unknown')        
+
+    def getAlarms(yolink):
+        logging.debug(yolink.type+' - getAlarms')
+        if yolink.online:   
+            attempts = 0
+            while yolink.dataAPI[yolink.dData][yolink.dAlarm]  == {} and attempts < 3:
+                time.sleep(1)
+                attempts = attempts + 1
+            if attempts <= 5 and yolink.dAlarm in yolink.dataAPI[yolink.dData]:
+                alarms = yolink.dataAPI[yolink.dData][yolink.dAlarm]
+                return(alarms)
+            else:
+                return('Unknown')
+     
     def getData(yolink):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
