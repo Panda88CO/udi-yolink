@@ -1018,7 +1018,10 @@ class YoLinkMQTTDevice(object):
                     yolink.nbrUsb = data['data']['delays'][0]['ch']
                     yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
             if 'method' in data:
+                if 'data' in data:
+                    yolink.dataAPI[yolink.dData] = data['data']
                 if yolink.dState in data[yolink.dData]:
+                    yolink.dataAPI[yolink.dData][yolink.dState] = {}
                     #if 'reportAt' in data[yolink.dData] or 'stateChangedAt' in data[yolink.dData]:
                     #    reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
                     #    yolink.dataAPI['lastStateTime'] = (reportAt.timestamp() -  yolink.timezoneOffsetSec)*1000
@@ -1065,8 +1068,7 @@ class YoLinkMQTTDevice(object):
                             else:
                                 yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
 
-                elif 'data' in data:
-                    yolink.dataAPI[yolink.dData] = data['data']
+
                 else: # setDelay only returns data
                     yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                     if ".setDelay" in data['method']:
