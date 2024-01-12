@@ -342,8 +342,9 @@ ST-nlswatermeter-GV6-NAME = Amount Overrun
 ST-nlswatermeter-GV7-NAME = Duration Overrun
 ST-nlswatermeter-GV8-NAME = Valve Error
 ST-nlswatermeter-GV9-NAME = Reminder
-ST-nlswatermeter-BATLVL-NAME = Power State
+ST-nlswatermeter-BATLVL-NAME = Battery State
 ST-nlswatermeter-GV10-NAME = Supply Mode
+ST-nlswatermeter-GV20-NAME = Connection State
 
 CMD-nlswatermeter-UPDATE-NAME = Update
 CMD-nlswatermeter-QUERY-NAME = Query
@@ -356,7 +357,7 @@ C
 nosupport-0 = Not Supported
 nosupport-99 = Unknown
 
-pwrmode-0 = External Supply
+pwrmode-0 = Ext Supply
 pwrmode-1 = Battery
 pwrmode-99 = Unknown
 
