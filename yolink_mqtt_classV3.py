@@ -1021,7 +1021,6 @@ class YoLinkMQTTDevice(object):
                 if 'data' in data:  #new
                     yolink.dataAPI[yolink.dData] = data['data'] #new
                 if yolink.dState in data[yolink.dData]:
-                    yolink.dataAPI[yolink.dData][yolink.dState] = {} #new
                     #if 'reportAt' in data[yolink.dData] or 'stateChangedAt' in data[yolink.dData]:
                     #    reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
                     #    yolink.dataAPI['lastStateTime'] = (reportAt.timestamp() -  yolink.timezoneOffsetSec)*1000
