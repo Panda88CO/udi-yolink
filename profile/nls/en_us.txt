@@ -334,9 +334,8 @@ ND-yowatermeter-NAME = YoLink Water Meter Controller
 ND-yowatermeter-ICON = PulseCounter
 ST-nlswatermeter-GV0-NAME = Valve State
 ST-nlswatermeter-GV1-NAME = Water Meter Reading
-ST-nlswatermeter-GV2-NAME = Open Delay
-ST-nlswatermeter-GV3-NAME = Close Delay
-
+# ST-nlswatermeter-GV2-NAME = Open Delay
+# ST-nlswatermeter-GV3-NAME = Close Delay
 ST-nlswatermeter-GV4-NAME = Open Reminder
 ST-nlswatermeter-GV5-NAME = Leak
 ST-nlswatermeter-GV6-NAME = Amount Overrun
@@ -351,8 +350,8 @@ CMD-nlswatermeter-QUERY-NAME = Query
 CMD-nlswatermeter-DON-NAME = Open Valve
 CMD-nlswatermeter-DOF-NAME = Close Valve
 CMD-nlswatermeter-VALVECTRL-NAME = Control Valve
-CMD-nlswatermeter-ONDELAY-NAME = Prepare on delay
-CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
+#CMD-nlswatermeter-ONDELAY-NAME = Prepare on delay
+#CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
 C
 nosupport-0 = Not Supported
 nosupport-99 = Unknown
