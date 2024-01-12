@@ -157,7 +157,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     self.node.setDriver('GV2', 0, True, False)
                     self.node.setDriver('GV3', 0, True, False)  
 
-                pwr_mode, bat_lvl =   self.yoWaterCtrl.getBattery()  
+                pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                 logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
                 self.node.setDriver('BATLVL', bat_lvl, True, True)          
                 if pwr_mode == 'Unknown':

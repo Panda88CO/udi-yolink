@@ -61,12 +61,13 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         logging.debug(yolink.type+' - getBattery')
         bat_lvl = 99
         pwr_mode = 'Unknown'
+        logging.debug('online {} , data {}'.format(yolink.online, yolink.dataAPI[yolink.dData] ))
         if yolink.online:   
             attempts = 0
-            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
+            while yolink.dataAPI[yolink.dData]  == {} and attempts < 3:
                 time.sleep(1)
                 attempts = attempts + 1
-            if attempts <= 5:
+            if attempts <= 3:
                 if 'battery' in yolink.dataAPI[yolink.dData]:
                     bat_lvl = yolink.dataAPI[yolink.dData]['battery']
                 if 'powerSupply' in yolink.dataAPI[yolink.dData]:
