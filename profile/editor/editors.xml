@@ -165,7 +165,7 @@
    </editor> 
    <editor id="watermeter"> 
      <range uom="69" min="0" max="214748364" prec="1" />
-     <range uom="25" subset="0,99" nls="error"  />
+     <range uom="25" subset="0,99" nls="error" />
    </editor> 
    <editor id="pwrmode"> 
      <range uom="25" subset="0-1, 99" nls="pwrmode" />
