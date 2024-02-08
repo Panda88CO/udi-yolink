@@ -853,7 +853,7 @@ class YoLinkMQTTDevice(object):
 
         time.sleep(1)
     '''
-    
+    '''
     def setSchedule(yolink, active, params):
         logging.debug(yolink.type + '- setSchedule')
         data = {}        
@@ -922,7 +922,7 @@ class YoLinkMQTTDevice(object):
         yolink.yoAccess.publish_data(data)
         time.sleep(1)
     
-    
+    '''
     def activateSchedules(yolink, index, Activate):
         logging.debug(yolink.type + 'activateSchedules')
         for schedule  in yolink.scheduleList:
