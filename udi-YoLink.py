@@ -78,6 +78,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
         self.n_queue = []
   
         self.Parameters = Custom(self.poly, 'customparams')
@@ -117,6 +118,14 @@ class YoLinkSetup (udi_interface.Node):
         else:
             return(0)
 
+    def configDoneHandler(self):
+        # We use this to discover devices, or ask to authenticate if user has not already done so
+        self.poly.Notices.clear()
+        logging.info('configDoneHandler called')
+        #self.myNetatmo.updateOauthConfig()
+        self.nodes_in_db = self.poly.getNodesFromDb()
+        logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
+        self.configDone = True
 
     def start (self):
         logging.info('Executing start - udi-YoLink')
@@ -570,6 +579,8 @@ class YoLinkSetup (udi_interface.Node):
         time.sleep(1)
         # need to go through nodes to see if there are nodes that no longer exist in device list                
         logging.debug('assigned addresses nodes  :{} - {}'.format(len(self.assigned_addresses), self.assigned_addresses))
+        while not self.configDone:
+            logging.info('Waiting for ')
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
         for nde in range(0, len(self.nodes_in_db)):
             node = self.nodes_in_db[nde]
