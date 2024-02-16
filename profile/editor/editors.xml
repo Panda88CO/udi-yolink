@@ -158,5 +158,25 @@
    <editor id="suspendstate"> 
      <range uom="25" subset="0-2, 99" nls="suspended" />
    </editor> 
-
+   <editor id="deviceAlert"> 
+     <range uom="25" subset="0-1, 99" nls="deviceAlert" />
+   </editor>    
+   <editor id="SmokeAlert"> 
+     <range uom="25" subset="0-1,98,99" nls="SmokeAlert" />
+   </editor>   
+   <editor id="COAlert"> 
+     <range uom="25" subset="0-1,98,99" nls="COAlert" />
+   </editor>   
+   <editor id="TempAlert"> 
+     <range uom="25" subset="0-1,98,99" nls="TempAlert" />
+   </editor>   
+   <editor id="BatteryAlert"> 
+     <range uom="25" subset="0-1,98,99" nls="BatteryAlert" />
+   </editor>   
+   <editor id="SelfcheckState"> 
+     <range uom="25" subset="0-1,99" nls="SelfcheckState" />
+   </editor>   
+   <editor id="cmdsetting"> 
+     <range uom="25" subset="0-3" nls="cmdsetting" />
+   </editor>   
 </editors>
