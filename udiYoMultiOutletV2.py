@@ -415,6 +415,15 @@ class udiYoMultiOutlet(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV12', 'value': 0, 'uom': 25}, #Output
+            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV14', 'value': 0, 'uom': 25}, # Active
+            {'driver': 'GV15', 'value': 0, 'uom': 25}, #start Hour
+            {'driver': 'GV16', 'value': 0, 'uom': 25}, #start Min
+            {'driver': 'GV17', 'value': 0, 'uom': 25}, #stop Hour                                              
+            {'driver': 'GV18', 'value': 0, 'uom': 25}, #stop Min
+            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
+
             {'driver': 'GV20', 'value': 0, 'uom': 25}
             ]
     
@@ -657,8 +666,14 @@ class udiYoMultiOutlet(udi_interface.Node):
         #self.delaysActive = False
         
   
+    def lookup_schedule(self, command):
+        logging.info('udiYoMultiOutlet lookup_schedule {}'.format(command))
 
+    def define_schedule(self, command):
+        logging.info('udiYoMultiOutlet define_schedule {}'.format(command))      
 
+    def control_schedule(self, command):
+        logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
 
     def update(self, command = None):
         logging.info('udiYoMultiOutlet Update Executed')
@@ -667,9 +682,11 @@ class udiYoMultiOutlet(udi_interface.Node):
 
 
     commands = {
-                'UPDATE': update,
-                'QUERY' : update,
-             
+                'UPDATE'        : update,
+                'QUERY'         : update,
+                'LOOKUP_SCH'    : lookup_schedule,
+                'DEFINE_SCH'    : define_schedule,
+                'CTRL_SCH'      : control_schedule,
                 }
 
 

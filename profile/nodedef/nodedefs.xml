@@ -140,6 +140,17 @@
       <sts>
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+
+         <st id="GV12" editor="outport" />    
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="startHour" />      
+         <st id="GV16" editor="startMin" />    
+         <st id="GV17" editor="stopHour" />      
+         <st id="GV18" editor="stopMin" />    
+         <st id="GV19" editor="binDays" />      
+
+   
          <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
@@ -149,6 +160,24 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
+            <cmd id="DEFINE_SCH" > 
+               <p id="" editor="multischedule" init="GV13" /> 
+             </cmd >
+            <cmd id="LOOKUP_SCH" > 
+               <p id="outport" editor="outport" init="GV12" /> 
+               <p id="index" editor="sch_indexM" init="GV13" /> 
+               <p id="active" editor="sch_active" init="GV14" /> 
+               <p id="startH" editor="hour" init="GV15" /> 
+               <p id="startM" editor="minute" init="GV16" /> 
+               <p id="stopH" editor="hour" init="GV17" /> 
+               <p id="stopM" editor="minute" init="GV18" />   
+               <p id="bindays" editor="bindays" init="GV19" />                                          
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="index" editor="sch_index" init="GV13" /> 
+               <p id="active" editor="sch_active" init="GV14" />                                     
+             </cmd >
+
          </accepts>
       </cmds>
    </nodeDef> 

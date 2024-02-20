@@ -322,6 +322,9 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         else:
             return('unknown')
 
+
+    
+
     '''
     def setMultiDelay(yolink,  delayList):
         atttempt = 1

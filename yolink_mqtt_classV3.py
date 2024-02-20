@@ -815,81 +815,8 @@ class YoLinkMQTTDevice(object):
             yolink.scheduleList.append(temp[scheduleNbr])
         return(temp)
     
-    '''
-    def setSchedule(yolink, active, params):
-        logging.debug(yolink.type + '- setSchedule')
-        data = {}        
-        index= 5
-        #data['time'] = str(int((time.time_ns()//1e6)))
-        data['method'] = yolink.type+'.setSchedules'
-        data["targetDevice"] =  yolink.deviceInfo['deviceId']
-        data["token"]= yolink.deviceInfo['token']
-        data['params'] = {}
-        data['params']['sches'] = {}
-        temp = {}
-        
-        temp['isValid'] = active
-        if 'on' in params:
-             temp['on'] = params['on']
-        else:
-            temp['on'] = "25:0"
-        if 'off' in params:
-             temp['off'] = params['off']
-        else:
-            temp['off'] = "25:0"
-        temp['week'] = params['week']
 
-        if 'ch' in params: # #MultiOutput
-            temp['ch'] = params['ch']               
-            index = index + params['ch']
-        temp['index'] = index 
-
-        data['params']['sches'][index] = {}
-        data['params']['sches'][index] = temp      
-                
-
-        logging.debug('setSchedule data = {} {}'.format(temp, data))
-        yolink.yoAccess.publish_data(data)
-
-        time.sleep(1)
-    '''
-    '''
-    def setSchedule(yolink, active, params):
-        logging.debug(yolink.type + '- setSchedule')
-        data = {}        
-        index= 5
-        #data['time'] = str(int((time.time_ns()//1e6)))
-        data['method'] = yolink.type+'.setSchedules'
-        data["targetDevice"] =  yolink.deviceInfo['deviceId']
-        data["token"]= yolink.deviceInfo['token']
-        data['params'] = {}
-        data['params']['sches'] = []
-        temp = {}
-        
-        temp['isValid'] = active
-        if 'on' in params:
-             temp['on'] = params['on']
-        else:
-            temp['on'] = "25:0"
-        if 'off' in params:
-             temp['off'] = params['off']
-        else:
-            temp['off'] = "25:0"
-        temp['week'] = params['week']
-
-        if 'ch' in params: # #MultiOutput
-            temp['ch'] = params['ch']   
-            index = index + params['ch']
-        temp['index'] = index
-        data['params']['sches'].append(temp)
-
-        logging.debug('setSchedule data = {} {}'.format(temp, data))
-        yolink.yoAccess.publish_data(data)
-
-        time.sleep(1)
-    
-
-    '''
+   
     def setSchedule(yolink, active, params):
         logging.debug(yolink.type + '- setSchedule')
         data = {}        

@@ -51,6 +51,14 @@ ND-yomultiout-NAME = YoLink Outlet
 ND-yomultiout-ICON = Switch
 #ST-nlsmultiout-GV8-NAME = Device Online
 ST-nlsmultiout-ST-NAME = Nodeserver Status
+ST-nlsmultiout-GV12-NAME = Schedule Port
+ST-nlsmultiout-GV13-NAME = Schedule Index
+ST-nlsmultiout-GV14-NAME = Schedule Info
+ST-nlsmultiout-GV15-NAME = Start Hour (25 no start)
+ST-nlsmultiout-GV16-NAME = Start Minute
+ST-nlsmultiout-GV17-NAME = Stop Hour (25 - no stop)
+ST-nlsmultiout-GV18-NAME = Stop Minute
+ST-nlsmultiout-GV19-NAME = Days Active
 ST-nlsmultiout-GV20-NAME = Connection State
 CMD-nlsmultiout-UPDATE-NAME = Update Status
 CMD-nlsmultiout-QUERY-NAME = Query
@@ -353,7 +361,17 @@ CMD-nlswatermeter-DOF-NAME = Close Valve
 CMD-nlswatermeter-VALVECTRL-NAME = Control Valve
 #CMD-nlswatermeter-ONDELAY-NAME = Prepare on delay
 #CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
-C
+
+outport-0 = port1
+outport-1 = port2
+outport-2 = port3
+outport-3 = port4
+
+sch_active-0 = Disabled
+sch_active-1 = Active
+sch_active-2 = Not Defined
+sch_active-99 = Unknown
+
 nosupport-0 = Not Supported
 nosupport-99 = Unknown
 
@@ -365,6 +383,8 @@ suspended-0 = Normal
 suspended-1 = Suspended
 suspended-2 = Offline
 suspended-99 = Unknown
+
+
 
 deviceAlert-0 = Normal
 deviceAlert-1 = Alert
@@ -596,3 +616,20 @@ sphtts-2 = Messa3
 sphtts-3 = Messag4
 sphtts-4 = Message 5
 sphtts-5 = mes77
+
+bindays-0 =   xxxxxxx
+bindays-1 =   Sxxxxxx
+bindays-2 =   xMxxxxx
+bindays-3 =   SMxxxxx
+bindays-4 =   xxTxxxx
+bindays-5 =   SxTxxxx
+bindays-6 =   xMTxxxx
+bindays-7 =   SMTxxxx
+bindays-8 =   xxxWxxx
+bindays-9 =   SxxWxxx
+bindays-10 =  xMxWxxx
+bindays-11 =  SMxWxxx
+bindays-12 =  xxTWxxx
+bindays-13 =  SxTWxxx
+bindays-14 =  xMTWxxx
+bindays-15 =  SMTWxxx

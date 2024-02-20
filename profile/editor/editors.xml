@@ -191,5 +191,25 @@
    <editor id="cmdsetting"> 
      <range uom="25" subset="0-3" nls="cmdsetting" />
    </editor>   
-
+   <editor id="outport"> 
+     <range uom="25" subset="0-3" nls="outport" />
+   </editor>   
+   <editor id="sch_active"> 
+     <range uom="25" subset="0-2,99" nls="sch_active" />
+   </editor>   
+   <editor id="sch_indexM"> 
+     <range uom="70" min="0" max="9" />
+   </editor>   
+   <editor id="sch_indexS"> 
+     <range uom="70" min="0" max="5" />
+   </editor>  
+   <editor id="hour"> 
+     <range uom="19" min="0" max="25" />
+   </editor>  
+   <editor id="minute"> 
+     <range uom="44" min="0" max="59" />
+   </editor>  
+   <editor id="bindays"> 
+     <range uom="25" subset="0-127" nls="bindays" />
+   </editor>  
 </editors>
