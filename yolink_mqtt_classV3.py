@@ -240,6 +240,7 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def data_updated(yolink):
         tmp = yolink.lastUpdate()
+        logging.debug('data_updated {} vd {}'.format(tmp, yolink.lastUpdateTime))
         if ( tmp > yolink.lastUpdateTime):
             yolink.lastUpdateTime = tmp 
             logging.debug('{} - Data Updated'.format(yolink.type))
