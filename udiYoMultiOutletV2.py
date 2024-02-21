@@ -677,27 +677,28 @@ class udiYoMultiOutlet(udi_interface.Node):
                 self.setDriver('GV14', defined_schedules[index]['isValid'])
                 timestr = defined_schedules[index]['on']
                 if '25:' in timestr:
-                    self.setdriver('GV15', 98,True, True, 25)
-                    self.setdriver('GV16', 98,True, True, 25)
+                    self.setDriver('GV15', 98,True, True, 25)
+                    self.setDriver('GV16', 98,True, True, 25)
                 else:
-                    self.setdriver('GV15', int(timestr[0:1]),True, True, 19)
-                    self.setdriver('GV16', int(timestr[3:4]),True, True, 44)
+                    self.setDriver('GV15', int(timestr[0:1]),True, True, 19)
+                    self.setDriver('GV16', int(timestr[3:4]),True, True, 44)
                 timestr = defined_schedules[index]['off']
                 if '25:' in timestr:
-                    self.setdriver('GV17', 98,True, True, 25)
-                    self.setdriver('GV18', 98,True, True, 25)                
+                    self.setDriver('GV17', 98,True, True, 25)
+                    self.setDriver('GV18', 98,True, True, 25)                
                 else:
-                    self.setdriver('GV17', int(timestr[0:1]),True, True, 19)
-                    self.setdriver('GV18', int(timestr[3:4]),True, True, 44)
+                    self.setDriver('GV17', int(timestr[0:1]),True, True, 19)
+                    self.setDriver('GV18', int(timestr[3:4]),True, True, 44)
+                binWeekday = list2bin(defined_schedules[index]['week'])
                 self.setDriver('GV19',  defined_schedules[index]['week'])
             else:
                 self.setDriver('GV14', 2) # schedule  not defined
                 self.setDriver('GV12', 99) # schedule  not defined
-                self.setdriver('GV15', 99,True, True, 25)
-                self.setdriver('GV16', 99,True, True, 25)
-                self.setdriver('GV17', 99,True, True, 25)
-                self.setdriver('GV18', 99,True, True, 25)
-                self.setdriver('GV18', 0, True, True, 25)
+                self.setDriver('GV15', 99,True, True, 25)
+                self.setDriver('GV16', 99,True, True, 25)
+                self.setDriver('GV17', 99,True, True, 25)
+                self.setDriver('GV18', 99,True, True, 25)
+                self.setDriver('GV18', 0, True, True, 25)
 
     def define_schedule(self, command):
         logging.info('udiYoMultiOutlet define_schedule {}'.format(command))      
