@@ -164,18 +164,18 @@
                <p id="" editor="sch_indexM" init="GV13" /> 
              </cmd >
             <cmd id="DEFINE_SCH" > 
-               <p id="outport" editor="outport" init="GV12" /> 
-               <p id="index" editor="sch_indexM" init="GV13" /> 
-               <p id="active" editor="sch_active" init="GV14" /> 
-               <p id="startH" editor="hour" init="GV15" /> 
-               <p id="startM" editor="minute" init="GV16" /> 
-               <p id="stopH" editor="hour" init="GV17" /> 
-               <p id="stopM" editor="minute" init="GV18" />   
-               <p id="bindays" editor="bindays" init="GV19" />                                          
+               <p id="Doutport" editor="outport" init="GV12" /> 
+               <p id="Dindex" editor="sch_indexM" init="GV13" /> 
+               <p id="Dactive" editor="sch_active" init="GV14" /> 
+               <p id="DstartH" editor="hour" init="GV15" /> 
+               <p id="DstartM" editor="minute" init="GV16" /> 
+               <p id="DstopH" editor="hour" init="GV17" /> 
+               <p id="DstopM" editor="minute" init="GV18" />   
+               <p id="Dbindays" editor="bindays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
-               <p id="index" editor="sch_indexM" init="GV13" /> 
-               <p id="active" editor="sch_active" init="GV14" />                                     
+               <p id="Cindex" editor="sch_indexM" init="GV13" /> 
+               <p id="Cactive" editor="sch_active" init="GV14" />                                     
              </cmd >
 
          </accepts>
