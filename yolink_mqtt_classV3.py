@@ -813,6 +813,7 @@ class YoLinkMQTTDevice(object):
                     temp[scheduleNbr][key] = yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr][key]
             #temp[scheduleNbr]['index'] = scheduleNbr   
             yolink.scheduleList.append(temp[scheduleNbr])
+        logging.debug('getSchedules - schedules : {}'.format(temp))
         return(temp)
     
 

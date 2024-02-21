@@ -609,6 +609,7 @@ portlist-4 = Outlet 5
 portlist-5 = Outlet 6
 portlist-6 = Outlet 7
 portlist-7 = Outlet 8
+portlist-99 = Unknown
 
 sphtts-0 = Mes1
 sphtts-1 = Mess2
@@ -617,7 +618,10 @@ sphtts-3 = Messag4
 sphtts-4 = Message 5
 sphtts-5 = mes77
 
-bindays-0 =   xxxxxxx
+notdefined-98 = Not used
+notdefined-99 = Unknown
+
+bindays-0 =   Not defined
 bindays-1 =   Sxxxxxx
 bindays-2 =   xMxxxxx
 bindays-3 =   SMxxxxx

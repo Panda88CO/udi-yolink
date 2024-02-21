@@ -160,10 +160,10 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="LOOKUP_SCH" > 
                <p id="" editor="multischedule" init="GV13" /> 
              </cmd >
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="DEFINE_SCH" > 
                <p id="outport" editor="outport" init="GV12" /> 
                <p id="index" editor="sch_indexM" init="GV13" /> 
                <p id="active" editor="sch_active" init="GV14" /> 

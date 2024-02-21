@@ -192,7 +192,7 @@
      <range uom="25" subset="0-3" nls="cmdsetting" />
    </editor>   
    <editor id="outport"> 
-     <range uom="25" subset="0-3" nls="outport" />
+     <range uom="25" subset="0-3,99" nls="portlist" />
    </editor>   
    <editor id="sch_active"> 
      <range uom="25" subset="0-2,99" nls="sch_active" />
@@ -205,11 +205,14 @@
    </editor>  
    <editor id="hour"> 
      <range uom="19" min="0" max="25" />
+     <range uom="25" subset="98,99" nls="notdefined"/>
    </editor>  
    <editor id="minute"> 
      <range uom="44" min="0" max="59" />
+     <range uom="25" subset="99" nls="notdefined"/>
    </editor>  
    <editor id="bindays"> 
      <range uom="25" subset="0-127" nls="bindays" />
    </editor>  
+
 </editors>
