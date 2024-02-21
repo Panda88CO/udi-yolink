@@ -416,7 +416,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV12', 'value': 99, 'uom': 25}, #Output
-            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV13', 'value': 99, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
             {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
