@@ -616,6 +616,18 @@ portlist-99 = Unknown
 notdefined-98 = Not used
 notdefined-99 = Unknown
 
+sch_index-0 = Schedule 0
+sch_index-1 = Schedule 1
+sch_index-2 = Schedule 2
+sch_index-3 = Schedule 3
+sch_index-4 = Schedule 4
+sch_index-5 = Schedule 5
+sch_index-6 = Schedule 6
+sch_index-7 = Schedule 7
+sch_index-8 = Schedule 8
+sch_index-9 = Schedule 9
+sch_index-99 = Unknown
+
 bindays-0 =   Not defined
 bindays-1 =   Sxxxxxx
 bindays-2 =   xMxxxxx
