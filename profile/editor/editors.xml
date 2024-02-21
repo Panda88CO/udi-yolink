@@ -204,7 +204,7 @@
      <range uom="25" subset="0-5,99" nls="sch_index" />
    </editor>  
    <editor id="hour"> 
-     <range uom="19" min="0" max="25" />
+     <range uom="19" min="0" max="24" />
      <range uom="25" subset="98,99" nls="notdefined"/>
    </editor>  
    <editor id="minute"> 

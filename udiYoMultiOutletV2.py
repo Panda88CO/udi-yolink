@@ -691,7 +691,10 @@ class udiYoMultiOutlet(udi_interface.Node):
             defined_schedules = self.yoMultiOutlet.getSchedules()
             if index in defined_schedules:
                 self.setDriver('GV12', defined_schedules[index]['ch'])
-                self.setDriver('GV14', defined_schedules[index]['isValid'])
+                if  defined_schedules[index]['isValid']:
+                    self.setDriver('GV14', 1)
+                else:
+                    self.setDriver('GV14', 0)
                 timestr = defined_schedules[index]['on']
                 if '25:' in timestr:
                     self.setDriver('GV15', 98,True, True, 25)
@@ -706,8 +709,8 @@ class udiYoMultiOutlet(udi_interface.Node):
                 else:
                     self.setDriver('GV17', int(timestr[0:1]),True, True, 19)
                     self.setDriver('GV18', int(timestr[3:4]),True, True, 44)
-                
-                self.setDriver('GV19',  self.daylist2bin(defined_schedules[index]['week']))
+                self.setDriver('GV19',  int(defined_schedules[index]['week']))
+                #self.setDriver('GV19',  self.daylist2bin(defined_schedules[index]['week']))
             else:
                 self.setDriver('GV14', 2) # schedule  not defined
                 self.setDriver('GV12', 99) # schedule  not defined
