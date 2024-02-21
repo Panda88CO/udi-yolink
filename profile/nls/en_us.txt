@@ -70,6 +70,7 @@ CMDP-DstartH-NAME = Start Hour
 CMDP-DstartM-NAME = Start Min
 CMDP-DstopH-NAME = Stop Hour
 CMDP-DstopM-NAME = Stop Min
+CMDP-Dbindays-NAME = Active Days
 CMD-nlsmultiout-CTRL_SCH-NAME = Activte Schedule
 CMDP-Cactive-NAME = Schedule Active
 CMDP-Cindex-NAME = Schedule Index

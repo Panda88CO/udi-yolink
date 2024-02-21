@@ -665,7 +665,24 @@ class udiYoMultiOutlet(udi_interface.Node):
         #logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
         #self.delaysActive = False
         
-  
+    def daylist2bin(self, daylist):
+        sum = 0
+        if 'sun' in daylist:
+            sum = sum + 1
+        if 'mon' in daylist:
+            sum = sum + 2       
+        if 'tue' in daylist:
+            sum = sum + 4
+        if 'wed' in daylist:
+            sum = sum + 8
+        if 'thu' in daylist:
+            sum = sum + 16
+        if 'fri' in daylist:
+            sum = sum + 32
+        if 'sat' in daylist:
+            sum = sum + 64
+        return(sum)
+
     def lookup_schedule(self, command):
         logging.info('udiYoMultiOutlet lookup_schedule {}'.format(command))
         index = int(command.get('value'))
@@ -689,8 +706,8 @@ class udiYoMultiOutlet(udi_interface.Node):
                 else:
                     self.setDriver('GV17', int(timestr[0:1]),True, True, 19)
                     self.setDriver('GV18', int(timestr[3:4]),True, True, 44)
-                binWeekday = list2bin(defined_schedules[index]['week'])
-                self.setDriver('GV19',  defined_schedules[index]['week'])
+                
+                self.setDriver('GV19',  self.daylist2bin(defined_schedules[index]['week']))
             else:
                 self.setDriver('GV14', 2) # schedule  not defined
                 self.setDriver('GV12', 99) # schedule  not defined
