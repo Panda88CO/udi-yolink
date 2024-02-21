@@ -54,15 +54,17 @@ ST-nlsmultiout-ST-NAME = Nodeserver Status
 ST-nlsmultiout-GV12-NAME = Schedule Port
 ST-nlsmultiout-GV13-NAME = Schedule Index
 ST-nlsmultiout-GV14-NAME = Schedule Info
-ST-nlsmultiout-GV15-NAME = Start Hour (25 no start)
+ST-nlsmultiout-GV15-NAME = Start Hour
 ST-nlsmultiout-GV16-NAME = Start Minute
-ST-nlsmultiout-GV17-NAME = Stop Hour (25 - no stop)
+ST-nlsmultiout-GV17-NAME = Stop Hour
 ST-nlsmultiout-GV18-NAME = Stop Minute
 ST-nlsmultiout-GV19-NAME = Days Active
 ST-nlsmultiout-GV20-NAME = Connection State
 CMD-nlsmultiout-UPDATE-NAME = Update Status
 CMD-nlsmultiout-QUERY-NAME = Query
-
+CMD-nlsmultiout-LOOKUP_SCH-NAME = Lookup Schedule
+CMD-nlsmultiout-DEFINE_SCH-NAME = Define Schedule
+CMD-nlsmultiout-CTRL_SCH-NAME = Activte Schedule
 
 ND-yosubout-NAME = YoLink subOutlet
 ND-yosubout-ICON = Switch
@@ -611,13 +613,6 @@ portlist-6 = Outlet 7
 portlist-7 = Outlet 8
 portlist-99 = Unknown
 
-sphtts-0 = Mes1
-sphtts-1 = Mess2
-sphtts-2 = Messa3
-sphtts-3 = Messag4
-sphtts-4 = Message 5
-sphtts-5 = mes77
-
 notdefined-98 = Not used
 notdefined-99 = Unknown
 
@@ -749,3 +744,13 @@ bindays-124 = xxTWTFS
 bindays-125 = SxTWTFS
 bindays-126 = xMTWTFS
 bindays-127 = SMTWTFS
+
+
+sphtts-0 = Mes1
+sphtts-1 = Mess2
+sphtts-2 = Messa3
+sphtts-3 = Messag4
+sphtts-4 = Message 5
+sphtts-5 = mes77
+
+
