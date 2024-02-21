@@ -211,6 +211,7 @@ class YoLinkMQTTDevice(object):
             yolink.check_system_online()
               
     #@measure_time
+    def lastUpdate(yolink):
         logging.debug('{} - Checking last update'.format(yolink.type))
         if 'reportAt' in yolink.dataAPI:
             timestamp = yolink.dataAPI['reportAt']
@@ -227,7 +228,6 @@ class YoLinkMQTTDevice(object):
             return(yolink.dataAPI['time'])
         else:
             return(0)
-        
     #@measure_time
     def check_system_online(yolink):
         return(yolink.yoAccess.online)
