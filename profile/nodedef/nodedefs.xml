@@ -109,6 +109,14 @@
          <st id="GV4" editor="energy" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="startHour" />      
+         <st id="GV16" editor="startMin" />    
+         <st id="GV17" editor="stopHour" />      
+         <st id="GV18" editor="stopMin" />    
+         <st id="GV19" editor="binDays" />   
+
          <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
@@ -141,8 +149,7 @@
                <p id="" editor="sch_indexM" init="GV13" /> 
              </cmd >
             <cmd id="DEFINE_SCH" > 
-               <p id="ODoutport" editor="outport" init="GV12" /> 
-               <p id="ODindex" editor="sch_indexM" init="GV13" /> 
+               <p id="ODindex" editor="sch_indexS" init="GV13" /> 
                <p id="ODactive" editor="sch_active" init="GV14" /> 
                <p id="ODstartH" editor="hour" init="GV15" /> 
                <p id="ODstartM" editor="minute" init="GV16" /> 
