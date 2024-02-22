@@ -42,11 +42,11 @@ ST-nlsoutlet-GV20-NAME = Connection State
 CMD-nlsoutlet-UPDATE-NAME = Update Status
 CMD-nlsoutlet-QUERY-NAME = Query
 CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
-CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay (min)
-CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay (min)
+CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay
+CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay
 CMD-nlsoutlet-DON-NAME = Switch On
 CMD-nlsoutlet-DOF-NAME = Switch Off
-CMD-nlsoutlet-DELAY_CTRL-NAME = Define Delays
+CMD-nlsoutlet-DELAY_CTRL-NAME = Program Delays
 CMDP-Oondelay-NAME = On delay (Min)
 CMDP-Ooffdelay-NAME = Off delay (Min)
 CMD-nlsoutlet-DEFINE_SCH-NAME = Define Schedule
@@ -61,7 +61,6 @@ CMD-nlsoutlet-CTRL_SCH-NAME = Activte Schedule
 CMDP-OCactive-NAME = Schedule Active
 CMDP-OCindex-NAME = Schedule Index
 CMD-nlsoutlet-LOOKUP_SCH-NAME = Lookup Schedule
-
 
 
 ND-yomultiout-NAME = YoLink Outlet
