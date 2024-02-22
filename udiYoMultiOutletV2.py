@@ -416,7 +416,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV12', 'value': 99, 'uom': 25}, #Output
-            {'driver': 'GV13', 'value': 99, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
             {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
@@ -445,7 +445,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.node_ready = False
         self.subUsb = []
         self.subOutlet = []
-
+        self.schedule_setected = 0
         self.n_queue = []
         
         #self.Parameters = Custom(polyglot, 'customparams')
@@ -552,7 +552,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         time.sleep(3)
     
         self.yoMultiOutlet.refreshMultiOutlet()
-        
+        self.yoMultiOutlet.refreshSchedules()
         self.node_ready = True
         logging.debug('Finished  MultiOutlet start')
 
@@ -621,7 +621,36 @@ class udiYoMultiOutlet(udi_interface.Node):
                 else:
                     state = 99
                 self.subUsb[usb].updateUsbNode(state)
+        sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_setected)
+        if sch_info:
+            if 'ch' in sch_info:
+                self.node.setDriver('GV12', sch_info['ch'])
+            self.node.setDriver('GV13', self.schedule_setected)
+            timestr = sch_info['on']
+            if '25:' in timestr:
+                self.node.setDriver('GV15', 98,True, True, 25)
+                self.node.setDriver('GV16', 98,True, True, 25)
+            else:
+                self.node.setDriver('GV15', int(timestr[0:1]),True, True, 19)
+                self.node.setDriver('GV16', int(timestr[3:4]),True, True, 44)
+            timestr = sch_info['off']
+            if '25:' in timestr:
+                self.node.setDriver('GV17', 98,True, True, 25)
+                self.node.setDriver('GV18', 98,True, True, 25)                
+            else:
+                self.node.setDriver('GV17', int(timestr[0:1]),True, True, 19)
+                self.node.setDriver('GV18', int(timestr[3:4]),True, True, 44)
+            self.node.setDriver('GV19',  int(sch_info['week']))
 
+        else:
+            self.node.setDriver('GV12', 99)
+            self.node.setDriver('GV13', self.schedule_setected)
+            self.node.setDriver('GV14', 99)
+            self.node.setDriver('GV15', 99,True, True, 25)
+            self.node.setDriver('GV16', 99,True, True, 25)
+            self.node.setDriver('GV17', 99,True, True, 25)
+            self.node.setDriver('GV18', 99,True, True, 25)            
+            self.node.setDriver('GV19', 0)                    
         if not self.yoMultiOutlet.online:
             logging.error( '{} - not on line'.format(self.nodeName))
             self.node.setDriver('ST', 0, True, True)
@@ -685,46 +714,53 @@ class udiYoMultiOutlet(udi_interface.Node):
 
     def lookup_schedule(self, command):
         logging.info('udiYoMultiOutlet lookup_schedule {}'.format(command))
-        index = int(command.get('value'))
-        self.setDriver('GV13', index)
+        self.schedule_setected = int(command.get('value'))
+        self.yoMultiOutlet.refreshSchedules()
+        '''
+        self.node.setDriver('GV13', index)
         if index >=0 and index <= 9:
             defined_schedules = self.yoMultiOutlet.getSchedules()
             if index in defined_schedules:
-                self.setDriver('GV12', defined_schedules[index]['ch'])
+                self.node.setDriver('GV12', defined_schedules[index]['ch'])
                 if  defined_schedules[index]['isValid']:
-                    self.setDriver('GV14', 1)
+                    self.node.setDriver('GV14', 1)
                 else:
-                    self.setDriver('GV14', 0)
+                    self.node.setDriver('GV14', 0)
                 timestr = defined_schedules[index]['on']
                 if '25:' in timestr:
-                    self.setDriver('GV15', 98,True, True, 25)
-                    self.setDriver('GV16', 98,True, True, 25)
+                    self.node.setDriver('GV15', 98,True, True, 25)
+                    self.node.setDriver('GV16', 98,True, True, 25)
                 else:
-                    self.setDriver('GV15', int(timestr[0:1]),True, True, 19)
-                    self.setDriver('GV16', int(timestr[3:4]),True, True, 44)
+                    self.node.setDriver('GV15', int(timestr[0:1]),True, True, 19)
+                    self.node.setDriver('GV16', int(timestr[3:4]),True, True, 44)
                 timestr = defined_schedules[index]['off']
                 if '25:' in timestr:
-                    self.setDriver('GV17', 98,True, True, 25)
-                    self.setDriver('GV18', 98,True, True, 25)                
+                    self.node.setDriver('GV17', 98,True, True, 25)
+                    self.node.setDriver('GV18', 98,True, True, 25)                
                 else:
-                    self.setDriver('GV17', int(timestr[0:1]),True, True, 19)
-                    self.setDriver('GV18', int(timestr[3:4]),True, True, 44)
-                self.setDriver('GV19',  int(defined_schedules[index]['week']))
-                #self.setDriver('GV19',  self.daylist2bin(defined_schedules[index]['week']))
+                    self.node.setDriver('GV17', int(timestr[0:1]),True, True, 19)
+                    self.node.setDriver('GV18', int(timestr[3:4]),True, True, 44)
+                self.node.setDriver('GV19',  int(defined_schedules[index]['week']))
+                #self.node.setDriver('GV19',  self.daylist2bin(defined_schedules[index]['week']))
             else:
-                self.setDriver('GV14', 2) # schedule  not defined
-                self.setDriver('GV12', 99) # schedule  not defined
-                self.setDriver('GV15', 99,True, True, 25)
-                self.setDriver('GV16', 99,True, True, 25)
-                self.setDriver('GV17', 99,True, True, 25)
-                self.setDriver('GV18', 99,True, True, 25)
-                self.setDriver('GV18', 0, True, True, 25)
-
+                self.node.setDriver('GV14', 2) # schedule  not defined
+                self.node.setDriver('GV12', 99) # schedule  not defined
+                self.node.setDriver('GV15', 99,True, True, 25)
+                self.node.setDriver('GV16', 99,True, True, 25)
+                self.node.setDriver('GV17', 99,True, True, 25)
+                self.node.setDriver('GV18', 99,True, True, 25)
+                self.node.setDriver('GV18', 0, True, True, 25)
+        '''
     def define_schedule(self, command):
         logging.info('udiYoMultiOutlet define_schedule {}'.format(command))      
 
     def control_schedule(self, command):
         logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
+        query = command.get("query")
+        self.schedule_setected = query.get("Cindex.uom25")
+        tmp = query.get("Cactive.uom25")
+        self.activated = (tmp == 1)
+        self.yoMultiOutlet.activateSchedule(self.schedule_setected, self.activated)
 
     def update(self, command = None):
         logging.info('udiYoMultiOutlet Update Executed')
