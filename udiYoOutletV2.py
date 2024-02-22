@@ -288,8 +288,8 @@ class udiYoOutlet(udi_interface.Node):
     def program_delays(self, command):
         logging.info('udiYoMultiOutlet program_delays {}'.format(command))
         query = command.get("query")
-        self.onDelay = query.get("Oondelay.uom44")
-        self.offDelay = query.get("Ooffdelay.uom44")
+        self.onDelay = int(query.get("Oondelay.uom44"))
+        self.offDelay = int(query.get("Ooffdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
         self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
@@ -306,8 +306,8 @@ class udiYoOutlet(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_setected = query.get("Cindex.uom25")
-        tmp = query.get("Cactive.uom25")
+        self.schedule_setected = int(query.get("Cindex.uom25"))
+        tmp = int(query.get("Cactive.uom25"))
         self.activated = (tmp == 1)
         self.yoOutlet.activateSchedule(self.schedule_setected, self.activated)
 
