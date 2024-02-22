@@ -122,6 +122,7 @@
             <cmd id="DOF" /> 
             <cmd id="QUERY" /> 
 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
@@ -131,6 +132,28 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="Oondelay" editor="delaymin" init="GV1" /> 
+               <p id="Ooffdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexM" init="GV13" /> 
+             </cmd >
+            <cmd id="DEFINE_SCH" > 
+               <p id="ODoutport" editor="outport" init="GV12" /> 
+               <p id="ODindex" editor="sch_indexM" init="GV13" /> 
+               <p id="ODactive" editor="sch_active" init="GV14" /> 
+               <p id="ODstartH" editor="hour" init="GV15" /> 
+               <p id="ODstartM" editor="minute" init="GV16" /> 
+               <p id="ODstopH" editor="hour" init="GV17" /> 
+               <p id="ODstopM" editor="minute" init="GV18" />   
+               <p id="ODindays" editor="bindays" init="GV19" />                                          
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="OCindex" editor="sch_indexM" init="GV13" /> 
+               <p id="OCactive" editor="sch_active" init="GV14" />                                     
+             </cmd >            
          </accepts>
       </cmds>
    </nodeDef> 
@@ -155,7 +178,6 @@
       </sts>
       <cmds>
          <sends>
-
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -164,18 +186,18 @@
                <p id="" editor="sch_indexM" init="GV13" /> 
              </cmd >
             <cmd id="DEFINE_SCH" > 
-               <p id="Doutport" editor="outport" init="GV12" /> 
-               <p id="Dindex" editor="sch_indexM" init="GV13" /> 
-               <p id="Dactive" editor="sch_active" init="GV14" /> 
-               <p id="DstartH" editor="hour" init="GV15" /> 
-               <p id="DstartM" editor="minute" init="GV16" /> 
-               <p id="DstopH" editor="hour" init="GV17" /> 
-               <p id="DstopM" editor="minute" init="GV18" />   
-               <p id="Dbindays" editor="bindays" init="GV19" />                                          
+               <p id="MODoutport" editor="outport" init="GV12" /> 
+               <p id="MODindex" editor="sch_indexM" init="GV13" /> 
+               <p id="MODactive" editor="sch_active" init="GV14" /> 
+               <p id="MODstartH" editor="hour" init="GV15" /> 
+               <p id="MODstartM" editor="minute" init="GV16" /> 
+               <p id="MODstopH" editor="hour" init="GV17" /> 
+               <p id="MODstopM" editor="minute" init="GV18" />   
+               <p id="MODindays" editor="bindays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
-               <p id="Cindex" editor="sch_indexM" init="GV13" /> 
-               <p id="Cactive" editor="sch_active" init="GV14" />                                     
+               <p id="MOCindex" editor="sch_indexM" init="GV13" /> 
+               <p id="MOCactive" editor="sch_active" init="GV14" />                                     
              </cmd >
 
          </accepts>
