@@ -835,6 +835,8 @@ class YoLinkMQTTDevice(object):
     
     def activateSchedule(yolink, index, active):
         logging.debug(yolink.type + '- activateSchedule')
+        logging.debug('dataAPI {}'.format(yolink.dataAPI[yolink.dData]))
+        logging.debug('dataAPI-schedules {}'.format( yolink.dataAPI[yolink.dData][yolink.dSchedule]))
         if index in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
             schedule = yolink.dataAPI[yolink.dData][yolink.dSchedule][index]
             schedule['isValid'] = active
