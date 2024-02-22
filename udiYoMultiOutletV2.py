@@ -757,8 +757,8 @@ class udiYoMultiOutlet(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_setected = query.get("Cindex.uom25")
-        tmp = query.get("Cactive.uom25")
+        self.schedule_setected = query.get('MOCindex.uom25')
+        tmp = query.get('MOCactive.uom25')
         self.activated = (tmp == 1)
         self.yoMultiOutlet.activateSchedule(self.schedule_setected, self.activated)
 

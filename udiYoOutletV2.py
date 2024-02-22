@@ -140,8 +140,11 @@ class udiYoOutlet(udi_interface.Node):
                 if tmp != None:
                     power = round(tmp['power']/1000,3)
                     kwatt = round(tmp['watt']/1000,3)
-                    self.node.setDriver('GV3', power, True, True)
-                    self.node.setDriver('GV4', kwatt, True, True)
+                    self.node.setDriver('GV3', power, True, True, 33)
+                    self.node.setDriver('GV4', kwatt, True, True, 33)
+                else:
+                    self.node.setDriver('GV3', 0, True, True, 25)
+                    self.node.setDriver('GV4', 0, True, True, 25)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.node.setDriver('GV1', 0, True, False)
@@ -306,8 +309,8 @@ class udiYoOutlet(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_setected = int(query.get("Cindex.uom25"))
-        tmp = int(query.get("Cactive.uom25"))
+        self.schedule_setected = int(query.get('OCindex.uom25'))
+        tmp = int(query.get('OCactive.uom25'))
         self.activated = (tmp == 1)
         self.yoOutlet.activateSchedule(self.schedule_setected, self.activated)
 
