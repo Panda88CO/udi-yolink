@@ -121,78 +121,76 @@ class udiYoOutlet(udi_interface.Node):
     def updateData(self):
         logging.info('udiYoOutlet updateData')
         if self.node is not None:
-            
-            if  self.yoOutlet.online:
-                self.node.setDriver('ST',1, True, True)
-                state = str(self.yoOutlet.getState()).upper()
-                if state == 'ON':
-                    self.node.setDriver('GV0',1 , True, True)
-                    #if self.last_state != state:
-                    #    self.node.reportCmd('DON')  
-                elif state == 'OFF' :
-                    self.node.setDriver('GV0', 0, True, True)
-                    #if self.last_state != state:
-                    #    self.node.reportCmd('DOF')  
-                else:
-                    self.node.setDriver('GV0', 99, True, True)
-                self.last_state = state                
-                tmp =  self.yoOutlet.getEnergy()
-                if tmp != None:
-                    power = round(tmp['power']/1000,3)
-                    kwatt = round(tmp['watt']/1000,3)
-                    self.node.setDriver('GV3', power, True, True, 33)
-                    self.node.setDriver('GV4', kwatt, True, True, 33)
-                else:
-                    self.node.setDriver('GV3', 0, True, True, 25)
-                    self.node.setDriver('GV4', 0, True, True, 25)
-                #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
-                if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
-                    self.node.setDriver('GV1', 0, True, False)
-                    self.node.setDriver('GV2', 0, True, False)
-                if self.yoOutlet.suspended:
-                    self.node.setDriver('GV20', 1, True, True)
-                else:
-                    self.node.setDriver('GV20', 0)
-
-
+            #if  self.yoOutlet.online:
+            self.node.setDriver('ST',1, True, True)
+            state = str(self.yoOutlet.getState()).upper()
+            if state == 'ON':
+                self.node.setDriver('GV0',1 , True, True)
+                #if self.last_state != state:
+                #    self.node.reportCmd('DON')  
+            elif state == 'OFF' :
+                self.node.setDriver('GV0', 0, True, True)
+                #if self.last_state != state:
+                #    self.node.reportCmd('DOF')  
             else:
                 self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV1', 0, True, True)
-                self.node.setDriver('GV2', 0, True, True)
-                self.node.setDriver('GV3', -1, True, True)
-                self.node.setDriver('GV4', -1, True, True)
-                self.node.setDriver('ST',0, True, True)
-                self.node.setDriver('GV20', 2, True, True)
-            sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_setected)
-            if sch_info:
-                if 'ch' in sch_info:
-                    self.node.setDriver('GV12', sch_info['ch'])
-                self.node.setDriver('GV13', self.schedule_setected)
-                timestr = sch_info['on']
-                if '25:' in timestr:
-                    self.node.setDriver('GV15', 98,True, True, 25)
-                    self.node.setDriver('GV16', 98,True, True, 25)
-                else:
-                    self.node.setDriver('GV15', int(timestr[0:1]),True, True, 19)
-                    self.node.setDriver('GV16', int(timestr[3:4]),True, True, 44)
-                timestr = sch_info['off']
-                if '25:' in timestr:
-                    self.node.setDriver('GV17', 98,True, True, 25)
-                    self.node.setDriver('GV18', 98,True, True, 25)                
-                else:
-                    self.node.setDriver('GV17', int(timestr[0:1]),True, True, 19)
-                    self.node.setDriver('GV18', int(timestr[3:4]),True, True, 44)
-                self.node.setDriver('GV19',  int(sch_info['week']))
-
+            self.last_state = state                
+            tmp =  self.yoOutlet.getEnergy()
+            if tmp != None:
+                power = round(tmp['power']/1000,3)
+                kwatt = round(tmp['watt']/1000,3)
+                self.node.setDriver('GV3', power, True, True, 33)
+                self.node.setDriver('GV4', kwatt, True, True, 33)
             else:
-                self.node.setDriver('GV12', 99)
-                self.node.setDriver('GV13', self.schedule_setected)
-                self.node.setDriver('GV14', 99)
-                self.node.setDriver('GV15', 99,True, True, 25)
-                self.node.setDriver('GV16', 99,True, True, 25)
-                self.node.setDriver('GV17', 99,True, True, 25)
-                self.node.setDriver('GV18', 99,True, True, 25)            
-                self.node.setDriver('GV19', 0)                    
+                self.node.setDriver('GV3', 0, True, True, 25)
+                self.node.setDriver('GV4', 0, True, True, 25)
+            #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
+            if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
+                self.node.setDriver('GV1', 0, True, False)
+                self.node.setDriver('GV2', 0, True, False)
+            if self.yoOutlet.suspended:
+                self.node.setDriver('GV20', 1, True, True)
+            else:
+                self.node.setDriver('GV20', 0)
+        else:
+            self.node.setDriver('GV0', 99, True, True)
+            self.node.setDriver('GV1', 0, True, True)
+            self.node.setDriver('GV2', 0, True, True)
+            self.node.setDriver('GV3', -1, True, True)
+            self.node.setDriver('GV4', -1, True, True)
+            self.node.setDriver('ST',0, True, True)
+            self.node.setDriver('GV20', 2, True, True)
+
+        sch_info = self.yoOutlet.getScheduleInfo(self.schedule_setected)
+        if sch_info:
+            if 'ch' in sch_info:
+                self.node.setDriver('GV12', sch_info['ch'])
+            self.node.setDriver('GV13', self.schedule_setected)
+            timestr = sch_info['on']
+            if '25:' in timestr:
+                self.node.setDriver('GV15', 98,True, True, 25)
+                self.node.setDriver('GV16', 98,True, True, 25)
+            else:
+                self.node.setDriver('GV15', int(timestr[0:1]),True, True, 19)
+                self.node.setDriver('GV16', int(timestr[3:4]),True, True, 44)
+            timestr = sch_info['off']
+            if '25:' in timestr:
+                self.node.setDriver('GV17', 98,True, True, 25)
+                self.node.setDriver('GV18', 98,True, True, 25)                
+            else:
+                self.node.setDriver('GV17', int(timestr[0:1]),True, True, 19)
+                self.node.setDriver('GV18', int(timestr[3:4]),True, True, 44)
+            self.node.setDriver('GV19',  int(sch_info['week']))
+
+        else:
+            self.node.setDriver('GV12', 99)
+            self.node.setDriver('GV13', self.schedule_setected)
+            self.node.setDriver('GV14', 99)
+            self.node.setDriver('GV15', 99,True, True, 25)
+            self.node.setDriver('GV16', 99,True, True, 25)
+            self.node.setDriver('GV17', 99,True, True, 25)
+            self.node.setDriver('GV18', 99,True, True, 25)            
+            self.node.setDriver('GV19', 0)                    
 
 
 
