@@ -528,7 +528,8 @@ class YoLinkMQTTDevice(object):
                         #if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateDelayData(data)       
                     elif  '.getSchedules'  in data['method'] :
-                        logging.debug('callback getSchedules t={} lu={} d={}'.format(data['time'],  int(yolink.getLastUpdate(),data )))
+                        logging.debug('callback getSchedules d={}'.format(data )))
+                        #logging.debug('callback getSchedules t={} lu={} d={}'.format(data['time'],  int(yolink.getLastUpdate(), data )))
                         #if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateScheduleStatus(data)
                     elif  '.setSchedules' in data['method'] :
@@ -1252,7 +1253,9 @@ class YoLinkMQTTDevice(object):
         try:
             yolink.setOnline(data)
             #yolink.setNbrPorts(data)
-            yolink.updateLoraInfo(data)
+            #yolink.updateLoraInfo(data)
+            if yolink.dSchedule not in yolink.dataAPI[yolink.dData]:
+                yolink.dataAPI[yolink.dData][yolink.dSchedule] = {}
             yolink.dataAPI[yolink.dData][yolink.dSchedule] = data[yolink.dData]
             yolink.dataAPI[yolink.lastMessage] = data
         except Exception as e:
