@@ -1120,7 +1120,7 @@ class YoLinkMQTTDevice(object):
             else: #event
 
                 if ".setDelay" in data['event']:
-                    #logging.debug("setDelay detected")
+                    logging.debug("setDelay detected")
                     if data[yolink.dData] != {}: #multiOutlet currently returns {}
                         if type(data[yolink.dData]) is dict:
                             temp = []
@@ -1178,6 +1178,7 @@ class YoLinkMQTTDevice(object):
                             yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState][0:yolink.nbrPorts+yolink.nbrUsb]
                     else: #must be single key - add all keys but contains key = 'state
                         for key in data[yolink.dData]:
+                            logging.debug('Adding data values {} {}'.format(key, data[yolink.dData][key]))
                             yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                 else:
                     for key in data[yolink.dData]:
@@ -1194,8 +1195,8 @@ class YoLinkMQTTDevice(object):
 
 
         except Exception as e:
-            logging.debug('Exception updateStatusData - {}'.format(e))
-            logging.debug('Exception Data - {}'.format(data))
+            logging.error('Exception updateStatusData - {}'.format(e))
+            logging.error('Exception Data - {}'.format(data))
 
     def get_event_from_state(yolink):
         logging.debug('get_event_from_state')
