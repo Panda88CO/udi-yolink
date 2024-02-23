@@ -528,7 +528,7 @@ class YoLinkMQTTDevice(object):
                         #if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateDelayData(data)       
                     elif  '.getSchedules'  in data['method'] :
-                        logging.debug('callback getSchedules d={}'.format(data )))
+                        logging.debug('callback getSchedules d={}'.format(data ))
                         #logging.debug('callback getSchedules t={} lu={} d={}'.format(data['time'],  int(yolink.getLastUpdate(), data )))
                         #if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateScheduleStatus(data)
