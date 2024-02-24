@@ -1250,7 +1250,7 @@ class YoLinkMQTTDevice(object):
             return(None)
 
     def updateScheduleStatus(yolink, data):
-        logging.debug(yolink.type + 'updateScheduleStatus')
+        logging.debug(yolink.type + 'updateScheduleStatus ;{}'.format(data))
         try:
             yolink.setOnline(data)
             #yolink.setNbrPorts(data)
@@ -1259,6 +1259,7 @@ class YoLinkMQTTDevice(object):
                 yolink.dataAPI[yolink.dData][yolink.dSchedule] = {}
             yolink.dataAPI[yolink.dData][yolink.dSchedule] = data[yolink.dData]
             yolink.dataAPI[yolink.lastMessage] = data
+            logging.debug('updateScheduleStatus finish: {}'.format(yolink.dataAPI) )
         except Exception as e:
             logging.debug(' Error schedules not fully supported yet {}'.format(e))
             
