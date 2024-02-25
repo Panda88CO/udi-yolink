@@ -465,8 +465,8 @@ class YoLinkInitPAC(object):
             #yoAccess.messageLock.release()
 
         except Exception as e:
-            pass
             logging.debug('message processing timeout - no new commands') 
+            pass
             #yoAccess.messageLock.release()
 
     #@measure_time
