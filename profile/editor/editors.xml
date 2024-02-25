@@ -215,7 +215,7 @@
    </editor>  
    <editor id="startMin"> 
      <range uom="44" min="0" max="59" />
-     <range uom="25" subset="99" nls="notdefined"/>
+     <range uom="25" subset="98,99" nls="notdefined"/>
    </editor>  
    <editor id="binDays"> 
      <range uom="25" subset="0-127" nls="bindays" />

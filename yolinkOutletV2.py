@@ -72,7 +72,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
     
 
     def getState(yolink):
-        logging.debug(yolink.type+' - getState')
+        logging.debug(yolink.type+' - getState :{}'.format(yolink.dataAPI))
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:       
             attempts = 0
@@ -96,8 +96,9 @@ class YoLinkOutl(YoLinkMQTTDevice):
             dev_state = 'Unknown'
         logging.debug(yolink.type+' - getState - return {} '.format(dev_state))
         return(dev_state)
+    
     def getEnergy(yolink):
-        logging.debug(yolink.type+' - getEnergy')
+        logging.debug(yolink.type+' - getEnergy : {}'.format(yolink.dataAPI))
 
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
