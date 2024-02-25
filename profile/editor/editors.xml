@@ -197,11 +197,14 @@
    <editor id="sch_active"> 
      <range uom="25" subset="0-2,99" nls="sch_active" />
    </editor>   
-   <editor id="sch_indexM"> 
+   <editor id="sch_index"> 
      <range uom="25" subset="0-9,99" nls="sch_index" />
+   </editor>  
+   <editor id="sch_indexM"> 
+     <range uom="25" subset="0-9" nls="sch_index" />
    </editor>   
    <editor id="sch_indexS"> 
-     <range uom="25" subset="0-5,99" nls="sch_index" />
+     <range uom="25" subset="0-5" nls="sch_index" />
    </editor>  
    <editor id="hour"> 
      <range uom="19" min="0" max="24" />
