@@ -76,21 +76,23 @@ class YoLinkOutl(YoLinkMQTTDevice):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:       
             attempts = 0
+            logging.debug(yolink.type+' - getState online')
             while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
                 time.sleep(1)
                 attempts = attempts + 1
+            logging.debug(yolink.type+' - getState - attempts {}'.format(attempts))    
             if attempts <= 5 and yolink.dataAPI[yolink.dData][yolink.dState]:
                 if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
-                    return('ON')
+                    dev_state = 'ON'
                 elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
-                    return('OFF')
+                    dev_state = 'OFF'
                 else:
-                    return('Unkown')
+                    dev_state = 'Unkown'
             else:
-                return('Unkown')
-        else:
-            return('Unkown')
-
+                dev_state = 'Unkown'            
+            dev_state = 'Unknown'
+        logging.debug(yolink.type+' - getState - return {} '.format(dev_state))
+        return(dev_state)
     def getEnergy(yolink):
         logging.debug(yolink.type+' - getEnergy')
 
