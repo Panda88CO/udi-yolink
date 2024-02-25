@@ -102,7 +102,9 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.initNode()
         time.sleep(2)
         self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
+        self.yoOutlet.refreshSchedules()
         self.node_ready = True
+        
     
     def stop (self):
         logging.info('Stop udiYoOutlet')
@@ -112,8 +114,8 @@ class udiYoOutlet(udi_interface.Node):
         #    self.poly.delNode(self.node.address)
 
     def checkDataUpdate(self):
-        if self.yoOutlet.data_updated():
-            self.updateData()
+        #if self.yoOutlet.data_updated():
+        self.updateData()
         #if time.time() >= self.timer_expires - self.timer_update:
         #    self.node.setDriver('GV1', 0, True, False)
         #    self.node.setDriver('GV2', 0, True, False)
