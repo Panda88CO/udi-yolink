@@ -1238,7 +1238,7 @@ class YoLinkMQTTDevice(object):
             return(False)
 
     def getScheduleInfo(yolink, index):
-        logging.debug(yolink.type + 'getScheduleInfo {} -- {}'.format( index, yolink.dataAPI[yolink.dData][yolink.dSchedule]))       
+        logging.debug(yolink.type + ' getScheduleInfo {} -- {}'.format( index, yolink.dataAPI))       
         try: 
             if  index in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
                 return(yolink.dataAPI[yolink.dData][yolink.dSchedule][index])
@@ -1250,7 +1250,7 @@ class YoLinkMQTTDevice(object):
             return(None)
 
     def updateScheduleStatus(yolink, data):
-        logging.debug(yolink.type + 'updateScheduleStatus ;{}'.format(data))
+        logging.debug(yolink.type + ' updateScheduleStatus ;{}'.format(data))
         try:
             yolink.setOnline(data)
             #yolink.setNbrPorts(data)

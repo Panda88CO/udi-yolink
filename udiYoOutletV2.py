@@ -186,7 +186,7 @@ class udiYoOutlet(udi_interface.Node):
             self.node.setDriver('GV19',  int(sch_info['week']))
 
         else:
-            self.node.setDriver('GV12', 99)
+            #self.node.setDriver('GV12', 99)
             self.node.setDriver('GV13', self.schedule_setected)
             self.node.setDriver('GV14', 99)
             self.node.setDriver('GV15', 99,True, True, 25)
