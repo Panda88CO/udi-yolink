@@ -169,6 +169,10 @@ class udiYoOutlet(udi_interface.Node):
             #if 'ch' in sch_info:
             #    self.node.setDriver('GV12', sch_info['ch'])
             self.node.setDriver('GV13', self.schedule_setected)
+            if self.yoOutlet.isScheduleActive(self.schedule_setected):
+                self.node.setDriver('GV14', 1)
+            else:
+                self.node.setDriver('GV14', 0)
             timestr = sch_info['on']
             if '25:' in timestr:
                 self.node.setDriver('GV15', 98,True, True, 25)

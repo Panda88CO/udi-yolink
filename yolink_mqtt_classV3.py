@@ -1261,15 +1261,29 @@ class YoLinkMQTTDevice(object):
             #yolink.updateLoraInfo(data)
             if yolink.dSchedule not in yolink.dataAPI[yolink.dData]:
                 yolink.dataAPI[yolink.dData][yolink.dSchedule] = {}
-            logging.debug('updateScheduleStatus 1: {}'.format(yolink.dataAPI) )
+            #logging.debug('updateScheduleStatus 1: {}'.format(yolink.dataAPI) )
             yolink.dataAPI[yolink.dData][yolink.dSchedule] = data[yolink.dData]
-            logging.debug('updateScheduleStatus 2: {}'.format(yolink.dataAPI) )
+            #logging.debug('updateScheduleStatus 2: {}'.format(yolink.dataAPI) )
             #yolink.dataAPI[yolink.lastMessage] = data
-            logging.debug('updateScheduleStatus finish: {}'.format(yolink.dataAPI) )
+            #logging.debug('updateScheduleStatus finish: {}'.format(yolink.dataAPI) )
         except Exception as e:
             logging.debug(' Error schedules not fully supported yet {}'.format(e))
             
-
+    def isScheduleActive(yolink, index):
+        logging.debug(yolink.type + ' scheduleActive {} '.format( index))       
+        indexS = str(index)
+        try: 
+            #logging.debug( 'getScheduleInfo 1 : {} '.format(yolink.dataAPI[yolink.dData]))
+            #logging.debug( 'getScheduleInfo 2 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule]))
+            #logging.debug( 'getScheduleInfo 3 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]))
+            if  indexS in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
+                return(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]['isValid'])
+            else:
+                return(None)
+    
+        except Exception as e:
+            logging.debug('Schedules not fully supported yet {}'.format(e))
+            return(None)
     '''
 
 

@@ -626,6 +626,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             if 'ch' in sch_info:
                 self.node.setDriver('GV12', sch_info['ch'])
             self.node.setDriver('GV13', self.schedule_setected)
+            #GV14 missing
             timestr = sch_info['on']
             if '25:' in timestr:
                 self.node.setDriver('GV15', 98,True, True, 25)
