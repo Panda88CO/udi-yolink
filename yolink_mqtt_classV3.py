@@ -1260,7 +1260,7 @@ class YoLinkMQTTDevice(object):
             logging.debug('updateScheduleStatus 1: {}'.format(yolink.dataAPI) )
             yolink.dataAPI[yolink.dData][yolink.dSchedule] = data[yolink.dData]
             logging.debug('updateScheduleStatus 2: {}'.format(yolink.dataAPI) )
-            yolink.dataAPI[yolink.lastMessage] = data
+            #yolink.dataAPI[yolink.lastMessage] = data
             logging.debug('updateScheduleStatus finish: {}'.format(yolink.dataAPI) )
         except Exception as e:
             logging.debug(' Error schedules not fully supported yet {}'.format(e))
