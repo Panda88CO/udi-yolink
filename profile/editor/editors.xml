@@ -209,11 +209,11 @@
    <editor id="sch_indexS"> 
      <range uom="25" subset="0-5" nls="sch_index" />
    </editor>  
-   <editor id="hour"> 
+   <editor id="startHour"> 
      <range uom="19" min="0" max="24" />
      <range uom="25" subset="98,99" nls="notdefined"/>
    </editor>  
-   <editor id="minute"> 
+   <editor id="startMin"> 
      <range uom="44" min="0" max="59" />
      <range uom="25" subset="99" nls="notdefined"/>
    </editor>  
