@@ -1238,7 +1238,7 @@ class YoLinkMQTTDevice(object):
             return(False)
 
     def getScheduleInfo(yolink, index):
-        logging.debug(yolink.type + 'getScheduleInfo {}'.format(index))       
+        logging.debug(yolink.type + 'getScheduleInfo {} -- {}'.format( index, yolink.dataAPI[yolink.dData][yolink.dSchedule]))       
         try: 
             if  index in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
                 return(yolink.dataAPI[yolink.dData][yolink.dSchedule][index])
