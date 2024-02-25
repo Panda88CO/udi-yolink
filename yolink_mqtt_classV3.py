@@ -1250,7 +1250,7 @@ class YoLinkMQTTDevice(object):
                 return(None)
     
         except Exception as e:
-            logging.debug('Schedules not fully supported yet {}'.format(e))
+            logging.debug('No schedules found {}'.format(e))
             return(None)
 
     def updateScheduleStatus(yolink, data):
@@ -1273,9 +1273,9 @@ class YoLinkMQTTDevice(object):
         logging.debug(yolink.type + ' scheduleActive {} '.format( index))       
         indexS = str(index)
         try: 
-            #logging.debug( 'getScheduleInfo 1 : {} '.format(yolink.dataAPI[yolink.dData]))
-            #logging.debug( 'getScheduleInfo 2 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule]))
-            #logging.debug( 'getScheduleInfo 3 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]))
+            logging.debug( 'getScheduleInfo 1 : {} '.format(yolink.dataAPI[yolink.dData]))
+            logging.debug( 'getScheduleInfo 2 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule]))
+            logging.debug( 'getScheduleInfo 3 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]))
             if  indexS in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
                 return(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]['isValid'])
             else:
