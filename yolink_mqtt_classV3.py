@@ -835,17 +835,21 @@ class YoLinkMQTTDevice(object):
         return(temp)
     
     def activateSchedule(yolink, index, active):
-        logging.debug(yolink.type + '- activateSchedule')
+        logging.debug(yolink.type + '- activateSchedule {} {} '.format(index, active))
         logging.debug('dataAPI {}'.format(yolink.dataAPI[yolink.dData]))
         logging.debug('dataAPI-schedules {}'.format( yolink.dataAPI[yolink.dData][yolink.dSchedule]))
-        if index in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
-            schedule = yolink.dataAPI[yolink.dData][yolink.dSchedule][index]
+        indexS = str(index)
+        if indexS in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
+            schedule = yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]
             schedule['isValid'] = active
-            schedule[index] = index
+            schedule[indexS] = index
             yolink.setSchedule( index, schedule)
+   
+
    
     def setSchedule(yolink, index, params):
         logging.debug(yolink.type + '- setSchedule')
+        indexS = str(index)
         if yolink.dSchedule in yolink.dataAPI[yolink.dData]:
             data['params']['sches'] = yolink.dataAPI[yolink.dData][yolink.dSchedule]
         else:
@@ -866,7 +870,7 @@ class YoLinkMQTTDevice(object):
 
         data['params']['sches'] = yolink.dataAPI[yolink.dData][yolink.dSchedule]
         logging.debug('setSchedule1 : {}'.format(data))
-        data['params']['sches'][index] = params
+        data['params']['sches'][indexS] = params
         logging.debug('setSchedule1 : {}'.format(data))
         '''
         if 'ch' in params: # multiOutlet
