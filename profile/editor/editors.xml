@@ -197,7 +197,7 @@
    <editor id="sch_active"> 
      <range uom="25" subset="0-2,99" nls="sch_active" />
    </editor>   
-   <editor id="sch_active"> 
+   <editor id="sch_activeI"> 
      <range uom="25" subset="0-1" nls="sch_active" />
    </editor>   
    <editor id="sch_index"> 

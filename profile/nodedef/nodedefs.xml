@@ -150,11 +150,11 @@
              </cmd >
             <cmd id="DEFINE_SCH" > 
                <p id="ODindex" editor="sch_indexS" init="GV13" /> 
-               <p id="ODactive" editor="sch_active" init="GV14" /> 
-               <p id="ODstartH" editor="hour" init="GV15" /> 
-               <p id="ODstartM" editor="minute" init="GV16" /> 
-               <p id="ODstopH" editor="hour" init="GV17" /> 
-               <p id="ODstopM" editor="minute" init="GV18" />   
+               <p id="ODactive" editor="sch_activeI" init="GV14" /> 
+               <p id="ODstartH" editor="startHour" init="GV15" /> 
+               <p id="ODstartM" editor="startMin" init="GV16" /> 
+               <p id="ODstopH" editor="startHour" init="GV17" /> 
+               <p id="ODstopM" editor="startMin" init="GV18" />   
                <p id="ODindays" editor="bindays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -196,10 +196,10 @@
                <p id="MODoutport" editor="outport" init="GV12" /> 
                <p id="MODindex" editor="sch_indexM" init="GV13" /> 
                <p id="MODactive" editor="sch_active" init="GV14" /> 
-               <p id="MODstartH" editor="hour" init="GV15" /> 
-               <p id="MODstartM" editor="minute" init="GV16" /> 
-               <p id="MODstopH" editor="hour" init="GV17" /> 
-               <p id="MODstopM" editor="minute" init="GV18" />   
+               <p id="MODstartH" editor="startHour" init="GV15" /> 
+               <p id="MODstartM" editor="startMin" init="GV16" /> 
+               <p id="MODstopH" editor="startHour" init="GV17" /> 
+               <p id="MODstopM" editor="startMin" init="GV18" />   
                <p id="MODindays" editor="bindays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
