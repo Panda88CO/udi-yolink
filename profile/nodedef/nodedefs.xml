@@ -155,7 +155,7 @@
                <p id="ODstartM" editor="startMin" init="GV16" /> 
                <p id="ODstopH" editor="startHour" init="GV17" /> 
                <p id="ODstopM" editor="startMin" init="GV18" />   
-               <p id="ODindays" editor="bindays" init="GV19" />                                          
+               <p id="ODindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
                <p id="OCindex" editor="sch_indexM" init="GV13" /> 
@@ -195,16 +195,16 @@
             <cmd id="DEFINE_SCH" > 
                <p id="MODoutport" editor="outport" init="GV12" /> 
                <p id="MODindex" editor="sch_indexM" init="GV13" /> 
-               <p id="MODactive" editor="sch_active" init="GV14" /> 
+               <p id="MODactive" editor="sch_activeI" init="GV14" /> 
                <p id="MODstartH" editor="startHour" init="GV15" /> 
                <p id="MODstartM" editor="startMin" init="GV16" /> 
                <p id="MODstopH" editor="startHour" init="GV17" /> 
                <p id="MODstopM" editor="startMin" init="GV18" />   
-               <p id="MODindays" editor="bindays" init="GV19" />                                          
+               <p id="MODindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
                <p id="MOCindex" editor="sch_indexM" init="GV13" /> 
-               <p id="MOCactive" editor="sch_active" init="GV14" />                                     
+               <p id="MOCactive" editor="sch_activeI" init="GV14" />                                     
              </cmd >
 
          </accepts>
