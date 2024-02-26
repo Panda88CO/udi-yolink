@@ -846,6 +846,14 @@ class YoLinkMQTTDevice(object):
    
     def setSchedule(yolink, index, params):
         logging.debug(yolink.type + '- setSchedule')
+        if yolink.dSchedule in yolink.dataAPI[yolink.dData]:
+            data['params']['sches'] = yolink.dataAPI[yolink.dData][yolink.dSchedule]
+        else:
+            yolink.getSchedules()
+            while yolink.dSchedule not in yolink.dataAPI[yolink.dData]:
+                time.sleep(1)
+                logging.info('Waiting for schedules to be updated')
+
         data = {}        
         #index= 5
         #data['time'] = str(int((time.time_ns()//1e6)))
@@ -854,7 +862,12 @@ class YoLinkMQTTDevice(object):
         data["token"]= yolink.deviceInfo['token']
         data['params'] = {}
         data['params']['sches'] ={}
+        #existing_schedules = yolink.dataAPI[yolink.dData][yolink.dSchedule]
+
+        data['params']['sches'] = yolink.dataAPI[yolink.dData][yolink.dSchedule]
+        logging.debug('setSchedule1 : {}'.format(data))
         data['params']['sches'][index] = params
+        logging.debug('setSchedule1 : {}'.format(data))
         '''
         if 'ch' in params: # multiOutlet
             index = index + params['ch']
