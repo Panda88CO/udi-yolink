@@ -119,9 +119,9 @@ class udiYoOutlet(udi_interface.Node):
         #if time.time() >= self.timer_expires - self.timer_update:
         #    self.node.setDriver('GV1', 0, True, False)
         #    self.node.setDriver('GV2', 0, True, False)
-
+        self.schedule_selected
     def updateData(self):
-        logging.info('udiYoOutlet updateData')
+        logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
         if self.node is not None:
             #if  self.yoOutlet.online:
             self.node.setDriver('ST',1, True, True)
@@ -317,7 +317,7 @@ class udiYoOutlet(udi_interface.Node):
 
     def lookup_schedule(self, command):
         logging.info('udiYoMultiOutlet lookup_schedule {}'.format(command))
-        self.schedule_seletected = int(command.get('value'))
+        self.schedule_selected = int(command.get('value'))
         self.yoOutlet.refreshSchedules()
 
     def define_schedule(self, command):
