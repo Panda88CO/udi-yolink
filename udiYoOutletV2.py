@@ -182,15 +182,15 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV16', 98,True, True, 25)
             else:
                 timelist =  timestr.split(':')
-                hour = timelist[0]
-                minute = timelist[1]
+                hour = int(timelist[0])
+                minute = int(timelist[1])
                 self.node.setDriver('GV15', int(hour),True, True, 19)
                 self.node.setDriver('GV16', int(minute),True, True, 44)
             timestr = sch_info['off']
             logging.debug('timestr : {}'.format(timestr))
             if '25:0' in timestr:
                 self.node.setDriver('GV17', 98,True, True, 25)
-                self.node.setDriver('GV18', 98,True, True, 25)                
+                self.node.setDriver('GV18', 98,True, True, 25)
             else:
                 timelist =  timestr.split(':')
                 hour = timelist[0]
