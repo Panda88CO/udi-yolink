@@ -77,22 +77,29 @@ class YoLinkOutl(YoLinkMQTTDevice):
         if yolink.online:       
             attempts = 0
             logging.debug(yolink.type+' - getState online')
-            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
-                time.sleep(1)
-                attempts = attempts + 1
-            logging.debug(yolink.type+' - getState - attempts {}'.format(attempts))    
-            if attempts <= 5 and yolink.dataAPI[yolink.dData][yolink.dState]:
-                if 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                    if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
+            #while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
+            #    time.sleep(1)
+            #    attempts = attempts + 1
+            logging.debug(yolink.type+' - getState data {}'.format(yolink.dataAPI[yolink.dData]))    
+            
+            if yolink.dState in yolink.dataAPI[yolink.dData]:
+                if yolink.dataAPI[yolink.dData][yolink.dState] is dict:
+                    if 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                        if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
+                            dev_state = 'ON'
+                        elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
+                            dev_state = 'OFF'
+                    else:
+                        dev_state = 'Unknown'
+                else:
+                    if  yolink.dataAPI[yolink.dData][yolink.dState] == 'open':
                         dev_state = 'ON'
-                    elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
+                    elif yolink.dataAPI[yolink.dData][yolink.dState] == 'closed':
                         dev_state = 'OFF'
                     else:
-                        dev_state = 'Unkown'
-                else:
-                    dev_state = 'Unkown'   
+                        dev_state = 'Unknown'
             else:
-                dev_state = 'Unkown'            
+                dev_state = 'Unknown'
             dev_state = 'Unknown'
         logging.debug(yolink.type+' - getState - return {} '.format(dev_state))
         return(dev_state)

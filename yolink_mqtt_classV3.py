@@ -1244,10 +1244,13 @@ class YoLinkMQTTDevice(object):
             logging.debug( 'getScheduleInfo 1 : {} '.format(yolink.dataAPI[yolink.dData]))
             logging.debug( 'getScheduleInfo 2 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule]))
             logging.debug( 'getScheduleInfo 3 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]))
+            
             if  indexS in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
-                return(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS])
+                sch = yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]
             else:
-                return(None)
+                sch = None
+            logging.debug(' retun {}'.format(sch) )
+            return(sch)
     
         except Exception as e:
             logging.debug('No schedules found {}'.format(e))
@@ -1270,16 +1273,18 @@ class YoLinkMQTTDevice(object):
             logging.debug(' Error schedules not fully supported yet {}'.format(e))
             
     def isScheduleActive(yolink, index):
-        logging.debug(yolink.type + ' scheduleActive {} '.format( index))       
+        
+        logging.debug(yolink.type + ' scheduleActive {} '.format( index))   
+        active = None
         indexS = str(index)
         try: 
-            logging.debug( 'getScheduleInfo 1 : {} '.format(yolink.dataAPI[yolink.dData]))
-            logging.debug( 'getScheduleInfo 2 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule]))
-            logging.debug( 'getScheduleInfo 3 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]))
+            #logging.debug( 'getScheduleInfo 1 : {} '.format(yolink.dataAPI[yolink.dData]))
+            #logging.debug( 'getScheduleInfo 2 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule]))
+            #logging.debug( 'getScheduleInfo 3 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]))
             if  indexS in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
-                return(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]['isValid'])
-            else:
-                return(None)
+                active = yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]['isValid']
+            logging.debug( 'getScheduleInfo {}'.format(active))
+            return(active)
     
         except Exception as e:
             logging.debug('Schedules not fully supported yet {}'.format(e))
