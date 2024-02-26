@@ -181,9 +181,9 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV15', 98,True, True, 25)
                 self.node.setDriver('GV16', 98,True, True, 25)
             else:
-                colon =  timestr.find(':')
-                hour = timestr[:colon-1]
-                minute = timestr[colon+1:]
+                timelist =  timestr.split(':')
+                hour = timelist[0]
+                minute = timelist[1]
                 self.node.setDriver('GV15', int(hour),True, True, 19)
                 self.node.setDriver('GV16', int(minute),True, True, 44)
             timestr = sch_info['off']
@@ -192,9 +192,9 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV17', 98,True, True, 25)
                 self.node.setDriver('GV18', 98,True, True, 25)                
             else:
-                colon =  timestr.find(':')
-                hour = timestr[:colon-1]
-                minute = timestr[colon+1:]                
+                timelist =  timestr.split(':')
+                hour = timelist[0]
+                minute = timelist[1]               
                 self.node.setDriver('GV17', int(hour),True, True, 19)
                 self.node.setDriver('GV18', int(minute),True, True, 44)
             self.node.setDriver('GV19',  int(sch_info['week']))
