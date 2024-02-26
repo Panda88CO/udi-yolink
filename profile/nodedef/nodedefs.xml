@@ -158,7 +158,7 @@
                <p id="ODindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
-               <p id="OCindex" editor="sch_indexM" init="GV13" /> 
+               <p id="OCindex" editor="sch_indexS" init="GV13" /> 
                <p id="OCactive" editor="sch_activeI" init="GV14" />                                     
              </cmd >            
          </accepts>
