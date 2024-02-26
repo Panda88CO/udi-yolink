@@ -209,7 +209,7 @@ class udiYoOutlet(udi_interface.Node):
             self.node.setDriver('GV15', 99,True, True, 25)
             self.node.setDriver('GV16', 99,True, True, 25)
             self.node.setDriver('GV17', 99,True, True, 25)
-            self.node.setDriver('GV18', 99,True, True, 25)     
+            self.node.setDriver('GV18', 99,True, True, 25)
             self.node.setDriver('GV19', 0)       
                
 
