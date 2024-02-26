@@ -204,10 +204,10 @@
      <range uom="25" subset="0-9,99" nls="sch_index" />
    </editor>  
    <editor id="sch_indexM"> 
-     <range uom="25" subset="0-9" nls="sch_index" />
+     <range uom="25" subset="0-9" nls="sch_indexM" />
    </editor>   
    <editor id="sch_indexS"> 
-     <range uom="25" subset="0-5" nls="sch_index" />
+     <range uom="25" subset="0-5" nls="sch_indexS" />
    </editor>  
    <editor id="startHour"> 
      <range uom="19" min="0" max="24" />

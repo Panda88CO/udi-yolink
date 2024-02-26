@@ -68,7 +68,7 @@ class udiYoOutlet(udi_interface.Node):
         self.timer_expires = 0
         self.onDelay = 0
         self.offDelay = 0
-        self.schedule_setected = 0
+        self.schedule_selected = 0
 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -162,7 +162,7 @@ class udiYoOutlet(udi_interface.Node):
             self.node.setDriver('GV4', -1, True, True)
             self.node.setDriver('ST',0, True, True)
             self.node.setDriver('GV20', 2, True, True)
-            self.node.setDriver('GV13', self.schedule_setected)
+            self.node.setDriver('GV13', self.schedule_selected)
             self.node.setDriver('GV14', 99)
             self.node.setDriver('GV15', 99,True, True, 25)
             self.node.setDriver('GV16', 99,True, True, 25)
@@ -170,13 +170,13 @@ class udiYoOutlet(udi_interface.Node):
             self.node.setDriver('GV18', 99,True, True, 25)            
             self.node.setDriver('GV19', 0)       
 
-        sch_info = self.yoOutlet.getScheduleInfo(self.schedule_setected)
+        sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
         logging.debug('sch_info {}'.format(sch_info))
         if sch_info:
             #if 'ch' in sch_info:
             #    self.node.setDriver('GV12', sch_info['ch'])
-            self.node.setDriver('GV13', self.schedule_setected)
-            if self.yoOutlet.isScheduleActive(self.schedule_setected):
+            self.node.setDriver('GV13', self.schedule_selected)
+            if self.yoOutlet.isScheduleActive(self.schedule_selected):
                 self.node.setDriver('GV14', 1)
             else:
                 self.node.setDriver('GV14', 0)
@@ -203,6 +203,14 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV17', int(hour),True, True, 19)
                 self.node.setDriver('GV18', int(minute),True, True, 44)
             self.node.setDriver('GV19',  int(sch_info['week']))
+        else:
+            self.node.setDriver('GV13', self.schedule_selected)
+            self.node.setDriver('GV14', 99)
+            self.node.setDriver('GV15', 99,True, True, 25)
+            self.node.setDriver('GV16', 99,True, True, 25)
+            self.node.setDriver('GV17', 99,True, True, 25)
+            self.node.setDriver('GV18', 99,True, True, 25)     
+            self.node.setDriver('GV19', 0)       
                
 
     def updateStatus(self, data):
@@ -309,7 +317,7 @@ class udiYoOutlet(udi_interface.Node):
 
     def lookup_schedule(self, command):
         logging.info('udiYoMultiOutlet lookup_schedule {}'.format(command))
-        self.schedule_setected = int(command.get('value'))
+        self.schedule_seletected = int(command.get('value'))
         self.yoOutlet.refreshSchedules()
 
     def define_schedule(self, command):
@@ -318,10 +326,10 @@ class udiYoOutlet(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_setected = int(query.get('OCindex.uom25'))
+        self.schedule_selected = int(query.get('OCindex.uom25'))
         tmp = int(query.get('OCactive.uom25'))
         self.activated = (tmp == 1)
-        self.yoOutlet.activateSchedule(self.schedule_setected, self.activated)
+        self.yoOutlet.activateSchedule(self.schedule_selected, self.activated)
 
 
 
