@@ -177,23 +177,24 @@ class udiYoOutlet(udi_interface.Node):
                 self.node.setDriver('GV14', 0)
             timestr = sch_info['on']
             logging.debug('timestr : {}'.format(timestr))
-            if '25:' in timestr:
+            if '25:0' in timestr:
                 self.node.setDriver('GV15', 98,True, True, 25)
                 self.node.setDriver('GV16', 98,True, True, 25)
             else:
                 colon =  timestr.find(':')
-                hour = timestr[0:colon-1]
-                minute = timestr[colon+1:len(timestr)]
+                hour = timestr[:colon-1]
+                minute = timestr[colon+1:]
                 self.node.setDriver('GV15', int(hour),True, True, 19)
                 self.node.setDriver('GV16', int(minute),True, True, 44)
             timestr = sch_info['off']
-            if '25:' in timestr:
+            logging.debug('timestr : {}'.format(timestr))
+            if '25:0' in timestr:
                 self.node.setDriver('GV17', 98,True, True, 25)
                 self.node.setDriver('GV18', 98,True, True, 25)                
             else:
                 colon =  timestr.find(':')
-                hour = timestr[0:colon-1]
-                minute = timestr[colon+1:len(timestr)]                
+                hour = timestr[:colon-1]
+                minute = timestr[colon+1:]                
                 self.node.setDriver('GV17', int(hour),True, True, 19)
                 self.node.setDriver('GV18', int(minute),True, True, 44)
             self.node.setDriver('GV19',  int(sch_info['week']))
