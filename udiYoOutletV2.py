@@ -323,8 +323,8 @@ class udiYoOutlet(udi_interface.Node):
     def define_schedule(self, command):
         logging.info('udiYoMultiOutlet define_schedule {}'.format(command))
         query = command.get("query")
-        self.schedule_selected = int(query.get('OCindex.uom25'))
-        tmp = int(query.get('OCactive.uom25'))
+        self.schedule_selected = int(query.get('ODindex.uom25'))
+        tmp = int(query.get('ODactive.uom25'))
         self.activated = (tmp == 1)
         if 'ODstartH.uom19' in query:
             StartH = int(query.get('ODstartH.uom19'))
@@ -339,7 +339,7 @@ class udiYoOutlet(udi_interface.Node):
             startH = 25
             StartM = 0      
 
-        binDays = int(query.get('ODindays.uom25'))
+        binDays = int(query.get('ODbindays.uom25'))
 
         params = {}
         params['index'] = str(self.schedule_selected )
