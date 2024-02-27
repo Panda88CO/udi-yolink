@@ -139,7 +139,7 @@ class YoLinkSetup (udi_interface.Node):
         #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
         #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
         #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController']
-        self.supportedYoTypes = ['Outlet', 'MultiOutlet' ]
+        self.supportedYoTypes = ['Outlet', 'MultiOutlet', 'Switch', ]
         
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
