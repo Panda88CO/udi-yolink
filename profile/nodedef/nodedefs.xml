@@ -155,7 +155,7 @@
                <p id="ODstartM" editor="startMin" init="GV16" /> 
                <p id="ODstopH" editor="startHour" init="GV17" /> 
                <p id="ODstopM" editor="startMin" init="GV18" />   
-               <p id="ODindays" editor="binDays" init="GV19" />                                          
+               <p id="ODbindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
                <p id="OCindex" editor="sch_indexS" init="GV13" /> 
