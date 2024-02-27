@@ -22,6 +22,13 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="startHour" />      
+         <st id="GV16" editor="startMin" />    
+         <st id="GV17" editor="stopHour" />      
+         <st id="GV18" editor="stopMin" />    
+         <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
       </sts>
@@ -50,6 +57,27 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="Sondelay" editor="delaymin" init="GV1" /> 
+               <p id="Soffdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexS" init="GV13" /> 
+             </cmd >
+            <cmd id="DEFINE_SCH" > 
+               <p id="SDindex" editor="sch_indexS" init="GV13" /> 
+               <p id="SDactive" editor="sch_activeI" init="GV14" /> 
+               <p id="SDstartH" editor="startHour" init="GV15" /> 
+               <p id="SDstartM" editor="startMin" init="GV16" /> 
+               <p id="SDstopH" editor="startHour" init="GV17" /> 
+               <p id="SDstopM" editor="startMin" init="GV18" />   
+               <p id="SDbindays" editor="binDays" init="GV19" />                                          
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="SCindex" editor="sch_indexS" init="GV13" /> 
+               <p id="SCactive" editor="sch_activeI" init="GV14" />                                     
+             </cmd >                
          </accepts>
       </cmds>
    </nodeDef> 
@@ -108,7 +136,7 @@
          <st id="GV3" editor="watt" />
          <st id="GV4" editor="energy" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="startHour" />      
@@ -116,7 +144,7 @@
          <st id="GV17" editor="stopHour" />      
          <st id="GV18" editor="stopMin" />    
          <st id="GV19" editor="binDays" />   
-
+         <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
@@ -146,7 +174,7 @@
              </cmd >   
 
             <cmd id="LOOKUP_SCH" > 
-               <p id="" editor="sch_indexM" init="GV13" /> 
+               <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINE_SCH" > 
                <p id="ODindex" editor="sch_indexS" init="GV13" /> 
@@ -242,6 +270,10 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="Mondelay" editor="delaymin" init="GV1" /> 
+               <p id="Moffdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >                
          </accepts>
       </cmds>
    </nodeDef> 

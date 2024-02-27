@@ -306,7 +306,7 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.refreshDevice()
 
     def program_delays(self, command):
-        logging.info('udiYoMultiOutlet program_delays {}'.format(command))
+        logging.info('udiYoOutlet program_delays {}'.format(command))
         query = command.get("query")
         self.onDelay = int(query.get("Oondelay.uom44"))
         self.offDelay = int(query.get("Ooffdelay.uom44"))
@@ -316,12 +316,12 @@ class udiYoOutlet(udi_interface.Node):
 
 
     def lookup_schedule(self, command):
-        logging.info('udiYoMultiOutlet lookup_schedule {}'.format(command))
+        logging.info('udiYoOutlet lookup_schedule {}'.format(command))
         self.schedule_selected = int(command.get('value'))
         self.yoOutlet.refreshSchedules()
 
     def define_schedule(self, command):
-        logging.info('udiYoMultiOutlet define_schedule {}'.format(command))
+        logging.info('udiYoOutlet define_schedule {}'.format(command))
         query = command.get("query")
         self.schedule_selected = int(query.get('ODindex.uom25'))
         tmp = int(query.get('ODactive.uom25'))
@@ -350,7 +350,7 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.setSchedule(self.schedule_selected, params)
 
     def control_schedule(self, command):
-        logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
+        logging.info('udiYoOutlet control_schedule {}'.format(command))       
         query = command.get("query")
         self.schedule_selected = int(query.get('OCindex.uom25'))
         tmp = int(query.get('OCactive.uom25'))

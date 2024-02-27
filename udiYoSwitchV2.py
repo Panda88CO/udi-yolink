@@ -27,10 +27,16 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            #{'driver': 'GV3', 'value': 0, 'uom': 30},
-            #{'driver': 'GV4', 'value': 0, 'uom': 33},
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+
+            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
+            {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
+            {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
+            {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
+            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
+            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
+            {'driver': 'GV20', 'value': 99, 'uom': 25},                          
             {'driver': 'GV20', 'value': 99, 'uom': 25},
             ]
     '''
@@ -243,23 +249,78 @@ class udiYoSwitch(udi_interface.Node):
         #self.yoSwitch.setOffDelay(delay)
         #self.node.setDriver('GV2', delay*60, True, True)
 
+    def program_delays(self, command):
+        logging.info('udiYoOutlet program_delays {}'.format(command))
+        query = command.get("query")
+        self.onDelay = int(query.get("Sondelay.uom44"))
+        self.offDelay = int(query.get("Soffdelay.uom44"))
+        self.node.setDriver('GV1', self.onDelay * 60, True, True)
+        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+        self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
     def update(self, command = None):
         logging.info('udiYoSwitch Update Status')
         self.yoSwitch.refreshDevice()
-        #self.yoSwitch.refreshSchedules()     
+        #self.yoSwitch.refreshSchedules()
+        
+        
+    def lookup_schedule(self, command):
+        logging.info('udiYoSwitch lookup_schedule {}'.format(command))
+        self.schedule_selected = int(command.get('value'))
+        self.yoOutlet.refreshSchedules()
 
+    def define_schedule(self, command):
+        logging.info('udiYoSwitch define_schedule {}'.format(command))
+        query = command.get("query")
+        self.schedule_selected = int(query.get('ODindex.uom25'))
+        tmp = int(query.get('ODactive.uom25'))
+        self.activated = (tmp == 1)
+        if 'ODstartH.uom19' in query:
+            StartH = int(query.get('ODstartH.uom19'))
+            StartM = int(query.get('ODstartM.uom44'))
+        else:
+            startH = 25
+            StartM = 0
+        if 'ODstopH.uom19' in query:
+            StopH = int(query.get('ODstopH.uom19'))
+            StopM = int(query.get('ODstopM.uom44'))
+        else:
+            startH = 25
+            StartM = 0      
+
+        binDays = int(query.get('ODbindays.uom25'))
+
+        params = {}
+        params['index'] = str(self.schedule_selected )
+        params['isValid'] = self.activated 
+        params['on'] = str(StartH)+':'+str(StartM)
+        params['off'] = str(StopH)+':'+str(StopM)
+        params['week'] = binDays
+        self.yoOutlet.setSchedule(self.schedule_selected, params)
+
+    def control_schedule(self, command):
+        logging.info('udiYoSwitch control_schedule {}'.format(command))       
+        query = command.get("query")
+        self.schedule_selected = int(query.get('OCindex.uom25'))
+        tmp = int(query.get('OCactive.uom25'))
+        self.activated = (tmp == 1)
+        self.yoOutlet.activateSchedule(self.schedule_selected, self.activated)
+        
 
     commands = {
-                'UPDATE': update,
-                'QUERY' : update,
-                'DON'   : set_switch_on,
-                'DOF'   : set_switch_off,    
-                'DFON'   : set_switch_fon,
-                'DFOF'   : set_switch_foff,                         
-                'SWCTRL': switchControl, 
-                'ONDELAY' : prepOnDelay,
-                'OFFDELAY' : prepOffDelay 
+                'UPDATE'        : update,
+                'QUERY'         : update,
+                'DON'           : set_switch_on,
+                'DOF'           : set_switch_off,    
+                'DFON'          : set_switch_fon,
+                'DFOF'          : set_switch_foff,                         
+                'SWCTRL'        : switchControl, 
+                'ONDELAY'       : prepOnDelay,
+                'OFFDELAY'      : prepOffDelay,
+                'DELAY_CTRL'    : program_delays, 
+                'LOOKUP_SCH'    : lookup_schedule,
+                'DEFINE_SCH'    : define_schedule,
+                'CTRL_SCH'      : control_schedule,                
                 }
 
 
