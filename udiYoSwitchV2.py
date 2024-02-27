@@ -139,7 +139,7 @@ class udiYoSwitch(udi_interface.Node):
 
 
     def updateData(self):
-       if self.node is not None:
+        if self.node is not None:
             state =  self.yoSwitch.getState().upper()
             if self.yoSwitch.online:
                 self.node.setDriver('ST', 1, True, True)
@@ -170,8 +170,55 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('GV1', 0, True, False)
                 self.node.setDriver('GV2', 0, True, False)
                 self.node.setDriver('GV20', 2, True, True)   
+                self.node.setDriver('GV13', self.schedule_selected)
+                self.node.setDriver('GV14', 99)
+                self.node.setDriver('GV15', 99,True, True, 25)
+                self.node.setDriver('GV16', 99,True, True, 25)
+                self.node.setDriver('GV17', 99,True, True, 25)
+                self.node.setDriver('GV18', 99,True, True, 25)
+                self.node.setDriver('GV19', 0)    
            
-
+            sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
+            logging.debug('sch_info {}'.format(sch_info))
+            if sch_info:
+                #if 'ch' in sch_info:
+                #    self.node.setDriver('GV12', sch_info['ch'])
+                self.node.setDriver('GV13', self.schedule_selected)
+                if self.yoOutlet.isScheduleActive(self.schedule_selected):
+                    self.node.setDriver('GV14', 1)
+                else:
+                    self.node.setDriver('GV14', 0)
+                timestr = sch_info['on']
+                logging.debug('timestr : {}'.format(timestr))
+                if '25:0' in timestr:
+                    self.node.setDriver('GV15', 98,True, True, 25)
+                    self.node.setDriver('GV16', 98,True, True, 25)
+                else:
+                    timelist =  timestr.split(':')
+                    hour = int(timelist[0])
+                    minute = int(timelist[1])
+                    self.node.setDriver('GV15', int(hour),True, True, 19)
+                    self.node.setDriver('GV16', int(minute),True, True, 44)
+                timestr = sch_info['off']
+                logging.debug('timestr : {}'.format(timestr))
+                if '25:0' in timestr:
+                    self.node.setDriver('GV17', 98,True, True, 25)
+                    self.node.setDriver('GV18', 98,True, True, 25)
+                else:
+                    timelist =  timestr.split(':')
+                    hour = timelist[0]
+                    minute = timelist[1]               
+                    self.node.setDriver('GV17', int(hour),True, True, 19)
+                    self.node.setDriver('GV18', int(minute),True, True, 44)
+                self.node.setDriver('GV19',  int(sch_info['week']))
+            else:
+                self.node.setDriver('GV13', self.schedule_selected)
+                self.node.setDriver('GV14', 99)
+                self.node.setDriver('GV15', 99,True, True, 25)
+                self.node.setDriver('GV16', 99,True, True, 25)
+                self.node.setDriver('GV17', 99,True, True, 25)
+                self.node.setDriver('GV18', 99,True, True, 25)
+                self.node.setDriver('GV19', 0)    
 
 
     def updateStatus(self, data):
@@ -272,23 +319,23 @@ class udiYoSwitch(udi_interface.Node):
     def define_schedule(self, command):
         logging.info('udiYoSwitch define_schedule {}'.format(command))
         query = command.get("query")
-        self.schedule_selected = int(query.get('ODindex.uom25'))
-        tmp = int(query.get('ODactive.uom25'))
+        self.schedule_selected = int(query.get('SDindex.uom25'))
+        tmp = int(query.get('SDactive.uom25'))
         self.activated = (tmp == 1)
-        if 'ODstartH.uom19' in query:
-            StartH = int(query.get('ODstartH.uom19'))
-            StartM = int(query.get('ODstartM.uom44'))
+        if 'SDstartH.uom19' in query:
+            StartH = int(query.get('SDstartH.uom19'))
+            StartM = int(query.get('SDstartM.uom44'))
         else:
             startH = 25
             StartM = 0
-        if 'ODstopH.uom19' in query:
-            StopH = int(query.get('ODstopH.uom19'))
-            StopM = int(query.get('ODstopM.uom44'))
+        if 'SDstopH.uom19' in query:
+            StopH = int(query.get('SDstopH.uom19'))
+            StopM = int(query.get('SDstopM.uom44'))
         else:
             startH = 25
             StartM = 0      
 
-        binDays = int(query.get('ODbindays.uom25'))
+        binDays = int(query.get('SDbindays.uom25'))
 
         params = {}
         params['index'] = str(self.schedule_selected )
@@ -301,8 +348,8 @@ class udiYoSwitch(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('udiYoSwitch control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_selected = int(query.get('OCindex.uom25'))
-        tmp = int(query.get('OCactive.uom25'))
+        self.schedule_selected = int(query.get('SCindex.uom25'))
+        tmp = int(query.get('SCactive.uom25'))
         self.activated = (tmp == 1)
         self.yoOutlet.activateSchedule(self.schedule_selected, self.activated)
         

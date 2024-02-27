@@ -29,6 +29,14 @@ class udiYoDimmer(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV3', 'value': 0, 'uom': 51},
+            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
+            {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
+            {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
+            {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
+            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
+            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
+                 
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},            
 
@@ -134,7 +142,7 @@ class udiYoDimmer(udi_interface.Node):
 
 
     def updateData(self):
-       if self.node is not None:
+        if self.node is not None:
             state =  self.yoDimmer.getState().upper()
             if self.yoDimmer.online:
                 self.node.setDriver('ST', 1, True, True)
@@ -164,7 +172,55 @@ class udiYoDimmer(udi_interface.Node):
                 self.node.setDriver('GV1', 0, True, False)
                 self.node.setDriver('GV2', 0, True, False)
                 self.node.setDriver('GV20', 2, True, True)
-           
+                self.node.setDriver('GV13', self.schedule_selected)
+                self.node.setDriver('GV14', 99)
+                self.node.setDriver('GV15', 99,True, True, 25)
+                self.node.setDriver('GV16', 99,True, True, 25)
+                self.node.setDriver('GV17', 99,True, True, 25)
+                self.node.setDriver('GV18', 99,True, True, 25)            
+                self.node.setDriver('GV19', 0)       
+
+        sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
+        logging.debug('sch_info {}'.format(sch_info))
+        if sch_info:
+            #if 'ch' in sch_info:
+            #    self.node.setDriver('GV12', sch_info['ch'])
+            self.node.setDriver('GV13', self.schedule_selected)
+            if self.yoOutlet.isScheduleActive(self.schedule_selected):
+                self.node.setDriver('GV14', 1)
+            else:
+                self.node.setDriver('GV14', 0)
+            timestr = sch_info['on']
+            logging.debug('timestr : {}'.format(timestr))
+            if '25:0' in timestr:
+                self.node.setDriver('GV15', 98,True, True, 25)
+                self.node.setDriver('GV16', 98,True, True, 25)
+            else:
+                timelist =  timestr.split(':')
+                hour = int(timelist[0])
+                minute = int(timelist[1])
+                self.node.setDriver('GV15', int(hour),True, True, 19)
+                self.node.setDriver('GV16', int(minute),True, True, 44)
+            timestr = sch_info['off']
+            logging.debug('timestr : {}'.format(timestr))
+            if '25:0' in timestr:
+                self.node.setDriver('GV17', 98,True, True, 25)
+                self.node.setDriver('GV18', 98,True, True, 25)
+            else:
+                timelist =  timestr.split(':')
+                hour = timelist[0]
+                minute = timelist[1]               
+                self.node.setDriver('GV17', int(hour),True, True, 19)
+                self.node.setDriver('GV18', int(minute),True, True, 44)
+            self.node.setDriver('GV19',  int(sch_info['week']))
+        else:
+            self.node.setDriver('GV13', self.schedule_selected)
+            self.node.setDriver('GV14', 99)
+            self.node.setDriver('GV15', 99,True, True, 25)
+            self.node.setDriver('GV16', 99,True, True, 25)
+            self.node.setDriver('GV17', 99,True, True, 25)
+            self.node.setDriver('GV18', 99,True, True, 25)
+            self.node.setDriver('GV19', 0)                
 
     def updateStatus(self, data):
         logging.info('updateStatus - Switch')
@@ -252,6 +308,57 @@ class udiYoDimmer(udi_interface.Node):
         self.yoDimmer.setOffDelay(self.offDelay)
         self.node.setDriver('GV2', self.offDelay*60, True, True)
 
+    def program_delays(self, command):
+        logging.info('udiYoDimmer program_delays {}'.format(command))
+        query = command.get("query")
+        self.onDelay = int(query.get("Dondelay.uom44"))
+        self.offDelay = int(query.get("Doffdelay.uom44"))
+        self.node.setDriver('GV1', self.onDelay * 60, True, True)
+        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+        self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+
+
+    def lookup_schedule(self, command):
+        logging.info('udiYoDimmer lookup_schedule {}'.format(command))
+        self.schedule_selected = int(command.get('value'))
+        self.yoOutlet.refreshSchedules()
+
+    def define_schedule(self, command):
+        logging.info('udiYoDimmer define_schedule {}'.format(command))
+        query = command.get("query")
+        self.schedule_selected = int(query.get('DDindex.uom25'))
+        tmp = int(query.get('DDactive.uom25'))
+        self.activated = (tmp == 1)
+        if 'DDstartH.uom19' in query:
+            StartH = int(query.get('DDstartH.uom19'))
+            StartM = int(query.get('DDstartM.uom44'))
+        else:
+            startH = 25
+            StartM = 0
+        if 'DDstopH.uom19' in query:
+            StopH = int(query.get('DDstopH.uom19'))
+            StopM = int(query.get('DDstopM.uom44'))
+        else:
+            startH = 25
+            StartM = 0      
+
+        binDays = int(query.get('DDbindays.uom25'))
+
+        params = {}
+        params['index'] = str(self.schedule_selected )
+        params['isValid'] = self.activated 
+        params['on'] = str(StartH)+':'+str(StartM)
+        params['off'] = str(StopH)+':'+str(StopM)
+        params['week'] = binDays
+        self.yoOutlet.setSchedule(self.schedule_selected, params)
+
+    def control_schedule(self, command):
+        logging.info('udiYoDimmer control_schedule {}'.format(command))       
+        query = command.get("query")
+        self.schedule_selected = int(query.get('DCindex.uom25'))
+        tmp = int(query.get('DCactive.uom25'))
+        self.activated = (tmp == 1)
+        self.yoOutlet.activateSchedule(self.schedule_selected, self.activated)
 
     def update(self, command = None):
         logging.info('udiYoDimmer Update Status')
@@ -269,7 +376,11 @@ class udiYoDimmer(udi_interface.Node):
                 'SWCTRL': switchControl, 
                 'DIMLVL' : set_dimmer_level,
                 'ONDELAY' : setOnDelay,
-                'OFFDELAY' : setOffDelay 
+                'OFFDELAY' : setOffDelay,
+                'DELAY_CTRL'    : program_delays, 
+                'LOOKUP_SCH'    : lookup_schedule,
+                'DEFINE_SCH'    : define_schedule,
+                'CTRL_SCH'      : control_schedule,
                 }
 
 

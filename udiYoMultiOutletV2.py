@@ -761,13 +761,13 @@ class udiYoMultiOutlet(udi_interface.Node):
         port = int(query.get('MODindex.uom25'))
         tmp = int(query.get('MODport.uom25'))
         self.activated = (tmp == 1)
-        if 'ODstartH.uom19' in query:
+        if 'MDstartH.uom19' in query:
             StartH = int(query.get('MODstartH.uom19'))
             StartM = int(query.get('MODstartM.uom44'))
         else:
             startH = 25
             StartM = 0
-        if 'ODstopH.uom19' in query:
+        if 'MDstopH.uom19' in query:
             StopH = int(query.get('MODstopH.uom19'))
             StopM = int(query.get('MODstopM.uom44'))
         else:

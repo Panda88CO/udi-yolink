@@ -151,6 +151,55 @@ class udiYoManipulator(udi_interface.Node):
                 self.node.setDriver('BATLVL', 99)
                 self.node.setDriver('ST', 0)
                 self.node.setDriver('GV20', 2, True, True)
+                self.node.setDriver('GV13', self.schedule_selected)
+                self.node.setDriver('GV14', 99)
+                self.node.setDriver('GV15', 99,True, True, 25)
+                self.node.setDriver('GV16', 99,True, True, 25)
+                self.node.setDriver('GV17', 99,True, True, 25)
+                self.node.setDriver('GV18', 99,True, True, 25)
+                self.node.setDriver('GV19', 0)        
+
+        sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
+        logging.debug('sch_info {}'.format(sch_info))
+        if sch_info:
+            #if 'ch' in sch_info:
+            #    self.node.setDriver('GV12', sch_info['ch'])
+            self.node.setDriver('GV13', self.schedule_selected)
+            if self.yoOutlet.isScheduleActive(self.schedule_selected):
+                self.node.setDriver('GV14', 1)
+            else:
+                self.node.setDriver('GV14', 0)
+            timestr = sch_info['on']
+            logging.debug('timestr : {}'.format(timestr))
+            if '25:0' in timestr:
+                self.node.setDriver('GV15', 98,True, True, 25)
+                self.node.setDriver('GV16', 98,True, True, 25)
+            else:
+                timelist =  timestr.split(':')
+                hour = int(timelist[0])
+                minute = int(timelist[1])
+                self.node.setDriver('GV15', int(hour),True, True, 19)
+                self.node.setDriver('GV16', int(minute),True, True, 44)
+            timestr = sch_info['off']
+            logging.debug('timestr : {}'.format(timestr))
+            if '25:0' in timestr:
+                self.node.setDriver('GV17', 98,True, True, 25)
+                self.node.setDriver('GV18', 98,True, True, 25)
+            else:
+                timelist =  timestr.split(':')
+                hour = timelist[0]
+                minute = timelist[1]               
+                self.node.setDriver('GV17', int(hour),True, True, 19)
+                self.node.setDriver('GV18', int(minute),True, True, 44)
+            self.node.setDriver('GV19',  int(sch_info['week']))
+        else:
+            self.node.setDriver('GV13', self.schedule_selected)
+            self.node.setDriver('GV14', 99)
+            self.node.setDriver('GV15', 99,True, True, 25)
+            self.node.setDriver('GV16', 99,True, True, 25)
+            self.node.setDriver('GV17', 99,True, True, 25)
+            self.node.setDriver('GV18', 99,True, True, 25)
+            self.node.setDriver('GV19', 0)                    
                 
 
     def updateStatus(self, data):
@@ -241,7 +290,58 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Update Status Executed')
         self.yoManipulator.refreshDevice()
 
+    def program_delays(self, command):
+        logging.info('Manipulator program_delays {}'.format(command))
+        query = command.get("query")
+        self.onDelay = int(query.get("Maondelay.uom44"))
+        self.offDelay = int(query.get("Maoffdelay.uom44"))
+        self.node.setDriver('GV1', self.onDelay * 60, True, True)
+        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+        self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
+
+    def lookup_schedule(self, command):
+        logging.info('Manipulator lookup_schedule {}'.format(command))
+        self.schedule_selected = int(command.get('value'))
+        self.yoOutlet.refreshSchedules()
+
+    def define_schedule(self, command):
+        logging.info('Manipulator define_schedule {}'.format(command))
+        query = command.get("query")
+        self.schedule_selected = int(query.get('MaDindex.uom25'))
+        tmp = int(query.get('ODactive.uom25'))
+        self.activated = (tmp == 1)
+        if 'ODstartH.uom19' in query:
+            StartH = int(query.get('MaDstartH.uom19'))
+            StartM = int(query.get('MaDstartM.uom44'))
+        else:
+            startH = 25
+            StartM = 0
+        if 'ODstopH.uom19' in query:
+            StopH = int(query.get('MaDstopH.uom19'))
+            StopM = int(query.get('MaDstopM.uom44'))
+        else:
+            startH = 25
+            StartM = 0      
+
+        binDays = int(query.get('ODbindays.uom25'))
+
+        params = {}
+        params['index'] = str(self.schedule_selected )
+        params['isValid'] = self.activated 
+        params['on'] = str(StartH)+':'+str(StartM)
+        params['off'] = str(StopH)+':'+str(StopM)
+        params['week'] = binDays
+        self.yoOutlet.setSchedule(self.schedule_selected, params)
+
+    def control_schedule(self, command):
+        logging.info('Manipulator control_schedule {}'.format(command))       
+        query = command.get("query")
+        self.schedule_selected = int(query.get('MaCindex.uom25'))
+        tmp = int(query.get('MaCactive.uom25'))
+        self.activated = (tmp == 1)
+        self.yoOutlet.activateSchedule(self.schedule_selected, self.activated)
+        
 
     commands = {
                 'UPDATE': update,
@@ -250,7 +350,11 @@ class udiYoManipulator(udi_interface.Node):
                 'DOF'   : set_close,
                 'MANCTRL': manipuControl, 
                 'ONDELAY' : prepOnDelay,
-                'OFFDELAY' : prepOffDelay 
+                'OFFDELAY' : prepOffDelay,
+                'DELAY_CTRL'    : program_delays, 
+                'LOOKUP_SCH'    : lookup_schedule,
+                'DEFINE_SCH'    : define_schedule,
+                'CTRL_SCH'      : control_schedule,                
                 }
 
 
