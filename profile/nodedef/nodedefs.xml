@@ -255,7 +255,7 @@
                <p id="MODstartM" editor="startMin" init="GV16" /> 
                <p id="MODstopH" editor="startHour" init="GV17" /> 
                <p id="MODstopM" editor="startMin" init="GV18" />   
-               <p id="MODindays" editor="binDays" init="GV19" />                                          
+               <p id="MODbindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
                <p id="MOCindex" editor="sch_indexM" init="GV13" /> 
