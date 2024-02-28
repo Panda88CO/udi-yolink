@@ -98,15 +98,22 @@ class udiRemoteKey(udi_interface.Node):
     def handleData(self, data):
         self.KeyOperations.load(data)
         logging.debug('handleData {}'.format(data))
-        if self.LONG_CMD in data:
-            self.long_cmd_type = data[self.LONG_CMD]
-        else:
-            self.long_cmd_type = 0
-        if self.SHORT_CMD in data:
-            self.short_cmd_type = data[self.SHORT_CMD]
-        else:
-            self.short_cmd_type = 1
-   
+        try:
+            if data is None: #Initialize
+                self.long_cmd_type = 0
+                self.short_cmd_type = 1
+            else:
+                if self.LONG_CMD in data:
+                    self.long_cmd_type = data[self.LONG_CMD]
+                else:
+                    self.long_cmd_type = 0
+                if self.SHORT_CMD in data:
+                    self.short_cmd_type = data[self.SHORT_CMD]
+                else:
+                    self.short_cmd_type = 1            
+        except Exception as e:
+            logging.info('No Key definitions exist yet : {}'.format(e))
+
 
     def configHandler(self):
         self.configDone = True
