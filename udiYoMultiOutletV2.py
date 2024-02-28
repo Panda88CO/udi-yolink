@@ -221,8 +221,8 @@ class udiYoSubOutlet(udi_interface.Node):
     def program_delays(self, command):
         logging.info('udiYoOutlet program_delays {}'.format(command))
         query = command.get("query")
-        self.onDelay = int(query.get("Mondelay.uom44"))
-        self.offDelay = int(query.get("Moffdelay.uom44"))
+        self.onDelay = int(query.get("ondelay.uom44"))
+        self.offDelay = int(query.get("offdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
         self.yoMultiOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
@@ -756,24 +756,24 @@ class udiYoMultiOutlet(udi_interface.Node):
     def define_schedule(self, command):
         logging.info('udiYoMultiOutlet define_schedule {}'.format(command))
         query = command.get("query")
-        self.schedule_selected = int(query.get('MODindex.uom25'))
-        port = int(query.get('MODindex.uom25'))
-        tmp = int(query.get('MODport.uom25'))
+        self.schedule_selected = int(query.get('index.uom25'))
+        port = int(query.get('port.uom25'))
+        tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
-        if 'MDstartH.uom19' in query:
-            StartH = int(query.get('MODstartH.uom19'))
-            StartM = int(query.get('MODstartM.uom44'))
+        if 'startH.uom19' in query:
+            StartH = int(query.get('startH.uom19'))
+            StartM = int(query.get('startM.uom44'))
         else:
             startH = 25
             StartM = 0
-        if 'MDstopH.uom19' in query:
-            StopH = int(query.get('MODstopH.uom19'))
-            StopM = int(query.get('MODstopM.uom44'))
+        if 'stopH.uom19' in query:
+            StopH = int(query.get('stopH.uom19'))
+            StopM = int(query.get('stopM.uom44'))
         else:
             startH = 25
             StartM = 0      
 
-        binDays = int(query.get('MODbindays.uom25'))
+        binDays = int(query.get('bindays.uom25'))
 
         params = {}
         params['ch'] = str(port -1)
@@ -787,8 +787,8 @@ class udiYoMultiOutlet(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_selected = int(query.get('MOCindex.uom25'))
-        tmp = int(query.get('MOCactive.uom25'))
+        self.schedule_selected = int(query.get('index.uom25'))
+        tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
         self.yoMultiOutlet.activateSchedule(self.schedule_selected, self.activated)
 

@@ -301,8 +301,8 @@ class udiYoManipulator(udi_interface.Node):
     def program_delays(self, command):
         logging.info('Manipulator program_delays {}'.format(command))
         query = command.get("query")
-        self.onDelay = int(query.get("Maondelay.uom44"))
-        self.offDelay = int(query.get("Maoffdelay.uom44"))
+        self.onDelay = int(query.get("ondelay.uom44"))
+        self.offDelay = int(query.get("offdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
         self.yoManipulator.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
@@ -316,23 +316,23 @@ class udiYoManipulator(udi_interface.Node):
     def define_schedule(self, command):
         logging.info('Manipulator define_schedule {}'.format(command))
         query = command.get("query")
-        self.schedule_selected = int(query.get('MaDindex.uom25'))
-        tmp = int(query.get('ODactive.uom25'))
+        self.schedule_selected = int(query.get('index.uom25'))
+        tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
         if 'ODstartH.uom19' in query:
-            StartH = int(query.get('MaDstartH.uom19'))
-            StartM = int(query.get('MaDstartM.uom44'))
+            StartH = int(query.get('startH.uom19'))
+            StartM = int(query.get('startM.uom44'))
         else:
             startH = 25
             StartM = 0
         if 'ODstopH.uom19' in query:
-            StopH = int(query.get('MaDstopH.uom19'))
-            StopM = int(query.get('MaDstopM.uom44'))
+            StopH = int(query.get('stopH.uom19'))
+            StopM = int(query.get('stopM.uom44'))
         else:
             startH = 25
             StartM = 0      
 
-        binDays = int(query.get('ODbindays.uom25'))
+        binDays = int(query.get('bindays.uom25'))
 
         params = {}
         params['index'] = str(self.schedule_selected )
@@ -345,8 +345,8 @@ class udiYoManipulator(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('Manipulator control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_selected = int(query.get('MaCindex.uom25'))
-        tmp = int(query.get('MaCactive.uom25'))
+        self.schedule_selected = int(query.get('index.uom25'))
+        tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
         self.yoManipulator.activateSchedule(self.schedule_selected, self.activated)
         

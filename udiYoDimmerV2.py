@@ -312,8 +312,8 @@ class udiYoDimmer(udi_interface.Node):
     def program_delays(self, command):
         logging.info('udiYoDimmer program_delays {}'.format(command))
         query = command.get("query")
-        self.onDelay = int(query.get("Dondelay.uom44"))
-        self.offDelay = int(query.get("Doffdelay.uom44"))
+        self.onDelay = int(query.get("ondelay.uom44"))
+        self.offDelay = int(query.get("offdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
         self.yoDimmer.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
@@ -327,23 +327,23 @@ class udiYoDimmer(udi_interface.Node):
     def define_schedule(self, command):
         logging.info('udiYoDimmer define_schedule {}'.format(command))
         query = command.get("query")
-        self.schedule_selected = int(query.get('DDindex.uom25'))
-        tmp = int(query.get('DDactive.uom25'))
+        self.schedule_selected = int(query.get('index.uom25'))
+        tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
-        if 'DDstartH.uom19' in query:
-            StartH = int(query.get('DDstartH.uom19'))
-            StartM = int(query.get('DDstartM.uom44'))
+        if 'startH.uom19' in query:
+            StartH = int(query.get('startH.uom19'))
+            StartM = int(query.get('startM.uom44'))
         else:
             startH = 25
             StartM = 0
-        if 'DDstopH.uom19' in query:
-            StopH = int(query.get('DDstopH.uom19'))
-            StopM = int(query.get('DDstopM.uom44'))
+        if 'stopH.uom19' in query:
+            StopH = int(query.get('stopH.uom19'))
+            StopM = int(query.get('stopM.uom44'))
         else:
             startH = 25
             StartM = 0      
 
-        binDays = int(query.get('DDbindays.uom25'))
+        binDays = int(query.get('bindays.uom25'))
 
         params = {}
         params['index'] = str(self.schedule_selected )
@@ -356,8 +356,8 @@ class udiYoDimmer(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('udiYoDimmer control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_selected = int(query.get('DCindex.uom25'))
-        tmp = int(query.get('DCactive.uom25'))
+        self.schedule_selected = int(query.get('index.uom25'))
+        tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
         self.yoDimmer.activateSchedule(self.schedule_selected, self.activated)
 

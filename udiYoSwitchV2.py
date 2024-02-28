@@ -301,8 +301,8 @@ class udiYoSwitch(udi_interface.Node):
     def program_delays(self, command):
         logging.info('udiYoOutlet program_delays {}'.format(command))
         query = command.get("query")
-        self.onDelay = int(query.get("Sondelay.uom44"))
-        self.offDelay = int(query.get("Soffdelay.uom44"))
+        self.onDelay = int(query.get("ondelay.uom44"))
+        self.offDelay = int(query.get("offdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
         self.yoSwitch.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
@@ -321,23 +321,23 @@ class udiYoSwitch(udi_interface.Node):
     def define_schedule(self, command):
         logging.info('udiYoSwitch define_schedule {}'.format(command))
         query = command.get("query")
-        self.schedule_selected = int(query.get('SDindex.uom25'))
-        tmp = int(query.get('SDactive.uom25'))
+        self.schedule_selected = int(query.get('index.uom25'))
+        tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
-        if 'SDstartH.uom19' in query:
-            StartH = int(query.get('SDstartH.uom19'))
-            StartM = int(query.get('SDstartM.uom44'))
+        if 'startH.uom19' in query:
+            StartH = int(query.get('startH.uom19'))
+            StartM = int(query.get('startM.uom44'))
         else:
             startH = 25
             StartM = 0
-        if 'SDstopH.uom19' in query:
-            StopH = int(query.get('SDstopH.uom19'))
-            StopM = int(query.get('SDstopM.uom44'))
+        if 'stopH.uom19' in query:
+            StopH = int(query.get('stopH.uom19'))
+            StopM = int(query.get('stopM.uom44'))
         else:
             startH = 25
             StartM = 0      
 
-        binDays = int(query.get('SDbindays.uom25'))
+        binDays = int(query.get('bindays.uom25'))
 
         params = {}
         params['index'] = str(self.schedule_selected )
@@ -350,8 +350,8 @@ class udiYoSwitch(udi_interface.Node):
     def control_schedule(self, command):
         logging.info('udiYoSwitch control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_selected = int(query.get('SCindex.uom25'))
-        tmp = int(query.get('SCactive.uom25'))
+        self.schedule_selected = int(query.get('index.uom25'))
+        tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
         self.yoSwitch.activateSchedule(self.schedule_selected, self.activated)
         
