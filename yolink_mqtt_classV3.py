@@ -1119,9 +1119,9 @@ class YoLinkMQTTDevice(object):
                                     yolink.nbrUsb = 0
                                     yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
                                 else:
-                                    #logging.debug('addind 1 {} {}:'.format(key,data[yolink.dData] ))
-                                    #logging.debug('addind 2 {} {}:'.format(key, yolink.dataAPI[yolink.dData][yolink.dState]))  
-                                    #logging.debug('addind 3 {} {}:'.format(key, data[yolink.dData][key]))
+                                    logging.debug('adding 1 {} {}:'.format(key,data[yolink.dData] ))
+                                    logging.debug('adding 2 {} {}:'.format(key, yolink.dataAPI[yolink.dData][yolink.dState]))  
+                                    logging.debug('adding 3 {} {}:'.format(key, data[yolink.dData][key]))
                                     if yolink.dState not in yolink.dataAPI[yolink.dData]:
                                         yolink.dataAPI[yolink.dData][yolink.dState] = {}
                                         logging.debug('dState added')
