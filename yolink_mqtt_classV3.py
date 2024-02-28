@@ -1102,6 +1102,7 @@ class YoLinkMQTTDevice(object):
                             yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState][0:yolink.nbrPorts+yolink.nbrUsb]
                             
                         else:
+                            logging.debug('input data: {}'.format(data[yolink.dData]) )
                             for key in data[yolink.dData]:
                                 if key == yolink.dDelay:
                                     temp = []
@@ -1113,6 +1114,7 @@ class YoLinkMQTTDevice(object):
                                     yolink.nbrUsb = 0
                                     yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
                                 else:
+                                    logging.debug('adding data : {} - {}'.format(key, data[yolink.dData][key]))
                                     yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
 
 
