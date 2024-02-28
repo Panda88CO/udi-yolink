@@ -20,8 +20,8 @@ from yolinkOutletV2 import YoLinkOutl
 
 
 
-class udiYoOutlet(udi_interface.Node):
-    id = 'yooutlet'
+class udiYoOutletPwr(udi_interface.Node):
+    id = 'yooutletPwr'
     '''
        drivers = [
             'GV0' = Outlet State
@@ -36,6 +36,8 @@ class udiYoOutlet(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV3', 'value': -1, 'uom': 30},
+            {'driver': 'GV4', 'value': -1, 'uom': 33},
             {'driver': 'ST', 'value': 0, 'uom': 25},
 
             {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
@@ -53,7 +55,7 @@ class udiYoOutlet(udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
 
-        logging.debug('udiYoOutlet INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoOutletPwr INIT- {}'.format(deviceInfo['name']))
         self.n_queue = []
      
         self.yoAccess = yoAccess
@@ -135,6 +137,15 @@ class udiYoOutlet(udi_interface.Node):
             #else:
             #    self.node.setDriver('GV0', 99, True, True)
             self.last_state = state                
+            tmp =  self.yoOutlet.getEnergy()
+            if tmp != None:
+                power = round(tmp['power']/1000,3)
+                kwatt = round(tmp['watt']/1000,3)
+                self.node.setDriver('GV3', power, True, True, 33)
+                self.node.setDriver('GV4', kwatt, True, True, 33)
+            else:
+                self.node.setDriver('GV3', 0, True, True, 33)
+                self.node.setDriver('GV4', 0, True, True, 3)
             #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
             if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                 self.node.setDriver('GV1', 0, True, False)
@@ -147,7 +158,8 @@ class udiYoOutlet(udi_interface.Node):
             self.node.setDriver('GV0', 99, True, True)
             self.node.setDriver('GV1', 0, True, True)
             self.node.setDriver('GV2', 0, True, True)
-
+            self.node.setDriver('GV3', 0, True, True)
+            self.node.setDriver('GV4', 0, True, True)
             self.node.setDriver('ST',0, True, True)
             self.node.setDriver('GV20', 2, True, True)
             self.node.setDriver('GV13', self.schedule_selected)

@@ -610,7 +610,10 @@ class YoLinkMQTTDevice(object):
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
                         logging.info('power report ignored')
-
+                elif '.DevEvent' in  data['event']:
+                    if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)
+                        logging.info('power report ignored')
                 else:
                     logging.debug('Unsupported Event passed - trying anyway; {}'.format(data) )
                     if int(data['time']) > int(yolink.getLastUpdate()):
@@ -1167,6 +1170,8 @@ class YoLinkMQTTDevice(object):
                                 yolink.dataAPI[yolink.dData][yolink.dState]['time'] =  meas_time                                         
                         else:
                             yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] 
+                #elif '.DevEvent'in data['event']:
+                #    logging.debug('.DevEvent {}'.format(data))
 
                 elif yolink.dState in data[yolink.dData]:
                     if type(data[yolink.dData][yolink.dState]) is dict:

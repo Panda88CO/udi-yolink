@@ -6,32 +6,7 @@ ST-nlssetup-GV20-NAME = Connection State
 CMD-nlssetup-DON-NAME = Heart Beat On
 CMD-nlssetup-DOF-NAME = Heart Beat Off
 
-# common commands #############
-
-ST-ST-NAME = Nodeserver Status
-ST-GV20-NAME = Connection State
-ST-BATLVL-NAME = Battery Level
-ST-CLITEMP-NAME = Sensor Temperature
-ST-CLIHUM-NAME = Current Rel Humidity (%)
-
-CMD-DEFINE_SCH-NAME = Define Schedule
-CMD-CTRL_SCH-NAME = Set Schedule
-CMD-LOOKUP_SCH-NAME = Lookup Schedule
-CMD-DELAY_CTRL-NAME = Program Delays
-CMD-UPDATE-NAME = Update Status
-CMD-QUERY-NAME = Query
-CMD-ONDELAY-NAME =  Set On Delay
-CMD-OFFDELAY-NAME =  Set Off Delay
-CMD-SWCTRL-NAME =  Switch control
-CMD-KEY1DEF-NAME = Key1 Scene Function
-CMD-KEY2DEF-NAME = Key2 Scene Function
-CMD-KEY3DEF-NAME = Key3 Scene Function
-CMD-KEY4DEF-NAME = Key4 Scene Function
-CMD-KEY1LDEF-NAME = Key1 Long Scene Function
-CMD-KEY2LDEF-NAME = Key2 Long Scene Function
-CMD-KEY3LDEF-NAME = Key3 Long Scene Function
-CMD-KEY4LDEF-NAME = Key4 LOng Scene Function
-
+# common commands
 CMDP-ondelay-NAME = On delay
 CMDP-offdelay-NAME = Off delay
 CMDP-index-NAME = Schedule Index
@@ -41,23 +16,15 @@ CMDP-startM-NAME = Start Min
 CMDP-stopH-NAME = Stop Hour
 CMDP-stopM-NAME = Stop Min
 CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
-# common commands #############
-
-
-
-
-# YoLink Switch
-ND-yoswitch2b-NAME = YoLink Switch
-ND-yoswitch2b-ICON = Switch
-ST-nlsswitch2b-GV0-NAME = Switch State
-ST-nlsswitch2-GV1-NAME = On Delay (min)
-ST-nlsswitc2b-GV2-NAME = Off Delay (min)
-ST-nlsswitch2b-GV3-NAME = Left Button
-ST-nlsswitch2b-GV4-NAME = Right Button
-CMD-nlsswitch2b-DON-NAME = ON command
-CMD-nlsswitch2b-DOF-NAME = OFF command
-CMD-nlsswitch2b-DFON-NAME = Fast ON command 
-CMD-nlsswitch2b-DFOF-NAME = Fast OFF command
+CMD-DEFINE_SCH-NAME = Define Schedule
+CMD-CTRL_SCH-NAME = Set Schedule
+CMD-LOOKUP_SCH-NAME = Lookup Schedule
+CMD-DELAY_CTRL-NAME = Program Delays
+CMD-UPDATE-NAME = Update Status
+CMD-QUERY-NAME = Query
+CMD-ONDELAY-NAME =  Set On Delay
+CMD-OFFDELAY-NAME =  Set Off Delay
+CMD-SWCTRL-NAME =  Switch control
 
 
 # YoLink Switch
@@ -66,11 +33,63 @@ ND-yoswitch-ICON = Switch
 ST-nlsswitch-GV0-NAME = Switch State
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
+#ST-nlsswitch-GV8-NAME = Device Online
+ST-nlsswitch-ST-NAME = Nodeserver Status
+ST-nlsswitch-GV20-NAME = Connection State
+#CMD-nlsswitch-UPDATE-NAME = Update Status
+#CMD-nlsswitch-QUERY-NAME = Query
+#CMD-nlsswitch-SWCTRL-NAME =  Switch control
+#CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
+#CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
 CMD-nlsswitch-DON-NAME = ON command
 CMD-nlsswitch-DOF-NAME = OFF command
 CMD-nlsswitch-DFON-NAME = Fast ON command 
 CMD-nlsswitch-DFOF-NAME = Fast OFF command
+#CMD-nlsswitch-DELAY_CTRL-NAME = Program Delays
+#CMDP-ondelay-NAME = On delay
+#CMDP-offdelay-NAME = Off delay
+#CMD-nlsoutlet-DEFINE_SCH-NAME = Define Schedule
+#CMDP-index-NAME = Schedule Index
+#CMDP-active-NAME = Schedle Active
+#CMDP-startH-NAME = Start Hour
+#CMDP-startM-NAME = Start Min
+#CMDP-stopH-NAME = Stop Hour
+#CMDP-stopM-NAME = Stop Min
+#CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
+#CMD-nlsswitch-CTRL_SCH-NAME = Set Schedule
+#CMD-nlsswitch-LOOKUP_SCH-NAME = Lookup Schedule
 
+# YoLink Switch
+ND-yoswitch-NAME = YoLink Switch
+ND-yoswitch-ICON = Switch
+ST-nlsswitch-GV0-NAME = Switch State
+ST-nlsswitch-GV1-NAME = On Delay (min)
+ST-nlsswitch-GV2-NAME = Off Delay (min)
+#ST-nlsswitch-GV8-NAME = Device Online
+ST-nlsswitch-ST-NAME = Nodeserver Status
+ST-nlsswitch-GV20-NAME = Connection State
+#CMD-nlsswitch-UPDATE-NAME = Update Status
+#CMD-nlsswitch-QUERY-NAME = Query
+#CMD-nlsswitch-SWCTRL-NAME =  Switch control
+#CMD-nlsswitch-ONDELAY-NAME =  Set On Delay (min)
+#CMD-nlsswitch-OFFDELAY-NAME =  Set Off Delay (min)
+CMD-nlsswitch-DON-NAME = ON command
+CMD-nlsswitch-DOF-NAME = OFF command
+CMD-nlsswitch-DFON-NAME = Fast ON command 
+CMD-nlsswitch-DFOF-NAME = Fast OFF command
+#CMD-nlsswitch-DELAY_CTRL-NAME = Program Delays
+#CMDP-ondelay-NAME = On delay
+#CMDP-offdelay-NAME = Off delay
+#CMD-nlsoutlet-DEFINE_SCH-NAME = Define Schedule
+#CMDP-index-NAME = Schedule Index
+#CMDP-active-NAME = Schedle Active
+#CMDP-startH-NAME = Start Hour
+#CMDP-startM-NAME = Start Min
+#CMDP-stopH-NAME = Stop Hour
+#CMDP-stopM-NAME = Stop Min
+#CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
+#CMD-nlsswitch-CTRL_SCH-NAME = Set Schedule
+#CMD-nlsswitch-LOOKUP_SCH-NAME = Lookup Schedule
 
 
 #YoLink Outlet
@@ -88,16 +107,36 @@ ST-nlsoutlet-GV16-NAME = Start Minute
 ST-nlsoutlet-GV17-NAME = Stop Hour
 ST-nlsoutlet-GV18-NAME = Stop Minute
 ST-nlsoutlet-GV19-NAME = Days Active
-
+ST-nlsoutlet-ST-NAME = Nodeserver Status
+ST-nlsoutlet-GV20-NAME = Connection State
+#CMD-nlsoutlet-UPDATE-NAME = Update Status
+#CMD-nlsoutlet-QUERY-NAME = Query
+#CMD-nlsoutlet-SWCTRL-NAME =  Outlet control
+#CMD-nlsoutlet-ONDELAY-NAME =  Set On Delay
+#CMD-nlsoutlet-OFFDELAY-NAME =  Set Off Delay
 CMD-nlsoutlet-DON-NAME = Switch On
 CMD-nlsoutlet-DOF-NAME = Switch Off
 CMD-nlsoutlet-DELAY_CTRL-NAME = Program Delays
-
+#CMDP-ondelay-NAME = On delay
+#CMDP-offdelay-NAME = Off delay
+#CMD-nlsoutlet-DEFINE_SCH-NAME = Define Schedule
+#CMDP-index-NAME = Schedule Index
+#CMDP-active-NAME = Schedle Active
+#CMDP-startH-NAME = Start Hour
+#CMDP-startM-NAME = Start Min
+#CMDP-stopH-NAME = Stop Hour
+#CMDP-stopM-NAME = Stop Min
+#CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
+#CMD-nlsoutlet-CTRL_SCH-NAME = Set Schedule
+#CMDP-active-NAME = Schedule Active
+#CMDP-index-NAME = Schedule Index
+#CMD-nlsoutlet-LOOKUP_SCH-NAME = Lookup Schedule
 
 
 ND-yomultiout-NAME = YoLink Outlet
 ND-yomultiout-ICON = Switch
 #ST-nlsmultiout-GV8-NAME = Device Online
+ST-nlsmultiout-ST-NAME = Nodeserver Status
 ST-nlsmultiout-GV12-NAME =  Port
 ST-nlsmultiout-GV13-NAME = Schedule Index
 ST-nlsmultiout-GV14-NAME = Activated
@@ -106,10 +145,22 @@ ST-nlsmultiout-GV16-NAME = Start Minute
 ST-nlsmultiout-GV17-NAME = Stop Hour
 ST-nlsmultiout-GV18-NAME = Stop Minute
 ST-nlsmultiout-GV19-NAME = Days Active
+ST-nlsmultiout-GV20-NAME = Connection State
+#CMD-nlsmultiout-UPDATE-NAME = Update Status
+#CMD-nlsmultiout-QUERY-NAME = Query
+#CMD-nlsmultiout-DEFINE_SCH-NAME = Define Schedule
 CMDP-outport-NAME = Outlet Port
-
+#CMDP-index-NAME = Schedule Index
+#CMDP-active-NAME = Schedle Active
+#CMDP-startH-NAME = Start Hour
+#CMDP-startM-NAME = Start Min
+#CMDP-stopH-NAME = Stop Hour
+#CMDP-stopM-NAME = Stop Min
+#CMDP-bindays-NAME = Active Days
  
-
+#CMDP-active-NAME = Schedule Active
+#CMDP-index-NAME = Schedule Index
+#CMD-nlsmultiout-LOOKUP_SCH-NAME = Lookup Schedule
 
 ND-yosubout-NAME = YoLink subOutlet
 ND-yosubout-ICON = Switch
@@ -117,6 +168,12 @@ ST-nlsubout-GV0-NAME = Outlet State
 ST-nlsubout-GV1-NAME = On Delay Remaining
 ST-nlsubout-GV2-NAME = Off Delay Remaining
 ST-nlsubout-GV4-NAME = Outlet 
+ST-nlsubout-ST-NAME = Nodeserver Status
+ST-nlsubout-GV20-NAME = Connection State
+#CMD-nlsubout-UPDATE-NAME = Update Status
+#CMD-nlsubout-SWCTRL-NAME =  Outlet control
+#CMD-nlsubout-ONDELAY-NAME =  Set On Delay
+#CMD-nlsubout-OFFDELAY-NAME =  Set Off Delay
 CMD-nlsubout-DON-NAME = Switch On
 CMD-nlsubout-DOF-NAME = Switch Off
 
@@ -125,8 +182,9 @@ CMD-nlsubout-DOF-NAME = Switch Off
 ND-yosubusb-NAME = YoLink USB Ports
 ND-yosubusb-ICON = Switch
 ST-nlssubusb-GV0-NAME = USB Power
-
+ST-nlssubusb-ST-NAME = Nodeserver Status
 ST-nlssubusb-GV20-NAME = Connection State
+#CMD-nlssubusb-UPDATE-NAME = Update Status
 CMD-nlssubusb-USBCTRL-NAME =  USB Power
 CMD-nlssubusb-DON-NAME = Enabled
 CMD-nlssubusb-DOF-NAME = Disabled
@@ -137,18 +195,26 @@ ST-nlsmanipu-GV0-NAME = Manipulator State
 ST-nlsmanipu-GV1-NAME = On Delay Remaining
 ST-nlsmanipu-GV2-NAME = Off Delay Remaining
 ST-nlsmanipu-BATLVL-NAME = Battery Level
-
+#ST-nlsmanipu-GV8-NAME = Device Online
+ST-nlsmanipu-ST-NAME = Nodeserver Status
+ST-nlsmanipu-GV20-NAME = Connection State
+#CMD-nlsmanipu-UPDATE-NAME = Update Status
+#CMD-nlsmanipu-QUERY-NAME = Query
 CMD-nlsmanipu-MANCTRL-NAME =  Switch control
+#CMD-nlsmanipu-ONDELAY-NAME =  Set On Delay
+#CMD-nlsmanipu-OFFDELAY-NAME =  Set Off Delay
 CMD-nlsmanipu-DON-NAME = Opened
 CMD-nlsmanipu-DOF-NAME = Closed
 
 ND-yothsens-NAME = YoLink THsensor
 ND-yothsens-ICON = TempSensor
+ST-nlsthsens-CLITEMP-NAME = Current Temp (C)
 ST-nlsthsens-GV1-NAME = Low Temp Alarm
 ST-nlsthsens-GV2-NAME = High Temp Alarm
-
+ST-nlsthsens-CLIHUM-NAME = Current Rel Humidity (%)
 ST-nlsthsens-GV4-NAME = Low Humidity Alarm
 ST-nlsthsens-GV5-NAME = High Humidity Alarm
+ST-nlsthsens-BATLVL-NAME = Battery Level
 ST-nlsthsens-GV7-NAME = Battery Alarm
 ST-nlsthsens-GV8-NAME = Alarm triggered
 ST-nlsthsens-GV9-NAME = Command Setting
@@ -156,13 +222,19 @@ ST-nlsthsens-GV10-NAME = Low Temp Limit
 ST-nlsthsens-GV11-NAME = High Temp Limit
 ST-nlsthsens-GV12-NAME = Low Humidity Limit
 ST-nlsthsens-GV13-NAME = High Humidity Limit
+ST-nlsthsens-ST-NAME = Nodeserver Status
+ST-nlsthsens-GV20-NAME = Connection State
 CMD-nlsthsens-SETCMD-NAME = Select Command Action
-
+#CMD-nlsthsens-UPDATE-NAME = Update Status
+#CMD-nlsthsens-QUERY-NAME = Query
 
 
 
 ND-yogarage-NAME = YoLink Garage Controller
 ND-yogarage-ICON = Switch
+#ST-nlsgarage-GV8-NAME = online
+ST-nlsgarage-ST-NAME = Nodeserver Status
+ST-nlsgarage-GV20-NAME = Connection State
 CMD-nlsgarage-TOGGLE-NAME = Toggle Door
 
 
@@ -172,7 +244,11 @@ ND-yodoorsens-ICON = Input
 ST-nlsdoorsens-GV0-NAME = Door State
 ST-nlsdoorsens-GV1-NAME = Sensor Battery Level
 ST-nlsdoorsens-GV2-NAME = Command Setting
+#ST-nlsdoorsens-GV8-NAME = Device Online
+ST-nlsdoorsens-GV20-NAME = Connection State
 CMD-nlsdoorsens-SETCMD-NAME = Select Command Action
+#CMD-nlsdoorsens-UPDATE-NAME = Update Door Status
+#CMD-nlsdoorsens-QUERY-NAME = Query
 CMD-nlsdoorsens-DOM-NAME = No use
 CMD-nlsdoorsens-DOF-NAME = No use
 
@@ -182,7 +258,13 @@ ND-yomotionsens-ICON = MotionSensor
 ST-nlsmotionsens-GV0-NAME = Motion State
 ST-nlsmotionsens-GV1-NAME = Sensor Battery Level
 ST-nlsmotionsens-GV2-NAME = Command Setting
+ST-nlsmotionsens-CLITEMP-NAME = Sensor Temperature
+#ST-nlsmotionsens-GV8-NAME = Device Online
+ST-nlsmotionsens-ST-NAME = Nodeserver Status
+ST-nlsmotionsens-GV20-NAME = Connection State
+#CMD-nlsmotionsens-UPDATE-NAME = Update Motion Status
 CMD-nlsmotionsens-SETCMD-NAME = Select Command Action
+#CMD-nlsmotionsens-QUERY-NAME = Query
 CMD-nlsmotionsens-DON-NAME = Motion
 CMD-nlsmotionsens-DOF-NAME = No Motion
 
@@ -191,7 +273,13 @@ ND-yoleaksens-ICON = Input
 ST-nlsleaksens-GV0-NAME = Water Sensor
 ST-nlsleaksens-GV1-NAME = Sensor Battery Level
 ST-nlsleaksens-GV2-NAME = Command Setting
+ST-nlsleaksens-CLITEMP-NAME = Sensor Temperature
+#ST-nlsleaksens-GV8-NAME = Device Online
+ST-nlsleaksens-ST-NAME = Nodeserver Status
+ST-nlsleaksens-GV20-NAME = Connection State
+#CMD-nlsleaksens-UPDATE-NAME = Update Water Status
 CMD-nlsleaksens-SETCMD-NAME = Select Command Action
+#CMD-nlsleaksens-QUERY-NAME = Query
 CMD-nlsleaksens-DON-NAME = Water Alert Detected
 CMD-nlsleaksens-DOF-NAME = Normal
 
@@ -200,7 +288,13 @@ ND-yovibrasens-ICON = MotionSensor
 ST-nlsvibrasens-GV0-NAME = Vibration State
 ST-nlsvibrasens-GV1-NAME = Sensor Battery Level
 ST-nlsvibrasens-GV2-NAME = Command Setting
+ST-nlsvibrasens-CLITEMP-NAME = Sensor Temperature
+#ST-nlsvibrasens-GV8-NAME = Device Online
+ST-nlsvibrasens-ST-NAME = Nodeserver Status
+ST-nlsvibrasens-GV20-NAME = Connection State
+#CMD-nlsvibrasens-UPDATE-NAME = Update Vibration Status
 CMD-nlsvibrasens-SETCMD-NAME = Select Command Action
+#CMD-nlsvibrasens-QUERY-NAME = Query
 CMD-nlsvibrasens-DON-NAME = Vibration Detected
 CMD-nlsvibrasens-DOF-NAME = Normal
 
@@ -213,6 +307,10 @@ ST-nlsspeakerh-GV3-NAME = Tone Type
 ST-nlsspeakerh-GV4-NAME = Message
 ST-nlsspeakerh-GV5-NAME = Repeat
 #ST-nlsspeakerh-GV8-NAME = Device Online
+ST-nlsspeakerh-ST-NAME = Nodeserver Status
+ST-nlsspeakerh-GV20-NAME = Connection State
+#CMD-nlsspeakerh-UPDATE-NAME = Update Status
+#CMD-nlsspeakerh-QUERY-NAME = Query
 CMD-nlsspeakerh-PLAY-NAME = Play Message
 CMD-nlsspeakerh-VOLUME-NAME = Volume
 CMD-nlsspeakerh-BEEP-NAME = Beep
@@ -227,6 +325,13 @@ ND-yolock-ICON = DoorLock
 ST-nlslock-GV0-NAME = Lock State
 ST-nlslock-GV1-NAME = Battery Level
 ST-nlslock-GV2-NAME = Doorbell Active
+#ST-nlslock-GV8-NAME = Device Online
+ST-nlslock-ST-NAME = Nodeserver Status
+ST-nlslock-GV20-NAME = Connection State
+#CMD-nlslock-UPDATE-NAME = Update Lock Status
+#CMD-nlslock-QUERY-NAME = Query
+#CMD-nlslock-DON-NAME = Lock Lock
+#CMD-nlslock-DOF-NAME = Unlock Lock
 CMD-nlslock-LOCK-NAME = Lock Lock
 CMD-nlslock-UNLOCK-NAME = Unlock Lock
 CMD-nlslock-LOCKCTRL-NAME = Set Lock
@@ -237,15 +342,25 @@ ST-nlsdimmer-GV0-NAME = Switch State
 ST-nlsdimmer-GV1-NAME = On Delay
 ST-nlsdimmer-GV2-NAME = Off Delay
 ST-nlsdimmer-GV3-NAME = Dimmer Level
+ST-nlsdimmer-ST-NAME = Nodeserver Status
+ST-nlsdimmer-GV20-NAME = Connection State
 CMD-nlsdimmer-DIMLVL-NAME = Dimming Level (%)
+#CMD-nlsdimmer-SWCTRL-NAME = Switch Control
+#CMD-nlsdimmer-ONDELAY-NAME = On Delay (min)
+#CMD-nlsdimmer-OFFDELAY-NAME = Off Delay (min)
+#CMD-nlsdimmer-UPDATE-NAME = Update
+#CMD-nlsdimmer-QUERY-NAME = Query
 
 ND-yoirremote-NAME = YoLink Ir Remoter
 ND-yoirremote-ICON = Output
 ST-nlsirremote-GV0-NAME = Number of Learned codes
 ST-nlsirremote-GV1-NAME = Battery Level
 ST-nlsirremote-GV2-NAME = Last Command Status
+ST-nlsirremote-ST-NAME = Nodeserver Status
+ST-nlsirremote-GV20-NAME = Connection State
 CMD-nlsirremote-TXCODE-NAME = Send Code
-
+#CMD-nlsirremote-UPDATE-NAME = Update
+#CMD-nlsirremote-QUERY-NAME = Query
 
 ND-yoCOSmokesens-NAME = YoLink COSmokeSensor
 ND-yoCOSmokesens-ICON = Input
@@ -258,9 +373,12 @@ ST-nlssmokesens-GV5-NAME = Self-check
 ST-nlssmokesens-GV4-NAME = Sensor Battery Level
 ST-nlssmokesens-GV7-NAME = Command Setting
 
-
+ST-nlssmokesens-CLITEMP-NAME = Sensor Temperature
+ST-nlssmokesens-ST-NAME = Nodeserver Status
+ST-nlssmokesens-GV20-NAME = Connection State
 #CMD-nlssmokesens-UPDATE-NAME = Update Sensor Status
 CMD-nlssmokesens-SETCMD-NAME = Select Command Action
+#CMD-nlssmokesens-QUERY-NAME = Query
 CMD-nlssmokesens-DON-NAME = Alert Detected
 CMD-nlssmokesens-DOF-NAME = Normal
 
@@ -272,8 +390,11 @@ ST-nlspwralarm-GV2-NAME = Alert Pending
 ST-nlspwralarm-GV3-NAME = Power on Unit
 ST-nlspwralarm-GV4-NAME = Muted
 ST-nlspwralarm-GV7-NAME = Command Setting
+ST-nlspwralarm-ST-NAME = Nodeserver Status
+ST-nlspwralarm-GV20-NAME = Connection State
 CMD-nlspwralarm-SETCMD-NAME = Select Command Action
-
+#CMD-nlspwralarm-UPDATE-NAME = Update
+#CMD-nlspwralarm-QUERY-NAME = Query
 
 ND-yosiren-NAME = YoLink Siren
 ND-yosiren-ICON = Output
@@ -283,6 +404,8 @@ ST-nlssiren-GV2-NAME = Supply State
 ST-nlssiren-ST-NAME = Nodeserver Status
 ST-nlssiren-ST-NAME = Nodeserver Status
 ST-nlssiren-GV20-NAME = Connection State
+#CMD-nlssiren-UPDATE-NAME = Update
+#CMD-nlssiren-QUERY-NAME = Query
 CMD-nlssiren-SIRENCTRL-NAME = Set Control
 
 ND-yosmremote-NAME = YoLink Smart Remoter
@@ -292,7 +415,18 @@ ST-nlssmremote-GV1-NAME = Key presstype
 ST-nlssmremote-GV2-NAME = Press type
 ST-nlssmremote-GV3-NAME = Battery Level
 ST-nlssmremote-GV4-NAME = Remote Temperature
-
+ST-nlssmremote-ST-NAME = Nodeserver Status
+ST-nlssmremote-GV20-NAME = Connection State
+#CMD-nlssmremote-UPDATE-NAME = Update
+#CMD-nlssmremote-QUERY-NAME = Query
+CMD-nlssmremote-KEY1DEF-NAME = Key1 Scene Function
+CMD-nlssmremote-KEY2DEF-NAME = Key2 Scene Function
+CMD-nlssmremote-KEY3DEF-NAME = Key3 Scene Function
+CMD-nlssmremote-KEY4DEF-NAME = Key4 Scene Function
+CMD-nlssmremote-KEY1LDEF-NAME = Key1 Long Scene Function
+CMD-nlssmremote-KEY2LDEF-NAME = Key2 Long Scene Function
+CMD-nlssmremote-KEY3LDEF-NAME = Key3 Long Scene Function
+CMD-nlssmremote-KEY4LDEF-NAME = Key4 LOng Scene Function
 
 ND-smremotekey-NAME = YoLink Smart Remoter
 ND-smremotekey-ICON = Input
@@ -306,13 +440,20 @@ ND-yowatermeter-NAME = YoLink Water Meter Controller
 ND-yowatermeter-ICON = PulseCounter
 ST-nlswatermeter-GV0-NAME = Valve State
 ST-nlswatermeter-GV1-NAME = Water Meter Reading
+# ST-nlswatermeter-GV2-NAME = Open Delay
+# ST-nlswatermeter-GV3-NAME = Close Delay
 ST-nlswatermeter-GV4-NAME = Open Reminder
 ST-nlswatermeter-GV5-NAME = Leak
 ST-nlswatermeter-GV6-NAME = Amount Overrun
 ST-nlswatermeter-GV7-NAME = Duration Overrun
 ST-nlswatermeter-GV8-NAME = Valve Error
 ST-nlswatermeter-GV9-NAME = Reminder
+ST-nlswatermeter-BATLVL-NAME = Battery State
 ST-nlswatermeter-GV10-NAME = Supply Mode
+ST-nlswatermeter-GV20-NAME = Connection State
+
+#CMD-nlswatermeter-UPDATE-NAME = Update
+#CMD-nlswatermeter-QUERY-NAME = Query
 CMD-nlswatermeter-DON-NAME = Open Valve
 CMD-nlswatermeter-DOF-NAME = Close Valve
 CMD-nlswatermeter-VALVECTRL-NAME = Control Valve

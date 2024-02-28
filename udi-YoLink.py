@@ -10,6 +10,7 @@ import time
 
 from yoLink_init_V3 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
+from udiYoSwitch2ButtonV2 import udiYoSwitch2Button
 from udiYoTHsensorV2 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
@@ -18,9 +19,9 @@ from udiYoLeakSensorV2 import udiYoLeakSensor
 from udiYoCOSmokeSensorV2 import udiYoCOSmokeSensor
 from udiYoDoorSensorV2 import udiYoDoorSensor
 from udiYoOutletV2 import udiYoOutlet
+from udiYoOutletPwrV2 import udiYoOutletPwr
 from udiYoMultiOutletV2 import udiYoMultiOutlet
 from udiYoManipulatorV2 import udiYoManipulator
-#from udiYoHubV2 import udiYoHub
 from udiYoSpeakerHubV2 import udiYoSpeakerHub
 from udiYoLockV2 import udiYoLock
 from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
@@ -30,7 +31,7 @@ from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV2 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
 from udiYoWaterMeterControllerV2 import udiYoWaterMeterController
-
+#from udiYoHubV2 import udiYoHub
 import udiProfileHandler
 
 try:
@@ -244,8 +245,13 @@ class YoLinkSetup (udi_interface.Node):
                         name = dev['name']
                         name = self.poly.getValidName(name)
                         self.Parameters[address] =  dev['name']
-                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoSwitch(self.poly, address, address, name,  self.yoAccess, dev )
+
+                    if  'YS5708' in dev['modelName'] or 'YS5709' in dev['modelName']:
+                        logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoSwitch2Button(self.poly, address, address, name,  self.yoAccess, dev )
+                    else:
+                        logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoSwitch(self.poly, address, address, name,  self.yoAccess, dev )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
@@ -389,9 +395,13 @@ class YoLinkSetup (udi_interface.Node):
                     else:
                         name = dev['name']
                         name = self.poly.getValidName(name)
-                        self.Parameters[address]=  dev['name']                    
-                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoOutlet(self.poly, address, address, name, self.yoAccess, dev )
+                        self.Parameters[address]=  dev['name']  
+                    if  'YS6602' in dev['modelName']:
+                        logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoOutletPwr(self.poly, address, address, name, self.yoAccess, dev )
+                    else:
+                        logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoOutlet(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
