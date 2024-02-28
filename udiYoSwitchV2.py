@@ -27,7 +27,7 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+
 
             {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
@@ -37,7 +37,7 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'GV20', 'value': 99, 'uom': 25},                          
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
        drivers = [
@@ -65,6 +65,7 @@ class udiYoSwitch(udi_interface.Node):
         self.timer_expires = 0
         self.onDelay = 0
         self.offDelay = 0
+        self.schedule_selected = 0
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -101,6 +102,7 @@ class udiYoSwitch(udi_interface.Node):
         time.sleep(10)
         #self.node.setDriver('ST', 1, True, True)
         self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
+        self.yoSwitch.refreshSchedules()
         self.node_ready = True
 
 
@@ -178,13 +180,13 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('GV18', 99,True, True, 25)
                 self.node.setDriver('GV19', 0)    
            
-            sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
+            sch_info = self.yoSwitch.getScheduleInfo(self.schedule_selected)
             logging.debug('sch_info {}'.format(sch_info))
             if sch_info:
                 #if 'ch' in sch_info:
                 #    self.node.setDriver('GV12', sch_info['ch'])
                 self.node.setDriver('GV13', self.schedule_selected)
-                if self.yoOutlet.isScheduleActive(self.schedule_selected):
+                if self.yoSwitch.isScheduleActive(self.schedule_selected):
                     self.node.setDriver('GV14', 1)
                 else:
                     self.node.setDriver('GV14', 0)
@@ -303,7 +305,7 @@ class udiYoSwitch(udi_interface.Node):
         self.offDelay = int(query.get("Soffdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
-        self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+        self.yoSwitch.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
     def update(self, command = None):
         logging.info('udiYoSwitch Update Status')
@@ -314,7 +316,7 @@ class udiYoSwitch(udi_interface.Node):
     def lookup_schedule(self, command):
         logging.info('udiYoSwitch lookup_schedule {}'.format(command))
         self.schedule_selected = int(command.get('value'))
-        self.yoOutlet.refreshSchedules()
+        self.yoSwitch.refreshSchedules()
 
     def define_schedule(self, command):
         logging.info('udiYoSwitch define_schedule {}'.format(command))
@@ -343,7 +345,7 @@ class udiYoSwitch(udi_interface.Node):
         params['on'] = str(StartH)+':'+str(StartM)
         params['off'] = str(StopH)+':'+str(StopM)
         params['week'] = binDays
-        self.yoOutlet.setSchedule(self.schedule_selected, params)
+        self.yoSwitch.setSchedule(self.schedule_selected, params)
 
     def control_schedule(self, command):
         logging.info('udiYoSwitch control_schedule {}'.format(command))       
@@ -351,7 +353,7 @@ class udiYoSwitch(udi_interface.Node):
         self.schedule_selected = int(query.get('SCindex.uom25'))
         tmp = int(query.get('SCactive.uom25'))
         self.activated = (tmp == 1)
-        self.yoOutlet.activateSchedule(self.schedule_selected, self.activated)
+        self.yoSwitch.activateSchedule(self.schedule_selected, self.activated)
         
 
     commands = {

@@ -37,9 +37,15 @@ class udiYoManipulator(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25}, 
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
+            {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
+            {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
+            {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
+            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
+            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
+            {'driver': 'GV20', 'value': 99, 'uom': 25},              
+
             ]
 
 
@@ -58,6 +64,7 @@ class udiYoManipulator(udi_interface.Node):
         self.timer_expires = 0
         self.onDelay = 0
         self.offDelay = 0
+        self.schedule_selected = 0
         self.valveState = 99 # needed as class c device - keep value until online again 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -94,6 +101,7 @@ class udiYoManipulator(udi_interface.Node):
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
+        self.yoManipulator.refreshSchedules()
         self.node_ready = True
 
     def stop (self):
@@ -159,13 +167,13 @@ class udiYoManipulator(udi_interface.Node):
                 self.node.setDriver('GV18', 99,True, True, 25)
                 self.node.setDriver('GV19', 0)        
 
-        sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
+        sch_info = self.yoDimmer.getScheduleInfo(self.schedule_selected)
         logging.debug('sch_info {}'.format(sch_info))
         if sch_info:
             #if 'ch' in sch_info:
             #    self.node.setDriver('GV12', sch_info['ch'])
             self.node.setDriver('GV13', self.schedule_selected)
-            if self.yoOutlet.isScheduleActive(self.schedule_selected):
+            if self.yoManipulator.isScheduleActive(self.schedule_selected):
                 self.node.setDriver('GV14', 1)
             else:
                 self.node.setDriver('GV14', 0)
@@ -297,13 +305,13 @@ class udiYoManipulator(udi_interface.Node):
         self.offDelay = int(query.get("Maoffdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
-        self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+        self.yoManipulator.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
 
     def lookup_schedule(self, command):
         logging.info('Manipulator lookup_schedule {}'.format(command))
         self.schedule_selected = int(command.get('value'))
-        self.yoOutlet.refreshSchedules()
+        self.yoManipulator.refreshSchedules()
 
     def define_schedule(self, command):
         logging.info('Manipulator define_schedule {}'.format(command))
@@ -332,7 +340,7 @@ class udiYoManipulator(udi_interface.Node):
         params['on'] = str(StartH)+':'+str(StartM)
         params['off'] = str(StopH)+':'+str(StopM)
         params['week'] = binDays
-        self.yoOutlet.setSchedule(self.schedule_selected, params)
+        self.yoManipulator.setSchedule(self.schedule_selected, params)
 
     def control_schedule(self, command):
         logging.info('Manipulator control_schedule {}'.format(command))       
@@ -340,7 +348,7 @@ class udiYoManipulator(udi_interface.Node):
         self.schedule_selected = int(query.get('MaCindex.uom25'))
         tmp = int(query.get('MaCactive.uom25'))
         self.activated = (tmp == 1)
-        self.yoOutlet.activateSchedule(self.schedule_selected, self.activated)
+        self.yoManipulator.activateSchedule(self.schedule_selected, self.activated)
         
 
     commands = {

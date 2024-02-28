@@ -225,7 +225,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.offDelay = int(query.get("Moffdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
-        self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+        self.yoMultiOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
     
         
     def prepOnDelay(self, command ):
@@ -423,7 +423,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+
             {'driver': 'GV12', 'value': 99, 'uom': 25}, #Output
             {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
@@ -432,7 +432,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
             {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
-
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 0, 'uom': 25}
             ]
     
@@ -475,7 +475,7 @@ class udiYoMultiOutlet(udi_interface.Node):
 
         self.node_fully_config = False
         self.node_ready = True
-
+        self.schedule_selected = 0
 
 
     def node_queue(self, data):
@@ -559,7 +559,6 @@ class udiYoMultiOutlet(udi_interface.Node):
         time.sleep(1)
         self.yoMultiOutlet.initNode()
         time.sleep(3)
-    
         self.yoMultiOutlet.refreshMultiOutlet()
         self.yoMultiOutlet.refreshSchedules()
         self.node_ready = True
@@ -646,13 +645,13 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.node.setDriver('GV17', 99,True, True, 25)
             self.node.setDriver('GV18', 99,True, True, 25)            
             self.node.setDriver('GV19', 0)    
-        sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
+        sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_selected)
         logging.debug('sch_info {}'.format(sch_info))
         if sch_info:
             #if 'ch' in sch_info:
             #    self.node.setDriver('GV12', sch_info['ch'])
             self.node.setDriver('GV13', self.schedule_selected)
-            if self.yoOutlet.isScheduleActive(self.schedule_selected):
+            if self.yoMultiOutlet.isScheduleActive(self.schedule_selected):
                 self.node.setDriver('GV14', 1)
             else:
                 self.node.setDriver('GV14', 0)
@@ -752,7 +751,7 @@ class udiYoMultiOutlet(udi_interface.Node):
     def lookup_schedule(self, command):
         logging.info('udiYoMultiOutlet lookup_schedule {}'.format(command))
         self.schedule_selected = int(command.get('value'))
-        self.yoOutlet.refreshSchedules()
+        self.yoMultiOutlet.refreshSchedules()
 
     def define_schedule(self, command):
         logging.info('udiYoMultiOutlet define_schedule {}'.format(command))
@@ -783,7 +782,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         params['on'] = str(StartH)+':'+str(StartM)
         params['off'] = str(StopH)+':'+str(StopM)
         params['week'] = binDays
-        self.yoOutlet.setSchedule(self.schedule_selected, params)
+        self.yoMultiOutlet.setSchedule(self.schedule_selected, params)
 
     def control_schedule(self, command):
         logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
@@ -791,7 +790,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.schedule_selected = int(query.get('MOCindex.uom25'))
         tmp = int(query.get('MOCactive.uom25'))
         self.activated = (tmp == 1)
-        self.yoOutlet.activateSchedule(self.schedule_selected, self.activated)
+        self.yoMultiOutlet.activateSchedule(self.schedule_selected, self.activated)
 
     def update(self, command = None):
         logging.info('udiYoMultiOutlet Update Executed')
