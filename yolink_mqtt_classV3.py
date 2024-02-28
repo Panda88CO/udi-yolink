@@ -1194,6 +1194,8 @@ class YoLinkMQTTDevice(object):
                             #yolink.dataAPI[yolink.dData][yolink.dDelays] = []
                             yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState][0:yolink.nbrPorts+yolink.nbrUsb]
                     else: #must be single key - add all keys but contains key = 'state
+                        logging.debug('data - {}'.format(data))
+                        logging.debug('dataAPI - {}'.format(yolink.dataAPI[yolink.dData]))
                         for key in data[yolink.dData]:
                             logging.debug('Adding data values {} {}'.format(key, data[yolink.dData][key]))
                             yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
