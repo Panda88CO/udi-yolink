@@ -308,8 +308,8 @@ class udiYoOutlet(udi_interface.Node):
     def program_delays(self, command):
         logging.info('udiYoOutlet program_delays {}'.format(command))
         query = command.get("query")
-        self.onDelay = int(query.get("Oondelay.uom44"))
-        self.offDelay = int(query.get("Ooffdelay.uom44"))
+        self.onDelay = int(query.get("ondelay.uom44"))
+        self.offDelay = int(query.get("offdelay.uom44"))
         self.node.setDriver('GV1', self.onDelay * 60, True, True)
         self.node.setDriver('GV2', self.offDelay * 60 , True, True)
         self.yoOutlet.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 

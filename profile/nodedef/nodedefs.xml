@@ -58,25 +58,25 @@
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
             <cmd id="DELAY_CTRL" > 
-               <p id="Sondelay" editor="delaymin" init="GV1" /> 
-               <p id="Soffdelay" editor="delaymin" init="GV2" />                                     
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
             <cmd id="LOOKUP_SCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINE_SCH" > 
-               <p id="SDindex" editor="sch_indexS" init="GV13" /> 
-               <p id="SDactive" editor="sch_activeI" init="GV14" /> 
-               <p id="SDstartH" editor="startHour" init="GV15" /> 
-               <p id="SDstartM" editor="startMin" init="GV16" /> 
-               <p id="SDstopH" editor="startHour" init="GV17" /> 
-               <p id="SDstopM" editor="startMin" init="GV18" />   
-               <p id="SDbindays" editor="binDays" init="GV19" />                                          
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="startH" editor="startHour" init="GV15" /> 
+               <p id="startM" editor="startMin" init="GV16" /> 
+               <p id="stopH" editor="startHour" init="GV17" /> 
+               <p id="stopM" editor="startMin" init="GV18" />   
+               <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
-               <p id="SCindex" editor="sch_indexS" init="GV13" /> 
-               <p id="SCactive" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >                
          </accepts>
       </cmds>
@@ -196,25 +196,25 @@
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
             <cmd id="DELAY_CTRL" > 
-               <p id="Oondelay" editor="delaymin" init="GV1" /> 
-               <p id="Ooffdelay" editor="delaymin" init="GV2" />                                     
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
             <cmd id="LOOKUP_SCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINE_SCH" > 
-               <p id="ODindex" editor="sch_indexS" init="GV13" /> 
-               <p id="ODactive" editor="sch_activeI" init="GV14" /> 
-               <p id="ODstartH" editor="startHour" init="GV15" /> 
-               <p id="ODstartM" editor="startMin" init="GV16" /> 
-               <p id="ODstopH" editor="startHour" init="GV17" /> 
-               <p id="ODstopM" editor="startMin" init="GV18" />   
-               <p id="ODbindays" editor="binDays" init="GV19" />                                          
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="startH" editor="startHour" init="GV15" /> 
+               <p id="startM" editor="startMin" init="GV16" /> 
+               <p id="stopH" editor="startHour" init="GV17" /> 
+               <p id="stopM" editor="startMin" init="GV18" />   
+               <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
-               <p id="OCindex" editor="sch_indexS" init="GV13" /> 
-               <p id="OCactive" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >            
          </accepts>
       </cmds>
@@ -248,18 +248,18 @@
                <p id="" editor="sch_indexM" init="GV13" /> 
              </cmd >
             <cmd id="DEFINE_SCH" > 
-               <p id="MODoutport" editor="outport" init="GV12" /> 
-               <p id="MODindex" editor="sch_indexM" init="GV13" /> 
-               <p id="MODactive" editor="sch_activeI" init="GV14" /> 
-               <p id="MODstartH" editor="startHour" init="GV15" /> 
-               <p id="MODstartM" editor="startMin" init="GV16" /> 
-               <p id="MODstopH" editor="startHour" init="GV17" /> 
-               <p id="MODstopM" editor="startMin" init="GV18" />   
-               <p id="MODbindays" editor="binDays" init="GV19" />                                          
+               <p id="outport" editor="outport" init="GV12" /> 
+               <p id="index" editor="sch_indexM" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="startH" editor="startHour" init="GV15" /> 
+               <p id="startM" editor="startMin" init="GV16" /> 
+               <p id="stopH" editor="startHour" init="GV17" /> 
+               <p id="stopM" editor="startMin" init="GV18" />   
+               <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
-               <p id="MOCindex" editor="sch_indexM" init="GV13" /> 
-               <p id="MOCactive" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="sch_indexM" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >
 
          </accepts>
@@ -299,8 +299,8 @@
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
             <cmd id="DELAY_CTRL" > 
-               <p id="Mondelay" editor="delaymin" init="GV1" /> 
-               <p id="Moffdelay" editor="delaymin" init="GV2" />                                     
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >                
          </accepts>
       </cmds>
