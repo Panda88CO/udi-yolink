@@ -1101,8 +1101,8 @@ class YoLinkMQTTDevice(object):
                             
                         else:
                             logging.debug('input data: {}'.format(data[yolink.dData]) )
-                            if  yolink.dataAPI[yolink.dData][yolink.dState] is not dict:
-                                logging.debug('State is not dict - {}'.format(yolink.dataAPI[yolink.dData]))
+                            #if  yolink.dataAPI[yolink.dData][yolink.dState] is not dict:
+                                #logging.debug('State is not dict - {}'.format(yolink.dataAPI[yolink.dData]))
                                 #yolink.dataAPI[yolink.dData][yolink.dState]= {}
                             for key in data[yolink.dData]:
                                 logging.debug('adding data : {} - {} {} '.format(key, data[yolink.dData][key], yolink.dataAPI))
@@ -1120,12 +1120,12 @@ class YoLinkMQTTDevice(object):
                                     yolink.nbrUsb = 0
                                     yolink.nbrPorts = yolink.nbrOutlets + yolink.nbrUsb
                                 else:
-                                    logging.debug('adding 1 {} {}:'.format(key,data[yolink.dData] ))
-                                    logging.debug('adding 2 {} {}:'.format(key, yolink.dataAPI[yolink.dData][yolink.dState]))  
-                                    logging.debug('adding 3 {} {}:'.format(key, data[yolink.dData][key]))
+                                    #logging.debug('adding 1 {} {}:'.format(key,data[yolink.dData] ))
+                                    #logging.debug('adding 2 {} {}:'.format(key, yolink.dataAPI[yolink.dData][yolink.dState]))  
+                                    #logging.debug('adding 3 {} {}:'.format(key, data[yolink.dData][key]))
                                     if yolink.dState not in yolink.dataAPI[yolink.dData]:
                                         yolink.dataAPI[yolink.dData][yolink.dState] = {}
-                                        logging.debug('dState added')
+                                        #logging.debug('dState added')
                                     yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
 
 
@@ -1209,26 +1209,26 @@ class YoLinkMQTTDevice(object):
                             #yolink.dataAPI[yolink.dData][yolink.dDelays] = []
                             yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState][0:yolink.nbrPorts+yolink.nbrUsb]
                     else: #must be single key - add all keys but contains key = 'state
-                        logging.debug('data - {}'.format(data))
-                        logging.debug('dataAPI - {}'.format(yolink.dataAPI[yolink.dData]))
+                        #logging.debug('data - {}'.format(data))
+                        #logging.debug('dataAPI - {}'.format(yolink.dataAPI[yolink.dData]))
                         for key in data[yolink.dData]:
-                            logging.debug('Adding data values {} {}'.format(key, data[yolink.dData][key]))
+                            #logging.debug('Adding data values {} {}'.format(key, data[yolink.dData][key]))
                             yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
-                        logging.debug('dataAPI AFTER - {}'.format(yolink.dataAPI[yolink.dData]))
+                        #logging.debug('dataAPI AFTER - {}'.format(yolink.dataAPI[yolink.dData]))
                 else:
-                    logging.debug('adding event data {}'.format(data[yolink.dData]))
+                    #logging.debug('adding event data {}'.format(data[yolink.dData]))
                     for key in data[yolink.dData]:
-                        logging.debug('adding event data {}  {}'.format(key, data[yolink.dData]))
+                        #logging.debug('adding event data {}  {}'.format(key, data[yolink.dData]))
                         yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] # sAdding all keys to state
                     
                         #yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
                 yolink.updateLoraInfo(data)
                 yolink.updateMessageInfo(data)
-                logging.debug('Nbr Outlets {}'.format(yolink.nbrOutlets ))
-                logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
+                #logging.debug('Nbr Outlets {}'.format(yolink.nbrOutlets ))
+                #logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
                 if  yolink.dataAPI[yolink.dData][yolink.dState] is not dict:
-                    logging.debug('END State is not dict 1 - {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]))
-                    logging.debug('END State is not dict 2 - {}'.format(yolink.dataAPI[yolink.dData]))
+                    #logging.debug('END State is not dict 1 - {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]))
+                    #logging.debug('END State is not dict 2 - {}'.format(yolink.dataAPI[yolink.dData]))
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts
             #yolink.online = yolink.check_system_online()
 
