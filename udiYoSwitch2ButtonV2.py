@@ -112,12 +112,14 @@ class udiYoSwitch2Button(udi_interface.Node):
         self.yoSwitch.refreshSchedules()
         self.node_ready = True
         for key in range (0,self.nbr_keys):
+            logging.debug('Adding keys to 2 button switch: {}'.format(key) )
             k_address =  self.address[4:14]+'key' + str(key)
             k_address = self.poly.getValidAddress(str(k_address))
             k_name =  str(self.name) + ' key' + str(key+1)
             k_name = self.poly.getValidName(str(k_name))
             self.keys[key] = udiRemoteKey(self.poly, self.address, k_address, k_name, key)
             self.adr_list.append(k_address)
+            logging.debug('Waiting for node to complete{}'.format(self.adr_list))
             self.wait_for_node_done()
 
 
