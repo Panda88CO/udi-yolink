@@ -70,6 +70,9 @@ class udiYoSwitch2Button(udi_interface.Node):
         self.onDelay = 0
         self.offDelay = 0
         self.schedule_selected = 0
+        self.keys = {}
+        self.max_remote_keys = 4
+        self.nbr_keys = 2
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -108,7 +111,7 @@ class udiYoSwitch2Button(udi_interface.Node):
         self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
         self.yoSwitch.refreshSchedules()
         self.node_ready = True
-        for key in range (0,2):
+        for key in range (0,self.nbr_keys):
             k_address =  self.address[4:14]+'key' + str(key)
             k_address = self.poly.getValidAddress(str(k_address))
             k_name =  str(self.name) + ' key' + str(key+1)

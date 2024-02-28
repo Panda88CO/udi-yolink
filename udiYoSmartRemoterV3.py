@@ -298,7 +298,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.yoSmartRemote.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
-        for key in range(0, 4):
+        for key in range(0, self.nbr_keys):
             k_address =  self.address[4:14]+'key' + str(key)
             k_address = self.poly.getValidAddress(str(k_address))
 
