@@ -1214,6 +1214,7 @@ class YoLinkMQTTDevice(object):
                         for key in data[yolink.dData]:
                             logging.debug('Adding data values {} {}'.format(key, data[yolink.dData][key]))
                             yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
+                        logging.debug('dataAPI AFTER - {}'.format(yolink.dataAPI[yolink.dData]))
                 else:
                     logging.debug('adding event data {}'.format(data[yolink.dData]))
                     for key in data[yolink.dData]:
@@ -1226,7 +1227,7 @@ class YoLinkMQTTDevice(object):
                 logging.debug('Nbr Outlets {}'.format(yolink.nbrOutlets ))
                 logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
                 if  yolink.dataAPI[yolink.dData][yolink.dState] is not dict:
-                    logging.debug('END State is not dict - {}'.format(yolink.dataAPI))
+                    logging.debug('END State is not dict - {}'.format(yolink.dataAPI[yolink.dData]))
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts
             #yolink.online = yolink.check_system_online()
 
