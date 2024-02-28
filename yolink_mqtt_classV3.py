@@ -1066,8 +1066,6 @@ class YoLinkMQTTDevice(object):
                 if data['method'] == 'getSchedules' or data['method'] == 'setSchedules':
                     yolink.updateScheduleStatus(data)
                 else:
-                    if 'data' in data:  #new
-                        yolink.dataAPI[yolink.dData] = data['data'] #new
                     if yolink.dState in data[yolink.dData]:
                         #if 'reportAt' in data[yolink.dData] or 'stateChangedAt' in data[yolink.dData]:
                         #    reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -1132,6 +1130,8 @@ class YoLinkMQTTDevice(object):
 
 
                     else: # setDelay only returns data
+                        if 'data' in data:  #new
+                            yolink.dataAPI[yolink.dData] = data['data'] #new
                         yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                         if ".setDelay" in data['method']:
                             logging.debug("setDelay detected")
