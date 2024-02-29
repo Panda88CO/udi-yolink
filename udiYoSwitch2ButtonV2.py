@@ -54,7 +54,7 @@ class udiYoSwitch2Button(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('udiYoSwitch INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoSwitch2Button INIT- {}'.format(deviceInfo['name']))
         self.poly = polyglot
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
@@ -197,24 +197,24 @@ class udiYoSwitch2Button(udi_interface.Node):
                 self.node.setDriver('GV18', 99,True, True, 25)
                 self.node.setDriver('GV19', 0)
 
-                event_data = self.yoSwitch.getEventData()
-                logging.debug('updateData - event data {}'.format(event_data))
-                if event_data:
-                    key_mask = event_data['keyMask']
-                    press_type = event_data['type']
-                    remote_key = self.mask2key(key_mask)
-                    if press_type == 'LongPress':
-                        press = self.max_remote_keys
-                    else:
-                        press = 0
-                    logging.debug('remote key {} press {}'.format(remote_key, press))
-                    
-                    while not self.nodesOK:
-                        time.sleep(1)
-                    if self.yoSwitch.isControlEvent():
-                        self.keys[remote_key].send_command(press)
-                        self.yoSwitch.clearEventData()
-                        logging.debug('clearEventData')           
+            event_data = self.yoSwitch.getEventData()
+            logging.debug('updateData - event data {}'.format(event_data))
+            if event_data:
+                key_mask = event_data['keyMask']
+                press_type = event_data['type']
+                remote_key = self.mask2key(key_mask)
+                if press_type == 'LongPress':
+                    press = self.max_remote_keys
+                else:
+                    press = 0
+                logging.debug('remote key {} press {}'.format(remote_key, press))
+                
+                while not self.nodesOK:
+                    time.sleep(1)
+                if self.yoSwitch.isControlEvent():
+                    self.keys[remote_key].send_command(press)
+                    self.yoSwitch.clearEventData()
+                    logging.debug('clearEventData')           
 
 
             sch_info = self.yoSwitch.getScheduleInfo(self.schedule_selected)
