@@ -18,6 +18,7 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
+import math
 from yolinkSwitchV2 import YoLinkSW
 from udiYoSmartRemoterV3 import udiRemoteKey
 
@@ -157,6 +158,10 @@ class udiYoSwitch2Button(udi_interface.Node):
             self.updateData()
 
 
+    def mask2key (self, mask):
+        logging.debug('mask2key : {}'.format(mask))
+        return(int(round(math.log2(mask),0)))
+    
     def updateData(self):
         if self.node is not None:
             state =  self.yoSwitch.getState().upper()
