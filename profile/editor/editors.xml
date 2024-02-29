@@ -209,13 +209,22 @@
    <editor id="sch_indexS"> 
      <range uom="25" subset="0-5" nls="sch_indexS" />
    </editor>  
-   <editor id="startHour"> 
+   <editor id="stHour"> 
      <range uom="19" min="0" max="24" />
      <range uom="25" subset="98,99" nls="notdefined"/>
    </editor>  
-   <editor id="startMin"> 
+   <editor id="stMin"> 
      <range uom="44" min="0" max="59" />
      <range uom="25" subset="98,99" nls="notdefined"/>
+   </editor>  
+
+    <editor id="stHourI"> 
+     <range uom="19" min="0" max="24" />
+     <range uom="25" subset="98" nls="notdefined"/>
+   </editor>  
+   <editor id="stMinI"> 
+     <range uom="44" min="0" max="59" />
+     <range uom="25" subset="98" nls="notdefined"/>
    </editor>  
    <editor id="binDays"> 
      <range uom="25" subset="0-127" nls="bindays" />

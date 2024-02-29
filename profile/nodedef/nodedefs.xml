@@ -24,10 +24,10 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
-         <st id="GV15" editor="startHour" />      
-         <st id="GV16" editor="startMin" />    
-         <st id="GV17" editor="stopHour" />      
-         <st id="GV18" editor="stopMin" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
@@ -68,10 +68,10 @@
             <cmd id="DEFINE_SCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
-               <p id="startH" editor="startHour" init="GV15" /> 
-               <p id="startM" editor="startMin" init="GV16" /> 
-               <p id="stopH" editor="startHour" init="GV17" /> 
-               <p id="stopM" editor="startMin" init="GV18" />   
+               <p id="startH" editor="stHourI" init="GV15" /> 
+               <p id="startM" editor="stMinI" init="GV16" /> 
+               <p id="stopH" editor="stHourI" init="GV17" /> 
+               <p id="stopM" editor="stMinI" init="GV18" />   
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -94,10 +94,10 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
-         <st id="GV15" editor="startHour" />      
-         <st id="GV16" editor="startMin" />    
-         <st id="GV17" editor="stopHour" />      
-         <st id="GV18" editor="stopMin" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
@@ -138,10 +138,10 @@
             <cmd id="DEFINE_SCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
-               <p id="startH" editor="startHour" init="GV15" /> 
-               <p id="startM" editor="startMin" init="GV16" /> 
-               <p id="stopH" editor="startHour" init="GV17" /> 
-               <p id="stopM" editor="startMin" init="GV18" />   
+               <p id="startH" editor="stHourI" init="GV15" /> 
+               <p id="startM" editor="stMinI" init="GV16" /> 
+               <p id="stopH" editor="stHourI" init="GV17" /> 
+               <p id="stopM" editor="stMinI" init="GV18" />   
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -162,10 +162,10 @@
 
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
-         <st id="GV15" editor="startHour" />      
-         <st id="GV16" editor="startMin" />    
-         <st id="GV17" editor="stopHour" />      
-         <st id="GV18" editor="stopMin" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />        
@@ -208,10 +208,10 @@
             <cmd id="DEFINE_SCH" > 
                <p id="DDindex" editor="sch_indexS" init="GV13" /> 
                <p id="DDactive" editor="sch_activeI" init="GV14" /> 
-               <p id="DDstartH" editor="startHour" init="GV15" /> 
-               <p id="DDstartM" editor="startMin" init="GV16" /> 
-               <p id="DDstopH" editor="startHour" init="GV17" /> 
-               <p id="DDstopM" editor="startMin" init="GV18" />   
+               <p id="DDstartH" editor="stHourI" init="GV15" /> 
+               <p id="DDstartM" editor="stMinI" init="GV16" /> 
+               <p id="DDstopH" editor="stHourI" init="GV17" /> 
+               <p id="DDstopM" editor="stMinI" init="GV18" />   
                <p id="DDbindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -233,10 +233,10 @@
 
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
-         <st id="GV15" editor="startHour" />      
-         <st id="GV16" editor="startMin" />    
-         <st id="GV17" editor="stopHour" />      
-         <st id="GV18" editor="stopMin" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
@@ -273,10 +273,10 @@
             <cmd id="DEFINE_SCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
-               <p id="startH" editor="startHour" init="GV15" /> 
-               <p id="startM" editor="startMin" init="GV16" /> 
-               <p id="stopH" editor="startHour" init="GV17" /> 
-               <p id="stopM" editor="startMin" init="GV18" />   
+               <p id="startH" editor="stHourI" init="GV15" /> 
+               <p id="startM" editor="stMinI" init="GV16" /> 
+               <p id="stopH" editor="stHourI" init="GV17" /> 
+               <p id="stopM" editor="stMinI" init="GV18" />   
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -298,10 +298,10 @@
 
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
-         <st id="GV15" editor="startHour" />      
-         <st id="GV16" editor="startMin" />    
-         <st id="GV17" editor="stopHour" />      
-         <st id="GV18" editor="stopMin" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
@@ -338,10 +338,10 @@
             <cmd id="DEFINE_SCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
-               <p id="startH" editor="startHour" init="GV15" /> 
-               <p id="startM" editor="startMin" init="GV16" /> 
-               <p id="stopH" editor="startHour" init="GV17" /> 
-               <p id="stopM" editor="startMin" init="GV18" />   
+               <p id="startH" editor="stHourI" init="GV15" /> 
+               <p id="startM" editor="stMinI" init="GV16" /> 
+               <p id="stopH" editor="stHourI" init="GV17" /> 
+               <p id="stopM" editor="stMinI" init="GV18" />   
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -360,10 +360,10 @@
          <st id="GV12" editor="outport" />    
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
-         <st id="GV15" editor="startHour" />      
-         <st id="GV16" editor="startMin" />    
-         <st id="GV17" editor="stopHour" />      
-         <st id="GV18" editor="stopMin" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
          <st id="GV19" editor="binDays" />      
 
    
@@ -382,10 +382,10 @@
                <p id="outport" editor="outport" init="GV12" /> 
                <p id="index" editor="sch_indexM" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
-               <p id="startH" editor="startHour" init="GV15" /> 
-               <p id="startM" editor="startMin" init="GV16" /> 
-               <p id="stopH" editor="startHour" init="GV17" /> 
-               <p id="stopM" editor="startMin" init="GV18" />   
+               <p id="startH" editor="stHourI" init="GV15" /> 
+               <p id="startM" editor="stMinI" init="GV16" /> 
+               <p id="stopH" editor="stHourI" init="GV17" /> 
+               <p id="stopM" editor="stMinI" init="GV18" />   
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -470,10 +470,10 @@
          <st id="BATLVL" editor="batlevel" />
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
-         <st id="GV15" editor="startHour" />      
-         <st id="GV16" editor="startMin" />    
-         <st id="GV17" editor="stopHour" />      
-         <st id="GV18" editor="stopMin" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />             
@@ -509,10 +509,10 @@
             <cmd id="DEFINE_SCH" > 
                <p id="MaDindex" editor="sch_indexS" init="GV13" /> 
                <p id="MaDactive" editor="sch_activeI" init="GV14" /> 
-               <p id="MaDstartH" editor="startHour" init="GV15" /> 
-               <p id="MaDstartM" editor="startMin" init="GV16" /> 
-               <p id="MaDstopH" editor="startHour" init="GV17" /> 
-               <p id="MaDstopM" editor="startMin" init="GV18" />   
+               <p id="MaDstartH" editor="stHourI" init="GV15" /> 
+               <p id="MaDstartM" editor="stMinI" init="GV16" /> 
+               <p id="MaDstopH" editor="stHourI" init="GV17" /> 
+               <p id="MaDstopM" editor="stMinI" init="GV18" />   
                <p id="MaDbindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 

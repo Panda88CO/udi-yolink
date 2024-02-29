@@ -191,8 +191,8 @@ class udiYoManipulator(udi_interface.Node):
             timestr = sch_info['off']
             logging.debug('timestr : {}'.format(timestr))
             if '25:0' in timestr:
-                self.node.setDriver('GV17', 98,True, True, 25)
-                self.node.setDriver('GV18', 98,True, True, 25)
+                self.node.setDriver('GV17', 98, True, True, 25)
+                self.node.setDriver('GV18', 98, True, True, 25)
             else:
                 timelist =  timestr.split(':')
                 hour = timelist[0]
