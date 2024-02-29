@@ -197,8 +197,6 @@ class udiYoSwitch2Button(udi_interface.Node):
                 self.node.setDriver('GV18', 99,True, True, 25)
                 self.node.setDriver('GV19', 0)
 
-
-
                 event_data = self.yoSwitch.getEventData()
                 logging.debug('updateData - event data {}'.format(event_data))
                 if event_data:
