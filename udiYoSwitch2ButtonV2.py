@@ -214,8 +214,6 @@ class udiYoSwitch2Button(udi_interface.Node):
                     press = 0
                 logging.debug('remote key {} press {}'.format(remote_key, press))
                 
-                while not self.nodesOK:
-                    time.sleep(1)
                 if self.yoSwitch.isControlEvent():
                     self.keys[remote_key].send_command(press)
                     self.yoSwitch.clearEventData()
