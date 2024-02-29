@@ -1226,7 +1226,7 @@ class YoLinkMQTTDevice(object):
                 yolink.updateMessageInfo(data)
                 #logging.debug('Nbr Outlets {}'.format(yolink.nbrOutlets ))
                 #logging.debug('updateStatusData - Event data : {}'.format(yolink.dataAPI))
-                if  yolink.dataAPI[yolink.dData][yolink.dState] is not dict:
+                #if  yolink.dataAPI[yolink.dData][yolink.dState] is not dict:
                     #logging.debug('END State is not dict 1 - {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]))
                     #logging.debug('END State is not dict 2 - {}'.format(yolink.dataAPI[yolink.dData]))
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts
