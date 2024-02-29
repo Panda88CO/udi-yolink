@@ -135,7 +135,7 @@ class udiRemoteKey(udi_interface.Node):
                 self.node.reportCmd(self.long_press_state )
             self.node.setDriver('GV0', isy_val)
             logging.debug('send long press command cmd:{} driver{}'.format(self.long_press_state, isy_val))
-
+            
 
     def get_new_state(self, cmd_type, state):
         logging.debug('key_pressed = key {} - cmd_type = {} state {}'.format(self.key , cmd_type, state ))
