@@ -1240,11 +1240,11 @@ class YoLinkMQTTDevice(object):
     def get_event_from_state(yolink):
         logging.debug('get_event_from_state')
         try:
-            logging.debug('get_event_from_state: {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['event']))
+            logging.debug('get_event_from_state: {}'.format(yolink.dataAPI[yolink.dData]))
             return(yolink.dataAPI[yolink.dData][yolink.dState]['event'])
         except Exception as E:
             logging.error('Exception in get_event_in_state {} {}'.format(E,yolink.dataAPI[yolink.dData][yolink.dState] ))
-
+            return(None)
     def clear_event_from_state(yolink):
         logging.debug('clear_event_from_state and last message')
         try:
@@ -1266,7 +1266,7 @@ class YoLinkMQTTDevice(object):
                     return(False)
             if 'event' in data:
                 temp = data['event']
-                if 'StatusChange' in temp or '.Alert' in temp:
+                if 'StatusChange' in temp or '.Alert' in temp or'.DevEvent' in temp:
                     return(True)
                 else:
                     return(False)

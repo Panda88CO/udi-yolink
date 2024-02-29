@@ -72,7 +72,7 @@ class udiYoSwitch2Button(udi_interface.Node):
         self.offDelay = 0
         self.schedule_selected = 0
         self.keys = {}
-        self.max_remote_keys = 4
+        self.max_remote_keys = 8
         self.nbr_keys = 2
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
