@@ -188,15 +188,37 @@ class udiYoSwitch2Button(udi_interface.Node):
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 0, True, False)
                 self.node.setDriver('GV2', 0, True, False)
-                self.node.setDriver('GV20', 2, True, True)   
+                self.node.setDriver('GV20', 2, True, True)
                 self.node.setDriver('GV13', self.schedule_selected)
                 self.node.setDriver('GV14', 99)
                 self.node.setDriver('GV15', 99,True, True, 25)
                 self.node.setDriver('GV16', 99,True, True, 25)
                 self.node.setDriver('GV17', 99,True, True, 25)
                 self.node.setDriver('GV18', 99,True, True, 25)
-                self.node.setDriver('GV19', 0)    
-           
+                self.node.setDriver('GV19', 0)
+
+
+
+                event_data = self.yoSwitch.getEventData()
+                logging.debug('updateData - event data {}'.format(event_data))
+                if event_data:
+                    key_mask = event_data['keyMask']
+                    press_type = event_data['type']
+                    remote_key = self.mask2key(key_mask)
+                    if press_type == 'LongPress':
+                        press = self.max_remote_keys
+                    else:
+                        press = 0
+                    logging.debug('remote key {} press {}'.format(remote_key, press))
+                    
+                    while not self.nodesOK:
+                        time.sleep(1)
+                    if self.yoSwitch.isControlEvent():
+                        self.keys[remote_key].send_command(press)
+                        self.yoSwitch.clearEventData()
+                        logging.debug('clearEventData')           
+
+
             sch_info = self.yoSwitch.getScheduleInfo(self.schedule_selected)
             logging.debug('sch_info {}'.format(sch_info))
             if sch_info:
