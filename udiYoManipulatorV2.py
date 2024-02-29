@@ -315,6 +315,10 @@ class udiYoManipulator(udi_interface.Node):
 
     def define_schedule(self, command):
         logging.info('Manipulator define_schedule {}'.format(command))
+        StartH = 25
+        StartM = 0        
+        StopH = 25
+        StopM = 0              
         query = command.get("query")
         self.schedule_selected = int(query.get('index.uom25'))
         tmp = int(query.get('active.uom25'))
@@ -322,15 +326,11 @@ class udiYoManipulator(udi_interface.Node):
         if 'ODstartH.uom19' in query:
             StartH = int(query.get('startH.uom19'))
             StartM = int(query.get('startM.uom44'))
-        else:
-            startH = 25
-            StartM = 0
+
         if 'ODstopH.uom19' in query:
             StopH = int(query.get('stopH.uom19'))
             StopM = int(query.get('stopM.uom44'))
-        else:
-            startH = 25
-            StartM = 0      
+
 
         binDays = int(query.get('bindays.uom25'))
 
