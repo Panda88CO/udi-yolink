@@ -18,18 +18,17 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-import math
 from yolinkSwitchV2 import YoLinkSW
-from udiYoSmartRemoterV3 import udiRemoteKey
 
-class udiYoSwitch2Button(udi_interface.Node):
-    #from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
-
-    id = 'yoswitch2b'
+class udiYoSwitch(udi_interface.Node):
+  
+    id = 'yoswitch'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
+
+
             {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
@@ -45,19 +44,18 @@ class udiYoSwitch2Button(udi_interface.Node):
             'GV0' =  switch State
             'GV1' = OnDelay
             'GV2' = OffDelay
-
+            'GV3' = Power
+            'GV4' = Energy
+            'GV5' = Online
             ]
 
     ''' 
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('udiYoSwitch2Button INIT- {}'.format(deviceInfo['name']))
-        self.poly = polyglot
+        logging.debug('udiYoSwitch INIT- {}'.format(deviceInfo['name']))
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
-        self.address = address
-        self.name = name
         self.yoSwitch = None
         self.node_ready = False
         self.timer_cleared = True
@@ -68,9 +66,6 @@ class udiYoSwitch2Button(udi_interface.Node):
         self.onDelay = 0
         self.offDelay = 0
         self.schedule_selected = 0
-        self.keys = {}
-        self.max_remote_keys = 8
-        self.nbr_keys = 2
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -109,16 +104,6 @@ class udiYoSwitch2Button(udi_interface.Node):
         self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
         self.yoSwitch.refreshSchedules()
         self.node_ready = True
-        for key in range (0,self.nbr_keys):
-            logging.debug('Adding keys to 2 button switch: {}'.format(key) )
-            k_address =  self.address[4:14]+'key' + str(key)
-            k_address = self.poly.getValidAddress(str(k_address))
-            k_name =  str(self.name) + ' key' + str(key+1)
-            k_name = self.poly.getValidName(str(k_name))
-            self.keys[key] = udiRemoteKey(self.poly, self.address, k_address, k_name, key)
-            self.adr_list.append(k_address)
-            logging.debug('Waiting for node to complete{}'.format(self.adr_list))
-            self.wait_for_node_done()
 
 
 
@@ -155,10 +140,6 @@ class udiYoSwitch2Button(udi_interface.Node):
             self.updateData()
 
 
-    def mask2key (self, mask):
-        logging.debug('mask2key : {}'.format(mask))
-        return(int(round(math.log2(mask),0)))
-    
     def updateData(self):
         if self.node is not None:
             state =  self.yoSwitch.getState().upper()
@@ -190,33 +171,15 @@ class udiYoSwitch2Button(udi_interface.Node):
                 self.node.setDriver('GV0', 99, True, True)
                 self.node.setDriver('GV1', 0, True, False)
                 self.node.setDriver('GV2', 0, True, False)
-                self.node.setDriver('GV20', 2, True, True)
+                self.node.setDriver('GV20', 2, True, True)   
                 self.node.setDriver('GV13', self.schedule_selected)
                 self.node.setDriver('GV14', 99)
                 self.node.setDriver('GV15', 99,True, True, 25)
                 self.node.setDriver('GV16', 99,True, True, 25)
                 self.node.setDriver('GV17', 99,True, True, 25)
                 self.node.setDriver('GV18', 99,True, True, 25)
-                self.node.setDriver('GV19', 0)
-
-            event_data = self.yoSwitch.getEventData()
-            logging.debug('updateData - event data {}'.format(event_data))
-            if event_data:
-                key_mask = event_data['keyMask']
-                press_type = event_data['type']
-                remote_key = self.mask2key(key_mask)
-                if press_type == 'LongPress':
-                    press = self.max_remote_keys
-                else:
-                    press = 0
-                logging.debug('remote key {} press {}'.format(remote_key, press))
-                
-                if self.yoSwitch.isControlEvent():
-                    self.keys[remote_key].send_command(press)
-                    self.yoSwitch.clearEventData()
-                    logging.debug('clearEventData')           
-
-
+                self.node.setDriver('GV19', 0)    
+           
             sch_info = self.yoSwitch.getScheduleInfo(self.schedule_selected)
             logging.debug('sch_info {}'.format(sch_info))
             if sch_info:
@@ -360,8 +323,7 @@ class udiYoSwitch2Button(udi_interface.Node):
         StartH = 25
         StartM = 0        
         StopH = 25
-        StopM = 0      
-
+        StopM = 0              
         query = command.get("query")
         self.schedule_selected = int(query.get('index.uom25'))
         tmp = int(query.get('active.uom25'))
@@ -369,11 +331,10 @@ class udiYoSwitch2Button(udi_interface.Node):
         if 'startH.uom19' in query:
             StartH = int(query.get('startH.uom19'))
             StartM = int(query.get('startM.uom44'))
-
         if 'stopH.uom19' in query:
             StopH = int(query.get('stopH.uom19'))
-            StopM = int(query.get('stopM.uom44'))
-            
+            StopM = int(query.get('stopM.uom44'))  
+
         binDays = int(query.get('bindays.uom25'))
 
         params = {}

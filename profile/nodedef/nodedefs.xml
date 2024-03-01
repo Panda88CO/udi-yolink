@@ -21,7 +21,7 @@
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
-         <!-- <st id="GV8" editor="online" /> -->
+
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
@@ -38,7 +38,6 @@
             <cmd id="DOF"  />
             <cmd id="DFON"  />               
             <cmd id="DFOF"  />    
-      
          </sends>
 
          <accepts>
@@ -65,6 +64,7 @@
             <cmd id="LOOKUP_SCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
+             
             <cmd id="DEFINE_SCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
@@ -82,73 +82,8 @@
       </cmds>
    </nodeDef> 
 
-   
-   <nodeDef id="yoswitch2b" nls="nlsswitch">
-      <editors />
-      <sts>
-         <st id="GV0" editor="swstate" />
-         <st id="GV1" editor="delay" />
-         <st id="GV2" editor="delay" />
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
-         <st id="GV15" editor="stHour" />      
-         <st id="GV16" editor="stMin" />    
-         <st id="GV17" editor="stHour" />      
-         <st id="GV18" editor="stMin" />    
-         <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
-      </sts>
-      <cmds>
-         <sends>
-            <cmd id="DON"  />               
-            <cmd id="DOF"  />
-            <cmd id="DFON"  />               
-            <cmd id="DFOF"  />    
-      
-         </sends>
 
-         <accepts>
-            <cmd id="UPDATE"  /> 
-            <cmd id="DON"  /> 
-            <cmd id="DOF"  /> 
-            <cmd id="DFON"  /> 
-            <cmd id="DFOF"  />
-            <cmd id="QUERY" /> 
-            <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="1" /> 
-            </cmd >
-            <cmd id="ONDELAY" > 
-               <p id="" editor="delaymin" init="GV1" /> 
-             </cmd >   
-            <cmd id="OFFDELAY" > 
-               <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
-            <cmd id="DELAY_CTRL" > 
-               <p id="ondelay" editor="delaymin" init="GV1" /> 
-               <p id="offdelay" editor="delaymin" init="GV2" />                                     
-             </cmd >   
-
-            <cmd id="LOOKUP_SCH" > 
-               <p id="" editor="sch_indexS" init="GV13" /> 
-             </cmd >
-            <cmd id="DEFINE_SCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
-               <p id="startH" editor="stHourI" init="GV15" /> 
-               <p id="startM" editor="stMinI" init="GV16" /> 
-               <p id="stopH" editor="stHourI" init="GV17" /> 
-               <p id="stopM" editor="stMinI" init="GV18" />   
-               <p id="bindays" editor="binDays" init="GV19" />                                          
-             </cmd >
-            <cmd id="CTRL_SCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
-             </cmd >                
-         </accepts>
-      </cmds>
-   </nodeDef> 
-
+ 
    <nodeDef id="yodimmer" nls="nlsdimmer">
       <editors />
       <sts>

@@ -47,17 +47,17 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 
 
 # YoLink Switch 2 buttons
-ND-yoswitch2b-NAME = YoLink Switch
-ND-yoswitch2b-ICON = Switch
-ST-nlsswitch2b-GV0-NAME = Switch State
-ST-nlsswitch2-GV1-NAME = On Delay (min)
-ST-nlsswitc2b-GV2-NAME = Off Delay (min)
-ST-nlsswitch2b-GV3-NAME = Left Button
-ST-nlsswitch2b-GV4-NAME = Right Button
-CMD-nlsswitch2b-DON-NAME = ON command
-CMD-nlsswitch2b-DOF-NAME = OFF command
-CMD-nlsswitch2b-DFON-NAME = Fast ON command 
-CMD-nlsswitch2b-DFOF-NAME = Fast OFF command
+#ND-yoswitch2b-NAME = YoLink Switch
+#ND-yoswitch2b-ICON = Switch
+#ST-nlsswitch2b-GV0-NAME = Switch State
+#ST-nlsswitch2-GV1-NAME = On Delay (min)
+#ST-nlsswitc2b-GV2-NAME = Off Delay (min)
+#ST-nlsswitch2b-GV3-NAME = Left Button
+#ST-nlsswitch2b-GV4-NAME = Right Button
+#CMD-nlsswitch2b-DON-NAME = ON command
+#CMD-nlsswitch2b-DOF-NAME = OFF command
+#CMD-nlsswitch2b-DFON-NAME = Fast ON command 
+#CMD-nlsswitch2b-DFOF-NAME = Fast OFF command
 
 
 # YoLink Switch
@@ -66,6 +66,14 @@ ND-yoswitch-ICON = Switch
 ST-nlsswitch-GV0-NAME = Switch State
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
+ST-nlsswitch-GV13-NAME = Schedule Index
+ST-nlsswitch-GV14-NAME = Activated
+ST-nlsswitch-GV15-NAME = Start Hour
+ST-nlsswitch-GV16-NAME = Start Minute
+ST-nlsswitch-GV17-NAME = Stop Hour
+ST-nlsswitch-GV18-NAME = Stop Minute
+ST-nlsswitch-GV19-NAME = Days Active
+
 CMD-nlsswitch-DON-NAME = ON command
 CMD-nlsswitch-DOF-NAME = OFF command
 CMD-nlsswitch-DFON-NAME = Fast ON command 
@@ -237,6 +245,13 @@ ST-nlsdimmer-GV0-NAME = Switch State
 ST-nlsdimmer-GV1-NAME = On Delay
 ST-nlsdimmer-GV2-NAME = Off Delay
 ST-nlsdimmer-GV3-NAME = Dimmer Level
+ST-nlsdimmer-GV13-NAME = Schedule Index
+ST-nlsdimmer-GV14-NAME = Activated
+ST-nlsdimmer-GV15-NAME = Start Hour
+ST-nlsdimmer-GV16-NAME = Start Minute
+ST-nlsdimmer-GV17-NAME = Stop Hour
+ST-nlsdimmer-GV18-NAME = Stop Minute
+ST-nlsdimmer-GV19-NAME = Days Active
 CMD-nlsdimmer-DIMLVL-NAME = Dimming Level (%)
 
 ND-yoirremote-NAME = YoLink Ir Remoter
