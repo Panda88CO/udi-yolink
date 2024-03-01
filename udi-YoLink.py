@@ -42,7 +42,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-version = '0.9.95'
+version = '0.9.96'
 
 class YoLinkSetup (udi_interface.Node):
 
