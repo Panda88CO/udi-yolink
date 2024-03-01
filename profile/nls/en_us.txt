@@ -62,6 +62,10 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 # YoLink Switch
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
+
+ND-yoswitchsec-NAME = YoLink Switch
+ND-yoswitchsec-ICON = Switch
+
 ST-nlsswitch-GV0-NAME = Switch State
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
