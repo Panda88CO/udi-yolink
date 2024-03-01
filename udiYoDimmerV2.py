@@ -326,20 +326,20 @@ class udiYoDimmer(udi_interface.Node):
 
     def define_schedule(self, command):
         logging.info('udiYoDimmer define_schedule {}'.format(command))
-        StartH = 25
-        StartM = 0        
-        StopH = 25
-        StopM = 0              
+        onH = 25
+        onM = 0        
+        offH = 25
+        offM = 0              
         query = command.get("query")
         self.schedule_selected = int(query.get('index.uom25'))
         tmp = int(query.get('active.uom25'))
         self.activated = (tmp == 1)
-        if 'startH.uom19' in query:
-            StartH = int(query.get('startH.uom19'))
-            StartM = int(query.get('startM.uom44'))
-        if 'stopH.uom19' in query:
-            StopH = int(query.get('stopH.uom19'))
-            StopM = int(query.get('stopM.uom44'))
+        if 'onH.uom19' in query:
+            onH = int(query.get('onH.uom19'))
+            onM = int(query.get('onM.uom44'))
+        if 'offH.uom19' in query:
+            offH = int(query.get('offH.uom19'))
+            offM = int(query.get('offM.uom44'))
  
 
         binDays = int(query.get('bindays.uom25'))
@@ -347,8 +347,8 @@ class udiYoDimmer(udi_interface.Node):
         params = {}
         params['index'] = str(self.schedule_selected )
         params['isValid'] = self.activated 
-        params['on'] = str(StartH)+':'+str(StartM)
-        params['off'] = str(StopH)+':'+str(StopM)
+        params['on'] = str(onH)+':'+str(onM)
+        params['off'] = str(offH)+':'+str(offM)
         params['week'] = binDays
         self.yoDimmer.setSchedule(self.schedule_selected, params)
 

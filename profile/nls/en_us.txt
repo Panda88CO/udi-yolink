@@ -59,7 +59,6 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 #CMD-nlsswitch2b-DFON-NAME = Fast ON command 
 #CMD-nlsswitch2b-DFOF-NAME = Fast OFF command
 
-
 # YoLink Switch
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
@@ -78,8 +77,6 @@ CMD-nlsswitch-DON-NAME = ON command
 CMD-nlsswitch-DOF-NAME = OFF command
 CMD-nlsswitch-DFON-NAME = Fast ON command 
 CMD-nlsswitch-DFOF-NAME = Fast OFF command
-
-
 
 #YoLink Outlet
 ND-yooutlet-NAME = YoLink Outlet

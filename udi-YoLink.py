@@ -10,6 +10,7 @@ import time
 
 from yoLink_init_V3 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
+from udiYoSwitchSecV2 import udiYoSwitchSec
 from udiYoTHsensorV2 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
@@ -245,8 +246,12 @@ class YoLinkSetup (udi_interface.Node):
                         name = self.poly.getValidName(name)
                         self.Parameters[address] =  dev['name']
 
-                    logging.info('Adding switch device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoSwitch(self.poly, address, address, name,  self.yoAccess, dev )
+                    if  'YS5708' in dev['modelName'] or 'YS5709' in dev['modelName']:
+                        logging.info('Adding swith2Button device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoSwitchSec(self.poly, address, address, name,  self.yoAccess, dev )
+                    else:
+                        logging.info('Adding switch device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoSwitch(self.poly, address, address, name,  self.yoAccess, dev )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
@@ -297,8 +302,9 @@ class YoLinkSetup (udi_interface.Node):
                         name = dev['name']
                         name = self.poly.getValidName(name)
                         self.Parameters[address]=  dev['name']
+                        
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev )
+                    temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev)
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
