@@ -22,20 +22,21 @@ from udiYoSmartRemoterV3 import udiRemoteKey
 
 class udiYoSwitchSec(udi_interface.Node):
     from  udiCommonLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
-    id = 'yoswitch'
+    id = 'yoswitchsec'
 
     drivers = [
         {'driver': 'GV0', 'value': 99, 'uom': 25},
         {'driver': 'GV1', 'value': 0, 'uom': 57}, 
         {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-        {'driver': 'GV10', 'value': 99, 'uom': 25}, #onSec
-        {'driver': 'GV11', 'value': 99, 'uom': 25}, #offSec            
+        
         {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
         {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
         {'driver': 'GV15', 'value': 99, 'uom': 25}, #On Hour
         {'driver': 'GV16', 'value': 99, 'uom': 25}, #On Min
+        {'driver': 'GV10', 'value': 99, 'uom': 25}, #onSec
         {'driver': 'GV17', 'value': 99, 'uom': 25}, #off Hour                                              
         {'driver': 'GV18', 'value': 99, 'uom': 25}, #off Min
+        {'driver': 'GV11', 'value': 99, 'uom': 25}, #offSec            
         {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
         {'driver': 'GV20', 'value': 99, 'uom': 25},                          
         {'driver': 'ST', 'value': 0, 'uom': 25},

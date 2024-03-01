@@ -69,8 +69,10 @@ ST-nlsswitch-GV13-NAME = Schedule Index
 ST-nlsswitch-GV14-NAME = Activated
 ST-nlsswitch-GV15-NAME = On Hour
 ST-nlsswitch-GV16-NAME = On Minute
+ST-nlsswitch-GV10-NAME = On Sec
 ST-nlsswitch-GV17-NAME = Off Hour
 ST-nlsswitch-GV18-NAME = Off Minute
+ST-nlsswitch-GV11-NAME = Off Sec
 ST-nlsswitch-GV19-NAME = Days Active
 
 CMD-nlsswitch-DON-NAME = ON command
