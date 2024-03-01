@@ -436,7 +436,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             {'driver': 'GV20', 'value': 0, 'uom': 25}
             ]
     
-    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo, config):
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
         #super(YoLinkSW, self).__init__( csName, csid, csseckey, devInfo,  self.updateStatus, )
         
@@ -445,8 +445,14 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.nodeName = address
         self.yoAccess = yoAccess
         self.delaysActive = False
-        self.nbrOutlets = config['outlet']
-        self.nbrUsb = config['usb']
+        if 'YS6802' in deviceInfo['modelName']:
+            self.nbrOutlets = 2
+            self.nbrUsb = 0
+        elif 'YS6801' in deviceInfo['modelName']:
+            self.nbrOutlets = 4
+            self.nbrUsb = 1
+        else:
+            logging.error('Unsupported device : {}'.format(deviceInfo['modelName']))
         self.ports =self.nbrOutlets + self.nbrUsb
         self.timer_update = 5
         self.devInfo =  deviceInfo

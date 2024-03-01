@@ -14,7 +14,6 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
 
-from os import truncate
 #import udi_interface
 #import sys
 import time
@@ -69,7 +68,8 @@ class udiYoSwitch(udi_interface.Node):
         self.offDelay = 0
         self.schedule_selected = 0
         self.keys = {}
-        if  'YS5708' in deviceInfo['modelName'] or 'YS5709' in deviceInfo['modelName']:                
+
+        if  'YS5708' in deviceInfo['modelName'] or 'YS5709' in deviceInfo['modelName']:
             self.max_remote_keys = 8
             self.nbr_keys = 2
         else:
