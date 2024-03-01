@@ -46,7 +46,7 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 
 
 
-# YoLink Switch
+# YoLink Switch 2 buttons
 ND-yoswitch2b-NAME = YoLink Switch
 ND-yoswitch2b-ICON = Switch
 ST-nlsswitch2b-GV0-NAME = Switch State

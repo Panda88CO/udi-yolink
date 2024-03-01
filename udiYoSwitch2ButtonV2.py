@@ -30,9 +30,6 @@ class udiYoSwitch2Button(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV3', 'value': 99, 'uom': 25}, #button Left
-            {'driver': 'GV4', 'value': 99, 'uom': 25}, #button Right            
-
             {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour

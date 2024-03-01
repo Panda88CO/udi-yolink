@@ -89,9 +89,6 @@
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
-         <st id="GV3" editor="presstype" />
-         <st id="GV4" editor="presstype" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
