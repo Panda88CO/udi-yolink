@@ -26,7 +26,7 @@ class udiRemoteKey(udi_interface.Node):
             {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
             ]
     
-    from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress,  isy_value, convert_temp_unit
+    from  udiYolinkLib import node_queue, wait_for_node_done
 
     def __init__(self, polyglot, primary, address, name, key):
         super().__init__( polyglot, primary, address, name)
@@ -212,7 +212,7 @@ class udiRemoteKey(udi_interface.Node):
 
 
 class udiYoSmartRemoter(udi_interface.Node):
-    from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
+    from  udiYolinkLib import node_queue, wait_for_node_done
 
     id = 'yosmremote'
 
