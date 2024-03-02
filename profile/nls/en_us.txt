@@ -38,8 +38,11 @@ CMDP-index-NAME = Schedule Index
 CMDP-active-NAME = Schedle Active
 CMDP-onH-NAME = On Hour
 CMDP-onM-NAME = On Min
+CMDP-onS-NAME = On Seconds
 CMDP-offH-NAME = Off Hour
 CMDP-offM-NAME = Off Min
+CMDP-offS-NAME = Off Seconds
+CMDP-onS-NAME = On Seconds
 CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 # common commands #############
 

@@ -33,13 +33,29 @@ def mask2key (self, mask):
     return(int(round(math.log2(mask),0)))
     
 
+def bool2ISY (self, data):
+    if data:
+        return(1)
+    else:
+        return(0)
+
+
+def isy_value(self, value):
+    if value == None:
+        return (99)
+    else:
+        return(value)
+    
+
+
 def prep_schedule(self, query):
     onH = 25
     onM = 0     
     onS = 0
     offH = 25
-    offM = None    
-    offS = None    
+    offM = 0   
+    offS = 0
+    include_sec = False
     #query = command.get("query")
     schedule_selected = int(query.get('index.uom25'))
     tmp = int(query.get('active.uom25'))
@@ -51,22 +67,26 @@ def prep_schedule(self, query):
         offH = int(query.get('offH.uom19'))
         offM = int(query.get('offM.uom44'))  
     if 'onS.uom57' in query:
+        include_sec = True
         onS = int(query.get('onS.uom57'))
+        if onS is None:
+            onS = 0
     if 'offS.uom57' in query:
+        include_sec = True  
         offS = int(query.get('onS.uom57'))
-            
+        if offS is None:
+            offS = 0 
+          
     binDays = int(query.get('bindays.uom25'))
 
     params = {}
     params['index'] = str(schedule_selected )
     params['isValid'] = activated 
     params['on'] = str(onH)+':'+str(onM)
-    if onS:
-        params['on'] = params['on'] + ':' + str(onS)
     params['off'] = str(offH)+':'+str(offM)
-
-    if offS:
-            params['off'] =  params['off'] + ':' + str(offS)
+    if include_sec:
+        params['on'] = params['on'] + ':' + str(onS)
+        params['off'] =  params['off'] + ':' + str(offS)
 
     params['week'] = binDays
     #self.yolink.setSchedule(self.schedule_selected, params)
@@ -150,3 +170,43 @@ def update_schedule_data(self, sch_info):
         if 'GV10' in self.drivers:
             self.node.setDriver('GV10', True, True, 25)
             self.node.setDriver('GV11', True, True, 25)
+
+
+def send_rel_temp_to_isy(self, temperature, stateVar):
+    logging.debug('convert_temp_to_isy - {}'.format(temperature))
+    logging.debug('ISYunit={}, Mess_unit={}'.format(self.ISY_temp_unit , self.messana_temp_unit ))
+    if self.ISY_temp_unit == 0: # Celsius in ISY
+        if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
+            self.node.setDriver(stateVar, round(temperature,1), True, True, 4)
+        else: # messana = Farenheit
+            self.node.setDriver(stateVar, round(temperature*5/9,1), True, True, 17)
+    elif  self.ISY_temp_unit == 1: # Farenheit in ISY
+        if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
+            self.node.setDriver(stateVar, round((temperature*9/5),1), True, True, 4)
+        else:
+            self.node.setDriver(stateVar, round(temperature,1), True, True, 17)
+    else: # kelvin
+        if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
+            self.node.setDriver(stateVar, round((temperature,1), True, True, 4))
+        else:
+            self.node.setDriver(stateVar, round((temperature)*9/5,1), True, True, 17)
+
+
+def send_temp_to_isy (self, temperature, stateVar):
+    logging.debug('convert_temp_to_isy - {}'.format(temperature))
+    logging.debug('ISYunit={}, Mess_unit={}'.format(self.ISY_temp_unit , self.messana_temp_unit ))
+    if self.ISY_temp_unit == 0: # Celsius in ISY
+        if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
+            self.node.setDriver(stateVar, round(temperature,1), True, True, 4)
+        else: # messana = Farenheit
+            self.node.setDriver(stateVar, round((temperature-32)*5/9,1), True, True, 17)
+    elif  self.ISY_temp_unit == 1: # Farenheit in ISY
+        if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
+            self.node.setDriver(stateVar, round((temperature*9/5+32),1), True, True, 4)
+        else:
+            self.node.setDriver(stateVar, round(temperature,1), True, True, 17)
+    else: # kelvin
+        if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
+            self.node.setDriver(stateVar, round((temperature+273.15,1), True, True, 4))
+        else:
+            self.node.setDriver(stateVar, round((temperature+273.15-32)*9/5,1), True, True, 17)
