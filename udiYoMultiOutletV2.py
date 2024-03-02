@@ -18,6 +18,7 @@ import re
 
 #assigned_addresses
 class udiYoSubOutlet(udi_interface.Node):
+    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
     id = 'yosubout'
     '''
        drivers = [
@@ -67,14 +68,6 @@ class udiYoSubOutlet(udi_interface.Node):
         time.sleep(1)
 
         
-        
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
 
 
     def start (self):
@@ -263,6 +256,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
 
 class udiYoSubUSB(udi_interface.Node):
+    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
     id = 'yosubusb'
     '''
        drivers = [
@@ -300,15 +294,6 @@ class udiYoSubUSB(udi_interface.Node):
         self.node = polyglot.getNode(self.address)
         #time.sleep(1)
         
-
-
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
 
 
 
@@ -414,7 +399,7 @@ class udiYoSubUSB(udi_interface.Node):
                 }
 
 class udiYoMultiOutlet(udi_interface.Node):
-    #def  __init__(self, polyglot, primary, address, name, csName, csid, csseckey, devInfo):
+    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
     id = 'yomultiout'
 
     '''
@@ -482,15 +467,6 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.node_fully_config = False
         self.node_ready = True
         self.schedule_selected = 0
-
-
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
 
     def start(self):
         #self.node_fully_config = False
@@ -651,47 +627,9 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.node.setDriver('GV17', 99,True, True, 25)
             self.node.setDriver('GV18', 99,True, True, 25)            
             self.node.setDriver('GV19', 0)    
+            
         sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_selected)
-        logging.debug('sch_info {}'.format(sch_info))
-        if sch_info:
-            #if 'ch' in sch_info:
-            #    self.node.setDriver('GV12', sch_info['ch'])
-            self.node.setDriver('GV13', self.schedule_selected)
-            if self.yoMultiOutlet.isScheduleActive(self.schedule_selected):
-                self.node.setDriver('GV14', 1)
-            else:
-                self.node.setDriver('GV14', 0)
-            timestr = sch_info['on']
-            logging.debug('timestr : {}'.format(timestr))
-            if '25:0' in timestr:
-                self.node.setDriver('GV15', 98,True, True, 25)
-                self.node.setDriver('GV16', 98,True, True, 25)
-            else:
-                timelist =  timestr.split(':')
-                hour = int(timelist[0])
-                minute = int(timelist[1])
-                self.node.setDriver('GV15', int(hour),True, True, 19)
-                self.node.setDriver('GV16', int(minute),True, True, 44)
-            timestr = sch_info['off']
-            logging.debug('timestr : {}'.format(timestr))
-            if '25:0' in timestr:
-                self.node.setDriver('GV17', 98,True, True, 25)
-                self.node.setDriver('GV18', 98,True, True, 25)
-            else:
-                timelist =  timestr.split(':')
-                hour = timelist[0]
-                minute = timelist[1]               
-                self.node.setDriver('GV17', int(hour),True, True, 19)
-                self.node.setDriver('GV18', int(minute),True, True, 44)
-            self.node.setDriver('GV19',  int(sch_info['week']))
-        else:
-            self.node.setDriver('GV13', self.schedule_selected)
-            self.node.setDriver('GV14', 99)
-            self.node.setDriver('GV15', 99,True, True, 25)
-            self.node.setDriver('GV16', 99,True, True, 25)
-            self.node.setDriver('GV17', 99,True, True, 25)
-            self.node.setDriver('GV18', 99,True, True, 25)
-            self.node.setDriver('GV19', 0)       
+        self.update_schedule_data(sch_info)
             
         if not self.yoMultiOutlet.online:
             logging.error( '{} - not on line'.format(self.nodeName))
@@ -736,23 +674,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         #logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
         #self.delaysActive = False
         
-    def daylist2bin(self, daylist):
-        sum = 0
-        if 'sun' in daylist:
-            sum = sum + 1
-        if 'mon' in daylist:
-            sum = sum + 2       
-        if 'tue' in daylist:
-            sum = sum + 4
-        if 'wed' in daylist:
-            sum = sum + 8
-        if 'thu' in daylist:
-            sum = sum + 16
-        if 'fri' in daylist:
-            sum = sum + 32
-        if 'sat' in daylist:
-            sum = sum + 64
-        return(sum)
+
 
     def lookup_schedule(self, command):
         logging.info('udiYoMultiOutlet lookup_schedule {}'.format(command))
@@ -760,42 +682,18 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yoMultiOutlet.refreshSchedules()
 
     def define_schedule(self, command):
-        logging.info('udiYoMultiOutlet define_schedule {}'.format(command))
-        StartH = 25
-        StartM = 0        
-        StopH = 25
-        StopM = 0              
+        logging.info('udiYoSwitch define_schedule {}'.format(command))
         query = command.get("query")
-        self.schedule_selected = int(query.get('index.uom25'))
-        port = int(query.get('port.uom25'))
-        tmp = int(query.get('active.uom25'))
-        self.activated = (tmp == 1)
-        if 'startH.uom19' in query:
-            StartH = int(query.get('startH.uom19'))
-            StartM = int(query.get('startM.uom44'))
-
-        if 'stopH.uom19' in query:
-            StopH = int(query.get('stopH.uom19'))
-            StopM = int(query.get('stopM.uom44'))
-
-        binDays = int(query.get('bindays.uom25'))
-
-        params = {}
-        params['ch'] = str(port -1)
-        params['index'] = str(self.schedule_selected )
-        params['isValid'] = self.activated 
-        params['on'] = str(StartH)+':'+str(StartM)
-        params['off'] = str(StopH)+':'+str(StopM)
-        params['week'] = binDays
+        self.schedule_selected, params = self.prep_schedule(query)
         self.yoMultiOutlet.setSchedule(self.schedule_selected, params)
 
+
     def control_schedule(self, command):
-        logging.info('udiYoMultiOutlet control_schedule {}'.format(command))       
+        logging.info('udiYoSwitch control_schedule {}'.format(command))       
         query = command.get("query")
-        self.schedule_selected = int(query.get('index.uom25'))
-        tmp = int(query.get('active.uom25'))
-        self.activated = (tmp == 1)
+        self.activated, self.schedule_selected = self.activate_schedule(query)
         self.yoMultiOutlet.activateSchedule(self.schedule_selected, self.activated)
+        
 
     def update(self, command = None):
         logging.info('udiYoMultiOutlet Update Executed')

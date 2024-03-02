@@ -207,7 +207,6 @@ class udiYoSwitchSec(udi_interface.Node):
 
 
             sch_info = self.yoSwitch.getScheduleInfo(self.schedule_selected)
-            logging.debug('sch_info {}'.format(sch_info))
             self.update_schedule_data(sch_info)
             '''
             if sch_info:

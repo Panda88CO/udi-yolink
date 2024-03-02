@@ -46,9 +46,27 @@ def isy_value(self, value):
     else:
         return(value)
     
-
+def daylist2bin(self, daylist):
+    sum = 0
+    if 'sun' in daylist:
+        sum = sum + 1
+    if 'mon' in daylist:
+        sum = sum + 2       
+    if 'tue' in daylist:
+        sum = sum + 4
+    if 'wed' in daylist:
+        sum = sum + 8
+    if 'thu' in daylist:
+        sum = sum + 16
+    if 'fri' in daylist:
+        sum = sum + 32
+    if 'sat' in daylist:
+        sum = sum + 64
+    return(sum)
 
 def prep_schedule(self, query):
+    logging.debug('prep_schedule {} '.format(query))
+    params = {}
     onH = 25
     onM = 0     
     onS = 0
@@ -57,29 +75,36 @@ def prep_schedule(self, query):
     offS = 0
     include_sec = False
     #query = command.get("query")
+    if 'port.uom25' in query:
+        port = int(query.get('port.uom25'))-1
+        params['ch'] = port
     schedule_selected = int(query.get('index.uom25'))
     tmp = int(query.get('active.uom25'))
     activated = (tmp == 1)
     if 'onH.uom19' in query:
         onH = int(query.get('onH.uom19'))
+    if 'onM.uom44' in query:    
         onM = int(query.get('onM.uom44'))
-    if 'stopH.uom19' in query:
+    if 'offH.uom19' in query:
         offH = int(query.get('offH.uom19'))
+    if 'offM.uom44' in query:    
         offM = int(query.get('offM.uom44'))  
-    if 'onS.uom57' in query:
+    if 'onS.' in query:
         include_sec = True
-        onS = int(query.get('onS.uom57'))
-        if onS is None:
+        if 'onS.uom57' in query:            
+            onS = int(query.get('onS.uom57'))
+        else:
             onS = 0
-    if 'offS.uom57' in query:
+    if 'offS.' in query:            
         include_sec = True  
-        offS = int(query.get('onS.uom57'))
-        if offS is None:
-            offS = 0 
+        if 'offS.uom57' in query:            
+            offS = int(query.get('onS.uom57'))
+        else:
+            offS = 0
           
     binDays = int(query.get('bindays.uom25'))
 
-    params = {}
+    
     params['index'] = str(schedule_selected )
     params['isValid'] = activated 
     params['on'] = str(onH)+':'+str(onM)
@@ -104,6 +129,9 @@ def activate_schedule(self, query):
 def update_schedule_data(self, sch_info):
     logging.info('update_schedule_data {}'.format(sch_info))    
     if sch_info:
+        if 'ch' in sch_info:
+            self.node.setDriver('GV12', int(sch_info['ch']))
+
         self.node.setDriver('GV13', int(sch_info['index']))
         if sch_info['isValid']:
             self.node.setDriver('GV14', 1)
@@ -160,6 +188,8 @@ def update_schedule_data(self, sch_info):
         self.node.setDriver('GV19',  int(sch_info['week']))
 
     else:
+        if 'GV12' in self.drivers:
+            self.node.setDriver('GV12', 99, True, True, 25)
         self.node.setDriver('GV13', 99)
         self.node.setDriver('GV14', 99)
         self.node.setDriver('GV15', 99,True, True, 25)
@@ -168,8 +198,8 @@ def update_schedule_data(self, sch_info):
         self.node.setDriver('GV18', 99,True, True, 25)
         self.node.setDriver('GV19', 0)    
         if 'GV10' in self.drivers:
-            self.node.setDriver('GV10', True, True, 25)
-            self.node.setDriver('GV11', True, True, 25)
+            self.node.setDriver('GV10', 99, True, True, 25)
+            self.node.setDriver('GV11', 99, True, True, 25)
 
 
 def send_rel_temp_to_isy(self, temperature, stateVar):

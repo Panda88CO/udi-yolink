@@ -73,7 +73,7 @@
                <p id="bindays" editor="binDays" init="GV19" />       
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="inS" editor="stSecI" init="GV10" /> 
+               <p id="onS" editor="stSecI" init="GV10" /> 
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
                <p id="offS" editor="stMinI" init="GV11" />   
