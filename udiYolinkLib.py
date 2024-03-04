@@ -176,7 +176,7 @@ def update_schedule_data(self, sch_info):
         elif len(timelist) == 3:
             hour = int(timelist[0])
             minute = int(timelist[1])
-            second = int(timelist[2])            
+            second = int(timelist[2])     
             if hour == 25:
                 self.node.setDriver('GV17', 98,True, True, 25)
                 self.node.setDriver('GV18', 98,True, True, 25)
@@ -188,7 +188,7 @@ def update_schedule_data(self, sch_info):
         self.node.setDriver('GV19',  int(sch_info['week']))
 
     else:
-        if 'GV12' in self.drivers:
+        if 'GV12' in self.node.drivers:
             self.node.setDriver('GV12', 99, True, True, 25)
         self.node.setDriver('GV13', 99)
         self.node.setDriver('GV14', 99)
@@ -197,7 +197,7 @@ def update_schedule_data(self, sch_info):
         self.node.setDriver('GV17', 99,True, True, 25)
         self.node.setDriver('GV18', 99,True, True, 25)
         self.node.setDriver('GV19', 0)    
-        if 'GV10' in self.drivers:
+        if 'GV10' in self.node.drivers:
             self.node.setDriver('GV10', 99, True, True, 25)
             self.node.setDriver('GV11', 99, True, True, 25)
 
