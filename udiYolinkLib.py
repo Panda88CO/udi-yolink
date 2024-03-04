@@ -129,6 +129,7 @@ def activate_schedule(self, query):
 def check_name_in_drivers(self,  name):
     found = False
     for drv in enumerate(self.node.drivers):
+        logging.debug('check_name_in_drivers: {}'.format(drv))
         if drv['driver'] == name:
             found = True
     return(found)
