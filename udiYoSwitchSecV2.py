@@ -205,9 +205,10 @@ class udiYoSwitchSec(udi_interface.Node):
                         self.yoSwitch.clearEventData()
                         logging.debug('clearEventData')           
 
-
+            self.node.setDriver('GV13', self.schedule_selected)
             sch_info = self.yoSwitch.getScheduleInfo(self.schedule_selected)
-            self.update_schedule_data(sch_info)
+            self.update_schedule_data(sch_info, self.schedule_selected)
+            
             '''
             if sch_info:
 

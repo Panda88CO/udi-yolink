@@ -135,7 +135,7 @@ def check_name_in_drivers(self,  name):
     return(found)
 
 
-def update_schedule_data(self, sch_info):
+def update_schedule_data(self, sch_info, selected_schedule):
     logging.info('update_schedule_data {}'.format(sch_info)) 
     #logging.debug('drivers: {} - {}'.format(self.drivers, self.node.drivers)) 
 
@@ -143,7 +143,7 @@ def update_schedule_data(self, sch_info):
         if 'ch' in sch_info:
             self.node.setDriver('GV12', int(sch_info['ch']))
 
-        self.node.setDriver('GV13', int(sch_info['index']))
+        self.node.setDriver('GV13', selected_schedule)
         if sch_info['isValid']:
             self.node.setDriver('GV14', 1)
         else:
@@ -199,9 +199,10 @@ def update_schedule_data(self, sch_info):
         self.node.setDriver('GV19',  int(sch_info['week']))
 
     else:
+        logging.debug('No schdule exist for the selected index')
         if self.check_name_in_drivers('GV12'):
             self.node.setDriver('GV12', 99, True, True, 25)
-        self.node.setDriver('GV13', 99)
+        self.node.setDriver('GV13', selected_schedule) 
         self.node.setDriver('GV14', 99)
         self.node.setDriver('GV15', 99,True, True, 25)
         self.node.setDriver('GV16', 99,True, True, 25)

@@ -629,7 +629,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.node.setDriver('GV19', 0)    
             
         sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_selected)
-        self.update_schedule_data(sch_info)
+        self.update_schedule_data(sch_info, self.schedule_selected)
             
         if not self.yoMultiOutlet.online:
             logging.error( '{} - not on line'.format(self.nodeName))

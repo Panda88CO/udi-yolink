@@ -152,7 +152,7 @@ class udiYoOutlet(udi_interface.Node):
 
    
             sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
-            self.update_schedule_data(sch_info)
+            self.update_schedule_data(sch_info, self.schedule_selected)
                
 
     def updateStatus(self, data):

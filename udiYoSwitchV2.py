@@ -204,7 +204,7 @@ class udiYoSwitch(udi_interface.Node):
                         logging.debug('clearEventData')           
 
             sch_info = self.yoSwitch.getScheduleInfo(self.schedule_selected)
-            self.update_schedule_data(sch_info)
+            self.update_schedule_data(sch_info, self.schedule_selected)
 
 
     def updateStatus(self, data):

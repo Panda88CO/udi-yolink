@@ -160,7 +160,7 @@ class udiYoManipulator(udi_interface.Node):
                 self.node.setDriver('GV19', 0)        
 
             sch_info = self.yoManipulator.getScheduleInfo(self.schedule_selected)
-            self.update_schedule_data(sch_info)                
+            self.update_schedule_data(sch_info, self.schedule_selected)            
 
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoManipulator')
