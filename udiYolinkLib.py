@@ -142,7 +142,7 @@ def update_schedule_data(self, sch_info, selected_schedule):
     def check_name_in_drivers( name):
         logging.debug('check_name_in_drivers: {}'.format(name))
         found = False
-        for drv in enumerate(self.node.drivers):
+        for indx, drv in enumerate(self.node.drivers):
             logging.debug('check_name_in_drivers: {}'.format(drv))
             if drv['driver'] == name:
                 found = True
