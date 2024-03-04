@@ -30,12 +30,12 @@ CMD-KEY4DEF-NAME = Key4 Scene Function
 CMD-KEY1LDEF-NAME = Key1 Long Scene Function
 CMD-KEY2LDEF-NAME = Key2 Long Scene Function
 CMD-KEY3LDEF-NAME = Key3 Long Scene Function
-CMD-KEY4LDEF-NAME = Key4 LOng Scene Function
+CMD-KEY4LDEF-NAME = Key4 Long Scene Function
 
 CMDP-ondelay-NAME = On delay (0 if no delay)
 CMDP-offdelay-NAME = Off delay (0 if no delay)
 CMDP-index-NAME = Schedule Index
-CMDP-active-NAME = Schedle Active
+CMDP-active-NAME = Schedule Active
 CMDP-onH-NAME = On Hour
 CMDP-onM-NAME = On Min
 CMDP-onS-NAME = On Seconds

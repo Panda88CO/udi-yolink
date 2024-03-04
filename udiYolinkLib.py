@@ -138,14 +138,13 @@ def check_name_in_drivers(self,  name):
 
 def update_schedule_data(self, sch_info, selected_schedule):
     logging.info('update_schedule_data {}'.format(sch_info)) 
-    #logging.debug('drivers: {} - {}'.format(self.drivers, self.node.drivers)) 
+
     def check_name_in_drivers( name):
-        logging.debug('check_name_in_drivers: {}'.format(name))
         found = False
         for indx, drv in enumerate(self.node.drivers):
-            logging.debug('check_name_in_drivers: {}'.format(drv))
             if drv['driver'] == name:
                 found = True
+                return(found)
         return(found)
 
     if sch_info:
@@ -171,7 +170,7 @@ def update_schedule_data(self, sch_info, selected_schedule):
         elif len(timelist) == 3:
             hour = int(timelist[0])
             minute = int(timelist[1])
-            second = int(timelist[2])            
+            second = int(timelist[2])
             if hour == 25:
                 self.node.setDriver('GV15', 98,True, True, 25)
                 self.node.setDriver('GV16', 98,True, True, 25)
