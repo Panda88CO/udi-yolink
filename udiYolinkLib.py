@@ -127,7 +127,9 @@ def activate_schedule(self, query):
     return(activated, schedule_selected)
 
 def update_schedule_data(self, sch_info):
-    logging.info('update_schedule_data {}'.format(sch_info))    
+    logging.info('update_schedule_data {}'.format(sch_info)) 
+    logging.debug('drivers: {} - {}'.format(self.drivers, self.node.drivers)) 
+
     if sch_info:
         if 'ch' in sch_info:
             self.node.setDriver('GV12', int(sch_info['ch']))
