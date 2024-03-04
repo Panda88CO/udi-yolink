@@ -126,9 +126,17 @@ def activate_schedule(self, query):
     #self.yolink.activateSchedule(schedule_selected, activated)
     return(activated, schedule_selected)
 
+def check_name_in_drivers(self,  name):
+    found = False
+    for drv in enumerate(self.node.drivers):
+        if drv['driver'] == name:
+            found = True
+    return(found)
+
+
 def update_schedule_data(self, sch_info):
     logging.info('update_schedule_data {}'.format(sch_info)) 
-    logging.debug('drivers: {} - {}'.format(self.drivers, self.node.drivers)) 
+    #logging.debug('drivers: {} - {}'.format(self.drivers, self.node.drivers)) 
 
     if sch_info:
         if 'ch' in sch_info:
@@ -190,7 +198,7 @@ def update_schedule_data(self, sch_info):
         self.node.setDriver('GV19',  int(sch_info['week']))
 
     else:
-        if 'GV12' in self.node.drivers:
+        if self.check_name_in_drivers('GV12'):
             self.node.setDriver('GV12', 99, True, True, 25)
         self.node.setDriver('GV13', 99)
         self.node.setDriver('GV14', 99)
@@ -198,8 +206,8 @@ def update_schedule_data(self, sch_info):
         self.node.setDriver('GV16', 99,True, True, 25)
         self.node.setDriver('GV17', 99,True, True, 25)
         self.node.setDriver('GV18', 99,True, True, 25)
-        self.node.setDriver('GV19', 0)    
-        if 'GV10' in self.node.drivers:
+        self.node.setDriver('GV19', 0)
+        if self.check_name_in_drivers('GV10'):
             self.node.setDriver('GV10', 99, True, True, 25)
             self.node.setDriver('GV11', 99, True, True, 25)
 
