@@ -218,10 +218,16 @@ class YoLinkMQTTDevice(object):
             dt = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
             return(int(dt.timestamp()))
-        elif 'lastUpdTime' in yolink.dataAPI:
-            logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI['lastStateTime']))
+        elif yolink.lastUpd in yolink.dataAPI:
+            logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
+            if yolink.dataAPI[yolink.lastUpd ] is not {}:
+                return(yolink.dataAPI[yolink.lastUpd ])
+            else:
+                return(0)
+        elif 'lastStateTime' in yolink.dataAPI:
+            logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI['lastStateTime' ]))
             if yolink.dataAPI['lastStateTime'] is not {}:
-                return(yolink.dataAPI['lastStateTime'])
+                return(yolink.dataAPI['lastStateTime'] )
             else:
                 return(0)
         elif 'time'in  yolink.dataAPI:
@@ -242,7 +248,12 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def data_updated(yolink):
         tmp = yolink.lastUpdate()
-        logging.debug('data_updated {} vd {}'.format(tmp, yolink.lastUpdateTime))
+        if tmp = {}
+            return(False)
+        logging.debug('data_updated {} vs {}'.format(tmp, yolink.lastUpdateTime))
+        if yolink.lastUpdateTime == 0:
+            return(True) # must be first time 
+
         if ( tmp > yolink.lastUpdateTime):
             yolink.lastUpdateTime = tmp 
             logging.debug('{} - Data Updated'.format(yolink.type))
@@ -1043,7 +1054,13 @@ class YoLinkMQTTDevice(object):
                 yolink.dataAPI[yolink.dData][yolink.dState]['loraInfo']= data[yolink.dData]['loraInfo']
 
     def updateMessageInfo(yolink, data):
-        yolink.dataAPI[yolink.lastUpd] = data[yolink.messageTime]
+        if yolink.lastUpd in data:
+            yolink.dataAPI[yolink.lastUpd] = data[yolink.lastUpd]
+        elif yolink.messageTime in data:
+            yolink.dataAPI[yolink.lastUpd] = data[yolink.messageTime]
+        else:
+            yolink.dataAPI[yolink.lastUpd] = 0
+        # should be last update time 
         yolink.dataAPI[yolink.lastMessage] = data
    
     #@measure_time
