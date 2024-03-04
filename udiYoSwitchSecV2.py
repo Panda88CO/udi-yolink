@@ -177,14 +177,14 @@ class udiYoSwitchSec(udi_interface.Node):
                 self.node.setDriver('GV2', 0, True, False)
                 self.node.setDriver('GV20', 2, True, True)
 
-                self.node.setDriver('GV10', True, True, 25)
-                self.node.setDriver('GV11', True, True, 25)
+                self.node.setDriver('GV10', 99, True, True, 25)
+                self.node.setDriver('GV11', 99, True, True, 25)
                 self.node.setDriver('GV13', self.schedule_selected)
                 self.node.setDriver('GV14', 99)
-                self.node.setDriver('GV15', 99,True, True, 25)
-                self.node.setDriver('GV16', 99,True, True, 25)
-                self.node.setDriver('GV17', 99,True, True, 25)
-                self.node.setDriver('GV18', 99,True, True, 25)
+                self.node.setDriver('GV15', 99, True, True, 25)
+                self.node.setDriver('GV16', 99, True, True, 25)
+                self.node.setDriver('GV17', 99, True, True, 25)
+                self.node.setDriver('GV18', 99, True, True, 25)
                 self.node.setDriver('GV19', 0)
 
             if self.nbr_keys > 0:
