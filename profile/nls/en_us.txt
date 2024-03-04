@@ -49,26 +49,9 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 
 
 
-# YoLink Switch 2 buttons
-#ND-yoswitch2b-NAME = YoLink Switch
-#ND-yoswitch2b-ICON = Switch
-#ST-nlsswitch2b-GV0-NAME = Switch State
-#ST-nlsswitch2-GV1-NAME = On Delay (min)
-#ST-nlsswitc2b-GV2-NAME = Off Delay (min)
-#ST-nlsswitch2b-GV3-NAME = Left Button
-#ST-nlsswitch2b-GV4-NAME = Right Button
-#CMD-nlsswitch2b-DON-NAME = ON command
-#CMD-nlsswitch2b-DOF-NAME = OFF command
-#CMD-nlsswitch2b-DFON-NAME = Fast ON command 
-#CMD-nlsswitch2b-DFOF-NAME = Fast OFF command
-
 # YoLink Switch
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
-
-ND-yoswitchsec-NAME = YoLink Switch
-ND-yoswitchsec-ICON = Switch
-
 ST-nlsswitch-GV0-NAME = Switch State
 ST-nlsswitch-GV1-NAME = On Delay (min)
 ST-nlsswitch-GV2-NAME = Off Delay (min)
@@ -80,7 +63,24 @@ ST-nlsswitch-GV10-NAME = On Sec
 ST-nlsswitch-GV17-NAME = Off Hour
 ST-nlsswitch-GV18-NAME = Off Minute
 ST-nlsswitch-GV11-NAME = Off Sec
-ST-nlsswitch-GV19-NAME = Days Active
+ST-nlsswitch-GV19-NAME = Active Days
+
+ND-yoswitchsec-NAME = YoLink Switch
+ND-yoswitchsec-ICON = Switch
+
+#ST-yoswitchsec-GV0-NAME = Switch State
+#ST-yoswitchsec-GV1-NAME = On Delay (min)
+#ST-yoswitchsec-GV2-NAME = Off Delay (min)
+#ST-yoswitchsec-GV13-NAME = Schedule Index
+#ST-yoswitchsec-GV14-NAME = Activated
+#ST-yoswitchsec-GV15-NAME = On Hour
+#ST-yoswitchsec-GV16-NAME = On Minute
+#ST-yoswitchsec-GV10-NAME = On Sec
+#ST-yoswitchsec-GV17-NAME = Off Hour
+#ST-yoswitchsec-GV18-NAME = Off Minute
+#ST-yoswitchsec-GV11-NAME = Off Sec
+#ST-yoswitchsec-GV19-NAME = Active Days
+
 
 CMD-nlsswitch-DON-NAME = ON command
 CMD-nlsswitch-DOF-NAME = OFF command
@@ -90,6 +90,9 @@ CMD-nlsswitch-DFOF-NAME = Fast OFF command
 #YoLink Outlet
 ND-yooutlet-NAME = YoLink Outlet
 ND-yooutlet-ICON = Switch
+ND-yooutletPwr-NAME = YoLink Outlet
+ND-yooutletPwr-ICON = Switch
+
 ST-nlsoutlet-GV0-NAME = Outlet State
 ST-nlsoutlet-GV1-NAME = On Delay Remaining
 ST-nlsoutlet-GV2-NAME = Off Delay Remaining
@@ -101,7 +104,7 @@ ST-nlsoutlet-GV15-NAME = On Hour
 ST-nlsoutlet-GV16-NAME = On Minute
 ST-nlsoutlet-GV17-NAME = Off Hour
 ST-nlsoutlet-GV18-NAME = Off Minute
-ST-nlsoutlet-GV19-NAME = Days Active
+ST-nlsoutlet-GV19-NAME = Active Days
 
 CMD-nlsoutlet-DON-NAME = Switch On
 CMD-nlsoutlet-DOF-NAME = Switch Off
@@ -119,12 +122,10 @@ ST-nlsmultiout-GV15-NAME = On Hour
 ST-nlsmultiout-GV16-NAME = On Minute
 ST-nlsmultiout-GV17-NAME = Off Hour
 ST-nlsmultiout-GV18-NAME = Off Minute
-ST-nlsmultiout-GV19-NAME = Days Active
+ST-nlsmultiout-GV19-NAME = Active Days
 CMDP-outport-NAME = Outlet Port
 
  
-
-
 ND-yosubout-NAME = YoLink subOutlet
 ND-yosubout-ICON = Switch
 ST-nlsubout-GV0-NAME = Outlet State
@@ -257,7 +258,7 @@ ST-nlsdimmer-GV15-NAME = On Hour
 ST-nlsdimmer-GV16-NAME = On Minute
 ST-nlsdimmer-GV17-NAME = Off Hour
 ST-nlsdimmer-GV18-NAME = Off Minute
-ST-nlsdimmer-GV19-NAME = Days Active
+ST-nlsdimmer-GV19-NAME = Active Days
 CMD-nlsdimmer-DIMLVL-NAME = Dimming Level (%)
 
 ND-yoirremote-NAME = YoLink Ir Remoter

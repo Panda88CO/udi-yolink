@@ -76,7 +76,7 @@
                <p id="onS" editor="stSecI" init="GV10" /> 
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="offS" editor="stMinI" init="GV11" />   
+               <p id="offS" editor="stI" init="GV11" />   
                                    
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -294,6 +294,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
+   
  <nodeDef id="yooutletPwr" nls="nlsoutlet">
       <editors />
       <sts>
