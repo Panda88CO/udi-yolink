@@ -248,9 +248,9 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def data_updated(yolink):
         tmp = yolink.lastUpdate()
-        if tmp = {}
-            return(False)
         logging.debug('data_updated {} vs {}'.format(tmp, yolink.lastUpdateTime))
+        if tmp == {}:
+            return(False)        
         if yolink.lastUpdateTime == 0:
             return(True) # must be first time 
 
