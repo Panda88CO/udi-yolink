@@ -1165,7 +1165,6 @@ class YoLinkMQTTDevice(object):
                     yolink.updateMessageInfo(data)
                     logging.debug('updateStatusData - Method data : {}'.format(yolink.dataAPI))                
             else: #event
-
                 if ".setDelay" in data['event']:
                     logging.debug("setDelay detected")
                     if data[yolink.dData] != {}: #multiOutlet currently returns {}
@@ -1234,6 +1233,8 @@ class YoLinkMQTTDevice(object):
                         #logging.debug('dataAPI AFTER - {}'.format(yolink.dataAPI[yolink.dData]))
                 else:
                     #logging.debug('adding event data {}'.format(data[yolink.dData]))
+                    if yolink.dState not in  yolink.dataAPI[yolink.dData]:
+                        yolink.dataAPI[yolink.dData][yolink.dState] = {}
                     for key in data[yolink.dData]:
                         #logging.debug('adding event data {}  {}'.format(key, data[yolink.dData]))
                         yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] # sAdding all keys to state
