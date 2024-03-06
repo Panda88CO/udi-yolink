@@ -42,7 +42,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-version = '1.1.0'
+version = '1.1.1'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -657,7 +657,7 @@ class YoLinkSetup (udi_interface.Node):
                                 logging.debug('longpoll {}'.format(nde))
                                 time.sleep(5) # need to limit calls to 100 per  5 min - using 5 to allow other calls - updating is not critical
                     except Exception as e:
-                        logging.debug('Exeption occcured during systemPoll : {}'.format(e))
+                        logging.error('Exeption occcured during systemPoll : {}'.format(e))
                         #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
                         #deviceList = self.yoAccess.getDeviceList()           
                     
@@ -669,7 +669,8 @@ class YoLinkSetup (udi_interface.Node):
                         if nde != 'setup':   # but not the controller node
                             nodes[nde].checkDataUpdate()
                             logging.debug('shortpoll {}'.format(nde))
-                            time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
+                            # no API calls so no need to spread out 
+                            #time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
             else:
                 self.node.setDriver('ST', 0, True, True)
                 

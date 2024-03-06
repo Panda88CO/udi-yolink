@@ -90,7 +90,8 @@ class udiRemoteKey(udi_interface.Node):
     def stop(self):
         logging.debug('stop smremotekey : {}'.format(self.key))
        
-
+    def checkOnline(self):
+        pass #this is a sub node - main node reflects on line
 
     def checkDataUpdate(self):
         pass
