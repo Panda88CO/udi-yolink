@@ -122,8 +122,10 @@ class udiYoOutletPwr(udi_interface.Node):
         #    self.node.setDriver('GV2', 0, True, False)
         self.schedule_selected
 
-    def getAlerts (self):
+    def updateAlerts(self):
+
         temp = self.yoOutlet.getAlertInfo()
+        logging.debug('self.getAlerts {}'.format(temp))
         if temp:
             if 'overload' in temp:
                 self.node.setDriver('GV5', self.bool2ISY(temp['overload']))
@@ -165,8 +167,9 @@ class udiYoOutletPwr(udi_interface.Node):
             #else:
             #    self.node.setDriver('GV0', 99, True, True)
             self.last_state = state           
-            self.getAlerts()
+            
             tmp =  self.yoOutlet.getEnergy()
+            self.updateAlerts()
             if tmp != None:
                 power = round(tmp['power']/1000,3)
                 kwatt = round(tmp['watt']/1000,3)

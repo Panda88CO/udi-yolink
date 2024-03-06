@@ -416,7 +416,7 @@ class YoLinkMQTTDevice(object):
 
     #@measure_time
     def getAlertInfo(yolink):
-        logging.debug('getAlerInfo')
+        logging.debug('getAlertInfo {}'.format(yolink.dataAPI))
         try:
             if 'alertType' in yolink.dataAPI[yolink.dData]:
                 return(yolink.dataAPI[yolink.dData]['alertType'])
