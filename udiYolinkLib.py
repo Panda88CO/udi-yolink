@@ -39,6 +39,13 @@ def bool2ISY (self, data):
     else:
         return(0)
 
+def state2Nbr(self, val):
+    if val == 'normal':
+        return(0)
+    elif val == 'alert':
+        return(1)
+    else:
+        return(99)
 
 def isy_value(self, value):
     if value == None:

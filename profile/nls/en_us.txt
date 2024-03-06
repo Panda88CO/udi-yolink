@@ -98,6 +98,11 @@ ST-nlsoutlet-GV1-NAME = On Delay Remaining
 ST-nlsoutlet-GV2-NAME = Off Delay Remaining
 ST-nlsoutlet-GV3-NAME = Watt
 ST-nlsoutlet-GV4-NAME = Energy
+ST-nlsoutlet-GV5-NAME = Overload Alert
+ST-nlsoutlet-GV6-NAME = High Load Alert
+ST-nlsoutlet-GV7-NAME = Low Load Alert
+ST-nlsoutlet-GV8-NAME = High Temperature Alert
+
 ST-nlsoutlet-GV13-NAME = Schedule Index
 ST-nlsoutlet-GV14-NAME = Activated
 ST-nlsoutlet-GV15-NAME = On Hour
@@ -543,6 +548,10 @@ batlevel-99 = Unknown
 alarm-0 = Normal
 alarm-1 = Alarm
 alarm-99 = Unknown 
+
+alert-0 = Normal
+alert-1 = Alert
+alert-99 = Unknown 
 
 online-0 = Offline
 online-1 = Online

@@ -163,6 +163,9 @@
    <editor id="alarm"> 
      <range uom="25" subset="0-1, 99" nls="alarm" />
    </editor> 
+   <editor id="alert"> 
+     <range uom="25" subset="0-1, 99" nls="alarm" />
+   </editor> 
    <editor id="watermeter"> 
      <range uom="69" min="0" max="214748364" prec="1" />
      <range uom="25" subset="0,99" nls="error" />

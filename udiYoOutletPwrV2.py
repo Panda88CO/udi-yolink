@@ -21,7 +21,7 @@ from yolinkOutletV2 import YoLinkOutl
 
 
 class udiYoOutletPwr(udi_interface.Node):
-    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, mask2key
     id = 'yooutletPwr'
     '''
        drivers = [
@@ -39,7 +39,16 @@ class udiYoOutletPwr(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV3', 'value': -1, 'uom': 30},
             {'driver': 'GV4', 'value': -1, 'uom': 33},
+            {'driver': 'GV5', 'value': 99, 'uom': 25},
+            {'driver': 'GV6', 'value': 99, 'uom': 25},
+            {'driver': 'GV7', 'value': 99, 'uom': 25},
+            {'driver': 'GV8', 'value': 99, 'uom': 25},
+
+
+
             {'driver': 'ST', 'value': 0, 'uom': 25},
+
+
 
             {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
@@ -113,6 +122,32 @@ class udiYoOutletPwr(udi_interface.Node):
         #    self.node.setDriver('GV2', 0, True, False)
         self.schedule_selected
 
+    def getAlerts (self):
+        temp = self.yoOutlet.getAlertInfo()
+        if temp:
+            if 'overload' in temp:
+                self.node.setDriver('GV5', self.bool2ISY(temp['overload']))
+            else:
+                self.node.setDriver('GV5', 99)
+            if 'highLoad' in temp:
+                self.node.setDriver('GV6', self.bool2ISY(temp['highLoad']))
+            else:
+                self.node.setDriver('GV6', 99)
+            if 'lowLoad' in temp:
+                self.node.setDriver('GV7', self.bool2ISY(temp['lowLoad']))
+            else:
+                self.node.setDriver('GV7', 99)
+            if 'highTemperature' in temp:
+                self.node.setDriver('GV8', self.bool2ISY(temp['highTemperature']))
+            else:
+                self.node.setDriver('GV8', 99)
+        else:
+            self.node.setDriver('GV5', 99)
+            self.node.setDriver('GV6', 99)
+            self.node.setDriver('GV7', 99)
+            self.node.setDriver('GV8', 99)
+
+
     def updateData(self):
         logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
         if self.node is not None:
@@ -129,7 +164,8 @@ class udiYoOutletPwr(udi_interface.Node):
                 #    self.node.reportCmd('DOF')  
             #else:
             #    self.node.setDriver('GV0', 99, True, True)
-            self.last_state = state                
+            self.last_state = state           
+            self.getAlerts()
             tmp =  self.yoOutlet.getEnergy()
             if tmp != None:
                 power = round(tmp['power']/1000,3)

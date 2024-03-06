@@ -412,6 +412,20 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def getBattery(yolink):
         return(yolink.getStateValue('battery'))
+    
+
+    #@measure_time
+    def getAlertInfo(yolink):
+        logging.debug('getAlerInfo')
+        try:
+            if 'alertType' in yolink.dataAPI[yolink.dData]:
+                return(yolink.dataAPI[yolink.dData]['alertType'])
+            else:
+                return(None)
+        except Exception as e:
+            logging.error('No AlertTypoe found {} - {}'.format(yolink.dataAPI, e))
+            return(None)
+
 
     #@measure_time
     def getDeviceTemperature(yolink):
@@ -620,11 +634,12 @@ class YoLinkMQTTDevice(object):
                 elif '.powerReport' in  data['event']:
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
-                        logging.info('power report ignored')
                 elif '.DevEvent' in  data['event']:
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
-                        logging.info('power report ignored')
+                elif '.setInitState' in  data['event']:
+                        yolink.updateStatusData(data)
+                        yolink.updateScheduleStatus(data)   
                 else:
                     logging.debug('Unsupported Event passed - trying anyway; {}'.format(data) )
                     if int(data['time']) > int(yolink.getLastUpdate()):
