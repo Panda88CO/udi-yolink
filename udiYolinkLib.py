@@ -32,6 +32,29 @@ def mask2key (self, mask):
     logging.debug('mask2key : {}'.format(mask))
     return(int(round(math.log2(mask),0)))
     
+def daysToMask (yolink, dayList):
+    daysValue = 0 
+    i = 0
+    for day in yolink.daysOfWeek:
+        if day in dayList:
+            daysValue = daysValue + pow(2,i)
+        i = i+1
+    return(daysValue)
+
+def maskToDays(yolink, daysValue):
+    daysList = []
+    for i in range(0,7):
+        mask = pow(2,i)
+        if (daysValue & mask) != 0 :
+            daysList.append(yolink.daysOfWeek[i])
+    return(daysList)
+
+
+def bool2Nbr(yolink, bool):
+    if bool:
+        return(1)
+    else:
+        return(0)
 
 def bool2ISY (self, data):
     if data:

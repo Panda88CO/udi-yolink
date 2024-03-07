@@ -418,8 +418,8 @@ class YoLinkMQTTDevice(object):
     def getAlertInfo(yolink):
         logging.debug('getAlertInfo {}'.format(yolink.dataAPI))
         try:
-            if 'alertType' in yolink.dataAPI[yolink.dData]:
-                return(yolink.dataAPI[yolink.dData]['alertType'])
+            if 'alertType' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                return(yolink.dataAPI[yolink.dData][yolink.dState]['alertType'])
             else:
                 return(None)
         except Exception as e:
@@ -1145,7 +1145,7 @@ class YoLinkMQTTDevice(object):
                                     if 'ch' not in dat:
                                         dat['ch'] = 1
 
-                                    temp.append(dat)
+                                    #temp.append(dat)
                                     logging.debug('temp {}'.format(temp))
                                     yolink.extDelayTimer.addDelays(temp) 
                                     yolink.nbrOutlets = 1
