@@ -46,7 +46,7 @@ class udiYoManipulator(udi_interface.Node):
             {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'GV20', 'value': 99, 'uom': 25},              
-
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 

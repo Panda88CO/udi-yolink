@@ -39,7 +39,7 @@ class udiYoSwitch(udi_interface.Node):
         {'driver': 'GV18', 'value': 99, 'uom': 25}, #off Min
         {'driver': 'GV11', 'value': 99, 'uom': 25}, #offSec            
         {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
-        {'driver': 'GV20', 'value': 99, 'uom': 25},                          
+        {'driver': 'GV20', 'value': 99, 'uom': 25},             
         {'driver': 'ST', 'value': 0, 'uom': 25},
         ]
 
