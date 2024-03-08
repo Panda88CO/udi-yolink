@@ -125,8 +125,8 @@ class udiYoDimmer(udi_interface.Node):
         #if self.node:
         #    self.poly.delNode(self.node.address)
             
-    #def checkOnline(self):
-    #    self.yoDimmer.refreshDevice()
+    def checkOnline(self):
+        self.yoDimmer.refreshDevice()
     
     
     def checkDataUpdate(self):
