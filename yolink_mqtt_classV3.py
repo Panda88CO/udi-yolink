@@ -638,7 +638,8 @@ class YoLinkMQTTDevice(object):
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
                 elif '.setInitState' in  data['event']:
-                        yolink.updateStatusData(data)
+                        #yolink.updateStatusData(data)
+                        yolink.initData(data)
                         yolink.updateScheduleStatus(data)   
                 else:
                     logging.debug('Unsupported Event passed - trying anyway; {}'.format(data) )
@@ -1078,6 +1079,37 @@ class YoLinkMQTTDevice(object):
         # should be last update time 
         yolink.dataAPI[yolink.lastMessage] = data
    
+    #@measure_time
+    def initData  (yolink, data):
+        try:
+            logging.debug('{} - initData : {}'.format(yolink.type , data))
+            #yolink.setOnline(data)
+            if 'time' in data[yolink.dData] :
+                yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
+            if 'event' in data:
+                if ".initData" in data['event']:
+                    logging.debug("initData detected")               
+                    for key in data[yolink.dData]:
+                        #logging.debug('Adding data values {} {}'.format(key, data[yolink.dData][key]))
+                        yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key]
+                        if key == 'initState':
+                            yolink.dataAPI[yolink.dData][yolink.dState]['state'] = data[yolink.dData][key]
+                else:
+                    #logging.debug('adding event data {}'.format(data[yolink.dData]))
+                    if yolink.dState not in  yolink.dataAPI[yolink.dData]:
+                        yolink.dataAPI[yolink.dData][yolink.dState] = {}
+                    for key in data[yolink.dData]:
+                        #logging.debug('adding event data {}  {}'.format(key, data[yolink.dData]))
+                        yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][key] # sAdding all keys to state                    
+
+                yolink.updateLoraInfo(data)
+                yolink.updateMessageInfo(data)
+        except Exception as e:
+            logging.error('Exception initData - {}'.format(e))
+            logging.error('Exception Data - {}'.format(data))
+
+
+
     #@measure_time
     def updateStatusData  (yolink, data):
         try:
