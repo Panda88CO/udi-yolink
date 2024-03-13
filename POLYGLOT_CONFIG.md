@@ -7,7 +7,7 @@
     'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
-    'PowerFailureAlarm', 'SmartRemoter'
+    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren'
 
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec

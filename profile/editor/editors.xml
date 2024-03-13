@@ -171,6 +171,7 @@
    <editor id="pwrmode"> 
      <range uom="25" subset="0-1, 99" nls="pwrmode" />
    </editor>    
+
    <editor id="deviceAlert"> 
      <range uom="25" subset="0-1, 99" nls="deviceAlert" />
    </editor>    
@@ -192,6 +193,7 @@
    <editor id="cmdsetting"> 
      <range uom="25" subset="0-3" nls="cmdsetting" />
    </editor>   
+
    <editor id="outport"> 
      <range uom="25" subset="0-3,99" nls="portlist" />
    </editor>   
