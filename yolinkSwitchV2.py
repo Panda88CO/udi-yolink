@@ -67,7 +67,19 @@ class YoLinkSW(YoLinkMQTTDevice):
         else:
             return(False)
     
+    def getEventData(yolink):
+        temp = yolink.get_event_from_state()
+        logging.debug('getEventData: {}'.format(temp))
+        return(temp)
+    
+    #def isControlEvent(yolink):
+    #    return(yolink.isControlEvent())
 
+    def clearEventData(yolink):
+        if yolink.clear_event_from_state():
+            logging.debug('clearEventData - SUCCESS:')
+
+            
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
         attempts = 0

@@ -10,6 +10,7 @@ import time
 
 from yoLink_init_V3 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
+from udiYoSwitchSecV2 import udiYoSwitchSec
 from udiYoTHsensorV2 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
@@ -18,9 +19,9 @@ from udiYoLeakSensorV2 import udiYoLeakSensor
 from udiYoCOSmokeSensorV2 import udiYoCOSmokeSensor
 from udiYoDoorSensorV2 import udiYoDoorSensor
 from udiYoOutletV2 import udiYoOutlet
+from udiYoOutletPwrV2 import udiYoOutletPwr
 from udiYoMultiOutletV2 import udiYoMultiOutlet
 from udiYoManipulatorV2 import udiYoManipulator
-#from udiYoHubV2 import udiYoHub
 from udiYoSpeakerHubV2 import udiYoSpeakerHub
 from udiYoLockV2 import udiYoLock
 from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
@@ -29,7 +30,8 @@ from udiYoVibrationSensorV2 import udiYoVibrationSensor
 from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV2 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
-
+from udiYoWaterMeterControllerV2 import udiYoWaterMeterController
+#from udiYoHubV2 import udiYoHub
 import udiProfileHandler
 
 try:
@@ -40,7 +42,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-version = '0.9.87'
+version = '1.0.3'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -77,6 +79,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.handleParams)
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
         self.n_queue = []
   
         self.Parameters = Custom(self.poly, 'customparams')
@@ -92,8 +95,6 @@ class YoLinkSetup (udi_interface.Node):
         self.node.setDriver('ST', 1, True, True)
         self.assigned_addresses = []
         self.assigned_addresses.append(self.address)   
-        self.nodes_in_db = self.poly.getNodesFromDb()
-        logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
 
@@ -116,6 +117,14 @@ class YoLinkSetup (udi_interface.Node):
         else:
             return(0)
 
+    def configDoneHandler(self):
+        # We use this to discover devices, or ask to authenticate if user has not already done so
+        self.poly.Notices.clear()
+        logging.info('configDoneHandler called')
+        #self.myNetatmo.updateOauthConfig()
+        self.nodes_in_db = self.poly.getNodesFromDb()
+        logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
+        self.configDone = True
 
     def start (self):
         logging.info('Executing start - udi-YoLink')
@@ -130,8 +139,8 @@ class YoLinkSetup (udi_interface.Node):
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
                                 'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
-                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren' ]
-        #self.supportedYoTypes = ['MultiOutlet' ]
+                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController']
+        #self.supportedYoTypes = ['Outlet', 'MultiOutlet', 'Switch', ]
         
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
@@ -236,8 +245,13 @@ class YoLinkSetup (udi_interface.Node):
                         name = dev['name']
                         name = self.poly.getValidName(name)
                         self.Parameters[address] =  dev['name']
-                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoSwitch(self.poly, address, address, name,  self.yoAccess, dev )
+
+                    if  'YS5708' in dev['modelName'] or 'YS5709' in dev['modelName']:
+                        logging.info('Adding swith2Button device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoSwitchSec(self.poly, address, address, name,  self.yoAccess, dev )
+                    else:
+                        logging.info('Adding switch device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoSwitch(self.poly, address, address, name,  self.yoAccess, dev )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
@@ -288,17 +302,9 @@ class YoLinkSetup (udi_interface.Node):
                         name = dev['name']
                         name = self.poly.getValidName(name)
                         self.Parameters[address]=  dev['name']
-                    config = {}
-                    if  'YS6802' in dev['modelName']:
-                        config['usb'] = 0
-                        config['outlet'] = 2
-                    elif 'YS6801' in dev['modelName']:
-                        config['usb'] = 1
-                        config['outlet'] = 4
-                    else:
-                        logging.error('Unsupported MultiOutlet devicve : {}'.format(dev['modelName']))
+                        
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev, config )
+                    temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev)
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
@@ -381,9 +387,13 @@ class YoLinkSetup (udi_interface.Node):
                     else:
                         name = dev['name']
                         name = self.poly.getValidName(name)
-                        self.Parameters[address]=  dev['name']                    
-                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoOutlet(self.poly, address, address, name, self.yoAccess, dev )
+                        self.Parameters[address]=  dev['name']  
+                    if  'YS6602' in dev['modelName']:
+                        logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoOutletPwr(self.poly, address, address, name, self.yoAccess, dev )
+                    else:
+                        logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoOutlet(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
@@ -407,7 +417,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
             
-                elif dev['type'] == 'Finger': 
+                elif dev['type'] == 'Finger':
                     name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
                     address = self.poly.getValidAddress(name)
                     if address in self.Parameters:
@@ -545,20 +555,40 @@ class YoLinkSetup (udi_interface.Node):
                         time.sleep(4)
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
+
+
+                elif dev['type'] == 'WaterMeterController': 
+                    name = dev['deviceId'][-14:] #14 last characters - hopefully there is no repeats (first charas seems the same for all)
+                    address = self.poly.getValidAddress(name)
+                    if address in self.Parameters:
+                        name = self.Parameters[address]
+                    else:
+                        name = dev['name']
+                        name = self.poly.getValidName(name)
+                        self.Parameters[address]=  dev['name']                    
+                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                    temp = udiYoWaterMeterController(self.poly, address, address, name, self.yoAccess, dev )
+                    while not temp.node_ready:
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
+                        time.sleep(4)
+                    for adr in temp.adr_list:
+                        self.assigned_addresses.append(adr)                        
                                                 
             else:
                 logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
         time.sleep(1)
         # need to go through nodes to see if there are nodes that no longer exist in device list                
         logging.debug('assigned addresses nodes  :{} - {}'.format(len(self.assigned_addresses), self.assigned_addresses))
+        while not self.configDone:
+            logging.info('Waiting for ')
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
         for nde in range(0, len(self.nodes_in_db)):
             node = self.nodes_in_db[nde]
             logging.debug('Scanning db for extra nodes : {}'.format(node))
-            if node['address']  not in self.assigned_addresses and node['isPrimary'] == 1: # do not remove sub-nodes
+            if node['primaryNode'] not in self.assigned_addresses:
                 logging.debug('Removing node : {} {}'.format(node['name'], node))
                 self.poly.delNode(node['address'])
-                
+        time.sleep(1)
         # checking params for erassed nodes
         self.poly.updateProfile()
         self.pollStart = True
@@ -627,7 +657,7 @@ class YoLinkSetup (udi_interface.Node):
                                 logging.debug('longpoll {}'.format(nde))
                                 time.sleep(5) # need to limit calls to 100 per  5 min - using 5 to allow other calls - updating is not critical
                     except Exception as e:
-                        logging.debug('Exeption occcured during systemPoll : {}'.format(e))
+                        logging.error('Exeption occcured during systemPoll : {}'.format(e))
                         #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
                         #deviceList = self.yoAccess.getDeviceList()           
                     
@@ -639,7 +669,8 @@ class YoLinkSetup (udi_interface.Node):
                         if nde != 'setup':   # but not the controller node
                             nodes[nde].checkDataUpdate()
                             logging.debug('shortpoll {}'.format(nde))
-                            time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
+                            # no API calls so no need to spread out 
+                            #time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
             else:
                 self.node.setDriver('ST', 0, True, True)
                 

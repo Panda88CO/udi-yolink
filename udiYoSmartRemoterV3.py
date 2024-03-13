@@ -24,10 +24,9 @@ class udiRemoteKey(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25}, # Command
             {'driver': 'GV1', 'value': 0, 'uom': 25}, # Short Keypress setting
             {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
-
             ]
     
-    from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
+    from  udiYolinkLib import node_queue, wait_for_node_done
 
     def __init__(self, polyglot, primary, address, name, key):
         super().__init__( polyglot, primary, address, name)
@@ -91,7 +90,8 @@ class udiRemoteKey(udi_interface.Node):
     def stop(self):
         logging.debug('stop smremotekey : {}'.format(self.key))
        
-
+    def checkOnline(self):
+        pass #this is a sub node - main node reflects on line
 
     def checkDataUpdate(self):
         pass
@@ -99,15 +99,22 @@ class udiRemoteKey(udi_interface.Node):
     def handleData(self, data):
         self.KeyOperations.load(data)
         logging.debug('handleData {}'.format(data))
-        if self.LONG_CMD in data:
-            self.long_cmd_type = data[self.LONG_CMD]
-        else:
-            self.long_cmd_type = 0
-        if self.SHORT_CMD in data:
-            self.short_cmd_type = data[self.SHORT_CMD]
-        else:
-            self.short_cmd_type = 1
-   
+        try:
+            if data is None: #Initialize
+                self.long_cmd_type = 0
+                self.short_cmd_type = 1
+            else:
+                if self.LONG_CMD in data:
+                    self.long_cmd_type = data[self.LONG_CMD]
+                else:
+                    self.long_cmd_type = 0
+                if self.SHORT_CMD in data:
+                    self.short_cmd_type = data[self.SHORT_CMD]
+                else:
+                    self.short_cmd_type = 1            
+        except Exception as e:
+            logging.info('No Key definitions exist yet : {}'.format(e))
+
 
     def configHandler(self):
         self.configDone = True
@@ -129,7 +136,7 @@ class udiRemoteKey(udi_interface.Node):
                 self.node.reportCmd(self.long_press_state )
             self.node.setDriver('GV0', isy_val)
             logging.debug('send long press command cmd:{} driver{}'.format(self.long_press_state, isy_val))
-
+            
 
     def get_new_state(self, cmd_type, state):
         logging.debug('key_pressed = key {} - cmd_type = {} state {}'.format(self.key , cmd_type, state ))
@@ -206,7 +213,7 @@ class udiRemoteKey(udi_interface.Node):
 
 
 class udiYoSmartRemoter(udi_interface.Node):
-    from  udiLib import node_queue, wait_for_node_done, getValidName, getValidAddress, send_temp_to_isy, isy_value, convert_temp_unit, send_rel_temp_to_isy
+    from  udiYolinkLib import node_queue, wait_for_node_done
 
     id = 'yosmremote'
 
@@ -292,7 +299,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.yoSmartRemote.initNode()
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
-        for key in range(0, 4):
+        for key in range(0, self.nbr_keys):
             k_address =  self.address[4:14]+'key' + str(key)
             k_address = self.poly.getValidAddress(str(k_address))
 

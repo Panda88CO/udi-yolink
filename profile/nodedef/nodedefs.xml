@@ -15,13 +15,22 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yoswitch" nls="nlsswitch">
+   <nodeDef id="yoswitchsec" nls="nlsswitch">
       <editors />
       <sts>
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
-         <!-- <st id="GV8" editor="online" /> -->
+
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV10" editor="stSec" />               
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
+         <st id="GV11" editor="stSec" />               
+         <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
       </sts>
@@ -31,7 +40,6 @@
             <cmd id="DOF"  />
             <cmd id="DFON"  />               
             <cmd id="DFOF"  />    
-      
          </sends>
 
          <accepts>
@@ -50,10 +58,105 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexS" init="GV13" /> 
+             </cmd >
+
+            <cmd id="DEFINE_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="bindays" editor="binDays" init="GV19" />       
+               <p id="onH" editor="stHourI" init="GV15" /> 
+               <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV10" /> 
+               <p id="offH" editor="stHourI" init="GV17" /> 
+               <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="offS" editor="stSecI" init="GV11" />   
+                                   
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
+             </cmd >                
          </accepts>
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yoswitch" nls="nlsswitch">
+      <editors />
+      <sts>
+         <st id="GV0" editor="swstate" />
+         <st id="GV1" editor="delay" />
+         <st id="GV2" editor="delay" />
+
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+            
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
+         
+         <st id="GV19" editor="binDays" />            
+         <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />
+            <cmd id="DFON"  />               
+            <cmd id="DFOF"  />    
+         </sends>
+
+         <accepts>
+            <cmd id="UPDATE"  /> 
+            <cmd id="DON"  /> 
+            <cmd id="DOF"  /> 
+            <cmd id="DFON"  /> 
+            <cmd id="DFOF"  />
+            <cmd id="QUERY" /> 
+            <cmd id="SWCTRL" > 
+               <p id="" editor="swctrl" init="1" /> 
+            </cmd >
+            <cmd id="ONDELAY" > 
+               <p id="" editor="delaymin" init="GV1" /> 
+             </cmd >   
+            <cmd id="OFFDELAY" > 
+               <p id="" editor="delaymin" init="GV2" /> 
+             </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexS" init="GV13" /> 
+             </cmd >
+
+            <cmd id="DEFINE_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="bindays" editor="binDays" init="GV19" />       
+               <p id="onH" editor="stHourI" init="GV15" /> 
+               <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="offH" editor="stHourI" init="GV17" /> 
+               <p id="offM" editor="stMinI" init="GV18" />   
+                                   
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
+             </cmd >                
+         </accepts>
+      </cmds>
+   </nodeDef> 
+ 
    <nodeDef id="yodimmer" nls="nlsdimmer">
       <editors />
       <sts>
@@ -61,9 +164,16 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV3" editor="dimlvl" />
-         <!-- <st id="GV8" editor="online" /> -->
+
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
+         <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />
+         <st id="GV20" editor="suspendstate" />        
       </sts>
       <cmds>
          <sends>
@@ -92,7 +202,30 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="Dondelay" editor="delaymin" init="GV1" /> 
+               <p id="Doffdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
 
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexS" init="GV13" /> 
+             </cmd >
+            <cmd id="DEFINE_SCH" > 
+
+
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="bindays" editor="binDays" init="GV19" />   
+               <p id="onH" editor="stHourI" init="GV15" /> 
+               <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="offH" editor="stHourI" init="GV17" /> 
+               <p id="offM" editor="stMinI" init="GV18" />   
+                                       
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
+             </cmd >     
 
          </accepts>
       </cmds>
@@ -105,9 +238,14 @@
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
-         <st id="GV3" editor="watt" />
-         <st id="GV4" editor="energy" />
-         <!-- <st id="GV8" editor="online" /> -->
+
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
+         <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
       </sts>
@@ -122,6 +260,7 @@
             <cmd id="DOF" /> 
             <cmd id="QUERY" /> 
 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
@@ -131,24 +270,144 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexS" init="GV13" /> 
+             </cmd >
+            <cmd id="DEFINE_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="onH" editor="stHourI" init="GV15" /> 
+               <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="offH" editor="stHourI" init="GV17" /> 
+               <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="bindays" editor="binDays" init="GV19" />                                          
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
+             </cmd >            
          </accepts>
       </cmds>
    </nodeDef> 
-
-   <nodeDef id="yomultiout" nls="nlsmultiout">
+   
+ <nodeDef id="yooutletPwr" nls="nlsoutlet">
       <editors />
       <sts>
+         <st id="GV0" editor="swstate" />
+         <st id="GV1" editor="delay" />
+         <st id="GV2" editor="delay" />
+         <st id="GV3" editor="watt" />
+         <st id="GV4" editor="energy" />
+         <st id="GV5" editor="alert" />
+         <st id="GV6" editor="alert" />
+         <st id="GV7" editor="alert" />
+         <st id="GV8" editor="alert" />
+
+
          <!-- <st id="GV8" editor="online" /> -->
+
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
+         <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" editor="swstate"  />               
+            <cmd id="DOF" editor="swstate"  />   
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
 
+
+            <cmd id="SWCTRL" > 
+               <p id="" editor="swctrl" init="GV0" /> 
+            </cmd >
+            <cmd id="ONDELAY" > 
+               <p id="" editor="delaymin" init="GV1" /> 
+             </cmd >   
+            <cmd id="OFFDELAY" > 
+               <p id="" editor="delaymin" init="GV2" /> 
+             </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexS" init="GV13" /> 
+             </cmd >
+            <cmd id="DEFINE_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="onH" editor="stHourI" init="GV15" /> 
+               <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="offH" editor="stHourI" init="GV17" /> 
+               <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="bindays" editor="binDays" init="GV19" />                                          
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
+             </cmd >            
+         </accepts>
+      </cmds>
+   </nodeDef> 
+   <nodeDef id="yomultiout" nls="nlsmultiout">
+      <editors />
+      <sts>
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="status" />
+
+         <st id="GV12" editor="outport" />    
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
+         <st id="GV19" editor="binDays" />      
+
+   
+         <st id="GV20" editor="suspendstate" />         
+      </sts>
+      <cmds>
+         <sends>
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexM" init="GV13" /> 
+             </cmd >
+            <cmd id="DEFINE_SCH" > 
+               <p id="outport" editor="outport" init="GV12" /> 
+               <p id="index" editor="sch_indexM" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="onH" editor="stHourI" init="GV15" /> 
+               <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="offH" editor="stHourI" init="GV17" /> 
+               <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="bindays" editor="binDays" init="GV19" />                                          
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="index" editor="sch_indexM" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
+             </cmd >
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -161,6 +420,7 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
+
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -184,6 +444,10 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >                
          </accepts>
       </cmds>
    </nodeDef> 
@@ -219,9 +483,15 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="BATLVL" editor="batlevel" />
-         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
+         <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />             
       </sts>
       <cmds>
          <sends>
@@ -243,9 +513,74 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
+            <cmd id="DELAY_CTRL" > 
+               <p id="Maondelay" editor="delaymin" init="GV1" /> 
+               <p id="Maoffdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexS" init="GV13" /> 
+             </cmd >
+            <cmd id="DEFINE_SCH" > 
+               <p id="MaDindex" editor="sch_indexS" init="GV13" /> 
+               <p id="MaDactive" editor="sch_activeI" init="GV14" /> 
+               <p id="MaDonH" editor="stHourI" init="GV15" /> 
+               <p id="MaDonM" editor="stMinI" init="GV16" /> 
+               <p id="MaDoffH" editor="stHourI" init="GV17" /> 
+               <p id="MaDoffM" editor="stMinI" init="GV18" />   
+               <p id="MaDbindays" editor="binDays" init="GV19" />                                          
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="MaCindex" editor="sch_indexS" init="GV13" /> 
+               <p id="MaCactive" editor="sch_activeI" init="GV14" />                                     
+             </cmd >                
          </accepts>
       </cmds>
    </nodeDef> 
+
+  <nodeDef id="yowatermeter" nls="nlswatermeter">
+      <editors />
+      <sts>
+         <st id="GV0" editor="manstate" />
+         <st id="GV1" editor="watermeter" />
+         <!--<st id="GV2" editor="delay" />
+         <st id="GV3" editor="delay" /> -->
+         <st id="BATLVL" editor="batlevel" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV4" editor="alarm" />
+         <st id="GV5" editor="alarm" />
+         <st id="GV6" editor="alarm" />
+         <st id="GV7" editor="alarm" />
+         <st id="GV8" editor="alarm" />
+         <st id="GV9" editor="alarm" />         
+         <st id="GV10" editor="pwrmode" />  
+         <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />         
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />    
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+            <cmd id="QUERY" /> 
+
+            <!--<cmd id="VALVECTRL" > 
+               <p id="" editor="manctrl" init="1" /> 
+            </cmd >
+            <cmd id="ONDELAY" > 
+               <p id="" editor="delaymin" init="GV1" /> 
+             </cmd >   
+            <cmd id="OFFDELAY" > 
+               <p id="" editor="delaymin" init="GV2" /> 
+             </cmd > -->
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
 
    <nodeDef id="yothsens" nls="nlsthsens">
       <editors />

@@ -102,7 +102,9 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
     def data_updated(yolink):
         tmp = yolink.lastUpdate()
-        if ( tmp > yolink.lastUpdateTime):
+        if tmp == None or yolink.lastUpdateTime == None or yolink.lastUpdateTime == {}:
+            return(True) 
+        elif ( tmp > yolink.lastUpdateTime):
             yolink.lastUpdateTime = tmp 
             logging.debug('{} - Data Updated'.format(yolink.type))
             return(True)
@@ -321,6 +323,9 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             return(temp['state'][usb])
         else:
             return('unknown')
+
+
+    
 
     '''
     def setMultiDelay(yolink,  delayList):

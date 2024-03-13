@@ -21,6 +21,7 @@ from yolinkManipulatorV2 import YoLinkManipul
 
 
 class udiYoManipulator(udi_interface.Node):
+    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key    
     id = 'yomanipu'
     '''
        drivers = [
@@ -37,9 +38,15 @@ class udiYoManipulator(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
+            {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
+            {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
+            {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
+            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
+            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
+            {'driver': 'GV20', 'value': 99, 'uom': 25},              
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
 
@@ -58,6 +65,7 @@ class udiYoManipulator(udi_interface.Node):
         self.timer_expires = 0
         self.onDelay = 0
         self.offDelay = 0
+        self.schedule_selected = 0
         self.valveState = 99 # needed as class c device - keep value until online again 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -74,15 +82,6 @@ class udiYoManipulator(udi_interface.Node):
 
 
 
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
-
-
 
     def start(self):
         logging.info('Start - udiYoManipulator')
@@ -94,6 +93,7 @@ class udiYoManipulator(udi_interface.Node):
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
+        self.yoManipulator.refreshSchedules()
         self.node_ready = True
 
     def stop (self):
@@ -151,7 +151,16 @@ class udiYoManipulator(udi_interface.Node):
                 self.node.setDriver('BATLVL', 99)
                 self.node.setDriver('ST', 0)
                 self.node.setDriver('GV20', 2, True, True)
-                
+                self.node.setDriver('GV13', self.schedule_selected)
+                self.node.setDriver('GV14', 99)
+                self.node.setDriver('GV15', 99,True, True, 25)
+                self.node.setDriver('GV16', 99,True, True, 25)
+                self.node.setDriver('GV17', 99,True, True, 25)
+                self.node.setDriver('GV18', 99,True, True, 25)
+                self.node.setDriver('GV19', 0)        
+
+            sch_info = self.yoManipulator.getScheduleInfo(self.schedule_selected)
+            self.update_schedule_data(sch_info, self.schedule_selected)            
 
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoManipulator')
@@ -241,7 +250,34 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Update Status Executed')
         self.yoManipulator.refreshDevice()
 
+    def program_delays(self, command):
+        logging.info('Manipulator program_delays {}'.format(command))
+        query = command.get("query")
+        self.onDelay = int(query.get("ondelay.uom44"))
+        self.offDelay = int(query.get("offdelay.uom44"))
+        self.node.setDriver('GV1', self.onDelay * 60, True, True)
+        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+        self.yoManipulator.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
+
+    def lookup_schedule(self, command):
+        logging.info('Manipulator lookup_schedule {}'.format(command))
+        self.schedule_selected = int(command.get('value'))
+        self.yoManipulator.refreshSchedules()
+
+    def define_schedule(self, command):
+        logging.info('udiYoSwitch define_schedule {}'.format(command))
+        query = command.get("query")
+        self.schedule_selected, params = self.prep_schedule(query)
+        self.yoManipulator.setSchedule(self.schedule_selected, params)
+
+
+    def control_schedule(self, command):
+        logging.info('udiYoSwitch control_schedule {}'.format(command))       
+        query = command.get("query")
+        self.activated, self.schedule_selected = self.activate_schedule(query)
+        self.yoSwiyoManipulatortch.activateSchedule(self.schedule_selected, self.activated)
+        
 
     commands = {
                 'UPDATE': update,
@@ -250,7 +286,11 @@ class udiYoManipulator(udi_interface.Node):
                 'DOF'   : set_close,
                 'MANCTRL': manipuControl, 
                 'ONDELAY' : prepOnDelay,
-                'OFFDELAY' : prepOffDelay 
+                'OFFDELAY' : prepOffDelay,
+                'DELAY_CTRL'    : program_delays, 
+                'LOOKUP_SCH'    : lookup_schedule,
+                'DEFINE_SCH'    : define_schedule,
+                'CTRL_SCH'      : control_schedule,                
                 }
 
 

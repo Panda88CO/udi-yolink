@@ -22,13 +22,21 @@ import time
 from yolinkDimmerV3 import YoLinkDim
 
 class udiYoDimmer(udi_interface.Node):
-  
+    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
     id = 'yodimmer'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV3', 'value': 0, 'uom': 51},
+            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
+            {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
+            {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
+            {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
+            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
+            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
+                 
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},            
 
@@ -60,7 +68,7 @@ class udiYoDimmer(udi_interface.Node):
         self.timer_expires = 0
         self.onDelay = 0
         self.offDelay = 0
-
+        self.schedule_selected = 0
         self.brightness = 50
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -79,14 +87,6 @@ class udiYoDimmer(udi_interface.Node):
         self.adr_list = []
         self.adr_list.append(address)
 
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
-
 
     def start(self):
         logging.info('start - udiYoDimmer')
@@ -97,6 +97,7 @@ class udiYoDimmer(udi_interface.Node):
         time.sleep(2)
         #self.node.setDriver('ST', 1, True, True)
         self.yoDimmer.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
+        self.yoDimmer.refreshSchedules()
         self.node_ready = True
 
 
@@ -124,8 +125,8 @@ class udiYoDimmer(udi_interface.Node):
         #if self.node:
         #    self.poly.delNode(self.node.address)
             
-    #def checkOnline(self):
-    #    self.yoDimmer.refreshDevice()
+    def checkOnline(self):
+        self.yoDimmer.refreshDevice()
     
     
     def checkDataUpdate(self):
@@ -134,7 +135,7 @@ class udiYoDimmer(udi_interface.Node):
 
 
     def updateData(self):
-       if self.node is not None:
+        if self.node is not None:
             state =  self.yoDimmer.getState().upper()
             if self.yoDimmer.online:
                 self.node.setDriver('ST', 1, True, True)
@@ -164,7 +165,17 @@ class udiYoDimmer(udi_interface.Node):
                 self.node.setDriver('GV1', 0, True, False)
                 self.node.setDriver('GV2', 0, True, False)
                 self.node.setDriver('GV20', 2, True, True)
-           
+                self.node.setDriver('GV13', self.schedule_selected)
+                self.node.setDriver('GV14', 99)
+                self.node.setDriver('GV15', 99,True, True, 25)
+                self.node.setDriver('GV16', 99,True, True, 25)
+                self.node.setDriver('GV17', 99,True, True, 25)
+                self.node.setDriver('GV18', 99,True, True, 25)            
+                self.node.setDriver('GV19', 0)       
+
+
+            sch_info = self.yoDimmer.getScheduleInfo(self.schedule_selected)
+            self.update_schedule_data(sch_info, self.schedule_selected)
 
     def updateStatus(self, data):
         logging.info('updateStatus - Switch')
@@ -252,6 +263,33 @@ class udiYoDimmer(udi_interface.Node):
         self.yoDimmer.setOffDelay(self.offDelay)
         self.node.setDriver('GV2', self.offDelay*60, True, True)
 
+    def program_delays(self, command):
+        logging.info('udiYoDimmer program_delays {}'.format(command))
+        query = command.get("query")
+        self.onDelay = int(query.get("ondelay.uom44"))
+        self.offDelay = int(query.get("offdelay.uom44"))
+        self.node.setDriver('GV1', self.onDelay * 60, True, True)
+        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+        self.yoDimmer.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+
+
+    def lookup_schedule(self, command):
+        logging.info('udiYoDimmer lookup_schedule {}'.format(command))
+        self.schedule_selected = int(command.get('value'))
+        self.yoDimmer.refreshSchedules()
+
+    def define_schedule(self, command):
+        logging.info('udiYoSwitch define_schedule {}'.format(command))
+        query = command.get("query")
+        self.schedule_selected, params = self.prep_schedule(query)
+        self.yoDimmer.setSchedule(self.schedule_selected, params)
+
+
+    def control_schedule(self, command):
+        logging.info('udiYoSwitch control_schedule {}'.format(command))       
+        query = command.get("query")
+        self.activated, self.schedule_selected = self.activate_schedule(query)
+        self.yoDimmer.activateSchedule(self.schedule_selected, self.activated)
 
     def update(self, command = None):
         logging.info('udiYoDimmer Update Status')
@@ -269,7 +307,11 @@ class udiYoDimmer(udi_interface.Node):
                 'SWCTRL': switchControl, 
                 'DIMLVL' : set_dimmer_level,
                 'ONDELAY' : setOnDelay,
-                'OFFDELAY' : setOffDelay 
+                'OFFDELAY' : setOffDelay,
+                'DELAY_CTRL'    : program_delays, 
+                'LOOKUP_SCH'    : lookup_schedule,
+                'DEFINE_SCH'    : define_schedule,
+                'CTRL_SCH'      : control_schedule,
                 }
 
 
