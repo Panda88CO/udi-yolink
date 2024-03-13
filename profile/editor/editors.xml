@@ -28,11 +28,9 @@
         <range uom="26" min="233" max="378" prec="1" />
         <range uom="25" subset="0,99" nls="error" />
   </editor>
-  
   <editor id="tempunit"> 
      <range uom="25" subset="0-2,99" nls="tempunit" />
   </editor>    
-
   <editor id="alarm"> 
      <range uom="25" subset="0-1,99" nls="alarm" />
   </editor>
@@ -239,5 +237,5 @@
    <editor id="binDays"> 
      <range uom="25" subset="0-127" nls="bindays" />
    </editor>  
-
+   
 </editors>
