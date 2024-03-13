@@ -31,9 +31,6 @@
   <editor id="tempunit"> 
      <range uom="25" subset="0-2,99" nls="tempunit" />
   </editor>    
-  <editor id="alarm"> 
-     <range uom="25" subset="0-1,99" nls="alarm" />
-  </editor>
 
   <editor id="humidity"> 
      <range uom="51" min="0" max="100" prec="1" />
@@ -171,7 +168,6 @@
    <editor id="pwrmode"> 
      <range uom="25" subset="0-1, 99" nls="pwrmode" />
    </editor>    
-
    <editor id="deviceAlert"> 
      <range uom="25" subset="0-1, 99" nls="deviceAlert" />
    </editor>    
@@ -189,9 +185,6 @@
    </editor>   
    <editor id="SelfcheckState"> 
      <range uom="25" subset="0-1,99" nls="SelfcheckState" />
-   </editor>   
-   <editor id="cmdsetting"> 
-     <range uom="25" subset="0-3" nls="cmdsetting" />
    </editor>   
 
    <editor id="outport"> 
