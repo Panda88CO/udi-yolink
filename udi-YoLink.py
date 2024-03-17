@@ -174,8 +174,12 @@ class YoLinkSetup (udi_interface.Node):
 
 
         logging.debug('{} devices detected : {}'.format(len(self.deviceList), self.deviceList) )
-        self.addNodes(self.deviceList)
-
+        if self.yoAccess:
+            self.node.setDriver('ST', 1, True, True)
+            self.addNodes(self.deviceList)
+        else:
+            self.node.setDriver('ST', 0, True, True)
+    
         #self.poly.updateProfile()
 
 

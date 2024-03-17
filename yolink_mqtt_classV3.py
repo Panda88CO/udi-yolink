@@ -238,12 +238,12 @@ class YoLinkMQTTDevice(object):
             return(0)
     #@measure_time
     def check_system_online(yolink):
-        return(yolink.yoAccess.online)
-        #if yolink.yoAccess.online:
-        #    yolink.online = yolink.dataAPI[yolink.dOnline]
-        #else:
-        #    yolink.online = False
-        #return(yolink.online)
+        #return(yolink.yoAccess.online)
+        if yolink.yoAccess.online:
+            yolink.online = yolink.dataAPI[yolink.dOnline]
+        else:
+            yolink.online = False
+        return(yolink.online)
 
     #@measure_time
     def data_updated(yolink):
@@ -309,7 +309,7 @@ class YoLinkMQTTDevice(object):
                 yolink.online = yolink.check_system_online()
                 return(yolink.dataAPI[yolink.dData][key])
             else:
-                yolink.online = False
+                #yolink.online = False
                 logging.debug('getDataValue NO Match  - {}  {}'.format(key, yolink.dataAPI[yolink.dData]))
                 return('NA')
         except Exception as E:
@@ -337,7 +337,7 @@ class YoLinkMQTTDevice(object):
                     logging.debug('getDataStateValue NO MATCH - {} {}'.format(key, yolink.dataAPI[yolink.dData]))
                     return(-1)
             else:
-                return( )
+                return(None )
         except Exception as E:
             logging.debug('getData exceptiom: {}'.format(E) )
             return( )
@@ -664,7 +664,9 @@ class YoLinkMQTTDevice(object):
                     yolink.eventQueue.put(data['event']) 
                 yolink.lastDataPacket = data
             else:
-                yolink.online = yolink.Status(data) and yolink.check_system_online()
+                #yolink.online = yolink.Status(data) and yolink.check_system_online()
+                yolink.online = yolink.Status(data)
+
                 logging.debug('updateStatus: Unsupported packet type: ' +  json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
             yolink.dataAPI[yolink.dOnline] = yolink.online 
         except Exception as e:
@@ -1060,7 +1062,7 @@ class YoLinkMQTTDevice(object):
             yolink.dataAPI[yolink.dOnline] = False
         else:
             yolink.dataAPI[yolink.dOnline] = True
-        yolink.online = yolink.dataAPI[yolink.dOnline]
+        yolink.online = yolink.Status(data)
         logging.debug('online: {}'.format( yolink.online))
  
 
