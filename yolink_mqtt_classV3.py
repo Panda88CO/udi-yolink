@@ -510,7 +510,11 @@ class YoLinkMQTTDevice(object):
         yolink.suspended= False
         if 'code' in dataPacket:
             if dataPacket['code'] == '000000':
-                yolink.online = True
+                if yolink.dData in dataPacket:
+                    if 'online' in dataPacket[yolink.dData]:
+                      yolink.online = dataPacket[yolink.dData]['online']
+                else: #assume device is online as it is responding        
+                    yolink.online = True
             elif dataPacket['code'].find('00020') == 0: # Offline
                 yolink.online = False
             elif  dataPacket['code'] == '010301': # need to add a wait
@@ -519,13 +523,13 @@ class YoLinkMQTTDevice(object):
                 time.sleep(1)
 
         elif 'event' in dataPacket:
-            if 'data' in dataPacket:
-                    if 'online' in dataPacket['data']:
-                        yolink.online = dataPacket['data']['online']
-                    else:
+            if yolink.dData in dataPacket:
+                    if 'online' in dataPacket[yolink.dData]:
+                        yolink.online = dataPacket[yolink.dData]['online']
+                    else: #assume device is online as it is reporting   
                         yolink.online = True
             else:
-                yolink.online = True 
+                yolink.online = True
         else:
             yolink.online = False
         if not yolink.online:
