@@ -165,20 +165,20 @@ class udiYoTHsensor(udi_interface.Node):
                         self.node.setDriver('GV11', round(limits['tempLimit']['max']+273.15,1), True, True, 26)    
                 else:
                     self.node.setDriver('CLITEMP', 99, True, True, 25)
-                self.node.setDriver('GV1', self.yoTHsensor.bool2Nbr(alarms['lowTemp']), True, True)
-                self.node.setDriver('GV2', self.yoTHsensor.bool2Nbr(alarms['highTemp']), True, True)
-                self.node.setDriver('CLIHUM', self.yoTHsensor.getHumidityValue(), True, True)
+                self.node.setDriver('GV1', self.yoTHsensor.bool2Nbr(alarms['lowTemp']))
+                self.node.setDriver('GV2', self.yoTHsensor.bool2Nbr(alarms['highTemp']))
+                self.node.setDriver('CLIHUM', self.yoTHsensor.getHumidityValue())
                 if 'humidityLimit' in limits:
-                        self.node.setDriver('GV12', limits['humidityLimit']['min'], True, True)
-                        self.node.setDriver('GV13', limits['humidityLimit']['max'], True, True)
-                self.node.setDriver('GV4', self.yoTHsensor.bool2Nbr(alarms['lowHumidity']), True, True)
-                self.node.setDriver('GV5', self.yoTHsensor.bool2Nbr(alarms['highHumidity']), True, True)
-                self.node.setDriver('BATLVL', self.yoTHsensor.getBattery(), True, True)
-                self.node.setDriver('GV7', self.yoTHsensor.bool2Nbr(alarms['lowBattery']), True, True)
-                self.node.setDriver('GV8', self.state2Nbr(self.yoTHsensor.getState()), True, True)
-                self.node.setDriver('GV9', self.cmd_state, True, True)
+                        self.node.setDriver('GV12', limits['humidityLimit']['min'])
+                        self.node.setDriver('GV13', limits['humidityLimit']['max'])
+                self.node.setDriver('GV4', self.yoTHsensor.bool2Nbr(alarms['lowHumidity']))
+                self.node.setDriver('GV5', self.yoTHsensor.bool2Nbr(alarms['highHumidity']))
+                self.node.setDriver('BATLVL', self.yoTHsensor.getBattery())
+                self.node.setDriver('GV7', self.yoTHsensor.bool2Nbr(alarms['lowBattery']))
+                self.node.setDriver('GV8', self.state2Nbr(self.yoTHsensor.getState()))
+                self.node.setDriver('GV9', self.cmd_state)
 
-                self.node.setDriver('ST', self.yoTHsensor.bool2Nbr(self.yoTHsensor.online), True, True)
+                self.node.setDriver('ST', 1)
 
                 if self.yoTHsensor.suspended:
                     self.node.setDriver('GV20', 1, True, True)
@@ -187,15 +187,15 @@ class udiYoTHsensor(udi_interface.Node):
                 
             else:
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
-                self.node.setDriver('GV1',99, True, True)
-                self.node.setDriver('GV2', 99, True, True)
+                self.node.setDriver('GV1',99)
+                self.node.setDriver('GV2', 99)
                 self.node.setDriver('CLIHUM', 0, True, True)
-                self.node.setDriver('GV4',99, True, True)
-                self.node.setDriver('GV5',99, True, True)
-                self.node.setDriver('BATLVL', 99, True, True)
-                self.node.setDriver('GV7',99, True, True)
-                self.node.setDriver('ST', 0, True, True)
-                self.node.setDriver('GV20', 2, True, True)
+                self.node.setDriver('GV4',99)
+                self.node.setDriver('GV5',99)
+                self.node.setDriver('BATLVL', 99)
+                self.node.setDriver('GV7',99)
+                #self.node.setDriver('ST', 0, True, True)
+                self.node.setDriver('GV20', 2)
 
 
 

@@ -353,10 +353,10 @@ class udiYoSmartRemoter(udi_interface.Node):
                             self.keys[remote_key].send_command(press)
                             self.yoSmartRemote.clearEventData()
                             logging.debug('clearEventData')
-                        self.node.setDriver('GV0', remote_key + press, True, True)
-                        self.node.setDriver('GV1', remote_key, True, True)
-                        self.node.setDriver('GV2', press, True, True)                        
-                    self.node.setDriver('GV3', self.yoSmartRemote.getBattery(), True, True)
+                        self.node.setDriver('GV0', remote_key + press)
+                        self.node.setDriver('GV1', remote_key)
+                        self.node.setDriver('GV2', press)                        
+                    self.node.setDriver('GV3', self.yoSmartRemote.getBattery())
                     logging.debug("udiYoSmartRemoter temp: {}".format(self.yoSmartRemote.getDevTemperature()))
                     if self.temp_unit == 0:
                         self.node.setDriver('CLITEMP', round(self.yoSmartRemote.getDevTemperature(),1), True, True, 4)
@@ -366,19 +366,19 @@ class udiYoSmartRemoter(udi_interface.Node):
                         self.node.setDriver('CLITEMP', round(self.yoSmartRemote.getDevTemperature()+273.15,1), True, True, 26)
                     else:
                         self.node.setDriver('CLITEMP', 99, True, True, 25)
-                    self.node.setDriver('ST', 1, True, True)
+                    self.node.setDriver('ST', 1)
                     if self.yoSmartRemote.suspended:
-                        self.node.setDriver('GV20', 1, True, True)
+                        self.node.setDriver('GV20', 1)
                     else:
-                        self.node.setDriver('GV20', 0, True, True)
+                        self.node.setDriver('GV20', 0)
                 else:
-                    self.node.setDriver('GV0', 99, True, True)
-                    self.node.setDriver('GV1', 99, True, True)
-                    self.node.setDriver('GV2', 99, True, True)
-                    self.node.setDriver('GV3', 99, True, True)
+                    self.node.setDriver('GV0', 99)
+                    self.node.setDriver('GV1', 99)
+                    self.node.setDriver('GV2', 99)
+                    self.node.setDriver('GV3', 99)
                     self.node.setDriver('CLITEMP', 99, True, True, 25)
-                    self.node.setDriver('ST', 1, True, True)
-                    self.node.setDriver('GV20', 2, True, True)
+                    #self.node.setDriver('ST', 0, True, True)
+                    self.node.setDriver('GV20', 2)
         except Exception as E:
             logging.error('Smart Remote  updateData exeption: {}'.format(E))
 

@@ -113,18 +113,18 @@ class udiYoVibrationSensor(udi_interface.Node):
             if self.yoVibrationSensor.online:               
                 vib_state = self.getVibrationState()
                 if vib_state == 1:
-                    self.node.setDriver('GV0', 1, True, True)
+                    self.node.setDriver('GV0', 1)
                     if self.last_state != vib_state and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')   
                 elif vib_state == 0:
-                    self.node.setDriver('GV0', 0, True, True)
+                    self.node.setDriver('GV0', 0)
                     if self.last_state != vib_state and self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')  
                 else:
-                    self.node.setDriver('GV0', 99, True, True) 
+                    self.node.setDriver('GV0', 99) 
                 self.last_state = vib_state
-                self.node.setDriver('GV1', self.yoVibrationSensor.getBattery(), True, True)
-                self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('GV1', self.yoVibrationSensor.getBattery())
+                self.node.setDriver('ST', 1)
                 
                 devTemp =  self.yoVibrationSensor.getDeviceTemperature()
                 if devTemp != 'NA':
@@ -141,11 +141,11 @@ class udiYoVibrationSensor(udi_interface.Node):
                 else:
                     self.node.setDriver('GV20', 0)
             else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV1', 99, True, True)
+                self.node.setDriver('GV0', 99)
+                self.node.setDriver('GV1', 99)
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
-                self.node.setDriver('ST', 1, True, True)
-                self.node.setDriver('GV20', 2, True, True)
+                #self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('GV20', 2)
 
 
 

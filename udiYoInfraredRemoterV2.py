@@ -122,7 +122,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             self.node.setDriver('GV0', 0, True, True)
             self.node.setDriver('GV1', 99, True, True)
             self.node.setDriver('GV2', 99, True, True)
-            self.node.setDriver('ST', 0)
+            #self.node.setDriver('ST', 0)
             self.node.setDriver('GV20', 2, True, True)
 
 

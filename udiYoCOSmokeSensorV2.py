@@ -194,7 +194,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
            
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
                 self.node.setDriver('ALARM', 99, True, True)     
-                self.node.setDriver('ST', 0)
+                #self.node.setDriver('ST', 0)
                 self.node.setDriver('GV20', 2, True, True)
 
 

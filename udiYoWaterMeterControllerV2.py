@@ -207,7 +207,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                 self.node.setDriver('GV9', 99)
                 self.node.setDriver('GV10', 99)
                 self.node.setDriver('BATLVL', 99)
-                self.node.setDriver('ST', 0)
+                #self.node.setDriver('ST', 0)
                 self.node.setDriver('GV20', 2, True, True)
                 
 
