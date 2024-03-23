@@ -1301,7 +1301,7 @@ class YoLinkMQTTDevice(object):
                     #logging.debug('END State is not dict 1 - {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]))
                     #logging.debug('END State is not dict 2 - {}'.format(yolink.dataAPI[yolink.dData]))
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts
-            #yolink.online = yolink.check_system_online()
+            yolink.online = yolink.Status(data)
 
 
         except Exception as e:
