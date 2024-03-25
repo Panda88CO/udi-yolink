@@ -123,37 +123,37 @@ class udiYoPowerFailSenor(udi_interface.Node):
             if self.yoPowerFail.online:               
                 state = self.yoPowerFail.getAlertState()
                 logging.debug('state GV0 : {}'.format(state))
-                self.node.setDriver('GV0', state, True, True)
+                self.node.setDriver('GV0', state)
                 if state != self.last_state:
                     if state ==1 and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')
                     elif state == 0 and self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')
                     
-                self.node.setDriver('GV1', self.yoPowerFail.getBattery(), True, True)
+                self.node.setDriver('GV1', self.yoPowerFail.getBattery())
                 alert = self.yoPowerFail.getAlertType()
                 logging.debug('AlertState GV2 : {}'.format(alert))
                 self.node.setDriver('GV2', alert, True, True)
                 powered = self.yoPowerFail.getPowerSupplyConnected()
                 logging.debug('Powered  GV3 : {}'.format(powered))
-                self.node.setDriver('GV3', self.bool2ISY(powered), True, True)
+                self.node.setDriver('GV3', self.bool2ISY(powered))
                 muted = self.yoPowerFail.muted()
                 logging.debug('Muted GV4 : {}'.format(muted))
-                self.node.setDriver('GV4', self.bool2ISY(muted), True, True)                
-                self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('GV4', self.bool2ISY(muted))
+                self.node.setDriver('ST', 1)
                 if self.yoPowerFail.suspended:
-                    self.node.setDriver('GV20', 1, True, True)
+                    self.node.setDriver('GV20', 1)
                 else:
                     self.node.setDriver('GV20', 0)
             else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV2', 99, True, True)
-                self.node.setDriver('GV3', 99, True, True)
-                self.node.setDriver('GV4', 99, True, True)
+                self.node.setDriver('GV0', 99)
+                self.node.setDriver('GV1', 99)
+                self.node.setDriver('GV2', 99)
+                self.node.setDriver('GV3', 99)
+                self.node.setDriver('GV4', 99)
 
-                self.node.setDriver('ST', 1, True, True)
-                self.node.setDriver('GV20', 99, True, True)
+                #self.node.setDriver('ST', 1, True, True)
+                self.node.setDriver('GV20', 2)
 
 
 

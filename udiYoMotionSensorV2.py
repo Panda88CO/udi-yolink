@@ -157,7 +157,7 @@ class udiYoMotionSensor(udi_interface.Node):
                 self.node.setDriver('GV1', 99, True, True)
                 self.node.setDriver('GV2', 0, True, True)
                 self.node.setDriver('CLITEMP', 99, True, True, 25)
-                self.node.setDriver('ST', 0, True, True)
+                #self.node.setDriver('ST', 0, True, True)
                 self.node.setDriver('GV20', 2, True, True)       
 
 

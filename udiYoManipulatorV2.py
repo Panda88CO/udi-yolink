@@ -149,7 +149,7 @@ class udiYoManipulator(udi_interface.Node):
                 self.node.setDriver('GV1', 0)     
                 self.node.setDriver('GV2', 0)
                 self.node.setDriver('BATLVL', 99)
-                self.node.setDriver('ST', 0)
+                #self.node.setDriver('ST', 0)
                 self.node.setDriver('GV20', 2, True, True)
                 self.node.setDriver('GV13', self.schedule_selected)
                 self.node.setDriver('GV14', 99)

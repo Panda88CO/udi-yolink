@@ -114,14 +114,14 @@ class udiYoOutlet(udi_interface.Node):
         logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
         if self.node is not None:
             #if  self.yoOutlet.online:
-            self.node.setDriver('ST',1, True, True)
+            self.node.setDriver('ST',1)
             state = str(self.yoOutlet.getState()).upper()
             if state == 'ON':
-                self.node.setDriver('GV0',1 , True, True)
+                self.node.setDriver('GV0',1)
                 #if self.last_state != state:
                 #    self.node.reportCmd('DON')  
             elif state == 'OFF' :
-                self.node.setDriver('GV0', 0, True, True)
+                self.node.setDriver('GV0', 0)
                 #if self.last_state != state:
                 #    self.node.reportCmd('DOF')  
             #else:
@@ -129,19 +129,19 @@ class udiYoOutlet(udi_interface.Node):
             self.last_state = state                
             #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
             if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
-                self.node.setDriver('GV1', 0, True, False)
-                self.node.setDriver('GV2', 0, True, False)
+                self.node.setDriver('GV1', 0)
+                self.node.setDriver('GV2', 0)
             if self.yoOutlet.suspended:
-                self.node.setDriver('GV20', 1, True, True)
+                self.node.setDriver('GV20', 1)
             else:
                 self.node.setDriver('GV20', 0)
         else:
-            self.node.setDriver('GV0', 99, True, True)
-            self.node.setDriver('GV1', 0, True, True)
-            self.node.setDriver('GV2', 0, True, True)
+            self.node.setDriver('GV0', 99)
+            self.node.setDriver('GV1', 0)
+            self.node.setDriver('GV2', 0)
 
-            self.node.setDriver('ST',0, True, True)
-            self.node.setDriver('GV20', 2, True, True)
+            #self.node.setDriver('ST',0, True, True)
+            self.node.setDriver('GV20', 2)
             self.node.setDriver('GV13', self.schedule_selected)
             self.node.setDriver('GV14', 99)
             self.node.setDriver('GV15', 99,True, True, 25)

@@ -42,7 +42,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-version = '1.0.3'
+version = '1.0.6'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -174,8 +174,12 @@ class YoLinkSetup (udi_interface.Node):
 
 
         logging.debug('{} devices detected : {}'.format(len(self.deviceList), self.deviceList) )
-        self.addNodes(self.deviceList)
-
+        if self.yoAccess:
+            self.node.setDriver('ST', 1, True, True)
+            self.addNodes(self.deviceList)
+        else:
+            self.node.setDriver('ST', 0, True, True)
+    
         #self.poly.updateProfile()
 
 
@@ -671,8 +675,8 @@ class YoLinkSetup (udi_interface.Node):
                             logging.debug('shortpoll {}'.format(nde))
                             # no API calls so no need to spread out 
                             #time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
-            else:
-                self.node.setDriver('ST', 0, True, True)
+            #else:
+            #    self.node.setDriver('ST', 0, True, True)
                 
 
 

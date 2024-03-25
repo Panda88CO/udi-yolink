@@ -112,26 +112,26 @@ class udiYoSiren(udi_interface.Node):
                 logging.debug('Siren state {}'.format(state))
                 if state.upper() == 'NORMAL':
                     self.sirenState = 0
-                    self.node.setDriver('GV0', self.sirenState , True, True)
+                    self.node.setDriver('GV0', self.sirenState)
                 elif state.upper() == 'ALERT':
                     self.sirenState = 1
-                    self.node.setDriver('GV0', self.sirenState , True, True)
+                    self.node.setDriver('GV0', self.sirenState)
                 elif state.upper() == 'OFF':
                     self.sirenState = 2
-                    self.node.setDriver('GV0', self.sirenState , True, True)
+                    self.node.setDriver('GV0', self.sirenState)
                 else:
-                    self.node.setDriver('GV0', 99, True, True)
+                    self.node.setDriver('GV0', 99)
                 if self.yoSiren.getSupplyType() == 'battery':
                     logging.debug('udiYoSiren - getBattery: () '.format(self.yoSiren.getBattery()))    
-                    self.node.setDriver('GV2', self.yoSiren.getBattery(), True, True)
+                    self.node.setDriver('GV2', self.yoSiren.getBattery())
                 elif self.yoSiren.getSupplyType() == 'ext_supply':
                     logging.debug('udiYoSiren - external Supply')    
-                    self.node.setDriver('GV2', 98, True, True)
+                    self.node.setDriver('GV2', 98)
                 else:
-                    self.node.setDriver('GV2', 99, True, True)
+                    self.node.setDriver('GV2', 99)
 
                 logging.debug('AlarmDuration : {}'.format(self.yoSiren.getSirenDuration()))
-                self.node.setDriver('GV1', self.yoSiren.getSirenDuration(), True, True)
+                self.node.setDriver('GV1', self.yoSiren.getSirenDuration())
                 self.node.setDriver('ST', 1)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if self.yoSiren.suspended:
@@ -142,7 +142,7 @@ class udiYoSiren(udi_interface.Node):
                 self.node.setDriver('GV0', 99)
                 self.node.setDriver('GV1', 0)
                 self.node.setDriver('GV2', 99)
-                self.node.setDriver('ST', 0)
+                #self.node.setDriver('ST', 0)
                 self.node.setDriver('GV20', 2)
                 
 

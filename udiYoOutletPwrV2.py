@@ -154,7 +154,7 @@ class udiYoOutletPwr(udi_interface.Node):
         logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
         if self.node is not None:
             #if  self.yoOutlet.online:
-            self.node.setDriver('ST',1, True, True)
+            self.node.setDriver('ST',1)
             state = str(self.yoOutlet.getState()).upper()
             if state == 'ON':
                 self.node.setDriver('GV0',1 , True, True)
@@ -192,7 +192,7 @@ class udiYoOutletPwr(udi_interface.Node):
             self.node.setDriver('GV2', 0, True, True)
             self.node.setDriver('GV3', 0, True, True)
             self.node.setDriver('GV4', 0, True, True)
-            self.node.setDriver('ST',0, True, True)
+            #self.node.setDriver('ST',0, True, True)
             self.node.setDriver('GV20', 2, True, True)
             self.node.setDriver('GV13', self.schedule_selected)
             self.node.setDriver('GV14', 99)

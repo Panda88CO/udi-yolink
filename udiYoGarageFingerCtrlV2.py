@@ -72,6 +72,7 @@ class udiYoGarageFinger(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoGarageFinger')
+        self.node.setDriver('ST', 0, True, True)
         self.yoDoorControl = YoLinkGarageFingerCtrl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.node.setDriver('ST', 1, True, True)
@@ -80,7 +81,7 @@ class udiYoGarageFinger(udi_interface.Node):
 
     def initNode(self):
         self.yoDoorControl.online = True
-        self.node.setDriver('ST',1, True, True)
+        #self.node.setDriver('ST',1, True, True)
         
     def checkOnline(self):
         pass
@@ -109,7 +110,7 @@ class udiYoGarageFinger(udi_interface.Node):
             self.node.setDriver('ST', 1)
         else:
             self.node.setDriver('GV20', 2, True, True)
-            self.node.setDriver('ST', 0, True, True)
+            #self.node.setDriver('ST', 0, True, True)
 
 
     def toggleDoor(self, command = None):

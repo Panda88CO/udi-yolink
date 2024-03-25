@@ -363,7 +363,7 @@ pwrmode-0 = Ext Supply
 pwrmode-1 = Battery
 pwrmode-99 = Unknown
 
-suspended-0 = Normal
+suspended-0 = Online
 suspended-1 = Suspended
 suspended-2 = Offline
 suspended-99 = Unknown
