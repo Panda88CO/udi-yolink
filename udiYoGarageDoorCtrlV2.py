@@ -76,7 +76,7 @@ class udiYoGarageDoor(udi_interface.Node):
         self.node.setDriver('ST', 0, True, True)
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        #self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('ST', 1, True, True)
         #time.sleep(3)
         self.node_ready = True
 
