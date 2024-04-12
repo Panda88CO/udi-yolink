@@ -1151,7 +1151,10 @@ class YoLinkMQTTDevice(object):
                                     yolink.extDelayTimer.addDelays(temp)
                                     # yolink.dataAPI[yolink.dData][yolink.dDelay].append(data[yolink.dData][yolink.dState][yolink.dDelay])
                                 else:
-                                    yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][yolink.dState][key]      
+                                    yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][yolink.dState][key]  
+                            for info in data[yolink.dData]: 
+                                if info != yolink.dState:
+                                    yolink.dataAPI[yolink.dData][info] = data[yolink.dData][info]
                         elif  type(data[yolink.dData][yolink.dState]) is list:
                             #logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))
                             if yolink.dDelays in data[yolink.dData]:

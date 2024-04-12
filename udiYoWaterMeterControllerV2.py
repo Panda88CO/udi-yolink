@@ -172,24 +172,25 @@ class udiYoWaterMeterController(udi_interface.Node):
                     self.node.setDriver('GV10', 1)
 
                 alarms = self.yoWaterCtrl.getAlarms()
-                if 'openReminder' in alarms:
-                    self.node.setDriver('GV4', self.bin2ISY(alarms['openReminder']))
-                
-                if 'leak' in alarms:
-                    self.node.setDriver('GV5', self.bin2ISY(alarms['leak']))
- 
-                if 'amountOverrun' in alarms:
-                    self.node.setDriver('GV6', self.bin2ISY(alarms['amountOverrun']))
+                if alarms:
+                    if 'openReminder' in alarms:
+                        self.node.setDriver('GV4', self.bin2ISY(alarms['openReminder']))
+                    
+                    if 'leak' in alarms:
+                        self.node.setDriver('GV5', self.bin2ISY(alarms['leak']))
+    
+                    if 'amountOverrun' in alarms:
+                        self.node.setDriver('GV6', self.bin2ISY(alarms['amountOverrun']))
 
-                if 'durationOverrun' in alarms:
-                    self.node.setDriver('GV7', self.bin2ISY(alarms['durationOverrun']))
-  
-                if 'valveError' in alarms:
-                    self.node.setDriver('GV8', self.bin2ISY(alarms['valveError']))
+                    if 'durationOverrun' in alarms:
+                        self.node.setDriver('GV7', self.bin2ISY(alarms['durationOverrun']))
+    
+                    if 'valveError' in alarms:
+                        self.node.setDriver('GV8', self.bin2ISY(alarms['valveError']))
 
-                if 'reminder' in alarms:
-                    self.node.setDriver('GV9', self.bin2ISY(alarms['reminder']))
- 
+                    if 'reminder' in alarms:
+                        self.node.setDriver('GV9', self.bin2ISY(alarms['reminder']))
+    
                 if self.yoWaterCtrl.suspended:
                     self.node.setDriver('GV20', 1, True, True)
                 else:
