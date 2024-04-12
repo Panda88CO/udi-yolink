@@ -5,7 +5,7 @@ import json
 import psutil
 import sys
 import math
-from threading import Lock
+
 from  datetime import datetime
 try:
     import udi_interface
@@ -28,7 +28,7 @@ countdownTimerUpdateInterval_G = 10
 
 import paho.mqtt.client as mqtt
 from queue import Queue
-from threading import Thread, Event
+from threading import Thread, Event, Lock
 DEBUG = False
 
 
