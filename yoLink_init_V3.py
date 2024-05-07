@@ -195,6 +195,7 @@ class YoLinkInitPAC(object):
                 logging.error('Exeption occcured during request_new_token : {}'.format(e))
                 return(False)
         else:
+            #yoAccess.refresh_token()  Need to consider 
             return(True) # use existing Token 
 
     #@measure_time
@@ -336,6 +337,7 @@ class YoLinkInitPAC(object):
 
         except Exception as e:
             logging.error('Exception  - connect_to_broker: {}'.format(e))
+            yoAccess.request_new_token()
             return(False)
 
     #@measure_time
