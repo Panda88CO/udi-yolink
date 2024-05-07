@@ -337,7 +337,10 @@ class YoLinkInitPAC(object):
 
         except Exception as e:
             logging.error('Exception  - connect_to_broker: {}'.format(e))
-            yoAccess.request_new_token()
+            #if yoAccess.token == None:
+            #    yoAccess.request_new_token()
+            #else:
+            #    yoAccess.refresh_token()
             return(False)
 
     #@measure_time
