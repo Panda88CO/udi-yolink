@@ -101,7 +101,7 @@ class YoLinkInitPAC(object):
             
 
             logging.info('Connecting to YoLink MQTT server')
-            while not yoAccess.request_new_token():
+            while not yoAccess.refresh_token():
                 time.sleep(35) # Wait 35 sec and try again - 35 sec ensures less than 10 attemps in 5min - API restriction
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
@@ -163,7 +163,7 @@ class YoLinkInitPAC(object):
     def getDeviceList(yoAccess):
         return(yoAccess.deviceList)
 
-
+    '''
     #@measure_time
     def request_new_token(yoAccess):
         logging.debug('yoAccess Token exists : {}'.format(yoAccess.token != None))
@@ -195,7 +195,9 @@ class YoLinkInitPAC(object):
                 logging.error('Exeption occcured during request_new_token : {}'.format(e))
                 return(False)
         else:
+            yoAccess.refresh_token()  
             return(True) # use existing Token 
+    '''
 
     #@measure_time
     def refresh_token(yoAccess):
@@ -208,15 +210,15 @@ class YoLinkInitPAC(object):
                     response = requests.post( yoAccess.tokenURL,
                         data={"grant_type": "refresh_token",
                             "client_id" :  yoAccess.uaID,
-                            "refresh_token":yoAccess.token['refresh_token'],
-                            }
+                            "refresh_token":yoAccess.token['refresh_token'], 
+                            }, timeout= 5
                     )
                 else:
                     response = requests.post( yoAccess.tokenURL,
                         data={"grant_type": "client_credentials",
                             "client_id" : yoAccess.uaID,
-                            "client_secret" : yoAccess.secID },
-                    )
+                            "client_secret" : yoAccess.secID }, timeout= 5
+                )
                 if response.ok:
                     yoAccess.token =  response.json()
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
@@ -225,19 +227,31 @@ class YoLinkInitPAC(object):
                     logging.error('Was not able to refresh token')
                     return(False)
             else:
-                return(yoAccess.request_new_token())
+                response = requests.post( yoAccess.tokenURL,
+                    data={"grant_type": "client_credentials",
+                        "client_id" : yoAccess.uaID,
+                        "client_secret" : yoAccess.secID }, timeout= 5
+                )
+                if response.ok:
+                    yoAccess.token =  response.json()
+                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
+                    return(True)
+                else:
+                    logging.error('Was not able to refresh token')
+                    return(False)       
+
 
 
         except Exception as e:
             logging.debug('Exeption occcured during refresh_token : {}'.format(e))
-            return(yoAccess.request_new_token())
+            #return(yoAccess.request_new_token())
 
     #@measure_time
     def get_access_token(yoAccess):
         yoAccess.tokenLock.acquire()
         #now = int(time.time())
         if yoAccess.token == None:
-            yoAccess.request_new_token()
+            yoAccess.refresh_token()
         #if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
         #    yoAccess.refresh_token()
         #    if now > yoAccess.token['expirationTime']: #we lost the token
@@ -259,7 +273,7 @@ class YoLinkInitPAC(object):
             headers1 = {}
             headers1['Content-type'] = 'application/json'
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
-            r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1) 
+            r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1, timeout=5) 
             info = r.json()
             yoAccess.deviceList = info['data']['devices']
             logging.debug('device_list : {}'.format(yoAccess.deviceList))
@@ -276,7 +290,7 @@ class YoLinkInitPAC(object):
             headers1['Content-type'] = 'application/json'
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
 
-            r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1) 
+            r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1, timeout=5) 
             logging.debug('Obtaining  homeID : {}'.format(r.ok))
             if r.ok:
                 homeId = r.json()
@@ -313,7 +327,7 @@ class YoLinkInitPAC(object):
         """
         try: 
             logging.info("Connecting to broker...")
-            while not yoAccess.request_new_token():
+            while not yoAccess.refresh_token():
                 time.sleep(35) # Wait 35 sec and try again (35sec ensure less than 10 attempts in 5 min)
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
@@ -336,6 +350,10 @@ class YoLinkInitPAC(object):
 
         except Exception as e:
             logging.error('Exception  - connect_to_broker: {}'.format(e))
+            #if yoAccess.token == None:
+            #    yoAccess.request_new_token()
+            #else:
+            #    yoAccess.refresh_token()
             return(False)
 
     #@measure_time
@@ -602,7 +620,7 @@ class YoLinkInitPAC(object):
             except Exception as e:
                 logging.error('Exeption occcured during on_ disconnect : {}'.format(e))
                 if yoAccess:
-                    yoAccess.request_new_token()
+                    yoAccess.refresh_token()
                 else:
                     logging.error('Lost credential info - need to restart node server')
 
