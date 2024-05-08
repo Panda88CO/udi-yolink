@@ -101,7 +101,7 @@ class YoLinkInitPAC(object):
             
 
             logging.info('Connecting to YoLink MQTT server')
-            while not yoAccess.request_new_token():
+            while not yoAccess.refresh_token():
                 time.sleep(35) # Wait 35 sec and try again - 35 sec ensures less than 10 attemps in 5min - API restriction
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
@@ -163,7 +163,7 @@ class YoLinkInitPAC(object):
     def getDeviceList(yoAccess):
         return(yoAccess.deviceList)
 
-
+    '''
     #@measure_time
     def request_new_token(yoAccess):
         logging.debug('yoAccess Token exists : {}'.format(yoAccess.token != None))
@@ -195,9 +195,10 @@ class YoLinkInitPAC(object):
                 logging.error('Exeption occcured during request_new_token : {}'.format(e))
                 return(False)
         else:
-            #yoAccess.refresh_token()  Need to consider 
+            yoAccess.refresh_token()  
             return(True) # use existing Token 
-
+    '''
+    
     #@measure_time
     def refresh_token(yoAccess):
         
@@ -213,11 +214,7 @@ class YoLinkInitPAC(object):
                             }
                     )
                 else:
-                    response = requests.post( yoAccess.tokenURL,
-                        data={"grant_type": "client_credentials",
-                            "client_id" : yoAccess.uaID,
-                            "client_secret" : yoAccess.secID },
-                    )
+
                 if response.ok:
                     yoAccess.token =  response.json()
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
@@ -226,19 +223,31 @@ class YoLinkInitPAC(object):
                     logging.error('Was not able to refresh token')
                     return(False)
             else:
-                return(yoAccess.request_new_token())
+                response = requests.post( yoAccess.tokenURL,
+                    data={"grant_type": "client_credentials",
+                        "client_id" : yoAccess.uaID,
+                        "client_secret" : yoAccess.secID },
+                )
+                if response.ok:
+                    yoAccess.token =  response.json()
+                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
+                    return(True)
+                else:
+                    logging.error('Was not able to refresh token')
+                    return(False)       
+
 
 
         except Exception as e:
             logging.debug('Exeption occcured during refresh_token : {}'.format(e))
-            return(yoAccess.request_new_token())
+            #return(yoAccess.request_new_token())
 
     #@measure_time
     def get_access_token(yoAccess):
         yoAccess.tokenLock.acquire()
         #now = int(time.time())
         if yoAccess.token == None:
-            yoAccess.request_new_token()
+            yoAccess.refresh_token()
         #if now > yoAccess.token['expirationTime']  - yoAccess.timeExpMarging :
         #    yoAccess.refresh_token()
         #    if now > yoAccess.token['expirationTime']: #we lost the token
@@ -314,7 +323,7 @@ class YoLinkInitPAC(object):
         """
         try: 
             logging.info("Connecting to broker...")
-            while not yoAccess.request_new_token():
+            while not yoAccess.refresh_token():
                 time.sleep(35) # Wait 35 sec and try again (35sec ensure less than 10 attempts in 5 min)
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
@@ -607,7 +616,7 @@ class YoLinkInitPAC(object):
             except Exception as e:
                 logging.error('Exeption occcured during on_ disconnect : {}'.format(e))
                 if yoAccess:
-                    yoAccess.request_new_token()
+                    yoAccess.refresh_token()
                 else:
                     logging.error('Lost credential info - need to restart node server')
 
