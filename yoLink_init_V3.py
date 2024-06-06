@@ -111,7 +111,7 @@ class YoLinkInitPAC(object):
             #if yoAccess.client == None:    
       
             #logging.debug('initialize MQTT' )
-            yoAccess.client = mqtt.Client(yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+            yoAccess.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
             yoAccess.client.on_connect = yoAccess.on_connect
             yoAccess.client.on_message = yoAccess.on_message
             yoAccess.client.on_subscribe = yoAccess.on_subscribe
