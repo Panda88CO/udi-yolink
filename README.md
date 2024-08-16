@@ -1,5 +1,6 @@
 # udi-yolink
     Suppport for YoLink devices 
+    Suggest to install on PG3x from version 1.1.x going forward.  PG3x updated to Python 3.11.  Still works under PG3 but cannot guarantee for how long it will be possible 
     
 ## Yolink Node server
     Enables yoLink (https://shop.yosmart.com/) devices to be controlled using the ISY
