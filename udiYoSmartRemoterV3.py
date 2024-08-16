@@ -328,7 +328,10 @@ class udiYoSmartRemoter(udi_interface.Node):
 
     def mask2key (self, mask):
         logging.debug('mask2key : {}'.format(mask))
-        return(int(round(math.log2(mask),0)))
+        if mask == 0:
+            return (0)
+        else: 
+            return(int(round(math.log2(mask),0)))
 
 
     def updateData(self):
