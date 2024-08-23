@@ -152,12 +152,10 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('ST', 1)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1)
-                    if self.last_state != state:
-                        self.node.reportCmd('DON')  
+                    self.node.reportCmd('DON')  
                 elif  state == 'OFF':
                     self.node.setDriver('GV0', 0)
-                    if self.last_state != state:
-                        self.node.reportCmd('DOF')  
+                    self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99)
                 self.last_state = state
@@ -243,21 +241,21 @@ class udiYoSwitch(udi_interface.Node):
         if ctrl == 1:
             self.yoSwitch.setState('ON')
             self.node.setDriver('GV0',1 , True, True)
-            self.node.reportCmd('DON')
+            #self.node.reportCmd('DON')
         elif ctrl == 0:
             self.yoSwitch.setState('OFF')
             self.node.setDriver('GV0',0 , True, True)
-            self.node.reportCmd('DOF')
+            #self.node.reportCmd('DOF')
         elif ctrl == 2: #toggle
             state = str(self.yoSwitch.getState()).upper() 
             if state == 'ON':
                 self.yoSwitch.setState('OFF')
                 self.node.setDriver('GV0',0 , True, True)
-                self.node.reportCmd('DOF')
+                #self.node.reportCmd('DOF')
             elif state == 'OFF':
                 self.yoSwitch.setState('ON')
                 self.node.setDriver('GV0',1 , True, True)
-                self.node.reportCmd('DON')
+                #self.node.reportCmd('DON')
         elif ctrl == 5:
             logging.info('switchControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
             #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)
