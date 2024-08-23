@@ -152,12 +152,12 @@ class udiYoSwitch(udi_interface.Node):
                 self.node.setDriver('ST', 1)
                 if state == 'ON':
                     self.node.setDriver('GV0', 1)
-                    #if self.last_state != state:
-                    #    self.node.reportCmd('DON')  
+                    if self.last_state != state:
+                        self.node.reportCmd('DON')  
                 elif  state == 'OFF':
                     self.node.setDriver('GV0', 0)
-                    #if self.last_state != state:
-                    #    self.node.reportCmd('DOF')  
+                    if self.last_state != state:
+                        self.node.reportCmd('DOF')  
                 else:
                     self.node.setDriver('GV0', 99)
                 self.last_state = state
