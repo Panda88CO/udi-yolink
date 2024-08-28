@@ -126,11 +126,11 @@ class udiYoMotionSensor(udi_interface.Node):
                 motion_state = self.getMotionState()
                 if motion_state == 1:
                     self.node.setDriver('GV0', 1, True, True)
-                    if self.last_state != motion_state and self.cmd_state in [0,1]:
+                    if  self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')
                 elif motion_state == 0:
                     self.node.setDriver('GV0', 0, True, True)
-                    if self.last_state != motion_state and self.cmd_state in [0,2]:
+                    if self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')
                 else:
                     self.node.setDriver('GV0', 99, True, True)
