@@ -188,8 +188,8 @@ class udiYoMotionSensor(udi_interface.Node):
                 'UPDATE': update,
                 'QUERY' : update, 
    
-                'DON'   : noop,
-                'DOF'   : noop
+                #'DON'   : noop,
+                #'DOF'   : noop
                 }
 
 

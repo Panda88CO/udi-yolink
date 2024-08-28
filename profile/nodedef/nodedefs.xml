@@ -637,8 +637,8 @@
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd > 
-            <cmd id="DON" /> 
-            <cmd id="DOF" />          
+            <!-- <cmd id="DON" /> 
+            <cmd id="DOF" />          -->
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
@@ -680,14 +680,14 @@
       <cmds>
          <sends>
             <cmd id="DON" editor="motionstate"  />               
-            <cmd id="DOF" editor="motionstate"  />    
+            <cmd id="DOF" editor="motionstate"  /> 
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >  
-            <cmd id="DON" /> 
-            <cmd id="DOF" />      
+            <!-- <cmd id="DON" /> 
+            <cmd id="DOF" />  -->
 
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
@@ -716,8 +716,8 @@
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >  
-            <cmd id="DON" /> 
-            <cmd id="DOF" />          
+            <!--<cmd id="DON" /> 
+            <cmd id="DOF" /> -->       
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
@@ -751,8 +751,8 @@
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV7" /> 
             </cmd >          
-            <cmd id="DON" /> 
-            <cmd id="DOF" />          
+            <!--<cmd id="DON" /> 
+            <cmd id="DOF" /> -->         
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
@@ -780,8 +780,8 @@
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >  
-            <cmd id="DON" /> 
-            <cmd id="DOF" />          
+            <!-- <cmd id="DON" /> 
+            <cmd id="DOF" /> -->
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
