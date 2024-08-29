@@ -181,8 +181,8 @@ class udiYoDoorSensor(udi_interface.Node):
                 'SETCMD': set_cmd,
                 'UPDATE': update,
                 'QUERY' : update, 
-                'DON'   : noop,
-                'DOF'   : noop
+                #'DON'   : noop,
+                #'DOF'   : noop
                 }
 
 
