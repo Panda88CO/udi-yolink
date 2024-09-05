@@ -31,7 +31,7 @@ def save_cmd_state(self, cmd_state):
     except IOError as e:
         logging.error('An error occurred saving command state: {}'.format(e))
     finally:
-        file.close() 
+        file.close()
 
 def retrieve_cmd_state(self):
     logging.debug('retrieve_cmd_state - {}'.format(self.address))
@@ -40,10 +40,11 @@ def retrieve_cmd_state(self):
             temp = json.load(file)
             self.cmd_state = temp['cmd_state']
     except FileNotFoundError:
-        self.cmd_state = 0 
+        self.cmd_state = 0
         self.save_cmd_state(self.cmd_state)
     finally:
         file.close()
+    logging.debug('retrieve_cmd_state - state = {}'.format(self.cmd_state))
     return(self.cmd_state)
 
 def node_queue(self, data):
