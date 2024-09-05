@@ -26,7 +26,7 @@ from udiYoSpeakerHubV2 import udiYoSpeakerHub
 from udiYoLockV2 import udiYoLock
 from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
 from udiYoDimmerV2 import udiYoDimmer
-from udiYoVibrationSensorV2 import udiYoVibrationSensor
+from udiYoVibrationSensorV3 import udiYoVibrationSensor
 from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV2 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
