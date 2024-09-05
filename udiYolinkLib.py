@@ -22,7 +22,7 @@ import json
 import math
 
 def save_cmd_state(self, cmd_state):
-    logging.debug('save_cmd_state - {}'.format(self.address))
+    logging.debug('save_cmd_state {} - {}'.format(cmd_state, self.address))
     temp = {}
     temp['cmd_state'] = cmd_state
     try:
@@ -30,8 +30,17 @@ def save_cmd_state(self, cmd_state):
             json.dump(temp, file)
     except IOError as e:
         logging.error('An error occurred saving command state: {}'.format(e))
-    finally:
-        file.close()
+
+
+def save_cmd_struct(self, cmd_struct):
+    logging.debug('save_cmd_struct  {} - {}'.format(cmd_struct, self.address))
+    try:
+        with open(str(self.address)+'.json', 'w') as file:
+            json.dump(cmd_struct, file)
+    except IOError as e:
+        logging.error('An error occurred saving command state: {}'.format(e))
+
+
 
 def retrieve_cmd_state(self):
     logging.debug('retrieve_cmd_state - {}'.format(self.address))
@@ -44,6 +53,19 @@ def retrieve_cmd_state(self):
         self.save_cmd_state(self.cmd_state)
     logging.debug('retrieve_cmd_state - state = {}'.format(self.cmd_state))
     return(self.cmd_state)
+
+
+def retrieve_cmd_struct(self):
+    logging.debug('retrieve_cmd_state - {}'.format(self.address))
+    try:
+        with open(str(self.address)+'.json', 'r') as file:
+            temp_struct = json.load(file)
+            
+    except FileNotFoundError:
+        temp_struct = {}
+        
+    logging.debug('retrieve_cmd_state - state = {}'.format(temp_struct))
+    return(temp_struct)
 
 
 def node_queue(self, data):
