@@ -11,13 +11,13 @@ import time
 from yoLink_init_V3 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoSwitchSecV2 import udiYoSwitchSec
-from udiYoTHsensorV2 import udiYoTHsensor 
+from udiYoTHsensorV3 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
 from udiYoMotionSensorV3 import udiYoMotionSensor
-from udiYoLeakSensorV2 import udiYoLeakSensor
-from udiYoCOSmokeSensorV2 import udiYoCOSmokeSensor
-from udiYoDoorSensorV2 import udiYoDoorSensor
+from udiYoLeakSensorV3 import udiYoLeakSensor
+from udiYoCOSmokeSensorV3 import udiYoCOSmokeSensor
+from udiYoDoorSensorV3 import udiYoDoorSensor
 from udiYoOutletV2 import udiYoOutlet
 from udiYoOutletPwrV2 import udiYoOutletPwr
 from udiYoMultiOutletV2 import udiYoMultiOutlet
@@ -28,7 +28,7 @@ from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
 from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV3 import udiYoVibrationSensor
 from udiYoSmartRemoterV3 import udiYoSmartRemoter
-from udiYoPowerFailV2 import udiYoPowerFailSenor
+from udiYoPowerFailV3 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
 from udiYoWaterMeterControllerV2 import udiYoWaterMeterController
 #from udiYoHubV2 import udiYoHub

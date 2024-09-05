@@ -89,6 +89,14 @@ def bool2ISY (self, data):
     else:
         return(0)
 
+def bool2nbr(self, type):
+    if type is True:
+        return (1)
+    elif type is False:
+        return(0)
+    else:
+        return(99)
+
 def state2Nbr(self, val):
     if val == 'normal':
         return(0)
