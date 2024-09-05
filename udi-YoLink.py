@@ -14,7 +14,7 @@ from udiYoSwitchSecV2 import udiYoSwitchSec
 from udiYoTHsensorV2 import udiYoTHsensor 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
-from udiYoMotionSensorV2 import udiYoMotionSensor
+from udiYoMotionSensorV3 import udiYoMotionSensor
 from udiYoLeakSensorV2 import udiYoLeakSensor
 from udiYoCOSmokeSensorV2 import udiYoCOSmokeSensor
 from udiYoDoorSensorV2 import udiYoDoorSensor
@@ -44,7 +44,7 @@ except ImportError:
 
 
 
-version = '1.1.4'
+version = '1.2.0'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -72,7 +72,7 @@ class YoLinkSetup (udi_interface.Node):
         self.mqttURL = 'api.yosmart.com'
         self.mqttPort = 8003
 
-       
+
         
         logging.setLevel(10)
         self.poly.subscribe(self.poly.STOP, self.stop)
