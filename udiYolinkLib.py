@@ -42,10 +42,9 @@ def retrieve_cmd_state(self):
     except FileNotFoundError:
         self.cmd_state = 0
         self.save_cmd_state(self.cmd_state)
-    finally:
-        file.close()
     logging.debug('retrieve_cmd_state - state = {}'.format(self.cmd_state))
     return(self.cmd_state)
+
 
 def node_queue(self, data):
     self.n_queue.append(data['address'])
