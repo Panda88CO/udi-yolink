@@ -18,7 +18,33 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
+import json
 import math
+
+def save_cmd_state(self, cmd_state):
+    logging.debug('save_cmd_state - {}'.format(self.address))
+    temp = {}
+    temp['cmd_state'] = cmd_state
+    try:
+        with open(str(self.address)+'.json', 'w') as file:
+            json.dump(temp, file)
+    except IOError as e:
+        logging.error('An error occurred saving command state: {}'.format(e))
+    finally:
+        file.close() 
+
+def retrieve_cmd_state(self):
+    logging.debug('retrieve_cmd_state - {}'.format(self.address))
+    try:
+        with open(str(self.address)+'.json', 'r') as file:
+            temp = json.load(file)
+            self.cmd_state = temp['cmd_state']
+    except FileNotFoundError:
+        self.cmd_state = 0 
+        self.save_cmd_state(self.cmd_state)
+    finally:
+        file.close()
+    return(self.cmd_state)
 
 def node_queue(self, data):
     self.n_queue.append(data['address'])
