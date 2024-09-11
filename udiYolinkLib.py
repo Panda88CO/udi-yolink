@@ -98,17 +98,21 @@ def maskToDays(yolink, daysValue):
     return(daysList)
 
 
-def bool2Nbr(yolink, bool):
-    if bool:
+def bool2Nbr (self, data):
+    if data is True:
         return(1)
-    else:
+    elif data is False:
         return(0)
+    else:
+        return(99)
 
 def bool2ISY (self, data):
-    if data:
+    if data is True:
         return(1)
-    else:
+    elif data is False:
         return(0)
+    else:
+        return(99)
 
 def bool2nbr(self, type):
     if type is True:
