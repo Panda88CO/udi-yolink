@@ -199,7 +199,7 @@ class udiRemoteKey(udi_interface.Node):
         val = int(command.get('value'))   
         logging.debug('short_cmdtype {}'.format(val))
         self.cmd_struct['short_press'] = val
-        self.KeyOperations[self.SHORT_CMD] = val  
+        #self.KeyOperations[self.SHORT_CMD] = val  
         self.node.setDriver('GV1', val, True, True)
         self.save_cmd_struct(self.cmd_struct)
 
@@ -207,7 +207,7 @@ class udiRemoteKey(udi_interface.Node):
         val = int(command.get('value'))   
         logging.debug('long_cmdype {}'.format(val))
         self.cmd_struct['long_press'] = val
-        self.KeyOperations[self.LONG_CMD] = val
+        #self.KeyOperations[self.LONG_CMD] = val
         self.node.setDriver('GV2', val, True, True)
         self.save_cmd_struct(self.cmd_struct)
 
