@@ -21,6 +21,8 @@ import time
 
 
 class udiYoCOSmokeSensor(udi_interface.Node):
+    from  udiYolinkLib import save_cmd_state, retrieve_cmd_state, bool2nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+
     id = 'yoCOSmokesens'
     
     '''
@@ -69,7 +71,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         self.yoCOSmokeSensor  = None
         self.node_ready = False
         self.last_state = 99
-        self.cmd_state = 0
+        self.cmd_state = self.retrieve_cmd_state()
         self.last_alert = False
         self.n_queue = []   
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -88,15 +90,6 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         self.adr_list.append(address)
 
         
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
-
-
 
 
     def start(self):
@@ -126,14 +119,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         #we only get casched values - but MQTT remains alive
         self.yoCOSmokeSensor.refreshDevice()  
         
-    def bool2nbr(self, type):
-        if type is True:
-            return (1)
-        elif type is False:
-            return(0)
-        else:
-            return(99)
-
+ 
 
 
     def checkDataUpdate(self):
@@ -209,7 +195,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         logging.info('yoCOSmokeSensor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
         self.node.setDriver('GV7', self.cmd_state, True, True)
-
+        self.save_cmd_state(self.cmd_state)
 
     def update(self, command = None):
         logging.info('yoCOSmokeSensor Update Status Executed')

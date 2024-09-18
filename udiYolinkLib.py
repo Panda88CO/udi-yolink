@@ -18,7 +18,55 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
+import json
 import math
+
+def save_cmd_state(self, cmd_state):
+    logging.debug('save_cmd_state {} - {}'.format(cmd_state, self.address))
+    temp = {}
+    temp['cmd_state'] = cmd_state
+    try:
+        with open(str(self.address)+'.json', 'w') as file:
+            json.dump(temp, file)
+    except IOError as e:
+        logging.error('An error occurred saving command state: {}'.format(e))
+
+
+def save_cmd_struct(self, cmd_struct):
+    logging.debug('save_cmd_struct  {} - {}'.format(cmd_struct, self.address))
+    try:
+        with open(str(self.address)+'.json', 'w') as file:
+            json.dump(cmd_struct, file)
+    except IOError as e:
+        logging.error('An error occurred saving command state: {}'.format(e))
+
+
+
+def retrieve_cmd_state(self):
+    logging.debug('retrieve_cmd_state - {}'.format(self.address))
+    try:
+        with open(str(self.address)+'.json', 'r') as file:
+            temp = json.load(file)
+            self.cmd_state = temp['cmd_state']
+    except FileNotFoundError:
+        self.cmd_state = 0
+        self.save_cmd_state(self.cmd_state)
+    logging.debug('retrieve_cmd_state - state = {}'.format(self.cmd_state))
+    return(self.cmd_state)
+
+
+def retrieve_cmd_struct(self):
+    logging.debug('retrieve_cmd_state - {}'.format(self.address))
+    try:
+        with open(str(self.address)+'.json', 'r') as file:
+            temp_struct = json.load(file)
+            
+    except FileNotFoundError:
+        temp_struct = {}
+        
+    logging.debug('retrieve_cmd_state - state = {}'.format(temp_struct))
+    return(temp_struct)
+
 
 def node_queue(self, data):
     self.n_queue.append(data['address'])
@@ -50,17 +98,29 @@ def maskToDays(yolink, daysValue):
     return(daysList)
 
 
-def bool2Nbr(yolink, bool):
-    if bool:
+def bool2Nbr (self, data):
+    if data is True:
         return(1)
-    else:
+    elif data is False:
         return(0)
+    else:
+        return(99)
 
 def bool2ISY (self, data):
-    if data:
+    if data is True:
         return(1)
-    else:
+    elif data is False:
         return(0)
+    else:
+        return(99)
+
+def bool2nbr(self, type):
+    if type is True:
+        return (1)
+    elif type is False:
+        return(0)
+    else:
+        return(99)
 
 def state2Nbr(self, val):
     if val == 'normal':

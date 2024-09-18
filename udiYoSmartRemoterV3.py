@@ -19,14 +19,14 @@ import math
 from yolinkSmartRemoterV2 import YoLinkSmartRemote
 
 class udiRemoteKey(udi_interface.Node):
+    from  udiYolinkLib import save_cmd_struct, retrieve_cmd_struct, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+
     id = 'smremotekey'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25}, # Command
             {'driver': 'GV1', 'value': 0, 'uom': 25}, # Short Keypress setting
             {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
             ]
-    
-    from  udiYolinkLib import node_queue, wait_for_node_done
 
     def __init__(self, polyglot, primary, address, name, key):
         super().__init__( polyglot, primary, address, name)
@@ -42,8 +42,12 @@ class udiRemoteKey(udi_interface.Node):
         #self.presstype = 99
         self.long_press_state = 'UNKNOWN'
         self.short_press_state = 'UNKNOWN'
-        self.short_cmd_type = 0
-        self.long_cmd_type = 1
+        self.cmd_struct = {}
+        self.cmd_struct = self.retrieve_cmd_struct()
+        if self.cmd_struct == {}:
+            self.cmd_struct['short_press'] = 1
+            self.cmd_struct['long_press']  = 0
+            self.save_cmd_struct(self.cmd_struct)
         self.configDone = False
         self.n_queue = []
 
@@ -51,11 +55,11 @@ class udiRemoteKey(udi_interface.Node):
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
         #polyglot.subscribe(polyglot.POLL, self.poll)
-        self.KeyOperations = Custom(self.poly, 'customdata')
+        #self.KeyOperations = Custom(self.poly, 'customdata')
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
-        self.poly.subscribe(self.poly.CUSTOMDATA, self.handleData)
+        #self.poly.subscribe(self.poly.CUSTOMDATA, self.handleData)
         self.poly.subscribe(self.poly.CONFIGDONE, self.configHandler)
         # start processing events and create add our controller node
         
@@ -69,22 +73,23 @@ class udiRemoteKey(udi_interface.Node):
         logging.debug('start / initialize smremotekey : {}'.format(self.key))
         while not self.configDone:
             time.sleep(1)
-
+        '''
         if self.SHORT_CMD in self.KeyOperations:
-            self.short_cmd_type = self.KeyOperations[self.SHORT_CMD]
+            self.cmd_struct['short_press'] = self.KeyOperations[self.SHORT_CMD]
         else:
             self.KeyOperations[self.SHORT_CMD] = 1
-            self.short_cmd_type = 1
+            self.cmd_struct['short_press'] = 1
 
         if self.LONG_CMD in self.KeyOperations:
-            self.long_cmd_type = self.KeyOperations[self.LONG_CMD]
+            self.cmd_struct['long_press'] = self.KeyOperations[self.LONG_CMD]
         else:
             self.KeyOperations[self.LONG_CMD] = 1
-            self.long_cmd_type = 1
-     
+            self.cmd_struct['long_press'] = 1
+        '''
+
         self.node.setDriver('GV0', 99)
-        self.node.setDriver('GV1', self.short_cmd_type)
-        self.node.setDriver('GV2', self.long_cmd_type)
+        self.node.setDriver('GV1', self.cmd_struct['short_press'])
+        self.node.setDriver('GV2', self.cmd_struct['long_press'])
 
 
     def stop(self):
@@ -96,25 +101,26 @@ class udiRemoteKey(udi_interface.Node):
     def checkDataUpdate(self):
         pass
 
+    '''
     def handleData(self, data):
         self.KeyOperations.load(data)
         logging.debug('handleData {}'.format(data))
         try:
             if data is None: #Initialize
-                self.long_cmd_type = 0
-                self.short_cmd_type = 1
+                self.cmd_struct['long_press'] = 0
+                self.cmd_struct['short_press'] = 1
             else:
                 if self.LONG_CMD in data:
-                    self.long_cmd_type = data[self.LONG_CMD]
+                    self.cmd_struct['long_press'] = data[self.LONG_CMD]
                 else:
-                    self.long_cmd_type = 0
+                    self.cmd_struct['long_press'] = 0
                 if self.SHORT_CMD in data:
-                    self.short_cmd_type = data[self.SHORT_CMD]
+                    self.cmd_struct['short_press'] = data[self.SHORT_CMD]
                 else:
-                    self.short_cmd_type = 1            
+                    self.cmd_struct['short_press'] = 1            
         except Exception as e:
             logging.info('No Key definitions exist yet : {}'.format(e))
-
+    '''
 
     def configHandler(self):
         self.configDone = True
@@ -125,13 +131,13 @@ class udiRemoteKey(udi_interface.Node):
     def send_command (self, press_type):
         logging.debug('send_command - press type : {}'.format(press_type))
         if press_type == 0 or press_type == 'Press' : #short press
-            self.short_press_state, isy_val = self. get_new_state(self.short_cmd_type, self.short_press_state)
+            self.short_press_state, isy_val = self. get_new_state(self.cmd_struct['short_press'], self.short_press_state)
             if self.short_press_state  != 'UNKNOWN':
                 self.node.reportCmd(self.short_press_state )
             self.node.setDriver('GV0', isy_val)
             logging.debug('send short press command cmd:{} driver{}'.format(self.short_press_state, isy_val))
         else:
-            self.long_press_state, isy_val = self. get_new_state(self.long_cmd_type, self.long_press_state)
+            self.long_press_state, isy_val = self. get_new_state(self.cmd_struct['long_press'], self.long_press_state)
             if self.long_press_state  != 'UNKNOWN':
                 self.node.reportCmd(self.long_press_state )
             self.node.setDriver('GV0', isy_val)
@@ -192,18 +198,20 @@ class udiRemoteKey(udi_interface.Node):
     def short_cmdtype(self, command):
         val = int(command.get('value'))   
         logging.debug('short_cmdtype {}'.format(val))
-        self.short_cmd_type = val
-        self.KeyOperations[self.SHORT_CMD] = val  
+        self.cmd_struct['short_press'] = val
+        #self.KeyOperations[self.SHORT_CMD] = val  
         self.node.setDriver('GV1', val, True, True)
-
+        self.save_cmd_struct(self.cmd_struct)
 
     def long_cmdtype(self, command):
         val = int(command.get('value'))   
         logging.debug('long_cmdype {}'.format(val))
-        self.long_cmd_type = val
-        self.KeyOperations[self.LONG_CMD] = val
+        self.cmd_struct['long_press'] = val
+        #self.KeyOperations[self.LONG_CMD] = val
         self.node.setDriver('GV2', val, True, True)
+        self.save_cmd_struct(self.cmd_struct)
 
+        
     commands = {
                 'KEYPRESS'  : short_cmdtype, 
                 'KEYLPRESS' : long_cmdtype,
