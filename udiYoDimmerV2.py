@@ -158,7 +158,7 @@ class udiYoDimmer(udi_interface.Node):
                 if self.yoDimmer.suspended:
                     self.node.setDriver('GV20', 1, True, True)
                 else:
-                     self.node.setDriver('GV20', 0)
+                    self.node.setDriver('GV20', 0)
             else:
                 #self.node.setDriver('ST', 0, True, True)
                 self.node.setDriver('GV0', 99, True, True)
