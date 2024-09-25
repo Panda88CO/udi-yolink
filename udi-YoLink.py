@@ -728,14 +728,14 @@ class YoLinkSetup (udi_interface.Node):
 
             if 'UAID' in userParam:
                 self.uaid = str(userParam['UAID'])
-                self.uaid = self.uaid.replace(" ","")
+                self.uaid = self.uaid.strip()
             else:
                 self.poly.Notices['uaid'] = 'Missing UAID parameter'
                 self.uaid = ''
 
             if 'SECRET_KEY' in userParam:
                 self.secretKey = str(userParam['SECRET_KEY'])
-                self.secretKey = self.secretKey.replace(" ","")
+                self.secretKey = self.secretKey.strip()
             else:
                 self.poly.Notices['sk'] = 'Missing SECRET_KEY parameter'
                 self.secretKey = ''
