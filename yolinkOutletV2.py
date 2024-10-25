@@ -86,12 +86,15 @@ class YoLinkOutl(YoLinkMQTTDevice):
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     if isinstance(yolink.dataAPI[yolink.dData][yolink.dState], dict):
                         logging.debug('DICT - {} '.format(yolink.dataAPI[yolink.dData][yolink.dState]))
+                        temp = 'state' in yolink.dataAPI[yolink.dData][yolink.dState]
+                        logging.debug('if  - {} '.format(temp))
                         if 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
                             if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                                 dev_state = 'ON'
                             elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
                                 dev_state = 'OFF'
                         else:
+                            
                             dev_state = 'Unknown'
                     else:
                         if  yolink.dataAPI[yolink.dData][yolink.dState] == 'open':
