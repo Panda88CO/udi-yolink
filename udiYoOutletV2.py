@@ -110,6 +110,8 @@ class udiYoOutlet(udi_interface.Node):
         #    self.node.setDriver('GV1', 0, True, False)
         #    self.node.setDriver('GV2', 0, True, False)
         self.schedule_selected
+
+        
     def updateData(self):
         logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
         if self.node is not None:
