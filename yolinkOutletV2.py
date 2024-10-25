@@ -109,7 +109,6 @@ class YoLinkOutl(YoLinkMQTTDevice):
                             dev_state = 'Unknown'
                 else:
                     dev_state = 'Unknown'
-                dev_state = 'Unknown'
             logging.debug(yolink.type+' - getState - return {} '.format(dev_state))
             return(dev_state)
         except Exception as e:
