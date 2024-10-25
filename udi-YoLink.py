@@ -44,7 +44,7 @@ except ImportError:
 
 
 
-version = '1.2.3'
+version = '1.2.4'
 
 class YoLinkSetup (udi_interface.Node):
 
