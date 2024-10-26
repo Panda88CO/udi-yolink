@@ -76,6 +76,21 @@ def wait_for_node_done(self):
         time.sleep(0.1)
     self.n_queue.pop()
 
+def my_setDriver(self, key, value, Unit=None):
+    logging.debug('my_setDriver : {key} {value} {Unit}')
+    try:
+        if value is None:
+            logging.debug('None value passed = seting 99, UOM 25')
+            self.node.setDriver(key, 99, True, True, 25)
+        else:
+            if Unit:
+                self.node.setDriver(key, value, True, True, Unit)
+            else:
+                self.node.setDriver(key, value)
+    except ValueError: #A non number was passed 
+        self.node.setDriver(key, 99, True, True, 25)
+        
+
 def mask2key (self, mask):
     logging.debug('mask2key : {}'.format(mask))
     return(int(round(math.log2(mask),0)))
