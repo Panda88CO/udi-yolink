@@ -20,8 +20,8 @@ CMD-LOOKUP_SCH-NAME = Lookup Schedule
 CMD-DELAY_CTRL-NAME = Program Delays
 CMD-UPDATE-NAME = Update Status
 CMD-QUERY-NAME = Query
-CMD-ONDELAY-NAME =  Set On Delay
-CMD-OFFDELAY-NAME =  Set Off Delay (0 if no delay)
+CMD-ONDELAY-NAME =  Set On Delay (0 = delay)
+CMD-OFFDELAY-NAME =  Set Off Delay (0 = delay)
 CMD-SWCTRL-NAME =  Switch control
 CMD-KEY1DEF-NAME = Key1 Scene Function
 CMD-KEY2DEF-NAME = Key2 Scene Function
