@@ -579,8 +579,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.node.setDriver('ST',1)
             for outlet in range(0,self.nbrOutlets):
                 portName = 'port'+str(outlet)
-                if self.yoMultiOutlet.online:
-                    
+                if self.yoMultiOutlet.online:                    
                     if outletStates[portName]['state'] == 'open':
                         state = 1
                     elif outletStates[portName]['state'] == 'closed':
