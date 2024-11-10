@@ -47,7 +47,16 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 # common commands #############
 
 
-
+ND-yowaterdept-NAME = YoLink Water Dept Sensor
+ND-yowaterdept-ICON = Irrigation
+ST-nlswaterdept-ST-NAME = Nodeserver Status
+ST-nlswaterdept-GV0-NAME = Water Level
+ST-nlswaterdept-GV1-NAME = Max Water Level
+ST-nlswaterdept-GV2-NAME = Min Water Level
+ST-nlswaterdept-GV3-NAME = DetectorSensor Alarm
+ST-nlswaterdept-GV4-NAME = Min Water Level
+ST-nlswaterdept-GV5-NAME = Min Water Level
+ST-nlswaterdept-BATLVL-NAME = Battery Level
 
 # YoLink Switch
 ND-yoswitch-NAME = YoLink Switch
@@ -242,6 +251,8 @@ CMD-nlsspeakerh-REPEAT-NAME = Repeat
 CMD-nlsspeakerh-MESSAGE-NAME = Select Message
 
 
+
+
 ND-yolock-NAME = YoLink Smart Lock
 ND-yolock-ICON = DoorLock
 ST-nlslock-GV0-NAME = Lock State
@@ -307,7 +318,7 @@ ND-yosiren-ICON = Output
 ST-nlssiren-GV0-NAME = Siren State
 ST-nlssiren-GV1-NAME = Siren Duration
 ST-nlssiren-GV2-NAME = Supply State
-ST-nlssiren-ST-NAME = Nodeserver Status
+#ST-nlssiren-ST-NAME = Nodeserver Status
 ST-nlssiren-ST-NAME = Nodeserver Status
 ST-nlssiren-GV20-NAME = Connection State
 CMD-nlssiren-SIRENCTRL-NAME = Set Control

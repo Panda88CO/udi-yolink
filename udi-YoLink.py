@@ -12,6 +12,7 @@ from yoLink_init_V3 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoSwitchSecV2 import udiYoSwitchSec
 from udiYoTHsensorV3 import udiYoTHsensor 
+from udiYoWaterDeptV3 import udiYoWaterDept 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
 from udiYoMotionSensorV3 import udiYoMotionSensor
@@ -141,9 +142,11 @@ class YoLinkSetup (udi_interface.Node):
         self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
                                 'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
                                 'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
-                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController']
-        #self.supportedYoTypes = ['Outlet', 'MultiOutlet', 'Switch', 'THSensor']
+                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+                                'WaterDepthSensor']
         
+        #self.supportedYoTypes = ['Outlet', 'MultiOutlet', 'Switch', 'THSensor']
+        self.supportedYoTypes = ['Outlet', 'WaterDepthSensor']    
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')
@@ -371,7 +374,16 @@ class YoLinkSetup (udi_interface.Node):
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)
                     for adr in temp.adr_list:
-                        self.assigned_addresses.append(adr)       
+                        self.assigned_addresses.append(adr)     
+
+                elif dev['type'] == 'WaterDepthSensor':   #  YS7905-UC           
+                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                    temp = udiYoWaterDept(self.poly, address, address, name, self.yoAccess, dev )
+                    while not temp.node_ready:
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
+                        time.sleep(4)
+                    for adr in temp.adr_list:
+                        self.assigned_addresses.append(adr)     
 
                 elif dev['type'] == 'COSmokeSensor':                
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
