@@ -22,7 +22,7 @@ from yolinkWaterDeptV2 import YoLinkWaterDept
 class udiYoWaterDept(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
-    id = 'yothsens'
+    id = 'yowaterdept'
     
     '''
        drivers = [
