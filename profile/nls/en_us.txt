@@ -178,9 +178,6 @@ ST-nlsthsens-GV12-NAME = Low Humidity Limit
 ST-nlsthsens-GV13-NAME = High Humidity Limit
 CMD-nlsthsens-SETCMD-NAME = Select Command Action
 
-
-
-
 ND-yogarage-NAME = YoLink Garage Controller
 ND-yogarage-ICON = Switch
 CMD-nlsgarage-TOGGLE-NAME = Toggle Door
