@@ -20,8 +20,8 @@ CMD-LOOKUP_SCH-NAME = Lookup Schedule
 CMD-DELAY_CTRL-NAME = Program Delays
 CMD-UPDATE-NAME = Update Status
 CMD-QUERY-NAME = Query
-CMD-ONDELAY-NAME =  Set On Delay (0 = No delay)
-CMD-OFFDELAY-NAME =  Set Off Delay (0 = No delay)
+CMD-ONDELAY-NAME =  Set On Delay
+CMD-OFFDELAY-NAME =  Set Off Delay (0 if no delay)
 CMD-SWCTRL-NAME =  Switch control
 CMD-KEY1DEF-NAME = Key1 Scene Function
 CMD-KEY2DEF-NAME = Key2 Scene Function
@@ -47,16 +47,7 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 # common commands #############
 
 
-ND-yowaterdept-NAME = YoLink Water Dept Sensor
-ND-yowaterdept-ICON = Irrigation
-ST-nlswaterdept-ST-NAME = Nodeserver Status
-ST-nlswaterdept-GV0-NAME = Water Level
-ST-nlswaterdept-GV1-NAME = Max Water Level
-ST-nlswaterdept-GV2-NAME = Min Water Level
-ST-nlswaterdept-GV3-NAME = DetectorSensor Alarm
-ST-nlswaterdept-GV4-NAME = Min Water Level
-ST-nlswaterdept-GV5-NAME = Min Water Level
-ST-nlswaterdept-BATLVL-NAME = Battery Level
+
 
 # YoLink Switch
 ND-yoswitch-NAME = YoLink Switch
@@ -91,10 +82,10 @@ ND-yoswitchsec-ICON = Switch
 #ST-yoswitchsec-GV19-NAME = Active Days
 
 
-CMD-nlsswitch-DON-NAME = ON command
-CMD-nlsswitch-DOF-NAME = OFF command
-CMD-nlsswitch-DFON-NAME = Fast ON command 
-CMD-nlsswitch-DFOF-NAME = Fast OFF command
+CMD-nlsswitch-DON-NAME = Switch On
+CMD-nlsswitch-DOF-NAME = Switch Off
+CMD-nlsswitch-DFON-NAME = Switch Fast On 
+CMD-nlsswitch-DFOF-NAME = Switch Fast Off
 
 #YoLink Outlet
 ND-yooutlet-NAME = YoLink Outlet
@@ -168,7 +159,7 @@ ST-nlsmanipu-GV2-NAME = Off Delay Remaining
 ST-nlsmanipu-BATLVL-NAME = Battery Level
 
 CMD-nlsmanipu-MANCTRL-NAME =  Switch control
-CMD-nlsmanipu-DON-NAME = Opened
+CMD-nlsmanipu-DON-NAME = Open
 CMD-nlsmanipu-DOF-NAME = Closed
 
 ND-yothsens-NAME = YoLink THsensor
@@ -187,9 +178,6 @@ ST-nlsthsens-GV12-NAME = Low Humidity Limit
 ST-nlsthsens-GV13-NAME = High Humidity Limit
 CMD-nlsthsens-SETCMD-NAME = Select Command Action
 
-
-
-
 ND-yogarage-NAME = YoLink Garage Controller
 ND-yogarage-ICON = Switch
 CMD-nlsgarage-TOGGLE-NAME = Toggle Door
@@ -202,8 +190,8 @@ ST-nlsdoorsens-GV0-NAME = Door State
 ST-nlsdoorsens-GV1-NAME = Sensor Battery Level
 ST-nlsdoorsens-GV2-NAME = Command Setting
 CMD-nlsdoorsens-SETCMD-NAME = Select Command Action
-CMD-nlsdoorsens-DOM-NAME = No use
-CMD-nlsdoorsens-DOF-NAME = No use
+CMD-nlsdoorsens-DON-NAME = Open
+CMD-nlsdoorsens-DOF-NAME = Closed
 
 
 ND-yomotionsens-NAME = YoLink Motion Sensor
@@ -249,8 +237,6 @@ CMD-nlsspeakerh-MUTE-NAME = Mute
 CMD-nlsspeakerh-TONE-NAME = Tone
 CMD-nlsspeakerh-REPEAT-NAME = Repeat
 CMD-nlsspeakerh-MESSAGE-NAME = Select Message
-
-
 
 
 ND-yolock-NAME = YoLink Smart Lock
@@ -318,7 +304,7 @@ ND-yosiren-ICON = Output
 ST-nlssiren-GV0-NAME = Siren State
 ST-nlssiren-GV1-NAME = Siren Duration
 ST-nlssiren-GV2-NAME = Supply State
-#ST-nlssiren-ST-NAME = Nodeserver Status
+ST-nlssiren-ST-NAME = Nodeserver Status
 ST-nlssiren-ST-NAME = Nodeserver Status
 ST-nlssiren-GV20-NAME = Connection State
 CMD-nlssiren-SIRENCTRL-NAME = Set Control
