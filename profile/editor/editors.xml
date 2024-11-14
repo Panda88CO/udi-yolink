@@ -17,8 +17,7 @@
      <range uom="25" subset="0,99" nls="nosupport" />
   </editor>
   <editor id="waterlevel"> 
-     <range uom="18" min="0" max="33" prec="1" />
-     <range uom="38" min="0" max="10" prec="1"  />
+    <range uom="56" min="0" max="1000" prec="0" />
      <range uom="25" subset="0,99" nls="error" />
   </editor>
 

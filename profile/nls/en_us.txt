@@ -343,6 +343,17 @@ CMD-nlswatermeter-VALVECTRL-NAME = Control Valve
 #CMD-nlswatermeter-ONDELAY-NAME = Prepare on delay
 #CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
 
+ND-yowaterdept-NAME = YoLink Water Level Sensor
+ND-yowaterdept-ICON = Input
+ST-nlswaterdept-ST-NAME = Water Level (0-1000)
+ST-nlswaterdept-GV1-NAME = Low water Level Alarm setting
+ST-nlswaterdept-GV2-NAME = High water Level Alarm setting
+ST-nlswaterdept-GV5-NAME = Low Water Level
+ST-nlswaterdept-GV6-NAME = High Water Level
+ST-nlswaterdept-GV7-NAME = Sensor Error
+ST-nlswaterdept-BATLVL-NAME = Battery Level
+CMDP-waterLowAlarm-NAME = Low Water Alarm (0-1000)
+CMDP-waterHighAlarm-NAME = High Water Alarm (0-1000)
 outport-0 = port1
 outport-1 = port2
 outport-2 = port3

@@ -930,7 +930,7 @@
          <st id="GV2" editor="waterlevel" />
          <st id="GV3" editor="alarm" />
          <st id="GV4" editor="alarm" />
-         <st id="GV5" editor="alarm" />
+  
          <st id="BATLVL" editor="batlevel" />         
 
       </sts>
@@ -941,8 +941,8 @@
          </sends>
          <accepts>     
             <cmd id="SETATTR" > 
-               <p id="max_level" editor="waterlevel" init="GV1" /> 
-               <p id="min_level" editor="waterlevel" init="GV2" />                                     
+               <p id="waterHighAlarm" editor="waterlevel" init="GV1" /> 
+               <p id="waterLowAlarm" editor="waterlevel" init="GV2" />                                     
              </cmd >                       
             <cmd id="UPDATE" />
          </accepts>
