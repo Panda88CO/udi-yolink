@@ -924,13 +924,13 @@
    <nodeDef id="yowaterdept" nls="nlswaterdept">
       <editors />
       <sts>
+         <st id="ST"  editor="status" />
          <st id="GV0" editor="waterlevel" />
          <st id="GV1" editor="waterlevel" />
          <st id="GV2" editor="waterlevel" />
          <st id="GV3" editor="alarm" />
          <st id="GV4" editor="alarm" />
          <st id="GV5" editor="alarm" />
-         <st id="ST"  editor="status" />
          <st id="BATLVL" editor="batlevel" />         
 
       </sts>
