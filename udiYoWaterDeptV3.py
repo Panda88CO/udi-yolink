@@ -127,7 +127,7 @@ class udiYoWaterDept(udi_interface.Node):
             if self.yoWaterDept.online:
                 logging.debug("yoWaterDept : UpdateData")
 
-                self.my_setDriver('GV0', None)
+                self.my_setDriver('ST', None)
                 self.my_setDriver('GV1', None)
                 self.my_setDriver('GV2', None)
                 self.my_setDriver('GV3', None)
@@ -156,9 +156,12 @@ class udiYoWaterDept(udi_interface.Node):
 
     def set_attributes(self, command):
         logging.info('udiYoWaterDept  set_attributes - {}'.format(command))
-        
-        #self.node.setDriver('GV9', self.cmd_state, True, True)
-        #self.save_cmd_state(self.cmd_state)
+        query = command.get("query")
+        highAlarm = int(query.get("waterHighAlarm.uom56"))
+        lowAlarm= int(query.get("waterLowAlarm.uom56"))
+        self.node.setDriver('GV4', lowAlarm, True, True)
+        self.node.setDriver('GV5', highAlarm, True, True)
+        self.yoSwitch.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
     def update(self, command = None):
         logging.info('WaterDept Update')
