@@ -20,36 +20,35 @@ from yolinkWaterDeptV2 import YoLinkWaterDept
 
 
 class udiYoWaterDept(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yowaterdept'
     
     '''
        drivers = [
-            'GV0' = Level ? 18/38
-            'GV1' = Low Level 18/38
-            'GV2' = High Level 18/38
-            'GV3' = Detect Error Alarm 25
-            'GV4' = Low Water Alarm 25
-            'GV5' = High Water Alarm  25
+            'GV0' = Level ?
+            'GV1' = Low Level 
+            'GV2' = High Level 
+            'GV5' = Detect Error Alarm 25
+            'GV3' = Low Water Alarm 25
+            'GV4' = High Water Alarm  25
+            'GV5' = Detect Error Alarm 25            
             'BATLVL' = BatteryLevel 25
-            #'GV7' = BatteryAlarm
-            #'GV8' = ALARM
-            #'GV9' = command setting 
+            'TIME' = Epoc time of data
             'ST' = Online
             ]
 
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 0, 'uom': 18},
-            {'driver': 'GV1', 'value': 2, 'uom': 18}, 
-            {'driver': 'GV2', 'value': 2, 'uom': 18}, 
-            {'driver': 'gv3', 'value': 0, 'uom': 25},
-            {'driver': 'GV4', 'value': 2, 'uom': 25},
-            {'driver': 'GV5', 'value': 2, 'uom': 25},
+            {'driver': 'GV0', 'value': 0, 'uom': 56},
+            {'driver': 'GV1', 'value': 0, 'uom': 56}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 56}, 
+            {'driver': 'GV3', 'value': 0, 'uom': 25},
+            {'driver': 'GV4', 'value': 0, 'uom': 25},
+            {'driver': 'GV5', 'value': 0, 'uom': 25},
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
-         
+            {'driver': 'TIME', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -126,15 +125,17 @@ class udiYoWaterDept(udi_interface.Node):
         if self.node is not None:
             if self.yoWaterDept.online:
                 logging.debug("yoWaterDept : UpdateData")
-
-                self.my_setDriver('ST', None)
-                self.my_setDriver('GV1', None)
-                self.my_setDriver('GV2', None)
-                self.my_setDriver('GV3', None)
-                self.my_setDriver('GV4', None)
-                self.my_setDriver('GV5', None)
+                self.my_setDriver('GV0', self.yoWaterDept.getWaterDepth())
+                settings = self.yoWaterDept.getAlarmsSettings()
+                self.my_setDriver('GV1', settings['low'])
+                self.my_setDriver('GV2', settings['high'])
+                alarms =  self.yoWaterDept.getAlarms()
+                self.my_setDriver('GV3', self.bool2ISY(alarms['low']))
+                self.my_setDriver('GV4', self.bool2ISY(alarms['high']))
+                self.my_setDriver('GV5', self.bool2ISY(alarms['error']))
                 self.my_setDriver('BATLVL', self.yoWaterDept.getBattery())
-                self.my_setDriver('ST', 1)           
+                self.my_setDriver('TIME', self.yoWaterDept.getDataTimestamp())
+                self.my_setDriver('ST', 1)
                 
             else:
                 self.my_setDriver('GV0', None)
@@ -161,7 +162,7 @@ class udiYoWaterDept(udi_interface.Node):
         lowAlarm= int(query.get("waterLowAlarm.uom56"))
         self.node.setDriver('GV4', lowAlarm, True, True)
         self.node.setDriver('GV5', highAlarm, True, True)
-        self.yoSwitch.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+        self.yoWaterDept.activateSchedulesetAttributes([{'low':lowAlarm, 'high':highAlarm}]) 
 
     def update(self, command = None):
         logging.info('WaterDept Update')

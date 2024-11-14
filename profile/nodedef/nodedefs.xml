@@ -3,6 +3,7 @@
       <editors />
       <sts>
          <st id="ST"  editor="status" />
+         <st id="GV0"  editor="epochtime" />
          <!--- st id="GV20" editor="suspendstate" /-->
       </sts>
       <cmds>
@@ -11,6 +12,7 @@
             <cmd id="DOF" /> 
          </sends>
          <accepts>
+            <cmd id="EPOCHTIME"  /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -930,8 +932,9 @@
          <st id="GV2" editor="waterlevel" />
          <st id="GV3" editor="alarm" />
          <st id="GV4" editor="alarm" />
-  
+         <st id="GV5" editor="alarm" />
          <st id="BATLVL" editor="batlevel" />         
+         <st id="TIME" editor="epochtime" />
 
       </sts>
       <cmds>

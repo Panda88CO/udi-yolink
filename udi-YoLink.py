@@ -631,23 +631,21 @@ class YoLinkSetup (udi_interface.Node):
         except Exception as e:
             logging.debug('Error: {} {}'.format(e, userParam))
 
-    '''
-    def set_t_unit(self, command ):
-        logging.info('set_t_unit ')
-        unit = int(command.get('value'))
-        if unit >= 1 and unit <= 3:
-            self.temp_unit = unit
-            #self.node.setDriver('GV0', self.temp_unit, True, True)
-    '''
+
+    def getEpochTime(self, command ):
+        logging.info('getEpochTime ')
+        #unit = int(command.get('value'))
+        self.node.setDriver('GV0', int(time.time()), True, True)
+
 
     id = 'setup'
-    #commands = {
-    #            'TEMPUNIT': set_t_unit,
-    #            }
+    commands = {
+                'EPOCHTIME': getEpochTime,
+                }
 
     drivers = [
             {'driver': 'ST', 'value':1, 'uom':25},
-           #{'driver': 'GV20', 'value':99, 'uom':25},
+            {'driver': 'TIME', 'value':99, 'uom':25},
            ]
 
 

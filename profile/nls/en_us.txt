@@ -1,7 +1,8 @@
 
 ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
-ST-nlssetup-ST-NAME = Nodeserver Status
+ST-nlssetup-ST-NAME = Nodeserver 
+ST-nlssetup-TIME-NAME = Current Epoch Time (sec)
 ST-nlssetup-GV20-NAME = Connection State
 CMD-nlssetup-DON-NAME = Heart Beat On
 CMD-nlssetup-DOF-NAME = Heart Beat Off
@@ -348,10 +349,11 @@ ND-yowaterdept-ICON = Input
 ST-nlswaterdept-ST-NAME = Water Level (0-1000)
 ST-nlswaterdept-GV1-NAME = Low water Level Alarm setting
 ST-nlswaterdept-GV2-NAME = High water Level Alarm setting
-ST-nlswaterdept-GV5-NAME = Low Water Level
-ST-nlswaterdept-GV6-NAME = High Water Level
-ST-nlswaterdept-GV7-NAME = Sensor Error
+ST-nlswaterdept-GV3-NAME = Low Water Level
+ST-nlswaterdept-GV4-NAME = High Water Level
+ST-nlswaterdept-GV5-NAME = Sensor Error
 ST-nlswaterdept-BATLVL-NAME = Battery Level
+ST-nlswaterdept-TIME-NAME = Last Data Update (Epoch time sec)
 CMDP-waterLowAlarm-NAME = Low Water Alarm (0-1000)
 CMDP-waterHighAlarm-NAME = High Water Alarm (0-1000)
 outport-0 = port1
