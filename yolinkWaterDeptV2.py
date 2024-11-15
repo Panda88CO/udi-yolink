@@ -36,7 +36,7 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
     def updateStatus(yolink, data):
         logging.debug('updataStatus WaterDept  : {}'.format(data))
         yolink.updateCallbackStatus(data, False)
-        yolink.alarmSettings = yolink.getAlarmsSettings()
+        yolink.alarmSettings = yolink.getAlarmSettings()
 
     def refreshSensor(yolink):
         logging.debug(yolink.type+ ' - refreshSensor')
@@ -78,7 +78,7 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
         except Exception as e:
             logging.error(f'Exception - waterdepth data not found {yolink.dataAPI[yolink.dData]}' )
         
-    def getAlarmsSettings(yolink):
+    def getAlarmSettings(yolink):
         logging.debug(yolink.type+ ' - getAlarmsLevels')
         try:
             alarmLevels = {}

@@ -138,13 +138,14 @@ class udiYoWaterDept(udi_interface.Node):
                 self.my_setDriver('ST', 1)
                 
             else:
-                self.my_setDriver('GV0', None)
-                self.my_setDriver('GV1', None)
-                self.my_setDriver('GV2', None)
-                self.my_setDriver('GV3', None)
-                self.my_setDriver('GV4', None)
-                self.my_setDriver('GV5', None)
-                self.my_setDriver('BATLVL',  None)
+                #self.my_setDriver('GV0', None)
+                #self.my_setDriver('GV1', None)
+                #self.my_setDriver('GV2', None)
+                #self.my_setDriver('GV3', None)
+                #self.my_setDriver('GV4', None)
+                #self.my_setDriver('GV5', None)
+                #self.my_setDriver('BATLVL',  None)
+                self.my_setDriver('TIME', self.yoWaterDept.getDataTimestamp())
                 self.my_setDriver('ST', 0)
                 #self.node.setDriver('ST', 0, True, True)
             
@@ -162,7 +163,7 @@ class udiYoWaterDept(udi_interface.Node):
         lowAlarm= int(query.get("waterLowAlarm.uom56"))
         self.node.setDriver('GV4', lowAlarm, True, True)
         self.node.setDriver('GV5', highAlarm, True, True)
-        self.yoWaterDept.activateSchedulesetAttributes([{'low':lowAlarm, 'high':highAlarm}]) 
+        self.yoWaterDept.setAttributes([{'low':lowAlarm, 'high':highAlarm}]) 
 
     def update(self, command = None):
         logging.info('WaterDept Update')
