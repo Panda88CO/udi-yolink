@@ -185,7 +185,7 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.node.setDriver('ST', 0, True, True)
         #self.poly.updateProfile()
-
+        self.getEpochTime()
 
 
     def addNodes (self, deviceList):
@@ -507,7 +507,7 @@ class YoLinkSetup (udi_interface.Node):
                         #            time.sleep(60)
                         #logging.info('Updating device status')
                         nodes = self.poly.getNodes()
-                        
+                        self.getEpochTime()
                         for nde in nodes:
                             if nde != 'setup':   # but not the controller node
                                 nodes[nde].checkOnline()
@@ -632,7 +632,7 @@ class YoLinkSetup (udi_interface.Node):
             logging.debug('Error: {} {}'.format(e, userParam))
 
 
-    def getEpochTime(self, command ):
+    def getEpochTime(self, command=None ):
         logging.info('getEpochTime ')
         #unit = int(command.get('value'))
         self.node.setDriver('GV0', int(time.time()), True, True)
