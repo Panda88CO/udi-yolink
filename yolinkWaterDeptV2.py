@@ -114,7 +114,7 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
             return(waterDepth)
         
         except Exception as e:
-            logging.error(f'Exception - waterdepth not found {data}' )
+            logging.error(f'Exception - waterdepth not found' )
         
 '''
 Stand-Alone Operation of WaterDept (no call back to live update data - pooling data in upper APP)
