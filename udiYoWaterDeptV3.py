@@ -134,7 +134,7 @@ class udiYoWaterDept(udi_interface.Node):
                 self.my_setDriver('GV4', self.bool2ISY(alarms['high']))
                 self.my_setDriver('GV5', self.bool2ISY(alarms['error']))
                 self.my_setDriver('BATLVL', self.yoWaterDept.getBattery())
-                self.my_setDriver('TIME', self.yoWaterDept.getDataTimestamp())
+                self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
                 self.my_setDriver('ST', 1)
                 
             else:
@@ -145,7 +145,7 @@ class udiYoWaterDept(udi_interface.Node):
                 #self.my_setDriver('GV4', None)
                 #self.my_setDriver('GV5', None)
                 #self.my_setDriver('BATLVL',  None)
-                self.my_setDriver('TIME', self.yoWaterDept.getDataTimestamp())
+                self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
                 self.my_setDriver('ST', 0)
                 #self.node.setDriver('ST', 0, True, True)
             

@@ -45,7 +45,7 @@ except ImportError:
 
 
 
-version = '1.2.11'
+version = '1.2.12'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -146,7 +146,7 @@ class YoLinkSetup (udi_interface.Node):
         #                        'WaterDepthSensor']
         
         #self.supportedYoTypes = ['Outlet', 'MultiOutlet', 'Switch', 'THSensor']
-        self.supportedYoTypes = ['Outlet', 'WaterDepthSensor']    
+        self.supportedYoTypes = ['Outlet', 'WaterDepthSensor', 'VibrationSensor']    
 
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')
@@ -185,7 +185,7 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.node.setDriver('ST', 0, True, True)
         #self.poly.updateProfile()
-        self.getEpochTime()
+        self.updateEpochTime()
 
 
     def addNodes (self, deviceList):
@@ -507,7 +507,7 @@ class YoLinkSetup (udi_interface.Node):
                         #            time.sleep(60)
                         #logging.info('Updating device status')
                         nodes = self.poly.getNodes()
-                        self.getEpochTime()
+                        self.updateEpochTime()
                         for nde in nodes:
                             if nde != 'setup':   # but not the controller node
                                 nodes[nde].checkOnline()
@@ -632,15 +632,15 @@ class YoLinkSetup (udi_interface.Node):
             logging.debug('Error: {} {}'.format(e, userParam))
 
 
-    def getEpochTime(self, command=None ):
-        logging.info('getEpochTime ')
+    def updateEpochTime(self, command=None ):
+        logging.info('updateEpochTime ')
         #unit = int(command.get('value'))
-        self.node.setDriver('GV0', int(time.time()), True, True)
+        self.node.setDriver('TIME', int(time.time()/60), True, True)
 
 
     id = 'setup'
     commands = {
-                'EPOCHTIME': getEpochTime,
+                'EPOCHTIME': updateEpochTime,
                 }
 
     drivers = [
