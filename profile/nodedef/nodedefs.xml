@@ -3,7 +3,7 @@
       <editors />
       <sts>
          <st id="ST"  editor="status" />
-         <st id="GV0"  editor="epochtime" />
+         <st id="TIME"  editor="epochtime" />
          <!--- st id="GV20" editor="suspendstate" /-->
       </sts>
       <cmds>
