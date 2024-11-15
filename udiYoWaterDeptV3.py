@@ -126,7 +126,7 @@ class udiYoWaterDept(udi_interface.Node):
             if self.yoWaterDept.online:
                 logging.debug("yoWaterDept : UpdateData")
                 self.my_setDriver('GV0', self.yoWaterDept.getWaterDepth())
-                settings = self.yoWaterDept.getAlarmsSettings()
+                settings = self.yoWaterDept.getAlarmSettings()
                 self.my_setDriver('GV1', settings['low'])
                 self.my_setDriver('GV2', settings['high'])
                 alarms =  self.yoWaterDept.getAlarms()
