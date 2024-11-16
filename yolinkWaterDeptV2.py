@@ -76,7 +76,8 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
             return(alarms)
         
         except Exception as e:
-            logging.error(f'Exception - waterdepth data not found {yolink.dataAPI[yolink.dData]}' )
+            logging.error(f'Exception - getAlarms data not found {yolink.dataAPI[yolink.dData]}' )
+            return({})
         
     def getAlarmSettings(yolink):
         logging.debug(yolink.type+ ' - getAlarmsLevels')
@@ -97,8 +98,8 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
             return(yolink.alarmSettings)
         
         except Exception as e:
-            logging.error(f'Exception - waterdepth not found {yolink.dataAPI[yolink.dData]}' )
-        
+            logging.error(f'Exception - getAlarmSettings not found {yolink.dataAPI[yolink.dData]}' )
+            return({})
     
 
     def getWaterDepth(yolink):
@@ -113,7 +114,7 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
             return(waterDepth)
         
         except Exception as e:
-            logging.error(f'Exception - waterdepth not found' )
+            logging.error(f'Exception - getWaterDepth not found' )
         
 '''
 Stand-Alone Operation of WaterDept (no call back to live update data - pooling data in upper APP)

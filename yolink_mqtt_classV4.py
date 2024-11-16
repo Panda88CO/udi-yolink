@@ -397,7 +397,7 @@ class YoLinkMQTTDevice(object):
     def getDataTimestamp(yolink):
         logging.debug('getDataTimestamp')
         try:
-            reportAtStr = yolink.dataAPI['reportAt']
+            reportAtStr = yolink.dataAPI[yolink.dData]['reportAt']
             utc_time = datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
             epoch_time =int((utc_time - datetime(1970, 1, 1)).total_seconds())
             return(epoch_time)

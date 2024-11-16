@@ -128,27 +128,24 @@ class udiYoWaterDept(udi_interface.Node):
                     logging.debug("yoWaterDept : UpdateData")
                     self.my_setDriver('GV0', self.yoWaterDept.getWaterDepth())
                     settings = self.yoWaterDept.getAlarmSettings()
+                    logging.debug(f'settings {settings}')
                     if settings != {}:
                         self.my_setDriver('GV1', settings['low'])
                         self.my_setDriver('GV2', settings['high'])
                     alarms =  self.yoWaterDept.getAlarms()
-                    if alarms['low']:
+                    logging.debug(f'alarms {alarms}')
+                    if 'low' in alarms:
                         self.my_setDriver('GV3', self.bool2ISY(alarms['low']))
                         self.my_setDriver('GV4', self.bool2ISY(alarms['high']))
                         self.my_setDriver('GV5', self.bool2ISY(alarms['error']))
-                        
+
                     self.my_setDriver('BATLVL', self.yoWaterDept.getBattery())
+                    logging.debug('date tamp {}'.formatint(self.yoWaterDept.getDataTimestamp()/60))
                     self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
                     self.my_setDriver('ST', 1)
                     
                 else:
-                    #self.my_setDriver('GV0', None)
-                    #self.my_setDriver('GV1', None)
-                    #self.my_setDriver('GV2', None)
-                    #self.my_setDriver('GV3', None)
-                    #self.my_setDriver('GV4', None)
-                    #self.my_setDriver('GV5', None)
-                    #self.my_setDriver('BATLVL',  None)
+
                     self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
                     self.my_setDriver('ST', 0)
                     #self.node.setDriver('ST', 0, True, True)
