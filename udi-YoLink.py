@@ -76,6 +76,7 @@ class YoLinkSetup (udi_interface.Node):
 
         
         logging.setLevel(10)
+        logging.info(f'Version {version}')
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.LOGLEVEL, self.handleLevelChange)
