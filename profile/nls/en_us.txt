@@ -355,8 +355,8 @@ ST-nlswaterdept-GV4-NAME = High Water Level
 ST-nlswaterdept-GV5-NAME = Sensor Error
 ST-nlswaterdept-BATLVL-NAME = Battery Level
 ST-nlswaterdept-TIME-NAME = Last Data Update (Epoch time min)
-CMD-nlswaterdept-SETATTR-NAME = Open Valve
-CMDP-waterLowAlarm-NAME = Set water level alarms
+CMD-nlswaterdept-SETATTR-NAME = Set water level alarms
+CMDP-waterLowAlarm-NAME = Low Water Alarm (0-1000)
 CMDP-waterHighAlarm-NAME = High Water Alarm (0-1000)
 
 
