@@ -45,7 +45,7 @@ except ImportError:
 
 
 
-version = '1.2.14'
+version = '1.2.21'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -148,7 +148,7 @@ class YoLinkSetup (udi_interface.Node):
         
         #self.supportedYoTypes = ['Outlet', 'MultiOutlet', 'Switch', 'THSensor']
         self.supportedYoTypes = ['Outlet', 'WaterDepthSensor', 'VibrationSensor']    
-
+        self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')
             exit() 
