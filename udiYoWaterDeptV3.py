@@ -140,6 +140,7 @@ class udiYoWaterDept(udi_interface.Node):
                         self.my_setDriver('GV5', self.bool2ISY(alarms['error']))
 
                     self.my_setDriver('BATLVL', self.yoWaterDept.getBattery())
+                    logging.debug('Last  tamp {}'.format(int(self.yoWaterDept.lastUpdate()/60)))
                     logging.debug('date tamp {}'.format(int(self.yoWaterDept.getDataTimestamp()/60)))
                     self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
                     self.my_setDriver('ST', 1)
