@@ -6,6 +6,7 @@ ST-nlssetup-TIME-NAME = Current Epoch Time (min)
 ST-nlssetup-GV20-NAME = Connection State
 CMD-nlssetup-DON-NAME = Heart Beat On
 CMD-nlssetup-DOF-NAME = Heart Beat Off
+CMD-nlssetup-EPOCHTIME-NAME = Update Time
 
 # common commands #############
 
