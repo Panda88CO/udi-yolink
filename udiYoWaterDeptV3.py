@@ -41,6 +41,7 @@ class udiYoWaterDept(udi_interface.Node):
     ''' 
         
     drivers = [
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV0', 'value': 0, 'uom': 56},
             {'driver': 'GV1', 'value': 0, 'uom': 56}, 
             {'driver': 'GV2', 'value': 0, 'uom': 56}, 
@@ -49,7 +50,7 @@ class udiYoWaterDept(udi_interface.Node):
             {'driver': 'GV5', 'value': 0, 'uom': 25},
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'TIME', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+
             ]
 
 
@@ -121,33 +122,39 @@ class udiYoWaterDept(udi_interface.Node):
     def updateData(self):
         #alarms = self.yoWaterDept.getAlarms()
         #limits = self.yoWaterDept.getLimits()
-        
-        if self.node is not None:
-            if self.yoWaterDept.online:
-                logging.debug("yoWaterDept : UpdateData")
-                self.my_setDriver('GV0', self.yoWaterDept.getWaterDepth())
-                settings = self.yoWaterDept.getAlarmSettings()
-                self.my_setDriver('GV1', settings['low'])
-                self.my_setDriver('GV2', settings['high'])
-                alarms =  self.yoWaterDept.getAlarms()
-                self.my_setDriver('GV3', self.bool2ISY(alarms['low']))
-                self.my_setDriver('GV4', self.bool2ISY(alarms['high']))
-                self.my_setDriver('GV5', self.bool2ISY(alarms['error']))
-                self.my_setDriver('BATLVL', self.yoWaterDept.getBattery())
-                self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
-                self.my_setDriver('ST', 1)
-                
-            else:
-                #self.my_setDriver('GV0', None)
-                #self.my_setDriver('GV1', None)
-                #self.my_setDriver('GV2', None)
-                #self.my_setDriver('GV3', None)
-                #self.my_setDriver('GV4', None)
-                #self.my_setDriver('GV5', None)
-                #self.my_setDriver('BATLVL',  None)
-                self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
-                self.my_setDriver('ST', 0)
-                #self.node.setDriver('ST', 0, True, True)
+        try:
+            if self.node is not None:
+                if self.yoWaterDept.online:
+                    logging.debug("yoWaterDept : UpdateData")
+                    self.my_setDriver('GV0', self.yoWaterDept.getWaterDepth())
+                    settings = self.yoWaterDept.getAlarmSettings()
+                    if settings != {}:
+                        self.my_setDriver('GV1', settings['low'])
+                        self.my_setDriver('GV2', settings['high'])
+                    alarms =  self.yoWaterDept.getAlarms()
+                    if alarms['low']:
+                        self.my_setDriver('GV3', self.bool2ISY(alarms['low']))
+                        self.my_setDriver('GV4', self.bool2ISY(alarms['high']))
+                        self.my_setDriver('GV5', self.bool2ISY(alarms['error']))
+                        
+                    self.my_setDriver('BATLVL', self.yoWaterDept.getBattery())
+                    self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
+                    self.my_setDriver('ST', 1)
+                    
+                else:
+                    #self.my_setDriver('GV0', None)
+                    #self.my_setDriver('GV1', None)
+                    #self.my_setDriver('GV2', None)
+                    #self.my_setDriver('GV3', None)
+                    #self.my_setDriver('GV4', None)
+                    #self.my_setDriver('GV5', None)
+                    #self.my_setDriver('BATLVL',  None)
+                    self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
+                    self.my_setDriver('ST', 0)
+                    #self.node.setDriver('ST', 0, True, True)
+        except Exception as e:
+                    logging.error(f'Exception updateData {e}')
+                    self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))       
             
 
 

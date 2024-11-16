@@ -81,7 +81,6 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
     def getAlarmSettings(yolink):
         logging.debug(yolink.type+ ' - getAlarmsLevels')
         try:
-            alarmLevels = {}
             if yolink.online:
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     yolink.alarmSettings['low'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarmSettings']['low']
