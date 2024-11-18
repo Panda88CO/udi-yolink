@@ -163,12 +163,17 @@ class udiYoWaterDept(udi_interface.Node):
 
     def set_attributes(self, command):
         logging.info('udiYoWaterDept  set_attributes - {}'.format(command))
+        attribs = {}
         query = command.get("query")
         highAlarm = int(query.get("waterHighAlarm.uom56"))
         lowAlarm= int(query.get("waterLowAlarm.uom56"))
-        self.node.setDriver('GV1', lowAlarm, True, True)
-        self.node.setDriver('GV2', highAlarm, True, True)
-        self.yoWaterDept.setAttributes([{'low':lowAlarm, 'high':highAlarm}]) 
+        attribs = self.yoWaterDept.getAttributes()
+
+
+        self.yoWaterDept.setAttributes(attribs) 
+        self.node.my_setDriverriver('GV1', lowAlarm)
+        self.node.my_setDriver('GV2', highAlarm)
+
 
     def update(self, command = None):
         logging.info('WaterDept Update')

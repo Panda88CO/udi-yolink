@@ -45,20 +45,36 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
     def setAttributes(yolink, attribs):
         logging.debug(yolink.type+ ' - setAttributes')
         data = {}
-        if 'setAttributes' in yolink.methodList:          
-            if 'low' in attribs:
-                yolink.alarmSettings['low'] = attribs['low']
-            if 'high' in attribs:
-                yolink.alarmSettings['high'] = attribs['high']
-            if 'standby' in attribs:
-                yolink.alarmSettings['standby'] = attribs['standby']
-            if 'interval' in attribs:
-                yolink.alarmSettings['interval'] = attribs['interval']                                            
-            data['params'] = yolink.alarmSettings
+        try:
+            if 'setAttributes' in yolink.methodList:
+                if 'alarmSettings' not in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    yolink.refreshDevice()
 
-            return(yolink.setDevice( data))
-        else:
+                if 'low' in attribs:
+                    yolink.alarmSettings['low'] = attribs['low']
+                else:
+                    yolink.alarmSettings['low'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarmSettings']['low']
+                if 'high' in attribs:
+                    yolink.alarmSettings['high'] = attribs['high']
+                else:
+                    yolink.alarmSettings['high'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarmSettings']['high']
+
+                if 'standby' in attribs:
+                    yolink.alarmSettings['standby'] = attribs['standby']
+                else:
+                    yolink.alarmSettings['standby'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarmSettings']['standby']
+                if 'interval' in attribs:
+                    yolink.alarmSettings['interval'] = attribs['interval']    
+                else:
+                    yolink.alarmSettings['interval'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarmSettings']['interval']
+
+                data['params'] = yolink.alarmSettings
+                return(yolink.setDevice( data))
+
+        except Exception as e:
+            logging.error(f'Exception - setAttributes {e}' )
             return(False)
+        
     
     def getAlarms(yolink):
         logging.debug(yolink.type+ ' - getAlarms')

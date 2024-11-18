@@ -20,7 +20,9 @@
     <range uom="56" min="0" max="1000" prec="0" />
      <range uom="25" subset="0,99" nls="error" />
   </editor>
-
+  <editor id="waterlevelNbr"> 
+    <range uom="56" min="0" max="1000" prec="0" />
+  </editor>
   <editor id="delay"> 
      <range uom="57" min="0" max="86400" prec="0" />
   </editor>     
