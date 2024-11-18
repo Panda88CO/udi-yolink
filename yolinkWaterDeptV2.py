@@ -49,7 +49,7 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
             if 'setAttributes' in yolink.methodList:
                 if 'alarmSettings' not in yolink.dataAPI[yolink.dData][yolink.dState]:
                     yolink.refreshDevice()
-
+                logging.debug('alarmSettings data: {}'.format(yolink.dataAPI[yolink.dData]))
                 if 'low' in attribs:
                     yolink.alarmSettings['low'] = attribs['low']
                 else:
@@ -82,13 +82,13 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
             alarms = {}
             if yolink.online:
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
-                    alarms['low'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarms']['lowAlarm']
-                    alarms['high'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarms']['highAlarm']
-                    alarms['error'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarms']['detectorError']  
+                    alarms['low'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarm']['lowAlarm']
+                    alarms['high'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarm']['highAlarm']
+                    alarms['error'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarm']['detectorError']  
                 elif 'waterDepth' in yolink.dataAPI[yolink.dData]:
-                    alarms['low'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarms']['lowAlarm']
-                    alarms['high'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarms']['highAlarm']
-                    alarms['error'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarms']['detectorError']  
+                    alarms['low'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarm']['lowAlarm']
+                    alarms['high'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarm']['highAlarm']
+                    alarms['error'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarm']['detectorError']  
             return(alarms)
         
         except Exception as e:
