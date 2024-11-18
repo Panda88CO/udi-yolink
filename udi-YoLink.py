@@ -147,7 +147,7 @@ class YoLinkSetup (udi_interface.Node):
         #                        'WaterDepthSensor']
         
         #self.supportedYoTypes = ['Outlet', 'MultiOutlet', 'Switch', 'THSensor']
-        self.supportedYoTypes = ['Outlet', 'WaterDepthSensor', 'VibrationSensor']    
+        self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')
