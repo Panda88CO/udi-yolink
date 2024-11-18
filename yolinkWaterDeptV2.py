@@ -45,6 +45,7 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
     def setAttributes(yolink, attribs):
         logging.debug(yolink.type+ ' - setAttributes')
         data = {}
+        data['params'] = {}
         try:
             if 'setAttributes' in yolink.methodList:
                 if 'alarmSettings' not in yolink.dataAPI[yolink.dData][yolink.dState]:
@@ -68,7 +69,7 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
                 else:
                     yolink.alarmSettings['interval'] = yolink.dataAPI[yolink.dData][yolink.dState]['alarmSettings']['interval']
 
-                data['params'] = yolink.alarmSettings
+                data['params']['alarmSetting'] = yolink.alarmSettings
                 return(yolink.setDevice( data))
 
         except Exception as e:
