@@ -560,7 +560,7 @@ batlevel-4 = High
 batlevel-98 = Ext Power
 batlevel-99 = Unknown
 
-alarm-0 = Normal
+alarm-0 = No Alarm (normal)
 alarm-1 = Alarm
 alarm-99 = Unknown 
 

@@ -944,8 +944,8 @@
          </sends>
          <accepts>     
             <cmd id="SETATTR" > 
-               <p id="waterHighAlarm" editor="waterlevel" init="GV1" /> 
-               <p id="waterLowAlarm" editor="waterlevel" init="GV2" />                                     
+               <p id="waterHighAlarm" editor="waterlevel" init="GV2" /> 
+               <p id="waterLowAlarm" editor="waterlevel" init="GV1" />                                     
              </cmd >                       
             <cmd id="UPDATE" />
          </accepts>

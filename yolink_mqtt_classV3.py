@@ -272,8 +272,6 @@ class YoLinkMQTTDevice(object):
 
     #@measure_time
     def setDevice(yolink,  data):
-        attempt = 1
-        maxAttempts = 3
         logging.debug(yolink.type+' - setDevice')
         worked = False
         if 'setState' in yolink.methodList:
@@ -282,6 +280,9 @@ class YoLinkMQTTDevice(object):
         elif 'toggle' in yolink.methodList:
             methodStr = yolink.type+'.toggle'
             worked = True
+        elif 'setAttributes' in yolink.methodList:
+            methodStr = yolink.type+'.setAttributes'
+            worked = True               
         #data['time'] = str(int(time.time_ns()//1e6))# we assign time just before publish
         data['method'] = methodStr
         data["targetDevice"] =  yolink.deviceInfo['deviceId']

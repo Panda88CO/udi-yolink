@@ -29,7 +29,6 @@ class udiYoWaterDept(udi_interface.Node):
             'GV0' = Level ?
             'GV1' = Low Level 
             'GV2' = High Level 
-            'GV5' = Detect Error Alarm 25
             'GV3' = Low Water Alarm 25
             'GV4' = High Water Alarm  25
             'GV5' = Detect Error Alarm 25            
@@ -136,6 +135,7 @@ class udiYoWaterDept(udi_interface.Node):
                     logging.debug(f'alarms {alarms}')
                     if 'low' in alarms:
                         self.my_setDriver('GV3', self.bool2ISY(alarms['low']))
+                    
                         self.my_setDriver('GV4', self.bool2ISY(alarms['high']))
                         self.my_setDriver('GV5', self.bool2ISY(alarms['error']))
 
@@ -166,8 +166,8 @@ class udiYoWaterDept(udi_interface.Node):
         query = command.get("query")
         highAlarm = int(query.get("waterHighAlarm.uom56"))
         lowAlarm= int(query.get("waterLowAlarm.uom56"))
-        self.node.setDriver('GV4', lowAlarm, True, True)
-        self.node.setDriver('GV5', highAlarm, True, True)
+        self.node.setDriver('GV1', lowAlarm, True, True)
+        self.node.setDriver('GV2', highAlarm, True, True)
         self.yoWaterDept.setAttributes([{'low':lowAlarm, 'high':highAlarm}]) 
 
     def update(self, command = None):
