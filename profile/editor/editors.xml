@@ -18,7 +18,7 @@
   </editor>
   <editor id="waterlevel"> 
     <range uom="56" min="0" max="1000" prec="0" />
-     <range uom="25" subset="0,99" nls="error" />
+     <range uom="25" subset="0,97,99" nls="wl_state" />
   </editor>
   <editor id="waterlevelNbr"> 
     <range uom="56" min="0" max="1000" prec="0" />
@@ -33,7 +33,7 @@
         <range uom="4" min="-40" max="105" prec="1" />
         <range uom="17" min="-40" max="221" prec="1" />
         <range uom="26" min="233" max="378" prec="1" />
-        <range uom="25" subset="0,99" nls="error" />
+        <range uom="25" subset="98,99" nls="wl_state" />
   </editor>
   <editor id="tempunit"> 
      <range uom="25" subset="0-2,99" nls="tempunit" />
@@ -243,4 +243,7 @@
      <range uom="44" min="0" max="9999999999" prec="0" />
      <range uom="25" subset="0,99" nls="error" />
    </editor>    
+   <editor id="ready"> 
+     <range uom="25" subset="0,1" nls="ready" />
+   </editor>     
 </editors>

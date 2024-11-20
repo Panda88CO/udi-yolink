@@ -3,6 +3,7 @@
       <editors />
       <sts>
          <st id="ST"  editor="status" />
+         <st id="GV1"  editor="ready" />         
          <st id="TIME"  editor="epochtime" />
          <!--- st id="GV20" editor="suspendstate" /-->
       </sts>
@@ -493,7 +494,8 @@
          <st id="GV18" editor="stMin" />    
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />             
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />               
       </sts>
       <cmds>
          <sends>
@@ -557,7 +559,8 @@
          <st id="GV9" editor="alarm" />         
          <st id="GV10" editor="pwrmode" />  
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                  
       </sts>
       <cmds>
          <sends>
@@ -602,7 +605,8 @@
          <st id="GV11" editor="tempC" />
          <st id="GV12" editor="humidity" />
          <st id="GV13" editor="humidity" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                              
       </sts>
       <cmds>
          <sends>
@@ -627,7 +631,8 @@
          <st id="GV2" editor="cmdsetting" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                              
       </sts>
       <cmds>
          <sends>
@@ -677,7 +682,8 @@
           <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" /> 
+         <st id="TIME" editor="epochtime" />                             
       </sts>
       <cmds>
          <sends>
@@ -707,7 +713,8 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" /> 
+         <st id="TIME" editor="epochtime" />                             
       </sts>
       <cmds>
          <sends>
@@ -742,7 +749,8 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="epochtime" />                           
       </sts>
       <cmds>
          <sends>
@@ -770,7 +778,8 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" />     
+         <st id="TIME" editor="epochtime" />                         
       </sts>
       <cmds>
          <sends>
@@ -846,7 +855,8 @@
          <st id="GV2" editor="doorbell" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />  
+         <st id="TIME" editor="epochtime" />                      
       </sts>
       <cmds>
          <sends>
@@ -875,7 +885,8 @@
          <st id="GV2" editor="cmdstatus" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="epochtime" />                     
       </sts>
       <cmds>
          <sends>
@@ -905,7 +916,8 @@
          <st id="GV4" editor="pfamute" />
          <st id="GV7" editor="cmdstatus" />
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="epochtime" />                     
 
       </sts>
       <cmds>
@@ -926,14 +938,16 @@
    <nodeDef id="yowaterdept" nls="nlswaterdept">
       <editors />
       <sts>
-         <st id="ST"  editor="status" />
+
          <st id="GV0" editor="waterlevel" />
          <st id="GV1" editor="waterlevel" />
          <st id="GV2" editor="waterlevel" />
          <st id="GV3" editor="alarm" />
          <st id="GV4" editor="alarm" />
          <st id="GV5" editor="alarm" />
-         <st id="BATLVL" editor="batlevel" />         
+         <st id="BATLVL" editor="batlevel" />    
+         <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />       
          <st id="TIME" editor="epochtime" />
 
       </sts>
@@ -960,6 +974,7 @@
          <st id="GV2" editor="sirenbatlevel" />
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />               
       </sts>
       <cmds>
          <sends>

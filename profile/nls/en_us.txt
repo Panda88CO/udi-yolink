@@ -15,6 +15,7 @@ ST-GV20-NAME = Connection State
 ST-BATLVL-NAME = Battery Level
 ST-CLITEMP-NAME = Sensor Temperature
 ST-CLIHUM-NAME = Current Rel Humidity (%)
+ST-TIME-NAME = Last Update (Epoch time min)
 
 CMD-DEFINE_SCH-NAME = Define Schedule
 CMD-CTRL_SCH-NAME = Set Schedule
@@ -360,6 +361,11 @@ CMD-nlswaterdept-SETATTR-NAME = Set water level alarms
 CMDP-waterLowAlarm-NAME = Low Water Alarm (0-1000)
 CMDP-waterHighAlarm-NAME = High Water Alarm (0-1000)
 
+wl_state-99 = Unknown
+wl_state-98 = Updating (may take up to 1 hour)
+
+ready-0 = Initializing
+ready-1 = Ready
 
 outport-0 = port1
 outport-1 = port2

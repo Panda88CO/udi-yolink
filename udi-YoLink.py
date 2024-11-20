@@ -45,7 +45,7 @@ except ImportError:
 
 
 
-version = '1.2.24'
+version = '1.3.0'
 
 class YoLinkSetup (udi_interface.Node):
 
@@ -97,6 +97,7 @@ class YoLinkSetup (udi_interface.Node):
         self.wait_for_node_done()
         self.node = self.poly.getNode(self.address)
         self.node.setDriver('ST', 1, True, True)
+        self.node.setDriver('GV1', 0, True, True)
         self.assigned_addresses = []
         self.assigned_addresses.append(self.address)   
         logging.debug('YoLinkSetup init DONE')
@@ -449,6 +450,7 @@ class YoLinkSetup (udi_interface.Node):
         time.sleep(1)
         # checking params for erassed nodes
         self.poly.updateProfile()
+        self.node.setDriver('GV1', 1, True, True)
         self.pollStart = True
 
     def stop(self):

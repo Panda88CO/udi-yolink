@@ -40,7 +40,7 @@ class udiYoWaterDept(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+
             {'driver': 'GV0', 'value': 0, 'uom': 56},
             {'driver': 'GV1', 'value': 0, 'uom': 56}, 
             {'driver': 'GV2', 'value': 0, 'uom': 56}, 
@@ -48,6 +48,8 @@ class udiYoWaterDept(udi_interface.Node):
             {'driver': 'GV4', 'value': 0, 'uom': 25},
             {'driver': 'GV5', 'value': 0, 'uom': 25},
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},            
+            {'driver': 'GV20', 'value': 0, 'uom': 25},            
             {'driver': 'TIME', 'value': 99, 'uom': 25},
 
             ]
@@ -123,14 +125,16 @@ class udiYoWaterDept(udi_interface.Node):
         #limits = self.yoWaterDept.getLimits()
         try:
             if self.node is not None:
+                self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
+
                 if self.yoWaterDept.online:
                     logging.debug("yoWaterDept : UpdateData")
                     self.my_setDriver('GV0', self.yoWaterDept.getWaterDepth())
                     settings = self.yoWaterDept.getAlarmSettings()
                     logging.debug(f'settings {settings}')
                     if settings != {}:
-                        self.my_setDriver('GV1', settings['low'])
-                        self.my_setDriver('GV2', settings['high'])
+                        self.my_setDriver('GV1', settings['low'], 56)
+                        self.my_setDriver('GV2', settings['high'], 56)
                     alarms =  self.yoWaterDept.getAlarms()
                     logging.debug(f'alarms {alarms}')
                     if 'low' in alarms:
@@ -142,14 +146,15 @@ class udiYoWaterDept(udi_interface.Node):
                     self.my_setDriver('BATLVL', self.yoWaterDept.getBattery())
                     logging.debug('Last  tamp {}'.format(int(self.yoWaterDept.lastUpdate()/60)))
                     logging.debug('date tamp {}'.format(int(self.yoWaterDept.getDataTimestamp()/60)))
-                    self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
+                    #self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60), 44)
                     self.my_setDriver('ST', 1)
-                    
+                    if self.yoWaterDept.suspended:
+                        self.my_setDriver('GV20', 1)
+                    else:
+                        self.my_setDriver('GV20', 0)                    
                 else:
-
-                    self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
                     self.my_setDriver('ST', 0)
-                    #self.node.setDriver('ST', 0, True, True)
+                    self.my_setDriver('GV20', 0)  
         except Exception as e:
                     logging.error(f'Exception updateData {e}')
                     self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))       
@@ -170,8 +175,8 @@ class udiYoWaterDept(udi_interface.Node):
         attribs['high'] = highAlarm
         attribs['low'] = lowAlarm
         self.yoWaterDept.setAttributes(attribs)
-        self.my_setDriver('GV1', lowAlarm)
-        self.my_setDriver('GV2', highAlarm)
+        self.my_setDriver('GV1', 98, 25)
+        self.my_setDriver('GV2', 98, 25)
 
 
     def update(self, command = None):
