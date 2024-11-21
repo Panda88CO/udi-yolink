@@ -230,7 +230,7 @@ class YoLinkMQTTDevice(object):
                 return(0)            
         elif 'reportAt' in yolink.dataAPI:
             timestamp = yolink.dataAPI['reportAt']
-            dt = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
+            dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             
             logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
             return(dt.timestamp())
@@ -452,10 +452,10 @@ class YoLinkMQTTDevice(object):
         try:
 
             utc_time = yolink.lastUpdate()
-            logging.debug('utc_time {} dateTime {} epochTime '.format(utc_time, datetime(1970, 1, 1).total_seconds()))
+            logging.debug('utc_time {}'.format(utc_time))
 
             #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
-            epoch_time =int((utc_time - int(datetime(1970, 1, 1)).total_seconds()))
+            epoch_time = int(utc_time)
             return(epoch_time)
         except Exception as e:
             logging.error(f'getDataTimestamp : {e}')
