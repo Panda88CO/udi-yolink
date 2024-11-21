@@ -18,7 +18,7 @@ except ImportError:
 
 
 class udiYoDoorSensor(udi_interface.Node):
-    from  udiYolinkLib import save_cmd_state, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yodoorsens'
     
@@ -36,7 +36,9 @@ class udiYoDoorSensor(udi_interface.Node):
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25},      
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},   
+            {'driver': 'GV20', 'value': 99, 'uom': 25}, 
+            {'driver': 'TIME', 'value': 0, 'uom': 44},
+
               ]
 
 
@@ -75,28 +77,23 @@ class udiYoDoorSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoDoorSensor')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoDoorSensor  = YoLinkDoorSens(self.yoAccess, self.devInfo, self.updateStatus)   
         time.sleep(2)
         self.yoDoorSensor.initNode()
         self.node_ready = True
 
-        #self.node.setDriver('ST', 1, True, True)
+        #self.my_setDriver('ST', 1)
         #if not self.yoDoorSensor.online:
         #    logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
 
         #else:
-        #    self.node.setDriver('ST', 1, True, True)
+        #    self.my_setDriver('ST', 1)
 
-
-    '''
-    def initNode(self):
-        self.yoDoorSensor.refreshSensor()
-    '''
     
     def stop (self):
         logging.info('Stop - udiYoDoorSensor')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoDoorSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -122,33 +119,35 @@ class udiYoDoorSensor(udi_interface.Node):
     def updateData(self):
 
         if self.node is not None:
+
+            self.my_setDriver('TIME', int(self.yoDoorSensor.getDataTimestamp()/60))
             if self.yoDoorSensor.online:
                 doorstate = self.doorState()
                 if doorstate == 1:
-                    self.node.setDriver('GV0', 1 , True, True)
+                    self.my_setDriver('GV0', 1 )
                     if doorstate != self.last_state and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')
                 elif doorstate == 0:
-                    self.node.setDriver('GV0', 0 , True, True)
+                    self.my_setDriver('GV0', 0 )
                     if doorstate != self.last_state and self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')
                 else:
-                    self.node.setDriver('GV0', 99 , True, True)
+                    self.my_setDriver('GV0', 99 )
                 self.last_state = doorstate
-                self.node.setDriver('GV1', self.yoDoorSensor.getBattery(), True, True)
-                self.node.setDriver('GV2', self.cmd_state)
-                self.node.setDriver('ST', 1, True, True)
+                self.my_setDriver('GV1', self.yoDoorSensor.getBattery())
+                self.my_setDriver('GV2', self.cmd_state)
+                self.my_setDriver('ST', 1)
                 if self.yoDoorSensor.suspended:
-                    self.node.setDriver('GV20', 1, True, True)
+                    self.my_setDriver('GV20', 1)
                 else:
-                    self.node.setDriver('GV20', 0, True, True)
+                    self.my_setDriver('GV20', 0)
 
             else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV2', self.cmd_state, True, True)
-                #self.node.setDriver('ST', 0)
-                self.node.setDriver('GV20', 2, True, True)
+                #self.my_setDriver('GV0', 99)
+                #self.my_setDriver('GV1', 99)
+                #self.my_setDriver('GV2', self.cmd_state)
+                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV20', 2)
 
 
 
@@ -163,7 +162,7 @@ class udiYoDoorSensor(udi_interface.Node):
         ctrl = int(command.get('value'))   
         logging.info('udiYoDoorSensor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
-        self.node.setDriver('GV2', self.cmd_state, True, True)
+        self.my_setDriver('GV2', self.cmd_state)
         self.save_cmd_state(self.cmd_state)
 
     def update(self, command = None):

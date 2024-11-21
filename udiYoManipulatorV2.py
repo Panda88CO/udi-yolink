@@ -45,8 +45,9 @@ class udiYoManipulator(udi_interface.Node):
             {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
             {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
-            {'driver': 'GV20', 'value': 99, 'uom': 25},              
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},              
+            {'driver': 'TIME', 'value': 0, 'uom': 44},            
             ]
 
 
@@ -85,20 +86,20 @@ class udiYoManipulator(udi_interface.Node):
 
     def start(self):
         logging.info('Start - udiYoManipulator')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoManipulator = YoLinkManipul(self.yoAccess, self.devInfo, self.updateStatus)
         
         time.sleep(4)
         self.yoManipulator.initNode()
         time.sleep(2)
-        #self.node.setDriver('ST', 1, True, True)
+        #self.my_setDriver('ST', 1)
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         self.yoManipulator.refreshSchedules()
         self.node_ready = True
 
     def stop (self):
         logging.info('Stop udiYoManipulator')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoManipulator.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -111,53 +112,55 @@ class udiYoManipulator(udi_interface.Node):
         if self.yoManipulator.data_updated():
             self.updateData()
         #if time.time() >= self.timer_expires - self.timer_update:
-        #    self.node.setDriver('GV1', 0, True, False)
-        #    self.node.setDriver('GV2', 0, True, False)
+        #    self.my_setDriver('GV1', 0)
+        #    self.my_setDriver('GV2', 0)
 
     def updateData(self):
         if self.node is not None:
+            self.my_setDriver('TIME', int(self.yoManipulator.getDataTimestamp()/60))
+
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
                 if state.upper() == 'OPEN':
                     self.valveState = 1
-                    self.node.setDriver('GV0', self.valveState , True, True)
+                    self.my_setDriver('GV0', self.valveState )
                     if self.last_state != state:
                         self.node.reportCmd('DON')
                 elif state.upper() == 'CLOSED':
                     self.valveState = 0
-                    self.node.setDriver('GV0', self.valveState , True, True)
+                    self.my_setDriver('GV0', self.valveState )
                     if self.last_state != state:
                         self.node.reportCmd('DOF')
                 else:
-                    self.node.setDriver('GV0', 99, True, True)
+                    self.my_setDriver('GV0', 99)
                     
                 self.last_state = state
-                self.node.setDriver('ST', 1)
+                self.my_setDriver('ST', 1)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
-                    self.node.setDriver('GV1', 0, True, False)
-                    self.node.setDriver('GV2', 0, True, False)  
-                logging.debug('udiYoManipulator - getBattery: () '.format(self.yoManipulator.getBattery()))    
-                self.node.setDriver('BATLVL', self.yoManipulator.getBattery(), True, True)          
+                    self.my_setDriver('GV1', 0)
+                    self.my_setDriver('GV2', 0)  
+                #logging.debug('udiYoManipulator - getBattery: {}'.format(self.yoManipulator.getBattery()))    
+                self.my_setDriver('BATLVL', self.yoManipulator.getBattery())          
                 if self.yoManipulator.suspended:
-                    self.node.setDriver('GV20', 1, True, True)
+                    self.my_setDriver('GV20', 1)
                 else:
-                    self.node.setDriver('GV20', 0)
+                    self.my_setDriver('GV20', 0)
 
             else:
-                self.node.setDriver('GV0', 99)
-                self.node.setDriver('GV1', 0)     
-                self.node.setDriver('GV2', 0)
-                self.node.setDriver('BATLVL', 99)
-                #self.node.setDriver('ST', 0)
-                self.node.setDriver('GV20', 2, True, True)
-                self.node.setDriver('GV13', self.schedule_selected)
-                self.node.setDriver('GV14', 99)
-                self.node.setDriver('GV15', 99,True, True, 25)
-                self.node.setDriver('GV16', 99,True, True, 25)
-                self.node.setDriver('GV17', 99,True, True, 25)
-                self.node.setDriver('GV18', 99,True, True, 25)
-                self.node.setDriver('GV19', 0)        
+                #self.my_setDriver('GV0', 99)
+                #self.my_setDriver('GV1', 0)     
+                #self.my_setDriver('GV2', 0)
+                #self.my_setDriver('BATLVL', 99)
+                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV20', 2)
+                #self.my_setDriver('GV13', self.schedule_selected)
+                #self.my_setDriver('GV14', 99)
+                #self.my_setDriver('GV15', 99, 25)
+                #self.my_setDriver('GV16', 99, 25)
+                #self.my_setDriver('GV17', 99, 25)
+                #self.my_setDriver('GV18', 99, 25)
+                #self.my_setDriver('GV19', 0)        
 
             sch_info = self.yoManipulator.getScheduleInfo(self.schedule_selected)
             self.update_schedule_data(sch_info, self.schedule_selected)            
@@ -178,14 +181,14 @@ class udiYoManipulator(udi_interface.Node):
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
                     if 'on' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                        self.my_setDriver('GV1', timeRemaining[delayInfo]['on'])
                         if max_delay < timeRemaining[delayInfo]['on']:
                             max_delay = timeRemaining[delayInfo]['on']
                     if 'off' in timeRemaining[delayInfo]:
-                        self.node.setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
+                        self.my_setDriver('GV2', timeRemaining[delayInfo]['off'])
                         if max_delay < timeRemaining[delayInfo]['off']:
                             max_delay = timeRemaining[delayInfo]['off']
-                    self.node.setDriver('GV0', self.valveState , True, True)
+                    self.my_setDriver('GV0', self.valveState )
         self.timer_expires = time.time()+max_delay
   
     def manipuControl(self, command):
@@ -194,19 +197,19 @@ class udiYoManipulator(udi_interface.Node):
         if state == 1:
             self.yoManipulator.setState('open')
             self.valveState = 1
-            self.node.setDriver('GV0',self.valveState  , True, True)
+            self.my_setDriver('GV0',self.valveState  )
    
             #self.node.reportCmd('DON')
         elif state == 0:
             self.yoManipulator.setState('closed')
             self.valveState  = 0
-            self.node.setDriver('GV0',self.valveState , True, True)
+            self.my_setDriver('GV0',self.valveState )
             #self.node.reportCmd('DOF')
         elif state == 5:
             logging.info('manipuControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
             #self.yolink.setMultiOutDelay(self.port, self.onDelay, self.offDelay)
-            self.node.setDriver('GV1', self.onDelay * 60, True, True)
-            self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+            self.my_setDriver('GV1', self.onDelay * 60)
+            self.my_setDriver('GV2', self.offDelay * 60 )
             self.yoManipulator.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
 
@@ -214,7 +217,7 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Manipulator - set_open')
         self.yoManipulator.setState('open')
         self.valveState  = 1
-        self.node.setDriver('GV0',self.valveState  , True, True)
+        self.my_setDriver('GV0',self.valveState  )
 
         #self.node.reportCmd('DON')
 
@@ -222,7 +225,7 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('Manipulator - set_close')
         self.yoManipulator.setState('closed')
         self.valveState  = 0
-        self.node.setDriver('GV0',self.valveState  , True, True)
+        self.my_setDriver('GV0',self.valveState  )
 
         #self.node.reportCmd('DOF')
 
@@ -232,8 +235,8 @@ class udiYoManipulator(udi_interface.Node):
         self.onDelay =int(command.get('value'))
         logging.info('prepOnDelay {}'.format(self.onDelay))
         #self.yoManipulator.setOnDelay(delay)
-        #self.node.setDriver('GV1', delay*60, True, True)
-        #self.node.setDriver('GV0',self.valveState  , True, True)
+        #self.my_setDriver('GV1', delay*60)
+        #self.my_setDriver('GV0',self.valveState  )
 
     def prepOffDelay(self, command):
         logging.info('setOnDelay Executed')
@@ -241,8 +244,8 @@ class udiYoManipulator(udi_interface.Node):
         logging.info('setOnDelay Executed {}'.format(self.offDelay))
 
         #self.yoManipulator.setOffDelay(delay)
-        #self.node.setDriver('GV2', delay*60, True, True)
-        #self.node.setDriver('GV0',self.valveState  , True, True)
+        #self.my_setDriver('GV2', delay*60)
+        #self.my_setDriver('GV0',self.valveState  )
 
 
 
@@ -255,8 +258,8 @@ class udiYoManipulator(udi_interface.Node):
         query = command.get("query")
         self.onDelay = int(query.get("ondelay.uom44"))
         self.offDelay = int(query.get("offdelay.uom44"))
-        self.node.setDriver('GV1', self.onDelay * 60, True, True)
-        self.node.setDriver('GV2', self.offDelay * 60 , True, True)
+        self.my_setDriver('GV1', self.onDelay * 60)
+        self.my_setDriver('GV2', self.offDelay * 60 )
         self.yoManipulator.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
 

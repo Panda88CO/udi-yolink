@@ -21,7 +21,7 @@ import time
 
 
 class udiYoCOSmokeSensor(udi_interface.Node):
-    from  udiYolinkLib import save_cmd_state, retrieve_cmd_state, bool2nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, bool2nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yoCOSmokesens'
     
@@ -57,7 +57,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},   
-
+            {'driver': 'TIME', 'value': 0, 'uom': 44},
             ]
 
 
@@ -94,12 +94,12 @@ class udiYoCOSmokeSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - YoLinkCOSmokeSensor')
-        self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0)
         self.yoCOSmokeSensor  = YoLinkCOSmokeSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoCOSmokeSensor.initNode()
         self.node_ready = True
-        #self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('ST', 1)
 
         #time.sleep(3)
     
@@ -110,7 +110,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoCOSmokeSensor ')
-        self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('ST', 0)
         self.yoCOSmokeSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)  
@@ -128,22 +128,24 @@ class udiYoCOSmokeSensor(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
+            self.my_setDriver('TIME', int(self.yoCOSmokeSensor.getDataTimestamp()/60))
+
             if self.yoCOSmokeSensor.online:
                 smoke_alert =   self.yoCOSmokeSensor.alert_state('smoke')  
                 logging.debug('Smokedetector smoke: {}'.format(smoke_alert))
-                self.node.setDriver('GV0', self.bool2nbr(smoke_alert), True, True)
+                self.node.setDriver('GV0', self.bool2nbr(smoke_alert))
                 CO_alert =   self.yoCOSmokeSensor.alert_state('CO')
                 logging.debug('Smokedetector CO: {}'.format(CO_alert))
-                self.node.setDriver('GV1', self.bool2nbr(CO_alert), True, True)
+                self.node.setDriver('GV1', self.bool2nbr(CO_alert))
                 hight_alert =   self.yoCOSmokeSensor.alert_state('high_temp')  
                 logging.debug('Smokedetector high temp: {}'.format(hight_alert))
-                self.node.setDriver('GV2', self.bool2nbr(hight_alert), True, True)
+                self.node.setDriver('GV2', self.bool2nbr(hight_alert))
                 bat_alert =   self.yoCOSmokeSensor.alert_state('battery')  
                 logging.debug('Smokedetector battery: {}'.format(bat_alert))
-                self.node.setDriver('GV3', self.bool2nbr(bat_alert), True, True)
-                self.node.setDriver('GV4', self.yoCOSmokeSensor.getBattery(), True, True)
+                self.node.setDriver('GV3', self.bool2nbr(bat_alert))
+                self.node.setDriver('GV4', self.yoCOSmokeSensor.getBattery())
                 alert = smoke_alert or CO_alert or hight_alert or bat_alert
-                self.node.setDriver('ALARM', self.bool2nbr(alert), True, True)
+                self.node.setDriver('ALARM', self.bool2nbr(alert))
                 if alert != self.last_alert:
                     if alert:
                         if self.cmd_state in [0,1]:
@@ -152,36 +154,36 @@ class udiYoCOSmokeSensor(udi_interface.Node):
                         if self.cmd_state in [0,2]:
                             self.node.reportCmd('DOF')
                     self.last_alert = alert
-                self.node.setDriver('GV5', self.bool2nbr(self.yoCOSmokeSensor.get_self_ckheck_state()), True, True)
+                self.node.setDriver('GV5', self.bool2nbr(self.yoCOSmokeSensor.get_self_ckheck_state()))
                 self.node.setDriver('ST', 1)
                 devTemp =  self.yoCOSmokeSensor.getDeviceTemperature()
                 if devTemp != 'NA':
                     if self.temp_unit == 0:
-                        self.node.setDriver('CLITEMP', round(devTemp,0), True, True, 4)
+                        self.node.setDriver('CLITEMP', round(devTemp,0), 4)
                     elif self.temp_unit == 1:
-                        self.node.setDriver('CLITEMP', round(devTemp*9/5+32,0), True, True, 17)
+                        self.node.setDriver('CLITEMP', round(devTemp*9/5+32,0), 17)
                     elif self.temp_unit == 2:
-                        self.node.setDriver('CLITEMP', round(devTemp+273.15,0), True, True, 26)
+                        self.node.setDriver('CLITEMP', round(devTemp+273.15,0), 26)
                 else:
-                    self.node.setDriver('CLITEMP', 99, True, True, 25)
+                    self.node.setDriver('CLITEMP', 99, 25)
                 self.node.setDriver('GV7', self.cmd_state)
                 if self.yoCOSmokeSensor.suspended:
-                    self.node.setDriver('GV20', 1, True, True)
+                    self.node.setDriver('GV20', 1)
                 else:
-                    self.node.setDriver('GV20', 0, True, True)
+                    self.node.setDriver('GV20', 0)
 
             else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV2', 99, True, True)
-                self.node.setDriver('GV3', 99, True, True)
-                self.node.setDriver('GV4', 99, True, True)
-                self.node.setDriver('GV5', 99, True, True)
+                #self.node.setDriver('GV0', 99)
+                #self.node.setDriver('GV1', 99)
+                #self.node.setDriver('GV2', 99)
+                #self.node.setDriver('GV3', 99)
+                #self.node.setDriver('GV4', 99)
+                #self.node.setDriver('GV5', 99)
            
-                self.node.setDriver('CLITEMP', 99, True, True, 25)
-                self.node.setDriver('ALARM', 99, True, True)     
-                #self.node.setDriver('ST', 0)
-                self.node.setDriver('GV20', 2, True, True)
+                #self.node.setDriver('CLITEMP', 99, 25)
+                #self.node.setDriver('ALARM', 99)     
+                self.node.setDriver('ST', 0)
+                self.node.setDriver('GV20', 2)
 
 
     def updateStatus(self, data):
@@ -194,7 +196,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         ctrl = int(command.get('value'))   
         logging.info('yoCOSmokeSensor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
-        self.node.setDriver('GV7', self.cmd_state, True, True)
+        self.node.setDriver('GV7', self.cmd_state)
         self.save_cmd_state(self.cmd_state)
 
     def update(self, command = None):
