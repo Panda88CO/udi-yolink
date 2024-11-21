@@ -213,29 +213,27 @@ class YoLinkMQTTDevice(object):
     def lastUpdate(yolink):
         logging.debug('{} - Checking last update'.format(yolink.type))
         logging.debug('Data: {}'.format(yolink.dataAPI))
-        if 'reportAt' in yolink.dataAPI:
-
-            timestamp = yolink.dataAPI['reportAt']
-            dt = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
-            
-            logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
-            return(dt.timestamp())
-        elif 'stateChangedAt' in yolink.dataAPI[yolink.dData]:
+        if 'stateChangedAt' in yolink.dataAPI[yolink.dData]:
             logging.debug('lastUpdate stateChangedAt {}'.format(yolink.dataAPI[yolink.dData]['stateChangedAt']))
             return(yolink.dataAPI[yolink.dData]['stateChangedAt'])
-
-        elif yolink.lastUpd in yolink.dataAPI:
-            logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
-            if yolink.dataAPI[yolink.lastUpd ] is not {}:
-                return(yolink.dataAPI[yolink.lastUpd ])
-            else:
-                return(0)            
         elif 'lastStateTime' in yolink.dataAPI:
             logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI['lastStateTime' ]))
             if yolink.dataAPI['lastStateTime'] is not {}:
                 return(yolink.dataAPI['lastStateTime'] )
             else:
                 return(0)
+        elif yolink.lastUpd in yolink.dataAPI:
+            logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
+            if yolink.dataAPI[yolink.lastUpd ] is not {}:
+                return(yolink.dataAPI[yolink.lastUpd ])
+            else:
+                return(0)            
+        elif 'reportAt' in yolink.dataAPI:
+            timestamp = yolink.dataAPI['reportAt']
+            dt = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
+            
+            logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
+            return(dt.timestamp())
         elif 'time'in  yolink.dataAPI:
             logging.debug('lastUpdate time {}'.format(yolink.dataAPI['time']))
 
@@ -454,7 +452,7 @@ class YoLinkMQTTDevice(object):
         try:
 
             utc_time = yolink.lastUpdate()
-            logging.debug(f'utc_time {utc_time}')
+            logging.debug('utc_time {} dateTime {} epochTime '.format(utc_time, datetime(1970, 1, 1)).total_seconds()))
 
             #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
             epoch_time =int((utc_time - int(datetime(1970, 1, 1)).total_seconds()))
