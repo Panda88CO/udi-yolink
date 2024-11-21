@@ -452,7 +452,7 @@ class YoLinkMQTTDevice(object):
         try:
 
             utc_time = yolink.lastUpdate()
-            logging.debug('utc_time {} dateTime {} epochTime '.format(utc_time, datetime(1970, 1, 1)).total_seconds()))
+            logging.debug('utc_time {} dateTime {} epochTime '.format(utc_time, datetime(1970, 1, 1).total_seconds()))
 
             #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
             epoch_time =int((utc_time - int(datetime(1970, 1, 1)).total_seconds()))
