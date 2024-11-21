@@ -50,8 +50,6 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 # common commands #############
 
 
-
-
 # YoLink Switch
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
@@ -546,6 +544,9 @@ vibration-99 = Unknown
 
 status-0 = Not Connected
 status-1 = Connected
+
+connect-0 = Off-line
+connect-1 = On-line
 
 swstate-0 = Off
 swstate-1 = On

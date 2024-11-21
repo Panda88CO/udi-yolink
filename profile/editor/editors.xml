@@ -2,6 +2,9 @@
   <editor id="status"> 
      <range uom="25" subset="0-1" nls="status" />
   </editor>
+    <editor id="connect"> 
+     <range uom="25" subset="0-1" nls="connect" />
+  </editor>
   <editor id="swstate"> 
      <range uom="25" subset="0-1,99" nls="swstate" />
   </editor>     

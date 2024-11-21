@@ -141,14 +141,14 @@ class YoLinkSetup (udi_interface.Node):
         #self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
         #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
         #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'InfraredRemoter' ]
-        #self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-        #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-        #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
-        #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-        #                        'WaterDepthSensor']
+        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+                                'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
+                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
+                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+                                'WaterDepthSensor']
         
         #self.supportedYoTypes = ['Outlet', 'MultiOutlet', 'Switch', 'THSensor']
-        self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
+        #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
             logging.error('UAID and secretKey must be provided to start node server')

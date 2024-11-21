@@ -2,7 +2,7 @@
  <nodeDef id="setup" nls="nlssetup">
       <editors />
       <sts>
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="connect" />
          <st id="GV1"  editor="ready" />         
          <st id="TIME"  editor="epochtime" />
          <!--- st id="GV20" editor="suspendstate" /-->
