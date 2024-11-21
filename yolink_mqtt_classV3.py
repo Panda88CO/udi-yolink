@@ -126,8 +126,7 @@ class YoLinkMQTTDevice(object):
         yolink.extDelayTimer.timerCallback(callback, updateTime)
         #logging.debug('delayTimerCallback: '.format(updateTime))
 
-    def measure_time(func):                                                                                                   
-                                                                                                                          
+    def measure_time(func):
         def wrapper(*arg):                                                                                                      
             t = time.time()                                                                                                     
             res = func(*arg)                                                                                                    
@@ -216,14 +215,18 @@ class YoLinkMQTTDevice(object):
         if 'reportAt' in yolink.dataAPI:
             timestamp = yolink.dataAPI['reportAt']
             dt = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
+            
             logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
             return(int(dt.timestamp()))
+        elif 'stateChangedAt' in yolink.dataAPI[yolink.dData]:
+            return(yolink.dataAPI[yolink.dData]['stateChangedAt'])
+
         elif yolink.lastUpd in yolink.dataAPI:
             logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
             if yolink.dataAPI[yolink.lastUpd ] is not {}:
                 return(yolink.dataAPI[yolink.lastUpd ])
             else:
-                return(0)
+                return(0)            
         elif 'lastStateTime' in yolink.dataAPI:
             logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI['lastStateTime' ]))
             if yolink.dataAPI['lastStateTime'] is not {}:
@@ -236,6 +239,7 @@ class YoLinkMQTTDevice(object):
             return(yolink.dataAPI['time'])
         else:
             return(0)
+        
     #@measure_time
     def check_system_online(yolink):
         #return(yolink.yoAccess.online)
@@ -437,15 +441,7 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def getLastUpdate (yolink):
         try:
-            if yolink.lastUpd in yolink.dataAPI:
-                if yolink.dataAPI[yolink.lastUpd] and  yolink.dataAPI[yolink.lastUpd] !='' :
-                    return(int(yolink.dataAPI[yolink.lastUpd]))
-                else:
-                    yolink.dataAPI[yolink.lastUpd] = 0
-                    return(0)
-            else:
-                yolink.dataAPI[yolink.lastUpd] = 0
-                return(0)
+            return(yolink.lastUpdate())
         except:
             logging.debug('Exception yolink.dataAPI[yolink.lastUpd] does not exist')
             return(time.time())
@@ -453,9 +449,9 @@ class YoLinkMQTTDevice(object):
     def getDataTimestamp(yolink):
         logging.debug('getDataTimestamp')
         try:
-            reportAtStr = yolink.dataAPI[yolink.dData]['reportAt']
-            logging.debug(f'reportAtStr {reportAtStr}')
-            utc_time = datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+            utc_time = yolink.lastUpdate()
+            #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
             epoch_time =int((utc_time - datetime(1970, 1, 1)).total_seconds())
             return(epoch_time)
         except Exception as e:
@@ -480,12 +476,12 @@ class YoLinkMQTTDevice(object):
         return(yolink.dataAPI['lastMessage']) 
 
     #@measure_time
-    def getState(yolink):
-        try:                
-            return(yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState] )
-        except Exception as e:
-            logging.debug('getState exception: {}'.format(e) )
-            return(None)
+    #def getState(yolink):
+    #    try:                
+    #        return(yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState] )
+    #    except Exception as e:
+    #        logging.debug('getState exception: {}'.format(e) )
+    #        return(None)
         
     #@measure_time
     def getData(yolink):
@@ -1417,16 +1413,7 @@ class YoLinkMQTTDevice(object):
         except Exception as e:
             logging.debug('Schedules not fully supported yet {}'.format(e))
             return(None)
-    '''
 
-
-    def updateFWStatus(yolink, data):
-        logging.debug(yolink.type + 'updateFWStatus - not working ??')
-        # Need to have it workign forst - not sure what return struture will look lik
-        #yolink.dataAPI['data']['state']['state'].append( data['data'])
-        yolink.dataAPI['state']['lastTime'] = data['time']
-        yolink.dataAPI['lastMessage'] = data      
-    '''
     def eventPending(yolink):
         return( not yolink.eventQueue.empty())
     

@@ -48,7 +48,7 @@ except ImportError:
 version = '1.3.0'
 
 class YoLinkSetup (udi_interface.Node):
-
+    from  udiYolinkLib import my_setDriver
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  
         
@@ -96,8 +96,8 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(self.address)
-        self.node.setDriver('ST', 1, True, True)
-        self.node.setDriver('GV1', 0, True, True)
+        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV1', 0)
         self.assigned_addresses = []
         self.assigned_addresses.append(self.address)   
         logging.debug('YoLinkSetup init DONE')
@@ -156,7 +156,8 @@ class YoLinkSetup (udi_interface.Node):
 
 
         self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
-
+        if self.yoAccess:
+            self.my_setDriver('ST', 0)
         if 'TEMP_UNIT' in self.Parameters:
             self.temp_unit = self.convert_temp_unit(self.Parameters['TEMP_UNIT'])
         else:
@@ -182,10 +183,10 @@ class YoLinkSetup (udi_interface.Node):
 
         logging.debug('{} devices detected : {}'.format(len(self.deviceList), self.deviceList) )
         if self.yoAccess:
-            self.node.setDriver('ST', 1, True, True)
+            self.my_setDriver('ST', 1)
             self.addNodes(self.deviceList)
         else:
-            self.node.setDriver('ST', 0, True, True)
+            self.my_setDriver('ST', 0)
         #self.poly.updateProfile()
         self.updateEpochTime()
 
@@ -450,7 +451,7 @@ class YoLinkSetup (udi_interface.Node):
         time.sleep(1)
         # checking params for erassed nodes
         self.poly.updateProfile()
-        self.node.setDriver('GV1', 1, True, True)
+        self.my_setDriver('GV1', 1)
         self.pollStart = True
 
     def stop(self):
@@ -458,7 +459,7 @@ class YoLinkSetup (udi_interface.Node):
             logging.info('Stop Called:')
             #self.yoAccess.writeTtsFile() #save current TTS messages
 
-            self.node.setDriver('ST', 0, True, True)
+            self.my_setDriver('ST', 0)
 
             if self.yoAccess:
                 self.yoAccess.shut_down()
@@ -473,7 +474,7 @@ class YoLinkSetup (udi_interface.Node):
     def heartbeat(self):
         logging.debug('heartbeat: ' + str(self.hb))
         if self.yoAccess.online:
-            self.node.setDriver('ST', 1)
+            self.my_setDriver('ST', 1)
             if self.hb == 0:
                 self.reportCmd('DON',2)
                 self.hb = 1
@@ -481,7 +482,7 @@ class YoLinkSetup (udi_interface.Node):
                 self.reportCmd('DOF',2)
                 self.hb = 0
         else:
-            self.node.setDriver('ST', 0)
+            self.my_setDriver('ST', 0)
 
     def checkNodes(self):
         logging.info('Updating Nodes')
@@ -500,10 +501,10 @@ class YoLinkSetup (udi_interface.Node):
         if self.pollStart:
             logging.debug('System Poll executing: {}'.format(polltype))
             if self.yoAccess.online:
-                self.node.setDriver('ST', 1)
+                self.my_setDriver('ST', 1)
                 if 'longPoll' in polltype:
                     #Keep token current
-                    #self.node.setDriver('GV0', self.temp_unit, True, True)
+                    #self.my_setDriver('GV0', self.temp_unit)
                     try:
                         #if not self.yoAccess.refresh_token(): #refresh failed
                         #    while not self.yoAccess.request_new_token():
@@ -532,7 +533,7 @@ class YoLinkSetup (udi_interface.Node):
                             # no API calls so no need to spread out 
                             #time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
             #else:
-            #    self.node.setDriver('ST', 0, True, True)
+            #    self.my_setDriver('ST', 0)
                 
 
 
@@ -638,7 +639,7 @@ class YoLinkSetup (udi_interface.Node):
     def updateEpochTime(self, command=None ):
         logging.info('updateEpochTime ')
         #unit = int(command.get('value'))
-        self.node.setDriver('TIME', int(time.time()/60), True, True)
+        self.my_setDriver('TIME', int(time.time()/60))
 
 
     id = 'setup'
@@ -647,7 +648,8 @@ class YoLinkSetup (udi_interface.Node):
                 }
 
     drivers = [
-            {'driver': 'ST', 'value':1, 'uom':25},
+            {'driver': 'ST', 'value':0, 'uom':25},
+            {'driver': 'GV1', 'value':0, 'uom':25},
             {'driver': 'TIME', 'value':99, 'uom':25},
            ]
 

@@ -200,14 +200,11 @@ class udiYoWaterMeterController(udi_interface.Node):
                 self.my_setDriver('ST', 0)
                 #self.my_setDriver('BATLVL', 99, 25)
                 self.my_setDriver('GV20', 2)
-                
-
+            
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoWaterMeterController')
         self.yoWaterCtrl.updateStatus(data)
         self.updateData()
-
-      
 
     '''
     def updateDelayCountdown( self, timeRemaining):
