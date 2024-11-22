@@ -6,6 +6,7 @@ MIT License
 
 import sys
 import time
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 from yoLink_init_V3 import YoLinkInitPAC
@@ -45,7 +46,7 @@ except ImportError:
 
 
 
-version = '1.3.0'
+version = '1.3.1'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver
@@ -72,7 +73,7 @@ class YoLinkSetup (udi_interface.Node):
         self.tokenURL = 'https://api.yosmart.com/open/yolink/token'
         self.mqttURL = 'api.yosmart.com'
         self.mqttPort = 8003
-
+        self.display_update_sec=60
 
         
         logging.setLevel(10)
@@ -188,8 +189,11 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.my_setDriver('ST', 0)
         #self.poly.updateProfile()
+        
+        self.scheduler = BackgroundScheduler()
+        self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
+        self.scheduler.start()
         self.updateEpochTime()
-
 
     def addNodes (self, deviceList):
         for dev in deviceList:
@@ -465,8 +469,8 @@ class YoLinkSetup (udi_interface.Node):
                 self.yoAccess.shut_down()
             self.poly.stop()
             exit()
-        except Exception as E:
-            logging.error('Stop Exception : {}'.format(E))
+        except Exception as e:
+            logging.error(f'Stop Exception : {e}')
             if self.yoAccess:
                 self.yoAccess.shut_down()
             self.poly.stop()
@@ -483,6 +487,11 @@ class YoLinkSetup (udi_interface.Node):
                 self.hb = 0
         else:
             self.my_setDriver('ST', 0)
+
+    def display_update(self):
+        logging.debug('display_update')
+        self.updateEpochTime()
+
 
     def checkNodes(self):
         logging.info('Updating Nodes')
