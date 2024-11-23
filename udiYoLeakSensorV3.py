@@ -114,9 +114,13 @@ class udiYoLeakSensor(udi_interface.Node):
         if self.yoLeakSensor.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoLeakSensor.getTimeSinceUpdate()/60))
+
+
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoLeakSensor.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoLeakSensor.getTimeSinceUpdate()/60))
 
             if self.yoLeakSensor.online:
                 waterState =   self.waterState()  

@@ -90,10 +90,12 @@ class udiYoLock(udi_interface.Node):
         if self.yoLock.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoLock.getTimeSinceUpdate()/60))
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoLock.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoLock.getTimeSinceUpdate()/60))
 
             if  self.yoLock.online:
                 state = str(self.yoLock.getState()).upper()

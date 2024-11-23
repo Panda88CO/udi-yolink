@@ -133,6 +133,8 @@ class udiYoSpeakerHub(udi_interface.Node):
         if self.yoSpeakerHub.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        pass
 
     def updateData(self):
         if self.node is not None:

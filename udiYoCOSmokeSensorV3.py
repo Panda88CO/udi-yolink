@@ -119,6 +119,8 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         #we only get casched values - but MQTT remains alive
         self.yoCOSmokeSensor.refreshDevice()  
         
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoCOSmokeSensor.getTimeSinceUpdate()/60))
  
 
 
@@ -128,7 +130,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoCOSmokeSensor.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoCOSmokeSensor.getTimeSinceUpdate()/60))
 
             if self.yoCOSmokeSensor.online:
                 smoke_alert =   self.yoCOSmokeSensor.alert_state('smoke')  

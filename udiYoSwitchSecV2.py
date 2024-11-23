@@ -145,10 +145,14 @@ class udiYoSwitchSec(udi_interface.Node):
         if self.yoSwitch.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoSwitch.getTimeSinceUpdate()/60))
+
+
     def updateData(self):
         if self.node is not None:
             state =  self.yoSwitch.getState().upper()
-            self.my_setDriver('TIME', int(self.yoSwitch.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoSwitch.getTimeSinceUpdate()/60))
 
             if self.yoSwitch.online:
                 self.my_setDriver('ST', 1)

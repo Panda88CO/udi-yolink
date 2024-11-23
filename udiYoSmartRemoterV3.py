@@ -101,6 +101,9 @@ class udiRemoteKey(udi_interface.Node):
     def checkDataUpdate(self):
         pass
 
+    def updateLastTime(self):
+        pass
+
     '''
     def handleData(self, data):
         self.KeyOperations.load(data)
@@ -341,7 +344,9 @@ class udiYoSmartRemoter(udi_interface.Node):
         else:
             return(int(round(math.log2(mask),0)))
 
-
+    def updateLastTime(self):
+        pass
+    
     def updateData(self):
         try:
             if self.node is not None:

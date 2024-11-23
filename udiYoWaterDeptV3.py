@@ -119,13 +119,16 @@ class udiYoWaterDept(udi_interface.Node):
         if self.yoWaterDept.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoWaterDept.getTimeSinceUpdate()/60))
+
 
     def updateData(self):
         #alarms = self.yoWaterDept.getAlarms()
         #limits = self.yoWaterDept.getLimits()
         try:
             if self.node is not None:
-                self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60))
+                self.my_setDriver('TIME', int(self.yoWaterDept.getTimeSinceUpdate()/60))
 
                 if self.yoWaterDept.online:
                     logging.debug("yoWaterDept : UpdateData")

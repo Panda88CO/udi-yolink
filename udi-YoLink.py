@@ -455,6 +455,7 @@ class YoLinkSetup (udi_interface.Node):
         time.sleep(1)
         # checking params for erassed nodes
         self.poly.updateProfile()
+        self.yolink_nodes = self.poly.getNodes()
         self.my_setDriver('GV1', 1)
         self.pollStart = True
 
@@ -492,6 +493,9 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('display_update')
         self.updateEpochTime()
 
+        for nde in self.yolink_nodes:
+            if nde != 'setup':   # but not the controller node
+                self.yolink_nodes[nde].updateLastTime()
 
     def checkNodes(self):
         logging.info('Updating Nodes')
@@ -519,11 +523,11 @@ class YoLinkSetup (udi_interface.Node):
                         #    while not self.yoAccess.request_new_token():
                         #            time.sleep(60)
                         #logging.info('Updating device status')
-                        nodes = self.poly.getNodes()
+                        #nodes = self.poly.getNodes()
                         self.updateEpochTime()
-                        for nde in nodes:
+                        for nde in self.yolink_nodes:
                             if nde != 'setup':   # but not the controller node
-                                nodes[nde].checkOnline()
+                                self.yolink_nodes[nde].checkOnline()
                                 logging.debug('longpoll {}'.format(nde))
                                 time.sleep(5) # need to limit calls to 100 per  5 min - using 5 to allow other calls - updating is not critical
                     except Exception as e:
@@ -534,10 +538,10 @@ class YoLinkSetup (udi_interface.Node):
                 if 'shortPoll' in polltype:
                     self.heartbeat()
 
-                    nodes = self.poly.getNodes()
-                    for nde in nodes:
+                    #nodes = self.poly.getNodes()
+                    for nde in self.yolink_nodes:
                         if nde != 'setup':   # but not the controller node
-                            nodes[nde].checkDataUpdate()
+                            self.yolink_nodes[nde].checkDataUpdate()
                             logging.debug('shortpoll {}'.format(nde))
                             # no API calls so no need to spread out 
                             #time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls

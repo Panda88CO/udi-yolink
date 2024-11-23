@@ -99,10 +99,12 @@ class udiYoVibrationSensor(udi_interface.Node):
         if self.yoVibrationSensor.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoVibrationSensor.getTimeSinceUpdate()/60))
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoVibrationSensor.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoVibrationSensor.getTimeSinceUpdate()/60))
             if self.yoVibrationSensor.online:               
                 vib_state = self.getVibrationState()
                 if vib_state == 1:

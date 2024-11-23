@@ -460,7 +460,20 @@ class YoLinkMQTTDevice(object):
         except Exception as e:
             logging.error(f'getDataTimestamp : {e}')
 
-    '''
+    def getTimeSinceUpdate(yolink):
+        logging.debug('getTimeSinceUpdate')
+        try:
+
+            utc_time = yolink.lastUpdate()
+            #logging.debug('utc_time {}'.format(utc_time))
+            
+            #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
+            epoch_time = time.time()
+            return(int((epoch_time-utc_time)))
+        except Exception as e:
+            logging.error(f'getDataTimestamp : {e}')
+
+
     def refreshState(yolink):
         logging.debug(str(yolink.type)+ ' - refreshState')
         yolink.refreshDevice()

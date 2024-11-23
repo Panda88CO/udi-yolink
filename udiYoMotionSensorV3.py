@@ -116,10 +116,13 @@ class udiYoMotionSensor(udi_interface.Node):
         if self.yoMotionsSensor.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoMotionsSensor.getTimeSinceUpdate()/60))
+
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoMotionsSensor.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoMotionsSensor.getTimeSinceUpdate()/60))
             if self.yoMotionsSensor.online:
                 logging.debug('Motion sensor CMD setting: {}'.format(self.cmd_state))
                 motion_state = self.getMotionState()

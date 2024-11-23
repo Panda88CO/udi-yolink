@@ -108,10 +108,13 @@ class udiYoPowerFailSenor(udi_interface.Node):
         if self.yoPowerFail.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoPowerFail.getTimeSinceUpdate()/60))
+
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoPowerFail.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoPowerFail.getTimeSinceUpdate()/60))
             
             if self.yoPowerFail.online:               
                 state = self.yoPowerFail.getAlertState()

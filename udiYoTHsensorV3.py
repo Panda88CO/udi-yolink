@@ -128,13 +128,16 @@ class udiYoTHsensor(udi_interface.Node):
         if self.yoTHsensor.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoTHsensor.getTimeSinceUpdate()/60))
+
 
     def updateData(self):
         alarms = self.yoTHsensor.getAlarms()
         limits = self.yoTHsensor.getLimits()
         
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoTHsensor.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoTHsensor.getTimeSinceUpdate()/60))
 
             if self.yoTHsensor.online:
                 logging.debug("yoTHsensor temp: {}".format(self.yoTHsensor.getTempValueC()))

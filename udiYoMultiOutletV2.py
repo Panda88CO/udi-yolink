@@ -130,6 +130,8 @@ class udiYoSubOutlet(udi_interface.Node):
             self.my_setDriver('GV1', 0)
             self.my_setDriver('GV2', 0)
 
+    def updateLastTime(self):
+        pass
       
     def updateDelayCountdown(self, timeRemaining):
         logging.debug('udiYoSubOutlet updateDelayCountDown: port: {} delays: {}'.format(self.port, timeRemaining))
@@ -330,6 +332,8 @@ class udiYoSubUSB(udi_interface.Node):
     def checkDataUpdate(self):
         pass
 
+    def updateLastTime(self):
+        pass
 
     def updateUsbNode(self, gv0):
         logging.info('udiYoSubUSB - updateUsbNode: {}'.format(gv0))
@@ -573,13 +577,15 @@ class udiYoMultiOutlet(udi_interface.Node):
         if self.yoMultiOutlet.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', int(self.yoMultiOutlet.getTimeSinceUpdate()/60))
 
     def updateData(self):
         outletStates =  self.yoMultiOutlet.getMultiOutStates()
 
         if self.node_fully_config:
             self.my_setDriver('ST',1)
-            self.my_setDriver('TIME', int(self.yoMultiOutlet.getDataTimestamp()/60))
+            self.my_setDriver('TIME', int(self.yoMultiOutlet.getTimeSinceUpdate()/60))
 
             for outlet in range(0,self.nbrOutlets):
                 portName = 'port'+str(outlet)
