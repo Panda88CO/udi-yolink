@@ -233,7 +233,7 @@ class YoLinkMQTTDevice(object):
             dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             
             logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
-            return(dt.timestamp())
+            return(dt.timestamp()*1000) # make in ms
         elif 'time'in  yolink.dataAPI:
             logging.debug('lastUpdate time {}'.format(yolink.dataAPI['time']))
 
@@ -464,7 +464,7 @@ class YoLinkMQTTDevice(object):
         logging.debug('getTimeSinceUpdate')
         try:
 
-            utc_time = yolink.lastUpdate()
+            utc_time = int(yolink.lastUpdate()/1000) # reported in ms
 
             
             #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
