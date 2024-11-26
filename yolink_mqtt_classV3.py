@@ -477,7 +477,7 @@ class YoLinkMQTTDevice(object):
     def refreshState(yolink):
         logging.debug(str(yolink.type)+ ' - refreshState')
         yolink.refreshDevice()
-    '''
+    
     #@measure_time
     def getDataAll(yolink):
         try:
@@ -516,7 +516,6 @@ class YoLinkMQTTDevice(object):
         if 'online' in yolink.dataAPI:
             return(yolink.check_system_online())
         else:
-            while count 
             return(False)
 
     def onlineStatus(yolink):
