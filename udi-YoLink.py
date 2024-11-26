@@ -663,7 +663,7 @@ class YoLinkSetup (udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value':0, 'uom':25},
             {'driver': 'GV1', 'value':0, 'uom':25},
-            {'driver': 'TIME', 'value':99, 'uom':25},
+            {'driver': 'TIME', 'value':99, 'uom':44},
            ]
 
 
