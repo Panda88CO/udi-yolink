@@ -46,7 +46,7 @@ except ImportError:
 
 
 
-version = '1.3.2'
+version = '1.3.3'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver
