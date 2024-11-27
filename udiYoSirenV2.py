@@ -98,11 +98,11 @@ class udiYoSiren(udi_interface.Node):
         #    self.node.setDriver('GV2', 0, True, False)
 
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoSiren.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoSiren.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoSiren.getTimeSinceUpdate()/60))
+            self.my_setDriver('TIME', self.yoSiren.getTimeSinceUpdateMin(), 44)
             state =  self.yoSiren.getState()
             if self.yoSiren.online:
                 logging.debug('Siren state {}'.format(state))

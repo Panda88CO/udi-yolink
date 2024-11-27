@@ -151,12 +151,12 @@ class udiYoOutletPwr(udi_interface.Node):
             self.my_setDriver('GV8', 99)
 
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoOutlet.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
         logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoOutlet.getTimeSinceUpdate()/60))
+            self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
             if self.yoOutlet.online: 
                 #if  self.yoOutlet.online:
                 self.my_setDriver('ST',1)

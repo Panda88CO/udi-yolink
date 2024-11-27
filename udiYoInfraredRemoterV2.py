@@ -100,13 +100,13 @@ class udiYoInfraredRemoter(udi_interface.Node):
         else:
             return(99)
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoIRrem.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoIRrem.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):
         if self.node is not None:
             logging.debug('updateData - {}'.format(self.yoIRrem.online))
-            self.my_setDriver('TIME', int(self.yoIRrem.getTimeSinceUpdate()/60))
+            self.my_setDriver('TIME', self.yoIRrem.getTimeSinceUpdateMin(), 44)
 
         if  self.yoIRrem.online:
             self.my_setDriver('ST', 1)

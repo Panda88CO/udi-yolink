@@ -120,7 +120,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         self.yoCOSmokeSensor.refreshDevice()  
         
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoCOSmokeSensor.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoCOSmokeSensor.getTimeSinceUpdateMin(), 44)
  
 
 
@@ -130,7 +130,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoCOSmokeSensor.getTimeSinceUpdate()/60))
+            self.my_setDriver('TIME', self.yoCOSmokeSensor.getTimeSinceUpdateMin(), 44)
 
             if self.yoCOSmokeSensor.online:
                 smoke_alert =   self.yoCOSmokeSensor.alert_state('smoke')  

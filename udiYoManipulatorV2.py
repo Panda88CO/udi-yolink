@@ -116,12 +116,12 @@ class udiYoManipulator(udi_interface.Node):
         #    self.my_setDriver('GV2', 0)
 
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoManipulator.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoManipulator.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoManipulator.getTimeSinceUpdate()/60))
+            self.my_setDriver('TIME', self.yoManipulator.getTimeSinceUpdateMin(), 44)
 
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:

@@ -118,12 +118,12 @@ class udiYoWaterMeterController(udi_interface.Node):
         #    self.my_setDriver('GV2', 0)
 
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoWaterCtrl.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoWaterCtrl.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoWaterCtrl.getTimeSinceUpdate()/60), 44)
+            self.my_setDriver('TIME', self.yoWaterCtrl.getTimeSinceUpdateMin(), 44)
             if self.yoWaterCtrl.online:
                 self.my_setDriver('ST', 1)
                 state =  self.yoWaterCtrl.getValveState()

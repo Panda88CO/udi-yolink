@@ -135,12 +135,12 @@ class udiYoDimmer(udi_interface.Node):
 
 
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoDimmer.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoDimmer.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoDimmer.getTimeSinceUpdate()/60))
+            self.my_setDriver('TIME', self.yoDimmer.getTimeSinceUpdateMin(), 44)
 
             state =  self.yoDimmer.getState().upper()
             if self.yoDimmer.online:

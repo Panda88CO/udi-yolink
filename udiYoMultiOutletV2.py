@@ -578,14 +578,14 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.updateData()
 
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoMultiOutlet.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
         outletStates =  self.yoMultiOutlet.getMultiOutStates()
 
         if self.node_fully_config:
             self.my_setDriver('ST',1)
-            self.my_setDriver('TIME', int(self.yoMultiOutlet.getTimeSinceUpdate()/60))
+            self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
 
             for outlet in range(0,self.nbrOutlets):
                 portName = 'port'+str(outlet)

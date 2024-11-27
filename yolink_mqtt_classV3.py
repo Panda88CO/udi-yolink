@@ -460,6 +460,14 @@ class YoLinkMQTTDevice(object):
         except Exception as e:
             logging.error(f'getDataTimestamp : {e}')
 
+    def getTimeSinceUpdateMin(yolink):
+        time_since = yolink.getTimeSinceUpdate():
+        if time_since:
+            return(int(time_since/60))
+        else:
+            return(None)
+
+            
     def getTimeSinceUpdate(yolink):
         logging.debug('getTimeSinceUpdate')
         try:
@@ -470,7 +478,8 @@ class YoLinkMQTTDevice(object):
             #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
             epoch_time = time.time()
             logging.debug(f'utc_time {utc_time}  epoch : {epoch_time}')
-            return(int((epoch_time-utc_time)))
+            return(int((epoch_time-utc_time)/60))
+
         except Exception as e:
             logging.error(f'getDataTimestamp : {e}')
             return(None)

@@ -118,11 +118,11 @@ class udiYoDoorSensor(udi_interface.Node):
 
 
     def updateLastTime(self):
-        self.my_setDriver('TIME', int(self.yoDoorSensor.getTimeSinceUpdate()/60))
+        self.my_setDriver('TIME', self.yoDoorSensor.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', int(self.yoDoorSensor.getTimeSinceUpdate()/60))
+            self.my_setDriver('TIME', self.yoDoorSensor.getTimeSinceUpdateMin(), 44)
             if self.yoDoorSensor.online:
                 doorstate = self.doorState()
                 if doorstate == 1:
