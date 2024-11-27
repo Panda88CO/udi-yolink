@@ -49,7 +49,7 @@ except ImportError:
 version = '1.3.3'
 
 class YoLinkSetup (udi_interface.Node):
-    from  udiYolinkLib import my_setDriver
+    from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  
         
@@ -105,13 +105,6 @@ class YoLinkSetup (udi_interface.Node):
         self.nodeDefineDone = True
 
 
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
 
 
 
