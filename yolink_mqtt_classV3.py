@@ -461,13 +461,13 @@ class YoLinkMQTTDevice(object):
             logging.error(f'getDataTimestamp : {e}')
 
     def getTimeSinceUpdateMin(yolink):
-        time_since = yolink.getTimeSinceUpdate():
+        time_since = yolink.getTimeSinceUpdate()
         if time_since:
             return(int(time_since/60))
         else:
             return(None)
 
-            
+
     def getTimeSinceUpdate(yolink):
         logging.debug('getTimeSinceUpdate')
         try:
