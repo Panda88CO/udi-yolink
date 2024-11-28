@@ -218,17 +218,25 @@ class YoLinkMQTTDevice(object):
             return(yolink.dataAPI[yolink.dData]['stateChangedAt'])
         elif 'lastStateTime' in yolink.dataAPI:
             logging.debug('lastUpdate lastStateTime {}'.format(yolink.dataAPI['lastStateTime' ]))
-            return(yolink.dataAPI['lastStateTime'] )
+            if yolink.dataAPI['lastStateTime'] is not {}:
+                return(yolink.dataAPI['lastStateTime'] )
+            else:
+                return(0)
         elif yolink.lastUpd in yolink.dataAPI:
             logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
-            return(yolink.dataAPI[yolink.lastUpd ])       
+            if yolink.dataAPI[yolink.lastUpd ] is not {}:
+                return(yolink.dataAPI[yolink.lastUpd ])
+            else:
+                return(0)            
         elif 'reportAt' in yolink.dataAPI:
             timestamp = yolink.dataAPI['reportAt']
             dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
+            
             logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
             return(dt.timestamp()*1000) # make in ms
         elif 'time'in  yolink.dataAPI:
             logging.debug('lastUpdate time {}'.format(yolink.dataAPI['time']))
+
             return(yolink.dataAPI['time'])
         else:
             return(0)
@@ -453,9 +461,8 @@ class YoLinkMQTTDevice(object):
             logging.error(f'getDataTimestamp : {e}')
 
     def getTimeSinceUpdateMin(yolink):
-        logging.debug('getTimeSinceUpdateMin')
         time_since = yolink.getTimeSinceUpdate()
-        logging.debug(F'getTimeSinceUpdateMin {int(time_since/60)}')
+        logging.debug(f'getTimeSinceUpdateMin {time_since}')
         if time_since:
             return(int(time_since/60))
         else:
