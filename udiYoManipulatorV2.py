@@ -122,7 +122,6 @@ class udiYoManipulator(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             self.my_setDriver('TIME', self.yoManipulator.getTimeSinceUpdateMin(), 44)
-
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
                 if state.upper() == 'OPEN':

@@ -217,26 +217,18 @@ class YoLinkMQTTDevice(object):
             logging.debug('lastUpdate stateChangedAt {}'.format(yolink.dataAPI[yolink.dData]['stateChangedAt']))
             return(yolink.dataAPI[yolink.dData]['stateChangedAt'])
         elif 'lastStateTime' in yolink.dataAPI:
-            logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI['lastStateTime' ]))
-            if yolink.dataAPI['lastStateTime'] is not {}:
-                return(yolink.dataAPI['lastStateTime'] )
-            else:
-                return(0)
+            logging.debug('lastUpdate lastStateTime {}'.format(yolink.dataAPI['lastStateTime' ]))
+            return(yolink.dataAPI['lastStateTime'] )
         elif yolink.lastUpd in yolink.dataAPI:
             logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
-            if yolink.dataAPI[yolink.lastUpd ] is not {}:
-                return(yolink.dataAPI[yolink.lastUpd ])
-            else:
-                return(0)            
+            return(yolink.dataAPI[yolink.lastUpd ])       
         elif 'reportAt' in yolink.dataAPI:
             timestamp = yolink.dataAPI['reportAt']
             dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
-            
             logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
             return(dt.timestamp()*1000) # make in ms
         elif 'time'in  yolink.dataAPI:
             logging.debug('lastUpdate time {}'.format(yolink.dataAPI['time']))
-
             return(yolink.dataAPI['time'])
         else:
             return(0)
@@ -461,7 +453,9 @@ class YoLinkMQTTDevice(object):
             logging.error(f'getDataTimestamp : {e}')
 
     def getTimeSinceUpdateMin(yolink):
+        logging.debug('getTimeSinceUpdateMin')
         time_since = yolink.getTimeSinceUpdate()
+        logging.debug(F'getTimeSinceUpdateMin {int(time_since/60)}')
         if time_since:
             return(int(time_since/60))
         else:
@@ -476,12 +470,12 @@ class YoLinkMQTTDevice(object):
 
             
             #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
-            epoch_time = time.time()
-            logging.debug(f'utc_time {utc_time}  epoch : {epoch_time}')
-            return(int(epoch_time-utc_time))
+            epoch_time = int(time.time())
+            logging.debug(f'utc_time {utc_time}  epoch : {epoch_time} - diff: {int(epoch_time-utc_time)}')
+            return(epoch_time-utc_time)
 
         except Exception as e:
-            logging.error(f'getDataTimestamp : {e}')
+            logging.error(f'Exception getDataTimestamp : {e}')
             return(None)
 
 
