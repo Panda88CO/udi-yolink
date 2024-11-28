@@ -463,7 +463,7 @@ class YoLinkMQTTDevice(object):
     def getTimeSinceUpdateMin(yolink):
         time_since = yolink.getTimeSinceUpdate()
         logging.debug(f'getTimeSinceUpdateMin {time_since}')
-        if time_since:
+        if time_since != None:
             return(int(time_since/60))
         else:
             return(None)
