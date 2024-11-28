@@ -478,7 +478,7 @@ class YoLinkMQTTDevice(object):
             #datetime.strptime(reportAtStr, "%Y-%m-%dT%H:%M:%S.%fZ")
             epoch_time = time.time()
             logging.debug(f'utc_time {utc_time}  epoch : {epoch_time}')
-            return(int((epoch_time-utc_time)/60))
+            return(int(epoch_time-utc_time))
 
         except Exception as e:
             logging.error(f'getDataTimestamp : {e}')
