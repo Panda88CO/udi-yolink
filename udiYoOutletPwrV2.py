@@ -178,7 +178,7 @@ class udiYoOutletPwr(udi_interface.Node):
                 if tmp != None:
                     power = round(tmp['power']/1000,3)
                     kwatt = round(tmp['watt']/1000,3)
-                    self.my_setDriver('GV3', power, 33)
+                    self.my_setDriver('GV3', power, 30)
                     self.my_setDriver('GV4', kwatt, 33)
                 else:
                     self.my_setDriver('GV3', 0, 33)
