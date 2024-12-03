@@ -374,6 +374,8 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
+   
    <nodeDef id="yomultiout" nls="nlsmultiout">
       <editors />
       <sts>
