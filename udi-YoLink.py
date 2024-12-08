@@ -46,7 +46,7 @@ except ImportError:
 
 
 
-version = '1.3.4'
+version = '1.3.5'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
@@ -194,12 +194,12 @@ class YoLinkSetup (udi_interface.Node):
                 nodename = str(dev['deviceId'][-14:])
                 address = self.poly.getValidAddress(nodename)
                 model = str(dev['modelName'][:6])
-                if address in self.Parameters:
-                    name = self.Parameters[address]
-                else:
-                    name = dev['name']
-                    name = self.poly.getValidName(name)
-                    self.Parameters[address] =  dev['name']
+                #if address in self.Parameters:
+                #    name = self.Parameters[address]
+                #else:
+                name = dev['name']
+                name = self.poly.getValidName(name)                
+                self.Parameters[address] =  dev['name']
 
                 logging.info('adding/checking device : {} - {}'.format(dev['name'], dev['type']))
                 if dev['type'] == 'Hub':     
@@ -444,7 +444,10 @@ class YoLinkSetup (udi_interface.Node):
             logging.debug('Scanning db for extra nodes : {}'.format(node))
             if node['primaryNode'] not in self.assigned_addresses:
                 logging.debug('Removing node : {} {}'.format(node['name'], node))
+                if node['address'] in self.Parameters:
+                    del self.Parameters[node['address']]
                 self.poly.delNode(node['address'])
+
         time.sleep(1)
         # checking params for erassed nodes
         self.poly.updateProfile()
