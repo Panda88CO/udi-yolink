@@ -21,7 +21,7 @@ from yolinkOutletV2 import YoLinkOutl
 
 
 class udiYoOutletPwr(udi_interface.Node):
-    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, mask2key
+    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, mask2key
     id = 'yooutletPwr'
     '''
        drivers = [
@@ -185,8 +185,8 @@ class udiYoOutletPwr(udi_interface.Node):
                     self.my_setDriver('GV4', 0, 33)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
-                    self.my_setDriver('GV1', 0, True, False)
-                    self.my_setDriver('GV2', 0, True, False)
+                    self.my_setDriver('GV1', 0)
+                    self.my_setDriver('GV2', 0)
                 if self.yoOutlet.suspended:
                     self.my_setDriver('GV20', 1)
                 else:
@@ -223,11 +223,11 @@ class udiYoOutletPwr(udi_interface.Node):
             if 'ch' in timeRemaining[delayInfo]:
                 if timeRemaining[delayInfo]['ch'] == 1:
                     if 'on' in timeRemaining[delayInfo]:
-                        self.my_setDriver('GV1', timeRemaining[delayInfo]['on'], True, False)
+                        self.my_setDriver('GV1', timeRemaining[delayInfo]['on'])
                         if max_delay < timeRemaining[delayInfo]['on']:
                             max_delay = timeRemaining[delayInfo]['on']
                     if 'off' in timeRemaining[delayInfo]:
-                        self.my_setDriver('GV2', timeRemaining[delayInfo]['off'], True, False)
+                        self.my_setDriver('GV2', timeRemaining[delayInfo]['off'])
                         if max_delay < timeRemaining[delayInfo]['off']:
                             max_delay = timeRemaining[delayInfo]['off']
         self.timer_expires = time.time()+max_delay

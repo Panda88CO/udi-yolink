@@ -21,7 +21,7 @@ from yolinkSwitchV2 import YoLinkSW
 from udiYoSmartRemoterV3 import udiRemoteKey
 
 class udiYoSwitchSec(udi_interface.Node):
-    from  udiYolinkLib import prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
     id = 'yoswitchsec'
 
     drivers = [
