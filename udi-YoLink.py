@@ -445,6 +445,7 @@ class YoLinkSetup (udi_interface.Node):
             if node['primaryNode'] not in self.assigned_addresses:
                 logging.debug('Removing node : {} {}'.format(node['name'], node))
                 if node['address'] in self.Parameters:
+                    logging.debug(f'self.Parameters {self.Parameters}')
                     del self.Parameters[node['address']]
                 self.poly.delNode(node['address'])
 
