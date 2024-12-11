@@ -447,8 +447,8 @@ class YoLinkSetup (udi_interface.Node):
 
                 if node['address'] in self.Parameters:
                     logging.debug(f'self.Parameters {self.Parameters}')
-                    logging.debug(f'node {node['address']}')
-                    logging.debug(f'Params {self.Parameters[node['address']]}')
+                    logging.debug('node {}'.format(node['address']))
+                    logging.debug('Params {}'.format(self.Parameters[node['address']]))
                     del self.Parameters[node['address']]
                 self.poly.delNode(node['address'])
 
