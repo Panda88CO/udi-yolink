@@ -198,7 +198,7 @@ class YoLinkSetup (udi_interface.Node):
                 #    name = self.Parameters[address]
                 #else:
                 name = dev['name']
-                name = self.poly.getValidName(name)                
+                name = self.poly.getValidName(name)
                 self.Parameters[address] =  dev['name']
 
                 logging.info('adding/checking device : {} - {}'.format(dev['name'], dev['type']))
@@ -444,8 +444,11 @@ class YoLinkSetup (udi_interface.Node):
             logging.debug('Scanning db for extra nodes : {}'.format(node))
             if node['primaryNode'] not in self.assigned_addresses:
                 logging.debug('Removing node : {} {}'.format(node['name'], node))
+
                 if node['address'] in self.Parameters:
                     logging.debug(f'self.Parameters {self.Parameters}')
+                    logging.debug(f'node {node['address']}')
+                    logging.debug(f'Params {self.Parameters[node['address']]}')
                     del self.Parameters[node['address']]
                 self.poly.delNode(node['address'])
 
