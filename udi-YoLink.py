@@ -449,7 +449,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.debug(f'self.Parameters {self.Parameters}')
                     logging.debug('node {}'.format(node['address']))
                     logging.debug('Params {}'.format(self.Parameters[node['address']]))
-                    self.Parameters.pop([node['address']])
+                    self.Parameters.pop(node['address'])
                 self.poly.delNode(node['address'])
 
         time.sleep(1)
