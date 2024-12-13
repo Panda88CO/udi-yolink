@@ -142,7 +142,6 @@ class udiYoWaterDept(udi_interface.Node):
                     logging.debug(f'alarms {alarms}')
                     if 'low' in alarms:
                         self.my_setDriver('GV3', self.bool2ISY(alarms['low']))
-                    
                         self.my_setDriver('GV4', self.bool2ISY(alarms['high']))
                         self.my_setDriver('GV5', self.bool2ISY(alarms['error']))
 

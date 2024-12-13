@@ -76,6 +76,12 @@ class udiYoTHsensor(udi_interface.Node):
         self.node_ready = False
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.cmd_state = self.retrieve_cmd_state()
+        model = str(self.devInfo['modelName'][:6])
+        if model in ['YS8017', 'YS8014', 'YS8004', 'US8008']:
+            self.meas_support = ['temp']
+        else:
+            self.meas_support = ['temp', 'hum']
+        self.alarm_state = False
         #self.address = address
         #self.poly = polyglot
 
@@ -108,6 +114,7 @@ class udiYoTHsensor(udi_interface.Node):
         time.sleep(1)
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.node_ready = True
+        self.alarm_state = self.get_alarms_state()
         #self.my_setDriver('ST', 1)
 
     def initNode(self):
@@ -131,11 +138,27 @@ class udiYoTHsensor(udi_interface.Node):
     def updateLastTime(self):
         self.my_setDriver('TIME', self.yoTHsensor.getTimeSinceUpdateMin(), 44)
 
+    def get_alarms_state (self):
+        alarm_on = False
+        alarms = self.yoTHsensor.getAlarms()
+        for a_type in alarms:
+            if alarms[a_type]:
+                alarm_on = True
+        return(alarm_on)
+                
 
     def updateData(self):
         alarms = self.yoTHsensor.getAlarms()
         limits = self.yoTHsensor.getLimits()
-        
+
+        alarm_det = self.get_alarms_state()
+        if alarm_det != self.alarm_state:
+            if alarm_det and self.cmd_state in [0,1]:
+                self.node.reportCmd('DON')
+            if not alarm_det and self.cmd_state in [0,2]:  
+                self.node.reportCmd('DOF')
+            self.alarm_state = alarm_det
+            
         if self.node is not None:
             self.my_setDriver('TIME', self.yoTHsensor.getTimeSinceUpdateMin(), 44)
 
@@ -158,18 +181,28 @@ class udiYoTHsensor(udi_interface.Node):
                         self.my_setDriver('GV11', round(limits['tempLimit']['max']+273.15,1),  26)    
                 else:
                     self.my_setDriver('CLITEMP', 99, 25)
+
                 self.my_setDriver('GV1', self.yoTHsensor.bool2Nbr(alarms['lowTemp']))
                 self.my_setDriver('GV2', self.yoTHsensor.bool2Nbr(alarms['highTemp']))
-                self.my_setDriver('CLIHUM', self.yoTHsensor.getHumidityValue())
-                if 'humidityLimit' in limits:
-                        self.my_setDriver('GV12', limits['humidityLimit']['min'])
-                        self.my_setDriver('GV13', limits['humidityLimit']['max'])
-                self.my_setDriver('GV4', self.yoTHsensor.bool2Nbr(alarms['lowHumidity']))
-                self.my_setDriver('GV5', self.yoTHsensor.bool2Nbr(alarms['highHumidity']))
+                if 'hum' in self.meas_support:
+                    self.my_setDriver('CLIHUM', self.yoTHsensor.getHumidityValue())
+                    if 'humidityLimit' in limits:
+                            self.my_setDriver('GV12', limits['humidityLimit']['min'])
+                            self.my_setDriver('GV13', limits['humidityLimit']['max'])
+                    self.my_setDriver('GV4', self.yoTHsensor.bool2Nbr(alarms['lowHumidity']))
+                    self.my_setDriver('GV5', self.yoTHsensor.bool2Nbr(alarms['highHumidity']))
+                else:
+                    self.my_setDriver('CLIHUM', 98, 25)
+                    self.my_setDriver('GV12', 98, 25)
+                    self.my_setDriver('GV13', 98, 25)
+                    self.my_setDriver('GV4', 98, 25)
+                    self.my_setDriver('GV5', 98, 25)
+
                 self.my_setDriver('BATLVL', self.yoTHsensor.getBattery())
                 self.my_setDriver('GV7', self.yoTHsensor.bool2Nbr(alarms['lowBattery']))
-                self.my_setDriver('GV8', self.state2Nbr(self.yoTHsensor.getState()))
+                self.my_setDriver('GV8', self.yoTHsensor.bool2Nbr(self.alarm_state))
                 self.my_setDriver('GV9', self.cmd_state)
+   
 
                 self.my_setDriver('ST', 1)
 
