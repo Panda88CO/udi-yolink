@@ -8,7 +8,7 @@
             "name": "udi-YoLink",
             "type": "debugpy",
             "request": "launch",
-            "program": "dui-YoLink.py",
+            "program": "udi-YoLink.py",
             "console": "integratedTerminal"
         }
     ]
