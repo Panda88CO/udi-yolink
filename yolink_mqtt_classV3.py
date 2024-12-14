@@ -1388,6 +1388,20 @@ class YoLinkMQTTDevice(object):
             logging.error('isControlEvent Exception: {}'.format(E))
             return(False)
 
+
+    def getNbrScheduleDefined(yolink):
+        try:
+            logging.debug('getNbrScheduleDefined : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule]))
+            nbr_sch = len(yolink.dataAPI[yolink.dData][yolink.dSchedule])
+            if nbr_sch == 0:
+                return (None)
+            else:
+                return(nbr_sch)
+
+        except Exception as e:
+            return(None) #No schedules exist
+        
+
     def getScheduleInfo(yolink, index):
         logging.debug(yolink.type + ' getScheduleInfo {} -- {}'.format( index, yolink.dataAPI))       
         indexS = str(index)

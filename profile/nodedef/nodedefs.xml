@@ -249,8 +249,10 @@
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
+         <st id="GV21" editor="stSec" />    
          <st id="GV17" editor="stHour" />      
-         <st id="GV18" editor="stMin" />    
+         <st id="GV18" editor="stMin" />   
+         <st id="GV22" editor="stSec" />             
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
@@ -271,12 +273,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd > -->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -290,8 +292,10 @@
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV21" />             
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="offS" editor="stSecI" init="GV22" />                  
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -344,12 +348,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     

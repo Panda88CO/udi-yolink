@@ -251,7 +251,6 @@ def update_schedule_data(self, sch_info, selected_schedule):
                 found = True
                 return(found)
         return(found)
-
     if sch_info:
         if 'ch' in sch_info:
             self.my_setDriver('GV12', int(sch_info['ch']))

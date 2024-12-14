@@ -363,6 +363,11 @@ CMDP-waterHighAlarm-NAME = High Water Alarm (0-1000)
 wl_state-99 = Unknown
 wl_state-98 = Updating (may take up to 1 hour)
 
+nosupport-0 = No Support
+nosupport-98 = No Support
+nosupport-99 = Unknown
+
+
 ready-0 = Initializing
 ready-1 = Ready
 
@@ -374,10 +379,8 @@ outport-3 = port4
 sch_active-0 = Disabled
 sch_active-1 = Active
 sch_active-2 = Not Defined
+sch_active-98 = No Schedules
 sch_active-99 = Unknown
-
-nosupport-0 = Not Supported
-nosupport-99 = Unknown
 
 pwrmode-0 = Ext Supply
 pwrmode-1 = Battery
@@ -570,6 +573,7 @@ batlevel-99 = Unknown
 
 alarm-0 = No Alarm (normal)
 alarm-1 = Alarm
+alarm-98 = No Support 
 alarm-99 = Unknown 
 
 alert-0 = Normal
@@ -635,6 +639,7 @@ sch_indexM-6 = Schedule 6
 sch_indexM-7 = Schedule 7
 sch_indexM-8 = Schedule 8
 sch_indexM-9 = Schedule 9
+sch_indexM-98 = No Schedules
 sch_indexM-99 = Unknown
 
 
@@ -644,7 +649,8 @@ sch_indexS-2 = Schedule 2
 sch_indexS-3 = Schedule 3
 sch_indexS-4 = Schedule 4
 sch_indexS-5 = Schedule 5
-sch_indexM-99 = Unknown
+sch_indexS-98 = No Schedules
+sch_indexS-99 = Unknown
 
 
 bindays-0 =   Not defined

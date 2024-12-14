@@ -247,8 +247,8 @@ class udiYoSubOutlet(udi_interface.Node):
 
     commands = {
                 'SWCTRL'   : switchControl, 
-                'ONDELAY'  : prepOnDelay,
-                'OFFDELAY' : prepOffDelay,
+                #'ONDELAY'  : prepOnDelay,
+                #'OFFDELAY' : prepOffDelay,
                 'DELAY_CTRL'    : program_delays, 
                 'UPDATE'   : update,
                 'QUERY'    : update,

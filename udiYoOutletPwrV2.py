@@ -44,22 +44,21 @@ class udiYoOutletPwr(udi_interface.Node):
             {'driver': 'GV7', 'value': 99, 'uom': 25},
             {'driver': 'GV8', 'value': 99, 'uom': 25},
 
-
-
-
-
-
-
             {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
             {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
+            {'driver': 'GV21', 'value': 99, 'uom': 25}, #start Sec            
             {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
             {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
+                                        
+            {'driver': 'GV22', 'value': 99, 'uom': 25}, #stop Sec
+                        
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25},            
             {'driver': 'GV20', 'value': 99, 'uom': 25},              
             {'driver': 'TIME', 'value': 0, 'uom': 44},
+
             ]
 
 
@@ -79,7 +78,12 @@ class udiYoOutletPwr(udi_interface.Node):
         self.timer_expires = 0
         self.onDelay = 0
         self.offDelay = 0
-        self.schedule_selected = 0
+        self.schedule_selected = None
+        model = str(self.devInfo['modelName'][:6])
+        if model in ['YS6602', 'YS6803']:
+            self.meas_support = ['pwr']
+        else:
+            self.meas_support = []
 
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
@@ -103,6 +107,7 @@ class udiYoOutletPwr(udi_interface.Node):
         time.sleep(2)
         self.yoOutlet.initNode()
         time.sleep(2)
+
         self.yoOutlet.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         self.yoOutlet.refreshSchedules()
         self.node_ready = True
@@ -121,13 +126,17 @@ class udiYoOutletPwr(udi_interface.Node):
         #if time.time() >= self.timer_expires - self.timer_update:
         #    self.my_setDriver('GV1', 0, True, False)
         #    self.my_setDriver('GV2', 0, True, False)
-        self.schedule_selected
+
+
+    def supportPower(self):
+        return('pwr' in self.meas_support)
 
     def updateAlerts(self):
 
-        temp = self.yoOutlet.getAlertInfo()
+       
         logging.debug('self.getAlerts {}'.format(temp))
-        if temp:
+        if self.supportPower():
+            temp = self.yoOutlet.getAlertInfo()
             if 'overload' in temp:
                 self.my_setDriver('GV5', self.bool2ISY(temp['overload']))
             else:
@@ -145,10 +154,10 @@ class udiYoOutletPwr(udi_interface.Node):
             else:
                 self.my_setDriver('GV8', 99)
         else:
-            self.my_setDriver('GV5', 99)
-            self.my_setDriver('GV6', 99)
-            self.my_setDriver('GV7', 99)
-            self.my_setDriver('GV8', 99)
+            self.my_setDriver('GV5', 98)
+            self.my_setDriver('GV6', 98)
+            self.my_setDriver('GV7', 98)
+            self.my_setDriver('GV8', 98)
 
     def updateLastTime(self):
         self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
@@ -172,17 +181,17 @@ class udiYoOutletPwr(udi_interface.Node):
                 #else:
                 #    self.my_setDriver('GV0', 99)
                 self.last_state = state           
-                
-                tmp =  self.yoOutlet.getEnergy()
-                self.updateAlerts()
-                if tmp != None:
-                    power = round(tmp['power']/10000,3)
-                    kwatt = round(tmp['watt']/10000,3)
-                    self.my_setDriver('GV3', power, 30)
-                    self.my_setDriver('GV4', kwatt, 33)
+                self.updateAlerts()                
+                if self.supportPower():
+                    tmp =  self.yoOutlet.getEnergy()
+                    if tmp != None:
+                        power = round(tmp['power']/10000,3) # reports 1/10W
+                        energy = round(tmp['watt']/10000,3) # reports 1/10Wh
+                        self.my_setDriver('GV3', power, 30)
+                        self.my_setDriver('GV4', energy, 33)
                 else:
-                    self.my_setDriver('GV3', 0, 30)
-                    self.my_setDriver('GV4', 0, 33)
+                    self.my_setDriver('GV3', 98)
+                    self.my_setDriver('GV4', 98)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)
@@ -337,8 +346,8 @@ class udiYoOutletPwr(udi_interface.Node):
                 'DON'           : set_outlet_on,
                 'DOF'           : set_outlet_off,
                 'SWCTRL'        : outletControl, 
-                'ONDELAY'       : prepOnDelay,
-                'OFFDELAY'      : prepOffDelay,
+                #'ONDELAY'       : prepOnDelay,
+                #'OFFDELAY'      : prepOffDelay,
                 'DELAY_CTRL'    : program_delays, 
                 'LOOKUP_SCH'    : lookup_schedule,
                 'DEFINE_SCH'    : define_schedule,

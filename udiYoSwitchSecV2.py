@@ -33,10 +33,10 @@ class udiYoSwitchSec(udi_interface.Node):
         {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
         {'driver': 'GV15', 'value': 99, 'uom': 25}, #On Hour
         {'driver': 'GV16', 'value': 99, 'uom': 25}, #On Min
-        {'driver': 'GV10', 'value': 99, 'uom': 25}, #onSec
+        {'driver': 'GV21', 'value': 99, 'uom': 25}, #onSec
         {'driver': 'GV17', 'value': 99, 'uom': 25}, #off Hour                                              
         {'driver': 'GV18', 'value': 99, 'uom': 25}, #off Min
-        {'driver': 'GV11', 'value': 99, 'uom': 25}, #offSec            
+        {'driver': 'GV22', 'value': 99, 'uom': 25}, #offSec            
         {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
         {'driver': 'GV20', 'value': 99, 'uom': 25},                          
         {'driver': 'ST', 'value': 0, 'uom': 25},
@@ -182,8 +182,8 @@ class udiYoSwitchSec(udi_interface.Node):
                 #self.my_setDriver('GV2', 0)
                 self.my_setDriver('GV20', 2)
 
-                #self.my_setDriver('GV10', 99, 25)
-                #self.my_setDriver('GV11', 99, 25)
+                #self.my_setDriver('GV21', 99, 25)
+                #self.my_setDriver('GV22', 99, 25)
                 #self.my_setDriver('GV13', self.schedule_selected)
                 #self.my_setDriver('GV14', 99)
                 #self.my_setDriver('GV15', 99, 25)
