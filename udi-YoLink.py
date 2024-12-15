@@ -319,12 +319,12 @@ class YoLinkSetup (udi_interface.Node):
                         self.assigned_addresses.append(adr)                     
                             
                 elif dev['type'] == 'Outlet':     
-                    #if  model in ['YS6803','YS6602' ]:
-                    logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoOutletPwr(self.poly, address, address, name, self.yoAccess, dev )
-                    #else:
-                    #    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    #    temp = udiYoOutlet(self.poly, address, address, name, self.yoAccess, dev )
+                    if  model in ['YS6803','YS6602' ]:
+                        logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoOutletPwr(self.poly, address, address, name, self.yoAccess, dev )
+                    else:
+                        logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoOutlet(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)

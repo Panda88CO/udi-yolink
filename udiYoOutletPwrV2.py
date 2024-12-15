@@ -50,8 +50,7 @@ class udiYoOutletPwr(udi_interface.Node):
             {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
             {'driver': 'GV21', 'value': 99, 'uom': 25}, #start Sec            
             {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
-            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
-                                        
+            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min                                        
             {'driver': 'GV22', 'value': 99, 'uom': 25}, #stop Sec
                         
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days

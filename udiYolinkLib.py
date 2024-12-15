@@ -278,11 +278,11 @@ def update_schedule_data(self, sch_info, selected_schedule):
             if hour == 25:
                 self.my_setDriver('GV15', 98, 25)
                 self.my_setDriver('GV16', 98, 25)
-                self.my_setDriver('GV10', 98, 25)
+                self.my_setDriver('GV21', 98, 25)
             else:
                 self.my_setDriver('GV15', hour, 19)
                 self.my_setDriver('GV16', minute, 44)
-                self.my_setDriver('GV10', second, 57)
+                self.my_setDriver('GV21', second, 57)
 
         timestr = sch_info['off']
         logging.debug('timestr : {}'.format(timestr))
@@ -303,11 +303,11 @@ def update_schedule_data(self, sch_info, selected_schedule):
             if hour == 25:
                 self.my_setDriver('GV17', 98, 25)
                 self.my_setDriver('GV18', 98, 25)
-                self.my_setDriver('GV11', 98, 25)
+                self.my_setDriver('GV22', 98, 25)
             else:
                 self.my_setDriver('GV17', hour, 19)
                 self.my_setDriver('GV18', minute, 44)
-                self.my_setDriver('GV11', second, 57)
+                self.my_setDriver('GV22', second, 57)
         self.my_setDriver('GV19',  int(sch_info['week']))
 
     else:

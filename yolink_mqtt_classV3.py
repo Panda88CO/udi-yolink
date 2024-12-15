@@ -1400,7 +1400,13 @@ class YoLinkMQTTDevice(object):
 
         except Exception as e:
             return(None) #No schedules exist
-        
+    def schedule_support_sec(yolink):
+        logging.debug('schedule_support_sec') 
+        if 'supportSeconds' in yolink.dataAPI[yolink.dData][yolink.dSchedule]
+            return(yolink.dataAPI[yolink.dData][yolink.dSchedule]['supportSeconds'])
+        else:
+            return(False)
+        return()
 
     def getScheduleInfo(yolink, index):
         logging.debug(yolink.type + ' getScheduleInfo {} -- {}'.format( index, yolink.dataAPI))       
