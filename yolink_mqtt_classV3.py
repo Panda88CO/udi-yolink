@@ -78,6 +78,9 @@ class YoLinkMQTTDevice(object):
         yolink.dDelays = 'delays'
         yolink.dDelay = 'delay'
         yolink.messageTime = 'time'
+        yolink.scheduleSec = False
+
+
         yolink.forceStop = False
         yolink.eventSupport = False # Support adding to EventQueue
         yolink.disconnect = False
@@ -880,15 +883,21 @@ class YoLinkMQTTDevice(object):
     
     def getSchedules(yolink):
         logging.debug('{}- getSchedules: {}'.format(yolink.type, yolink.deviceInfo['name'] ))
+        if 'supportSeconds' in 
         yolink.refreshSchedules()
         while 'schedules' not in yolink.dataAPI[yolink.dData]:
             time.sleep(1)
             logging.debug('Waiting for schedules to be retrieved')
             
         #nbrSchedules  = len(yolink.dataAPI[yolink.dData])
+        if 'supportSeconds' in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
+            yolink.scheduleSec = yolink.dataAPI[yolink.dData][yolink.dSchedule]['supportSeconds' i]
+        else:
+            yolink.scheduleSec = False
+
         temp = {}
         yolink.scheduleList = []
-
+        if 'supportSeconds' in 
         for scheduleNbr in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
             temp[scheduleNbr] = {}
             for key in yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr]:
@@ -1400,6 +1409,7 @@ class YoLinkMQTTDevice(object):
 
         except Exception as e:
             return(None) #No schedules exist
+        
     def schedule_support_sec(yolink):
         logging.debug('schedule_support_sec') 
         if 'supportSeconds' in yolink.dataAPI[yolink.dData][yolink.dSchedule]
@@ -1415,7 +1425,10 @@ class YoLinkMQTTDevice(object):
             #logging.debug( 'getScheduleInfo 1 : {} '.format(yolink.dataAPI[yolink.dData]))
             #logging.debug( 'getScheduleInfo 2 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule]))
             #logging.debug( 'getScheduleInfo 3 : {} '.format(yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]))
-            
+            if 'supportSeconds' in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
+                yolink.scheduleSec = yolink.dataAPI[yolink.dData][yolink.dSchedule]['supportSeconds']
+            else:
+                yolink.scheduleSec = False
             if  indexS in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
                 sch = yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]
             else:
