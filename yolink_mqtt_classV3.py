@@ -883,7 +883,7 @@ class YoLinkMQTTDevice(object):
     
     def getSchedules(yolink):
         logging.debug('{}- getSchedules: {}'.format(yolink.type, yolink.deviceInfo['name'] ))
-        if 'supportSeconds' in 
+
         yolink.refreshSchedules()
         while 'schedules' not in yolink.dataAPI[yolink.dData]:
             time.sleep(1)
@@ -891,13 +891,13 @@ class YoLinkMQTTDevice(object):
             
         #nbrSchedules  = len(yolink.dataAPI[yolink.dData])
         if 'supportSeconds' in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
-            yolink.scheduleSec = yolink.dataAPI[yolink.dData][yolink.dSchedule]['supportSeconds' i]
+            yolink.scheduleSec = yolink.dataAPI[yolink.dData][yolink.dSchedule]['supportSeconds']
         else:
             yolink.scheduleSec = False
 
         temp = {}
         yolink.scheduleList = []
-        if 'supportSeconds' in 
+
         for scheduleNbr in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
             temp[scheduleNbr] = {}
             for key in yolink.dataAPI[yolink.dData][yolink.dSchedule][scheduleNbr]:
@@ -1412,7 +1412,7 @@ class YoLinkMQTTDevice(object):
         
     def schedule_support_sec(yolink):
         logging.debug('schedule_support_sec') 
-        if 'supportSeconds' in yolink.dataAPI[yolink.dData][yolink.dSchedule]
+        if 'supportSeconds' in yolink.dataAPI[yolink.dData][yolink.dSchedule]:
             return(yolink.dataAPI[yolink.dData][yolink.dSchedule]['supportSeconds'])
         else:
             return(False)
