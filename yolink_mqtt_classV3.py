@@ -1433,7 +1433,7 @@ class YoLinkMQTTDevice(object):
                 sch = yolink.dataAPI[yolink.dData][yolink.dSchedule][indexS]
             else:
                 sch = None
-            logging.debug(' retun {}'.format(sch) )
+            logging.debug(' return {}'.format(sch) )
             return(sch)
     
         except Exception as e:
