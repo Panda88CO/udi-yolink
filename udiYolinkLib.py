@@ -86,7 +86,7 @@ def my_setDriver(self, key, value, Unit=None):
             if Unit:
                 self.node.setDriver(key, value, True, True, Unit)
             else:
-                self.node.setDriver(key, value)
+                self.node.setDriver(key, value, True, True)
     except ValueError: #A non number was passed 
         self.node.setDriver(key, 99, True, True, 25)
         
