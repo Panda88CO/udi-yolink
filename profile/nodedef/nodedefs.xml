@@ -265,13 +265,13 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="swstate"  />               
-            <cmd id="DOF" editor="swstate"  />   
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />   
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
+            <cmd id="DON" editor="swstate" /> 
+            <cmd id="DOF" editor="swstate" /> 
             <cmd id="QUERY" /> 
 
 
@@ -451,14 +451,14 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="swstate"  />               
-            <cmd id="DOF" editor="swstate"  />    
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
       
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
+            <cmd id="DON" editor="swstate" /> 
+            <cmd id="DOF" editor="swstate" /> 
             <cmd id="QUERY" /> 
 
             <cmd id="SWCTRL" > 
@@ -486,13 +486,13 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="usbstate"  />               
-            <cmd id="DOF" editor="usbstate"  />     
+            <cmd id="DON"  />               
+            <cmd id="DOF" />     
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
+            <cmd id="DON" editor="usbstate"  /> 
+            <cmd id="DOF" editor="usbstate"  /> 
             <cmd id="QUERY" /> 
 
             <cmd id="USBCTRL" > 
@@ -524,13 +524,16 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />    
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  /> -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
+            <cmd id="DON" editor="manstate"/> 
+            <cmd id="DOF" editor="manstate"/> 
             <cmd id="QUERY" /> 
 
             <cmd id="MANCTRL" > 
@@ -591,8 +594,11 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />    
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />   -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -714,8 +720,11 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="motionstate"  />               
-            <cmd id="DOF" editor="motionstate"  /> 
+            <!--<cmd id="DON" editor="motionstate"  />               
+            <cmd id="DOF" editor="motionstate"  />  -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  /> 
+
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
@@ -745,8 +754,11 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="waterstate"  />               
-            <cmd id="DOF" editor="waterstate"  />    
+            <!--<cmd id="DON" editor="waterstate"  /> 
+            <cmd id="DOF" editor="waterstate"  />    -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
@@ -781,8 +793,11 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="deviceAlert"  />               
-            <cmd id="DOF" editor="deviceAlert"  />    
+            <!--<cmd id="DON" editor="deviceAlert"  /> 
+            <cmd id="DOF" editor="deviceAlert"  /> -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
@@ -810,8 +825,10 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="vibrastate"  />               
-            <cmd id="DOF" editor="vibrastate"  />    
+            <!--<cmd id="DON" editor="vibrastate"  />
+            <cmd id="DOF" editor="vibrastate"  /> -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
 
          </sends>
          <accepts>
@@ -887,8 +904,10 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />
+            <!--<cmd id="DON" editor="lock"  />               
+            <cmd id="DOF" editor="lock"  />    -->
          </sends>
          <accepts>
             <!-- <cmd id="DON" />
@@ -917,9 +936,13 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    
+            <!--<cmd id="DON" editor="lock"  />               
+            <cmd id="DOF" editor="lock"  />    -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         
          </sends>
+
          <accepts>
             <!-- <cmd id="DON" />
             <cmd id="DOF" />    -->

@@ -93,7 +93,8 @@ class udiYoLeakSensor(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoLeakSensor ')
         self.my_setDriver('ST', 0)
-        self.yoLeakSensor.shut_down()
+        if self.yoLeakSensor:
+            self.yoLeakSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)  
 

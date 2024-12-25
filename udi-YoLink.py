@@ -46,7 +46,7 @@ except ImportError:
 
 
 
-version = '1.3.9'
+version = '1.3.10'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
@@ -137,7 +137,7 @@ class YoLinkSetup (udi_interface.Node):
         #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'InfraredRemoter' ]
         #self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
         #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-        #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter',
+        #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
         #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
         #                        'WaterDepthSensor']
         
@@ -340,7 +340,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
             
-                elif dev['type'] == 'Finger':                   
+                elif dev['type'] in ['Finger']:                   
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoGarageFinger(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -349,7 +349,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                                                       
 
-                elif dev['type'] == 'Lock':        
+                elif dev['type'] in ['Lock', 'LockV2']:        
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                     
                     temp = udiYoLock(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:

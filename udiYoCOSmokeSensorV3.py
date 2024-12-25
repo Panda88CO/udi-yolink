@@ -111,7 +111,8 @@ class udiYoCOSmokeSensor(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoCOSmokeSensor ')
         self.node.setDriver('ST', 0)
-        self.yoCOSmokeSensor.shut_down()
+        if self.yoCOSmokeSensor:
+            self.yoCOSmokeSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)  
 
