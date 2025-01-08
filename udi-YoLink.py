@@ -141,7 +141,7 @@ class YoLinkSetup (udi_interface.Node):
         #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
         #                        'WaterDepthSensor']
         
-        self.supportedYoTypes = ['Outlet', 'THSensor']
+        self.supportedYoTypes = ['Outlet', 'THSensor' ]
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
@@ -205,7 +205,7 @@ class YoLinkSetup (udi_interface.Node):
                 if dev['type'] == 'Hub':     
                     logging.info('Hub not added - ISY cannot do anything useful with it')    
 
-                elif dev['type'] == 'SpeakerHub':
+                elif dev['type'] in ['SpeakerHub']:
 
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoSpeakerHub(self.poly, address, address, name,  self.yoAccess, dev )                    
@@ -242,7 +242,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)  
 
-                elif dev['type'] == 'Switch':
+                elif dev['type'] in ['Switch']:
                     if  model in ['YS5708', 'YS5709']:
                         logging.info('Adding swith2Button device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoSwitchSec(self.poly, address, address, name,  self.yoAccess, dev )
@@ -255,7 +255,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
 
-                elif dev['type'] == 'Dimmer':
+                elif dev['type'] in ['Dimmer']:
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoDimmer(self.poly, address, address, name,  self.yoAccess, dev )
                     while not temp.node_ready:
@@ -264,7 +264,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                    
 
-                elif dev['type'] == 'THSensor':      
+                elif dev['type'] in ['THSensor']:      
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoTHsensor(self.poly, address, address, name, self.yoAccess, dev)
                     while not temp.node_ready:
@@ -273,7 +273,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
           
-                elif dev['type'] == 'MultiOutlet':
+                elif dev['type'] in ['MultiOutlet']:
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoMultiOutlet(self.poly, address, address, name, self.yoAccess, dev)
                     while not temp.node_ready:
@@ -282,7 +282,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                     
                            
-                elif dev['type'] == 'DoorSensor':                 
+                elif dev['type'] in ['DoorSensor']:                 
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoDoorSensor(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -291,7 +291,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
                          
-                elif dev['type'] == 'Manipulator':              
+                elif dev['type'] in ['Manipulator']:              
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoManipulator(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -300,7 +300,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
                           
-                elif dev['type'] == 'MotionSensor':              
+                elif dev['type'] in ['MotionSensor']:              
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoMotionSensor(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -309,7 +309,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
 
-                elif dev['type'] == 'VibrationSensor':                    
+                elif dev['type'] in  ['VibrationSensor']:                    
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoVibrationSensor(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -318,7 +318,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                     
                             
-                elif dev['type'] == 'Outlet':     
+                elif dev['type'] in  ['Outlet']:     
                     if  model in ['YS6803','YS6602' ]:
                         logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoOutletPwr(self.poly, address, address, name, self.yoAccess, dev )
@@ -331,7 +331,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                      
             
-                elif dev['type'] == 'GarageDoor':                 
+                elif dev['type'] in ['GarageDoor']:                 
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoGarageDoor(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -367,7 +367,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)      
                                  
-                elif dev['type'] == 'LeakSensor':                 
+                elif dev['type'] in ['LeakSensor']:                 
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoLeakSensor(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -376,7 +376,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)     
 
-                elif dev['type'] == 'WaterDepthSensor':   #  YS7905-UC           
+                elif dev['type'] in ['WaterDepthSensor']:   #  YS7905-UC           
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoWaterDept(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -385,7 +385,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)     
 
-                elif dev['type'] == 'COSmokeSensor':                
+                elif dev['type'] in ['COSmokeSensor']:                
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoCOSmokeSensor(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -394,7 +394,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)       
 
-                elif dev['type'] == 'PowerFailureAlarm':                 
+                elif dev['type'] in ['PowerFailureAlarm']:                 
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoPowerFailSenor(self.poly, address, address, name, self.yoAccess, dev )
 
@@ -404,7 +404,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)                  
 
-                elif dev['type'] == 'SmartRemoter':                    
+                elif dev['type'] in ['SmartRemoter']:                    
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoSmartRemoter(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -413,7 +413,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
 
-                elif dev['type'] == 'Siren':                  
+                elif dev['type'] in ['Siren']:                  
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoSiren(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -422,7 +422,7 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
 
-                elif dev['type'] == 'WaterMeterController':                 
+                elif dev['type'] in ['WaterMeterController']:                 
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoWaterMeterController(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
@@ -492,7 +492,6 @@ class YoLinkSetup (udi_interface.Node):
     def display_update(self):
         logging.debug('display_update')
         self.updateEpochTime()
-
         for nde in self.yolink_nodes:
             if nde != 'setup':   # but not the controller node
                 self.yolink_nodes[nde].updateLastTime()
