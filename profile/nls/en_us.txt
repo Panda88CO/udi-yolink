@@ -226,10 +226,6 @@ ST-nlsleaksens-CLITEMP-NAME = Sensor Temperature
 ST-nlsleaksens-ST-NAME = Nodeserver Status
 ST-nlsleaksens-GV20-NAME = Connection State
 ST-nlsleaksens-TIME-NAME = Current Epoch Time (min)
-
-
-
-
 CMD-nlsleaksens-SETCMD-NAME = Select Command Action
 CMD-nlsleaksens-DON-NAME = Water Alert Detected
 CMD-nlsleaksens-DOF-NAME = Normal
