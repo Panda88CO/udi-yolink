@@ -16,7 +16,7 @@ from udiYoTHsensorV3 import udiYoTHsensor
 from udiYoWaterDeptV3 import udiYoWaterDept 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
-from udiYoMotionSensorV2 import udiYoMotionSensor
+from udiYoMotionSensorV3 import udiYoMotionSensor
 from udiYoLeakSensorV3 import udiYoLeakSensor
 from udiYoCOSmokeSensorV3 import udiYoCOSmokeSensor
 from udiYoDoorSensorV3 import udiYoDoorSensor
