@@ -16,7 +16,7 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-from yolinkLockV2 import YoLink_lock
+from yolinkLockV3 import YoLink_lock
 
 
 
