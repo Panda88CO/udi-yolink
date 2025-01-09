@@ -135,13 +135,13 @@ class YoLinkSetup (udi_interface.Node):
         #self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
         #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
         #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'InfraredRemoter' ]
-        #self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-        #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-        #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
-        #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-        #                        'WaterDepthSensor']
+        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+                                'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
+                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
+                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+                                'WaterDepthSensor']
         
-        self.supportedYoTypes = ['Outlet', 'THSensor' ]
+        #self.supportedYoTypes = ['Outlet', 'THSensor' ]
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
