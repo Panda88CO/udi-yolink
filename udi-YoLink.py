@@ -16,7 +16,7 @@ from udiYoTHsensorV3 import udiYoTHsensor
 from udiYoWaterDeptV3 import udiYoWaterDept 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
 from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
-from udiYoMotionSensorV3 import udiYoMotionSensor
+from udiYoMotionSensorV2 import udiYoMotionSensor
 from udiYoLeakSensorV3 import udiYoLeakSensor
 from udiYoCOSmokeSensorV3 import udiYoCOSmokeSensor
 from udiYoDoorSensorV3 import udiYoDoorSensor
@@ -46,7 +46,7 @@ except ImportError:
 
 
 
-version = '1.3.10'
+version = '1.3.11'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
