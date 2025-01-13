@@ -17,7 +17,7 @@ class YoLinkVibrationSen(YoLinkMQTTDevice):
         yolink.eventList = ['Alert' , 'getState', 'StatusChange']
         yolink.eventName = 'VibrationEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'VibrationSensor'
+        yolink.type = deviceInfo['type']
         #time.sleep(2)
        
     
