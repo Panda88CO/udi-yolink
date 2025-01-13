@@ -20,7 +20,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.ManipulatorName = 'WaterMeterControllerEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'WaterMeterController'
+        yolink.type = deviceInfo['type']
         yolink.MQTT_type = 'c'
         #time.sleep(1)
 

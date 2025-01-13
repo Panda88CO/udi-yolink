@@ -17,7 +17,7 @@ class YoLinkSmartRemote(YoLinkMQTTDevice):
         yolink.eventList = ['Alert' , 'getState', 'StatusChange']
         yolink.eventName = 'SmartRemoteEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'SmartRemoter'
+        yolink.type = deviceInfo['type']
         #time.sleep(2)
        
     

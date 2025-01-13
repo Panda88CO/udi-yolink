@@ -17,7 +17,7 @@ class YoLinkPowerFailSen(YoLinkMQTTDevice):
         yolink.eventList = ['Alert' , 'getState', 'StatusChange']
         yolink.eventName = 'PowerFailurerationEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'PowerFailureAlarm'
+        yolink.type = deviceInfo['type']
         #time.sleep(2)
        
     

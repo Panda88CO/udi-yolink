@@ -17,7 +17,7 @@ class YoLinkMotionSens(YoLinkMQTTDevice):
         yolink.eventList = ['Alert' , 'getState', 'StatusChange']
         yolink.eventName = 'MotionEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'MotionSensor'
+        yolink.type = deviceInfo['type']
         #time.sleep(2)
        
     '''

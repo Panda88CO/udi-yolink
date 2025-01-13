@@ -21,7 +21,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         yolink.stateList = []#['open', 'closed', 'on', 'off']
         yolink.ManipulatorName = 'IREvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'InfraredRemoter'
+        yolink.type = deviceInfo['type']
         yolink.learn_started = False
         yolink.nbr_codes = 0
         #time.sleep(2)

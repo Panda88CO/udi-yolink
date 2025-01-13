@@ -18,7 +18,7 @@ class YoLinkHu(YoLinkMQTTDevice):
         yolink.eventList = ['Report']
         yolink.HubName = 'HubEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'Hub'
+        yolink.type = deviceInfo['type']
         yolink.refreshHub()
   
     def refreshHub(yolink):

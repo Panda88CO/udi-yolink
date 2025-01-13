@@ -21,7 +21,7 @@ class YoLinkCOSmokeSen(YoLinkMQTTDevice):
         yolink.eventList = ['Report','Alert']
         yolink.waterName = 'WaterEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'COSmokeSensor'
+        yolink.type = deviceInfo['type']
         #time.sleep(1)
         #yolink.refreshSensor()
 

@@ -20,7 +20,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdates'   ]
         yolink.eventList = ['StatusChange', 'Report']
-        yolink.type = 'MultiOutlet'
+        yolink.type = deviceInfo['type']
         yolink.MQTT_class = 'c'
         yolink.last_set_data = None
         yolink.attempt = 0

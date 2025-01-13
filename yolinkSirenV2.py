@@ -19,7 +19,7 @@ class YoLinkSir(YoLinkMQTTDevice):
         yolink.stateList = ['normal', 'alert', 'off' ]
         yolink.SirenName = 'SirenEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'Siren'
+        yolink.type = deviceInfo['type']
         yolink.MQTT_type = 'c'
         #time.sleep(1)
 

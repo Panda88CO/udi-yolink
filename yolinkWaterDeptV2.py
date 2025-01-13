@@ -20,7 +20,7 @@ class YoLinkWaterDept(YoLinkMQTTDevice):
         #yolink.temperature = 'Temperature'
         #yolink.humidity = 'Humidity'
         yolink.eventTime = 'Time'
-        yolink.type = 'WaterDepthSensor'
+        yolink.type = deviceInfo['type']
         #time.sleep(2)
         yolink.alarmSettings = {'standby':None, 'interval':None, 'high':None, 'low':None}
 
