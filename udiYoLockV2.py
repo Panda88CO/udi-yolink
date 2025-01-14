@@ -46,7 +46,7 @@ class udiYoLock(udi_interface.Node):
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
 
-        logging.debug('udiYoOutlet INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoLock INIT- {}'.format(deviceInfo['name']))
         self.n_queue = []   
         
         self.yoAccess = yoAccess
@@ -72,7 +72,7 @@ class udiYoLock(udi_interface.Node):
 
 
     def start(self):
-        logging.info('start - YoLinkOutlet')
+        logging.info('start - YoLinkLock')
         self.yoLock  = YoLink_lock(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoLock.initNode()
@@ -81,7 +81,7 @@ class udiYoLock(udi_interface.Node):
 
 
     def stop (self):
-        logging.info('Stop udiYoOutlet')
+        logging.info('Stop udiYoLock')
         self.my_setDriver('ST', 0)
         self.yoLock.shut_down()
 
@@ -134,7 +134,7 @@ class udiYoLock(udi_interface.Node):
 
 
     def updateStatus(self, data):
-        logging.info('udiYoOutlet updateStatus')
+        logging.info('udiYoLock updateStatus')
         self.yoLock.updateStatus(data)
         self.updateData()
 
@@ -146,13 +146,13 @@ class udiYoLock(udi_interface.Node):
 
 
     def set_lock(self, command = None):
-        logging.info('udiYoOutlet set_lock')
+        logging.info('udiYoLock set_lock')
         self.yoLock.setState('LOCK')
         self.my_setDriver('GV0',1 )
         self.node.reportCmd('DON')
 
     def set_unlock(self, command = None):
-        logging.info('udiYoOutlet set_outlet_off')
+        logging.info('udiYoLock set_outlet_off')
         self.yoLock.setState('UNLOCK')
         self.my_setDriver('GV0',0 )
         self.node.reportCmd('DOF')
@@ -161,7 +161,7 @@ class udiYoLock(udi_interface.Node):
 
     def lockControl(self, command):
         ctrl = int(command.get('value'))   
-        logging.info('udiYoOutlet switchControl - {}'.format(ctrl))
+        logging.info('udiYoLock switchControl - {}'.format(ctrl))
         ctrl = int(command.get('value'))     
         if ctrl == 1:
             self.yoLock.setState('LOCK')

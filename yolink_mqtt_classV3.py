@@ -1187,7 +1187,7 @@ class YoLinkMQTTDevice(object):
                         #else:
                         #    yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                         if type(data[yolink.dData][yolink.dState]) is dict:
-                            #logging.debug('State is Dict: {} '.format(data[yolink.dData][yolink.dState]))
+                            logging.debug('State is Dict: {} '.format(data[yolink.dData][yolink.dState]))
                             for key in data[yolink.dData][yolink.dState]:
                                 if key == yolink.dDelay and yolink.type in yolink.delaySupport:
                                     temp = []
