@@ -58,7 +58,15 @@ class YoLink_lock(YoLinkMQTTDevice):
             yolink.doorBellRing = None
 
     def getDoorBellRing(yolink):
+        logging.debug('getDoorBellRing')
+        if yolink.doorBellRing == None:
+            return (99)
+         
         return(yolink.doorBellRing)
+
+    def getDoorState(yolink):
+        logging.debug('getDoorState')
+        return(yolink.getStateValue('door'))
 
     def setState(yolink, state):
         logging.debug(yolink.type + ' - setState')

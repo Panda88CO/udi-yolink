@@ -36,7 +36,7 @@ class udiYoLock(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25}, 
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV3', 'value': 98, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},
             {'driver': 'TIME', 'value': 0, 'uom': 44},            
@@ -117,6 +117,13 @@ class udiYoLock(udi_interface.Node):
                     self.my_setDriver('GV2', 0)
                 else:
                     self.my_setDriver('GV2', 1)
+                doorstate = self.yoLock.getDoorState()
+                if doorstate in ['closed']:
+                    self.my_setDriver('GV3', 0)
+                elif  doorstate in ['open']:
+                    self.my_setDriver('GV3', 1)
+                else:
+                    self.my_setDriver('GV3', 99)
                 self.my_setDriver('ST', 1)
                 if self.yoLock.suspended:
                     self.my_setDriver('GV20', 1)

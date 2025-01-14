@@ -536,6 +536,7 @@ lock-1 = Locked
 
 doorbell-0 = Idle
 doorbell-1 = Activated
+doorbell-99 = Unknown
 
 tempunit-0 = Celsius
 tempunit-1 = Fahrenheit

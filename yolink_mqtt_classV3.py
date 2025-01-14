@@ -344,7 +344,7 @@ class YoLinkMQTTDevice(object):
                     return(yolink.dataAPI[yolink.dData][yolink.dState][key])
                 else:
                     logging.debug('getDataStateValue NO MATCH - {} {}'.format(key, yolink.dataAPI[yolink.dData]))
-                    return(-1)
+                    return(99)
             else:
                 return(None )
         except Exception as E:
@@ -366,7 +366,7 @@ class YoLinkMQTTDevice(object):
             else:
                 yolink.online = False 
                 logging.debug('getValue NO MATCH - {} {}'.format(key, yolink.dataAPI[yolink.dData]))
-                return('NA')
+                return(99)
         except Exception as E:
             logging.debug('getData exceptiom: {}'.format(E) )
             return( )    
@@ -380,9 +380,9 @@ class YoLinkMQTTDevice(object):
             yolink.online = yolink.check_system_online()
             #logging.debug("getStateValue Online: {}".format(yolink.online))
             if yolink.online :
-                while key not in yolink.dataAPI[yolink.dData][yolink.dState] and count <3:
-                    time.sleep(1)
-                    count = count + 1
+                #while key not in yolink.dataAPI[yolink.dData][yolink.dState] and count <3:
+                #    time.sleep(1)
+                #    count = count + 1
                 #logging.debug('DEBUG getStateValue {}-{} : {}'.format(yolink.type, key, yolink.dataAPI[yolink.dData]))
                 if key in yolink.dataAPI[yolink.dData][yolink.dState]:
                     return(yolink.dataAPI[yolink.dData][yolink.dState][key])
@@ -420,7 +420,10 @@ class YoLinkMQTTDevice(object):
 
     #@measure_time
     def getBattery(yolink):
-        return(yolink.getStateValue('battery'))
+        bat = yolink.getStateValue('battery')
+        if bat == 99: # No battery under state
+            bat = yolink.getValue('battery')
+        return(bat)
     
 
     #@measure_time
