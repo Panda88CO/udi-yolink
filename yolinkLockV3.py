@@ -91,29 +91,23 @@ class YoLink_lock(YoLinkMQTTDevice):
         logging.debug(yolink.type+' - getState')
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:       
-            attempts = 0
-            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
-                time.sleep(1)
-                attempts = attempts + 1
-            if attempts <= 5 and yolink.dataAPI[yolink.dData][yolink.dState]:
-                if yolink.lock_type == 'LockV2':
-                    if  yolink.dataAPI[yolink.dData][yolink.dState]['state']['lock'] == 'locked':
-                        return('LOCK')
-                    elif yolink.dataAPI[yolink.dData][yolink.dState]['state']['lock']  == 'unlocked':
-                        return('UNLOCK')
-                    else:
-                        return('Unkown')              
+            if yolink.lock_type == 'LockV2':
+                if  yolink.dataAPI[yolink.dData][yolink.dState]['state']['lock'] == 'locked':
+                    return('LOCK')
+                elif yolink.dataAPI[yolink.dData][yolink.dState]['state']['lock']  == 'unlocked':
+                    return('UNLOCK')
                 else:
-                    if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'locked':
-                        return('LOCK')
-                    elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'unlocked':
-                        return('UNLOCK')
-                    else:
-                        return('Unkown')   
+                    return('Unkown')              
             else:
-                return('Unkown')
+                if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'locked':
+                    return('LOCK')
+                elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'unlocked':
+                    return('UNLOCK')
+                else:
+                    return('Unkown')   
         else:
             return('Unkown')
+
 
     def fetchState(yolink):
         logging.debug(yolink.type+' - fetchState')

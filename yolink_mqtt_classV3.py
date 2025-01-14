@@ -545,13 +545,11 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def Status(yolink, dataPacket):
         '''Status'''
+        logging.debug(f'Status : {dataPacket}')
         yolink.suspended= False
         if 'code' in dataPacket:
+            logging.debug('code selected')
             if dataPacket['code'] == '000000':
-                if yolink.dData in dataPacket:
-                    if 'online' in dataPacket[yolink.dData]:
-                      yolink.online = dataPacket[yolink.dData]['online']
-                else: #assume device is online as it is responding        
                     yolink.online = True
             elif dataPacket['code'].find('00020') == 0: # Offline
                 yolink.online = False
@@ -561,15 +559,17 @@ class YoLinkMQTTDevice(object):
                 time.sleep(1)
 
         elif 'event' in dataPacket:
+            logging.debug('event selected')
             if yolink.dData in dataPacket:
-                    if 'online' in dataPacket[yolink.dData]:
-                        yolink.online = dataPacket[yolink.dData]['online']
-                    else: #assume device is online as it is reporting   
-                        yolink.online = True
+                if 'online' in dataPacket[yolink.dData]:
+                    yolink.online = dataPacket[yolink.dData]['online']
+                else: #assume device is online as it is reporting   
+                    yolink.online = True
             else:
                 yolink.online = True
         else:
             yolink.online = False
+            logging.debug(f'OFFLINE STRANGE {dataPacket}')
         if not yolink.online:
             logging.debug('Status {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
         return(yolink.online)
@@ -638,46 +638,46 @@ class YoLinkMQTTDevice(object):
                     logging.error(yolink.type+ ': ' + data['desc'])
             elif 'event' in data:
                 #logging.debug('Event deteced')
-                yolink.online = yolink.Status(data)
+                yolink.online = True # Event generated so it must be online 
                 #yolink.online = True #
                 if '.StatusChange' in data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)              
                 elif '.Report' in data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)  
                 elif '.getState' in data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                        yolink.updateStatusData(data)  
                 elif '.setState' in data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)                      
                 elif '.getSchedules' in data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateScheduleStatus(data)   
                 elif '.setSchedules' in data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateScheduleStatus(data)   
                 elif '.Alert' in data['event']:         
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)  
                 elif '.StatusChange' in data['event']:         
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)                          
                 elif '.setDelay' in data['event']:         
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)     
                 elif '.openReminder' in data['event']:         
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
                 elif '.DataRecord' in  data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
                 elif '.powerReport' in  data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
                 elif '.DevEvent' in  data['event']:
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
                 elif '.setInitState' in  data['event']:
                         #yolink.updateStatusData(data)
@@ -685,11 +685,11 @@ class YoLinkMQTTDevice(object):
                         yolink.updateScheduleStatus(data)   
                 else:
                     logging.debug('Unsupported Event passed - trying anyway; {}'.format(data) )
-                    if int(data['time']) > int(yolink.getLastUpdate()):
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
                         '''
                         try:
-                            if int(data['time']) > int(yolink.getLastUpdate()) and data['data'] != {}:
+                            if int(data['time']) >= int(yolink.getLastUpdate()) and data['data'] != {}:
                                 if data['event'].find('chedule') >= 0 :
                                     yolink.updateScheduleStatus(data)    
                                 elif data['event'].find('ersion') >= 0 :
@@ -1443,7 +1443,7 @@ class YoLinkMQTTDevice(object):
     def updateScheduleStatus(yolink, data):
         logging.debug(yolink.type + ' updateScheduleStatus ;{}'.format(data))
         try:
-            yolink.setOnline(data)
+            #yolink.setOnline(data)
             #yolink.setNbrPorts(data)
             #yolink.updateLoraInfo(data)
             if yolink.dSchedule not in yolink.dataAPI[yolink.dData]:
