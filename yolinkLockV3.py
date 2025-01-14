@@ -89,12 +89,13 @@ class YoLink_lock(YoLinkMQTTDevice):
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
+        logging.debug(f'yolink.dataAPI {yolink.dataAPI}')
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:       
             if yolink.lock_type == 'LockV2':
-                if  yolink.dataAPI[yolink.dData][yolink.dState]['state']['lock'] == 'locked':
+                if  yolink.dataAPI[yolink.dData][yolink.dState]['lock'] == 'locked':
                     return('LOCK')
-                elif yolink.dataAPI[yolink.dData][yolink.dState]['state']['lock']  == 'unlocked':
+                elif yolink.dataAPI[yolink.dData][yolink.dState]['lock']  == 'unlocked':
                     return('UNLOCK')
                 else:
                     return('Unkown')              
