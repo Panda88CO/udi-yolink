@@ -113,10 +113,9 @@ class udiYoLock(udi_interface.Node):
                 self.last_state = state
                 battery = self.yoLock.getBattery()
                 self.my_setDriver('GV1', battery)
-                if None == self.yoLock.getDoorBellRing():
-                    self.my_setDriver('GV2', 0)
-                else:
-                    self.my_setDriver('GV2', 1)
+                
+                self.my_setDriver('GV2', self.bool2ISY(self.yoLock.getDoorBellRing()))
+
                 doorstate = self.yoLock.getDoorState()
                 if doorstate in ['closed']:
                     self.my_setDriver('GV3', 0)

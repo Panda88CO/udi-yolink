@@ -262,6 +262,7 @@ ND-yolock-ICON = DoorLock
 ST-nlslock-GV0-NAME = Lock State
 ST-nlslock-GV1-NAME = Battery Level
 ST-nlslock-GV2-NAME = Doorbell Active
+ST-nlslock-GV3-NAME = Door State
 CMD-nlslock-LOCK-NAME = Lock Lock
 CMD-nlslock-UNLOCK-NAME = Unlock Lock
 CMD-nlslock-LOCKCTRL-NAME = Set Lock

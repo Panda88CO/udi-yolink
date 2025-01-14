@@ -21,6 +21,7 @@ class YoLink_lock(YoLinkMQTTDevice):
         yolink.eventTime = 'Time'
         yolink.type = deviceInfo['type']
         yolink.MQTT_type = 'c'
+        yolink.alertType = ModuleNotFoundError
         yolink.doorBellRing = False
         yolink.lock_type = deviceInfo['type']
         #time.sleep(2)
@@ -52,17 +53,19 @@ class YoLink_lock(YoLinkMQTTDevice):
         yolink.updateCallbackStatus(data, False)
         if 'event' in data:
             if '.Alert' in data['event']:
-                if 'alertType' in data['data']:
-                    yolink.doorBellRing = data['data']['alertType']
+                if 'alert' in data['data']:
+                    if ['type'] in  data['data']['alert']
+                        yolink.alertType = data['data']['alert']['type']
         else:
-            yolink.doorBellRing = None
+            yolink.alertType = None
 
     def getDoorBellRing(yolink):
         logging.debug('getDoorBellRing')
-        if yolink.doorBellRing == None:
+        if yolink.alertType == None:
             return (99)
-         
-        return(yolink.doorBellRing)
+        else:
+            return(yolink.alertType =='DoorBell')
+
 
     def getDoorState(yolink):
         logging.debug('getDoorState')
