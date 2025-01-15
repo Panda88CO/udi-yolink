@@ -109,7 +109,7 @@ class udiYoOutlet(udi_interface.Node):
         #if time.time() >= self.timer_expires - self.timer_update:
         #    self.my_setDriver('GV1', 0)
         #    self.my_setDriver('GV2', 0)
-        self.schedule_selected
+        #self.schedule_selected
 
     def updateLastTime(self):
         self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)

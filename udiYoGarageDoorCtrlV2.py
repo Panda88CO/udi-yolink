@@ -92,7 +92,8 @@ class udiYoGarageDoor(udi_interface.Node):
         pass
 
     def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoDoorControl.getTimeSinceUpdateMin(), 44)
+        pass
+        #self.my_setDriver('TIME', self.yoDoorControl.getTimeSinceUpdateMin(), 44)
 
     
     def stop (self):
