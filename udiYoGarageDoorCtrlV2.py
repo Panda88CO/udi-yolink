@@ -90,6 +90,10 @@ class udiYoGarageDoor(udi_interface.Node):
         
     def checkDataUpdate(self):
         pass
+
+    def updateLastTime(self):
+        self.my_setDriver('TIME', self.yoDoorControl.getTimeSinceUpdateMin(), 44)
+
     
     def stop (self):
         logging.info('Stop udiYoGarageDoor')
