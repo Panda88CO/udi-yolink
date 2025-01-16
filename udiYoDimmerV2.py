@@ -72,6 +72,7 @@ class udiYoDimmer(udi_interface.Node):
         self.offDelay = 0
         self.schedule_selected = 0
         self.brightness = 50
+        self.previous_level = self.brightness
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -97,6 +98,7 @@ class udiYoDimmer(udi_interface.Node):
         time.sleep(2)
         self.yoDimmer.initNode()
         time.sleep(2)
+        self.previous_level = self.yoDimmer.brightness
         #self.my_setDriver('ST', 1)
         self.yoDimmer.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
         self.yoDimmer.refreshSchedules()
@@ -159,6 +161,11 @@ class udiYoDimmer(udi_interface.Node):
                     self.my_setDriver('GV0', 99)
                 self.last_state = state
                 self.my_setDriver('GV3', self.yoDimmer.brightness)
+                if self.yoDimmer.brightness >= self.previous_level + 3:
+                    self.node.reportCmd('BRT')
+                if self.yoDimmer.brightness >= self.previous_level - 3:
+                    self.node.reportCmd('DIM')
+                self.previous_level = self.yoDimmer.brightness
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)
@@ -169,17 +176,8 @@ class udiYoDimmer(udi_interface.Node):
                     self.my_setDriver('GV20', 0)
             else:
                 self.my_setDriver('ST', 0)
-                #self.my_setDriver('GV0', 99)
-                #self.my_setDriver('GV1', 0)
-                #self.my_setDriver('GV2', 0)
                 self.my_setDriver('GV20', 2)
-                #self.my_setDriver('GV13', self.schedule_selected)
-                #self.my_setDriver('GV14', 99)
-                #self.my_setDriver('GV15', 99, 25)
-                #self.my_setDriver('GV16', 99, 25)
-                #self.my_setDriver('GV17', 99, 25)
-                #self.my_setDriver('GV18', 99, 25)            
-                #self.my_setDriver('GV19', 0)       
+
 
 
             sch_info = self.yoDimmer.getScheduleInfo(self.schedule_selected)
@@ -213,6 +211,23 @@ class udiYoDimmer(udi_interface.Node):
         self.yoDimmer.setState('OFF')
         self.my_setDriver('GV0',0 )
         self.node.reportCmd('DFOF')
+
+
+    def increase_level(self, command = None):
+        logging.info('udiYoDimmer increase_level') 
+        self.yoDimmer.brightness += 3
+        self.yoDimmer.setBrightness(self.yoDimmer.brightness)  
+        self.my_setDriver('GV3', self.yoDimmer.brightness)
+        #self.my_setDriver('GV0',0 )
+        #self.node.reportCmd('DFOF')
+
+    def decrease_level(self, command = None):
+        logging.info('udiYoDimmer decrease_level')
+        self.yoDimmer.brightness -= 3
+        self.yoDimmer.setBrightness(self.yoDimmer.brightness) 
+        self.my_setDriver('GV3', self.yoDimmer.brightness)
+        #self.my_setDriver('GV0',0 )
+        #self.node.reportCmd('DFOF')
 
 
 
@@ -320,6 +335,8 @@ class udiYoDimmer(udi_interface.Node):
                 'LOOKUP_SCH'    : lookup_schedule,
                 'DEFINE_SCH'    : define_schedule,
                 'CTRL_SCH'      : control_schedule,
+                'BRT'           : increase_level,
+                'DIM'           : decrease_level,
                 }
 
 

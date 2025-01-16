@@ -189,7 +189,9 @@
             <cmd id="DON"  />               
             <cmd id="DOF"  />
             <cmd id="DFON"  />               
-            <cmd id="DFOF"  />    
+            <cmd id="DFOF"  />   
+            <cmd id="BRT"  />                
+            <cmd id="DIM"  />               
          </sends>
 
          <accepts>
@@ -198,6 +200,8 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
+            <cmd id="BRT"  /> 
+            <cmd id="DIM"  />
             <cmd id="QUERY" /> 
             <cmd id="DIMLVL" > 
                <p id="" editor="dimlvl" init="GV3" /> 
