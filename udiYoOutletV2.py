@@ -106,10 +106,7 @@ class udiYoOutlet(udi_interface.Node):
     def checkDataUpdate(self):
         #if self.yoOutlet.data_updated():
         self.updateData()
-        #if time.time() >= self.timer_expires - self.timer_update:
-        #    self.my_setDriver('GV1', 0)
-        #    self.my_setDriver('GV2', 0)
-        #self.schedule_selected
+
 
     def updateLastTime(self):
         self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
@@ -124,14 +121,10 @@ class udiYoOutlet(udi_interface.Node):
                 state = str(self.yoOutlet.getState()).upper()
                 if state == 'ON':
                     self.my_setDriver('GV0',1)
-                    #if self.last_state != state:
-                    #    self.node.reportCmd('DON')  
+
                 elif state == 'OFF' :
                     self.my_setDriver('GV0', 0)
-                    #if self.last_state != state:
-                    #    self.node.reportCmd('DOF')  
-                #else:
-                #    self.my_setDriver('GV0', 99)
+
                 self.last_state = state                
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
@@ -142,21 +135,9 @@ class udiYoOutlet(udi_interface.Node):
                 else:
                     self.my_setDriver('GV20', 0)
         else:
-            #self.my_setDriver('GV0', 99)
-            #self.my_setDriver('GV1', 0)
-            #self.my_setDriver('GV2', 0)
-
             self.my_setDriver('ST',0)
             self.my_setDriver('GV20', 2)
-            #self.my_setDriver('GV13', self.schedule_selected)
-            #self.my_setDriver('GV14', 99)
-            #self.my_setDriver('GV15', 99, 25)
-            #self.my_setDriver('GV16', 99, 25)
-            #self.my_setDriver('GV17', 99, 25)
-            #self.my_setDriver('GV18', 99, 25)            
-            #self.my_setDriver('GV19', 0)       
 
-   
             sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
             self.update_schedule_data(sch_info, self.schedule_selected)
                

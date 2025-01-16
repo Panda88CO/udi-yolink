@@ -567,8 +567,6 @@ class udiYoMultiOutlet(udi_interface.Node):
         logging.info('Stop udiYoMultiOutlet ')
         self.my_setDriver('ST', 0)
         self.yoMultiOutlet.shut_down()
-        #if self.node:
-        #    self.poly.delNode(self.node.address)
 
     def checkOnline(self):
         self.yoMultiOutlet.refreshDevice() 
@@ -592,11 +590,12 @@ class udiYoMultiOutlet(udi_interface.Node):
             for outlet in range(0,self.nbrOutlets):
                 portName = 'port'+str(outlet)
                 state = 99
-                if self.yoMultiOutlet.online:                    
-                    if outletStates[portName]['state'] == 'open':
-                        state = 1
-                    elif outletStates[portName]['state'] == 'closed':
-                        state = 0
+                if self.yoMultiOutlet.online:   
+                    if 'state' in outletStates[portName]:
+                        if outletStates[portName]['state'] == 'open':
+                            state = 1
+                        elif outletStates[portName]['state'] == 'closed':
+                            state = 0
                 if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
                     if 'on' in outletStates[portName]['delays']:
                         onDelay = outletStates[portName]['delays']['on']*60
@@ -623,41 +622,24 @@ class udiYoMultiOutlet(udi_interface.Node):
                     state = 99
                 self.subUsb[usb].updateUsbNode(state)
         else:
-            #self.my_setDriver('GV0', 99)
-            #self.my_setDriver('GV1', 0)
-            #self.my_setDriver('GV2', 0)
-            #self.my_setDriver('GV3', -1)
-            #self.my_setDriver('GV4', -1)
+
             self.my_setDriver('ST',0)
             self.my_setDriver('GV20', 2)
-            #self.my_setDriver('GV12', 99)
-            #self.my_setDriver('GV13', self.schedule_selected)
-            #self.my_setDriver('GV14', 99)
-            #self.my_setDriver('GV15', 99, 25)
-            #self.my_setDriver('GV16', 99, 25)
-            #self.my_setDriver('GV17', 99, 25)
-            #self.my_setDriver('GV18', 99, 25)            
-            #self.my_setDriver('GV19', 0)    
-            
-        sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_selected)
-        self.update_schedule_data(sch_info, self.schedule_selected)
-            
+
         if not self.yoMultiOutlet.online:
             logging.error( '{} - not on line'.format(self.nodeName))
             #self.my_setDriver('ST', 0)
             self.my_setDriver('GV20', 2)
-            # if device is offline - it will report when back online, so no need to try again
-            #if self.yoMultiOutlet.get_nbr_attempts() < 3:
-            #    logging.debug ('Device not on-line retrying ')
-            #    time.sleep(10.1)
-            #    self.yoMultiOutlet.retry_send_data()
-            #    self.my_setDriver('GV20', 2)
         else:
             self.my_setDriver('ST', 1)
             if self.yoMultiOutlet.suspended:
                 self.my_setDriver('GV20', 1)
             else:
                 self.my_setDriver('GV20', 0)
+            
+        sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_selected)
+        self.update_schedule_data(sch_info, self.schedule_selected)
+            
 
 
 
@@ -679,12 +661,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.start()
             time.sleep(3)
 
-        #logging.debug('updateCallbackStatus - udiYoMultiOutlet')
-        #logging.debug(data)
-        #logging.debug('nbr ports {} , online {}'.format(self.nbrOutlets, self.yoMultiOutlet.online ))
-        #logging.debug('udiYoMultiOutlet - nbrOutlets: {}'.format(self.nbrOutlets))
-        #self.delaysActive = False
-        
+
 
 
     def lookup_schedule(self, command):
