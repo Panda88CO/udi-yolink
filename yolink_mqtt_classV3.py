@@ -221,13 +221,13 @@ class YoLinkMQTTDevice(object):
             return(yolink.dataAPI[yolink.dData]['stateChangedAt'])
         elif 'lastStateTime' in yolink.dataAPI:
             logging.debug('lastUpdate lastStateTime {}'.format(yolink.dataAPI['lastStateTime' ]))
-            if len(yolink.dataAPI['lastStateTime']) != 0:
+            if type(yolink.dataAPI['lastStateTime']) in [int, float]:
                 return(yolink.dataAPI['lastStateTime'] )
             else:
-                return(0)
+                return(0)        
         elif yolink.lastUpd in yolink.dataAPI:
             logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
-            if yolink.dataAPI[yolink.lastUpd ] is not None:
+            if type(yolink.dataAPI[yolink.lastUpd ]) in [int, float]:
                 return(yolink.dataAPI[yolink.lastUpd ])
             else:
                 return(0)            
