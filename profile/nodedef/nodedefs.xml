@@ -153,7 +153,7 @@
                <p id="onS" editor="stSecI" init="GV21" />                
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="onS" editor="stSecI" init="GV22" />                                    
+               <p id="offS" editor="stSecI" init="GV22" />                                    
              </cmd >
             <cmd id="CTRL_SCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
@@ -230,7 +230,7 @@
                <p id="onS" editor="stSecI" init="GV21" />                
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="onS" editor="stSecI" init="GV22" />                
+               <p id="offS" editor="stSecI" init="GV22" />                
                                        
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -374,7 +374,7 @@
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="offS" editor="stSecI" init="GV21" />                       
+               <p id="onS" editor="stSecI" init="GV21" />                       
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
                <p id="offS" editor="stSecI" init="GV22" />                       
@@ -424,7 +424,7 @@
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="offS" editor="stSecI" init="GV21"/>   
+               <p id="onS" editor="stSecI" init="GV21"/>   
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
                <p id="offS" editor="stSecI" init="GV22" />   
@@ -558,7 +558,7 @@
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="offS" editor="stSecI" init="GV21"/>   
+               <p id="onS" editor="stSecI" init="GV21"/>   
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
                <p id="offS" editor="stSecI" init="GV22" />   
