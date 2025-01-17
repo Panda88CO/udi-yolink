@@ -581,65 +581,69 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
-        outletStates =  self.yoMultiOutlet.getMultiOutStates()
-
-        if self.node_fully_config:
-            self.my_setDriver('ST',1)
-            self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
-
-            for outlet in range(0,self.nbrOutlets):
-                portName = 'port'+str(outlet)
-                state = 99
-                if self.yoMultiOutlet.online:   
-                    if 'state' in outletStates[portName]:
-                        if outletStates[portName]['state'] == 'open':
-                            state = 1
-                        elif outletStates[portName]['state'] == 'closed':
-                            state = 0
-                if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
-                    if 'on' in outletStates[portName]['delays']:
-                        onDelay = outletStates[portName]['delays']['on']*60
+        #outletStates =  self.yoMultiOutlet.getMultiOutStates()
+        try:
+            if self.node_fully_config:
+                outletStates =  self.yoMultiOutlet.getMultiOutStates()
+                self.my_setDriver('ST',1)
+                self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
+                logging.debug(f'outlet states {outletStates}')
+                for outlet in range(0,self.nbrOutlets):
+                    portName = 'port'+str(outlet)
+                    state = 99
+                    if self.yoMultiOutlet.online: 
+                        if portName in outletStates:  
+                            if 'state' in outletStates[portName]:
+                                if outletStates[portName]['state'] == 'open':
+                                    state = 1
+                                elif outletStates[portName]['state'] == 'closed':
+                                    state = 0
+                        
+                    if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
+                        if 'on' in outletStates[portName]['delays']:
+                            onDelay = outletStates[portName]['delays']['on']*60
+                        else:
+                            onDelay = 0
+                        if 'off' in outletStates[portName]['delays']:
+                            offDelay = outletStates[portName]['delays']['off']*60
+                        else:
+                            offDelay = 0
                     else:
                         onDelay = 0
-                    if 'off' in outletStates[portName]['delays']:
-                        offDelay = outletStates[portName]['delays']['off']*60
-                    else:
                         offDelay = 0
-                else:
-                    onDelay = 0
-                    offDelay = 0
-                logging.debug('Updating subnode {}: {} {} {}'.format(outlet, state, onDelay, offDelay))
-                self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
+                    logging.debug('Updating subnode {}: {} {} {}'.format(outlet, state, onDelay, offDelay))
+                    self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
 
-            for usb in range(0,self.nbrUsb):       
-                usbName = 'usb'+str(usb)
-                if self.yoMultiOutlet.online:
-                    if outletStates[usbName]['state'] == 'open':
-                        state = 1
-                    elif outletStates[usbName]['state'] == 'closed':
-                        state = 0
-                else:
-                    state = 99
-                self.subUsb[usb].updateUsbNode(state)
-        else:
-
-            self.my_setDriver('ST',0)
-            self.my_setDriver('GV20', 2)
-
-        if not self.yoMultiOutlet.online:
-            logging.error( '{} - not on line'.format(self.nodeName))
-            #self.my_setDriver('ST', 0)
-            self.my_setDriver('GV20', 2)
-        else:
-            self.my_setDriver('ST', 1)
-            if self.yoMultiOutlet.suspended:
-                self.my_setDriver('GV20', 1)
+                for usb in range(0,self.nbrUsb):       
+                    usbName = 'usb'+str(usb)
+                    if self.yoMultiOutlet.online:
+                        if outletStates[usbName]['state'] == 'open':
+                            state = 1
+                        elif outletStates[usbName]['state'] == 'closed':
+                            state = 0
+                    else:
+                        state = 99
+                    self.subUsb[usb].updateUsbNode(state)
             else:
-                self.my_setDriver('GV20', 0)
-            
-        sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_selected)
-        self.update_schedule_data(sch_info, self.schedule_selected)
-            
+
+                self.my_setDriver('ST',0)
+                self.my_setDriver('GV20', 2)
+
+            if not self.yoMultiOutlet.online:
+                logging.error( '{} - not on line'.format(self.nodeName))
+                #self.my_setDriver('ST', 0)
+                self.my_setDriver('GV20', 2)
+            else:
+                self.my_setDriver('ST', 1)
+                if self.yoMultiOutlet.suspended:
+                    self.my_setDriver('GV20', 1)
+                else:
+                    self.my_setDriver('GV20', 0)
+                
+            sch_info = self.yoMultiOutlet.getScheduleInfo(self.schedule_selected)
+            self.update_schedule_data(sch_info, self.schedule_selected)
+        except Exception as e:
+            logging.error(f'Exception: {e} ')     
 
 
 
