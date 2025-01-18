@@ -19,7 +19,7 @@ import math
 from yolinkSmartRemoterV2 import YoLinkSmartRemote
 
 class udiRemoteKey(udi_interface.Node):
-    from  udiYolinkLib import save_cmd_struct, retrieve_cmd_struct, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, save_cmd_struct, retrieve_cmd_struct, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'smremotekey'
     drivers = [
@@ -99,6 +99,9 @@ class udiRemoteKey(udi_interface.Node):
         pass #this is a sub node - main node reflects on line
 
     def checkDataUpdate(self):
+        pass
+
+    def updateLastTime(self):
         pass
 
     '''
@@ -341,7 +344,9 @@ class udiYoSmartRemoter(udi_interface.Node):
         else:
             return(int(round(math.log2(mask),0)))
 
-
+    def updateLastTime(self):
+        pass
+    
     def updateData(self):
         try:
             if self.node is not None:

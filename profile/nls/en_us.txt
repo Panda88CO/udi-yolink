@@ -1,10 +1,13 @@
 
 ND-setup-NAME = YoLink Setup
 ND-setup-ICON = GenericCtrl
-ST-nlssetup-ST-NAME = Nodeserver Status
+ST-nlssetup-GV1-NAME = Status
+ST-nlssetup-ST-NAME = Nodeserver 
+ST-nlssetup-TIME-NAME = Current Epoch Time (min)
 ST-nlssetup-GV20-NAME = Connection State
 CMD-nlssetup-DON-NAME = Heart Beat On
 CMD-nlssetup-DOF-NAME = Heart Beat Off
+CMD-nlssetup-EPOCHTIME-NAME = Update Time
 
 # common commands #############
 
@@ -13,6 +16,7 @@ ST-GV20-NAME = Connection State
 ST-BATLVL-NAME = Battery Level
 ST-CLITEMP-NAME = Sensor Temperature
 ST-CLIHUM-NAME = Current Rel Humidity (%)
+ST-TIME-NAME = Time since last update (min)
 
 CMD-DEFINE_SCH-NAME = Define Schedule
 CMD-CTRL_SCH-NAME = Set Schedule
@@ -47,8 +51,6 @@ CMDP-bindays-NAME = Active Days (Su|Mo|Tu|We|Th|Fr|Sa)
 # common commands #############
 
 
-
-
 # YoLink Switch
 ND-yoswitch-NAME = YoLink Switch
 ND-yoswitch-ICON = Switch
@@ -59,27 +61,27 @@ ST-nlsswitch-GV13-NAME = Schedule Index
 ST-nlsswitch-GV14-NAME = Activated
 ST-nlsswitch-GV15-NAME = On Hour
 ST-nlsswitch-GV16-NAME = On Minute
-ST-nlsswitch-GV10-NAME = On Sec
+ST-nlsswitch-GV21-NAME = On Sec
 ST-nlsswitch-GV17-NAME = Off Hour
 ST-nlsswitch-GV18-NAME = Off Minute
-ST-nlsswitch-GV11-NAME = Off Sec
+ST-nlsswitch-GV22-NAME = Off Sec
 ST-nlsswitch-GV19-NAME = Active Days
 
 ND-yoswitchsec-NAME = YoLink Switch
 ND-yoswitchsec-ICON = Switch
 
-#ST-yoswitchsec-GV0-NAME = Switch State
-#ST-yoswitchsec-GV1-NAME = On Delay (min)
-#ST-yoswitchsec-GV2-NAME = Off Delay (min)
-#ST-yoswitchsec-GV13-NAME = Schedule Index
-#ST-yoswitchsec-GV14-NAME = Activated
-#ST-yoswitchsec-GV15-NAME = On Hour
-#ST-yoswitchsec-GV16-NAME = On Minute
-#ST-yoswitchsec-GV10-NAME = On Sec
-#ST-yoswitchsec-GV17-NAME = Off Hour
-#ST-yoswitchsec-GV18-NAME = Off Minute
-#ST-yoswitchsec-GV11-NAME = Off Sec
-#ST-yoswitchsec-GV19-NAME = Active Days
+ST-yoswitchsec-GV0-NAME = Switch State
+ST-yoswitchsec-GV1-NAME = On Delay (min)
+ST-yoswitchsec-GV2-NAME = Off Delay (min)
+ST-yoswitchsec-GV13-NAME = Schedule Index
+ST-yoswitchsec-GV14-NAME = Activated
+ST-yoswitchsec-GV15-NAME = On Hour
+ST-yoswitchsec-GV16-NAME = On Minute
+ST-yoswitchsec-GV21-NAME = On Sec
+ST-yoswitchsec-GV17-NAME = Off Hour
+ST-yoswitchsec-GV18-NAME = Off Minute
+ST-yoswitchsec-GV22-NAME = Off Sec
+ST-yoswitchsec-GV19-NAME = Active Days
 
 
 CMD-nlsswitch-DON-NAME = Switch On
@@ -107,8 +109,10 @@ ST-nlsoutlet-GV13-NAME = Schedule Index
 ST-nlsoutlet-GV14-NAME = Activated
 ST-nlsoutlet-GV15-NAME = On Hour
 ST-nlsoutlet-GV16-NAME = On Minute
+ST-nlsoutlet-GV21-NAME = On Sec
 ST-nlsoutlet-GV17-NAME = Off Hour
 ST-nlsoutlet-GV18-NAME = Off Minute
+ST-nlsoutlet-GV22-NAME = Off Sec
 ST-nlsoutlet-GV19-NAME = Active Days
 
 CMD-nlsoutlet-DON-NAME = Switch On
@@ -125,8 +129,10 @@ ST-nlsmultiout-GV13-NAME = Schedule Index
 ST-nlsmultiout-GV14-NAME = Activated
 ST-nlsmultiout-GV15-NAME = On Hour
 ST-nlsmultiout-GV16-NAME = On Minute
+ST-nlsmultiout-GV21-NAME = On Sec
 ST-nlsmultiout-GV17-NAME = Off Hour
 ST-nlsmultiout-GV18-NAME = Off Minute
+ST-nlsmultiout-GV21-NAME = On Sec
 ST-nlsmultiout-GV19-NAME = Active Days
 CMDP-outport-NAME = Outlet Port
 
@@ -157,7 +163,15 @@ ST-nlsmanipu-GV0-NAME = Manipulator State
 ST-nlsmanipu-GV1-NAME = On Delay Remaining
 ST-nlsmanipu-GV2-NAME = Off Delay Remaining
 ST-nlsmanipu-BATLVL-NAME = Battery Level
-
+ST-nlsmanipu-GV13-NAME = Schedule Index
+ST-nlsmanipu-GV14-NAME = Activated
+ST-nlsmanipu-GV15-NAME = On Hour
+ST-nlsmanipu-GV16-NAME = On Minute
+ST-nlsmanipu-GV21-NAME = On Sec
+ST-nlsmanipu-GV17-NAME = Off Hour
+ST-nlsmanipu-GV18-NAME = Off Minute
+ST-nlsmanipu-GV21-NAME = On Sec
+ST-nlsmanipu-GV19-NAME = Active Days
 CMD-nlsmanipu-MANCTRL-NAME =  Switch control
 CMD-nlsmanipu-DON-NAME = Open
 CMD-nlsmanipu-DOF-NAME = Closed
@@ -208,6 +222,10 @@ ND-yoleaksens-ICON = Input
 ST-nlsleaksens-GV0-NAME = Water Sensor
 ST-nlsleaksens-GV1-NAME = Sensor Battery Level
 ST-nlsleaksens-GV2-NAME = Command Setting
+ST-nlsleaksens-CLITEMP-NAME = Sensor Temperature
+ST-nlsleaksens-ST-NAME = Nodeserver Status
+ST-nlsleaksens-GV20-NAME = Connection State
+ST-nlsleaksens-TIME-NAME = Current Epoch Time (min)
 CMD-nlsleaksens-SETCMD-NAME = Select Command Action
 CMD-nlsleaksens-DON-NAME = Water Alert Detected
 CMD-nlsleaksens-DOF-NAME = Normal
@@ -244,6 +262,7 @@ ND-yolock-ICON = DoorLock
 ST-nlslock-GV0-NAME = Lock State
 ST-nlslock-GV1-NAME = Battery Level
 ST-nlslock-GV2-NAME = Doorbell Active
+ST-nlslock-GV3-NAME = Door State
 CMD-nlslock-LOCK-NAME = Lock Lock
 CMD-nlslock-UNLOCK-NAME = Unlock Lock
 CMD-nlslock-LOCKCTRL-NAME = Set Lock
@@ -343,6 +362,32 @@ CMD-nlswatermeter-VALVECTRL-NAME = Control Valve
 #CMD-nlswatermeter-ONDELAY-NAME = Prepare on delay
 #CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
 
+ND-yowaterdept-NAME = YoLink Water Level Sensor
+ND-yowaterdept-ICON = Input
+ST-nlswaterdept-ST-NAME = Sensor Connection
+ST-nlswaterdept-GV0-NAME = Water Level (0-1000)
+ST-nlswaterdept-GV1-NAME = Low water Level Alarm setting
+ST-nlswaterdept-GV2-NAME = High water Level Alarm setting
+ST-nlswaterdept-GV3-NAME = Low Water Level
+ST-nlswaterdept-GV4-NAME = High Water Level
+ST-nlswaterdept-GV5-NAME = Sensor Error
+ST-nlswaterdept-BATLVL-NAME = Battery Level
+ST-nlswaterdept-TIME-NAME = Last Data Update (Epoch time min)
+CMD-nlswaterdept-SETATTR-NAME = Set water level alarms
+CMDP-waterLowAlarm-NAME = Low Water Alarm (0-1000)
+CMDP-waterHighAlarm-NAME = High Water Alarm (0-1000)
+
+wl_state-99 = Unknown
+wl_state-98 = Updating (may take up to 1 hour)
+
+nosupport-0 = No Support
+nosupport-98 = No Support
+nosupport-99 = Unknown
+
+
+ready-0 = Initializing
+ready-1 = Ready
+
 outport-0 = port1
 outport-1 = port2
 outport-2 = port3
@@ -351,10 +396,8 @@ outport-3 = port4
 sch_active-0 = Disabled
 sch_active-1 = Active
 sch_active-2 = Not Defined
+sch_active-98 = No Schedules
 sch_active-99 = Unknown
-
-nosupport-0 = Not Supported
-nosupport-99 = Unknown
 
 pwrmode-0 = Ext Supply
 pwrmode-1 = Battery
@@ -494,6 +537,7 @@ lock-1 = Locked
 
 doorbell-0 = Idle
 doorbell-1 = Activated
+doorbell-99 = Unknown
 
 tempunit-0 = Celsius
 tempunit-1 = Fahrenheit
@@ -523,6 +567,9 @@ vibration-99 = Unknown
 status-0 = Not Connected
 status-1 = Connected
 
+connect-0 = Off-line
+connect-1 = On-line
+
 swstate-0 = Off
 swstate-1 = On
 swstate-99 = Unknown
@@ -542,8 +589,9 @@ batlevel-4 = High
 batlevel-98 = Ext Power
 batlevel-99 = Unknown
 
-alarm-0 = Normal
+alarm-0 = No Alarm (normal)
 alarm-1 = Alarm
+alarm-98 = No Support 
 alarm-99 = Unknown 
 
 alert-0 = Normal
@@ -609,7 +657,7 @@ sch_indexM-6 = Schedule 6
 sch_indexM-7 = Schedule 7
 sch_indexM-8 = Schedule 8
 sch_indexM-9 = Schedule 9
-sch_indexM-99 = Unknown
+sch_indexM-99 = No Schedules
 
 
 sch_indexS-0 = Schedule 0
@@ -618,7 +666,7 @@ sch_indexS-2 = Schedule 2
 sch_indexS-3 = Schedule 3
 sch_indexS-4 = Schedule 4
 sch_indexS-5 = Schedule 5
-sch_indexM-99 = Unknown
+sch_indexS-99 = No Schedules
 
 
 bindays-0 =   Not defined
@@ -751,11 +799,11 @@ bindays-126 = xMTWTFS
 bindays-127 = SMTWTFS
 
 
+
+
 sphtts-0 = Mes1
 sphtts-1 = Mess2
 sphtts-2 = Messa3
 sphtts-3 = Messag4
 sphtts-4 = Message 5
 sphtts-5 = mes77
-
-

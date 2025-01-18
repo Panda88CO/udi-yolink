@@ -166,6 +166,7 @@ class YoLinkInitPAC(object):
     #####################################
     #@measure_time
     def getDeviceList(yoAccess):
+        logging.debug(f'Device list: {yoAccess.deviceList}')
         return(yoAccess.deviceList)
 
     '''
@@ -281,7 +282,7 @@ class YoLinkInitPAC(object):
             r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1, timeout=5) 
             info = r.json()
             yoAccess.deviceList = info['data']['devices']
-            logging.debug('device_list : {}'.format(yoAccess.deviceList))
+            logging.debug('yoAccess.deviceList : {}'.format(yoAccess.deviceList))
         except Exception as e:
             logging.error('Exception  -  retrieve_device_list : {}'.format(e))             
 
@@ -307,8 +308,8 @@ class YoLinkInitPAC(object):
             logging.error('Exception  - retrieve_homeID: {}'.format(e))    
 
     #@measure_time
-    def getDeviceList (yoAccess):
-        return(yoAccess.deviceList)
+    #def getDeviceList (yoAccess):
+    #    return(yoAccess.deviceList)
 
     #@measure_time
     def shut_down(yoAccess):

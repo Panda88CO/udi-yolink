@@ -21,7 +21,7 @@ import time
 from yolinkSpeakerHubV3 import YoLinkSpeakerH
 
 class udiYoSpeakerHub(udi_interface.Node):
-  
+    from  udiYolinkLib import my_setDriver
     id = 'yospeakerh'
     drivers = [
             {'driver': 'GV0', 'value': 5, 'uom': 107}, 
@@ -31,7 +31,7 @@ class udiYoSpeakerHub(udi_interface.Node):
             {'driver': 'GV4', 'value': 0, 'uom': 25}, 
             {'driver': 'GV5', 'value': 0, 'uom': 107},        
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25}, 
             ]
     '''
@@ -85,7 +85,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoSpeakerHub')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoSpeakerHub  = YoLinkSpeakerH(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoSpeakerHub.volume = 5
@@ -97,7 +97,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.yoSpeakerHub.setMessageNbr(self.messageNbr )
         self.yoSpeakerHub.initNode()
         self.node_ready = True
-        #self.node.setDriver('ST', 1, True, True)
+        #self.my_setDriver('ST', 1)
         #time.sleep(3)
 
  
@@ -121,7 +121,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoSpeakerHub')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoSpeakerHub.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -133,25 +133,27 @@ class udiYoSpeakerHub(udi_interface.Node):
         if self.yoSpeakerHub.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        pass
 
     def updateData(self):
         if self.node is not None:
             #state =  self.yoSpeakerHub.getState().upper()
             if self.yoSpeakerHub.online:
-                self.node.setDriver('GV0', self.yoSpeakerHub.volume)
-                self.node.setDriver('GV1', self.bool2nbr(self.yoSpeakerHub.beepEnabled))
-                self.node.setDriver('GV2', self.bool2nbr(self.yoSpeakerHub.mute))
-                self.node.setDriver('GV3', self.tone2nbr(self.yoSpeakerHub.tone))
-                self.node.setDriver('GV4', self.messageNbr)
-                self.node.setDriver('GV5', self.yoSpeakerHub.repeat)
-                self.node.setDriver('ST', 1)
+                self.my_setDriver('GV0', self.yoSpeakerHub.volume)
+                self.my_setDriver('GV1', self.bool2nbr(self.yoSpeakerHub.beepEnabled))
+                self.my_setDriver('GV2', self.bool2nbr(self.yoSpeakerHub.mute))
+                self.my_setDriver('GV3', self.tone2nbr(self.yoSpeakerHub.tone))
+                self.my_setDriver('GV4', self.messageNbr)
+                self.my_setDriver('GV5', self.yoSpeakerHub.repeat)
+                self.my_setDriver('ST', 1)
                 if self.yoSpeakerHub.suspended:
-                    self.node.setDriver('GV20', 1)
+                    self.my_setDriver('GV20', 1)
                 else:
-                     self.node.setDriver('GV20', 0)
+                     self.my_setDriver('GV20', 0)
             else:
-                #self.node.setDriver('ST', 0, True, True)
-                self.node.setDriver('GV20', 2)
+                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV20', 2)
                 #self.pollDelays()
 
 
@@ -177,7 +179,7 @@ class udiYoSpeakerHub(udi_interface.Node):
     def setTone(self, command ):
         logging.info('udiYoSpeakerHub setTone')
         tone =int(command.get('value'))
-        self.node.setDriver('GV3', tone, True, True)
+        self.my_setDriver('GV3', tone )
         if tone == 0:
             self.yoSpeakerHub.setTone('none')
         elif tone == 1:
@@ -193,13 +195,13 @@ class udiYoSpeakerHub(udi_interface.Node):
     def setRepeat(self, command):
         logging.info('udiYoSpeakerHub setRepeat')
         self.repeat =int(command.get('value'))
-        self.node.setDriver('GV5', self.repeat, True, True)
+        self.my_setDriver('GV5', self.repeat )
         self.yoSpeakerHub.setRepeat(self.repeat)
 
     def setMute(self, command):
         logging.info('udiYoSpeakerHub setMute')
         self.mute = int(command.get('value'))
-        self.node.setDriver('GV2', self.mute, True, True)
+        self.my_setDriver('GV2', self.mute )
         if self.mute == 1:
             self.yoSpeakerHub.setMute(True)
         else:
@@ -208,7 +210,7 @@ class udiYoSpeakerHub(udi_interface.Node):
     def setBeepEnable(self, command):
         logging.info('udiYoSpeakerHub setBeepEnable')
         self.beepEn =int(command.get('value'))
-        self.node.setDriver('GV1', self.beepEn, True, True)
+        self.my_setDriver('GV1', self.beepEn )
         if self.beepEn == 1:
             self.yoSpeakerHub.setBeepEnable(True)
         else:
@@ -218,13 +220,13 @@ class udiYoSpeakerHub(udi_interface.Node):
         logging.info('udiYoSpeakerHub setVolume')
         volume =int(command.get('value'))
         self.yoSpeakerHub.volume = volume
-        self.node.setDriver('GV0',self.yoSpeakerHub.volume , True, True)
+        self.my_setDriver('GV0',self.yoSpeakerHub.volume )
         self.yoSpeakerHub.setVolume(self.yoSpeakerHub.volume )
 
     def setMessage(self, command):
         logging.info('udiYoSpeakerHub setMessage')
         self.messageNbr =int(command.get('value'))
-        self.node.setDriver('GV4',self.messageNbr, True, True)
+        self.my_setDriver('GV4',self.messageNbr )
         self.yoSpeakerHub.setMessageNbr(self.messageNbr )
         logging.info('udiYoSpeakerHub setMessage {} {}'.format(self.messageNbr, self.yoAccess.TtsMessages[self.messageNbr]))
 

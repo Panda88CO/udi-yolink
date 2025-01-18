@@ -20,7 +20,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdates'   ]
         yolink.eventList = ['StatusChange', 'Report']
-        yolink.type = 'MultiOutlet'
+        yolink.type = deviceInfo['type']
         yolink.MQTT_class = 'c'
         yolink.last_set_data = None
         yolink.attempt = 0
@@ -273,28 +273,24 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
         states= {}
         temp = yolink.getInfoAPI()
         logging.debug(temp)
-
+        onDelay = 0
+        offDelay = 0
+        state = 0
         for usb in range (0,yolink.nbrUsb):
                 states['usb'+str(usb)]= {'state':temp['data']['state'][usb]}
         delays = yolink.extDelayTimer.timeRemaining()      
         for outlet in range(0, yolink.nbrOutlets):      
             state = temp['data']['state'][outlet + yolink.nbrUsb]
-            found = False
-            for indx in range(0, len(delays)):
-                if delays[indx]['ch'] == outlet:
-                    found = True
-                   
-                    if 'on' in delays[indx]:
-                        onDelay = int(delays[indx]['on']/60)
+            for indx, delay in enumerate(delays):
+                if delay['ch'] == outlet:
+                    if 'on' in delay:
+                        onDelay = int(delay['on']/60)
                     else:
                         onDelay = 0
-                    if 'off' in delays[indx]:
-                        offDelay = int(delays[indx]['off']/60) 
+                    if 'off' in delay:
+                        offDelay = int(delay['off']/60) 
                     else:
                         offDelay = 0 
-            if not found:
-                onDelay = 0
-                offDelay = 0
             states['port'+str(outlet)]= {'state':state, 'delays':{'on':onDelay, 'off':offDelay}}
         return(states)
 

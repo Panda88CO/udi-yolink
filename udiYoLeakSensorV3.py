@@ -21,7 +21,7 @@ import time
 
 
 class udiYoLeakSensor(udi_interface.Node):
-    from  udiYolinkLib import save_cmd_state, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yoleaksens'
     
@@ -41,7 +41,8 @@ class udiYoLeakSensor(udi_interface.Node):
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},   
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'TIME', 'value': 0, 'uom': 44},
+
             ]
 
 
@@ -75,12 +76,12 @@ class udiYoLeakSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - YoLinkLeakSensor')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoLeakSensor  = YoLinkLeakSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoLeakSensor.initNode()
         self.node_ready = True
-        #self.node.setDriver('ST', 1, True, True)
+        #self.my_setDriver('ST', 1)
 
         #time.sleep(3)
     
@@ -91,8 +92,9 @@ class udiYoLeakSensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoLeakSensor ')
-        self.node.setDriver('ST', 0, True, True)
-        self.yoLeakSensor.shut_down()
+        self.my_setDriver('ST', 0)
+        if self.yoLeakSensor:
+            self.yoLeakSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)  
 
@@ -113,47 +115,53 @@ class udiYoLeakSensor(udi_interface.Node):
         if self.yoLeakSensor.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', self.yoLeakSensor.getTimeSinceUpdateMin(), 44)
+
+
     def updateData(self):
         if self.node is not None:
+            self.my_setDriver('TIME', self.yoLeakSensor.getTimeSinceUpdateMin(), 44)
+
             if self.yoLeakSensor.online:
                 waterState =   self.waterState()  
                 #logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
                 if waterState == 1:
-                    self.node.setDriver('GV0', 1, True, True)
+                    self.my_setDriver('GV0', 1)
                     if waterState != self.last_state:
                         if self.cmd_state in [0,1]:
                             self.node.reportCmd('DON')
                 elif waterState == 0:
-                    self.node.setDriver('GV0', 0, True, True)
+                    self.my_setDriver('GV0', 0)
                     if waterState != self.last_state:
                         if self.cmd_state in [0,2]:
                             self.node.reportCmd('DOF')
                 else:
-                    self.node.setDriver('GV0', 99, True, True)
+                    self.my_setDriver('GV0', 99)
                 self.last_state = waterState
-                self.node.setDriver('GV1', self.yoLeakSensor.getBattery(), True, True)
-                self.node.setDriver('GV2', self.cmd_state)
-                self.node.setDriver('ST', 1)
+                self.my_setDriver('GV1', self.yoLeakSensor.getBattery())
+                self.my_setDriver('GV2', self.cmd_state)
+                self.my_setDriver('ST', 1)
                 devTemp =  self.yoLeakSensor.getDeviceTemperature()
                 if devTemp != 'NA':
                     if self.temp_unit == 0:
-                        self.node.setDriver('CLITEMP', round(devTemp,0), True, True, 4)
+                        self.my_setDriver('CLITEMP', round(devTemp,0), 4)
                     elif self.temp_unit == 1:
-                        self.node.setDriver('CLITEMP', round(devTemp*9/5+32,0), True, True, 17)
-                    elif self.temp_unit == 2:
-                        self.node.setDriver('CLITEMP', round(devTemp+273.15,0), True, True, 26)
+                        self.my_setDriver('CLITEMP', round(devTemp*9/5+32,0), 17)
+                    #elif self.temp_unit == 2:
+                    #    self.my_setDriver('CLITEMP', round(devTemp+273.15,0), 26)
                 else:
-                    self.node.setDriver('CLITEMP', 99, True, True, 25)
+                    self.my_setDriver('CLITEMP', 99, 25)
                 if self.yoLeakSensor.suspended:
-                    self.node.setDriver('GV20', 1, True, True)
+                    self.my_setDriver('GV20', 1)
                 else:
-                    self.node.setDriver('GV20', 0, True, True)             
+                    self.my_setDriver('GV20', 0)             
             else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('CLITEMP', 99, True, True, 25)
-                #self.node.setDriver('ST', 1)
-                self.node.setDriver('GV20', 2, True, True)       
+                #self.my_setDriver('GV0', 99)
+                #self.my_setDriver('GV1', 99)
+                #self.my_setDriver('CLITEMP', 99, 25)
+                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV20', 2)       
 
     def updateStatus(self, data):
         logging.debug('updateStatus - yoLeakSensor')
@@ -164,7 +172,7 @@ class udiYoLeakSensor(udi_interface.Node):
         ctrl = int(command.get('value'))   
         logging.info('Leak Sensor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
-        self.node.setDriver('GV2', self.cmd_state, True, True)
+        self.my_setDriver('GV2', self.cmd_state)
         self.save_cmd_state(self.cmd_state)
 
     def update(self, command = None):

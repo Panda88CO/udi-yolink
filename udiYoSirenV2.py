@@ -19,6 +19,8 @@ from yolinkSirenV2 import YoLinkSir
 
 
 class udiYoSiren(udi_interface.Node):
+    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+
     id = 'yosiren'
     '''
        drivers = [
@@ -34,7 +36,7 @@ class udiYoSiren(udi_interface.Node):
             {'driver': 'GV2', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},
-
+            {'driver': 'TIME', 'value': 0, 'uom': 44},
             ]
 
 
@@ -66,20 +68,10 @@ class udiYoSiren(udi_interface.Node):
         self.adr_list.append(address)
 
 
-
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
-
-
-
     def start(self):
         logging.info('Start - udiYoSiren')
         self.node.setDriver('ST', 0, True, True)
+
         self.yoSiren = YoLinkSir(self.yoAccess, self.devInfo, self.updateStatus)
         
         time.sleep(2)
@@ -105,8 +97,12 @@ class udiYoSiren(udi_interface.Node):
         #    self.node.setDriver('GV1', 0, True, False)
         #    self.node.setDriver('GV2', 0, True, False)
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', self.yoSiren.getTimeSinceUpdateMin(), 44)
+
     def updateData(self):
         if self.node is not None:
+            self.my_setDriver('TIME', self.yoSiren.getTimeSinceUpdateMin(), 44)
             state =  self.yoSiren.getState()
             if self.yoSiren.online:
                 logging.debug('Siren state {}'.format(state))
@@ -139,10 +135,10 @@ class udiYoSiren(udi_interface.Node):
                 else:
                     self.node.setDriver('GV20', 0)
             else:
-                self.node.setDriver('GV0', 99)
-                self.node.setDriver('GV1', 0)
-                self.node.setDriver('GV2', 99)
-                #self.node.setDriver('ST', 0)
+                #self.node.setDriver('GV0', 99)
+                #self.node.setDriver('GV1', 0)
+                #self.node.setDriver('GV2', 99)
+                self.node.setDriver('ST', 0)
                 self.node.setDriver('GV20', 2)
                 
 

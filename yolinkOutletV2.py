@@ -20,7 +20,7 @@ class YoLinkOutl(YoLinkMQTTDevice):
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.ManipulatorName = 'OutletEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'Outlet'
+        yolink.type = deviceInfo['type']
         #time.sleep(2)
         
         #yolink.refreshState()

@@ -20,7 +20,7 @@ class YoLinkTHSen(YoLinkMQTTDevice):
         yolink.temperature = 'Temperature'
         yolink.humidity = 'Humidity'
         yolink.eventTime = 'Time'
-        yolink.type = 'THSensor'
+        yolink.type = deviceInfo['type']
         #time.sleep(2)
 
     '''    

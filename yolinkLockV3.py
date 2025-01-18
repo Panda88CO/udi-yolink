@@ -19,9 +19,11 @@ class YoLink_lock(YoLinkMQTTDevice):
         yolink.eventList = ['StatusChange', 'Report', 'getState']
         yolink.stateList = ['open', 'closed', 'lock', 'unlock']
         yolink.eventTime = 'Time'
-        yolink.type = 'Lock'
+        yolink.type = deviceInfo['type']
         yolink.MQTT_type = 'c'
+        yolink.alertType = ModuleNotFoundError
         yolink.doorBellRing = False
+        yolink.lock_type = deviceInfo['type']
         #time.sleep(2)
         
         #yolink.refreshState()
@@ -51,76 +53,80 @@ class YoLink_lock(YoLinkMQTTDevice):
         yolink.updateCallbackStatus(data, False)
         if 'event' in data:
             if '.Alert' in data['event']:
-                if 'alertType' in data['data']:
-                    yolink.doorBellRing = data['data']['alertType']
+                if 'alert' in data['data']:
+                    if ['type'] in  data['data']['alert']:
+                        yolink.alertType = data['data']['alert']['type']
+                elif 'alertType' in data['data']:
+                    yolink.alertType = data['data']['alertType']
         else:
-            yolink.doorBellRing = None
+            yolink.alertType = None
 
     def getDoorBellRing(yolink):
-        return(yolink.doorBellRing)
+        logging.debug('getDoorBellRing')
+        if yolink.alertType == None:
+            return (None)
+        else:
+            return(yolink.alertType =='DoorBell' or yolink.alertType =='bell')
+
+
+    def getDoorState(yolink):
+        logging.debug('getDoorState')
+        return(yolink.getStateValue('door'))
 
     def setState(yolink, state):
         logging.debug(yolink.type + ' - setState')
-        outlet = str(state)
+        lock_st = str(state)
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:
             if 'setState'  in yolink.methodList:          
-                if outlet.lower() not in yolink.stateList:
+                if lock_st.lower() not in yolink.stateList:
                     logging.error('Unknows state passed')
                     return(False, yolink.dataAPI[yolink.dOnline])
-                if outlet.lower() == 'lock':
+                if lock_st.lower() == 'lock':
                     state = 'lock'
                 if state.lower() == 'unlock':
                     state = 'unlock'
-                data = {}
-                data['params'] = {}
-                data['params']['state'] = state.lower()
-                return(yolink.setDevice( data))
+                if yolink.lock_type == 'LockV2':
+                    data = {}
+                    data['params'] = {}
+                    data['params']['state'] = {}
+                    data['params']['state']['lock'] = state.lower()
+                else:
+                    data = {}
+                    data['params'] = {}
+                    data['params']['state'] = state.lower()
+            return(yolink.setDevice( data))
         else:
             return(False)
     
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
+        logging.debug(f'yolink.dataAPI {yolink.dataAPI}')
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:       
-            attempts = 0
-            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
-                time.sleep(1)
-                attempts = attempts + 1
-            if attempts <= 5 and yolink.dataAPI[yolink.dData][yolink.dState]:
+            if yolink.lock_type == 'LockV2':
+                if  yolink.dataAPI[yolink.dData][yolink.dState]['lock'] == 'locked':
+                    return('LOCK')
+                elif yolink.dataAPI[yolink.dData][yolink.dState]['lock']  == 'unlocked':
+                    return('UNLOCK')
+                else:
+                    return('Unkown')              
+            else:
                 if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'locked':
                     return('LOCK')
                 elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'unlocked':
                     return('UNLOCK')
                 else:
-                    return('Unkown')
-            else:
-                return('Unkown')
+                    return('Unkown')   
         else:
             return('Unkown')
+
 
     def fetchState(yolink):
         logging.debug(yolink.type+' - fetchState')
         #yolink.online = yolink.getOnlineStatus()
-        if yolink.online:       
-            attempts = 0
-            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
-                time.sleep(4)
-                attempts = attempts + 1
-            if attempts <= 5 and yolink.dataAPI[yolink.dData][yolink.dState]:
-                if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'locked':
-                    return('LOCK')
-                elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'unlocked':
-                    return('UNLOCK')
-                else:
-                    return('Unkown')
-            else:
-                return('Unkown')
-        else:
-            return('Unkown')
-
-
+        yolink.getState()
     
     
 class YoLinkLock(YoLink_lock):

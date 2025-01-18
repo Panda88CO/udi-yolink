@@ -17,7 +17,7 @@ class YoLinkDoorSens(YoLinkMQTTDevice):
         yolink.methodList = ['getState' ]
         yolink.eventList = ['Report']
         yolink.eventTime = 'Time'
-        yolink.type = 'DoorSensor'
+        yolink.type = deviceInfo['type']
         #time.sleep(2)
        
   

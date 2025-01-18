@@ -16,12 +16,12 @@ except ImportError:
 
 import time
 
-from yolinkMotionSensorV2 import YoLinkMotionSen
+from yolinkMotionSensorV2 import YoLinkMotionSens
 
 
 
 class udiYoMotionSensor(udi_interface.Node):
-    from  udiYolinkLib import save_cmd_state, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yomotionsens'
     
@@ -43,7 +43,7 @@ class udiYoMotionSensor(udi_interface.Node):
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},
-            #{'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'TIME', 'value': 0, 'uom': 44},
             ]
     
 
@@ -83,18 +83,19 @@ class udiYoMotionSensor(udi_interface.Node):
         
     def start(self):
         logging.info('start - udiYoLinkMotionSensor')
-        self.node.setDriver('ST', 0, True, True)
-        self.yoMotionsSensor  = YoLinkMotionSen(self.yoAccess, self.devInfo, self.updateStatus)
+        self.my_setDriver('ST', 0)
+        self.yoMotionsSensor  = YoLinkMotionSens(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoMotionsSensor.initNode()
         self.node_ready = True
-        #self.node.setDriver('ST', 1, True, True)
+        #self.my_setDriver('ST', 1)
 
     
     def stop (self):
         logging.info('Stop udiYoMotionSensor')
-        self.node.setDriver('ST', 0, True, True)
-        self.yoMotionsSensor.shut_down()
+        self.my_setDriver('ST', 0)
+        if self.yoMotionsSensor:
+            self.yoMotionsSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
                 
@@ -116,47 +117,51 @@ class udiYoMotionSensor(udi_interface.Node):
         if self.yoMotionsSensor.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', self.yoMotionsSensor.getTimeSinceUpdateMin(), 44)
+
 
     def updateData(self):
         if self.node is not None:
+            self.my_setDriver('TIME', self.yoMotionsSensor.getTimeSinceUpdateMin(), 44)
             if self.yoMotionsSensor.online:
                 logging.debug('Motion sensor CMD setting: {}'.format(self.cmd_state))
                 motion_state = self.getMotionState()
                 if motion_state == 1:
-                    self.node.setDriver('GV0', 1, True, True)
+                    self.my_setDriver('GV0', 1)
                     if  self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')
                 elif motion_state == 0:
-                    self.node.setDriver('GV0', 0, True, True)
+                    self.my_setDriver('GV0', 0)
                     if self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')
                 else:
-                    self.node.setDriver('GV0', 99, True, True)
+                    self.my_setDriver('GV0', 99)
                 self.last_state = motion_state
-                self.node.setDriver('GV1', self.yoMotionsSensor.getBattery(), True, True)
-                self.node.setDriver('GV2', self.cmd_state)
-                self.node.setDriver('ST', 1, True, True)
+                self.my_setDriver('GV1', self.yoMotionsSensor.getBattery())
+                self.my_setDriver('GV2', self.cmd_state)
+                self.my_setDriver('ST', 1)
                 devTemp =  self.yoMotionsSensor.getDeviceTemperature()
                 if devTemp != 'NA':
                     if self.temp_unit == 0:
-                        self.node.setDriver('CLITEMP', round(devTemp,0), True, True, 4)
+                        self.my_setDriver('CLITEMP', round(devTemp,0), 4)
                     elif self.temp_unit == 1:
-                        self.node.setDriver('CLITEMP', round(devTemp*9/5+32,0), True, True, 17)
-                    elif self.temp_unit == 2:
-                        self.node.setDriver('CLITEMP', round(devTemp+273.15,0), True, True, 26)
+                        self.my_setDriver('CLITEMP', round(devTemp*9/5+32,0), 17)
+                    #elif self.temp_unit == 2:
+                    #    self.my_setDriver('CLITEMP', round(devTemp+273.15,0), 26)
                 else:
-                    self.node.setDriver('CLITEMP', 99, True, True, 25)
+                    self.my_setDriver('CLITEMP', 99, 25)
                 if self.yoMotionsSensor.suspended:
-                    self.node.setDriver('GV20', 1, True, True)
+                    self.my_setDriver('GV20', 1)
                 else:
-                    self.node.setDriver('GV20', 0, True, True)         
+                    self.my_setDriver('GV20', 0)         
             else:
-                self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('GV1', 99, True, True)
-                self.node.setDriver('GV2', 0, True, True)
-                self.node.setDriver('CLITEMP', 99, True, True, 25)
-                #self.node.setDriver('ST', 0, True, True)
-                self.node.setDriver('GV20', 2, True, True)       
+                #self.my_setDriver('GV0', 99)
+                #self.my_setDriver('GV1', 99)
+                #self.my_setDriver('GV2', 0)
+                #self.my_setDriver('CLITEMP', 99, 25)
+                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV20', 2)       
 
 
 
@@ -171,7 +176,7 @@ class udiYoMotionSensor(udi_interface.Node):
         ctrl = int(command.get('value'))   
         logging.info('udiYoMotionSensor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
-        self.node.setDriver('GV2', self.cmd_state, True, True)
+        self.my_setDriver('GV2', self.cmd_state)
         self.save_cmd_state(self.cmd_state)
 
     def update(self, command = None):

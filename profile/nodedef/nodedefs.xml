@@ -2,7 +2,9 @@
  <nodeDef id="setup" nls="nlssetup">
       <editors />
       <sts>
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="connect" />
+         <st id="GV1"  editor="ready" />         
+         <st id="TIME"  editor="epochtime" />
          <!--- st id="GV20" editor="suspendstate" /-->
       </sts>
       <cmds>
@@ -11,6 +13,7 @@
             <cmd id="DOF" /> 
          </sends>
          <accepts>
+            <cmd id="EPOCHTIME"  /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -26,13 +29,14 @@
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
-         <st id="GV10" editor="stSec" />               
+         <st id="GV21" editor="stSec" />               
          <st id="GV17" editor="stHour" />      
          <st id="GV18" editor="stMin" />    
-         <st id="GV11" editor="stSec" />               
+         <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="epochtime" />                  
       </sts>
       <cmds>
          <sends>
@@ -73,10 +77,10 @@
                <p id="bindays" editor="binDays" init="GV19" />       
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="onS" editor="stSecI" init="GV10" /> 
+               <p id="onS" editor="stSecI" init="GV21" /> 
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="offS" editor="stSecI" init="GV11" />   
+               <p id="offS" editor="stSecI" init="GV22" />   
                                    
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -98,13 +102,14 @@
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
-            
+         <st id="GV21" editor="stSec" />                 
          <st id="GV17" editor="stHour" />      
          <st id="GV18" editor="stMin" />    
-         
+         <st id="GV22" editor="stSec" />              
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
+         <st id="TIME" editor="epochtime" />            
       </sts>
       <cmds>
          <sends>
@@ -145,9 +150,10 @@
                <p id="bindays" editor="binDays" init="GV19" />       
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV21" />                
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
-                                   
+               <p id="offS" editor="stSecI" init="GV22" />                                    
              </cmd >
             <cmd id="CTRL_SCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
@@ -169,11 +175,14 @@
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
+         <st id="GV21" editor="stSec" />           
          <st id="GV17" editor="stHour" />      
-         <st id="GV18" editor="stMin" />    
+         <st id="GV18" editor="stMin" />
+         <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />        
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                    
       </sts>
       <cmds>
          <sends>
@@ -218,8 +227,10 @@
                <p id="bindays" editor="binDays" init="GV19" />   
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV21" />                
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="offS" editor="stSecI" init="GV22" />                
                                        
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -243,33 +254,36 @@
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
+         <st id="GV21" editor="stSec" />    
          <st id="GV17" editor="stHour" />      
-         <st id="GV18" editor="stMin" />    
+         <st id="GV18" editor="stMin" />   
+         <st id="GV22" editor="stSec" />             
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                     
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="swstate"  />               
-            <cmd id="DOF" editor="swstate"  />   
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />   
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
+            <cmd id="DON" editor="swstate" /> 
+            <cmd id="DOF" editor="swstate" /> 
             <cmd id="QUERY" /> 
 
 
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd > -->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -283,8 +297,10 @@
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV21" />             
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="offS" editor="stSecI" init="GV22" />                  
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -315,11 +331,14 @@
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
+         <st id="GV21" editor="stSec" />           
          <st id="GV17" editor="stHour" />      
-         <st id="GV18" editor="stMin" />    
+         <st id="GV18" editor="stMin" />  
+         <st id="GV22" editor="stSec" />             
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
+         <st id="TIME" editor="epochtime" />            
       </sts>
       <cmds>
          <sends>
@@ -336,12 +355,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -355,8 +374,10 @@
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV21" />                       
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="offS" editor="stSecI" init="GV22" />                       
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -366,23 +387,27 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
+   
    <nodeDef id="yomultiout" nls="nlsmultiout">
       <editors />
       <sts>
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+
 
          <st id="GV12" editor="outport" />    
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
+         <st id="GV21" editor="stSec" />     
          <st id="GV17" editor="stHour" />      
          <st id="GV18" editor="stMin" />    
+         <st id="GV22" editor="stSec" />     
          <st id="GV19" editor="binDays" />      
-
-   
-         <st id="GV20" editor="suspendstate" />         
+         <st id="ST"  editor="status" />   
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                     
       </sts>
       <cmds>
          <sends>
@@ -399,8 +424,10 @@
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV21"/>   
                <p id="offH" editor="stHourI" init="GV17" /> 
                <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="offS" editor="stSecI" init="GV22" />   
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
@@ -420,19 +447,18 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
-
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="swstate"  />               
-            <cmd id="DOF" editor="swstate"  />    
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
       
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
+            <cmd id="DON" editor="swstate" /> 
+            <cmd id="DOF" editor="swstate" /> 
             <cmd id="QUERY" /> 
 
             <cmd id="SWCTRL" > 
@@ -460,13 +486,13 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="usbstate"  />               
-            <cmd id="DOF" editor="usbstate"  />     
+            <cmd id="DON"  />               
+            <cmd id="DOF" />     
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
+            <cmd id="DON" editor="usbstate"  /> 
+            <cmd id="DOF" editor="usbstate"  /> 
             <cmd id="QUERY" /> 
 
             <cmd id="USBCTRL" > 
@@ -487,21 +513,27 @@
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
+         <st id="GV21" editor="stSec" />              
          <st id="GV17" editor="stHour" />      
          <st id="GV18" editor="stMin" />    
+         <st id="GV22" editor="stSec" />              
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />             
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />               
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />    
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  /> -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
+            <cmd id="DON" editor="manstate"/> 
+            <cmd id="DOF" editor="manstate"/> 
             <cmd id="QUERY" /> 
 
             <cmd id="MANCTRL" > 
@@ -514,25 +546,27 @@
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >
             <cmd id="DELAY_CTRL" > 
-               <p id="Maondelay" editor="delaymin" init="GV1" /> 
-               <p id="Maoffdelay" editor="delaymin" init="GV2" />                                     
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
             <cmd id="LOOKUP_SCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINE_SCH" > 
-               <p id="MaDindex" editor="sch_indexS" init="GV13" /> 
-               <p id="MaDactive" editor="sch_activeI" init="GV14" /> 
-               <p id="MaDonH" editor="stHourI" init="GV15" /> 
-               <p id="MaDonM" editor="stMinI" init="GV16" /> 
-               <p id="MaDoffH" editor="stHourI" init="GV17" /> 
-               <p id="MaDoffM" editor="stMinI" init="GV18" />   
-               <p id="MaDbindays" editor="binDays" init="GV19" />                                          
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="onH" editor="stHourI" init="GV15" /> 
+               <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV21"/>   
+               <p id="offH" editor="stHourI" init="GV17" /> 
+               <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="offS" editor="stSecI" init="GV22" />   
+               <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRL_SCH" > 
-               <p id="MaCindex" editor="sch_indexS" init="GV13" /> 
-               <p id="MaCactive" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >                
          </accepts>
       </cmds>
@@ -555,12 +589,16 @@
          <st id="GV9" editor="alarm" />         
          <st id="GV10" editor="pwrmode" />  
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                  
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />    
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />   -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -600,7 +638,8 @@
          <st id="GV11" editor="tempC" />
          <st id="GV12" editor="humidity" />
          <st id="GV13" editor="humidity" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                              
       </sts>
       <cmds>
          <sends>
@@ -625,7 +664,8 @@
          <st id="GV2" editor="cmdsetting" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />                              
       </sts>
       <cmds>
          <sends>
@@ -675,12 +715,16 @@
           <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" /> 
+         <st id="TIME" editor="epochtime" />                             
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="motionstate"  />               
-            <cmd id="DOF" editor="motionstate"  /> 
+            <!--<cmd id="DON" editor="motionstate"  />               
+            <cmd id="DOF" editor="motionstate"  />  -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  /> 
+
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
@@ -705,12 +749,16 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" /> 
+         <st id="TIME" editor="epochtime" />                             
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="waterstate"  />               
-            <cmd id="DOF" editor="waterstate"  />    
+            <!--<cmd id="DON" editor="waterstate"  /> 
+            <cmd id="DOF" editor="waterstate"  />    -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
@@ -740,12 +788,16 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="epochtime" />                           
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="deviceAlert"  />               
-            <cmd id="DOF" editor="deviceAlert"  />    
+            <!--<cmd id="DON" editor="deviceAlert"  /> 
+            <cmd id="DOF" editor="deviceAlert"  /> -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
@@ -768,12 +820,15 @@
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />               
+         <st id="GV20" editor="suspendstate" />     
+         <st id="TIME" editor="epochtime" />                         
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="vibrastate"  />               
-            <cmd id="DOF" editor="vibrastate"  />    
+            <!--<cmd id="DON" editor="vibrastate"  />
+            <cmd id="DOF" editor="vibrastate"  /> -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
 
          </sends>
          <accepts>
@@ -842,14 +897,17 @@
          <st id="GV0" editor="lockstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="doorbell" />
-         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV3" editor="doorstate" /> 
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />  
+         <st id="TIME" editor="epochtime" />                      
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />
+            <!--<cmd id="DON" editor="lock"  />               
+            <cmd id="DOF" editor="lock"  />    -->
          </sends>
          <accepts>
             <!-- <cmd id="DON" />
@@ -873,13 +931,18 @@
          <st id="GV2" editor="cmdstatus" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="epochtime" />                     
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    
+            <!--<cmd id="DON" editor="lock"  />               
+            <cmd id="DOF" editor="lock"  />    -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         
          </sends>
+
          <accepts>
             <!-- <cmd id="DON" />
             <cmd id="DOF" />    -->
@@ -903,7 +966,8 @@
          <st id="GV4" editor="pfamute" />
          <st id="GV7" editor="cmdstatus" />
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="epochtime" />                     
 
       </sts>
       <cmds>
@@ -921,7 +985,36 @@
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yowaterdept" nls="nlswaterdept">
+      <editors />
+      <sts>
 
+         <st id="GV0" editor="waterlevel" />
+         <st id="GV1" editor="waterlevel" />
+         <st id="GV2" editor="waterlevel" />
+         <st id="GV3" editor="alarm" />
+         <st id="GV4" editor="alarm" />
+         <st id="GV5" editor="alarm" />
+         <st id="BATLVL" editor="batlevel" />    
+         <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />       
+         <st id="TIME" editor="epochtime" />
+
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         </sends>
+         <accepts>     
+            <cmd id="SETATTR" > 
+               <p id="waterLowAlarm" editor="waterlevel" init="GV1" />       
+               <p id="waterHighAlarm" editor="waterlevel" init="GV2" />                                              
+             </cmd >                       
+            <cmd id="UPDATE" />
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
    <nodeDef id="yosiren" nls="nlssiren">
       <editors />
@@ -931,6 +1024,7 @@
          <st id="GV2" editor="sirenbatlevel" />
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="epochtime" />               
       </sts>
       <cmds>
          <sends>

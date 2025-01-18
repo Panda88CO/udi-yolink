@@ -24,7 +24,7 @@ class YoLinkDim(YoLinkMQTTDevice):
         yolink.eventList = ['StatusChange', 'Report', 'getState']
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.eventTime = 'Time'
-        yolink.type = 'Dimmer'
+        yolink.type = deviceInfo['type']
 
         yolink.brightness = 50  #default
 

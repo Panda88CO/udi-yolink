@@ -21,6 +21,7 @@ from yolinkGarageFingerToggleV2 import YoLinkGarageFingerCtrl
 
 
 class udiYoGarageFinger(udi_interface.Node):
+    from  udiYolinkLib import my_setDriver
     id = 'yogarage'
     
     '''
@@ -72,16 +73,16 @@ class udiYoGarageFinger(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoGarageFinger')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoDoorControl = YoLinkGarageFingerCtrl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
-        self.node.setDriver('ST', 1, True, True)
+        self.my_setDriver('ST', 1)
         #time.sleep(3)
         self.node_ready = True
 
     def initNode(self):
         self.yoDoorControl.online = True
-        #self.node.setDriver('ST',1, True, True)
+        #self.my_setDriver('ST',1)
         
     def checkOnline(self):
         pass
@@ -91,7 +92,7 @@ class udiYoGarageFinger(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoGarageFinger')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoDoorControl.shut_down()
 
     
@@ -100,17 +101,17 @@ class udiYoGarageFinger(udi_interface.Node):
         self.yoDoorControl.updateCallbackStatus(data)
         logging.debug(data)
         if self.node is not None:
-            self.node.setDriver('ST',1 , True, True)
+            self.my_setDriver('ST',1)
         if self.yoDoorControl.suspended:
-            self.node.setDriver('GV20', 1, True, True)
+            self.my_setDriver('GV20', 1)
         else:
-            self.node.setDriver('GV20', 0)
+            self.my_setDriver('GV20', 0)
             
         if self.yoDoorControl.online:
-            self.node.setDriver('ST', 1)
+            self.my_setDriver('ST', 1)
         else:
-            self.node.setDriver('GV20', 2, True, True)
-            #self.node.setDriver('ST', 0, True, True)
+            self.my_setDriver('GV20', 2)
+            self.my_setDriver('ST', 0)
 
 
     def toggleDoor(self, command = None):

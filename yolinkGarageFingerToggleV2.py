@@ -20,7 +20,7 @@ class YoLinkGarageFingerCtrl(YoLinkMQTTDevice):
         yolink.eventList = ['Report']
         yolink.ToggleName = 'GarageEvent'
         yolink.eventTime = 'Time'
-        yolink.type = 'Finger'
+        yolink.type = deviceInfo['type']
         yolink.online = True # No way to check 
         
     def toggleDevice(yolink):

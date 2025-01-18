@@ -2,6 +2,9 @@
   <editor id="status"> 
      <range uom="25" subset="0-1" nls="status" />
   </editor>
+  <editor id="connect"> 
+     <range uom="25" subset="0-1" nls="connect" />
+  </editor>
   <editor id="swstate"> 
      <range uom="25" subset="0-1,99" nls="swstate" />
   </editor>     
@@ -16,6 +19,13 @@
      <range uom="33" min="-1" max="2000" prec="2" />
      <range uom="25" subset="0,99" nls="nosupport" />
   </editor>
+  <editor id="waterlevel"> 
+    <range uom="56" min="0" max="1000" prec="0" />
+     <range uom="25" subset="0,97,99" nls="wl_state" />
+  </editor>
+  <editor id="waterlevelNbr"> 
+    <range uom="56" min="0" max="1000" prec="0" />
+  </editor>
   <editor id="delay"> 
      <range uom="57" min="0" max="86400" prec="0" />
   </editor>     
@@ -25,15 +35,16 @@
   <editor id="tempC"> 
         <range uom="4" min="-40" max="105" prec="1" />
         <range uom="17" min="-40" max="221" prec="1" />
-        <range uom="26" min="233" max="378" prec="1" />
-        <range uom="25" subset="0,99" nls="error" />
+        
+        <range uom="25" subset="98,99" nls="wl_state" />
   </editor>
   <editor id="tempunit"> 
-     <range uom="25" subset="0-2,99" nls="tempunit" />
+     <range uom="51" min="0" max="100" prec="1" />
   </editor>    
 
   <editor id="humidity"> 
-     <range uom="51" min="0" max="100" prec="1" />
+      <range uom="51" min="0" max="100" prec="1" />
+      <range uom="25" subset="0,98,99" nls="nosupport" />
   </editor>
   <editor id="batlevel"> 
      <range uom="25" subset="0-4,98,99" nls="batlevel" />
@@ -156,7 +167,7 @@
      <range uom="25" subset="0-2, 99" nls="suspended" />
    </editor> 
    <editor id="alarm"> 
-     <range uom="25" subset="0-1, 99" nls="alarm" />
+     <range uom="25" subset="0-1, 98,99" nls="alarm" />
    </editor> 
    <editor id="alert"> 
      <range uom="25" subset="0-1, 99" nls="alarm" />
@@ -191,46 +202,52 @@
      <range uom="25" subset="0-3,99" nls="portlist" />
    </editor>   
    <editor id="sch_active"> 
-     <range uom="25" subset="0-2,99" nls="sch_active" />
+     <range uom="25" subset="0-2,98,99" nls="sch_active" />
    </editor>   
    <editor id="sch_activeI"> 
      <range uom="25" subset="0-1" nls="sch_active" />
    </editor>   
    <editor id="sch_index"> 
-     <range uom="25" subset="0-9,99" nls="sch_index" />
+     <range uom="25" subset="0-9,98,99" nls="sch_index" />
    </editor>  
    <editor id="sch_indexM"> 
-     <range uom="25" subset="0-9" nls="sch_indexM" />
+     <range uom="25" subset="0-9,99" nls="sch_indexM" />
    </editor>   
    <editor id="sch_indexS"> 
-     <range uom="25" subset="0-5" nls="sch_indexS" />
+     <range uom="25" subset="0-5,99" nls="sch_indexS" />
    </editor>  
    <editor id="stHour"> 
      <range uom="19" min="0" max="24" />
-     <range uom="25" subset="98,99" nls="notdefined"/>
+     <range uom="25" subset="98,99" nls="notdefined" />
    </editor>  
    <editor id="stMin"> 
      <range uom="44" min="0" max="59" />
-     <range uom="25" subset="98,99" nls="notdefined"/>
+     <range uom="25" subset="98,99" nls="notdefined" />
    </editor>  
     <editor id="stSec"> 
      <range uom="57" min="0" max="59" />
-     <range uom="25" subset="0,99" nls="nosupport"/>
+     <range uom="25" subset="0,99" nls="nosupport" />
    </editor>  
     <editor id="stHourI"> 
      <range uom="19" min="0" max="24" />
-     <range uom="25" subset="98" nls="notdefined"/>
+     <range uom="25" subset="98" nls="notdefined" />
    </editor>  
    <editor id="stMinI"> 
      <range uom="44" min="0" max="59" />
-     <range uom="25" subset="98" nls="notdefined"/>
+     <range uom="25" subset="98" nls="notdefined" />
    </editor>  
     <editor id="stSecI"> 
      <range uom="57" min="0" max="59" />
-     <range uom="25" subset="0" nls="nosupport"/>
+     <range uom="25" subset="0" nls="nosupport" />
    </editor>  
    <editor id="binDays"> 
      <range uom="25" subset="0-127" nls="bindays" />
    </editor>  
-   
+   <editor id="epochtime"> 
+     <range uom="44" min="0" max="9999999999" prec="0" />
+     <range uom="25" subset="0,99" nls="error" />
+   </editor>    
+   <editor id="ready"> 
+     <range uom="25" subset="0,1" nls="ready" />
+   </editor>     
 </editors>

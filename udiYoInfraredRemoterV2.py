@@ -21,6 +21,8 @@ from yolinkInfraredRemoterV2 import YoLinkInfraredRem
 
 
 class udiYoInfraredRemoter(udi_interface.Node):
+    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+
     id = 'yoirremote'
     '''
        drivers = [
@@ -35,7 +37,8 @@ class udiYoInfraredRemoter(udi_interface.Node):
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV2', 'value': 99, 'uom': 25}, 
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},            
+            {'driver': 'GV20', 'value': 99, 'uom': 25},       
+            {'driver': 'TIME', 'value': 0, 'uom': 44},                 
             ]
 
 
@@ -64,29 +67,21 @@ class udiYoInfraredRemoter(udi_interface.Node):
         self.adr_list = []
         self.adr_list.append(address)        
 
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
-
 
 
     def start(self):
         logging.info('start - YoLinkOutlet')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoIRrem  = YoLinkInfraredRem(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoIRrem.initNode()
         time.sleep(2)
-        #self.node.setDriver('ST', 1, True, True)
+        #self.my_setDriver('ST', 1)
         self.node_ready = True
     
     def stop (self):
         logging.info('Stop udiIRremote')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoIRrem.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -104,26 +99,30 @@ class udiYoInfraredRemoter(udi_interface.Node):
             return(2)
         else:
             return(99)
+    def updateLastTime(self):
+        self.my_setDriver('TIME', self.yoIRrem.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):
-        logging.debug('updateData - {}'.format(self.yoIRrem.online))
+        if self.node is not None:
+            logging.debug('updateData - {}'.format(self.yoIRrem.online))
+            self.my_setDriver('TIME', self.yoIRrem.getTimeSinceUpdateMin(), 44)
 
         if  self.yoIRrem.online:
-            self.node.setDriver('ST', 1)
-            self.node.setDriver('GV0',self.yoIRrem.nbr_codes , True, True)                  
-            self.node.setDriver('GV1',self.yoIRrem.getBattery(), True, True)
-            self.node.setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()), True, True)
+            self.my_setDriver('ST', 1)
+            self.my_setDriver('GV0',self.yoIRrem.nbr_codes )                  
+            self.my_setDriver('GV1',self.yoIRrem.getBattery())
+            self.my_setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()))
             if self.yoIRrem.suspended:
-                self.node.setDriver('GV20', 1, True, True)
+                self.my_setDriver('GV20', 1)
             else:
-                self.node.setDriver('GV20', 0)
+                self.my_setDriver('GV20', 0)
         else:
-            self.node.setDriver('GV0', 0, True, True)
-            self.node.setDriver('GV1', 99, True, True)
-            self.node.setDriver('GV2', 99, True, True)
-            #self.node.setDriver('ST', 0)
-            self.node.setDriver('GV20', 2, True, True)
+            #self.my_setDriver('GV0', 0)
+            #self.my_setDriver('GV1', 99)
+            #self.my_setDriver('GV2', 99)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
 
 
 

@@ -2,3 +2,4 @@ udi_interface>=3.3.14
 requests>=2.31.0
 paho-mqtt>=1.6.1
 psutil>=5.9.2
+apscheduler>=3.10.4

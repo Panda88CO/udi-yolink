@@ -77,7 +77,7 @@ def wait_for_node_done(self):
     self.n_queue.pop()
 
 def my_setDriver(self, key, value, Unit=None):
-    logging.debug('my_setDriver : {key} {value} {Unit}')
+    logging.debug(f'my_setDriver : {key} {value} {Unit}')
     try:
         if value is None:
             logging.debug('None value passed = seting 99, UOM 25')
@@ -86,7 +86,7 @@ def my_setDriver(self, key, value, Unit=None):
             if Unit:
                 self.node.setDriver(key, value, True, True, Unit)
             else:
-                self.node.setDriver(key, value)
+                self.node.setDriver(key, value, True, True)
     except ValueError: #A non number was passed 
         self.node.setDriver(key, 99, True, True, 25)
         
@@ -251,39 +251,38 @@ def update_schedule_data(self, sch_info, selected_schedule):
                 found = True
                 return(found)
         return(found)
-
     if sch_info:
         if 'ch' in sch_info:
-            self.node.setDriver('GV12', int(sch_info['ch']))
+            self.my_setDriver('GV12', int(sch_info['ch']))
 
-        self.node.setDriver('GV13', selected_schedule)
+        self.my_setDriver('GV13', selected_schedule)
         if sch_info['isValid']:
-            self.node.setDriver('GV14', 1)
+            self.my_setDriver('GV14', 1)
         else:
-            self.node.setDriver('GV14', 0)
+            self.my_setDriver('GV14', 0)
         timestr = sch_info['on']
         timelist =  timestr.split(':')
         if len(timelist) == 2:
             hour = int(timelist[0])
             minute = int(timelist[1])
             if hour == 25:
-                self.node.setDriver('GV15', 98,True, True, 25)
-                self.node.setDriver('GV16', 98,True, True, 25)
+                self.my_setDriver('GV15', 98, 25)
+                self.my_setDriver('GV16', 98, 25)
             else:
-                self.node.setDriver('GV15', int(hour),True, True, 19)
-                self.node.setDriver('GV16', int(minute),True, True, 44)
+                self.my_setDriver('GV15', int(hour),19)
+                self.my_setDriver('GV16', int(minute), 44)
         elif len(timelist) == 3:
             hour = int(timelist[0])
             minute = int(timelist[1])
             second = int(timelist[2])
             if hour == 25:
-                self.node.setDriver('GV15', 98,True, True, 25)
-                self.node.setDriver('GV16', 98,True, True, 25)
-                self.node.setDriver('GV10', 98,True, True, 25)
+                self.my_setDriver('GV15', 98, 25)
+                self.my_setDriver('GV16', 98, 25)
+                self.my_setDriver('GV21', 98, 25)
             else:
-                self.node.setDriver('GV15', hour,True, True, 19)
-                self.node.setDriver('GV16', minute,True, True, 44)
-                self.node.setDriver('GV10', second,True, True, 57)
+                self.my_setDriver('GV15', hour, 19)
+                self.my_setDriver('GV16', minute, 44)
+                self.my_setDriver('GV21', second, 57)
 
         timestr = sch_info['off']
         logging.debug('timestr : {}'.format(timestr))
@@ -292,39 +291,39 @@ def update_schedule_data(self, sch_info, selected_schedule):
             hour = int(timelist[0])
             minute = int(timelist[1])
             if hour == 25:
-                self.node.setDriver('GV17', 98,True, True, 25)
-                self.node.setDriver('GV18', 98,True, True, 25)
+                self.my_setDriver('GV17', 98, 25)
+                self.my_setDriver('GV18', 98, 25)
             else:
-                self.node.setDriver('GV17', int(hour),True, True, 19)
-                self.node.setDriver('GV18', int(minute),True, True, 44)
+                self.my_setDriver('GV17', int(hour), 19)
+                self.my_setDriver('GV18', int(minute), 44)
         elif len(timelist) == 3:
             hour = int(timelist[0])
             minute = int(timelist[1])
             second = int(timelist[2])     
             if hour == 25:
-                self.node.setDriver('GV17', 98,True, True, 25)
-                self.node.setDriver('GV18', 98,True, True, 25)
-                self.node.setDriver('GV11', 98,True, True, 25)
+                self.my_setDriver('GV17', 98, 25)
+                self.my_setDriver('GV18', 98, 25)
+                self.my_setDriver('GV22', 98, 25)
             else:
-                self.node.setDriver('GV17', hour,True, True, 19)
-                self.node.setDriver('GV18', minute,True, True, 44)
-                self.node.setDriver('GV11', second,True, True, 57)
-        self.node.setDriver('GV19',  int(sch_info['week']))
+                self.my_setDriver('GV17', hour, 19)
+                self.my_setDriver('GV18', minute, 44)
+                self.my_setDriver('GV22', second, 57)
+        self.my_setDriver('GV19',  int(sch_info['week']))
 
     else:
         logging.debug('No schdule exist for the selected index')
         if check_name_in_drivers('GV12'):
-            self.node.setDriver('GV12', 99, True, True, 25)
-        self.node.setDriver('GV13', selected_schedule) 
-        self.node.setDriver('GV14', 99)
-        self.node.setDriver('GV15', 99,True, True, 25)
-        self.node.setDriver('GV16', 99,True, True, 25)
-        self.node.setDriver('GV17', 99,True, True, 25)
-        self.node.setDriver('GV18', 99,True, True, 25)
-        self.node.setDriver('GV19', 0)
+            self.my_setDriver('GV12', 99, 25)
+        self.my_setDriver('GV13', selected_schedule) 
+        self.my_setDriver('GV14', 99)
+        self.my_setDriver('GV15', 99, 25)
+        self.my_setDriver('GV16', 99, 25)
+        self.my_setDriver('GV17', 99, 25)
+        self.my_setDriver('GV18', 99, 25)
+        self.my_setDriver('GV19', 0)
         if check_name_in_drivers('GV10'):
-            self.node.setDriver('GV10', 99, True, True, 25)
-            self.node.setDriver('GV11', 99, True, True, 25)
+            self.my_setDriver('GV10', 99, 25)
+            self.my_setDriver('GV11', 99, 25)
 
 
 def send_rel_temp_to_isy(self, temperature, stateVar):
@@ -332,19 +331,19 @@ def send_rel_temp_to_isy(self, temperature, stateVar):
     logging.debug('ISYunit={}, Mess_unit={}'.format(self.ISY_temp_unit , self.messana_temp_unit ))
     if self.ISY_temp_unit == 0: # Celsius in ISY
         if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
-            self.node.setDriver(stateVar, round(temperature,1), True, True, 4)
+            self.my_setDriver(stateVar, round(temperature,1), 4)
         else: # messana = Farenheit
-            self.node.setDriver(stateVar, round(temperature*5/9,1), True, True, 17)
+            self.my_setDriver(stateVar, round(temperature*5/9,1), 17)
     elif  self.ISY_temp_unit == 1: # Farenheit in ISY
         if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
-            self.node.setDriver(stateVar, round((temperature*9/5),1), True, True, 4)
+            self.my_setDriver(stateVar, round((temperature*9/5),1),  4)
         else:
-            self.node.setDriver(stateVar, round(temperature,1), True, True, 17)
+            self.my_setDriver(stateVar, round(temperature,1), 17)
     else: # kelvin
         if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
-            self.node.setDriver(stateVar, round((temperature,1), True, True, 4))
+            self.my_setDriver(stateVar, round((temperature,1), 4))
         else:
-            self.node.setDriver(stateVar, round((temperature)*9/5,1), True, True, 17)
+            self.my_setDriver(stateVar, round((temperature)*9/5,1),  17)
 
 
 def send_temp_to_isy (self, temperature, stateVar):
@@ -352,16 +351,16 @@ def send_temp_to_isy (self, temperature, stateVar):
     logging.debug('ISYunit={}, Mess_unit={}'.format(self.ISY_temp_unit , self.messana_temp_unit ))
     if self.ISY_temp_unit == 0: # Celsius in ISY
         if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
-            self.node.setDriver(stateVar, round(temperature,1), True, True, 4)
+            self.my_setDriver(stateVar, round(temperature,1),  4)
         else: # messana = Farenheit
-            self.node.setDriver(stateVar, round((temperature-32)*5/9,1), True, True, 17)
+            self.my_setDriver(stateVar, round((temperature-32)*5/9,1),  17)
     elif  self.ISY_temp_unit == 1: # Farenheit in ISY
         if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
-            self.node.setDriver(stateVar, round((temperature*9/5+32),1), True, True, 4)
+            self.my_setDriver(stateVar, round((temperature*9/5+32),1), 4)
         else:
-            self.node.setDriver(stateVar, round(temperature,1), True, True, 17)
+            self.my_setDriver(stateVar, round(temperature,1),  17)
     else: # kelvin
         if self.messana_temp_unit == 'Celsius' or self.messana_temp_unit == 0:
-            self.node.setDriver(stateVar, round((temperature+273.15,1), True, True, 4))
+            self.my_setDriver(stateVar, round((temperature+273.15,1), 4))
         else:
-            self.node.setDriver(stateVar, round((temperature+273.15-32)*9/5,1), True, True, 17)
+            self.my_setDriver(stateVar, round((temperature+273.15-32)*9/5,1),  17)

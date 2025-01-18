@@ -20,7 +20,7 @@ from yolinkPowerFailV2 import YoLinkPowerFailSen
 
 
 class udiYoPowerFailSenor(udi_interface.Node):
-    from  udiYolinkLib import save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yopwralarm'
     
@@ -46,6 +46,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
             {'driver': 'GV7', 'value': 0, 'uom': 25},      
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25}, 
+            {'driver': 'TIME', 'value': 0, 'uom': 44},
 
             ]
 
@@ -76,7 +77,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.node.setDriver('ST', 1, True, True)
+        #self.my_setDriver('ST', 0)
         self.adr_list = []
         self.adr_list.append(address)
 
@@ -85,17 +86,17 @@ class udiYoPowerFailSenor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoPowerFailSenor')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoPowerFail  = YoLinkPowerFailSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoPowerFail.initNode()
         self.node_ready = True
-        #self.node.setDriver('ST', 1, True, True)
+        #self.my_setDriver('ST', 1)
 
     
     def stop (self):
         logging.info('Stop udiYoPowerFailSenor')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
         self.yoPowerFail.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -107,43 +108,48 @@ class udiYoPowerFailSenor(udi_interface.Node):
         if self.yoPowerFail.data_updated():
             self.updateData()
 
+    def updateLastTime(self):
+        self.my_setDriver('TIME', self.yoPowerFail.getTimeSinceUpdateMin(), 44)
+
 
     def updateData(self):
         if self.node is not None:
+            self.my_setDriver('TIME', self.yoPowerFail.getTimeSinceUpdateMin(), 44)
+            
             if self.yoPowerFail.online:               
                 state = self.yoPowerFail.getAlertState()
                 logging.debug('state GV0 : {}'.format(state))
-                self.node.setDriver('GV0', state)
+                self.my_setDriver('GV0', state)
                 if state != self.last_state:
                     if state ==1 and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')
                     elif state == 0 and self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')
                     
-                self.node.setDriver('GV1', self.yoPowerFail.getBattery())
+                self.my_setDriver('GV1', self.yoPowerFail.getBattery())
                 alert = self.yoPowerFail.getAlertType()
                 logging.debug('AlertState GV2 : {}'.format(alert))
-                self.node.setDriver('GV2', alert, True, True)
+                self.my_setDriver('GV2', alert)
                 powered = self.yoPowerFail.getPowerSupplyConnected()
                 logging.debug('Powered  GV3 : {}'.format(powered))
-                self.node.setDriver('GV3', self.bool2ISY(powered))
+                self.my_setDriver('GV3', self.bool2ISY(powered))
                 muted = self.yoPowerFail.muted()
                 logging.debug('Muted GV4 : {}'.format(muted))
-                self.node.setDriver('GV4', self.bool2ISY(muted))
-                self.node.setDriver('ST', 1)
+                self.my_setDriver('GV4', self.bool2ISY(muted))
+                self.my_setDriver('ST', 1)
                 if self.yoPowerFail.suspended:
-                    self.node.setDriver('GV20', 1)
+                    self.my_setDriver('GV20', 1)
                 else:
-                    self.node.setDriver('GV20', 0)
+                    self.my_setDriver('GV20', 0)
             else:
-                self.node.setDriver('GV0', 99)
-                self.node.setDriver('GV1', 99)
-                self.node.setDriver('GV2', 99)
-                self.node.setDriver('GV3', 99)
-                self.node.setDriver('GV4', 99)
+                #self.my_setDriver('GV0', 99)
+                #self.my_setDriver('GV1', 99)
+                #self.my_setDriver('GV2', 99)
+                #self.my_setDriver('GV3', 99)
+                #self.my_setDriver('GV4', 99)
 
-                #self.node.setDriver('ST', 1, True, True)
-                self.node.setDriver('GV20', 2)
+                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV20', 2)
 
 
 
@@ -162,7 +168,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
         ctrl = int(command.get('value'))   
         logging.info('udiYoPowerFailSenor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
-        self.node.setDriver('GV7', self.cmd_state, True, True)
+        self.my_setDriver('GV7', self.cmd_state)
         self.save_cmd_state(self.cmd_state)
 
         
