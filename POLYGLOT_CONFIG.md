@@ -8,6 +8,7 @@
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
     'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren'
+    'WaterMeterController','WaterDepthSensor', 'LockV2'
 
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec
