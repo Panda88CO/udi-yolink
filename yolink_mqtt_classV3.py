@@ -344,9 +344,9 @@ class YoLinkMQTTDevice(object):
                     return(yolink.dataAPI[yolink.dData][yolink.dState][key])
                 else:
                     logging.debug('getDataStateValue NO MATCH - {} {}'.format(key, yolink.dataAPI[yolink.dData]))
-                    return(99)
+                    return(None)
             else:
-                return(None )
+                return(None)
         except Exception as E:
             logging.debug('getData exceptiom: {}'.format(E) )
             return( )
@@ -366,7 +366,7 @@ class YoLinkMQTTDevice(object):
             else:
                 yolink.online = False 
                 logging.debug('getValue NO MATCH - {} {}'.format(key, yolink.dataAPI[yolink.dData]))
-                return(99)
+                return(None)
         except Exception as E:
             logging.debug('getData exceptiom: {}'.format(E) )
             return( )    
@@ -376,7 +376,6 @@ class YoLinkMQTTDevice(object):
     
         logging.debug('{} - getStateValue, key:{}'.format(yolink.type, key))
         try:
-            count = 1
             yolink.online = yolink.check_system_online()
             #logging.debug("getStateValue Online: {}".format(yolink.online))
             if yolink.online :
@@ -389,9 +388,9 @@ class YoLinkMQTTDevice(object):
                 else:
                     logging.debug('getStateValue NO MATCH - {} {}'.format(key, yolink.dataAPI[yolink.dData]))
 
-                    return(-1)
+                    return(None)
             else:
-                return( )
+                return(99)
         except Exception as e:
             logging.debug('getData exceptiom: {}'.format(e) )
             return( )
@@ -421,7 +420,7 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def getBattery(yolink):
         bat = yolink.getStateValue('battery')
-        if bat == 99: # No battery under state
+        if bat == None: # No battery under state
             bat = yolink.getValue('battery')
         return(bat)
     
@@ -997,7 +996,7 @@ class YoLinkMQTTDevice(object):
                 tmp['index'] = index
                 yolink.scheduleList.append(tmp)
             return(index)
-        return(-1)
+        return(None)
             
     def deleteSchedule(yolink, index):
         logging.debug(yolink.type + 'addSchedule')       
