@@ -64,7 +64,7 @@ class YoLink_lock(YoLinkMQTTDevice):
     def getDoorBellRing(yolink):
         logging.debug('getDoorBellRing')
         if yolink.alertType == None:
-            return (None)
+            return (False)
         else:
             return(yolink.alertType =='DoorBell' or yolink.alertType =='bell')
 
