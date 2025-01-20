@@ -46,7 +46,7 @@ except ImportError:
 
 
 
-version = '1.4.3'
+version = '1.4.4'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
@@ -511,6 +511,7 @@ class YoLinkSetup (udi_interface.Node):
         if self.pollStart:
             logging.debug('System Poll executing: {}'.format(polltype))
             if self.yoAccess.online:
+                self.updateEpochTime()
                 self.my_setDriver('ST', 1)
                 if 'longPoll' in polltype:
                     #Keep token current
@@ -521,7 +522,7 @@ class YoLinkSetup (udi_interface.Node):
                         #            time.sleep(60)
                         #logging.info('Updating device status')
                         #nodes = self.poly.getNodes()
-                        self.updateEpochTime()
+                        
                         for nde in self.yolink_nodes:
                             if nde != 'setup':   # but not the controller node
                                 self.yolink_nodes[nde].checkOnline()
@@ -649,18 +650,18 @@ class YoLinkSetup (udi_interface.Node):
     def updateEpochTime(self, command=None ):
         logging.info('updateEpochTime ')
         #unit = int(command.get('value'))
-        self.my_setDriver('TIME', int(time.time()/60))
+        self.my_setDriver('TIME', int(time.time()))
 
 
     id = 'setup'
     commands = {
-                'EPOCHTIME': updateEpochTime,
+                #'EPOCHTIME': updateEpochTime,
                 }
 
     drivers = [
             {'driver': 'ST', 'value':0, 'uom':25},
             {'driver': 'GV1', 'value':0, 'uom':25},
-            {'driver': 'TIME', 'value':99, 'uom':151},
+            {'driver': 'TIME', 'value':int(time.time()), 'uom':151},
            ]
 
 

@@ -12,9 +12,9 @@
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
          </sends>
-         <accepts>
+         <!--<accepts>
             <cmd id="EPOCHTIME"  /> 
-         </accepts>
+         </accepts>-->
       </cmds>
    </nodeDef> 
 
