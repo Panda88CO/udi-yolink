@@ -43,7 +43,7 @@ class udiYoMotionSensor(udi_interface.Node):
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},
-            {'driver': 'TIME', 'value': 0, 'uom': 44},
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
             ]
     
 
@@ -117,13 +117,11 @@ class udiYoMotionSensor(udi_interface.Node):
         if self.yoMotionsSensor.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoMotionsSensor.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoMotionsSensor.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoMotionsSensor.getLastUpdateTime(), 151)
             if self.yoMotionsSensor.online:
                 logging.debug('Motion sensor CMD setting: {}'.format(self.cmd_state))
                 motion_state = self.getMotionState()

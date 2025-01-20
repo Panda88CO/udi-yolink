@@ -56,7 +56,7 @@ class udiYoOutletPwr(udi_interface.Node):
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25},            
             {'driver': 'GV20', 'value': 99, 'uom': 25},              
-            {'driver': 'TIME', 'value': 0, 'uom': 44},
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
 
             ]
 
@@ -157,13 +157,11 @@ class udiYoOutletPwr(udi_interface.Node):
             self.my_setDriver('GV7', 98)
             self.my_setDriver('GV8', 98)
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
         logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoOutlet.getLastUpdateTime(), 151)
             if self.yoOutlet.online: 
                 #if  self.yoOutlet.online:
                 self.my_setDriver('ST',1)

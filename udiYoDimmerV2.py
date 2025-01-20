@@ -41,7 +41,7 @@ class udiYoDimmer(udi_interface.Node):
                  
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},            
-            {'driver': 'TIME', 'value': 0, 'uom': 151},
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
             ]
     '''
        drivers = [
@@ -138,9 +138,6 @@ class udiYoDimmer(udi_interface.Node):
         if self.yoDimmer.data_updated():
             self.updateData()
 
-
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoDimmer.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):

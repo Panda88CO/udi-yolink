@@ -42,7 +42,7 @@ class udiYoSwitch(udi_interface.Node):
 
         {'driver': 'ST', 'value': 0, 'uom': 25},
         {'driver': 'GV20', 'value': 99, 'uom': 25},      
-        {'driver': 'TIME', 'value': 0, 'uom': 44},        
+         {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},        
         ]
 
 
@@ -147,13 +147,11 @@ class udiYoSwitch(udi_interface.Node):
         if self.yoSwitch.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoSwitch.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
         if self.node is not None:
             state =  self.yoSwitch.getState().upper()
-            self.my_setDriver('TIME', self.yoSwitch.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoSwitch.getLastUpdateTime(), 151)
 
             if self.yoSwitch.online:
                 self.my_setDriver('ST', 1)

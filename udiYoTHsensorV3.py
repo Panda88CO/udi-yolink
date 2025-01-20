@@ -60,7 +60,7 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'GV13', 'value': 0, 'uom': 51},
             {'driver': 'ST', 'value': 0, 'uom': 25},            
             {'driver': 'GV20', 'value': 99, 'uom': 25},            
-            {'driver': 'TIME', 'value': 0, 'uom': 44},    
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},    
             ]
 
 
@@ -135,8 +135,6 @@ class udiYoTHsensor(udi_interface.Node):
         if self.yoTHsensor.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoTHsensor.getTimeSinceUpdateMin(), 44)
 
     def get_alarms_state (self):
         alarm_on = False
@@ -160,7 +158,7 @@ class udiYoTHsensor(udi_interface.Node):
             self.alarm_state = alarm_det
             
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoTHsensor.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoTHsensor.getLastUpdateTime(), 151)
 
             if self.yoTHsensor.online:
                 logging.debug("yoTHsensor temp: {}".format(self.yoTHsensor.getTempValueC()))

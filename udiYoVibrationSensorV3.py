@@ -40,7 +40,7 @@ class udiYoVibrationSensor(udi_interface.Node):
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},    
             {'driver': 'GV20', 'value': 99, 'uom': 25},
-            {'driver': 'TIME', 'value': 0, 'uom': 44},                   
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                   
             ]
 
 
@@ -99,12 +99,10 @@ class udiYoVibrationSensor(udi_interface.Node):
         if self.yoVibrationSensor.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoVibrationSensor.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoVibrationSensor.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoVibrationSensor.getLastUpdateTime(), 151)
             if self.yoVibrationSensor.online:               
                 vib_state = self.getVibrationState()
                 if vib_state == 1:

@@ -46,7 +46,7 @@ except ImportError:
 
 
 
-version = '1.4.2'
+version = '1.4.3'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
@@ -181,10 +181,10 @@ class YoLinkSetup (udi_interface.Node):
             self.my_setDriver('ST', 0)
         #self.poly.updateProfile()
         
-        self.scheduler = BackgroundScheduler()
-        self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
-        self.scheduler.start()
-        self.updateEpochTime()
+        #self.scheduler = BackgroundScheduler()
+        #self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
+        #self.scheduler.start()
+        #self.updateEpochTime()
 
     def addNodes (self, deviceList):
         for dev in deviceList:
@@ -487,12 +487,12 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.my_setDriver('ST', 0)
 
-    def display_update(self):
-        logging.debug('display_update')
-        self.updateEpochTime()
-        for nde in self.yolink_nodes:
-            if nde != 'setup':   # but not the controller node
-                self.yolink_nodes[nde].updateLastTime()
+    #def display_update(self):
+    #    logging.debug('display_update')
+    #    self.updateEpochTime()
+    #    for nde in self.yolink_nodes:
+    #        if nde != 'setup':   # but not the controller node
+    #            self.yolink_nodes[nde].updateLastTime()
 
     def checkNodes(self):
         logging.info('Updating Nodes')
@@ -660,7 +660,7 @@ class YoLinkSetup (udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value':0, 'uom':25},
             {'driver': 'GV1', 'value':0, 'uom':25},
-            {'driver': 'TIME', 'value':99, 'uom':44},
+            {'driver': 'TIME', 'value':99, 'uom':151},
            ]
 
 

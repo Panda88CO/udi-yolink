@@ -425,7 +425,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 0, 'uom': 25},
-            {'driver': 'TIME', 'value': 0, 'uom': 44},            
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},            
             ]
     
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -577,15 +577,12 @@ class udiYoMultiOutlet(udi_interface.Node):
         if self.yoMultiOutlet.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
-
     def updateData(self):
         outletStates =  self.yoMultiOutlet.getMultiOutStates()
 
         if self.node_fully_config:
             self.my_setDriver('ST',1)
-            self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoMultiOutlet.getLastUpdateTime(), 151)
 
             for outlet in range(0,self.nbrOutlets):
                 portName = 'port'+str(outlet)

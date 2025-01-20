@@ -46,7 +46,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
             {'driver': 'GV7', 'value': 0, 'uom': 25},      
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25}, 
-            {'driver': 'TIME', 'value': 0, 'uom': 44},
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
 
             ]
 
@@ -108,13 +108,11 @@ class udiYoPowerFailSenor(udi_interface.Node):
         if self.yoPowerFail.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoPowerFail.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoPowerFail.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoPowerFail.getLastUpdateTime(), 151)
             
             if self.yoPowerFail.online:               
                 state = self.yoPowerFail.getAlertState()

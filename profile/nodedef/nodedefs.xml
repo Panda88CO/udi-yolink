@@ -4,7 +4,7 @@
       <sts>
          <st id="ST"  editor="connect" />
          <st id="GV1"  editor="ready" />         
-         <st id="TIME"  editor="epochtime" />
+         <st id="TIME"  editor="unixtime" />
          <!--- st id="GV20" editor="suspendstate" /-->
       </sts>
       <cmds>
@@ -36,7 +36,7 @@
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="epochtime" />                  
+         <st id="TIME" editor="unixtime" />                  
       </sts>
       <cmds>
          <sends>
@@ -109,7 +109,7 @@
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
-         <st id="TIME" editor="epochtime" />            
+         <st id="TIME" editor="unixtime" />            
       </sts>
       <cmds>
          <sends>
@@ -265,7 +265,7 @@
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                     
+         <st id="TIME" editor="unixtime" />                     
       </sts>
       <cmds>
          <sends>
@@ -342,7 +342,7 @@
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
-         <st id="TIME" editor="epochtime" />            
+         <st id="TIME" editor="unixtime" />            
       </sts>
       <cmds>
          <sends>
@@ -411,7 +411,7 @@
          <st id="GV19" editor="binDays" />      
          <st id="ST"  editor="status" />   
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                     
+         <st id="TIME" editor="unixtime" />                     
       </sts>
       <cmds>
          <sends>
@@ -524,7 +524,7 @@
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />               
+         <st id="TIME" editor="unixtime" />               
       </sts>
       <cmds>
          <sends>
@@ -594,7 +594,7 @@
          <st id="GV10" editor="pwrmode" />  
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                  
+         <st id="TIME" editor="unixtime" />                  
       </sts>
       <cmds>
          <sends>
@@ -643,7 +643,7 @@
          <st id="GV12" editor="humidity" />
          <st id="GV13" editor="humidity" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                              
+         <st id="TIME" editor="unixtime" />                              
       </sts>
       <cmds>
          <sends>
@@ -669,7 +669,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                              
+         <st id="TIME" editor="unixtime" />                              
       </sts>
       <cmds>
          <sends>
@@ -720,7 +720,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" /> 
-         <st id="TIME" editor="epochtime" />                             
+         <st id="TIME" editor="unixtime" />                             
       </sts>
       <cmds>
          <sends>
@@ -754,7 +754,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" /> 
-         <st id="TIME" editor="epochtime" />                             
+         <st id="TIME" editor="unixtime" />                             
       </sts>
       <cmds>
          <sends>
@@ -793,7 +793,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="epochtime" />                           
+         <st id="TIME" editor="unixtime" />                           
       </sts>
       <cmds>
          <sends>
@@ -825,7 +825,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
-         <st id="TIME" editor="epochtime" />                         
+         <st id="TIME" editor="unixtime" />                         
       </sts>
       <cmds>
          <sends>
@@ -904,7 +904,7 @@
          <st id="GV3" editor="doorstate" /> 
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />  
-         <st id="TIME" editor="epochtime" />                      
+         <st id="TIME" editor="unixtime" />                      
       </sts>
       <cmds>
          <sends>
@@ -936,7 +936,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="epochtime" />                     
+         <st id="TIME" editor="unixtime" />                     
       </sts>
       <cmds>
          <sends>
@@ -971,7 +971,7 @@
          <st id="GV7" editor="cmdstatus" />
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="epochtime" />                     
+         <st id="TIME" editor="unixtime" />                     
 
       </sts>
       <cmds>
@@ -1002,7 +1002,7 @@
          <st id="BATLVL" editor="batlevel" />    
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />       
-         <st id="TIME" editor="epochtime" />
+         <st id="TIME" editor="unixtime" />
 
       </sts>
       <cmds>
@@ -1028,7 +1028,7 @@
          <st id="GV2" editor="sirenbatlevel" />
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />               
+         <st id="TIME" editor="unixtime" />               
       </sts>
       <cmds>
          <sends>

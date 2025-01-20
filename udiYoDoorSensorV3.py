@@ -37,7 +37,7 @@ class udiYoDoorSensor(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 25},      
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25}, 
-            {'driver': 'TIME', 'value': 0, 'uom': 44},
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
 
               ]
 
@@ -117,12 +117,9 @@ class udiYoDoorSensor(udi_interface.Node):
 
 
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoDoorSensor.getTimeSinceUpdateMin(), 44)
-
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoDoorSensor.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoDoorSensor.getLastUpdateTime(), 151)
             if self.yoDoorSensor.online:
                 doorstate = self.doorState()
                 if doorstate == 1:

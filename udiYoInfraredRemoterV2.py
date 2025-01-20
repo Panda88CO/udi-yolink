@@ -38,7 +38,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             {'driver': 'GV2', 'value': 99, 'uom': 25}, 
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},       
-            {'driver': 'TIME', 'value': 0, 'uom': 44},                 
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                 
             ]
 
 
@@ -99,14 +99,12 @@ class udiYoInfraredRemoter(udi_interface.Node):
             return(2)
         else:
             return(99)
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoIRrem.getTimeSinceUpdateMin(), 44)
 
 
     def updateData(self):
         if self.node is not None:
             logging.debug('updateData - {}'.format(self.yoIRrem.online))
-            self.my_setDriver('TIME', self.yoIRrem.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoIRrem.getLastUpdateTime(), 151)
 
         if  self.yoIRrem.online:
             self.my_setDriver('ST', 1)
