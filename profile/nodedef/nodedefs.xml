@@ -216,8 +216,8 @@
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >-->
             <cmd id="DELAY_CTRL" > 
-               <p id="Dondelay" editor="delaymin" init="GV1" /> 
-               <p id="Doffdelay" editor="delaymin" init="GV2" />                                     
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
             <cmd id="LOOKUP_SCH" > 

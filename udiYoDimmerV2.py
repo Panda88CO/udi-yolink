@@ -73,6 +73,7 @@ class udiYoDimmer(udi_interface.Node):
         self.schedule_selected = 0
         self.brightness = 50
         self.previous_level = self.brightness
+        self.dimmer_step = 5
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -215,7 +216,7 @@ class udiYoDimmer(udi_interface.Node):
 
     def increase_level(self, command = None):
         logging.info('udiYoDimmer increase_level') 
-        self.yoDimmer.brightness += 3
+        self.yoDimmer.brightness += self.dimmer_step
         self.yoDimmer.setBrightness(self.yoDimmer.brightness)  
         self.my_setDriver('GV3', self.yoDimmer.brightness)
         #self.my_setDriver('GV0',0 )
@@ -223,7 +224,7 @@ class udiYoDimmer(udi_interface.Node):
 
     def decrease_level(self, command = None):
         logging.info('udiYoDimmer decrease_level')
-        self.yoDimmer.brightness -= 3
+        self.yoDimmer.brightness -= self.dimmer_step
         self.yoDimmer.setBrightness(self.yoDimmer.brightness) 
         self.my_setDriver('GV3', self.yoDimmer.brightness)
         #self.my_setDriver('GV0',0 )
