@@ -56,12 +56,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -129,12 +129,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd > -->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -209,12 +209,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="Dondelay" editor="delaymin" init="GV1" /> 
                <p id="Doffdelay" editor="delaymin" init="GV2" />                                     
@@ -468,12 +468,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -543,12 +543,12 @@
             <cmd id="MANCTRL" > 
                <p id="" editor="manctrl" init="1" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
