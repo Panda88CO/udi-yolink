@@ -473,7 +473,10 @@ class YoLinkMQTTDevice(object):
         else:
             return(None)
 
-
+    def getLastUpdateTime(yolink):
+        return(int(yolink.lastUpdate()/1000))
+    
+    
     def getTimeSinceUpdate(yolink):
         logging.debug('getTimeSinceUpdate')
         try:

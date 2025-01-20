@@ -41,7 +41,7 @@ class udiYoDimmer(udi_interface.Node):
                  
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},            
-            {'driver': 'TIME', 'value': 0, 'uom': 44},
+            {'driver': 'TIME', 'value': 0, 'uom': 151},
             ]
     '''
        drivers = [
@@ -145,7 +145,7 @@ class udiYoDimmer(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoDimmer.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoDimmer.getLastUpdateTime(), 151)
 
             state =  self.yoDimmer.getState().upper()
             if self.yoDimmer.online:
@@ -162,9 +162,9 @@ class udiYoDimmer(udi_interface.Node):
                     self.my_setDriver('GV0', 99)
                 self.last_state = state
                 self.my_setDriver('GV3', self.yoDimmer.brightness)
-                if self.yoDimmer.brightness >= self.previous_level + 3:
+                if self.yoDimmer.brightness >= self.previous_level + self.dimmer_step:
                     self.node.reportCmd('BRT')
-                if self.yoDimmer.brightness >= self.previous_level - 3:
+                if self.yoDimmer.brightness >= self.previous_level - self.dimmer_step:
                     self.node.reportCmd('DIM')
                 self.previous_level = self.yoDimmer.brightness
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
