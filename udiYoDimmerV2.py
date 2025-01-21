@@ -212,7 +212,7 @@ class udiYoDimmer(udi_interface.Node):
 
 
     def increase_level(self, command = None):
-        logging.info('udiYoDimmer increase_level') 
+        logging.info(f'udiYoDimmer increase_level - {command}') 
         self.yoDimmer.brightness += self.dimmer_step
         self.yoDimmer.setBrightness(self.yoDimmer.brightness)  
         self.my_setDriver('GV3', self.yoDimmer.brightness)
@@ -220,14 +220,20 @@ class udiYoDimmer(udi_interface.Node):
         #self.node.reportCmd('DFOF')
 
     def decrease_level(self, command = None):
-        logging.info('udiYoDimmer decrease_level')
+        logging.info(f'udiYoDimmer decrease_level - {command}')
         self.yoDimmer.brightness -= self.dimmer_step
         self.yoDimmer.setBrightness(self.yoDimmer.brightness) 
         self.my_setDriver('GV3', self.yoDimmer.brightness)
         #self.my_setDriver('GV0',0 )
         #self.node.reportCmd('DFOF')
 
-
+    def manual_dim(self, command = None):
+        logging.info(f'udiYoDimmer manual_dim - {command}')
+        #self.yoDimmer.brightness -= self.dimmer_step
+        #self.yoDimmer.setBrightness(self.yoDimmer.brightness) 
+        #self.my_setDriver('GV3', self.yoDimmer.brightness)
+        #self.my_setDriver('GV0',0 )
+        #self.node.reportCmd('DFOF')
 
     def set_dimmer_level(self, command = None):
         brightness = int(command.get('value'))   
@@ -335,6 +341,8 @@ class udiYoDimmer(udi_interface.Node):
                 'CTRL_SCH'      : control_schedule,
                 'BRT'           : increase_level,
                 'DIM'           : decrease_level,
+                'BMAN'          : manual_dim,
+                'SMAN'          : manual_dim,
                 }
 
 
