@@ -339,10 +339,11 @@ class udiYoDimmer(udi_interface.Node):
                 'LOOKUP_SCH'    : lookup_schedule,
                 'DEFINE_SCH'    : define_schedule,
                 'CTRL_SCH'      : control_schedule,
-                'BRT'           : increase_level,
-                'DIM'           : decrease_level,
-                'BMAN'          : manual_dim,
-                'SMAN'          : manual_dim,
+                'FDUP'          : manual_dim,
+                'FDDOWN'        : manual_dim,
+                #'BMAN'          : manual_dim,
+                #'SMAN'          : manual_dim,
+                'FDSTOP'        : manual_dim
                 }
 
 
