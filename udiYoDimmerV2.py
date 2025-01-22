@@ -229,6 +229,14 @@ class udiYoDimmer(udi_interface.Node):
 
     def manual_dim(self, command = None):
         logging.info(f'udiYoDimmer manual_dim - {command}')
+        if str(command) == 'FDUP':
+            logging.debug('FDUP detected')
+        elif str(command) == 'FDDOWN':
+            logging.debug('FDDOWN detected')
+        elif str(command) == 'FDSTOP':            
+            logging.debug('FDSTOP detected')
+        
+    
         #self.yoDimmer.brightness -= self.dimmer_step
         #self.yoDimmer.setBrightness(self.yoDimmer.brightness) 
         #self.my_setDriver('GV3', self.yoDimmer.brightness)
