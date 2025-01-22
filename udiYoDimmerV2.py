@@ -231,11 +231,13 @@ class udiYoDimmer(udi_interface.Node):
         logging.info(f'udiYoDimmer manual_dim - {command}')
         if str(command) == 'FDUP':
             logging.debug('FDUP detected')
+            dim_start = time.time()
         elif str(command) == 'FDDOWN':
             logging.debug('FDDOWN detected')
-        elif str(command) == 'FDSTOP':            
+            dim_start = time.time()
+        elif str(command) == 'FDSTOP':
             logging.debug('FDSTOP detected')
-        
+            dim_stop = time.time()
     
         #self.yoDimmer.brightness -= self.dimmer_step
         #self.yoDimmer.setBrightness(self.yoDimmer.brightness) 
@@ -244,9 +246,9 @@ class udiYoDimmer(udi_interface.Node):
         #self.node.reportCmd('DFOF')
 
     def set_dimmer_level(self, command = None):
-        brightness = int(command.get('value'))   
+        brightness = int(command.get('value'))
         #self.brightness = brightness
-        logging.info('udiYoDimmer set_dimmer_level:{}'.format(brightness) )  
+        logging.info('udiYoDimmer set_dimmer_level:{}'.format(brightness) )
         if 0 >= brightness :
             #self.yoDimmer.setState('OFF')
             brightness = 0            
@@ -256,7 +258,7 @@ class udiYoDimmer(udi_interface.Node):
         self.my_setDriver('GV3',brightness )
 
     def switchControl(self, command):
-        logging.info('udiYoDimmer switchControl') 
+        logging.info('udiYoDimmer switchControl')
         ctrl = command.get('value')   
         logging.debug('switchControl : {}'.format(ctrl))
         if ctrl == 1:
