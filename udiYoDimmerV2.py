@@ -22,7 +22,7 @@ import time
 from yolinkDimmerV3 import YoLinkDim
 
 class udiYoDimmer(udi_interface.Node):
-    from  udiYolinkLib import  my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import  my_setDriver, save_cmd_struct, retrieve_cmd_struct, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
     id = 'yodimmer'
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},
@@ -71,8 +71,14 @@ class udiYoDimmer(udi_interface.Node):
         self.onDelay = 0
         self.offDelay = 0
         self.schedule_selected = 0
-        self.brightness = 50
-        self.previous_level = self.brightness
+        self.dim_setting = self.retrieve_cmd_struct()
+        if self.dim_setting == {}:
+            self.dim_setting['dim'] = 50
+            self.dim_setting['dim_up'] =  80
+            self.dim_setting['dim_down'] = 20
+            self.dim_setting['previous'] = self.dim_setting['dim']
+            self.save_cmd_struct(self.dim_setting)
+        self.dim_setting['previous'] = self.dim_setting['dim']
         self.dimmer_step = 5
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -99,7 +105,8 @@ class udiYoDimmer(udi_interface.Node):
         time.sleep(2)
         self.yoDimmer.initNode()
         time.sleep(2)
-        self.previous_level = self.yoDimmer.brightness
+        self.yoDimmer.setBrightness(self.dim_setting['dim'])
+        self.dim_setting['previous'] = self.yoDimmer.brightness
         #self.my_setDriver('ST', 1)
         self.yoDimmer.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
         self.yoDimmer.refreshSchedules()
@@ -143,8 +150,8 @@ class udiYoDimmer(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             self.my_setDriver('TIME', self.yoDimmer.getLastUpdateTime(), 151)
-
             state =  self.yoDimmer.getState().upper()
+            self.dim_setting['dim'] = self.yoDimmer.brightness
             if self.yoDimmer.online:
                 self.my_setDriver('ST', 1)
                 if state == 'ON':
@@ -158,12 +165,25 @@ class udiYoDimmer(udi_interface.Node):
                 else:
                     self.my_setDriver('GV0', 99)
                 self.last_state = state
-                self.my_setDriver('GV3', self.yoDimmer.brightness)
-                if self.yoDimmer.brightness >= self.previous_level + self.dimmer_step:
-                    self.node.reportCmd('BRT')
-                if self.yoDimmer.brightness >= self.previous_level - self.dimmer_step:
-                    self.node.reportCmd('DIM')
-                self.previous_level = self.yoDimmer.brightness
+
+                if self.yoDimmer.brightness >= self.dim_setting['previous'] + self.dimmer_step:
+                    self.node.reportCmd('FDUP')
+                    dim_change = abs(self.yoDimmer.brightness - self.dim_setting['previous'])
+                    dim_time = self.yoDimmer.ramp_up_time*(dim_change/(self.yoDimmer.max_level-self.yoDimmer.min_level))
+                    time.sleep(dim_time)
+                    self.node.reportCmd('FDSTOP')
+                if self.yoDimmer.brightness <= self.dim_setting['previous'] - self.dimmer_step:
+                    self.node.reportCmd('FDDOWN')
+                    dim_change = abs(self.yoDimmer.brightness - self.dim_setting['previous'])
+                    dim_time = self.yoDimmer.ramp_down_time*(dim_change/(self.yoDimmer.max_level-self.yoDimmer.min_level))
+                    time.sleep(dim_time)
+                    self.node.reportCmd('FDSTOP')
+                if self.dim_setting['previous'] != self.dim_setting['dim']:
+                    self.dim_setting['previous'] = self.dim_setting['dim']
+                    self.save_cmd_struct(self.dim_setting)
+                self.my_setDriver('GV3', self.dim_setting['dim'])
+                self.my_setDriver('GV4', self.dim_setting['dim_down'])
+                self.my_setDriver('GV3', self.dim_setting['dim_up'])
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)
@@ -175,8 +195,6 @@ class udiYoDimmer(udi_interface.Node):
             else:
                 self.my_setDriver('ST', 0)
                 self.my_setDriver('GV20', 2)
-
-
 
             sch_info = self.yoDimmer.getScheduleInfo(self.schedule_selected)
             self.update_schedule_data(sch_info, self.schedule_selected)
@@ -214,7 +232,7 @@ class udiYoDimmer(udi_interface.Node):
     def increase_level(self, command = None):
         logging.info(f'udiYoDimmer increase_level - {command}') 
         self.yoDimmer.brightness += self.dimmer_step
-        self.yoDimmer.setBrightness(self.yoDimmer.brightness)  
+        self.yoDimmer.setBrightness(self.yoDimmer.brightness)
         self.my_setDriver('GV3', self.yoDimmer.brightness)
         #self.my_setDriver('GV0',0 )
         #self.node.reportCmd('DFOF')
@@ -227,23 +245,24 @@ class udiYoDimmer(udi_interface.Node):
         #self.my_setDriver('GV0',0 )
         #self.node.reportCmd('DFOF')
 
-    def manual_dim(self, command = None):
-        logging.info(f'udiYoDimmer manual_dim - {command}')
-        if str(command) == 'FDUP':
+    def scene_dim(self, command = None):
+        logging.info(f'udiYoDimmer scene_dim - {command}')
+        ctrl = str(command.get('cmd')  )
+        if ctrl == 'FDUP':
             logging.debug('FDUP detected')
-            dim_start = time.time()
-        elif str(command) == 'FDDOWN':
+            self.yoDimmer.setBrightness(self.dim_setting['dim_up'], True)
+            self.dim_setting['dim'] = self.dim_setting['dim_up']
+            #self.my_setDriver('GV3', self.dim_setting['dim'])
+            
+            self.save_cmd_struct(self.dim_setting)
+        elif ctrl == 'FDDOWN':
             logging.debug('FDDOWN detected')
-            dim_start = time.time()
-        elif str(command) == 'FDSTOP':
+            self.yoDimmer.setBrightness(self.dim_setting['dim_down'], True)
+            self.dim_setting['dim'] = self.dim_setting['dim_up']
+            #self.my_setDriver('GV3', self.dim_setting['dim'])            
+            self.save_cmd_struct(self.dim_setting)
+        elif ctrl == 'FDSTOP':
             logging.debug('FDSTOP detected')
-            dim_stop = time.time()
-    
-        #self.yoDimmer.brightness -= self.dimmer_step
-        #self.yoDimmer.setBrightness(self.yoDimmer.brightness) 
-        #self.my_setDriver('GV3', self.yoDimmer.brightness)
-        #self.my_setDriver('GV0',0 )
-        #self.node.reportCmd('DFOF')
 
     def set_dimmer_level(self, command = None):
         brightness = int(command.get('value'))
@@ -256,6 +275,22 @@ class udiYoDimmer(udi_interface.Node):
             brightness = 100
         self.yoDimmer.setBrightness(brightness) #????
         self.my_setDriver('GV3',brightness )
+        self.dim_setting['dim'] = brightness
+        self.save_cmd_struct(self.dim_setting)
+
+    def setDimUp(self, command = None):
+        logging.debug(f'setDimUp {command}')
+        dimlvl = int(command.get('value'))
+        self.dim_setting['dim_up'] = dimlvl
+        self.my_setDriver('GV5', self.dim_setting['dim_up'])
+        self.save_cmd_struct(self.dim_setting)
+
+    def setDimDown(self, command = None):
+        logging.debug(f'setDimDown {command}')
+        dimlvl = int(command.get('value'))
+        self.dim_setting['dim_down'] = dimlvl
+        self.my_setDriver('GV5', self.dim_setting['dim_down'])
+        self.save_cmd_struct(self.dim_setting)
 
     def switchControl(self, command):
         logging.info('udiYoDimmer switchControl')
@@ -343,17 +378,17 @@ class udiYoDimmer(udi_interface.Node):
                 'DFOF'   : set_switch_foff,                
                 'SWCTRL': switchControl, 
                 'DIMLVL' : set_dimmer_level,
-                #'ONDELAY' : setOnDelay,
-                #'OFFDELAY' : setOffDelay,
+                'DIMUP' : setDimUp,
+                'DIMDOWN' : setDimDown,
                 'DELAY_CTRL'    : program_delays, 
                 'LOOKUP_SCH'    : lookup_schedule,
                 'DEFINE_SCH'    : define_schedule,
                 'CTRL_SCH'      : control_schedule,
-                'FDUP'          : manual_dim,
-                'FDDOWN'        : manual_dim,
-                #'BMAN'          : manual_dim,
-                #'SMAN'          : manual_dim,
-                'FDSTOP'        : manual_dim
+                'FDUP'          : scene_dim,
+                'FDDOWN'        : scene_dim,
+                #'BMAN'          : scene_dim,
+                #'SMAN'          : scene_dim,
+                'FDSTOP'        : scene_dim
                 }
 
 

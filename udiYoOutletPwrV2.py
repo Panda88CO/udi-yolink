@@ -197,20 +197,10 @@ class udiYoOutletPwr(udi_interface.Node):
                 else:
                     self.my_setDriver('GV20', 0)
             else:
-                #self.my_setDriver('GV0', 99)
-                #self.my_setDriver('GV1', 0)
-                #self.my_setDriver('GV2', 0)
-                #self.my_setDriver('GV3', 0)
-                #self.my_setDriver('GV4', 0)
+
                 self.my_setDriver('ST',0)
                 self.my_setDriver('GV20', 2)
-                #self.my_setDriver('GV13', self.schedule_selected)
-                #self.my_setDriver('GV14', 99)
-                #self.my_setDriver('GV15', 99,True, True, 25)
-                #self.my_setDriver('GV16', 99,True, True, 25)
-                #self.my_setDriver('GV17', 99,True, True, 25)
-                #self.my_setDriver('GV18', 99,True, True, 25)            
-                #self.my_setDriver('GV19', 0)       
+  
 
         sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
         self.update_schedule_data(sch_info, self.schedule_selected)

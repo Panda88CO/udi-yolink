@@ -170,7 +170,8 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV3" editor="dimlvl" />
-
+         <st id="GV4" editor="dimlvl" />
+         <st id="GV5" editor="dimlvl" />         
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
@@ -203,8 +204,8 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-            <!--<cmd id="BRT"  /> 
-            <cmd id="DIM"  />-->
+            <!--<cmd id="DIMDOWN"  /> 
+            <cmd id="DIMUP"  />-->
             <cmd id="FDUP"  /> 
             <cmd id="FDDOWN"  /> 
             <cmd id="FDSTOP"  />
@@ -213,6 +214,13 @@
             <cmd id="DIMLVL" > 
                <p id="" editor="dimlvl" init="GV3" /> 
             </cmd >
+            <cmd id="DIMDOWN" > 
+               <p id="" editor="dimlvl" init="GV4" /> 
+            </cmd >            
+            <cmd id="DIMUP" > 
+               <p id="" editor="dimlvl" init="GV5" /> 
+            </cmd >
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >

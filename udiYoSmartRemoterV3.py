@@ -388,15 +388,11 @@ class udiYoSmartRemoter(udi_interface.Node):
                     else:
                         self.node.setDriver('GV20', 0)
                 else:
-                    self.node.setDriver('GV0', 99)
-                    self.node.setDriver('GV1', 99)
-                    self.node.setDriver('GV2', 99)
-                    self.node.setDriver('GV3', 99)
-                    self.node.setDriver('CLITEMP', 99, True, True, 25)
-                    #self.node.setDriver('ST', 0, True, True)
+
+                    self.node.setDriver('ST', 0, True, True)
                     self.node.setDriver('GV20', 2)
-        except Exception as E:
-            logging.error('Smart Remote  updateData exeption: {}'.format(E))
+        except Exception as e:
+            logging.error('Smart Remote  updateData exeption: {}'.format(e))
 
 
 

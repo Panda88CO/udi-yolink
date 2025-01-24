@@ -175,20 +175,9 @@ class udiYoSwitchSec(udi_interface.Node):
 
             else:
                 self.my_setDriver('ST', 0)
-                #self.my_setDriver('GV0', 99)
-                #self.my_setDriver('GV1', 0)
-                #self.my_setDriver('GV2', 0)
+
                 self.my_setDriver('GV20', 2)
 
-                #self.my_setDriver('GV21', 99, 25)
-                #self.my_setDriver('GV22', 99, 25)
-                #self.my_setDriver('GV13', self.schedule_selected)
-                #self.my_setDriver('GV14', 99)
-                #self.my_setDriver('GV15', 99, 25)
-                #self.my_setDriver('GV16', 99, 25)
-                #self.my_setDriver('GV17', 99, 25)
-                #self.my_setDriver('GV18', 99, 25)
-                #self.my_setDriver('GV19', 0)
 
             if self.nbr_keys > 0:
                 event_data = self.yoSwitch.getEventData()
