@@ -184,9 +184,9 @@ class udiYoDimmer(udi_interface.Node):
                 if self.dim_setting['previous'] != self.dim_setting['dim']:
                     self.dim_setting['previous'] = self.dim_setting['dim']
                     self.save_cmd_struct(self.dim_setting)
-                self.my_setDriver('GV3', self.dim_setting['dim'])
-                self.my_setDriver('GV4', self.dim_setting['dim_down'])
-                self.my_setDriver('GV5', self.dim_setting['dim_up'])
+                self.my_setDriver('GV3', self.dim_setting['dim'], 51)
+                self.my_setDriver('GV4', self.dim_setting['dim_down'], 51)
+                self.my_setDriver('GV5', self.dim_setting['dim_up'], 51)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)
@@ -253,15 +253,16 @@ class udiYoDimmer(udi_interface.Node):
         ctrl = str(command.get('cmd')  )
         if ctrl == 'FDUP':
             logging.debug('FDUP detected')
-            self.yoDimmer.setBrightness(self.dim_setting['dim_up'], True)
             self.dim_setting['dim'] = self.dim_setting['dim_up']
+            self.yoDimmer.setBrightness(self.dim_setting['dim'], True)
+            
             #self.my_setDriver('GV3', self.dim_setting['dim'])
             
             self.save_cmd_struct(self.dim_setting)
         elif ctrl == 'FDDOWN':
             logging.debug('FDDOWN detected')
-            self.yoDimmer.setBrightness(self.dim_setting['dim_down'], True)
             self.dim_setting['dim'] = self.dim_setting['dim_down']
+            self.yoDimmer.setBrightness(self.dim_setting['dim'], True)
             #self.my_setDriver('GV3', self.dim_setting['dim'])            
             self.save_cmd_struct(self.dim_setting)
         elif ctrl == 'FDSTOP':
@@ -292,7 +293,7 @@ class udiYoDimmer(udi_interface.Node):
         logging.debug(f'setDimDown {command}')
         dimlvl = int(command.get('value'))
         self.dim_setting['dim_down'] = dimlvl
-        self.my_setDriver('GV5', self.dim_setting['dim_down'])
+        self.my_setDriver('GV4', self.dim_setting['dim_down'])
         self.save_cmd_struct(self.dim_setting)
 
     def switchControl(self, command):
