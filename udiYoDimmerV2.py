@@ -51,7 +51,8 @@ class udiYoDimmer(udi_interface.Node):
             'GV1' = OnDelay
             'GV2' = OffDelay
             'GV3' = Dimmer Brightness
-            #'GV4' = Energy
+            'GV4' = Dim down target
+            'GV5' = Dim up target
             'ST' = Online/Connected
             'GV20' = Suspended state
             ]
@@ -185,7 +186,7 @@ class udiYoDimmer(udi_interface.Node):
                     self.save_cmd_struct(self.dim_setting)
                 self.my_setDriver('GV3', self.dim_setting['dim'])
                 self.my_setDriver('GV4', self.dim_setting['dim_down'])
-                self.my_setDriver('GV3', self.dim_setting['dim_up'])
+                self.my_setDriver('GV5', self.dim_setting['dim_up'])
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)
