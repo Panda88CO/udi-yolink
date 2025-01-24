@@ -82,7 +82,7 @@ class udiYoDimmer(udi_interface.Node):
             self.dim_setting['previous'] = self.dim_setting['dim']
             self.save_cmd_struct(self.dim_setting)
         self.dim_setting['previous'] = self.dim_setting['dim']
-        self.dimmer_step = 5
+        self.dimmer_step = 3
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -151,6 +151,8 @@ class udiYoDimmer(udi_interface.Node):
 
 
     def updateData(self):
+        logging.info('udiYoDimmer -  updateData{}'.format(self.schedule_selected))
+
         if self.node is not None:
             self.my_setDriver('TIME', self.yoDimmer.getLastUpdateTime(), 151)
             state =  self.yoDimmer.getState().upper()

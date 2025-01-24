@@ -78,22 +78,21 @@ class YoLinkDim(YoLinkMQTTDevice):
         logging.debug(yolink.type+' - setState')
         logging.debug('Dimmer Brightness: {}'.format(yolink.brightness))
 
-        if 'setState'  in yolink.methodList:          
-            if state.lower() not in yolink.stateList:
-                logging.error('Unknows state passed')
-                return(False)
-            if state.lower() == 'on':
-                state = 'open'
-            if state.lower() == 'off':
-                state = 'closed'
-            data = {}
-            data['params'] = {}
-            data['params']['state'] = state.lower()
-            data['params']['brightness'] = int(yolink.brightness)
-            logging.debug('Dimmer setState Data {}'.format(data))
-            return(yolink.setDevice( data))
-        else:
+        #if 'setState'  in yolink.methodList:          
+        if state.lower() not in yolink.stateList:
+            logging.error('Unknows state passed')
             return(False)
+        if state.lower() == 'on':
+            state = 'open'
+        if state.lower() == 'off':
+            state = 'closed'
+        data = {}
+        data['params'] = {}
+        data['params']['state'] = state.lower()
+        data['params']['brightness'] = int(yolink.brightness)
+        logging.debug('Dimmer setState Data {}'.format(data))
+        return(yolink.setDevice( data))
+
     
 
     def getState(yolink):

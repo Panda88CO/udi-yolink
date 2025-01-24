@@ -159,7 +159,7 @@ class udiYoOutletPwr(udi_interface.Node):
 
 
     def updateData(self):
-        logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
+        logging.info('udiYoOutlet updateData -  {}'.format(self.schedule_selected))
         if self.node is not None:
             self.my_setDriver('TIME', self.yoOutlet.getLastUpdateTime(), 151)
             if self.yoOutlet.online: 
