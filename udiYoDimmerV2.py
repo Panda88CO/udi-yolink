@@ -261,7 +261,7 @@ class udiYoDimmer(udi_interface.Node):
         elif ctrl == 'FDDOWN':
             logging.debug('FDDOWN detected')
             self.yoDimmer.setBrightness(self.dim_setting['dim_down'], True)
-            self.dim_setting['dim'] = self.dim_setting['dim_up']
+            self.dim_setting['dim'] = self.dim_setting['dim_down']
             #self.my_setDriver('GV3', self.dim_setting['dim'])            
             self.save_cmd_struct(self.dim_setting)
         elif ctrl == 'FDSTOP':
