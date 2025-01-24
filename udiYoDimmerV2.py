@@ -29,6 +29,8 @@ class udiYoDimmer(udi_interface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV3', 'value': 0, 'uom': 51},
+            {'driver': 'GV4', 'value': 0, 'uom': 51},
+            {'driver': 'GV5', 'value': 0, 'uom': 51},
             {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour

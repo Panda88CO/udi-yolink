@@ -180,7 +180,7 @@ class udiYoOutletPwr(udi_interface.Node):
                 self.updateAlerts()                
                 if self.supportPower():
                     tmp =  self.yoOutlet.getEnergy()
-                    if tmp != None:
+                    if tmp is not None:
                         power = round(tmp['power']/10000,3) # reports 1/10W
                         energy = round(tmp['watt']/10000,3) # reports 1/10Wh
                         self.my_setDriver('GV3', power, 30)
