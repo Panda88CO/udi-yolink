@@ -76,6 +76,7 @@ class udiYoDimmer(udi_interface.Node):
         self.schedule_selected = 0
         self.dim_setting = self.retrieve_cmd_struct()
         if self.dim_setting == {}:
+
             self.dim_setting['dim'] = 50
             self.dim_setting['dim_up'] =  80
             self.dim_setting['dim_down'] = 20
@@ -160,17 +161,20 @@ class udiYoDimmer(udi_interface.Node):
             if self.yoDimmer.online:
                 self.my_setDriver('ST', 1)
                 if state == 'ON':
-                    self.my_setDriver('GV0', 1)
-                    #if self.last_state != state:
-                    #    self.node.reportCmd('DON')  
+                    
+                    if self.last_state != state:
+                        self.my_setDriver('GV0', 1)
+                        self.node.reportCmd('DON')  
                 elif  state == 'OFF':
-                    self.my_setDriver('GV0', 0)
-                    #if self.last_state != state:
-                    #    self.node.reportCmd('DOF')  
+                    #self.my_setDriver('GV0', 0)
+                    if self.last_state != state:
+                        self.my_setDriver('GV0', 0)
+                        self.node.reportCmd('DOF')  
                 else:
                     self.my_setDriver('GV0', 99)
                 self.last_state = state
-
+                tmp = self.dim_setting['previous'] 
+                logging.debug(f'dim {self.yoDimmer.brightness} {tmp}')
                 if self.yoDimmer.brightness >= self.dim_setting['previous'] + self.dimmer_step:
                     self.node.reportCmd('FDUP')
                     dim_change = abs(self.yoDimmer.brightness - self.dim_setting['previous'])
