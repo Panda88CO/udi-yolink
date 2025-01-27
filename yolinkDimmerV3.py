@@ -42,6 +42,7 @@ class YoLinkDim(YoLinkMQTTDevice):
     ''' Assume no event support needed if using MQTT'''
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
+        yolink.brightness = yolink.dataAPI[yolink.dData][yolink.dState]['brightness'] 
     '''
     def initNode(yolink):
         yolink.refreshState()
