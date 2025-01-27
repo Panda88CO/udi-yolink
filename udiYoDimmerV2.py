@@ -35,10 +35,10 @@ class udiYoDimmer(udi_interface.Node):
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
             {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
-            {'driver': 'GV21', 'value': 99, 'uom': 25}, #start Min              
+            {'driver': 'GV21', 'value': 99, 'uom': 25}, #start sec             
             {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
             {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
-            {'driver': 'GV22', 'value': 99, 'uom': 25}, #start Min              
+            {'driver': 'GV22', 'value': 99, 'uom': 25}, #start sec             
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
                  
             {'driver': 'ST', 'value': 0, 'uom': 25},
@@ -176,14 +176,14 @@ class udiYoDimmer(udi_interface.Node):
                 tmp = self.dim_setting['previous'] 
                 logging.debug(f'dim {self.yoDimmer.brightness} {tmp}')
                 if self.yoDimmer.brightness >= self.dim_setting['previous'] + self.dimmer_step:
-                    logging.debug('dim UP detected')
+                    #logging.debug('dim UP detected')
                     self.node.reportCmd('FDUP')
                     dim_change = abs(self.yoDimmer.brightness - self.dim_setting['previous'])
                     dim_time = self.yoDimmer.ramp_up_time*(dim_change/(self.yoDimmer.max_level-self.yoDimmer.min_level))
                     time.sleep(dim_time)
                     self.node.reportCmd('FDSTOP')
                 if self.yoDimmer.brightness <= self.dim_setting['previous'] - self.dimmer_step:
-                    logging.debug('dim DOWN detected')
+                    #logging.debug('dim DOWN detected')
                     self.node.reportCmd('FDDOWN')
                     dim_change = abs(self.yoDimmer.brightness - self.dim_setting['previous'])
                     dim_time = self.yoDimmer.ramp_down_time*(dim_change/(self.yoDimmer.max_level-self.yoDimmer.min_level))

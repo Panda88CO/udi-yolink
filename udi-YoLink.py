@@ -46,7 +46,7 @@ except ImportError:
 
 
 
-version = '1.4.8'
+version = '1.4.9'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
@@ -139,7 +139,7 @@ class YoLinkSetup (udi_interface.Node):
                                 'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
                                 'WaterDepthSensor']
         
-        self.supportedYoTypes = ['Dimmer']
+        #self.supportedYoTypes = ['Dimmer']
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
