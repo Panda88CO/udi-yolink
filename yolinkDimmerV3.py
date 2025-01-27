@@ -30,7 +30,7 @@ class YoLinkDim(YoLinkMQTTDevice):
         yolink.ramp_up_time = 1 #sec
         yolink.ramp_down_time = 1 #sec
         yolink.min_level = 0
-        yolink.max_level = 0
+        yolink.max_level = 99
 
         #time.sleep(2)
         #print('yolink.refreshState')
@@ -113,7 +113,8 @@ class YoLinkDim(YoLinkMQTTDevice):
                     yolink.min_level = yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']['calibration']
                 if 'calibrationHigh' in yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']:
                     yolink.max_level = yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']['calibrationHigh']
-            
+                    if  yolink.max_level <= yolink.min_level :
+                         yolink.max_level = yolink.min_level + 1             
             
             if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                 return('on')
