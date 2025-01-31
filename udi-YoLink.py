@@ -317,7 +317,7 @@ class YoLinkSetup (udi_interface.Node):
                         self.assigned_addresses.append(adr)                     
                             
                 elif dev['type'] in  ['Outlet']:     
-                    if  model in ['YS6803','YS6602' ]:
+                    if  model in ['YS6803','YS6602' '5716']:
                         logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoOutletPwr(self.poly, address, address, name, self.yoAccess, dev )
                     else:
