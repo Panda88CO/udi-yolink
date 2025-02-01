@@ -588,11 +588,14 @@ class udiYoMultiOutlet(udi_interface.Node):
                 portName = 'port'+str(outlet)
                 state = 99
                 if self.yoMultiOutlet.online:   
-                    if 'state' in outletStates[portName]:
-                        if outletStates[portName]['state'] == 'open':
-                            state = 1
-                        elif outletStates[portName]['state'] == 'closed':
-                            state = 0
+                    if portName in outletStates:
+                        if 'state' in outletStates[portName]:
+                            if outletStates[portName]['state'] == 'open':
+                                state = 1
+                            elif outletStates[portName]['state'] == 'closed':
+                                state = 0
+                    else:
+                        logging.error(f'PortName {portName} not in outletState  {outletStates}')
                 if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
                     if 'on' in outletStates[portName]['delays']:
                         onDelay = outletStates[portName]['delays']['on']*60
