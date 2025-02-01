@@ -12,6 +12,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from yoLink_init_V3 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoSwitchSecV2 import udiYoSwitchSec
+from udiYoSwitchPwrSecV2 import udiYoSwitchPwrSec
 from udiYoTHsensorV3 import udiYoTHsensor 
 from udiYoWaterDeptV3 import udiYoWaterDept 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
@@ -46,7 +47,7 @@ except ImportError:
 
 
 
-version = '1.4.11'
+version = '1.4.12'
 
 class YoLinkSetup (udi_interface.Node):
     from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
@@ -242,8 +243,11 @@ class YoLinkSetup (udi_interface.Node):
 
                 elif dev['type'] in ['Switch']:
                     if  model in ['YS5708', 'YS5709']:
-                        logging.info('Adding swith2Button device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        logging.info('Adding swithSec device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoSwitchSec(self.poly, address, address, name,  self.yoAccess, dev )
+                    elif  model in ['YS5716']:
+                        logging.info('Adding swithPwr device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoSwitchPwrSec(self.poly, address, address, name,  self.yoAccess, dev )
                     else:
                         logging.info('Adding switch device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoSwitch(self.poly, address, address, name,  self.yoAccess, dev )
@@ -317,7 +321,7 @@ class YoLinkSetup (udi_interface.Node):
                         self.assigned_addresses.append(adr)                     
                             
                 elif dev['type'] in  ['Outlet']:     
-                    if  model in ['YS6803','YS6602' '5716']:
+                    if  model in ['YS6803','YS6602']:
                         logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoOutletPwr(self.poly, address, address, name, self.yoAccess, dev )
                     else:
