@@ -7,7 +7,8 @@
     'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
-    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren'
+    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+    'WaterDepthSensor'
 
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec
@@ -35,5 +36,6 @@
 ## Notes 
     
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
-    Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)  
+    Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)
+    The latest version of the node report latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions 
     
