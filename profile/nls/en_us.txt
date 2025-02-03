@@ -75,20 +75,8 @@ ST-nlsswitch-GV19-NAME = Active Days
 
 ND-yoswitchsec-NAME = YoLink Switch
 ND-yoswitchsec-ICON = Switch
-
-ST-yoswitchsec-GV0-NAME = Switch State
-ST-yoswitchsec-GV1-NAME = On Delay (min)
-ST-yoswitchsec-GV2-NAME = Off Delay (min)
-ST-yoswitchsec-GV13-NAME = Schedule Index
-ST-yoswitchsec-GV14-NAME = Activated
-ST-yoswitchsec-GV15-NAME = On Hour
-ST-yoswitchsec-GV16-NAME = On Minute
-ST-yoswitchsec-GV21-NAME = On Sec
-ST-yoswitchsec-GV17-NAME = Off Hour
-ST-yoswitchsec-GV18-NAME = Off Minute
-ST-yoswitchsec-GV22-NAME = Off Sec
-ST-yoswitchsec-GV19-NAME = Active Days
-
+ND-yoswitchPwrsec-NAME = YoLink Relay Switch
+ND-yoswitchPwrsec-ICON = Switch
 
 CMD-nlsswitch-DON-NAME = Switch On
 CMD-nlsswitch-DOF-NAME = Switch Off
