@@ -281,6 +281,8 @@ ST-nlsdimmer-GV19-NAME = Active Days
 CMD-nlsdimmer-DIMLVL-NAME = Light Level (%)
 CMD-nlsdimmer-DIMDOWN-NAME = Light Down Level (%)
 CMD-nlsdimmer-DIMUP-NAME = Light Up Level (%)
+
+
 ND-yoirremote-NAME = YoLink Ir Remoter
 ND-yoirremote-ICON = Output
 ST-nlsirremote-GV0-NAME = Number of Learned codes
