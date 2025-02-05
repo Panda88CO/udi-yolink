@@ -594,22 +594,22 @@ class udiYoMultiOutlet(udi_interface.Node):
                                 state = 1
                             elif outletStates[portName]['state'] == 'closed':
                                 state = 0
-                    else:
-                        logging.error(f'PortName {portName} not in outletState  {outletStates}')
-                    if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
-                        if 'on' in outletStates[portName]['delays']:
-                            onDelay = outletStates[portName]['delays']['on']*60
+                        else:
+                            logging.error(f'PortName {portName} not in outletState  {outletStates}')
+                        if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
+                            if 'on' in outletStates[portName]['delays']:
+                                onDelay = outletStates[portName]['delays']['on']*60
+                            else:
+                                onDelay = 0
+                            if 'off' in outletStates[portName]['delays']:
+                                offDelay = outletStates[portName]['delays']['off']*60
+                            else:
+                                offDelay = 0
                         else:
                             onDelay = 0
-                        if 'off' in outletStates[portName]['delays']:
-                            offDelay = outletStates[portName]['delays']['off']*60
-                        else:
                             offDelay = 0
-                    else:
-                        onDelay = 0
-                        offDelay = 0
-                    logging.debug('Updating subnode {}: {} {} {}'.format(outlet, state, onDelay, offDelay))
-                    self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
+                        logging.debug('Updating subnode {}: {} {} {}'.format(outlet, state, onDelay, offDelay))
+                        self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
 
             for usb in range(0,self.nbrUsb):       
                 usbName = 'usb'+str(usb)
