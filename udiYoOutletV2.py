@@ -42,13 +42,15 @@ class udiYoOutlet(udi_interface.Node):
             {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
             {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
+            {'driver': 'GV21', 'value': 99, 'uom': 25}, #start Sec            
             {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
-            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
+            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min                                        
+            {'driver': 'GV22', 'value': 99, 'uom': 25}, #stop Sec
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
 
             {'driver': 'ST', 'value': 0, 'uom': 25},            
             {'driver': 'GV20', 'value': 99, 'uom': 25},              
-            {'driver': 'TIME', 'value': 0, 'uom': 44},
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
             ]
 
 
@@ -107,15 +109,11 @@ class udiYoOutlet(udi_interface.Node):
         #if self.yoOutlet.data_updated():
         self.updateData()
 
-
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
         
     def updateData(self):
         logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
-
+            self.my_setDriver('TIME', self.yoOutlet.getLastUpdateTime(), 151)
             if  self.yoOutlet.online:
                 self.my_setDriver('ST',1)
                 state = str(self.yoOutlet.getState()).upper()
@@ -134,13 +132,13 @@ class udiYoOutlet(udi_interface.Node):
                     self.my_setDriver('GV20', 1)
                 else:
                     self.my_setDriver('GV20', 0)
-        else:
-            self.my_setDriver('ST',0)
-            self.my_setDriver('GV20', 2)
+            else:
+                self.my_setDriver('ST',0)
+                self.my_setDriver('GV20', 2)
 
-            sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
-            self.update_schedule_data(sch_info, self.schedule_selected)
-               
+                sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
+                self.update_schedule_data(sch_info, self.schedule_selected)
+                
 
     def updateStatus(self, data):
         logging.info('udiYoOutlet updateStatus')
@@ -269,8 +267,8 @@ class udiYoOutlet(udi_interface.Node):
                 'DON'           : set_outlet_on,
                 'DOF'           : set_outlet_off,
                 'SWCTRL'        : outletControl, 
-                'ONDELAY'       : prepOnDelay,
-                'OFFDELAY'      : prepOffDelay,
+                #'ONDELAY'       : prepOnDelay,
+                #'OFFDELAY'      : prepOffDelay,
                 'DELAY_CTRL'    : program_delays, 
                 'LOOKUP_SCH'    : lookup_schedule,
                 'DEFINE_SCH'    : define_schedule,

@@ -102,6 +102,17 @@ class YoLinkSW(YoLinkMQTTDevice):
         return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['power']})
     '''
 
+    def getEnergy(yolink):
+        logging.debug(yolink.type+' - getEnergy : {}'.format(yolink.dataAPI))
+
+        #yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            try:    
+                return({'power':yolink.dataAPI[yolink.dData][yolink.dState]['power'], 'watt':yolink.dataAPI[yolink.dData][yolink.dState]['watt']})
+            except:
+                return(None)
+    
+
 class YoLinkSwitch(YoLinkSW):
     def __init__(yolink, yoAccess,  deviceInfo):
         super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)

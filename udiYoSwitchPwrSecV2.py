@@ -20,15 +20,21 @@ import time
 from yolinkSwitchV2 import YoLinkSW
 from udiYoSmartRemoterV3 import udiRemoteKey
 
-class udiYoSwitchSec(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
-    id = 'yoswitchsec'
+class udiYoSwitchPwrSec(udi_interface.Node):
+    from  udiYolinkLib import my_setDriver, prep_schedule, bool2ISY, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    id = 'yoswitchPwrsec'
 
     drivers = [
         {'driver': 'GV0', 'value': 99, 'uom': 25},
         {'driver': 'GV1', 'value': 0, 'uom': 57}, 
         {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-        
+        {'driver': 'GV3', 'value': -1, 'uom': 30},
+        {'driver': 'GV4', 'value': -1, 'uom': 33},
+        {'driver': 'GV5', 'value': 99, 'uom': 25},
+        {'driver': 'GV6', 'value': 99, 'uom': 25},
+        {'driver': 'GV7', 'value': 99, 'uom': 25},
+        {'driver': 'GV8', 'value': 99, 'uom': 25},
+
         {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
         {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
         {'driver': 'GV15', 'value': 99, 'uom': 25}, #On Hour
@@ -63,8 +69,13 @@ class udiYoSwitchSec(udi_interface.Node):
         self.offDelay = 0
         self.schedule_selected = 0
         self.keys = {}
+        model = str(self.devInfo['modelName'][:6])
+        if model in ['YS5716']:
+            self.meas_support = ['pwr']
+        else:
+            self.meas_support = []
 
-        if  'YS5708' in deviceInfo['modelName'] or 'YS5709' in deviceInfo['modelName']:
+        if  model in ['YS5708', 'YS5709']:
             self.max_remote_keys = 8
             self.nbr_keys = 2
         else:
@@ -145,6 +156,34 @@ class udiYoSwitchSec(udi_interface.Node):
         if self.yoSwitch.data_updated():
             self.updateData()
 
+    def supportPower(self):
+        return('pwr' in self.meas_support)
+
+    def updateAlerts(self):
+        temp = self.yoSwitch.getAlertInfo()
+        logging.debug('self.getAlerts {}'.format(temp))
+        if self.supportPower():            
+            if 'overload' in temp:
+                self.my_setDriver('GV5', self.bool2ISY(temp['overload']))
+            else:
+                self.my_setDriver('GV5', 99)
+            if 'highLoad' in temp:
+                self.my_setDriver('GV6', self.bool2ISY(temp['highLoad']))
+            else:
+                self.my_setDriver('GV6', 99)
+            if 'lowLoad' in temp:
+                self.my_setDriver('GV7', self.bool2ISY(temp['lowLoad']))
+            else:
+                self.my_setDriver('GV7', 99)
+            if 'highTemperature' in temp:
+                self.my_setDriver('GV8', self.bool2ISY(temp['highTemperature']))
+            else:
+                self.my_setDriver('GV8', 99)
+        else:
+            self.my_setDriver('GV5', 98)
+            self.my_setDriver('GV6', 98)
+            self.my_setDriver('GV7', 98)
+            self.my_setDriver('GV8', 98)
 
 
     def updateData(self):
@@ -163,7 +202,17 @@ class udiYoSwitchSec(udi_interface.Node):
                 else:
                     self.my_setDriver('GV0', 99)
                 self.last_state = state
-                
+                if self.supportPower():
+                    tmp =  self.yoSwitch.getEnergy()
+                    if tmp is not None:
+                        power = round(tmp['power']/10000,3) # reports 1/10W
+                        energy = round(tmp['watt']/10000,3) # reports 1/10Wh
+                        self.my_setDriver('GV3', power, 30)
+                        self.my_setDriver('GV4', energy, 33)
+                else:
+                    self.my_setDriver('GV3', 98)
+                    self.my_setDriver('GV4', 98)
+
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)

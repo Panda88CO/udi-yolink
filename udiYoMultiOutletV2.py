@@ -425,7 +425,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 0, 'uom': 25},
-            {'driver': 'TIME', 'value': 0, 'uom': 44},            
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},            
             ]
     
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -577,42 +577,40 @@ class udiYoMultiOutlet(udi_interface.Node):
         if self.yoMultiOutlet.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
-
     def updateData(self):
-        #outletStates =  self.yoMultiOutlet.getMultiOutStates()
-        try:
-            if self.node_fully_config:
-                outletStates =  self.yoMultiOutlet.getMultiOutStates()
-                self.my_setDriver('ST',1)
-                self.my_setDriver('TIME', self.yoMultiOutlet.getTimeSinceUpdateMin(), 44)
-                logging.debug(f'outlet states {outletStates}')
-                for outlet in range(0,self.nbrOutlets):
-                    portName = 'port'+str(outlet)
-                    state = 99
-                    if self.yoMultiOutlet.online: 
-                        if portName in outletStates:  
-                            if 'state' in outletStates[portName]:
-                                if outletStates[portName]['state'] == 'open':
-                                    state = 1
-                                elif outletStates[portName]['state'] == 'closed':
-                                    state = 0
-                        
-                    if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
-                        if 'on' in outletStates[portName]['delays']:
-                            onDelay = outletStates[portName]['delays']['on']*60
+
+        outletStates =  self.yoMultiOutlet.getMultiOutStates()
+
+        if self.node_fully_config:
+            self.my_setDriver('ST',1)
+            self.my_setDriver('TIME', self.yoMultiOutlet.getLastUpdateTime(), 151)
+
+            for outlet in range(0,self.nbrOutlets):
+                portName = 'port'+str(outlet)
+                state = 99
+                if self.yoMultiOutlet.online:   
+                    if portName in outletStates:
+                        if 'state' in outletStates[portName]:
+                            if outletStates[portName]['state'] == 'open':
+                                state = 1
+                            elif outletStates[portName]['state'] == 'closed':
+                                state = 0
+                        else:
+                            logging.error(f'PortName {portName} not in outletState  {outletStates}')
+                        if 'delays'in outletStates[portName] and self.yoMultiOutlet.online:
+                            if 'on' in outletStates[portName]['delays']:
+                                onDelay = outletStates[portName]['delays']['on']*60
+                            else:
+                                onDelay = 0
+                            if 'off' in outletStates[portName]['delays']:
+                                offDelay = outletStates[portName]['delays']['off']*60
+                            else:
+                                offDelay = 0
                         else:
                             onDelay = 0
-                        if 'off' in outletStates[portName]['delays']:
-                            offDelay = outletStates[portName]['delays']['off']*60
-                        else:
                             offDelay = 0
-                    else:
-                        onDelay = 0
-                        offDelay = 0
-                    logging.debug('Updating subnode {}: {} {} {}'.format(outlet, state, onDelay, offDelay))
-                    self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
+                        logging.debug('Updating subnode {}: {} {} {}'.format(outlet, state, onDelay, offDelay))
+                        self.subOutlet[outlet].updateOutNode(state, onDelay, offDelay)
 
                 for usb in range(0,self.nbrUsb):       
                     usbName = 'usb'+str(usb)

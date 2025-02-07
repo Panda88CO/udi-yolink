@@ -50,7 +50,7 @@ class udiYoWaterDept(udi_interface.Node):
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},            
             {'driver': 'GV20', 'value': 0, 'uom': 25},            
-            {'driver': 'TIME', 'value': 99, 'uom': 25},
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
 
             ]
 
@@ -119,16 +119,13 @@ class udiYoWaterDept(udi_interface.Node):
         if self.yoWaterDept.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoWaterDept.getTimeSinceUpdateMin(), 44)
-
 
     def updateData(self):
         #alarms = self.yoWaterDept.getAlarms()
         #limits = self.yoWaterDept.getLimits()
         try:
             if self.node is not None:
-                self.my_setDriver('TIME', self.yoWaterDept.getTimeSinceUpdateMin(), 44)
+                self.my_setDriver('TIME', self.yoWaterDept.getLastUpdateTime(), 151)
 
                 if self.yoWaterDept.online:
                     logging.debug("yoWaterDept : UpdateData")

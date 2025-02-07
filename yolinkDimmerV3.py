@@ -27,6 +27,10 @@ class YoLinkDim(YoLinkMQTTDevice):
         yolink.type = deviceInfo['type']
 
         yolink.brightness = 50  #default
+        yolink.ramp_up_time = 1 #sec
+        yolink.ramp_down_time = 1 #sec
+        yolink.min_level = 0
+        yolink.max_level = 99
 
         #time.sleep(2)
         #print('yolink.refreshState')
@@ -38,6 +42,7 @@ class YoLinkDim(YoLinkMQTTDevice):
     ''' Assume no event support needed if using MQTT'''
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
+        yolink.brightness = yolink.dataAPI[yolink.dData][yolink.dState]['brightness'] 
     '''
     def initNode(yolink):
         yolink.refreshState()
@@ -57,13 +62,13 @@ class YoLinkDim(YoLinkMQTTDevice):
 
 
 
-    def setBrightness (yolink, brightness):
+    def setBrightness (yolink, brightness, force_on=False):
         logging.debug('setBrightness : {}'.format(brightness))
         yolink.brightness = int(brightness)
         yolink.dataAPI[yolink.dData][yolink.dState]['brightness'] = yolink.brightness
 
         logging.debug( 'SetBrightness getState(): {}'.format(yolink.getState()))
-        if 'on' == yolink.getState():
+        if 'on' == yolink.getState() or force_on:
             yolink.setState('on')
         else:
             yolink.setState('off')
@@ -74,40 +79,51 @@ class YoLinkDim(YoLinkMQTTDevice):
         logging.debug(yolink.type+' - setState')
         logging.debug('Dimmer Brightness: {}'.format(yolink.brightness))
 
-        if 'setState'  in yolink.methodList:          
-            if state.lower() not in yolink.stateList:
-                logging.error('Unknows state passed')
-                return(False)
-            if state.lower() == 'on':
-                state = 'open'
-            if state.lower() == 'off':
-                state = 'closed'
-            data = {}
-            data['params'] = {}
-            data['params']['state'] = state.lower()
-            data['params']['brightness'] = int(yolink.brightness)
-            logging.debug('Dimmer setState Data {}'.format(data))
-            return(yolink.setDevice( data))
-        else:
+        #if 'setState'  in yolink.methodList:          
+        if state.lower() not in yolink.stateList:
+            logging.error('Unknows state passed')
             return(False)
+        if state.lower() == 'on':
+            state = 'open'
+        if state.lower() == 'off':
+            state = 'closed'
+        data = {}
+        data['params'] = {}
+        data['params']['state'] = state.lower()
+        data['params']['brightness'] = int(yolink.brightness)
+        logging.debug('Dimmer setState Data {}'.format(data))
+        return(yolink.setDevice( data))
+
     
 
     def getState(yolink):
         logging.debug(yolink.type+' - getState')
         attempts = 0
         logging.debug('getState - {}'.format(yolink.dataAPI[yolink.dData] ))
-        while yolink.dState not in yolink.dataAPI[yolink.dData] and attempts < 3:
-            time.sleep(1)
-            attempts = attempts + 1
-        if attempts <3 and 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
+
+        if 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
             if 'brightness' in  yolink.dataAPI[yolink.dData][yolink.dState]:
                 yolink.brightness = yolink.dataAPI[yolink.dData][yolink.dState]['brightness']
+            if 'deviceAttributes' in  yolink.dataAPI[yolink.dData][yolink.dState]:
+                if 'gradient' in yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']:
+                    if 'on' in yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']['gradient']:
+                        yolink.ramp_up_time =  yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']['gradient']['on']
+                    if 'off' in yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']['gradient']:
+                        yolink.ramp_down_time =  yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']['gradient']['off']
+                if 'calibration' in yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']:
+                    yolink.min_level = yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']['calibration']
+                if 'calibrationHigh' in yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']:
+                    yolink.max_level = yolink.dataAPI[yolink.dData][yolink.dState]['deviceAttributes']['calibrationHigh']
+                    if  yolink.max_level <= yolink.min_level :
+                         yolink.max_level = yolink.min_level + 1             
+            
             if  yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'open':
                 return('on')
             elif yolink.dataAPI[yolink.dData][yolink.dState]['state'] == 'closed':
                 return('off')
             else:
                 return('Unkown')
+            
             
         else:
             return('Unkown')

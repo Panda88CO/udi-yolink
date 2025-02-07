@@ -104,7 +104,7 @@
      <range uom="25" subset="0-1" nls="lockstate" />
   </editor>
  <editor id="doorbell"> 
-     <range uom="25" subset="0-1" nls="doorbell" />
+     <range uom="25" subset="0-1,99" nls="doorbell" />
   </editor>
  <editor id="dimlvl"> 
      <range uom="51" min="0" max="100" prec="0" />
@@ -247,6 +247,10 @@
      <range uom="44" min="0" max="9999999999" prec="0" />
      <range uom="25" subset="0,99" nls="error" />
    </editor>    
+      <editor id="unixtime"> 
+     <range uom="151" min="1737400000" max="9999999999" prec="0" />
+     <range uom="25" subset="0,99" nls="error" />
+   </editor> 
    <editor id="ready"> 
      <range uom="25" subset="0,1" nls="ready" />
    </editor>     

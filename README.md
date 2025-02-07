@@ -11,6 +11,7 @@
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
     'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren'
     'WaterMeterController','WaterDepthSensor', 'LockV2'
+
     
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec - It will also chech if data was updated since last update - this can happen when a command has a very slow reply from the cloud - the server uses separate threads from sending commands and receiving results 
@@ -44,5 +45,10 @@
 
     In configuraiton TEMP_UNIT can be used to set temperature until to C, F or K
 
-    Schedules are not supported yet (you can use ISY for the same and the YoLink APP can beused to set schedules)  - I did not manage to get API working with schdules yet 
+    YoLink Schedules are now supported 
+    
+    Remaining delay time shown in ISY is estimated - count down is running on node server - not device
+    Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)
+    
+    The latest version of the node report latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions 
     

@@ -268,7 +268,11 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.last_state = 99
         self.n_queue = []
         self.max_remote_keys = 8
-        self.nbr_keys = 4
+        model = str(self.devInfo['modelName'][:6])
+        if model in ['YS3614', 'YS3615']:
+             self.nbr_keys = 2
+        else:
+            self.nbr_keys = 4
         self.keys = {}
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
@@ -388,15 +392,11 @@ class udiYoSmartRemoter(udi_interface.Node):
                     else:
                         self.node.setDriver('GV20', 0)
                 else:
-                    self.node.setDriver('GV0', 99)
-                    self.node.setDriver('GV1', 99)
-                    self.node.setDriver('GV2', 99)
-                    self.node.setDriver('GV3', 99)
-                    self.node.setDriver('CLITEMP', 99, True, True, 25)
-                    #self.node.setDriver('ST', 0, True, True)
+
+                    self.node.setDriver('ST', 0, True, True)
                     self.node.setDriver('GV20', 2)
-        except Exception as E:
-            logging.error('Smart Remote  updateData exeption: {}'.format(E))
+        except Exception as e:
+            logging.error('Smart Remote  updateData exeption: {}'.format(e))
 
 
 

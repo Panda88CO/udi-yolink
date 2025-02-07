@@ -49,7 +49,7 @@ class udiYoManipulator(udi_interface.Node):
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},              
-            {'driver': 'TIME', 'value': 0, 'uom': 44},            
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},            
             ]
 
 
@@ -117,13 +117,10 @@ class udiYoManipulator(udi_interface.Node):
         #    self.my_setDriver('GV1', 0)
         #    self.my_setDriver('GV2', 0)
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoManipulator.getTimeSinceUpdateMin(), 44)
-
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoManipulator.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoManipulator.getLastUpdateTime(), 151)
             state =  self.yoManipulator.getState()
             if self.yoManipulator.online:
                 if state.upper() == 'OPEN':
@@ -293,8 +290,8 @@ class udiYoManipulator(udi_interface.Node):
                 'DON'   : set_open,
                 'DOF'   : set_close,
                 'MANCTRL': manipuControl, 
-                'ONDELAY' : prepOnDelay,
-                'OFFDELAY' : prepOffDelay,
+                #'ONDELAY' : prepOnDelay,
+                #'OFFDELAY' : prepOffDelay,
                 'DELAY_CTRL'    : program_delays, 
                 'LOOKUP_SCH'    : lookup_schedule,
                 'DEFINE_SCH'    : define_schedule,

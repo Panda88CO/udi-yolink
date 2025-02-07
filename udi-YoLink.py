@@ -12,6 +12,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from yoLink_init_V3 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoSwitchSecV2 import udiYoSwitchSec
+from udiYoSwitchPwrSecV2 import udiYoSwitchPwrSec
 from udiYoTHsensorV3 import udiYoTHsensor 
 from udiYoWaterDeptV3 import udiYoWaterDept 
 from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
@@ -47,7 +48,7 @@ except ImportError:
 
 
 
-version = '1.3.23'
+version = '1.4.15'
 
 
 class YoLinkSetup (udi_interface.Node):
@@ -141,7 +142,7 @@ class YoLinkSetup (udi_interface.Node):
                                 'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
                                 'WaterDepthSensor']
         
-        #self.supportedYoTypes = ['Lock' , 'LockV2', 'Switch']
+        #self.supportedYoTypes = ['Dimmer']
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
@@ -183,10 +184,10 @@ class YoLinkSetup (udi_interface.Node):
             self.my_setDriver('ST', 0)
         #self.poly.updateProfile()
         
-        self.scheduler = BackgroundScheduler()
-        self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
-        self.scheduler.start()
-        self.updateEpochTime()
+        #self.scheduler = BackgroundScheduler()
+        #self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
+        #self.scheduler.start()
+        #self.updateEpochTime()
 
     def addNodes (self, deviceList):
         for dev in deviceList:
@@ -244,8 +245,11 @@ class YoLinkSetup (udi_interface.Node):
 
                 elif dev['type'] in ['Switch']:
                     if  model in ['YS5708', 'YS5709']:
-                        logging.info('Adding swith2Button device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        logging.info('Adding swithSec device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoSwitchSec(self.poly, address, address, name,  self.yoAccess, dev )
+                    elif  model in ['YS5716']:
+                        logging.info('Adding swithPwr device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
+                        temp = udiYoSwitchPwrSec(self.poly, address, address, name,  self.yoAccess, dev )
                     else:
                         logging.info('Adding switch device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoSwitch(self.poly, address, address, name,  self.yoAccess, dev )
@@ -319,7 +323,7 @@ class YoLinkSetup (udi_interface.Node):
                         self.assigned_addresses.append(adr)                     
                             
                 elif dev['type'] in  ['Outlet']:     
-                    if  model in ['YS6803','YS6602' ]:
+                    if  model in ['YS6803','YS6602']:
                         logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                         temp = udiYoOutletPwr(self.poly, address, address, name, self.yoAccess, dev )
                     else:
@@ -489,12 +493,12 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.my_setDriver('ST', 0)
 
-    def display_update(self):
-        logging.debug('display_update')
-        self.updateEpochTime()
-        for nde in self.yolink_nodes:
-            if nde != 'setup':   # but not the controller node
-                self.yolink_nodes[nde].updateLastTime()
+    #def display_update(self):
+    #    logging.debug('display_update')
+    #    self.updateEpochTime()
+    #    for nde in self.yolink_nodes:
+    #        if nde != 'setup':   # but not the controller node
+    #            self.yolink_nodes[nde].updateLastTime()
 
     def checkNodes(self):
         logging.info('Updating Nodes')
@@ -513,6 +517,7 @@ class YoLinkSetup (udi_interface.Node):
         if self.pollStart:
             logging.debug('System Poll executing: {}'.format(polltype))
             if self.yoAccess.online:
+                self.updateEpochTime()
                 self.my_setDriver('ST', 1)
                 if 'longPoll' in polltype:
                     #Keep token current
@@ -523,7 +528,7 @@ class YoLinkSetup (udi_interface.Node):
                         #            time.sleep(60)
                         #logging.info('Updating device status')
                         #nodes = self.poly.getNodes()
-                        self.updateEpochTime()
+                        
                         for nde in self.yolink_nodes:
                             if nde != 'setup':   # but not the controller node
                                 self.yolink_nodes[nde].checkOnline()
@@ -651,18 +656,18 @@ class YoLinkSetup (udi_interface.Node):
     def updateEpochTime(self, command=None ):
         logging.info('updateEpochTime ')
         #unit = int(command.get('value'))
-        self.my_setDriver('TIME', int(time.time()/60))
+        self.my_setDriver('TIME', int(time.time()))
 
 
     id = 'setup'
     commands = {
-                'EPOCHTIME': updateEpochTime,
+                #'EPOCHTIME': updateEpochTime,
                 }
 
     drivers = [
             {'driver': 'ST', 'value':0, 'uom':25},
             {'driver': 'GV1', 'value':0, 'uom':25},
-            {'driver': 'TIME', 'value':99, 'uom':44},
+            {'driver': 'TIME', 'value':int(time.time()), 'uom':151},
            ]
 
 

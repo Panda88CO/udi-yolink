@@ -4,7 +4,7 @@
       <sts>
          <st id="ST"  editor="connect" />
          <st id="GV1"  editor="ready" />         
-         <st id="TIME"  editor="epochtime" />
+         <st id="TIME"  editor="unixtime" />
          <!--- st id="GV20" editor="suspendstate" /-->
       </sts>
       <cmds>
@@ -12,8 +12,85 @@
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
          </sends>
-         <accepts>
+         <!--<accepts>
             <cmd id="EPOCHTIME"  /> 
+         </accepts>-->
+      </cmds>
+   </nodeDef> 
+   <nodeDef id="yoswitchPwrsec" nls="nlsswitch">
+      <editors />
+      <sts>
+         <st id="GV0" editor="swstate" />
+         <st id="GV1" editor="delay" />
+         <st id="GV2" editor="delay" />
+         <st id="GV3" editor="watt" />
+         <st id="GV4" editor="energy" />
+         <st id="GV5" editor="alert" />
+         <st id="GV6" editor="alert" />
+         <st id="GV7" editor="alert" />
+         <st id="GV8" editor="alert" />
+         <st id="GV13" editor="sch_index" />      
+         <st id="GV14" editor="sch_active" />    
+         <st id="GV15" editor="stHour" />      
+         <st id="GV16" editor="stMin" />    
+         <st id="GV21" editor="stSec" />               
+         <st id="GV17" editor="stHour" />      
+         <st id="GV18" editor="stMin" />    
+         <st id="GV22" editor="stSec" />               
+         <st id="GV19" editor="binDays" />            
+         <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="unixtime" />                  
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />
+            <cmd id="DFON"  />               
+            <cmd id="DFOF"  />    
+         </sends>
+
+         <accepts>
+            <cmd id="UPDATE"  /> 
+            <cmd id="DON"  /> 
+            <cmd id="DOF"  /> 
+            <cmd id="DFON"  /> 
+            <cmd id="DFOF"  />
+            <cmd id="QUERY" /> 
+            <cmd id="SWCTRL" > 
+               <p id="" editor="swctrl" init="1" /> 
+            </cmd >
+            <!--<cmd id="ONDELAY" > 
+               <p id="" editor="delaymin" init="GV1" /> 
+             </cmd >   
+            <cmd id="OFFDELAY" > 
+               <p id="" editor="delaymin" init="GV2" /> 
+             </cmd >-->
+            <cmd id="DELAY_CTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+
+            <cmd id="LOOKUP_SCH" > 
+               <p id="" editor="sch_indexS" init="GV13" /> 
+             </cmd >
+
+            <cmd id="DEFINE_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="bindays" editor="binDays" init="GV19" />       
+               <p id="onH" editor="stHourI" init="GV15" /> 
+               <p id="onM" editor="stMinI" init="GV16" /> 
+               <p id="onS" editor="stSecI" init="GV21" /> 
+               <p id="offH" editor="stHourI" init="GV17" /> 
+               <p id="offM" editor="stMinI" init="GV18" />   
+               <p id="offS" editor="stSecI" init="GV22" />   
+                                   
+             </cmd >
+            <cmd id="CTRL_SCH" > 
+               <p id="index" editor="sch_indexS" init="GV13" /> 
+               <p id="active" editor="sch_activeI" init="GV14" />                                     
+             </cmd >                
          </accepts>
       </cmds>
    </nodeDef> 
@@ -36,7 +113,7 @@
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="epochtime" />                  
+         <st id="TIME" editor="unixtime" />                  
       </sts>
       <cmds>
          <sends>
@@ -56,12 +133,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -109,7 +186,7 @@
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
-         <st id="TIME" editor="epochtime" />            
+         <st id="TIME" editor="unixtime" />            
       </sts>
       <cmds>
          <sends>
@@ -129,12 +206,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd > -->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -170,7 +247,8 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV3" editor="dimlvl" />
-
+         <st id="GV4" editor="dimlvl" />
+         <st id="GV5" editor="dimlvl" />         
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
@@ -182,14 +260,19 @@
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                    
+         <st id="TIME" editor="unixtime" />                    
       </sts>
       <cmds>
          <sends>
             <cmd id="DON"  />               
             <cmd id="DOF"  />
             <cmd id="DFON"  />               
-            <cmd id="DFOF"  />    
+            <cmd id="DFOF"  />   
+            <!--<cmd id="BRT"  />                
+            <cmd id="DIM"  /> -->
+            <cmd id="FDUP"  /> 
+            <cmd id="FDDOWN"  /> 
+            <cmd id="FDSTOP"  />           
          </sends>
 
          <accepts>
@@ -198,22 +281,35 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
+            <!--<cmd id="DIMDOWN"  /> 
+            <cmd id="DIMUP"  />-->
+            <cmd id="FDUP"  /> 
+            <cmd id="FDDOWN"  /> 
+            <cmd id="FDSTOP"  />
+
             <cmd id="QUERY" /> 
             <cmd id="DIMLVL" > 
                <p id="" editor="dimlvl" init="GV3" /> 
             </cmd >
+            <cmd id="DIMDOWN" > 
+               <p id="" editor="dimlvl" init="GV4" /> 
+            </cmd >            
+            <cmd id="DIMUP" > 
+               <p id="" editor="dimlvl" init="GV5" /> 
+            </cmd >
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
-               <p id="Dondelay" editor="delaymin" init="GV1" /> 
-               <p id="Doffdelay" editor="delaymin" init="GV2" />                                     
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
             <cmd id="LOOKUP_SCH" > 
@@ -261,7 +357,7 @@
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                     
+         <st id="TIME" editor="unixtime" />                     
       </sts>
       <cmds>
          <sends>
@@ -338,7 +434,7 @@
          <st id="GV19" editor="binDays" />   
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />         
-         <st id="TIME" editor="epochtime" />            
+         <st id="TIME" editor="unixtime" />            
       </sts>
       <cmds>
          <sends>
@@ -407,7 +503,7 @@
          <st id="GV19" editor="binDays" />      
          <st id="ST"  editor="status" />   
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                     
+         <st id="TIME" editor="unixtime" />                     
       </sts>
       <cmds>
          <sends>
@@ -464,12 +560,12 @@
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -520,7 +616,7 @@
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />               
+         <st id="TIME" editor="unixtime" />               
       </sts>
       <cmds>
          <sends>
@@ -539,12 +635,12 @@
             <cmd id="MANCTRL" > 
                <p id="" editor="manctrl" init="1" /> 
             </cmd >
-            <cmd id="ONDELAY" > 
+            <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
              </cmd >   
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >
+             </cmd >-->
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -590,7 +686,7 @@
          <st id="GV10" editor="pwrmode" />  
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                  
+         <st id="TIME" editor="unixtime" />                  
       </sts>
       <cmds>
          <sends>
@@ -639,7 +735,7 @@
          <st id="GV12" editor="humidity" />
          <st id="GV13" editor="humidity" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                              
+         <st id="TIME" editor="unixtime" />                              
       </sts>
       <cmds>
          <sends>
@@ -665,7 +761,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />                              
+         <st id="TIME" editor="unixtime" />                              
       </sts>
       <cmds>
          <sends>
@@ -716,7 +812,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" /> 
-         <st id="TIME" editor="epochtime" />                             
+         <st id="TIME" editor="unixtime" />                             
       </sts>
       <cmds>
          <sends>
@@ -750,7 +846,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" /> 
-         <st id="TIME" editor="epochtime" />                             
+         <st id="TIME" editor="unixtime" />                             
       </sts>
       <cmds>
          <sends>
@@ -789,7 +885,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="epochtime" />                           
+         <st id="TIME" editor="unixtime" />                           
       </sts>
       <cmds>
          <sends>
@@ -821,7 +917,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
-         <st id="TIME" editor="epochtime" />                         
+         <st id="TIME" editor="unixtime" />                         
       </sts>
       <cmds>
          <sends>
@@ -900,7 +996,7 @@
          <st id="GV3" editor="doorstate" /> 
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />  
-         <st id="TIME" editor="epochtime" />                      
+         <st id="TIME" editor="unixtime" />                      
       </sts>
       <cmds>
          <sends>
@@ -932,7 +1028,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="epochtime" />                     
+         <st id="TIME" editor="unixtime" />                     
       </sts>
       <cmds>
          <sends>
@@ -967,7 +1063,7 @@
          <st id="GV7" editor="cmdstatus" />
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="epochtime" />                     
+         <st id="TIME" editor="unixtime" />                     
 
       </sts>
       <cmds>
@@ -998,7 +1094,7 @@
          <st id="BATLVL" editor="batlevel" />    
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />       
-         <st id="TIME" editor="epochtime" />
+         <st id="TIME" editor="unixtime" />
 
       </sts>
       <cmds>
@@ -1024,7 +1120,7 @@
          <st id="GV2" editor="sirenbatlevel" />
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="epochtime" />               
+         <st id="TIME" editor="unixtime" />               
       </sts>
       <cmds>
          <sends>

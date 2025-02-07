@@ -10,6 +10,7 @@
     'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren'
     'WaterMeterController','WaterDepthSensor', 'LockV2'
 
+
     Code uses MQTT communications
     ###SHORT POLL sends a heart beat to the ISY - defauls is 60 sec
     ###LONG POLL check the online state of the devices (If a device goes off-line it will not be detected until this is called - for battery operated devices it may take even longer as data appear to be cached in the cloud - battery devices are not querried as part of the LONG POLL) 
@@ -36,5 +37,6 @@
 ## Notes 
     
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
-    Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)  
+    Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)
+    The latest version of the node report latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions 
     

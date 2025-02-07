@@ -42,7 +42,7 @@ class udiYoSwitch(udi_interface.Node):
 
         {'driver': 'ST', 'value': 0, 'uom': 25},
         {'driver': 'GV20', 'value': 99, 'uom': 25},      
-        {'driver': 'TIME', 'value': 0, 'uom': 44},        
+         {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},        
         ]
 
 
@@ -147,13 +147,11 @@ class udiYoSwitch(udi_interface.Node):
         if self.yoSwitch.data_updated():
             self.updateData()
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoSwitch.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
         if self.node is not None:
             state =  self.yoSwitch.getState().upper()
-            self.my_setDriver('TIME', self.yoSwitch.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoSwitch.getLastUpdateTime(), 151)
 
             if self.yoSwitch.online:
                 self.my_setDriver('ST', 1)
@@ -178,17 +176,8 @@ class udiYoSwitch(udi_interface.Node):
 
             else:
                 self.my_setDriver('ST', 0)
-                #self.my_setDriver('GV0', 99)
-                #self.my_setDriver('GV1', 0)
-                #self.my_setDriver('GV2', 0)
                 self.my_setDriver('GV20', 2)
-                #self.my_setDriver('GV13', self.schedule_selected)
-                #self.my_setDriver('GV14', 99)
-                #self.my_setDriver('GV15', 99, 25)
-                #self.my_setDriver('GV16', 99, 25)
-                #self.my_setDriver('GV17', 99, 25)
-                #self.my_setDriver('GV18', 99, 25)
-                #self.my_setDriver('GV19', 0)
+
 
             if self.nbr_keys > 0:
                 event_data = self.yoSwitch.getEventData()
@@ -328,8 +317,8 @@ class udiYoSwitch(udi_interface.Node):
                 'DFON'          : set_switch_fon,
                 'DFOF'          : set_switch_foff,                         
                 'SWCTRL'        : switchControl, 
-                'ONDELAY'       : prepOnDelay,
-                'OFFDELAY'      : prepOffDelay,
+                #'ONDELAY'       : prepOnDelay,
+                #'OFFDELAY'      : prepOffDelay,
                 'DELAY_CTRL'    : program_delays, 
                 'LOOKUP_SCH'    : lookup_schedule,
                 'DEFINE_SCH'    : define_schedule,

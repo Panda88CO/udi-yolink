@@ -56,7 +56,7 @@ class udiYoOutletPwr(udi_interface.Node):
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25},            
             {'driver': 'GV20', 'value': 99, 'uom': 25},              
-            {'driver': 'TIME', 'value': 0, 'uom': 44},
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
 
             ]
 
@@ -157,13 +157,11 @@ class udiYoOutletPwr(udi_interface.Node):
             self.my_setDriver('GV7', 98)
             self.my_setDriver('GV8', 98)
 
-    def updateLastTime(self):
-        self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
 
     def updateData(self):
-        logging.info('udiYoOutlet updateData - schedule {}'.format(self.schedule_selected))
+        logging.info('udiYoOutlet updateData -  {}'.format(self.schedule_selected))
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoOutlet.getTimeSinceUpdateMin(), 44)
+            self.my_setDriver('TIME', self.yoOutlet.getLastUpdateTime(), 151)
             if self.yoOutlet.online: 
                 #if  self.yoOutlet.online:
                 self.my_setDriver('ST',1)
@@ -182,7 +180,7 @@ class udiYoOutletPwr(udi_interface.Node):
                 self.updateAlerts()                
                 if self.supportPower():
                     tmp =  self.yoOutlet.getEnergy()
-                    if tmp != None:
+                    if tmp is not None:
                         power = round(tmp['power']/10000,3) # reports 1/10W
                         energy = round(tmp['watt']/10000,3) # reports 1/10Wh
                         self.my_setDriver('GV3', power, 30)
@@ -199,20 +197,10 @@ class udiYoOutletPwr(udi_interface.Node):
                 else:
                     self.my_setDriver('GV20', 0)
             else:
-                #self.my_setDriver('GV0', 99)
-                #self.my_setDriver('GV1', 0)
-                #self.my_setDriver('GV2', 0)
-                #self.my_setDriver('GV3', 0)
-                #self.my_setDriver('GV4', 0)
+
                 self.my_setDriver('ST',0)
                 self.my_setDriver('GV20', 2)
-                #self.my_setDriver('GV13', self.schedule_selected)
-                #self.my_setDriver('GV14', 99)
-                #self.my_setDriver('GV15', 99,True, True, 25)
-                #self.my_setDriver('GV16', 99,True, True, 25)
-                #self.my_setDriver('GV17', 99,True, True, 25)
-                #self.my_setDriver('GV18', 99,True, True, 25)            
-                #self.my_setDriver('GV19', 0)       
+  
 
         sch_info = self.yoOutlet.getScheduleInfo(self.schedule_selected)
         self.update_schedule_data(sch_info, self.schedule_selected)
