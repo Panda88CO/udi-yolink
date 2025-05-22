@@ -95,20 +95,24 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 return(None)
     
     def getMeterReading(yolink):
-        logging.debug(yolink.type+' - getMeterReading')
-        #yolink.online = yolink.getOnlineStatus()
-        if yolink.online:   
-            attempts = 0
-            while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
-                time.sleep(1)
-                attempts = attempts + 1
-            if attempts <= 5:
-                if  'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                    return(round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/10,1))
+        try:
+            logging.debug(yolink.type+' - getMeterReading')
+            #yolink.online = yolink.getOnlineStatus()
+            if yolink.online:   
+                attempts = 0
+                while yolink.dataAPI[yolink.dData][yolink.dState] is None and attempts < 3:
+                    time.sleep(1)
+                    attempts = attempts + 1
+                if attempts <= 5:
+                    if  'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                        return(round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/10,1))
+                    else:
+                        return(None)
                 else:
-                    return(None)
-            else:
-                return('Unknown')        
+                    return('Unknown')   
+        except KeyError as e:
+            logging.error(f'EXCEPTION - getMeterReading {e}') 
+            return(None)
 
     def getAlarms(yolink):
         logging.debug(yolink.type+' - getAlarms')
