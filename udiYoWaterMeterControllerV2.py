@@ -163,22 +163,22 @@ class udiYoWaterMeterController(udi_interface.Node):
                 alarms = self.yoWaterCtrl.getAlarms()
                 if alarms:
                     if 'openReminder' in alarms:
-                        self.my_setDriver('GV4', self.bin2ISY(alarms['openReminder']))
+                        self.my_setDriver('GV4', self.bool2ISY(alarms['openReminder']))
                     
                     if 'leak' in alarms:
-                        self.my_setDriver('GV5', self.bin2ISY(alarms['leak']))
+                        self.my_setDriver('GV5', self.bool2ISY(alarms['leak']))
     
                     if 'amountOverrun' in alarms:
-                        self.my_setDriver('GV6', self.bin2ISY(alarms['amountOverrun']))
+                        self.my_setDriver('GV6', self.bool2ISY(alarms['amountOverrun']))
 
                     if 'durationOverrun' in alarms:
-                        self.my_setDriver('GV7', self.bin2ISY(alarms['durationOverrun']))
+                        self.my_setDriver('GV7', self.bool2ISY(alarms['durationOverrun']))
     
                     if 'valveError' in alarms:
-                        self.my_setDriver('GV8', self.bin2ISY(alarms['valveError']))
+                        self.my_setDriver('GV8', self.bool2ISY(alarms['valveError']))
 
                     if 'reminder' in alarms:
-                        self.my_setDriver('GV9', self.bin2ISY(alarms['reminder']))
+                        self.my_setDriver('GV9', self.bool2ISY(alarms['reminder']))
     
                 if self.yoWaterCtrl.suspended:
                     self.my_setDriver('GV20', 1)
