@@ -576,7 +576,7 @@ class YoLinkMQTTDevice(object):
             yolink.online = False
             logging.debug(f'OFFLINE STRANGE {dataPacket}')
         if not yolink.online:
-            logging.debug('Status {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
+            logging.error('Status {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
         return(yolink.online)
 
     #@measure_time
@@ -684,6 +684,11 @@ class YoLinkMQTTDevice(object):
                 elif '.DevEvent' in  data['event']:
                     if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
+                elif '.HourlyUsageReport' in  data['event']:
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
+                        yolink.updateHourlyData(data)
+
+
                 elif '.setInitState' in  data['event']:
                         #yolink.updateStatusData(data)
                         yolink.initData(data)
@@ -1163,7 +1168,9 @@ class YoLinkMQTTDevice(object):
             logging.error('Exception initData - {}'.format(e))
             logging.error('Exception Data - {}'.format(data))
 
-
+    #@measure_time
+    def updateHourlyData(yolink, data):
+        logging.debug('{} - updateHourlyData : {}'.format(yolink.type , json.dumps(data, indent=4)))
 
     #@measure_time
     def updateStatusData  (yolink, data):
