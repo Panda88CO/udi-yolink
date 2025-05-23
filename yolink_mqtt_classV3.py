@@ -1211,7 +1211,7 @@ class YoLinkMQTTDevice(object):
                             for info in data[yolink.dData]: 
                                 if info != yolink.dState:
                                     yolink.dataAPI[yolink.dData][info] = data[yolink.dData][info]
-                            logging.debug('After parsing {}'.format(json.dumps(yolink.dataAPI[yolink.dData])))
+                            logging.debug('After parsing {}'.format(json.dumps(yolink.dataAPI[yolink.dData], indent=4)))
                         elif  type(data[yolink.dData][yolink.dState]) is list:
                             #logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))
                             if yolink.dDelays in data[yolink.dData]:
