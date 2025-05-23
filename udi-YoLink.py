@@ -430,9 +430,9 @@ class YoLinkSetup (udi_interface.Node):
                 elif dev['type'] in ['WaterMeterController']:
                     logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))                       
                     if  model in ['YS5007']:    
-                        temp = udiYoWaterMeterController(self.poly, address, address, name, self.yoAccess, dev )
-                    else: #YS5018 or YS5008 
                         temp = udiYoWaterMeterOnly(self.poly, address, address, name, self.yoAccess, dev )
+                    else: #YS5018 or YS5008 
+                        temp = udiYoWaterMeterController(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)

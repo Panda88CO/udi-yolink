@@ -63,15 +63,10 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         pwr_mode = 'Unknown'
         logging.debug('online {} , data {}'.format(yolink.online, yolink.dataAPI[yolink.dData] ))
         if yolink.online:   
-            attempts = 0
-            while yolink.dataAPI[yolink.dData]  == {} and attempts < 3:
-                time.sleep(1)
-                attempts = attempts + 1
-            if attempts <= 3:
-                if 'battery' in yolink.dataAPI[yolink.dData]:
-                    bat_lvl = yolink.dataAPI[yolink.dData]['battery']
-                if 'powerSupply' in yolink.dataAPI[yolink.dData]:
-                    pwr_mode = yolink.dataAPI[yolink.dData]['powerSupply']
+            if 'battery' in yolink.dataAPI[yolink.dData]:
+                bat_lvl = yolink.dataAPI[yolink.dData]['battery']
+            if 'powerSupply' in yolink.dataAPI[yolink.dData]:
+                pwr_mode = yolink.dataAPI[yolink.dData]['powerSupply']
         return(pwr_mode, bat_lvl)
     
 
@@ -79,12 +74,8 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         logging.debug(yolink.type+' - getValveState')
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
-            attempts = 0
             if yolink.dState in yolink.dataAPI[yolink.dData]:
-                while yolink.dataAPI[yolink.dData][yolink.dState]  == {} and attempts < 3:
-                    time.sleep(1)
-                    attempts = attempts + 1
-                if attempts <= 3 and 'valve' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                if 'valve' in yolink.dataAPI[yolink.dData][yolink.dState]:
                     if  yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'open':
                         return('open')
                     elif yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'closed':
@@ -99,11 +90,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             logging.debug(yolink.type+' - getMeterReading')
             #yolink.online = yolink.getOnlineStatus()
             if yolink.online:   
-                attempts = 0
-                while yolink.dataAPI[yolink.dData][yolink.dState] is None and attempts < 3:
-                    time.sleep(1)
-                    attempts = attempts + 1
-                if attempts <= 5:
+                if yolink.dState in yolink.dataAPI[yolink.dData]:
                     if  'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
                         return(round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/10,1))
                     else:
