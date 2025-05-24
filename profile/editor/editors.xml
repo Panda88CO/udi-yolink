@@ -253,5 +253,21 @@
    </editor> 
    <editor id="ready"> 
      <range uom="25" subset="0,1" nls="ready" />
-   </editor>     
+   </editor>  
+   <editor id="waterunit"> 
+     <range uom="25" subset="0,1,2,99" nls="waterUnit" />
+   </editor> 
+   <editor id="float"> 
+      <range uom="6" min="0" max = "10000" prec="1" />
+      <range uom="8" min="0" max = "10000" prec="1" />
+      <range uom="69" min="0" max = "10000" prec="1" />
+      <range uom="25" subset="0,99" nls="error" />
+   </editor> 
+   <editor id="enable"> 
+     <range uom="25" subset="0,1,2,99" nls="waterUnit" />
+   </editor> 
+   <editor id="minutes"> 
+     <range uom="44" min="0" max="1440" />
+   </editor>
+
 </editors>

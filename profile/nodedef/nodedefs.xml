@@ -671,6 +671,7 @@
   <nodeDef id="yowatermeter" nls="nlswatermeter">
       <editors />
       <sts>
+         <st id="ST" editor="waterrun" /> <!-- water runing-->
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="watermeter" />
          <!--<st id="GV2" editor="delay" />
@@ -683,8 +684,15 @@
          <st id="GV7" editor="alarm" />
          <st id="GV8" editor="alarm" />
          <st id="GV9" editor="alarm" />         
-         <st id="GV10" editor="pwrmode" />  
-         <st id="ST"  editor="status" />
+         <st id="CLITEMP" editor="tempC" />
+         <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
+         <st id="GV12" editor="float" /> <!-- leak limit -->
+         <st id="GV13" editor="enable" /> <!-- Leak auto shutoff -->
+         <st id="GV14" editor="float" /> <!-- Overrun Volume  -->        
+         <st id="GV15" editor="enable" /> <!-- Overrun Volume autoshutoff -->
+         <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
+         <st id="GV17" editor="enable" /> <!-- Overrun time autoshutoff -->
+
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                  
       </sts>
@@ -718,7 +726,7 @@
 <nodeDef id="yowatermeteronly" nls="nlswatermeter">
       <editors />
       <sts>
-         <!--<st id="ST"  editor="status" />-->
+         <st id="ST" editor="waterrun" /> <!-- water runing-->
          <!--<st id="GV0" editor="manstate" />-->
          <st id="GV1" editor="watermeter" /> <!--water use -->
          <!--<st id="GV2" editor="delay" />
@@ -732,7 +740,6 @@
          <st id="GV8" editor="alarm" />
          <st id="GV9" editor="alarm" />         
          <st id="GV10" editor="pwrmode" />  
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
          <st id="CLITEMP" editor="tempC" />
          <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
          <st id="GV12" editor="float" /> <!-- leak limit -->

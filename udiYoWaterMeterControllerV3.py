@@ -272,7 +272,6 @@ class udiYoWaterMeterController(udi_interface.Node):
 
 
     def prepOnDelay(self, command ):
-
         self.onDelay =int(command.get('value'))
         logging.info('prepOnDelay {}'.format(self.onDelay))
         #self.yoWaterCtrl.setOnDelay(delay)
