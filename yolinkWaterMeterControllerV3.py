@@ -87,7 +87,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     
     def getMeterReading(yolink):
         try:
-            logging.debug(yolink.type+' - getMeterReading')
+            logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData])}')
             #yolink.online = yolink.getOnlineStatus()
             if yolink.online:   
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
