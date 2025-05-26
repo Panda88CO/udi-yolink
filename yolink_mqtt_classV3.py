@@ -1201,6 +1201,7 @@ class YoLinkMQTTDevice(object):
                         if type(data[yolink.dData][yolink.dState]) is dict:
                             logging.debug('State is Dict: {} '.format(json.dumps(data[yolink.dData][yolink.dState])))
                             for key in data[yolink.dData][yolink.dState]:
+                                logging.debug(f'key {key} {[yolink.dData][yolink.dState][key]} ')
                                 if key == yolink.dDelay and yolink.type in yolink.delaySupport:
                                     temp = []
                                     temp.append(data[yolink.dData][yolink.dState][yolink.dDelay])
