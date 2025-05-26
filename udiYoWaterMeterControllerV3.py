@@ -303,7 +303,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                 'QUERY' : update,
                 'DON'   : set_open,
                 'DOF'   : set_close,
-                'SETATTRIB' : set_sttributes,
+                'SETATTRIB' : set_attributes,
                 #'VALVECTRL': waterCtrlControl, 
                 #'ONDELAY' : prepOnDelay,
                 #'OFFDELAY' : prepOffDelay 

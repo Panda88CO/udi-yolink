@@ -52,11 +52,11 @@ class udiYoWaterMeterOnly(udi_interface.Node):
             {'driver': 'GV10', 'value': 99, 'uom': 25}, 
             {'driver': 'GV11', 'value': 99, 'uom' : 25}, # Water flowing
             {'driver': 'GV12', 'value': 99, 'uom' : 6}, # Water flowing
-            {'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
+            #{'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
-            {'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
+            #{'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
-            {'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
+            #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'GV20', 'value': 0, 'uom': 25},
              {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
@@ -288,7 +288,8 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         #self.my_setDriver('GV2', delay*60, True, True)
         #self.my_setDriver('GV0',self.valveState  , True, True)
 
-
+    def set_attributes(yolike, command):
+        logging.info(f'set_attributes {command}')
 
     def update(self, command = None):
         logging.info('Update Status Executed')
@@ -299,6 +300,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
     commands = {
                 'UPDATE': update,
                 'QUERY' : update,
+                'SETATTRIB' : set_attributes,
                 #'DON'   : set_open,
                 #'DOF'   : set_close,
                 #'VALVECTRL': waterCtrlControl, 
