@@ -346,8 +346,8 @@ ST-nlssmkey-GV2-NAME = Long Press Type
 CMD-nlssmkey-KEYPRESS-NAME = Short Press Type
 CMD-nlssmkey-KEYLPRESS-NAME = Long Press Type
 
-ND-yowatermeter-NAME = YoLink Water Meter Controller
-ND-yowatermeter-ICON = PulseCounter
+ND-yowatermeterCtrl-NAME = YoLink Water Meter Controller
+ND-yowatermeterCtrl-ICON = PulseCounter
 ST-nlswatermeter-ST-NAME = Water State
 ST-nlswatermeter-GV0-NAME = Valve State
 ST-nlswatermeter-GV1-NAME = Water Meter Reading
