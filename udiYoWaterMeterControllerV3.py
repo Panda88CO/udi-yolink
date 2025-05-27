@@ -50,7 +50,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV9', 'value': 99, 'uom': 25}, 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'GV10', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV11', 'value': 99, 'uom' : 25}, # Water flowing
+            {'driver': 'GV11', 'value': 99, 'uom' : 25}, # leak limit
             {'driver': 'GV12', 'value': 99, 'uom' : 6}, # Water flowing
             {'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
@@ -289,12 +289,21 @@ class udiYoWaterMeterController(udi_interface.Node):
 
     def set_attributes(yolike, command):
         logging.info(f'set_attributes {command}')
+        query = command.get("query")
+
         
-
-
     def update(self, command = None):
         logging.info('Update Status Executed')
         self.yoWaterCtrl.refreshDevice()
+        
+    def program_delays(self, command):
+        logging.info('udiYoOutlet program_delays {}'.format(command))
+        query = command.get("query")
+        self.onDelay = int(query.get("ondelay.uom44"))
+        self.offDelay = int(query.get("offdelay.uom44"))
+        self.my_setDriver('GV1', self.onDelay * 60)
+        self.my_setDriver('GV2', self.offDelay * 60 )
+        self.yoWaterCtrl.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
 
 
@@ -305,7 +314,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                 'DOF'   : set_close,
                 'SETATTRIB' : set_attributes,
                 #'VALVECTRL': waterCtrlControl, 
-                #'ONDELAY' : prepOnDelay,
+                'DELAY_CTRL' : program_delays,
                 #'OFFDELAY' : prepOffDelay 
                 }
 
