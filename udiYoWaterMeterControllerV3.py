@@ -40,8 +40,8 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'ST', 'value': 0, 'uom': 25},  # Water flowing
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 69}, #water use
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV3', 'value': 0, 'uom': 57}, 
+            #{'driver': 'GV2', 'value': 0, 'uom': 57}, 
+            #{'driver': 'GV3', 'value': 0, 'uom': 57}, 
             {'driver': 'GV4', 'value': 99, 'uom': 25}, 
             {'driver': 'GV5', 'value': 99, 'uom': 25}, 
             {'driver': 'GV6', 'value': 99, 'uom': 25}, 
@@ -59,7 +59,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'GV20', 'value': 0, 'uom': 25},
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
+            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
             ]
 
 

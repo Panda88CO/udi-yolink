@@ -668,7 +668,7 @@
       </cmds>
    </nodeDef> 
 
-  <nodeDef id="yowatermeter" nls="nlswatermeter">
+  <nodeDef id="yowatermeterCtrl" nls="nlswatermeter">
       <editors />
       <sts>
          <st id="ST" editor="waterrun" /> <!-- water runing-->
