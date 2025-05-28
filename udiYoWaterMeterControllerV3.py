@@ -387,8 +387,6 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.my_setDriver('GV2', self.offDelay * 60 )
         self.yoWaterCtrl.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
 
-
-
     commands = {
                 'UPDATE': update,
                 'QUERY' : update,
