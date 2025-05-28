@@ -143,7 +143,7 @@ class YoLinkSetup (udi_interface.Node):
         #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
         #                        'WaterDepthSensor']
         
-        self.supportedYoTypes = ['WaterMeterController']
+        self.supportedYoTypes = ['WaterMeterController', 'InfraredRemoter']
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':

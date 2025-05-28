@@ -323,10 +323,45 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         #self.my_setDriver('GV2', delay*60, True, True)
         #self.my_setDriver('GV0',self.valveState  , True, True)
 
-    def set_attributes(yolike, command):
+    def set_attributes(self, command):
         logging.info(f'set_attributes {command}')
         query = command.get("query")
+        data={}
+        data['attributes'] = {}
+        leak_lim = None
+        or_lim = None
+        if 'L_LIMIT.uom69' in query:
+            leak_lim = float(query.get('L_LIMIT.uom69'))
+        elif 'L_LIMIT.uom6' in query:
+            leak_lim = float(query.get('L_LIMIT.uom6'))
+        elif 'L_LIMIT.uom8' in query:
+            leak_lim = float(query.get('L_LIMIT.uom8'))
+        elif 'L_LIMIT.uom35' in query:
+            leak_lim = float(query.get('L_LIMIT.uom35'))
+        if leak_lim:
+            data['attributes'] ['leakLimit'] = leak_lim
 
+        #if 'L_OFF.uom25' in query:
+        #    data['attributes'] ['autoCloseValve'] = bool(query.get('L_OFF.uom25'))
+
+        if 'OR_LIMIT.uom69' in query:
+            or_lim = float(query.get('OR_LIMIT.uom69'))
+        elif 'OR_LIMIT.uom6' in query:
+            or_lim = float(query.get('OR_LIMIT.uom6'))
+        elif 'OR_LIMIT.uom8' in query:
+            or_lim = float(query.get('OR_LIMIT.uom8'))
+        elif 'OR_LIMIT.uom35' in query:
+            or_lim = float(query.get('OR_LIMIT.uom35'))   
+        if or_lim:
+            data['attributes'] ['overrunAmount'] = or_lim     
+        #if 'OR_OFF.uom25' in query:
+        #    data['attributes'] ['overrunAmountACV'] = bool(query.get('OR_OFF.uom25')) 
+        if 'ORT_LIMIT.uom44' in query:
+            data['attributes'] ['overrunDuration']  = int(query.get('ORT_LIMIT.uom44'))
+        #if 'ORT_OFF' in query:
+        #    data['attributes'] ['overrunDurationACV']  = bool(query.get('ORT_OFF.uom25'))
+
+        self.yoWaterCtrl.setAttributes(data)
         
     def update(self, command = None):
         logging.info('Update Status Executed')
