@@ -187,7 +187,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                 attributes = self.yoWaterCtrl.getAttributes()
                 if attributes:
                      if 'meterUnit' in attributes:
-                        self.my_setDriver('GV11', self.w_unit2ISY(attributes['meterUnit'])                     
+                        self.my_setDriver('GV11', self.w_unit2ISY(attributes['meterUnit']))                    
                      if 'leakLimit' in attributes:
                         self.my_setDriver('GV12', attributes['leakLimit'])
                      if 'autoCloseValve' in attributes:
