@@ -56,7 +56,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
             {'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
-            {'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
+            #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'GV20', 'value': 0, 'uom': 25},
             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
@@ -154,8 +154,8 @@ class udiYoWaterMeterController(udi_interface.Node):
                 if meter != None:
                     self.my_setDriver('GV1', meter['total'],  69)
                     self.my_setDriver('GV10', meter['daily_usage'],  69)
-                    self.my_setDriver('GV3', meter['recent_amount'],  69)
-                    self.my_setDriver('GV4', meter['recent_duration'],  44)
+                    self.my_setDriver('GV2', meter['recent_amount'],  69)
+                    self.my_setDriver('GV3', meter['recent_duration'],  44)
 
                 pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                 logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
@@ -186,9 +186,20 @@ class udiYoWaterMeterController(udi_interface.Node):
 
                 attributes = self.yoWaterCtrl.getAttributes()
                 if attributes:
-                     if 'openReminder' in alarms:
-                        self.my_setDriver('GV4', self.bool2ISY(alarms['openReminder']))
-    
+                     if 'leakLimit' in attributes:
+                        self.my_setDriver('GV11', attributes['leakLimit'])
+                     if 'autoCloseValve' in attributes:
+                        self.my_setDriver('GV12', self.bool2ISY(attributes['autoCloseValve']))
+                     if 'overrunAmountACV' in attributes:
+                        self.my_setDriver('GV13', self.bool2ISY(attributes['overrunAmountACV']))
+                     if 'overrunDurationACV' in attributes:
+                        self.my_setDriver('GV14', self.bool2ISY(attributes['overrunDurationACV']))
+                     if 'overrunAmount' in attributes:
+                        self.my_setDriver('GV15', attributes['overrunAmount'])
+                     if 'overrunDuration' in attributes:
+                        self.my_setDriver('GV16', attributes['overrunDuration'])
+
+
                 if self.yoWaterCtrl.suspended:
                     self.my_setDriver('GV20', 1)
                 else:
