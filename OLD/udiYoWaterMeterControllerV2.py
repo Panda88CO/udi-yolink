@@ -15,7 +15,7 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-from yolinkWaterMeterControllerV2 import YoLinkWaterMeter
+from OLD.yolinkWaterMeterControllerV2 import YoLinkWaterMeter
 
 
 

@@ -127,102 +127,134 @@ class udiYoWaterMeterController(udi_interface.Node):
         #    self.my_setDriver('GV1', 0)
         #    self.my_setDriver('GV2', 0)
 
+    def unit2uom(self) -> int:
+        logging.debug('unit2uom')
+        isy_uom = None
+        if self.yoWaterCtrl.uom == 0:
+            isy_uom = 69 # gallon
+        if self.yoWaterCtrl.uom == 1:
+            isy_uom = 6 #ft^3
+        if self.yoWaterCtrl.uom == 2:
+            isy_uom = 8 #m^3
+        if self.yoWaterCtrl.uom == 3:
+            isy_uom = 35 # liter                       
+
+
     def updateData(self):
-        if self.node is not None:
-            self.my_setDriver('TIME', self.yoWaterCtrl.getLastUpdateTime(), 151)
-            if self.yoWaterCtrl.online:
-                #self.my_setDriver('ST', 1)
-                state =  self.yoWaterCtrl.getValveState()
-                if state != None:
-                    if state.upper() == 'OPEN':
-                        self.valveState = 1
-                        self.my_setDriver('GV0', self.valveState)
-                        if self.last_state != state:
-                            self.node.reportCmd('DON')
-                    elif state.upper() == 'CLOSED':
-                        self.valveState = 0
-                        self.my_setDriver('GV0', self.valveState)
-                        if self.last_state != state:
-                            self.node.reportCmd('DOF')
-                    elif state.upper() == 'UNKNOWN':
-                        self.my_setDriver('GV0', 99)                        
-                    self.last_state = state
+        try:
+            if self.node is not None:
+                self.my_setDriver('TIME', self.yoWaterCtrl.getLastUpdateTime(), 151)
+                if self.yoWaterCtrl.online:
+                    #self.my_setDriver('ST', 1)
+                    state =  self.yoWaterCtrl.getValveState()
+                    if state != None:
+                        if state.upper() == 'OPEN':
+                            self.valveState = 1
+                            self.my_setDriver('GV0', self.valveState)
+                            if self.last_state != state:
+                                self.node.reportCmd('DON')
+                        elif state.upper() == 'CLOSED':
+                            self.valveState = 0
+                            self.my_setDriver('GV0', self.valveState)
+                            if self.last_state != state:
+                                self.node.reportCmd('DOF')
+                        elif state.upper() == 'UNKNOWN':
+                            self.my_setDriver('GV0', 99)                        
+                        self.last_state = state
 
 
-                meter  = self.yoWaterCtrl.getMeterReading()
-                logging.debug(f'meter: {meter}')
-                if meter != None:
-                    self.my_setDriver('GV1', meter['total'],  69)
-                    self.my_setDriver('GV10', meter['daily_usage'],  69)
-                    self.my_setDriver('GV2', meter['recent_amount'],  69)
-                    self.my_setDriver('GV3', meter['recent_duration'],  44)
+                    meter  = self.yoWaterCtrl.getMeterReading()
+                    logging.debug(f'meter: {meter}')
+                    if meter != None:
+                        if 'water_runing' in meter:
+                            self.my_setDriver('ST', meter['water_runing'])
+                        else:
+                            self.my_setDriver('ST', None)
+                        if 'total' in meter:
+                            self.my_setDriver('GV1', meter['total'],  self.unit2uom())
+                        else:
+                            self.my_setDriver('GV1', None)
+                        if 'daily_usage' in meter:
+                            self.my_setDriver('GV10', meter['daily_usage'],  self.unit2uom())
+                        else:
+                            self.my_setDriver('GV10', None)
+                        if 'recent_amount' in meter:
+                            self.my_setDriver('GV2', meter['recent_amount'],  self.unit2uom())
+                        else:
+                            self.my_setDriver('GV2', None)
+                        if 'recent_duration' in meter:
+                            self.my_setDriver('GV3', meter['recent_duration'],  44)
+                        else:
+                            self.my_setDriver('GV3', None)
 
-                pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
-                logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
-                if pwr_mode == 'PowerLine':
-                    self.my_setDriver('BATLVL', 98, 25)
+                    pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
+                    logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
+                    if pwr_mode == 'PowerLine':
+                        self.my_setDriver('BATLVL', 98, 25)
+                    else:
+                        self.my_setDriver('BATLVL', bat_lvl, 25)
+
+                    alarms = self.yoWaterCtrl.getAlarms()
+                    if alarms:
+                        if 'openReminder' in alarms:
+                            self.my_setDriver('GV4', self.bool2ISY(alarms['openReminder']))
+                        
+                        if 'leak' in alarms:
+                            self.my_setDriver('GV5', self.bool2ISY(alarms['leak']))
+        
+                        if 'amountOverrun' in alarms:
+                            self.my_setDriver('GV6', self.bool2ISY(alarms['amountOverrun']))
+
+                        if 'durationOverrun' in alarms:
+                            self.my_setDriver('GV7', self.bool2ISY(alarms['durationOverrun']))
+        
+                        if 'valveError' in alarms:
+                            self.my_setDriver('GV8', self.bool2ISY(alarms['valveError']))
+
+                        if 'reminder' in alarms:
+                            self.my_setDriver('GV9', self.bool2ISY(alarms['reminder']))
+
+                    attributes = self.yoWaterCtrl.getAttributes()
+                    if attributes:
+                        if 'meterUnit' in attributes:
+                            self.my_setDriver('GV11', self.w_unit2ISY(attributes['meterUnit']), 25)                    
+                        if 'leakLimit' in attributes:
+                            self.my_setDriver('GV12', attributes['leakLimit'], self.unit2uom())
+                        if 'autoCloseValve' in attributes:
+                            self.my_setDriver('GV13', self.bool2ISY(attributes['autoCloseValve']), 25)
+                        if 'overrunAmountACV' in attributes:
+                            self.my_setDriver('GV15', self.bool2ISY(attributes['overrunAmountACV']), 25)
+                        if 'overrunDurationACV' in attributes:
+                            self.my_setDriver('GV17', self.bool2ISY(attributes['overrunDurationACV']), 25)
+                        if 'overrunAmount' in attributes:
+                            self.my_setDriver('GV14', attributes['overrunAmount'],self.unit2uom())
+                        if 'overrunDuration' in attributes:
+                            self.my_setDriver('GV16', attributes['overrunDuration'], 44)
+
+
+                    if self.yoWaterCtrl.suspended:
+                        self.my_setDriver('GV20', 1)
+                    else:
+                        self.my_setDriver('GV20', 0)
+
                 else:
-                    self.my_setDriver('BATLVL', bat_lvl, 25)
-
-                alarms = self.yoWaterCtrl.getAlarms()
-                if alarms:
-                    if 'openReminder' in alarms:
-                        self.my_setDriver('GV4', self.bool2ISY(alarms['openReminder']))
+                    #self.my_setDriver('GV0', 99, 25)
+                    #self.my_setDriver('GV1', 99, 25)
                     
-                    if 'leak' in alarms:
-                        self.my_setDriver('GV5', self.bool2ISY(alarms['leak']))
-    
-                    if 'amountOverrun' in alarms:
-                        self.my_setDriver('GV6', self.bool2ISY(alarms['amountOverrun']))
-
-                    if 'durationOverrun' in alarms:
-                        self.my_setDriver('GV7', self.bool2ISY(alarms['durationOverrun']))
-    
-                    if 'valveError' in alarms:
-                        self.my_setDriver('GV8', self.bool2ISY(alarms['valveError']))
-
-                    if 'reminder' in alarms:
-                        self.my_setDriver('GV9', self.bool2ISY(alarms['reminder']))
-
-                attributes = self.yoWaterCtrl.getAttributes()
-                if attributes:
-                     if 'meterUnit' in attributes:
-                        self.my_setDriver('GV11', self.w_unit2ISY(attributes['meterUnit']))                    
-                     if 'leakLimit' in attributes:
-                        self.my_setDriver('GV12', attributes['leakLimit'])
-                     if 'autoCloseValve' in attributes:
-                        self.my_setDriver('GV13', self.bool2ISY(attributes['autoCloseValve']))
-                     if 'overrunAmountACV' in attributes:
-                        self.my_setDriver('GV15', self.bool2ISY(attributes['overrunAmountACV']))
-                     if 'overrunDurationACV' in attributes:
-                        self.my_setDriver('GV17', self.bool2ISY(attributes['overrunDurationACV']))
-                     if 'overrunAmount' in attributes:
-                        self.my_setDriver('GV14', attributes['overrunAmount'])
-                     if 'overrunDuration' in attributes:
-                        self.my_setDriver('GV16', attributes['overrunDuration'])
-
-
-                if self.yoWaterCtrl.suspended:
-                    self.my_setDriver('GV20', 1)
-                else:
-                    self.my_setDriver('GV20', 0)
-
-            else:
-                #self.my_setDriver('GV0', 99, 25)
-                #self.my_setDriver('GV1', 99, 25)
+                    #self.my_setDriver('GV4', 99, 25)
+                    #self.my_setDriver('GV5', 99, 25)
+                    #self.my_setDriver('GV6', 99, 25)
+                    #self.my_setDriver('GV7', 99, 25)
+                    #self.my_setDriver('GV8', 99, 25)
+                    #self.my_setDriver('GV9', 99, 25)
+                    #self.my_setDriver('GV10', 99, 25)
+                    #self.my_setDriver('BATLVL', 99, 25)
+                    self.my_setDriver('ST', 0)
+                    #self.my_setDriver('BATLVL', 99, 25)
+                    self.my_setDriver('GV20', 2)
                 
-                #self.my_setDriver('GV4', 99, 25)
-                #self.my_setDriver('GV5', 99, 25)
-                #self.my_setDriver('GV6', 99, 25)
-                #self.my_setDriver('GV7', 99, 25)
-                #self.my_setDriver('GV8', 99, 25)
-                #self.my_setDriver('GV9', 99, 25)
-                #self.my_setDriver('GV10', 99, 25)
-                #self.my_setDriver('BATLVL', 99, 25)
-                self.my_setDriver('ST', 0)
-                #self.my_setDriver('BATLVL', 99, 25)
-                self.my_setDriver('GV20', 2)
-            
+        except KeyError as e:
+            logging.error(f'EXCEPTION - {e}')
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoWaterMeterController')
         self.yoWaterCtrl.updateStatus(data)
@@ -301,11 +333,47 @@ class udiYoWaterMeterController(udi_interface.Node):
         #self.my_setDriver('GV2', delay*60, True, True)
         #self.my_setDriver('GV0',self.valveState  , True, True)
 
-    def set_attributes(yolike, command):
+    def set_attributes(self, command):
         logging.info(f'set_attributes {command}')
         query = command.get("query")
+        data={}
+        data['attributes'] = {}
+        leak_lim = None
+        or_lim = None
+        if 'L_LIMIT.uom69' in query:
+            leak_lim = float(query.get('L_LIMIT.uom69'))
+        elif 'L_LIMIT.uom6' in query:
+            leak_lim = float(query.get('L_LIMIT.uom6'))
+        elif 'L_LIMIT.uom8' in query:
+            leak_lim = float(query.get('L_LIMIT.uom8'))
+        elif 'L_LIMIT.uom35' in query:
+            leak_lim = float(query.get('L_LIMIT.uom35'))
+        if leak_lim:
+            data['attributes'] ['leakLimit'] = leak_lim
 
-        
+        if 'L_OFF.uom25' in query:
+            data['attributes'] ['autoCloseValve'] = bool(query.get('L_OFF.uom25'))
+
+        if 'OR_LIMIT.uom69' in query:
+            or_lim = float(query.get('OR_LIMIT.uom69'))
+        elif 'OR_LIMIT.uom6' in query:
+            or_lim = float(query.get('OR_LIMIT.uom6'))
+        elif 'OR_LIMIT.uom8' in query:
+            or_lim = float(query.get('OR_LIMIT.uom8'))
+        elif 'OR_LIMIT.uom35' in query:
+            or_lim = float(query.get('OR_LIMIT.uom35'))   
+        if or_lim:
+            data['attributes'] ['overrunAmount'] = or_lim     
+        if 'OR_OFF.uom25' in query:
+            data['attributes'] ['overrunAmountACV'] = bool(query.get('OR_OFF.uom25')) 
+        if 'ORT_LIMIT.uom44' in query:
+            data['attributes'] ['overrunDuration']  = int(query.get('ORT_LIMIT.uom44'))
+        if 'ORT_OFF' in query:
+            data['attributes'] ['overrunDurationACV']  = bool(query.get('ORT_OFF.uom25'))
+
+        self.yoWaterCtrl.setAttributes(data)
+
+
     def update(self, command = None):
         logging.info('Update Status Executed')
         self.yoWaterCtrl.refreshDevice()

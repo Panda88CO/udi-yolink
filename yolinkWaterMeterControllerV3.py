@@ -15,13 +15,14 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__( yoAccess,  deviceInfo, callback)
         yolink.maxSchedules = 6
-        yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
+        yolink.methodList = ['setAttributes', 'getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
         yolink.eventList = ['StatusChange', 'Report', 'HourlyReport']
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.ManipulatorName = 'WaterMeterControllerEvent'
         yolink.eventTime = 'Time'
         yolink.type = deviceInfo['type']
         yolink.MQTT_type = 'c'
+        yolink.uom = None
         #time.sleep(1)
 
     '''
@@ -56,6 +57,10 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             data['params'] = {}
             data['params']['valve'] = state.lower()
             return(yolink.setDevice(data))
+        
+    def setAttributes(yolink, attributes):
+        logging.debug(yolink.type+' - setAttributes')
+        return(yolink.setDevice(attributes))
 
     def getBattery(yolink):
         logging.debug(yolink.type+' - getBattery')
@@ -99,6 +104,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     #logging.debug('next {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['meter']))
                     temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
+                    temp['water_runing'] = yolink.dataAPI[yolink.dData][yolink.dState]['waterFlowing']
                     #logging.debug('next 2 {}'.format(temp ))
 
                 if 'recentUsage' in yolink.dataAPI[yolink.dData]:
@@ -133,8 +139,11 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             logging.debug(yolink.type+' - getAttributes')
             if yolink.online:   
                 if 'attributes' in yolink.dataAPI[yolink.dData]:
-                    attribues = yolink.dataAPI[yolink.dData]['attributes' ]
-                    return(attribues)
+                    attributes = yolink.dataAPI[yolink.dData]['attributes' ]
+                    if 'meterUnit' in attributes and yolink.uom is None:
+                        yolink.uom = attributes['meterUnit']
+                    return(attributes)
+                
                 else:
                     return(None)
         except KeyError as e:
@@ -145,10 +154,10 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
 
         
 
-    def getData(yolink):
+    #def getData(yolink):
         #yolink.online = yolink.getOnlineStatus()
-        if yolink.online:   
-            return(yolink.getData())
+    #    if yolink.online:   
+    #        return(yolink.getData())
 
 
 class YoLinkWaterMeterCtrl(YoLinkWaterMeter):
