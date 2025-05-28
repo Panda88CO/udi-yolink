@@ -372,7 +372,7 @@ CMD-nlswatermeter-DON-NAME = Open Valve
 CMD-nlswatermeter-DOF-NAME = Close Valve
 CMD-nlswatermeter-VALVECTRL-NAME = Control Valve
 CMD-nlswatermeter-SETATTRIB-NAME = Set Parameters
-#CMD-nlswatermeter-ONDELAY-NAME = Prepare on delay
+#CMD-nlswatermeter-DELAY_CTRL-NAME = Set delaysy
 #CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
 
 ND-yowaterdept-NAME = YoLink Water Level Sensor
@@ -490,7 +490,14 @@ powered-0 = No Power
 powered-1 = Unit powered
 powered-99 = Unknown
 
+bool-0=False
+bool-1=True 
+bool-99=Unknown
 
+waterunit-0=Gal
+waterunit-1=Cubic feet
+waterunit-2=Cubic Meter
+waterunit-99=Undefined
 
 keyscenedef-0 = OFF
 keyscenedef-1 = ON

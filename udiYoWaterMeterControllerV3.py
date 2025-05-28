@@ -21,7 +21,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterController(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, w_unit2IST, save_cmd_state, retrieve_cmd_state, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yowatermeterCtrl'
     '''
@@ -186,16 +186,18 @@ class udiYoWaterMeterController(udi_interface.Node):
 
                 attributes = self.yoWaterCtrl.getAttributes()
                 if attributes:
+                     if 'meterUnit' in attributes:
+                        self.my_setDriver('GV11', self.w_unit2ISY(attributes['meterUnit'])                     
                      if 'leakLimit' in attributes:
-                        self.my_setDriver('GV11', attributes['leakLimit'])
+                        self.my_setDriver('GV12', attributes['leakLimit'])
                      if 'autoCloseValve' in attributes:
-                        self.my_setDriver('GV12', self.bool2ISY(attributes['autoCloseValve']))
+                        self.my_setDriver('GV13', self.bool2ISY(attributes['autoCloseValve']))
                      if 'overrunAmountACV' in attributes:
-                        self.my_setDriver('GV13', self.bool2ISY(attributes['overrunAmountACV']))
+                        self.my_setDriver('GV15', self.bool2ISY(attributes['overrunAmountACV']))
                      if 'overrunDurationACV' in attributes:
-                        self.my_setDriver('GV14', self.bool2ISY(attributes['overrunDurationACV']))
+                        self.my_setDriver('GV17', self.bool2ISY(attributes['overrunDurationACV']))
                      if 'overrunAmount' in attributes:
-                        self.my_setDriver('GV15', attributes['overrunAmount'])
+                        self.my_setDriver('GV14', attributes['overrunAmount'])
                      if 'overrunDuration' in attributes:
                         self.my_setDriver('GV16', attributes['overrunDuration'])
 

@@ -673,9 +673,9 @@
       <sts>
          <st id="ST" editor="waterrun" /> <!-- water runing-->
          <st id="GV0" editor="manstate" />
-         <st id="GV1" editor="watermeter" />
-         <st id="GV10" editor="watermeter" />     
-         <st id="GV2" editor="watermeter" /> <!-- recent use -->
+         <st id="GV1" editor="flow" />
+         <st id="GV10" editor="flow" />     
+         <st id="GV2" editor="flow" /> <!-- recent use -->
 
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="BATLVL" editor="batlevel" />
@@ -686,11 +686,10 @@
          <st id="GV7" editor="alarm" />
          <st id="GV8" editor="alarm" />
          <st id="GV9" editor="alarm" />         
-         <st id="CLITEMP" editor="tempC" />
          <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
-         <st id="GV12" editor="float" /> <!-- leak limit -->
+         <st id="GV12" editor="leaklimit" /> <!-- leak limit -->
          <st id="GV13" editor="enable" /> <!-- Leak auto shutoff -->
-         <st id="GV14" editor="float" /> <!-- Overrun Volume  -->        
+         <st id="GV14" editor="flow" /> <!-- Overrun Volume  -->        
          <st id="GV15" editor="enable" /> <!-- Overrun Volume autoshutoff -->
          <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
          <st id="GV17" editor="enable" /> <!-- Overrun time autoshutoff -->
@@ -712,7 +711,12 @@
             <cmd id="DOF" /> 
             <cmd id="QUERY" /> 
             <cmd id="SETATTRIB">
-               <p id="A" editor="manctrl" init="1" /> 
+               <p id="L_LIMIT" editor="leaklimit" init="1" /> 
+               <p id="L_OFF" editor="set_enable" init="1" />       
+               <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
+               <p id="OR_OFF" editor="set_enable" init="1" />   
+               <p id="ORT_limit" editor="minutes" init="1" /> 
+               <p id="ORT_OFF" editor="set_enable" init="1" />   
             </cmd >
             <cmd id="DELAY_CTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
