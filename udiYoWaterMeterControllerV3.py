@@ -106,6 +106,7 @@ class udiYoWaterMeterController(udi_interface.Node):
         #self.my_setDriver('ST', 1)
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         self.node_ready = True
+        self.updateData()
 
     def stop (self):
         logging.info('Stop udiYoWaterMeterController')
