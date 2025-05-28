@@ -88,10 +88,11 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     def getMeterReading(yolink):
         try:
             
-            logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData])}')
+            logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData], indent=4)}')
             temp = {'total':None, 'recent_amount':None, 'recent_duration':None, 'daily_usage':None}
             #yolink.online = yolink.getOnlineStatus()
             if yolink.online:   
+
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     if  'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
                         temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
@@ -101,7 +102,8 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                     temp['recent_duration'] = yolink.dataAPI[yolink.dData]['recentUsage']['duration']
                     temp = yolink.dataAPI[yolink.dData]['recentUsage']
                 if 'dailyUsage' in yolink.dataAPI[yolink.dData]:
-                    temp['daily_usage'] = yolink.dataAPI[yolink.dData]['dailyUsage']               
+                    temp['daily_usage'] = yolink.dataAPI[yolink.dData]['dailyUsage']  
+            logging.debug(f' temp {temp}')             
             return(temp)
 
         except KeyError as e:
@@ -137,7 +139,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             return(None)
         
 
-    
+
         
 
     def getData(yolink):
