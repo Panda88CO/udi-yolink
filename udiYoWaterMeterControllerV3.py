@@ -150,6 +150,7 @@ class udiYoWaterMeterController(udi_interface.Node):
 
 
                 meter  = self.yoWaterCtrl.getMeterReading()
+                logging.debug(f'meter: {meter}')
                 if meter != None:
                     self.my_setDriver('GV1', meter['total'],  69)
                     self.my_setDriver('GV10', meter['daily_usage'],  69)
