@@ -138,7 +138,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             isy_uom = 8 #m^3
         if self.yoWaterCtrl.uom == 3:
             isy_uom = 35 # liter                       
-
+        return(isy_uom)
 
     def updateData(self):
         try:
@@ -217,7 +217,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     attributes = self.yoWaterCtrl.getAttributes()
                     if attributes:
                         if 'meterUnit' in attributes:
-                            self.my_setDriver('GV11', self.w_unit2ISY(attributes['meterUnit']), 25)                    
+                            self.my_setDriver('GV11', attributes['meterUnit'], 25)                    
                         if 'leakLimit' in attributes:
                             self.my_setDriver('GV12', attributes['leakLimit'], self.unit2uom())
                         if 'autoCloseValve' in attributes:
