@@ -78,7 +78,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 if 'valve' in yolink.dataAPI[yolink.dData][yolink.dState]:
                     if  yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'open':
                         return('open')
-                    elif yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'closed':
+                    elif yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'close':
                         return('closed')
                     else:
                         return('Unkown')

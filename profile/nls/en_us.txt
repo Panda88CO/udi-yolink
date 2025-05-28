@@ -348,16 +348,19 @@ CMD-nlssmkey-KEYLPRESS-NAME = Long Press Type
 
 ND-yowatermeterCtrl-NAME = YoLink Water Meter Controller
 ND-yowatermeterCtrl-ICON = PulseCounter
-ST-nlswatermeter-ST-NAME = Water State
+ST-nlswatermeter-ST-NAME = Water Running
 ST-nlswatermeter-GV0-NAME = Valve State
-ST-nlswatermeter-GV1-NAME = Water Meter Reading
+ST-nlswatermeter-GV1-NAME = Water Meter Total
+ST-nlswatermeter-GV10-NAME = Water Meter Day Use
+ST-nlswatermeter-GV2-NAME = Water Meter Recent Use
+ST-nlswatermeter-GV3-NAME = Water Meter Recent Duration
 ST-nlswatermeter-GV4-NAME = Open Reminder
 ST-nlswatermeter-GV5-NAME = Leak
 ST-nlswatermeter-GV6-NAME = Amount Overrun
 ST-nlswatermeter-GV7-NAME = Duration Overrun
 ST-nlswatermeter-GV8-NAME = Valve Error
 ST-nlswatermeter-GV9-NAME = Reminder
-ST-nlswatermeter-GV10-NAME = Supply Mode
+
 ST-nlswatermeter-GV11-NAME = Measure Unit
 ST-nlswatermeter-GV12-NAME = Leak Limit
 ST-nlswatermeter-GV13-NAME = Leak Auto Shutoff
@@ -366,7 +369,12 @@ ST-nlswatermeter-GV15-NAME = Overrun Volume Auto Shutoff
 ST-nlswatermeter-GV16-NAME = Overrun time
 ST-nlswatermeter-GV17-NAME = Overrun Time Auto Shutoff
 ST-nlswatermeter-CLITEMP-NAME = Water Temperature
-
+CMDP-L_LIMIT-NAME=Leak Limit
+CMDP-L_OFF-NAME=Leak Auto Off
+CMDP-OR_LIMIT-NAME=Overrun Limit
+CMDP-OR_OFF-NAME=Overrun Auto Off
+CMDP-ORT_LIMIT-NAME=Overrun Time Limit
+CMDP-ORT_OFF-NAME=Overrun Time Auto Off
 
 CMD-nlswatermeter-DON-NAME = Open Valve
 CMD-nlswatermeter-DOF-NAME = Close Valve

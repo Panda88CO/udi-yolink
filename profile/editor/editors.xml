@@ -255,13 +255,12 @@
      <range uom="25" subset="0,1" nls="ready" />
    </editor>  
    <editor id="waterunit"> 
-     <range uom="25" subset="0,1,2,99" nls="waterUnit" />
+     <range uom="25" subset="0,1,2,99" nls="waterunit" />
    </editor> 
   <editor id="leaklimit"> 
-      <range uom="69" min="0" max = "100" prec="1" />
-      <range uom="6" min="0" max = "100" prec="1" />
+      <range uom="69" min="0" max = "100" prec="0" />
+      <range uom="6" min="0" max = "100" prec="0" />
       <range uom="8" min="0" max = "10" prec="1" />
-
    </editor> 
 
    <editor id="flow"> 
