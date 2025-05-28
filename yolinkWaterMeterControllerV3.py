@@ -94,8 +94,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             if yolink.online:   
                 logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
-                    if  'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                        temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
+                    temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
                     
                 if 'recentUsage' in yolink.dataAPI[yolink.dData]:
                     temp['recent_amount'] = yolink.dataAPI[yolink.dData]['recentUsage']['amount']
