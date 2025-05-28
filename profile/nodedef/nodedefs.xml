@@ -693,7 +693,6 @@
          <st id="GV15" editor="enable" /> <!-- Overrun Volume autoshutoff -->
          <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
          <st id="GV17" editor="enable" /> <!-- Overrun time autoshutoff -->
-
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                  
       </sts>
