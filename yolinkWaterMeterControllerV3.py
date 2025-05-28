@@ -91,8 +91,11 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData], indent=4)}')
             temp = {'total':None, 'recent_amount':None, 'recent_duration':None, 'daily_usage':None}
             #yolink.online = yolink.getOnlineStatus()
+            logging.debug(f'temp1 {temp}')
             if yolink.online:   
                 logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
+                
+                logging.debug(f'logic {yolink.dState in yolink.dataAPI[yolink.dData]}')
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
                     
