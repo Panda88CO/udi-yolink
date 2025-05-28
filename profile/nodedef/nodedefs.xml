@@ -674,8 +674,10 @@
          <st id="ST" editor="waterrun" /> <!-- water runing-->
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="watermeter" />
-         <!--<st id="GV2" editor="delay" />
-         <st id="GV3" editor="delay" /> -->
+         <st id="GV10" editor="watermeter" />     
+         <st id="GV2" editor="watermeter" /> <!-- recent use -->
+
+         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="BATLVL" editor="batlevel" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="GV4" editor="alarm" />

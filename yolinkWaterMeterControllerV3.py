@@ -16,7 +16,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         super().__init__( yoAccess,  deviceInfo, callback)
         yolink.maxSchedules = 6
         yolink.methodList = ['getState', 'setState', 'setDelay', 'getSchedules', 'setSchedules', 'getUpdate'   ]
-        yolink.eventList = ['StatusChange', 'Report']
+        yolink.eventList = ['StatusChange', 'Report', 'HourlyReport']
         yolink.stateList = ['open', 'closed', 'on', 'off']
         yolink.ManipulatorName = 'WaterMeterControllerEvent'
         yolink.eventTime = 'Time'
@@ -87,34 +87,59 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     
     def getMeterReading(yolink):
         try:
+            
             logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData])}')
+            temp = {'total':None, 'recent_amount':None, 'recent_duration':None, 'daily_usage':None}
             #yolink.online = yolink.getOnlineStatus()
             if yolink.online:   
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     if  'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                        return(round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/10,1))
-                    else:
-                        return(None)
-                else:
-                    return('Unknown')   
+                        temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
+                    
+                if 'recentUsage' in yolink.dataAPI[yolink.dData]:
+                    temp['recent_amount'] = yolink.dataAPI[yolink.dData]['recentUsage']['amount']
+                    temp['recent_duration'] = yolink.dataAPI[yolink.dData]['recentUsage']['duration']
+                    temp = yolink.dataAPI[yolink.dData]['recentUsage']
+                if 'dailyUsage' in yolink.dataAPI[yolink.dData]:
+                    temp['daily_usage'] = yolink.dataAPI[yolink.dData]['dailyUsage']               
+            return(temp)
+
         except KeyError as e:
             logging.error(f'EXCEPTION - getMeterReading {e}') 
             return(None)
 
     def getAlarms(yolink):
-        logging.debug(yolink.type+' - getAlarms')
-        if yolink.online:   
-            attempts = 0
-            if yolink.dAlarm in yolink.dataAPI[yolink.dData]:
-                while yolink.dataAPI[yolink.dData][yolink.dAlarm]  == {} and attempts < 3:
-                    time.sleep(1)
-                    attempts = attempts + 1
-                if attempts <= 5 and yolink.dAlarm in yolink.dataAPI[yolink.dData]:
-                    alarms = yolink.dataAPI[yolink.dData][yolink.dAlarm]
+        try:
+            logging.debug(yolink.type+' - getAlarms')
+            if yolink.online:   
+
+                if 'alarm' in yolink.dataAPI[yolink.dData]:
+                    alarms = yolink.dataAPI[yolink.dData]['alarm']
                     return(alarms)
                 else:
                     return(None)
-     
+        except KeyError as e:
+            logging.error(f'Exception : {e}')
+            return(None)
+        
+
+    def getAttributes(yolink):
+        try:
+            logging.debug(yolink.type+' - getAttributes')
+            if yolink.online:   
+                if 'attributes' in yolink.dataAPI[yolink.dData]:
+                    attribues = yolink.dataAPI[yolink.dData]['attributes' ]
+                    return(attribues)
+                else:
+                    return(None)
+        except KeyError as e:
+            logging.error(f'Exception : {e}')
+            return(None)
+        
+
+    
+        
+
     def getData(yolink):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   

@@ -15,7 +15,7 @@ from os import truncate
 #import udi_interface
 #import sys
 import time
-from yolinkWaterMeterControllerV2 import YoLinkWaterMeter
+from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 
@@ -39,17 +39,17 @@ class udiYoWaterMeterController(udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},  # Water flowing
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 69}, #water use
-            #{'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            #{'driver': 'GV3', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV4', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 69}, #water use total
+            {'driver': 'GV10', 'value': 99, 'uom': 25}, #water use daily             
+            {'driver': 'GV2', 'value': 0, 'uom': 69},  #wateruse recent
+            {'driver': 'GV3', 'value': 0, 'uom': 44},  #Wateruse duration
+            {'driver': 'GV4', 'value': 99, 'uom': 25}, #alarm
             {'driver': 'GV5', 'value': 99, 'uom': 25}, 
             {'driver': 'GV6', 'value': 99, 'uom': 25}, 
             {'driver': 'GV7', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 99, 'uom': 25},                                              
             {'driver': 'GV9', 'value': 99, 'uom': 25}, 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
-            {'driver': 'GV10', 'value': 99, 'uom': 25}, 
             {'driver': 'GV11', 'value': 99, 'uom' : 25}, # leak limit
             {'driver': 'GV12', 'value': 99, 'uom' : 6}, # Water flowing
             {'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
@@ -149,24 +149,17 @@ class udiYoWaterMeterController(udi_interface.Node):
 
                 meter  = self.yoWaterCtrl.getMeterReading()
                 if meter != None:
-                    if meter == 'Unknown':
-                        self.my_setDriver('GV1', 99,  25)
-                    else:
-                        self.my_setDriver('GV1', meter,  69)
-                #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
-                #if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
-                #    self.my_setDriver('GV2', 0)
-                #    self.my_setDriver('GV3', 0)  
+                    self.my_setDriver('GV1', meter['total'],  69)
+                    self.my_setDriver('GV10', meter['daily_usage'],  69)
+                    self.my_setDriver('GV3', meter['recent_amount'],  69)
+                    self.my_setDriver('GV4', meter['recent_duration'],  44)
 
                 pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                 logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
-                self.my_setDriver('BATLVL', bat_lvl)          
-                if pwr_mode == 'Unknown':
-                    self.my_setDriver('GV10', 99)
-                elif pwr_mode == 'PowerLine':
-                    self.my_setDriver('GV10', 0)
+                if pwr_mode == 'PowerLine':
+                    self.my_setDriver('BATLVL', 98, 25)
                 else:
-                    self.my_setDriver('GV10', 1)
+                    self.my_setDriver('BATLVL', bat_lvl, 25)
 
                 alarms = self.yoWaterCtrl.getAlarms()
                 if alarms:
@@ -187,6 +180,11 @@ class udiYoWaterMeterController(udi_interface.Node):
 
                     if 'reminder' in alarms:
                         self.my_setDriver('GV9', self.bool2ISY(alarms['reminder']))
+
+                attributes = self.yoWaterCtrl.getAttributes()
+                if attributes:
+                     if 'openReminder' in alarms:
+                        self.my_setDriver('GV4', self.bool2ISY(alarms['openReminder']))
     
                 if self.yoWaterCtrl.suspended:
                     self.my_setDriver('GV20', 1)
