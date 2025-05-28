@@ -508,6 +508,7 @@ bool-99=Unknown
 waterunit-0=Gal
 waterunit-1=Cubic feet
 waterunit-2=Cubic Meter
+waterunit-2=Liter
 waterunit-99=Undefined
 
 keyscenedef-0 = OFF
