@@ -120,6 +120,7 @@ class udiYoWaterMeterController(udi_interface.Node):
 
     def checkDataUpdate(self):
         if self.yoWaterCtrl.data_updated():
+            #self.yoWaterCtrl.refreshDevice() 
             self.updateData()
         #if time.time() >= self.timer_expires - self.timer_update:
         #    self.my_setDriver('GV1', 0)
