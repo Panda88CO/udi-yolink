@@ -405,6 +405,9 @@ nosupport-0 = No Support
 nosupport-98 = No Support
 nosupport-99 = Unknown
 
+enable-0=Disabled
+enable-1=Enabled
+enable-99=Unknown
 
 ready-0 = Initializing
 ready-1 = Ready
