@@ -687,7 +687,7 @@
          <st id="GV8" editor="alarm" />
          <st id="GV9" editor="alarm" />         
          <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
-         <st id="GV12" editor="leaklimit" /> <!-- leak limit -->
+         <st id="GV12" editor="flow" /> <!-- leak limit -->
          <st id="GV13" editor="enable" /> <!-- Leak auto shutoff -->
          <st id="GV14" editor="flow" /> <!-- Overrun Volume  -->        
          <st id="GV15" editor="enable" /> <!-- Overrun Volume autoshutoff -->
@@ -714,7 +714,7 @@
                <p id="L_OFF" editor="set_enable" init="1" />       
                <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
                <p id="OR_OFF" editor="set_enable" init="1" />   
-               <p id="ORT_LIMIT" editor="minutes" init="1" /> 
+               <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
                <p id="ORT_OFF" editor="set_enable" init="1" />   
             </cmd >
             <cmd id="DELAY_CTRL" > 
@@ -742,7 +742,7 @@
          <st id="GV7" editor="alarm" />
          <st id="GV9" editor="alarm" />         
          <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
-         <st id="GV12" editor="leaklimit" /> <!-- leak limit -->
+         <st id="GV12" editor="flow" /> <!-- leak limit -->
          <st id="GV14" editor="flow" /> <!-- Overrun Volume  -->        
          <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
          <st id="GV20" editor="suspendstate" />
@@ -764,7 +764,7 @@
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" init="1" /> 
                <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="ORT_LIMIT" editor="minutes" init="1" /> 
+               <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
             </cmd >
  
          </accepts>
