@@ -94,7 +94,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         try:
             
             #logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData], indent=4)}')
-            temp = {'total':None, 'recent_amount':None, 'recent_duration':None, 'daily_usage':None}
+            temp = {'total':None, 'water_runing':None, 'recent_amount':None, 'recent_duration':None, 'daily_usage':None}
             #yolink.online = yolink.getOnlineStatus()
             #logging.debug(f'temp1 {temp}')
             if yolink.online:   
@@ -103,8 +103,10 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 #logging.debug(f'logic {yolink.dState in yolink.dataAPI[yolink.dData]}')
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     #logging.debug('next {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['meter']))
-                    temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
-                    temp['water_runing'] = yolink.dataAPI[yolink.dData][yolink.dState]['waterFlowing']
+                    if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]
+                        temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
+                    if 'waterFlowing' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                        temp['water_runing'] = yolink.dataAPI[yolink.dData][yolink.dState]['waterFlowing']
                     #logging.debug('next 2 {}'.format(temp ))
 
                 if 'recentUsage' in yolink.dataAPI[yolink.dData]:
