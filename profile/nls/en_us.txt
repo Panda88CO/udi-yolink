@@ -575,8 +575,8 @@ tempunit-0 = Celsius
 tempunit-1 = Fahrenheit
 tempunit-2 = Kelvin
 
-error-0 = unknown
-error-99 = offline
+error-0 = Unknown
+error-99 = Unknown/Not reported
 sphmute-0 = Muted
 sphmute-1 = Unmuted
 sphmute-99 = Unknown

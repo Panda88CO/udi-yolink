@@ -92,28 +92,33 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     
     def getMeterReading(yolink):
         try:
-            
+            meter_correction_factor = 1
             #logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData], indent=4)}')
             temp = {'total':None, 'water_runing':None, 'recent_amount':None, 'recent_duration':None, 'daily_usage':None}
             #yolink.online = yolink.getOnlineStatus()
             #logging.debug(f'temp1 {temp}')
             if yolink.online:   
                 #logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
-                
+                if 'meterStepFactor' in yolink.dataAPI[yolink.dData]['attributes']:
+                    meter_correction_factor = yolink.dataAPI[yolink.dData]['attributes']['meterStepFactor']
+                else:
+                    meter_correction_factor = 1.0   
                 #logging.debug(f'logic {yolink.dState in yolink.dataAPI[yolink.dData]}')
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     #logging.debug('next {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['meter']))
                     if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                        temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
+                        temp['total'] = round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/meter_correction_factor,1)
                     if 'waterFlowing' in yolink.dataAPI[yolink.dData][yolink.dState]:
                         temp['water_runing'] = yolink.dataAPI[yolink.dData][yolink.dState]['waterFlowing']
                     #logging.debug('next 2 {}'.format(temp ))
 
                 if 'recentUsage' in yolink.dataAPI[yolink.dData]:
-                    temp['recent_amount'] = yolink.dataAPI[yolink.dData]['recentUsage']['amount']
-                    temp['recent_duration'] = yolink.dataAPI[yolink.dData]['recentUsage']['duration']
+                    if 'amount' in yolink.dataAPI[yolink.dData]['recentUsage']:
+                        temp['recent_amount'] = round(yolink.dataAPI[yolink.dData]['recentUsage']['amount']/meter_correction_factor,1)
+                    if 'duration' in yolink.dataAPI[yolink.dData]['recentUsage']:
+                        temp['recent_duration'] = yolink.dataAPI[yolink.dData]['recentUsage']['duration']
                 if 'dailyUsage' in yolink.dataAPI[yolink.dData]:
-                    temp['daily_usage'] = yolink.dataAPI[yolink.dData]['dailyUsage']  
+                    temp['daily_usage'] = round(yolink.dataAPI[yolink.dData]['dailyUsage']/meter_correction_factor,1)
             #logging.debug(f' temp {temp}')             
             return(temp)
 
