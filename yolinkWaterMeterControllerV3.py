@@ -103,7 +103,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 #logging.debug(f'logic {yolink.dState in yolink.dataAPI[yolink.dData]}')
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     #logging.debug('next {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['meter']))
-                    if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]
+                    if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
                         temp['total'] = yolink.dataAPI[yolink.dData][yolink.dState]['meter']
                     if 'waterFlowing' in yolink.dataAPI[yolink.dData][yolink.dState]:
                         temp['water_runing'] = yolink.dataAPI[yolink.dData][yolink.dState]['waterFlowing']
