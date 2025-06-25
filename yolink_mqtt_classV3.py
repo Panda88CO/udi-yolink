@@ -1138,7 +1138,7 @@ class YoLinkMQTTDevice(object):
     def updateLoraInfo(yolink, data):
         if yolink.dState in data[yolink.dData]:
             if 'loraInfo' in data[yolink.dData][yolink.dState]:
-                yolink.dataAPI[yolink.dData][yolink.dState]['loraInfo']= data[yolink.dData]['loraInfo']
+                yolink.dataAPI[yolink.dData][yolink.dState]['loraInfo']= data[yolink.dData][yolink.dState]['loraInfo']
 
     def updateMessageInfo(yolink, data):
         if yolink.lastUpd in data:
