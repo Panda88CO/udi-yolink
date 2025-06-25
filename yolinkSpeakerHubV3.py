@@ -122,8 +122,8 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     
     def setMessageNbr(yolink, messageNbr):
         if messageNbr > 0:
-            logging.debug(yolink.type+' - setMessage: {} = {}'.format(messageNbr, yolink.yoAccess.TtsMessages[messageNbr]))
-        yolink.TtsMessageNbr = messageNbr
+            #logging.debug(yolink.type+' - setMessage: {} = {}'.format(messageNbr, yolink.yoAccess.TtsMessages[messageNbr]))
+            yolink.TtsMessageNbr = messageNbr
 
 
 
