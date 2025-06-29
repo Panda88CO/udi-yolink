@@ -119,15 +119,24 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         except Exception as E:
             logging.error('battery not defined : {}'.format(E))
        
-    def get_code_dict(yolink):
+    def get_code_dict(yolink) -> dict:
         logging.debug('YoLinkInfraredRem get_code_dict {}')
         code_dict = {}
         if 'keys' in yolink.dataAPI[yolink.dData]:
             for code in range(0,len(yolink.dataAPI[yolink.dData]['keys'])):
                 code_dict[code] =  yolink.dataAPI[yolink.dData]['keys'][code]
         return(code_dict)
-           
-    '''
+
+    def get_active_code_dict(yolink)-> dict:   
+        logging.debug('YoLinkInfraredRem get_active_code_dict')
+        code_dict = {}
+        if 'keys' in yolink.dataAPI[yolink.dData]:
+            for code in range(0,len(yolink.dataAPI[yolink.dData]['keys'])):
+                if yolink.dataAPI[yolink.dData]['keys'][code]:
+                    code_dict[code] =  yolink.dataAPI[yolink.dData]['keys'][code]
+        return(code_dict)
+
+    
     def learn(yolink, code):
         yolink.send_learn(code)
         
@@ -168,7 +177,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                 return (False)
         else:
             logging.error('previous send_learn not completed - cannot start another')
-    '''
+    
     
     def check_code_learned(yolink, code):
         logging.debug('YoLinkInfraredRem check_code_learned {}'.format(code))
