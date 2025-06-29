@@ -512,28 +512,47 @@ CMD-nlssmkey-KEY2LDEF-NAME = Key2 Long Scene Function
 CMD-nlssmkey-KEY3LDEF-NAME = Key3 Long Scene Function
 CMD-nlssmkey-KEY4LDEF-NAME = Key4 Long Scene Function
 
+
 ND-yowatermeter-NAME = YoLink Water Meter Controller
 ND-yowatermeter-ICON = PulseCounter
 ST-nlswatermeter-NAME = Nodeserver Status
 ST-nlswatermeter-GV0-NAME = Valve State
-ST-nlswatermeter-GV1-NAME = Water Meter Reading
+ST-nlswatermeter-GV1-NAME = Water Meter Total
+ST-nlswatermeter-GV10-NAME = Water Meter Day Use
+ST-nlswatermeter-GV2-NAME = Water Meter Recent Use
+ST-nlswatermeter-GV3-NAME = Water Meter Recent Duration
 ST-nlswatermeter-GV4-NAME = Open Reminder
-ST-nlswatermeter-GV5-NAME = Leak
+ST-nlswatermeter-GV5-NAME = Leak 
 ST-nlswatermeter-GV6-NAME = Amount Overrun
 ST-nlswatermeter-GV7-NAME = Duration Overrun
 ST-nlswatermeter-GV8-NAME = Valve Error
 ST-nlswatermeter-GV9-NAME = Reminder
+ST-nlswatermeter-GV11-NAME = Measure Unit
+ST-nlswatermeter-GV12-NAME = Leak Limit
+ST-nlswatermeter-GV13-NAME = Leak Auto Shutoff
+ST-nlswatermeter-GV14-NAME = Amount Overrun Volume Limit
+ST-nlswatermeter-GV15-NAME = Overrun Volume Auto Shutoff
+ST-nlswatermeter-GV16-NAME = Overrun time Limit
+ST-nlswatermeter-GV17-NAME = Overrun Time Auto Shutoff
+ST-nlswatermeter-CLITEMP-NAME = Water Temperature
 ST-nlswatermeter-GV10-NAME = Supply Mode
 ST-nlswatermeter-GV20-NAME = Connection State
 ST-nlswatermeter-BATLVL-NAME = Battery Level
 ST-nlswatermeter-TIME-NAME = Last device update
-ST-nlswatermeter-CLITEMP-NAME = Sensor Temperature
-ST-nlswatermeter-CLIHUM-NAME = Current Rel Humidity (%)
+CMDP-L_LIMIT-NAME=Leak Limit
+CMDP-L_OFF-NAME=Leak Auto Off
+CMDP-OR_LIMIT-NAME=Overrun Limit
+CMDP-OR_OFF-NAME=Overrun Auto Off
+CMDP-ORT_LIMIT-NAME=Overrun Time Limit
+CMDP-ORT_OFF-NAME=Overrun Time Auto Off
+
+
 
 CMD-nlswatermeter-DON-NAME = Open Valve
 CMD-nlswatermeter-DOF-NAME = Close Valve
 CMD-nlswatermeter-VALVECTRL-NAME = Control Valve
-#CMD-nlswatermeter-ONDELAY-NAME = Prepare on delay
+CMD-nlswatermeter-SETATTRIB-NAME = Set Parameters
+#CMD-nlswatermeter-DELAY_CTRL-NAME = Set delaysy
 #CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
 
 ND-yowaterdept-NAME = YoLink Water Level Sensor
@@ -562,6 +581,9 @@ nosupport-0 = No Support
 nosupport-98 = No Support
 nosupport-99 = Unknown
 
+enable-0=Disabled
+enable-1=Enabled
+enable-99=Unknown
 
 ready-0 = Initializing
 ready-1 = Ready
@@ -655,7 +677,15 @@ powered-0 = No Power
 powered-1 = Unit powered
 powered-99 = Unknown
 
+bool-0=False
+bool-1=True 
+bool-99=Unknown
 
+waterunit-0=Gal
+waterunit-1=Cubic feet
+waterunit-2=Cubic Meter
+waterunit-3=Liter
+waterunit-99=Undefined
 
 keyscenedef-0 = OFF
 keyscenedef-1 = ON
@@ -721,8 +751,8 @@ tempunit-0 = Celsius
 tempunit-1 = Fahrenheit
 tempunit-2 = Kelvin
 
-error-0 = unknown
-error-99 = offline
+error-0 = Unknown
+error-99 = Unknown/Not reported
 sphmute-0 = Muted
 sphmute-1 = Unmuted
 sphmute-99 = Unknown

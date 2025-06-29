@@ -33,7 +33,8 @@ from udiYoVibrationSensorV3 import udiYoVibrationSensor
 from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV3 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
-from udiYoWaterMeterControllerV2 import udiYoWaterMeterController
+from udiYoWaterMeterControllerV3 import udiYoWaterMeterController
+from udiYoWaterMeterOnlyV3 import udiYoWaterMeterOnly
 #from udiYoHubV2 import udiYoHub
 import udiProfileHandler
 
@@ -48,7 +49,9 @@ except ImportError:
 
 
 
-version = '1.4.17'
+
+version = '1.4.21'
+
 
 
 class YoLinkSetup (udi_interface.Node):
@@ -136,13 +139,13 @@ class YoLinkSetup (udi_interface.Node):
             time.sleep(1)
             logging.debug ('waiting for inital node to get created')
 
-        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-                                'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
-                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-                                'WaterDepthSensor']
+        #self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+        #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
+        #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
+        #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+        #                        'WaterDepthSensor']
         
-        #self.supportedYoTypes = ['Dimmer']
+        self.supportedYoTypes = ['WaterMeterController',  'InfraredRemoter']
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
@@ -426,9 +429,12 @@ class YoLinkSetup (udi_interface.Node):
                     for adr in temp.adr_list:
                         self.assigned_addresses.append(adr)
 
-                elif dev['type'] in ['WaterMeterController']:                 
-                    logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
-                    temp = udiYoWaterMeterController(self.poly, address, address, name, self.yoAccess, dev )
+                elif dev['type'] in ['WaterMeterController']:
+                    logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))                       
+                    if  model in ['YS5007']:    
+                        temp = udiYoWaterMeterOnly(self.poly, address, address, name, self.yoAccess, dev )
+                    else: #YS5018 or YS5008 
+                        temp = udiYoWaterMeterController(self.poly, address, address, name, self.yoAccess, dev )
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                         time.sleep(4)

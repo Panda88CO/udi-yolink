@@ -277,7 +277,20 @@ class YoLinkMQTTDevice(object):
             time.sleep(1) 
         return (True)
     '''
+   #@measure_time
+    def setAttributes(yolink,  data):
+        logging.debug(yolink.type+f' - setAttributes {data}')
 
+        methodStr = yolink.type+'.setAttributes'
+            
+        #data['time'] = str(int(time.time_ns()//1e6))# we assign time just before publish
+        data['method'] = methodStr
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token']
+        logging.debug(yolink.type+' - setDevice -data {}'.format(data))
+        yolink.yoAccess.publish_data(data)
+        return(True)
+ 
     #@measure_time
     def setDevice(yolink,  data):
         logging.debug(yolink.type+' - setDevice')
@@ -288,9 +301,7 @@ class YoLinkMQTTDevice(object):
         elif 'toggle' in yolink.methodList:
             methodStr = yolink.type+'.toggle'
             worked = True
-        elif 'setAttributes' in yolink.methodList:
-            methodStr = yolink.type+'.setAttributes'
-            worked = True               
+           
         #data['time'] = str(int(time.time_ns()//1e6))# we assign time just before publish
         data['method'] = methodStr
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
@@ -576,7 +587,7 @@ class YoLinkMQTTDevice(object):
             yolink.online = False
             logging.debug(f'OFFLINE STRANGE {dataPacket}')
         if not yolink.online:
-            logging.debug('Status {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
+            logging.error('Status {} - Off line detected: {}'.format(yolink.deviceInfo['name'], dataPacket))
         return(yolink.online)
 
     #@measure_time
@@ -684,6 +695,11 @@ class YoLinkMQTTDevice(object):
                 elif '.DevEvent' in  data['event']:
                     if int(data['time']) >= int(yolink.getLastUpdate()):
                         yolink.updateStatusData(data)
+                elif '.HourlyUsageReport' in  data['event']:
+                    if int(data['time']) >= int(yolink.getLastUpdate()):
+                        yolink.updateHourlyData(data)
+
+
                 elif '.setInitState' in  data['event']:
                         #yolink.updateStatusData(data)
                         yolink.initData(data)
@@ -1163,12 +1179,14 @@ class YoLinkMQTTDevice(object):
             logging.error('Exception initData - {}'.format(e))
             logging.error('Exception Data - {}'.format(data))
 
-
+    #@measure_time
+    def updateHourlyData(yolink, data):
+        logging.debug('{} - updateHourlyData : {}'.format(yolink.type , json.dumps(data, indent=4)))
 
     #@measure_time
     def updateStatusData  (yolink, data):
         try:
-            logging.debug('{} - updateStatusData : {}'.format(yolink.type , data))
+            logging.debug('{} - updateStatusData : {}'.format(yolink.type , json.dumps(data, indent=4)))
             #yolink.setOnline(data)
             if 'reportAt' in data[yolink.dData] :
                 reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -1192,8 +1210,10 @@ class YoLinkMQTTDevice(object):
                         #else:
                         #    yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                         if type(data[yolink.dData][yolink.dState]) is dict:
-                            logging.debug('State is Dict: {} '.format(data[yolink.dData][yolink.dState]))
+                            logging.debug('State is Dict: {} '.format(json.dumps(data[yolink.dData][yolink.dState])))
                             for key in data[yolink.dData][yolink.dState]:
+                                logging.debug(f'key {key}')
+                                logging.debug(f'value {data[yolink.dData][yolink.dState][key]} ')
                                 if key == yolink.dDelay and yolink.type in yolink.delaySupport:
                                     temp = []
                                     temp.append(data[yolink.dData][yolink.dState][yolink.dDelay])
@@ -1204,6 +1224,7 @@ class YoLinkMQTTDevice(object):
                             for info in data[yolink.dData]: 
                                 if info != yolink.dState:
                                     yolink.dataAPI[yolink.dData][info] = data[yolink.dData][info]
+                            logging.debug('After parsing {}'.format(json.dumps(yolink.dataAPI[yolink.dData], indent=4)))
                         elif  type(data[yolink.dData][yolink.dState]) is list:
                             #logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))
                             if yolink.dDelays in data[yolink.dData]:

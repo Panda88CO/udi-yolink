@@ -112,6 +112,12 @@ def maskToDays(yolink, daysValue):
             daysList.append(yolink.daysOfWeek[i])
     return(daysList)
 
+def w_unit2ISY(self, unit):
+    if isinstance(unit, int):
+        return(unit)
+    else:
+        return(None)
+    
 
 def bool2Nbr (self, data):
     if data is True:
