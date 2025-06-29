@@ -50,7 +50,7 @@ except ImportError:
 
 
 
-version = '1.4.21'
+version = '1.4.22'
 
 
 
@@ -139,13 +139,13 @@ class YoLinkSetup (udi_interface.Node):
             time.sleep(1)
             logging.debug ('waiting for inital node to get created')
 
-        #self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-        #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-        #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
-        #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-        #                        'WaterDepthSensor']
+        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+                                'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
+                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
+                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+                                'WaterDepthSensor']
         
-        self.supportedYoTypes = ['WaterMeterController',  'InfraredRemoter']
+        #self.supportedYoTypes = ['WaterMeterController',  'InfraredRemoter']
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
