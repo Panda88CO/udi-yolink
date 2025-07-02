@@ -322,7 +322,7 @@ CMD-nlsleaksens-DON-NAME = Water Alert Detected
 CMD-nlsleaksens-DOF-NAME = Normal
 
 ND-yovibrasens-NAME = YoLink Vibrations Sensor
-ND-yovibrasens-ICON = MotionSensor
+ND-yovibrasens-ICON = MotionSen-ST-NAMEsor
 ST-nlsvibrasens-NAME = Nodeserver Status
 ST-nlsvibrasens-GV0-NAME = Vibration State
 ST-nlsvibrasens-GV1-NAME = Sensor Battery Level
@@ -412,7 +412,7 @@ CMD-nlsdimmer-SWCTRL-NAME =  Switch control
 
 ND-yoirremote-NAME = YoLink Ir Remoter
 ND-yoirremote-ICON = Output
-ST-nlsirremote-NAME = Nodeserver Status
+ST-nlsirremote-ST-NAME = Nodeserver Status
 ST-nlsirremote-GV0-NAME = Number of Learned codes
 ST-nlsirremote-GV1-NAME = Battery Level
 ST-nlsirremote-GV2-NAME = Last Command Status
@@ -421,12 +421,17 @@ ST-nlsirremote-BATLVL-NAME = Battery Level
 ST-nlsirremote-TIME-NAME = Last device update
 ST-nlsirremote-CLITEMP-NAME = Sensor Temperature
 ST-nlsirremote-CLIHUM-NAME = Current Rel Humidity (%)
-CMD-nlsirremote-TXCODE-NAME = Send Code
+CMD-nlsirremote-LEARNCODE-NAME = Learn New Code
 
+ND-yoircode-NAME = YoLink IRremote code
+ND-yoircode-ICON = Output
+ST-nlsircode-ST-NAME = IR code Send Status
+ST-nlsircode-TIME-NAME = Last device update
+CMD-nlsircode-TXCODE-NAME = Send Code
 
 ND-yoCOSmokesens-NAME = YoLink COSmokeSensor
 ND-yoCOSmokesens-ICON = Input
-ST-nlssmokesens-NAME = Nodeserver Status
+ST-nlssmokesens-ST-NAME = Nodeserver Status
 ST-nlssmokesens-ALARM-NAME = Alert Detected
 ST-nlssmokesens-GV0-NAME = Smoke Detection
 ST-nlssmokesens-GV1-NAME = CO Detection
@@ -448,7 +453,7 @@ CMD-nlssmokesens-DOF-NAME = Normal
 
 ND-yopwralarm-NAME = YoLink Power Failure Alarm
 ND-yopwralarm-ICON = Input
-ST-nlspwralarm-NAME = Nodeserver Status
+ST-nlspwralarm-ST-NAME = Nodeserver Status
 ST-nlspwralarm-GV0-NAME = Unit State
 ST-nlspwralarm-GV1-NAME = Battery Level
 ST-nlspwralarm-GV2-NAME = Alert Pending
@@ -465,7 +470,7 @@ CMD-nlspwralarm-SETCMD-NAME = Select Command Action
 
 ND-yosiren-NAME = YoLink Siren
 ND-yosiren-ICON = Output
-ST-nlssiren-NAME = Nodeserver Status
+ST-nlssiren-ST-NAME = Nodeserver Status
 ST-nlssiren-GV0-NAME = Siren State
 ST-nlssiren-GV1-NAME = Siren Duration
 ST-nlssiren-GV2-NAME = Supply State

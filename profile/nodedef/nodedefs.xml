@@ -1074,6 +1074,28 @@
       </cmds>
    </nodeDef> 
 
+<nodeDef id="yoircode" nls="nlsyoircode">
+      <editors />
+      <sts>
+
+         <st id="ST"  editor="status" /> 
+         <st id="TIME" editor="unixtime" />                     
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="lock"  />               
+            <cmd id="DOF" editor="lock"  />    -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         
+         </sends>
+
+         <accepts>
+            <cmd id="TXCODE" />   
+         </accepts>
+      </cmds>
+   </nodeDef> 
+   
    <nodeDef id="yoirremote" nls="nlsirremote">
       <editors />
       <sts>
@@ -1091,13 +1113,12 @@
             <cmd id="DOF" editor="lock"  />    -->
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
-         
          </sends>
 
          <accepts>
             <!-- <cmd id="DON" />
             <cmd id="DOF" />    -->
-            <cmd id="TXCODE" >   
+            <cmd id="LEARNCODE" >   
                <p id="" editor="txcode" />
             </cmd > 
             <cmd id="UPDATE" /> 

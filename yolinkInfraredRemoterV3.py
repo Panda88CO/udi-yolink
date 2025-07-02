@@ -10,7 +10,8 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-class YolinkIRcode(YoLinkMQTTDevice)
+#class YolinkIRcode(YoLinkMQTTDevice):
+#    def __init__
 class YoLinkInfraredRem(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(yoAccess,  deviceInfo, callback)
@@ -119,24 +120,14 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         except Exception as E:
             logging.error('battery not defined : {}'.format(E))
        
-    def get_code_dict(yolink) -> dict:
+    def get_code_dict(yolink):
         logging.debug('YoLinkInfraredRem get_code_dict {}')
         code_dict = {}
         if 'keys' in yolink.dataAPI[yolink.dData]:
             for code in range(0,len(yolink.dataAPI[yolink.dData]['keys'])):
                 code_dict[code] =  yolink.dataAPI[yolink.dData]['keys'][code]
         return(code_dict)
-
-    def get_active_code_dict(yolink)-> dict:   
-        logging.debug('YoLinkInfraredRem get_active_code_dict')
-        code_dict = {}
-        if 'keys' in yolink.dataAPI[yolink.dData]:
-            for code in range(0,len(yolink.dataAPI[yolink.dData]['keys'])):
-                if yolink.dataAPI[yolink.dData]['keys'][code]:
-                    code_dict[code] =  yolink.dataAPI[yolink.dData]['keys'][code]
-        return(code_dict)
-
-    
+           
     def learn(yolink, code):
         yolink.send_learn(code)
         
