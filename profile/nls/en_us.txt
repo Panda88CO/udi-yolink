@@ -552,7 +552,8 @@ CMD-nlswatermeter-DON-NAME = Open Valve
 CMD-nlswatermeter-DOF-NAME = Close Valve
 CMD-nlswatermeter-VALVECTRL-NAME = Control Valve
 CMD-nlswatermeter-SETATTRIB-NAME = Set Parameters
-#CMD-nlswatermeter-DELAY_CTRL-NAME = Set delaysy
+CMD-nlswatermeter-DELAY_CTRL-NAME = Set delays
+CMD-nlswatermeter-UPDATE-NAME = Update Node
 #CMD-nlswatermeter-OFFDELAY-NAME = Prepare off delay
 
 ND-yowaterdept-NAME = YoLink Water Level Sensor
