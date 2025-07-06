@@ -227,18 +227,18 @@ class YoLinkSetup (udi_interface.Node):
                         if index not in self.Parameters:
                             self.Parameters[index] = 'Message '+str(n)
                         self.yoAccess.TtsMessages[n] = self.Parameters[index]
-                        logging.info ('Adding {} to Parameters'.format(self.Parameters[index] ))
+                        logging.info ('Adding {} to Parameters'.format(self.yoAccess.TtsMessages[n] ))
                     #self.yoAccess.writeTtsFile()
                     logging.info('TTS messages : {}'.format(self.yoAccess.TtsMessages))
                     logging.info('Updating profile files ')
                     if udiProfileHandler.udiTssProfileUpdate(self.yoAccess.TtsMessages):
-                        self.poly.Notices['tts'] = 'Speaker hub messages updated - PoI/ISY need to be restarted to take effect'
+                        self.poly.Notices['tts'] = 'Speaker hub messages updated - Polisy/eISY need to be restarted to take effect'
                     self.poly.updateProfile()   
-                    for nbr in range(0,self.nbrTTS):
-                        index = 'TTS'+str(nbr)
-                        if index not in self.Parameters:
-                            self.Parameters[index] = index
-                        self.yoAccess.TtsMessages[nbr] = self.Parameters[index]
+                    #for nbr in range(0,self.nbrTTS):
+                    #    index = 'TTS'+str(nbr)
+                    #    if index not in self.Parameters:
+                    #        self.Parameters[index] = index
+                    #    self.yoAccess.TtsMessages[nbr] = self.Parameters[index]
 
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))                        
