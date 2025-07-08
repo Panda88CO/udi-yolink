@@ -139,11 +139,13 @@ class udiYoTHsensor(udi_interface.Node):
     def get_alarms_state (self):
         alarm_on = False
         alarms = self.yoTHsensor.getAlarms()
-        for a_type in alarms:
-            if alarms[a_type]:
-                alarm_on = True
+        logging.debug(f'Alarms: {alarms}')
+        if alarms:
+            for a_type in alarms:
+                if alarms[a_type]:
+                    alarm_on = True
         return(alarm_on)
-                
+                    
 
     def updateData(self):
         alarms = self.yoTHsensor.getAlarms()
