@@ -241,7 +241,7 @@ class udiYoSpeakerHub(udi_interface.Node):
             logging.info(f'udiYoSpeakerHub playMessage {command}')
             query = command.get("query")
             message_nbr = int(query.get("message.uom25"))
-            message = self.yoSpeakerHub.TtsMessages[message_nbr]
+            message = self.yoAccess.TtsMessages[message_nbr]
             self.my_setDriver('GV4',message_nbr )
             volume =  int(query.get("volume.uom107"))
             self.my_setDriver('GV0',volume )
