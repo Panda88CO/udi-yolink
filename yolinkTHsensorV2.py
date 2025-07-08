@@ -53,6 +53,8 @@ class YoLinkTHSen(YoLinkMQTTDevice):
 
     def getHumidityValue(yolink):
         return(yolink.getStateValue('humidity'))
+    
+    
     '''
     def getAlarms(yolink):
         return(yolink.getStateValue('alarm'))
