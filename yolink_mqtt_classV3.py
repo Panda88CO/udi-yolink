@@ -1211,19 +1211,26 @@ class YoLinkMQTTDevice(object):
                         #    yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                         if type(data[yolink.dData][yolink.dState]) is dict:
                             logging.debug('State is Dict: {} '.format(json.dumps(data[yolink.dData][yolink.dState])))
-                            for key in data[yolink.dData][yolink.dState]:
+                            temp_dict = data[yolink.dData][yolink.dState]
+                            if 'loraInfo' in temp_dict:
+                                lora_inf = temp['loraInfo']
+                                del temp['loraInfo']
+                            
+                            for key in temp_dict:
                                 logging.debug(f'key {key}')
-                                logging.debug(f'value {data[yolink.dData][yolink.dState][key]} ')
+                                logging.debug(f'value {temp_dict[key]} ')
                                 if key == yolink.dDelay and yolink.type in yolink.delaySupport:
                                     temp = []
-                                    temp.append(data[yolink.dData][yolink.dState][yolink.dDelay])
+                                    temp.append(temp_dict[yolink.dDelay])
                                     yolink.extDelayTimer.addDelays(temp)
                                     # yolink.dataAPI[yolink.dData][yolink.dDelay].append(data[yolink.dData][yolink.dState][yolink.dDelay])
                                 else:
-                                    yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][yolink.dState][key]  
+                                    yolink.dataAPI[yolink.dData][yolink.dState][key] = temp_dict[key]  
                             for info in data[yolink.dData]: 
                                 if info != yolink.dState:
+                                    logging.debug(f'info loop {info}')
                                     yolink.dataAPI[yolink.dData][info] = data[yolink.dData][info]
+
                             logging.debug('After parsing {}'.format(json.dumps(yolink.dataAPI[yolink.dData], indent=4)))
                         elif  type(data[yolink.dData][yolink.dState]) is list:
                             #logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))
