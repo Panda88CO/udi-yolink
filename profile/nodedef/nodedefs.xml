@@ -1018,26 +1018,18 @@
             <cmd id="QUERY" /> 
 
 
-            <cmd id="PLAY" /> 
-            <cmd id="VOLUME" > 
-               <p id="" editor="volume" init="GV0" />
-            </cmd >    
+            <cmd id="PLAY" > 
+               <p id="message" editor="messages" init="GV4" />
+               <p id="volume" editor="volume" init="GV0" />
+               <p id="tone" editor="tone" init="GV3" />
+               <p id="repeat" editor="repeat" init="GV5" />
+            </cmd >
             <cmd id="BEEP" > 
                <p id="" editor="beepEn" init="GV1" />
             </cmd >
             <cmd id="MUTE" > 
                <p id="" editor="mute" init="GV2" />
             </cmd >
-            <cmd id="TONE" > 
-               <p id="" editor="tone" init="GV3" />
-            </cmd >
-            <cmd id="REPEAT" > 
-               <p id="" editor="repeat" init="GV5" />
-            </cmd >
-            <cmd id="MESSAGE" > 
-               <p id="" editor="messages" init="GV4" />
-            </cmd >                        
-            
          </accepts>
       </cmds>
    </nodeDef> 
