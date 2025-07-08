@@ -351,12 +351,12 @@ ST-nlsspeakerh-TIME-NAME=Last device update
 ST-nlsspeakerh-CLITEMP-NAME=Sensor Temperature
 ST-nlsspeakerh-CLIHUM-NAME=Current Rel Humidity (%)
 CMD-nlsspeakerh-PLAY-NAME=Play Message
-CMDP-PLAY-VOLUME-NAME=Volume
+CMDP-volume-NAME=Volume
 CMD-nlsspeakerh-BEEP-NAME=Beep
 CMD-nlsspeakerh-MUTE-NAME=Mute
-CMDP-PLAY-TONE-NAME=Tone
-CMDP-PLAY-REPEAT-NAME=Repeat
-CMDP-PLAY-MESSAGE-NAME=Select Message
+CMDP-tone-NAME=Tone
+CMDP-Repeat-NAME=Repeat
+CMDP-message-NAME=Select Message
 
 
 ND-yolock-NAME=YoLink Smart Lock

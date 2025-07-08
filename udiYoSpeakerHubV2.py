@@ -240,11 +240,18 @@ class udiYoSpeakerHub(udi_interface.Node):
 
             logging.info(f'udiYoSpeakerHub playMessage {command}')
             query = command.get("query")
-            message = str(query.get("messages.uom25"))
-            volume =  int(query.get("tone.uom107"))
-            tone =  tones[int(query.get("tone.uom25"))]
+            message_nbr = int(query.get("messages.uom25"))
+            message = self.yoSpeakerHub.TtsMessages[message_nbr]
+            self.my_setDriver('GV4',message )
+            volume =  int(query.get("volume.uom107"))
+            self.my_setDriver('GV0',volume )
+            tone_nbr =  int(query.get("tone.uom25"))
+            tone = tones[tone_nbr]
+            self.my_setDriver('GV3',tone_nbr )
             repeat = int(query.get("repeat.uom107"))
+            self.my_setDriver('GV5',repeat )
             self.yoSpeakerHub.playAudio(message, tone,volume, repeat)
+            
         except KeyError as e:
             logging.error(f'Error playng message {e}')
 
