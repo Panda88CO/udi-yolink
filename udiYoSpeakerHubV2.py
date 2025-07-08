@@ -234,6 +234,20 @@ class udiYoSpeakerHub(udi_interface.Node):
         logging.info('udiYoSpeakerHub playMessage')
         self.yoSpeakerHub.playAudio()
 
+    def playMessageNew(self, command ):
+        try:
+            tones=['none','Emergency','Alert','Warn','Tip']                        
+
+            logging.info(f'udiYoSpeakerHub playMessage {command}')
+            query = command.get("query")
+            message = str(query.get("messages.uom25"))
+            volume =  int(query.get("tone.uom107"))
+            tone =  tones[int(query.get("tone.uom25"))]
+            repeat = int(query.get("repeat.uom107"))
+            self.yoSpeakerHub.playAudio(message, tone,volume, repeat)
+        except KeyError as e:
+            logging.error(f'Error playng message {e}')
+
     def update(self, command = None):
         logging.info('udiYoSpeakerHub Update Status')
         self.yoSpeakerHub.refreshDevice()
@@ -243,13 +257,13 @@ class udiYoSpeakerHub(udi_interface.Node):
     commands = {
                 'UPDATE'    : update,
                 'QUERY'     : update,
-                'VOLUME'    : setVolume,
+                #'VOLUME'    : setVolume,
                 'BEEP'      : setBeepEnable,
                 'MUTE'      : setMute,
-                'TONE'      : setTone,
-                'REPEAT'    : setRepeat,
-                'MESSAGE'   : setMessage,
-                'PLAY'      : playMessage,
+                #'TONE'      : setTone,
+                #'REPEAT'    : setRepeat,
+                #'MESSAGE'   : setMessage,
+                'PLAY'      : playMessageNew,
 
     }
 
