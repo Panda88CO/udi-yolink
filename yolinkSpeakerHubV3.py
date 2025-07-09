@@ -143,7 +143,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
         if len(message ) > 200:
             message = message[0:200]
         data['params']['message'] = message
-        logging.debug('playAudio: {}'.format(data))
+        logging.debug(f'playAudio: {data}')
         while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
                time.sleep(4)
                attempt = attempt + 1

@@ -242,14 +242,17 @@ class udiYoSpeakerHub(udi_interface.Node):
             query = command.get("query")
             message_nbr = int(query.get("message.uom25"))
             message = self.yoAccess.TtsMessages[message_nbr]
+            logging.debug(f'message: {message}')
             self.my_setDriver('GV4',message_nbr )
             volume =  int(query.get("volume.uom56"))
             self.my_setDriver('GV0',volume )
             tone_nbr =  int(query.get("tone.uom25"))
             tone = tones[tone_nbr]
-            self.my_setDriver('GV3',tone_nbr )
+            self.my_setDriver('GV3', tone_nbr )
+            logging.debug(f'tone: {tone}')
             repeat = int(query.get("repeat.uom56"))
-            self.my_setDriver('GV5',repeat )
+            self.my_setDriver('GV5', repeat )
+            logging.debug(f'play: {message} {tone} {volume} {repeat}')
             self.yoSpeakerHub.playAudio(message, tone,volume, repeat)
             
         except KeyError as e:

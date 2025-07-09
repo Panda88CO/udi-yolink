@@ -1213,8 +1213,8 @@ class YoLinkMQTTDevice(object):
                             logging.debug('State is Dict: {} '.format(json.dumps(data[yolink.dData][yolink.dState])))
                             temp_dict = data[yolink.dData][yolink.dState]
                             if 'loraInfo' in temp_dict:
-                                lora_inf = temp['loraInfo']
-                                del temp['loraInfo']
+                                lora_inf = temp_dict['loraInfo']
+                                del temp_dict['loraInfo']
                             
                             for key in temp_dict:
                                 logging.debug(f'key {key}')
