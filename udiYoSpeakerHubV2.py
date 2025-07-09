@@ -247,7 +247,6 @@ class udiYoSpeakerHub(udi_interface.Node):
             volume =  int(query.get("volume.uom56"))
             self.my_setDriver('GV0',volume )
             tone_nbr =  int(query.get("tone.uom25"))
-            
             tone = tones[tone_nbr]
             self.my_setDriver('GV3', tone_nbr )
             logging.debug(f'tone: {tone}')
