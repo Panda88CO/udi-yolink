@@ -1013,9 +1013,9 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
+            <!--<cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+            <cmd id="QUERY" /> -->
 
 
             <cmd id="PLAY" > 

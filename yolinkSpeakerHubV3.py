@@ -126,12 +126,12 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
             yolink.TtsMessageNbr = messageNbr
 
 
-    def playAudio(yolink, message_nbr, tone, volume, repeat ):
+    def playAudio(yolink, message, tone, volume, repeat ):
         logging.debug(yolink.type+' - playAudio')
         maxAttempts = 3
         attempt = 0
         #missing try
-        message = yolink.yoAccess.TtsMessages[message_nbr]
+        #message = yolink.yoAccess.TtsMessages[message_nbr]
         data = {}
         data['method'] = yolink.type+'.playAudio'
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
