@@ -237,7 +237,7 @@ class YoLinkMQTTDevice(object):
             
             logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
             return(dt.timestamp()*1000) # make in ms
-        elif 'time'in  yolink.dataAPI:
+        elif 'time' in  yolink.dataAPI:
             logging.debug('lastUpdate time {}'.format(yolink.dataAPI['time']))
 
             return(yolink.dataAPI['time'])
@@ -638,6 +638,9 @@ class YoLinkMQTTDevice(object):
                     elif  '.setOption' in data['method'] :
                         #if int(data['time']) > int(yolink.getLastUpdate()):
                         logging.debug('Do Nothing for now')
+                        logging.debug('No data returned - just update time')
+                        #yolink.updateStatusData(data)    
+                        yolink.updateMessageInfo(data)  
                         #yolink.updateStatusData(data)   
                     elif  '.StatusChange' in data['method']:
                         #if int(data['time']) > int(yolink.getLastUpdate()):
@@ -1143,12 +1146,14 @@ class YoLinkMQTTDevice(object):
                 yolink.dataAPI[yolink.dData][yolink.dState]['loraInfo']= data[yolink.dData][yolink.dState]['loraInfo']
 
     def updateMessageInfo(yolink, data):
+        logging.debug(f'updateMessageInfo {data}')
         if yolink.lastUpd in data:
             yolink.dataAPI[yolink.lastUpd] = data[yolink.lastUpd]
         elif yolink.messageTime in data:
             yolink.dataAPI[yolink.lastUpd] = data[yolink.messageTime]
         else:
             yolink.dataAPI[yolink.lastUpd] = 0
+        logging.debug(f'updateMessageInfo 2 {yolink.dataAPI}')
         # should be last update time 
         yolink.dataAPI[yolink.lastMessage] = data
    
