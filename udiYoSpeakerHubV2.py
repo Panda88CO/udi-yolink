@@ -109,11 +109,14 @@ class udiYoSpeakerHub(udi_interface.Node):
             return(0)
     
     def tone2nbr(self, tone):
-        for index in range(1,len(self.yoSpeakerHub.toneList)-1):
-            if tone == self.yoSpeakerHub.toneList[index]:
-                return(index)
-        # if not found return None = 0
-        return(0)
+        try:
+            tones=['none','Emergency','Alert','Warn','Tip']  
+            #for index in range(1,len(self.yoSpeakerHub.toneList)-1):
+            #if tone == self.yoSpeakerHub.toneList[index]:
+            return(tones[tone])
+        except KeyError as e:
+            logging.debug(f'Key error in tone2Nbr {e}')# if not found return None = 0
+            return(0)
 
     def msg2nbr(self, msg):
         #dummy for now
@@ -176,7 +179,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         logging ('setPassword')
         self.WiFipassword = password
 
-
+    '''
     def setTone(self, command ):
         logging.info('udiYoSpeakerHub setTone')
         tone =int(command.get('value'))
@@ -198,25 +201,25 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.repeat =int(command.get('value'))
         self.my_setDriver('GV5', self.repeat )
         self.yoSpeakerHub.setRepeat(self.repeat)
-
+    '''
     def setMute(self, command):
         logging.info('udiYoSpeakerHub setMute')
         self.mute = int(command.get('value'))
         self.my_setDriver('GV2', self.mute )
         if self.mute == 1:
-            self.yoSpeakerHub.setMute(True)
+            self.yoSpeakerHub.mute = True
         else:
-            self.yoSpeakerHub.setMute(False)
+            self.yoSpeakerHub.mute = False
     
     def setBeepEnable(self, command):
         logging.info('udiYoSpeakerHub setBeepEnable')
         self.beepEn =int(command.get('value'))
         self.my_setDriver('GV1', self.beepEn )
         if self.beepEn == 1:
-            self.yoSpeakerHub.setBeepEnable(True)
+            self.yoSpeakerHub.beepEnabled = True
         else:
-            self.yoSpeakerHub.setBeepEnable(False)
-
+            self.yoSpeakerHub.beepEnabled = False
+    '''
     def setVolume(self, command):
         logging.info('udiYoSpeakerHub setVolume')
         volume =int(command.get('value'))
@@ -234,27 +237,27 @@ class udiYoSpeakerHub(udi_interface.Node):
     def playMessage(self, command = None ):
         logging.info('udiYoSpeakerHub playMessage')
         self.yoSpeakerHub.playAudio()
-
+    '''
     def playMessageNew(self, command ):
         try:
-            tones=['none','Emergency','Alert','Warn','Tip']                        
+                                  
 
             logging.info(f'udiYoSpeakerHub playMessage {command}')
             query = command.get("query")
-            message_nbr = int(query.get("message.uom25"))
-            message = self.yoAccess.TtsMessages[message_nbr]
+            self.message_nbr = int(query.get("message.uom25"))
+            message = self.yoAccess.TtsMessages[self.message_nbr]
             logging.debug(f'message: {message}')
-            self.my_setDriver('GV4',message_nbr )
-            volume =  int(query.get("volume.uom56"))
-            self.my_setDriver('GV0',volume )
+            self.my_setDriver('GV4',self.message_nbr )
+            self.yoSpeakerHub.volume =  int(query.get("volume.uom56"))
+            self.my_setDriver('GV0',self.yoSpeakerHub.volume  )
             tone_nbr =  int(query.get("tone.uom25"))
-            tone = tones[tone_nbr]
+            self.yoSpeakerHub.tone = self.tone2nbr([tone_nbr])
             self.my_setDriver('GV3', tone_nbr )
-            logging.debug(f'tone: {tone}')
-            repeat = int(query.get("repeat.uom56"))
-            self.my_setDriver('GV5', repeat )
-            logging.debug(f'play: {message} {tone} {volume} {repeat}')
-            self.yoSpeakerHub.playAudio(message, tone,volume, repeat)
+            logging.debug(f'tone: {self.yoSpeakerHub.tone }')
+            self.yoSpeakerHub.repeat = int(query.get("repeat.uom56"))
+            self.my_setDriver('GV5', self.yoSpeakerHub.repeat  )
+            logging.debug(f'play: {message} {self.yoSpeakerHub.tone} {self.yoSpeakerHub.volume } {self.yoSpeakerHub.repeat}')
+            self.yoSpeakerHub.playAudio(message, self.yoSpeakerHub.tone,self.yoSpeakerHub.volume, self.yoSpeakerHub.repeat)
             
         except KeyError as e:
             logging.error(f'Error playng message {e}')
