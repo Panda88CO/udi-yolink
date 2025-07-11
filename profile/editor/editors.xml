@@ -85,13 +85,22 @@
   <editor id="mute"> 
      <range uom="25" subset="0-1,99" nls="sphmute" />
   </editor>
+  <editor id="muteSet"> 
+     <range uom="25" subset="0-1" nls="sphmute" />
+  </editor>
  <editor id="repeat"> 
      <range uom="56" min="0" max="10" prec="0" />
   </editor>
  <editor id="beepEn"> 
      <range uom="25" subset="0-1,99" nls="sphbeepen" />
   </editor>
+ <editor id="beepEnSet"> 
+     <range uom="25" subset="0-1" nls="sphbeepen" />
+  </editor>  
  <editor id="tone"> 
+     <range uom="25" subset="0-4,99" nls="sphtones" />
+  </editor>
+   <editor id="toneSet"> 
      <range uom="25" subset="0-4" nls="sphtones" />
   </editor>
  <editor id="messages"> 

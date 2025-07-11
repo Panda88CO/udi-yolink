@@ -24,15 +24,16 @@ class udiYoSpeakerHub(udi_interface.Node):
     from  udiYolinkLib import my_setDriver
     id = 'yospeakerh'
     drivers = [
-            {'driver': 'GV0', 'value': 5, 'uom': 56}, 
+            {'driver': 'GV0', 'value': 7, 'uom': 56}, 
             {'driver': 'GV1', 'value': 0, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25}, 
             {'driver': 'GV3', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV4', 'value': 0, 'uom': 25}, 
+            {'driver': 'GV4', 'value': 0, 'uom': 56}, 
             {'driver': 'GV5', 'value': 0, 'uom': 56},        
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25}, 
+            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
             ]
     '''
        drivers = [

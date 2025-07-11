@@ -357,7 +357,7 @@ CMD-nlsspeakerh-MUTE-NAME=Mute
 CMDP-tone-NAME=Tone
 CMDP-repeat-NAME=Repeat
 CMDP-message-NAME=Select Message
-CMD-nlsspeakerh-UPDTE-NAME=Update Data
+CMD-nlsspeakerh-UPDATE-NAME=Update Data
 
 ND-yolock-NAME=YoLink Smart Lock
 ND-yolock-ICON=DoorLock
