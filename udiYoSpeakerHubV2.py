@@ -83,9 +83,10 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.yoSpeakerHub  = YoLinkSpeakerH(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.volume = 8
+        self.yoSpeakerHub.setVolume(self.volume)
         self.beepEnabled = False
         self.yoSpeakerHub.setBeepEnable(self.beepEnabled)
-        self.yoSpeakerHub.mute = False
+        self.mute = False
         self.yoSpeakerHub.setMute(self.mute)
         self.tone = 'none'
         self.repeat = 0
