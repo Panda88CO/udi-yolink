@@ -81,4 +81,4 @@ def udiTssProfileUpdate(messages):
         logging.error('./profile/nls/en_us.txt NOT FOUND ')
     return(foundChanges)
 
-udiTssProfileUpdate(testMessages)
+#udiTssProfileUpdate(testMessages)

@@ -85,7 +85,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.volume = 8
         self.beepEnabled = False
         self.yoSpeakerHub.setBeepEnable(self.beepEnabled)
-        self.mute = False
+        self.yoSpeakerHub.mute = False
         self.yoSpeakerHub.setMute(self.mute)
         self.tone = 'none'
         self.repeat = 0
@@ -136,7 +136,8 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoSpeakerHub.getLastUpdateTime(), 151)
+            self.my_setDriver('TIME', self.yoSpeakerHub.getLastUpdateTime(), 151).debug()
+            logging.debug(f'TIME {self.yoSpeakerHub.getLastUpdateTime()}')
             if self.yoSpeakerHub.online:
                 self.my_setDriver('GV0', self.volume)
                 self.my_setDriver('GV1', self.bool2ISY(self.beepEnabled))
@@ -198,16 +199,16 @@ class udiYoSpeakerHub(udi_interface.Node):
     '''
     def setMute(self, command):
         logging.info('udiYoSpeakerHub setMute')
-        self.mute = int(command.get('value'))
-        self.my_setDriver('GV2', self.mute )
-        self.mute =  self.mute == 1
-  
+        mute = int(command.get('value'))
+        #self.my_setDriver('GV2', self.yoSpeakerHub.mute )
+        #mute =  mute == 1
+        self.mute = mute == 1
         self.yoSpeakerHub.setMute(self.mute)
     
     def setBeepEnable(self, command):
         logging.info('udiYoSpeakerHub setBeepEnable')
-        self.beepEn =int(command.get('value'))
-        self.my_setDriver('GV1', self.beepEn )
+        beepEn =int(command.get('value'))
+        #self.my_setDriver('GV1', self.beepEn )
         self.beepEnabled =  self.beepEn == 1
       
         self.yoSpeakerHub.setBeepEnable(self.beepEnabled )
@@ -232,24 +233,22 @@ class udiYoSpeakerHub(udi_interface.Node):
     '''
     def playMessageNew(self, command ):
         try:
-                                  
-
             logging.info(f'udiYoSpeakerHub playMessage {command}')
             query = command.get("query")
             self.messageNbr = int(query.get("message.uom25"))
-            message = self.yoAccess.TtsMessages[self.messageNbr]
-            logging.debug(f'message: {message}')
-            self.my_setDriver('GV4',self.messageNbr )
+            self.message = self.yoAccess.TtsMessages[self.messageNbr]
+            logging.debug(f'message: {self.message}')
+            #self.my_setDriver('GV4',self.messageNbr )
             self.volume =  int(query.get("volume.uom56"))
-            self.my_setDriver('GV0',self.volume  )
+            #self.my_setDriver('GV0',self.volume  )
             self.tone_nbr =  int(query.get("tone.uom25"))
             self.tone = self.tone_list[self.tone_nbr]
-            self.my_setDriver('GV3', self.tone_nbr )
+            #self.my_setDriver('GV3', self.tone_nbr )
             logging.debug(f'tone: {self.tone }')
             self.yoSpeakerHub.repeat = int(query.get("repeat.uom56"))
-            self.my_setDriver('GV5', self.yoSpeakerHub.repeat  )
-            logging.debug(f'play: {message} {self.tone} {self.volume } {self.repeat}')
-            self.yoSpeakerHub.playAudio(message, self.tone,self.volume, self.repeat)
+            #self.my_setDriver('GV5', self.yoSpeakerHub.repeat  )
+            logging.debug(f'play: {self.message} {self.tone} {self.volume } {self.repeat}')
+            self.yoSpeakerHub.playAudio(self.message, self.tone,self.volume, self.repeat)
             
         except KeyError as e:
             logging.error(f'Error playng message {e}')
