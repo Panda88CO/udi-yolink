@@ -630,15 +630,15 @@ class YoLinkMQTTDevice(object):
                         #yolink.updateStatusData(data)       
                         logging.debug('Do Nothing for now')
                     elif  '.playAudio' in data['method'] :
-                        if int(data['time']) > int(yolink.getLastUpdate()):
-
-                            logging.debug('No data returned - just update time')
+                        #if int(data['time']) > int(yolink.getLastUpdate()):
+                        yolink.updateStatusData(data)   
+                        logging.debug('playAudio No data returned - just update time')
                             #yolink.updateStatusData(data)    
-                            yolink.updateMessageInfo(data)  
+                            #yolink.updateMessageInfo(data)  
                     elif  '.setOption' in data['method'] :
                         #if int(data['time']) > int(yolink.getLastUpdate()):
-                        logging.debug('Do Nothing for now')
-                        logging.debug('No data returned - just update time')
+                        yolink.updateStatusData(data)   
+                        logging.debug('setOption No data returned - just update time')
                         #yolink.updateStatusData(data)    
                         yolink.updateMessageInfo(data)  
                         #yolink.updateStatusData(data)   
