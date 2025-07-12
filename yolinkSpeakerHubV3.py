@@ -230,11 +230,11 @@ class YoLinkSpeakerHub(YoLinkSpeakerH):
                 elif  '.playAudio' in data['method'] :
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         logging.debug('Do Nothing for now')
-                        #yolink.updateStatusData(data)      
+                        yolink.updateStatusData(data)      
                 elif  '.setOption' in data['method'] :
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         logging.debug('Do Nothing for now')
-                        #yolink.updateStatusData(data)   
+                        yolink.updateStatusData(data)   
                 elif  '.getState' in data['method'] :
                     if int(data['time']) > int(yolink.getLastUpdate()):
                        yolink.updateOptionData(data)   
