@@ -59,7 +59,7 @@ def udiTssProfileUpdate(messages):
         removedLines = {}
         for line in range(len(nls)-1, 0, -1):
             if nls[line].find(NLSstr, 0, len(NLSstr)) != -1:
-                splitLine = re.split(' = ', nls[line])                
+                splitLine = re.split('=', nls[line])                
                 index = int(re.findall("[0-9]", splitLine[0])[0])
                 TTS = splitLine[1]
                 removedLines[index] = TTS
@@ -81,4 +81,4 @@ def udiTssProfileUpdate(messages):
         logging.error('./profile/nls/en_us.txt NOT FOUND ')
     return(foundChanges)
 
-udiTssProfileUpdate(testMessages)
+#udiTssProfileUpdate(testMessages)

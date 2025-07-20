@@ -237,7 +237,7 @@ class YoLinkMQTTDevice(object):
             
             logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
             return(dt.timestamp()*1000) # make in ms
-        elif 'time'in  yolink.dataAPI:
+        elif 'time' in  yolink.dataAPI:
             logging.debug('lastUpdate time {}'.format(yolink.dataAPI['time']))
 
             return(yolink.dataAPI['time'])
@@ -631,11 +631,16 @@ class YoLinkMQTTDevice(object):
                         logging.debug('Do Nothing for now')
                     elif  '.playAudio' in data['method'] :
                         #if int(data['time']) > int(yolink.getLastUpdate()):
-                        logging.debug('Do Nothing for now')
-                        #yolink.updateStatusData(data)      
+                        yolink.updateStatusData(data)   
+                        logging.debug('playAudio No data returned - just update time')
+                            #yolink.updateStatusData(data)    
+                            #yolink.updateMessageInfo(data)  
                     elif  '.setOption' in data['method'] :
                         #if int(data['time']) > int(yolink.getLastUpdate()):
-                        logging.debug('Do Nothing for now')
+                        yolink.updateStatusData(data)   
+                        logging.debug('setOption No data returned - just update time')
+                        #yolink.updateStatusData(data)    
+                        yolink.updateMessageInfo(data)  
                         #yolink.updateStatusData(data)   
                     elif  '.StatusChange' in data['method']:
                         #if int(data['time']) > int(yolink.getLastUpdate()):
@@ -1141,12 +1146,14 @@ class YoLinkMQTTDevice(object):
                 yolink.dataAPI[yolink.dData][yolink.dState]['loraInfo']= data[yolink.dData][yolink.dState]['loraInfo']
 
     def updateMessageInfo(yolink, data):
+        logging.debug(f'updateMessageInfo {data}')
         if yolink.lastUpd in data:
             yolink.dataAPI[yolink.lastUpd] = data[yolink.lastUpd]
         elif yolink.messageTime in data:
             yolink.dataAPI[yolink.lastUpd] = data[yolink.messageTime]
         else:
             yolink.dataAPI[yolink.lastUpd] = 0
+        logging.debug(f'updateMessageInfo 2 {yolink.dataAPI}')
         # should be last update time 
         yolink.dataAPI[yolink.lastMessage] = data
    
@@ -1211,19 +1218,26 @@ class YoLinkMQTTDevice(object):
                         #    yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                         if type(data[yolink.dData][yolink.dState]) is dict:
                             logging.debug('State is Dict: {} '.format(json.dumps(data[yolink.dData][yolink.dState])))
-                            for key in data[yolink.dData][yolink.dState]:
+                            temp_dict = data[yolink.dData][yolink.dState]
+                            if 'loraInfo' in temp_dict:
+                                lora_inf = temp_dict['loraInfo']
+                                del temp_dict['loraInfo']
+                            
+                            for key in temp_dict:
                                 logging.debug(f'key {key}')
-                                logging.debug(f'value {data[yolink.dData][yolink.dState][key]} ')
+                                logging.debug(f'value {temp_dict[key]} ')
                                 if key == yolink.dDelay and yolink.type in yolink.delaySupport:
                                     temp = []
-                                    temp.append(data[yolink.dData][yolink.dState][yolink.dDelay])
+                                    temp.append(temp_dict[yolink.dDelay])
                                     yolink.extDelayTimer.addDelays(temp)
                                     # yolink.dataAPI[yolink.dData][yolink.dDelay].append(data[yolink.dData][yolink.dState][yolink.dDelay])
                                 else:
-                                    yolink.dataAPI[yolink.dData][yolink.dState][key] = data[yolink.dData][yolink.dState][key]  
+                                    yolink.dataAPI[yolink.dData][yolink.dState][key] = temp_dict[key]  
                             for info in data[yolink.dData]: 
                                 if info != yolink.dState:
+                                    logging.debug(f'info loop {info}')
                                     yolink.dataAPI[yolink.dData][info] = data[yolink.dData][info]
+
                             logging.debug('After parsing {}'.format(json.dumps(yolink.dataAPI[yolink.dData], indent=4)))
                         elif  type(data[yolink.dData][yolink.dState]) is list:
                             #logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))

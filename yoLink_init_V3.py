@@ -446,7 +446,7 @@ class YoLinkInitPAC(object):
 
 
                 elif msg.topic == yoAccess.mqttList[deviceId]['response']:
-                    logging.debug('porcessing response: {}'.format(payload))                   
+                    logging.debug('processing response: {}'.format(payload))                   
 
                     if payload['code'] == '000000':
                         tempCallback(payload)
@@ -463,7 +463,7 @@ class YoLinkInitPAC(object):
                         logging.debug('resp_fileThread - starting')
                         
                 elif msg.topic == yoAccess.mqttList[deviceId]['request']:
-                    logging.debug('porcessing request - no action: {}'.format(payload))                   
+                    logging.debug('processing request - no action: {}'.format(payload))                   
                     #transmitted message
                     if yoAccess.debug:
                         fileData= {}

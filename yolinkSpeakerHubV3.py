@@ -126,7 +126,30 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
             yolink.TtsMessageNbr = messageNbr
 
 
+    def playAudio(yolink, message, tone, volume, repeat ):
+        logging.debug(yolink.type+' - playAudio')
+        maxAttempts = 3
+        attempt = 0
+        #missing try
+        #message = yolink.yoAccess.TtsMessages[message_nbr]
+        data = {}
+        data['method'] = yolink.type+'.playAudio'
+        data["targetDevice"] =  yolink.deviceInfo['deviceId']
+        data["token"]= yolink.deviceInfo['token']
+        data['params'] = {}
+        data['params']['tone'] = tone
+        data['params']['volume'] = volume
+        data['params']['repeat'] = repeat
+        if len(message ) > 200:
+            message = message[0:200]
+        data['params']['message'] = message
+        logging.debug(f'playAudio: {data}')
+        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
+               time.sleep(4)
+               attempt = attempt + 1
+        yolink.lastControlPacket = data
 
+    '''
     def playAudio(yolink):
         logging.debug(yolink.type+' - playAudio')
         maxAttempts = 3
@@ -149,7 +172,7 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
                time.sleep(4)
                attempt = attempt + 1
         yolink.lastControlPacket = data
-
+    '''
 
     def setOptions(yolink):
         logging.debug(yolink.type+' - setOptions')
@@ -207,11 +230,11 @@ class YoLinkSpeakerHub(YoLinkSpeakerH):
                 elif  '.playAudio' in data['method'] :
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         logging.debug('Do Nothing for now')
-                        #yolink.updateStatusData(data)      
+                        yolink.updateStatusData(data)      
                 elif  '.setOption' in data['method'] :
                     if int(data['time']) > int(yolink.getLastUpdate()):
                         logging.debug('Do Nothing for now')
-                        #yolink.updateStatusData(data)   
+                        yolink.updateStatusData(data)   
                 elif  '.getState' in data['method'] :
                     if int(data['time']) > int(yolink.getLastUpdate()):
                        yolink.updateOptionData(data)   
