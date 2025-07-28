@@ -1124,7 +1124,7 @@
                <p id="" editor="cmdsetting" init="GV7" /> 
             </cmd >           
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1180,7 +1180,7 @@
                <p id="" editor="sirenctrl" init="1" /> 
             </cmd >
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1203,7 +1203,7 @@
          </sends>
          <accepts>                                          
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+  
          </accepts>
       </cmds>
    </nodeDef> 

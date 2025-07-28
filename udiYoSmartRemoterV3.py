@@ -415,7 +415,7 @@ class udiYoSmartRemoter(udi_interface.Node):
 
     commands = {
                 'UPDATE'    : update,
-                'QUERY'     : update, 
+  
                 }
 
 
