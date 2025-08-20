@@ -1090,15 +1090,36 @@
          <accepts>
             <!-- <cmd id="DON" />
             <cmd id="DOF" />    -->
-            <cmd id="TXCODE" >   
-               <p id="" editor="txcode" />
-            </cmd > 
+            <cmd id="LEARNCODE" />   
             <cmd id="UPDATE" /> 
             <cmd id="QUERY" /> 
          </accepts>
       </cmds>
    </nodeDef> 
-   
+      <nodeDef id="yoircode" nls="nlsircode  ">
+      <editors />
+      <sts>
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="status" />
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="unixtime" />                     
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="lock"  />               
+            <cmd id="DOF" editor="lock"  />    -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         
+         </sends>
+
+         <accepts>
+            <!-- <cmd id="DON" />
+            <cmd id="DOF" />    -->
+            <cmd id="TXCODE" >   
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
    <nodeDef id="yopwralarm" nls="nlspwralarm">
       <editors />

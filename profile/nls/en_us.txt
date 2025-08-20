@@ -421,7 +421,17 @@ ST-nlsirremote-BATLVL-NAME=Battery Level
 ST-nlsirremote-TIME-NAME=Last device update
 ST-nlsirremote-CLITEMP-NAME=Sensor Temperature
 ST-nlsirremote-CLIHUM-NAME=Current Rel Humidity (%)
-CMD-nlsirremote-TXCODE-NAME=Send Code
+CMD-nlsirremote-LEARNCODE-NAME=Learn New Code
+
+ND-yoircode-NAME=YoLink Ir Code
+ND-yoircode-ICON=Output
+ST-nlsircode-NAME=Send IR code
+ST-nlsircode-ST=TX success
+ST-nlsircode-GV1-NAME=Battery Level
+ST-nlsircode-GV20-NAME=Connection State
+ST-nlsircode-TIME-NAME=Last device update
+CMD-nlsircode-TXCODE-NAME=Send Code
+
 
 
 ND-yoCOSmokesens-NAME=YoLink COSmokeSensor
