@@ -18,7 +18,25 @@ from os import truncate
 import time
 from yolinkInfraredRemoterV2 import YoLinkInfraredRem
 
-class udiYoInfraredCode(udi_interface.Node)
+class udiYoInfraredCode(udi_interface.Node):
+    id = 'yoircode'
+    '''
+       drivers = [
+            'GV0' = Nbr codes
+            'GV1' = Battery Level
+            'GV2' = Command status
+            'GV5' = Online
+            ]
+    ''' 
+    drivers = [
+            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV0', 'value': 0, 'uom': 107},
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV2', 'value': 99, 'uom': 25}, 
+
+            {'driver': 'GV20', 'value': 99, 'uom': 25},       
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                 
+            ] 
 
 class udiYoInfraredRemoter(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key

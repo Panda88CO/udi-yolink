@@ -206,11 +206,6 @@ class YoLinkSetup (udi_interface.Node):
                 self.Parameters[address] =  dev['name']
 
                 logging.info('adding/checking device : {} - {}'.format(dev['name'], dev['type']))
-<<<<<<< Updated upstream
-                if dev['type'] == 'Hub':     
-                    logging.info('Hub not added - ISY cannot do anything useful with it')    
-
-=======
                 if dev['type'] == 'Hub':   
                     if  model in ['YS1613', 'YS1605']: #Need to add local hub????
                         temp = udiYoHub(self.poly, address, address, name, self.yoAccess, dev)
@@ -221,7 +216,6 @@ class YoLinkSetup (udi_interface.Node):
                             self.assigned_addresses.append(adr)
                     else:
                         logging.info('Hub not added - ISY cannot do anything useful with it')    
->>>>>>> Stashed changes
                 elif dev['type'] in ['SpeakerHub']:
 
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
