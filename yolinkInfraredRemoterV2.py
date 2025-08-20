@@ -127,7 +127,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                 code_dict[code] =  yolink.dataAPI[yolink.dData]['keys'][code]
         return(code_dict)
            
-    '''
+    
     def learn(yolink, code):
         yolink.send_learn(code)
         
@@ -168,7 +168,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                 return (False)
         else:
             logging.error('previous send_learn not completed - cannot start another')
-    '''
+    
     
     def check_code_learned(yolink, code):
         logging.debug('YoLinkInfraredRem check_code_learned {}'.format(code))
@@ -184,26 +184,27 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
             else:
                 return(False)
 
-    def send_code(yolink, code):
+    def send_code(yolink, code) -> bool:
         logging.debug('YoLinkInfraredRem send_code {}'.format(code))
-        attempt = 1
-        maxAttempts = 3
-        worked = False
-        if 'send' in yolink.methodList:
-            methodStr = yolink.type+'.send'
-            worked = True
-        data = {}
-        data['params'] = {}
-        data['params']['key'] = code
-        data['time'] = str(int(time.time_ns()//1e6))
-        data['method'] = methodStr
-        data["targetDevice"] =  yolink.deviceInfo['deviceId']
-        data["token"]= yolink.deviceInfo['token']
-        if worked:
-            yolink.yoAccess.publish_data( data) 
-            #yolink.publish_data(data)
-  
-    
+        
+        try:
+
+            if 'send' in yolink.methodList:
+                methodStr = yolink.type+'.send'
+                data = {}
+                data['params'] = {}
+                data['params']['key'] = code
+                data['time'] = str(int(time.time_ns()//1e6))
+                data['method'] = methodStr
+                data["targetDevice"] =  yolink.deviceInfo['deviceId']
+                data["token"]= yolink.deviceInfo['token']
+                yolink.yoAccess.publish_data( data) 
+                return(True)
+        except  Exception as E:
+            logging.error('YoLinkInfraredRem send_code - Exception: {}'.format(E))
+            return(False)
+        
+
     def get_last_message_type(yolink):
         logging.debug( '{} - get_last_message_type'.format(yolink.type))
         if yolink.dataAPI[yolink.lastMessage] != {}:
@@ -251,6 +252,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         for key in range (0,len(yolink.dataAPI[yolink.dData]['keys'])):
             if yolink.dataAPI[yolink.dData]['keys'][key]:
                 keys = keys + 1
+        self.nbr_codes = keys
         return(keys)
 
 
