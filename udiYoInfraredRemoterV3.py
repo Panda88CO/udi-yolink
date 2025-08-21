@@ -66,7 +66,9 @@ class udiYoInfraredCode(udi_interface.Node):
             self.my_setDriver('GV20', 1)
         else:
             self.my_setDriver('GV20', 0)  
-commands = {
+
+
+    commands = {
             'TXCODE': send_IRcode,
             }
 

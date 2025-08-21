@@ -27,7 +27,7 @@ from udiYoMultiOutletV2 import udiYoMultiOutlet
 from udiYoManipulatorV2 import udiYoManipulator
 from udiYoSpeakerHubV2 import udiYoSpeakerHub
 from udiYoLockV2 import udiYoLock
-from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
+from udiYoInfraredRemoterV3 import udiYoInfraredRemoter
 from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV3 import udiYoVibrationSensor
 from udiYoSmartRemoterV3 import udiYoSmartRemoter
@@ -35,7 +35,7 @@ from udiYoPowerFailV3 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
 from udiYoWaterMeterControllerV3 import udiYoWaterMeterController
 from udiYoWaterMeterOnlyV3 import udiYoWaterMeterOnly
-#from udiYoHubV2 import udiYoHub
+from udiYoHubV2 import udiYoHub
 import udiProfileHandler
 
 try:

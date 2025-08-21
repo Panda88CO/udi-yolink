@@ -18,7 +18,7 @@ from os import truncate
 import time
 from yolinkInfraredRemoterV2 import YoLinkInfraredRem
 
-class udiYoInfraredCode(udi_interface.Node)
+
 
 class udiYoInfraredRemoter(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
