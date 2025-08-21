@@ -120,7 +120,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
         self.node = self.poly.getNode(address)
         self.adr_list = []
         self.adr_list.append(address)   
-
+        self.codes_used = []
 
 
 
@@ -132,10 +132,16 @@ class udiYoInfraredRemoter(udi_interface.Node):
         self.yoIRrem.initNode()
         time.sleep(2)
         #self.my_setDriver('ST', 1)
-        nbr_codes= self.yoIRrem.nbr_codes
-        for code in nbr_codes:  
-            self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, code, 'code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
-        self.updateData()
+
+        code_dict_temp = self.yoIRrem.get_code_dict()
+        logging.debug(f'Code dict temp: {code_dict_temp}')
+        for code in range(0, len(code_dict_temp)):
+            if code_dict_temp[code]:
+                logging.info(f'Adding code {code} to node list')
+                self.used_codes.append(code)
+                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, code, 'code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
+        
+
         #self.poly.setCustomParams({'yoirremote': self.address})
         #self.poly.saveCustomParams()
         self.poly.updateProfile()
@@ -214,9 +220,10 @@ class udiYoInfraredRemoter(udi_interface.Node):
         logging.info('udiIRremote learn_IRcode')
         if self.yoIRrem.nbr_codes < 64:
             code = self.yoIRrem.nbr_codes + 1
-            if self.yoIRrem.learn_code(code):
+            if self.yoIRrem.learn2(code):
                 logging.info(f'Code {code} learned - creating new node')
                 self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, code, 'code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
+                
                 self.yoIRrem.get_nbr_keys()
             else:
                 logging.info('Unsuccessful learn of code {}'.format(code))

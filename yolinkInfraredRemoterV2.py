@@ -252,7 +252,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         for key in range (0,len(yolink.dataAPI[yolink.dData]['keys'])):
             if yolink.dataAPI[yolink.dData]['keys'][key]:
                 keys = keys + 1
-        self.nbr_codes = keys
+        yolink.nbr_codes = keys
         return(keys)
 
 
