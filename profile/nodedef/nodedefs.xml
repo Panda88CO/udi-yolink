@@ -1081,10 +1081,9 @@
       <cmds>
          <sends>
             <!--<cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    -->
+            <cmd id="DOF" editor="lock"  />    
             <cmd id="DON"   />               
-            <cmd id="DOF"   />    
-         
+            <cmd id="DOF"   />    -->
          </sends>
 
          <accepts>
@@ -1092,7 +1091,7 @@
             <cmd id="DOF" />    -->
             <cmd id="LEARNCODE" />   
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1110,7 +1109,6 @@
             <cmd id="DOF" editor="lock"  />    -->
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
-         
          </sends>
 
          <accepts>

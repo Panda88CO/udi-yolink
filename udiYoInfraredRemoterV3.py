@@ -84,12 +84,12 @@ class udiYoInfraredRemoter(udi_interface.Node):
             'GV0' = Nbr codes
             'GV1' = Battery Level
             'GV2' = Command status
-            'GV5' = Online
+
             ]
     ''' 
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV0', 'value': 0, 'uom': 25},
+            {'driver': 'GV0', 'value': 0, 'uom': 56},
             {'driver': 'GV1', 'value': 0, 'uom': 25},
             {'driver': 'GV2', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},       
@@ -243,7 +243,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'QUERY' : update,
+
                 #'TXCODE': send_IRcode,
                 'LEARNCODE' : learn_IRcode,
                 }

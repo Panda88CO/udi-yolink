@@ -119,7 +119,7 @@
      <range uom="51" min="0" max="100" prec="0" />
   </editor>
  <editor id="nbrcodes"> 
-     <range uom="107" min="0" max="64" prec="0" />
+     <range uom="56" min="0" max="64" prec="0" />
   </editor>
  <editor id="cmdstatus"> 
      <range uom="25" subset="0-2,99" nls="cmdstatus" />
