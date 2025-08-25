@@ -39,7 +39,9 @@ class udiYoInfraredCode(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
         self.yoIRrem = yoIRrem
         self.code = int(address)
+        self.n_queue = []   
         self.poly.ready()
+       
         #self.poly.subscribe(polyglot.START, self.start, self.address)
         #self.poly.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
