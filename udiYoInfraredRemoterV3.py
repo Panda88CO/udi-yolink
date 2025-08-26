@@ -50,6 +50,21 @@ class udiYoInfraredCode(udi_interface.Node):
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
 
+    def checkDataUpdate(self):
+        if self.yoIRrem.data_updated():
+            self.updateData()
+    
+    def updateData(self):
+        if self.node is not None:
+            logging.debug('updateData - {}'.format(self.yoIRrem.online))
+            self.my_setDriver('TIME', self.yoIRrem.getLastUpdateTime(), 151)
+           
+            if self.yoIRrem.suspended:
+                self.my_setDriver('GV20', 1)
+            else:
+                self.my_setDriver('GV20', 0)
+        else:
+            self.my_setDriver('GV20', 2)
 
     def send_IRcode(self, command=None):
         logging.info('udiIRremote send_IRcode')
@@ -144,7 +159,8 @@ class udiYoInfraredRemoter(udi_interface.Node):
             if code_dict_temp[code]:
                 logging.info(f'Adding code {code} to node list')
                 self.codes_used.append(code)
-                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, code, 'Code '+ str(code+1), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
+                nde_address =self.address[-11] +'x'+ str(code)
+                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
         
 
         #self.poly.setCustomParams({'yoirremote': self.address})
