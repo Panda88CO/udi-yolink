@@ -48,7 +48,8 @@ class udiYoInfraredCode(udi_interface.Node):
 
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
-        
+        self.node = self.poly.getNode(address)
+
 
     def send_IRcode(self, command=None):
         logging.info('udiIRremote send_IRcode')
@@ -58,6 +59,7 @@ class udiYoInfraredCode(udi_interface.Node):
         if 'success' in res:
             if  res['success'] == True:
                 logging.info('Code {} sent successfully'.format(self.code))
+                self.node.reportCmd('DON')  
                 self.my_setDriver('ST', 1)
             else:
                 self.my_setDriver('ST', 0)
@@ -84,7 +86,6 @@ class udiYoInfraredRemoter(udi_interface.Node):
             'GV0' = Nbr codes
             'GV1' = Battery Level
             'GV2' = Command status
-
             ]
     ''' 
     drivers = [
