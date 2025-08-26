@@ -1114,7 +1114,7 @@
          <accepts>
             <!-- <cmd id="DON" />
             <cmd id="DOF" />    -->
-            <cmd id="TXCODE" / >   
+            <cmd id="TXCODE" />   
          </accepts>
       </cmds>
    </nodeDef> 
