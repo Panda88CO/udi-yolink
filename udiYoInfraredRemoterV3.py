@@ -161,7 +161,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             if code_dict_temp[code]:
                 logging.info(f'Adding code {code} to node list')
                 self.codes_used.append(code)
-                nde_address =self.address[-11] +'x'+ str(code)
+                nde_address =self.primary[-11] +'x'+ str(code)
                 self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
         
 
