@@ -244,7 +244,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
                     if res['success'] == True:
                         self.code_nodes[code].my_setDriver('ST', 1)
                     else:
-                        self.code_nodes[code].my_setDriver('ST', 0)
+                        self.code_nodes[code].my_setDriver('ST', 2)
                 else:
                     self.code_nodes[code].my_setDriver('ST', 0)
 

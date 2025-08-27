@@ -124,6 +124,9 @@
  <editor id="cmdstatus"> 
      <range uom="25" subset="0-2,99" nls="cmdstatus" />
   </editor>
+   <editor id="ircmdstatus"> 
+     <range uom="25" subset="0-2,99" nls="ircmdstatus" />
+  </editor>
  <editor id="txcode"> 
      <range uom="107" min="0" max="63" prec="0" />
   </editor>

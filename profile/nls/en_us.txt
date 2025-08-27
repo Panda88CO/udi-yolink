@@ -741,8 +741,12 @@ presstype-0=Normal
 presstype-8=Long press
 presstype-99=Unknown
 
+ircmdstatus-0=Ready
+ircmdstatus-1=Success
+ircmdstatus-2=Fail
+ircmdstatus-99=Unknown
 
-cmdstatus-0=Code Not learn code
+cmdstatus-0=Fail
 cmdstatus-1=Success
 cmdstatus-2=TX Key Wrong
 cmdstatus-99=Unknown
