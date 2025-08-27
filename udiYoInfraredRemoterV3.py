@@ -34,11 +34,11 @@ class udiYoInfraredCode(udi_interface.Node):
             {'driver': 'GV20', 'value': 99, 'uom': 25},       
             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                 
             ] 
-    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo, yoIRrem):
+    def  __init__(self, polyglot, primary, address, name, code_indx, yoIRrem):
         logging.debug('udiIRcode'.format(deviceInfo['name']))
         super().__init__( polyglot, primary, address, name)   
         self.yoIRrem = yoIRrem
-        self.code = int(address)
+        self.code = code_indx
         self.n_queue = []   
         self.poly.ready()
        
@@ -49,6 +49,8 @@ class udiYoInfraredCode(udi_interface.Node):
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
+        time.sleep(2)
+        self.updateData()
 
     def checkDataUpdate(self):
         if self.yoIRrem.data_updated():
@@ -58,7 +60,7 @@ class udiYoInfraredCode(udi_interface.Node):
         if self.node is not None:
             logging.debug('updateData - {}'.format(self.yoIRrem.online))
             self.my_setDriver('TIME', self.yoIRrem.getLastUpdateTime(), 151)
-           
+            self.my_setDriver('ST', 0)
             if self.yoIRrem.suspended:
                 self.my_setDriver('GV20', 1)
             else:
@@ -160,7 +162,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
                 logging.info(f'Adding code {code} to node list')
                 self.codes_used.append(code)
                 nde_address =self.address[-11] +'x'+ str(code)
-                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
+                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
         
 
         #self.poly.setCustomParams({'yoirremote': self.address})
