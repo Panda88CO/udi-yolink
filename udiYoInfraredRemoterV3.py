@@ -70,7 +70,7 @@ class udiYoInfraredCode(udi_interface.Node):
 
     def send_IRcode(self, command=None):
         logging.info('udiIRremote send_IRcode')
-        self.yoIRrem.send_code(self, self.code)
+        self.yoIRrem.send_code( self.code)
         
         res = self.yoIRrem.get_send_status()
         if 'success' in res:
@@ -161,7 +161,8 @@ class udiYoInfraredRemoter(udi_interface.Node):
             if code_dict_temp[code]:
                 logging.info(f'Adding code {code} to node list')
                 self.codes_used.append(code)
-                nde_address =self.primary[-11] +'x'+ str(code)
+                nde_address =self.primary[-11:] +'x'+ str(code)
+                logging.debug(f'ircode {self.primary} {code} {nde_address}')
                 self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
         
 

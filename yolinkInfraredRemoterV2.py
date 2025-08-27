@@ -135,10 +135,9 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
     def send_learn(yolink, code):
         logging.debug('YoLinkInfraredRem learn_code {}'.format(code))
         if yolink.learn_started == False:
-            if code >= 0 and 63 >= code:
+            if  0 <= code <= 63:
                 attempt = 1
-                maxAttempts = 3
-                worked = False
+
                 if 'send' in yolink.methodList:
                     methodStr = yolink.type+'.learn'
                     worked = True
@@ -149,19 +148,10 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                 data['method'] = methodStr
                 data["targetDevice"] =  yolink.deviceInfo['deviceId']
                 data["token"]= yolink.deviceInfo['token']
-                if worked:
-                    while  not yolink.publish_data( data) and attempt <= maxAttempts:
-                        time.sleep(1)
-                        attempt = attempt + 1
-                    if attempt > maxAttempts:
-                        yolink.learn_started = False
-                        return(False)
-                    else:
-                        yolink.learn_started = True
-                        return(True)
-                else:
-                    yolink.learn_started = False
-                    return(False)
+                yolink.yoAccess.publish_data(data) 
+                yolink.learn_started = True
+                return(True)
+
             else:
                 logging.error('Code {} out of range (0-63)'.format(code))
                 yolink.learn_started = False
@@ -198,7 +188,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                 data['method'] = methodStr
                 data["targetDevice"] =  yolink.deviceInfo['deviceId']
                 data["token"]= yolink.deviceInfo['token']
-                yolink.yoAccess.publish_data( data) 
+                yolink.yoAccess.publish_data(data) 
                 return(True)
         except  Exception as E:
             logging.error('YoLinkInfraredRem send_code - Exception: {}'.format(E))
