@@ -73,6 +73,7 @@ class udiYoInfraredCode(udi_interface.Node):
         self.yoIRrem.send_code( self.code)
         
         res = self.yoIRrem.get_send_status()
+        logging.debug(f'Send code result: {res}')
         if 'success' in res:
             if  res['success'] == True:
                 logging.info('Code {} sent successfully'.format(self.code))
