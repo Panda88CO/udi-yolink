@@ -216,7 +216,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
         if  self.yoIRrem.online:
             self.my_setDriver('ST', 1)
-            self.my_setDriver('GV0',self.yoIRrem.get_nbr_keys())                  
+            self.my_setDriver('GV0',len(self.codes_used) )                 
             self.my_setDriver('GV1',self.yoIRrem.getBattery())
             self.my_setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()))
             if self.yoIRrem.suspended:
@@ -280,7 +280,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
                 nde_address =self.address[-11:] +'x'+ str(code)
                 self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
                 
-                self.yoIRrem.get_nbr_keys()
+            
             else:
                 logging.info('Unsuccessful learn of code {}'.format(code))
     
