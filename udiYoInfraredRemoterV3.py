@@ -237,7 +237,10 @@ class udiYoInfraredRemoter(udi_interface.Node):
         self.yoIRrem.updateStatus(data)
         self.updateData()
         res = self.yoIRrem.getIRstatus_info()
+        logging.debug(f'IR status info: {res}')
+        logging.debug(f'Code nodes: {self.code_nodes}')
         for code in self.code_nodes:
+            logging.debug(f'Checking code node {code}')
             if self.code_nodes[code] is not None:
                 self.code_nodes[code].updateData()
                 if res['key'] == code:
