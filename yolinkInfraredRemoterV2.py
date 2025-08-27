@@ -58,7 +58,15 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
             else:
                 return('unknown')
 
+    def getIRstatus_info (yolink):
+        logging.debug('{} - getIRinfo'.format(yolink.type))
+        info = {}
+        info['success'] = yolink.dataAPI[yolink.dData]['success'] 
+        info['errorCode'] = yolink.dataAPI[yolink.dData]['errorCode']
+        info['key'] = yolink.dataAPI[yolink.dData]['key']
+        info['IRtype'] = yolink.dataAPI[yolink.dData]['IRtype'] 
 
+        return(info)
 
     def updateStatus(yolink, data):
         try:
@@ -67,6 +75,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
             yolink.dataAPI[yolink.dData]['key'] = None
             yolink.dataAPI[yolink.dData]['success'] = None
             yolink.dataAPI[yolink.dData]['errorCode'] = None
+            yolink.dataAPI[yolink.dData]['IRtype'] = None
             logging.debug('{} - updateStatus after callback: {}'.format(yolink.type, yolink.dataAPI[yolink.dData]))
             if 'method' in data:
                 if '.learn' in data['method']:
@@ -76,7 +85,8 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                         if 'errorCode' in data:
                             yolink.dataAPI[yolink.dData]['errorCode']= data['data']['errorCode']
                         if 'key' in data:
-                            yolink.dataAPI[yolink.dData]['key'] = data['data']['key']     
+                            yolink.dataAPI[yolink.dData]['key'] = data['data']['key']    
+                        yolink.dataAPI[yolink.dData]['IRtype'] = 'learn' 
                         yolink.learn_started = False  ## Not sure 
                 if 'getState' in data['method']:
                     if 'data' in data:
@@ -91,13 +101,16 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                                     nbr_codes = nbr_codes + 1
                             yolink.nbr_codes = nbr_codes
                             logging.debug('keys: {} - {}'.format( yolink.nbr_codes, yolink.dataAPI[yolink.dData]['keys']))
-
+                        yolink.dataAPI[yolink.dData]['IRtype'] = None
                 if 'send' in data['method']:
                     if 'data' in data:
                         if 'success' in data['data']:
                             yolink.dataAPI[yolink.dData]['success']  = data['data']['success']
-                        if 'keys' in data:
-                            yolink.dataAPI[yolink.dData]['errorCode'] = data['data']['errorCode']    
+                        if 'errorCode' in data:
+                            yolink.dataAPI[yolink.dData]['errorCode']= data['data']['errorCode']
+                        if 'key' in data:
+                            yolink.dataAPI[yolink.dData]['key'] = data['data']['key']
+                        yolink.dataAPI[yolink.dData]['IRtype'] = 'send'        
 
             if 'event' in data:
                 if '.learn' in data['event']:
@@ -108,7 +121,8 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                         if 'errorCode' in data:
                             yolink.dataAPI[yolink.dData]['errorCode'] = data['data']['errorCode']
                         if 'key' in data:
-                            yolink.dataAPI[yolink.dData]['key'] = data['data']['key']                                 
+                            yolink.dataAPI[yolink.dData]['key'] = data['data']['key']     
+                        yolink.dataAPI[yolink.dData]['IRtype'] = 'learn'                             
         except Exception as E:
             logging.error('{} - Exception - {} '.format(yolink.type, E))
             logging.error (yolink.dataAPI[yolink.dData])

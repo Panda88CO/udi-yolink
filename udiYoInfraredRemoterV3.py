@@ -54,13 +54,14 @@ class udiYoInfraredCode(udi_interface.Node):
 
     def checkDataUpdate(self):
         if self.yoIRrem.data_updated():
+
             self.updateData()
     
     def updateData(self):
         if self.node is not None:
             logging.debug('updateData - {}'.format(self.yoIRrem.online))
             self.my_setDriver('TIME', self.yoIRrem.getLastUpdateTime(), 151)
-            self.my_setDriver('ST', 0)
+            #self.my_setDriver('ST', 0)
             if self.yoIRrem.suspended:
                 self.my_setDriver('GV20', 1)
             else:
@@ -70,17 +71,24 @@ class udiYoInfraredCode(udi_interface.Node):
 
     def send_IRcode(self, command=None):
         logging.info('udiIRremote send_IRcode')
-        self.yoIRrem.send_code( self.code)
+        if self.yoIRrem.send_code( self.code):
+            #res = self.yoIRrem.get_send_status()
+            logging.debug(f'Send code {self.code}')
+        else:
+            logging.info('Failed to send code {}'.format(self.code))
+            self.my_setDriver('ST', 0)
+            return
         
-        res = self.yoIRrem.get_send_status()
-        logging.debug(f'Send code result: {res}')
-        if 'success' in res:
-            if  res['success'] == True:
-                logging.info('Code {} sent successfully'.format(self.code))
-                self.node.reportCmd('DON')  
-                self.my_setDriver('ST', 1)
+        '''   
+            if 'success' in res:
+                if  res['success'] == True:
+                    logging.info('Code {} sent successfully'.format(self.code))
+                    self.node.reportCmd('DON')  
+                    self.my_setDriver('ST', 1)
+                else:
+                    self.my_setDriver('ST', 0)
             else:
-                self.my_setDriver('ST', 0)
+                self.my_setDriver('ST', 0)              
         else:
             self.my_setDriver('ST', 0)
         
@@ -88,8 +96,7 @@ class udiYoInfraredCode(udi_interface.Node):
             self.my_setDriver('GV20', 1)
         else:
             self.my_setDriver('GV20', 0)  
-
-
+        '''
     commands = {
             'TXCODE': send_IRcode,
             }
@@ -144,7 +151,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
         self.adr_list = []
         self.adr_list.append(address)   
         self.codes_used = []
-
+        self.code_nodes = {}
 
 
     def start(self):
@@ -158,13 +165,14 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
         code_dict_temp = self.yoIRrem.get_code_dict()
         logging.debug(f'Code dict temp: {code_dict_temp}')
+ 
         for code in range(0, len(code_dict_temp)):
             if code_dict_temp[code]:
                 logging.info(f'Adding code {code} to node list')
                 self.codes_used.append(code)
                 nde_address =self.address[-11:] +'x'+ str(code)
                 logging.debug(f'ircode {self.primary} {code} {nde_address}')
-                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
+                self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
         
 
         #self.poly.setCustomParams({'yoirremote': self.address})
@@ -228,8 +236,20 @@ class udiYoInfraredRemoter(udi_interface.Node):
         logging.info('udiIRremote updateStatus')
         self.yoIRrem.updateStatus(data)
         self.updateData()
+        res = self.yoIRrem.getIRstatus_info()
+        for code in self.code_nodes:
+            if self.code_nodes[code] is not None:
+                self.code_nodes[code].updateData()
+                if res['key'] == code:
+                    if res['success'] == True:
+                        self.code_nodes[code].my_setDriver('ST', 1)
+                    else:
+                        self.code_nodes[code].my_setDriver('ST', 0)
+                else:
+                    self.code_nodes[code].my_setDriver('ST', 0)
 
-    
+
+                
     def checkOnline(self):
         self.yoIRrem.refreshDevice()
 
@@ -255,7 +275,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             if self.yoIRrem.learn2(code):
                 logging.info(f'Code {code} learned - creating new node')
                 nde_address =self.address[-11:] +'x'+ str(code)
-                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
+                self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
                 
                 self.yoIRrem.get_nbr_keys()
             else:
