@@ -35,7 +35,7 @@ class udiYoInfraredCode(udi_interface.Node):
             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                 
             ] 
     def  __init__(self, polyglot, primary, address, name, code_indx, yoIRrem):
-        logging.debug('udiIRcode'.format(deviceInfo['name']))
+        logging.debug('udiIRcode'.format(code_indx))
         super().__init__( polyglot, primary, address, name)   
         self.yoIRrem = yoIRrem
         self.code = code_indx
@@ -122,7 +122,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
         self.yoAccess = yoAccess
         self.poly = polyglot
-        #self.devInfo =  deviceInfo
+        self.devInfo =  deviceInfo
         self.address = address
         self.primary = primary
         self.yoIRrem = None
