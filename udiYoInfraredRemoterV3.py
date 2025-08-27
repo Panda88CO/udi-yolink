@@ -161,7 +161,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             if code_dict_temp[code]:
                 logging.info(f'Adding code {code} to node list')
                 self.codes_used.append(code)
-                nde_address =self.primary[-11:] +'x'+ str(code)
+                nde_address =self.address[-11:] +'x'+ str(code)
                 logging.debug(f'ircode {self.primary} {code} {nde_address}')
                 self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
         
@@ -253,7 +253,8 @@ class udiYoInfraredRemoter(udi_interface.Node):
             logging.info(f'Learning code {code}')     
             if self.yoIRrem.learn2(code):
                 logging.info(f'Code {code} learned - creating new node')
-                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, code, 'code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
+                nde_address =self.address[-11:] +'x'+ str(code)
+                self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
                 
                 self.yoIRrem.get_nbr_keys()
             else:
