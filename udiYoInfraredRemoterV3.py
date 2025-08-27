@@ -122,7 +122,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
         self.yoAccess = yoAccess
         self.poly = polyglot
-        self.devInfo =  deviceInfo
+        #self.devInfo =  deviceInfo
         self.address = address
         self.primary = primary
         self.yoIRrem = None
