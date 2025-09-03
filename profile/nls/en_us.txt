@@ -422,7 +422,7 @@ ST-nlsirremote-TIME-NAME=Last device update
 ST-nlsirremote-CLITEMP-NAME=Sensor Temperature
 ST-nlsirremote-CLIHUM-NAME=Current Rel Humidity (%)
 CMD-nlsirremote-LEARNCODE-NAME=Learn New Code
-CMD-nlsirremote-UPDATE-NAME=Learn New Code
+CMD-nlsirremote-UPDATE-NAME=Update
 
 ND-yoircode-NAME=YoLink Ir Code
 ND-yoircode-ICON=Output
