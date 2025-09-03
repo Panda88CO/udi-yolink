@@ -135,7 +135,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
             logging.error('battery not defined : {}'.format(E))
        
     def get_code_dict(yolink):
-        logging.debug('YoLinkInfraredRem get_code_dict {}')
+        logging.debug(f'YoLinkInfraredRem get_code_dict {yolink.dataAPI[yolink.dData]}')
         code_dict = {}
         if 'keys' in yolink.dataAPI[yolink.dData]:
             for code in range(0,len(yolink.dataAPI[yolink.dData]['keys'])):
