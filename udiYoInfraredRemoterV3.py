@@ -77,11 +77,11 @@ class udiYoInfraredCode(udi_interface.Node):
         try:
             logging.info('udiIRremote send_IRcode')
             if self.yoIRrem.send_code( self.code):
+                time.sleep(0.5)
                 res = self.yoIRrem.get_send_status()
-                while res['success'] is None:
+                while res is {} and self.yoIRrem.online:
                     time.sleep(1)
                     res = self.yoIRrem.get_send_status()
-                    
                 logging.debug(f'Send code {self.code} {res}')
                 if res['success'] == True and res['key'] == self.code:
                     logging.info('Code {} sent successfully'.format(self.code))
