@@ -165,8 +165,8 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
         code_dict_temp = self.yoIRrem.get_code_dict()
         logging.debug(f'Code dict temp: {code_dict_temp}')
-        while len(code_dict_temp) == 0:
-            logging.warning('No code dictionary - trying again')
+        while not self.yoIRrem.check_system_online():
+            logging.warning('System offline - need to obtain learned codes before continuing - trying again')
             time.sleep(5)
             self.yoIRrem.refreshDevice()
             time.sleep(2)  
@@ -186,9 +186,8 @@ class udiYoInfraredRemoter(udi_interface.Node):
         #self.poly.saveCustomParams()
         self.poly.updateProfile()
         #self.poly.addCustomProfile(self.id, 'YoLink Infrared Remoter', 'YoLink Infrared Remoter', 'YoLink Infrared Remoter')
-        self.poly.updateProfile()
         logging.info('YoLink Infrared Remoter Node Ready')
-
+        self.updateData()
 
 
         self.node_ready = True
