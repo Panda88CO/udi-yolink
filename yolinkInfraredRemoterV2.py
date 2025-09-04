@@ -281,9 +281,9 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         temp = {}
         if 'key' in yolink.dataAPI[yolink.dData]:
             temp['key'] = yolink.dataAPI[yolink.dData]['key']
-        if ['success'] in yolink.dataAPI[yolink.dData]:
+        if 'success' in yolink.dataAPI[yolink.dData]:
             temp['success'] = yolink.dataAPI[yolink.dData]
-        if ['errorCode'] in yolink.dataAPI[yolink.dData]:
+        if 'errorCode' in yolink.dataAPI[yolink.dData]:
             temp['errorCode'] = yolink.dataAPI[yolink.dData]['errorCode']
         return(temp)
 
