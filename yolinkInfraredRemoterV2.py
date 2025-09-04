@@ -78,6 +78,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
             #yolink.dataAPI[yolink.dData]['success'] = None
             #yolink.dataAPI[yolink.dData]['errorCode'] = None
             #yolink.dataAPI[yolink.dData]['IRtype'] = None
+            time.sleep(0.5)
             logging.debug(f'updateStatus 2 {data}')
             if 'method' in data:
                 logging.debug(f'method detected {data}')
