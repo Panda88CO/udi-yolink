@@ -298,7 +298,8 @@ class udiYoInfraredRemoter(udi_interface.Node):
                 nde_address =self.address[-11:] +'x'+ str(code)
                 self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code), self.yoAccess, self.devInfo, self.yoIRrem ), conn_status = None, rename = True)
                 self.codes_used.append(code)
-                self.updateData()
+                self.yoIRrem.refreshDevice()
+                #self.updateData()
             else:
                 logging.info('Unsuccessful learn of code {}'.format(code))
     

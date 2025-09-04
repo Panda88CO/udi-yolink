@@ -186,7 +186,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         logging.debug('YoLinkInfraredRem check_learn_completed {}'.format(code))
         try:
             #temp = yolink.dataAPI['lastMessage']
-            logging.debug('lastMessage: {}'.format(yolink.dataAPI))
+            logging.debug('Analyzed Message: {}'.format(yolink.dataAPI))
             if 'key' in yolink.dataAPI[yolink.dData]:
                 if  yolink.dataAPI[yolink.dData]['key'] == code:                                   
                     if 'errorCode' in yolink.dataAPI[yolink.dData]:
@@ -202,6 +202,8 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                             return('failure')
                 else:
                     return('ignore')  
+            else:         
+                return('ignore')    
 
         except Exception as E:
             logging.error('YoLinkInfraredRem check_learn_completed - Exception: {}'.format(E))
