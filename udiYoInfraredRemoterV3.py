@@ -165,7 +165,14 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
         code_dict_temp = self.yoIRrem.get_code_dict()
         logging.debug(f'Code dict temp: {code_dict_temp}')
- 
+        while len(code_dict_temp) == 0:
+            logging.warning('No code dictionary - trying again')
+            time.sleep(5)
+            self.yoIRrem.refreshDevice()
+            time.sleep(2)  
+            code_dict_temp = self.yoIRrem.get_code_dict()
+            logging.debug(f'Code dict temp: {code_dict_temp}')
+
         for code in range(0, len(code_dict_temp)):
             if code_dict_temp[code]:
                 logging.info(f'Adding code {code} to node list')
