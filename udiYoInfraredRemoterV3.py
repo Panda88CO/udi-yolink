@@ -94,8 +94,7 @@ class udiYoInfraredCode(udi_interface.Node):
             self.my_setDriver('ST', 2)
             self.clear_delay(5)
             return
-        time.sleep(5)
-        self.my_setDriver('ST', 0)  
+
 
         
         '''   
