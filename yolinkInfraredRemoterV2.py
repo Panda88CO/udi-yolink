@@ -174,6 +174,31 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
         else:
             logging.error('previous send_learn not completed - cannot start another')
     
+
+    def check_learn_completed(yolink, code):
+        logging.debug('YoLinkInfraredRem check_learn_completed {}'.format(code))
+        try:
+            #temp = yolink.dataAPI['lastMessage']
+            logging.debug('lastMessage: {}'.format(yolink.dataAPI))
+            if 'key' in yolink.dataAPI[yolink.dData]:
+                if  yolink.dataAPI[yolink.dData]['key'] == code:                                   
+                    if 'errorCode' in yolink.dataAPI[yolink.dData]:
+                        if yolink.dataAPI[yolink.dData]['errorCode'] == 'started':
+                            logging.debug('Learn in progress')
+                            return('larning')
+                        else:
+                            logging.error('Error code {}'.format(yolink.dataAPI[yolink.dData]['errorCode']))
+                    elif 'success' in yolink.dataAPI[yolink.dData]:
+                        if yolink.dataAPI[yolink.dData]['success']:
+                            return('success')
+                        else:
+                            return('failure')
+                else:
+                    return('ignore')  
+
+        except Exception as E:
+            logging.error('YoLinkInfraredRem check_learn_completed - Exception: {}'.format(E))
+            return('exception')
     
     def check_code_learned(yolink, code):
         logging.debug('YoLinkInfraredRem check_code_learned {}'.format(code))
