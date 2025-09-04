@@ -70,13 +70,15 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
 
     def updateStatus(yolink, data):
         try:
+            # NEEDS UPDATE 
             logging.debug('{} - updateStatus: {}'.format(yolink.type, data))
             yolink.updateCallbackStatus(data, False)
+            logging.debug(f'updateStatus 2 {data}')
             yolink.dataAPI[yolink.dData]['key'] = None
             yolink.dataAPI[yolink.dData]['success'] = None
             yolink.dataAPI[yolink.dData]['errorCode'] = None
             yolink.dataAPI[yolink.dData]['IRtype'] = None
-            
+            logging.debug(f'updateStatus 2 {data}')
             if 'method' in data:
                 logging.debug(f'method detected {data}')
 
