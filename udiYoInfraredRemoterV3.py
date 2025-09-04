@@ -284,11 +284,13 @@ class udiYoInfraredRemoter(udi_interface.Node):
             self.yoIRrem.learn(code)
             time.sleep(1)
             res = self.yoIRrem.check_learn_completed(code)
+            logging.debug(f'Initial learn res: {res}')  
             attempts = 1
             while res in ['learning', 'ignore'] and attempts < 10:
                 time.sleep(1)
                 res = self.yoIRrem.check_learn_completed(code)
                 attempts += 1   
+                logging.debug(f'Learn res: {res}')  
 
             if res == 'success':
                 logging.info(f'Learned code {code} successfully')
