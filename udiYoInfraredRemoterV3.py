@@ -74,29 +74,33 @@ class udiYoInfraredCode(udi_interface.Node):
         self.my_setDriver('ST', 0)
 
     def send_IRcode(self, command=None):
-        logging.info('udiIRremote send_IRcode')
-        if self.yoIRrem.send_code( self.code):
-            res = self.yoIRrem.get_send_status()
-            logging.debug(f'Send code {self.code} {res}')
-            if res['success'] == True and res['key'] == self.code:
-                logging.info('Code {} sent successfully'.format(self.code))
-                self.node.reportCmd('DON')  
-                self.my_setDriver('ST', 1)
-                self.clear_delay(5)
-                return
+        try:
+            logging.info('udiIRremote send_IRcode')
+            if self.yoIRrem.send_code( self.code):
+                res = self.yoIRrem.get_send_status()
+                while res['success'] is None:
+                    time.sleep(1)
+                    res = self.yoIRrem.get_send_status()
+                    
+                logging.debug(f'Send code {self.code} {res}')
+                if res['success'] == True and res['key'] == self.code:
+                    logging.info('Code {} sent successfully'.format(self.code))
+                    self.node.reportCmd('DON')  
+                    self.my_setDriver('ST', 1)
+                    self.clear_delay(5)
+                    return
+                else:
+                    logging.info('Failed to send code {}'.format(self.code))
+                    self.my_setDriver('ST', 2)
+                    self.clear_delay(5)
+                    return
             else:
                 logging.info('Failed to send code {}'.format(self.code))
                 self.my_setDriver('ST', 2)
                 self.clear_delay(5)
                 return
-        else:
-            logging.info('Failed to send code {}'.format(self.code))
-            self.my_setDriver('ST', 2)
-            self.clear_delay(5)
-            return
-
-
-        
+        except Exception as E:
+            logging.error('udiIRcode send_IRcode - Exception: {}'.format(E))        
         '''   
             if 'success' in res:
                 if  res['success'] == True:
