@@ -78,7 +78,10 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
             yolink.dataAPI[yolink.dData]['IRtype'] = None
             
             if 'method' in data:
+                logging.debug(f'method detected {data}')
+
                 if '.learn' in data['method']:
+                    logging.debug(f'.learn detected {data}')
                     if 'data' in data:
                         if 'success' in data['data']:
                             yolink.dataAPI[yolink.dData]['success'] = data['data']['success']
@@ -87,6 +90,7 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
                         if 'key' in data:
                             yolink.dataAPI[yolink.dData]['key'] = data['data']['key']    
                         yolink.dataAPI[yolink.dData]['IRtype'] = 'learn' 
+                        
                         yolink.learn_started = False  ## Not sure 
                 if 'getState' in data['method']:
                     if 'data' in data:
