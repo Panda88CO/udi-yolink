@@ -69,15 +69,34 @@ class udiYoInfraredCode(udi_interface.Node):
         else:
             self.my_setDriver('GV20', 2)
 
+    def clear_delay(self, delay=5):
+        time.sleep(delay)
+        self.my_setDriver('ST', 0)
+
     def send_IRcode(self, command=None):
         logging.info('udiIRremote send_IRcode')
         if self.yoIRrem.send_code( self.code):
-            #res = self.yoIRrem.get_send_status()
-            logging.debug(f'Send code {self.code}')
+            res = self.yoIRrem.get_send_status()
+            logging.debug(f'Send code {self.code} {res}')
+            if res['success'] == True and res['key'] == self.code:
+                logging.info('Code {} sent successfully'.format(self.code))
+                self.node.reportCmd('DON')  
+                self.my_setDriver('ST', 1)
+                self.clear_delay(5)
+                return
+            else:
+                logging.info('Failed to send code {}'.format(self.code))
+                self.my_setDriver('ST', 2)
+                self.clear_delay(5)
+                return
         else:
             logging.info('Failed to send code {}'.format(self.code))
-            self.my_setDriver('ST', 0)
+            self.my_setDriver('ST', 2)
+            self.clear_delay(5)
             return
+        time.sleep(5)
+        self.my_setDriver('ST', 0)  
+
         
         '''   
             if 'success' in res:
@@ -181,7 +200,6 @@ class udiYoInfraredRemoter(udi_interface.Node):
                 logging.debug(f'ircode {self.primary} {code} {nde_address}')
                 self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
         
-
         #self.poly.setCustomParams({'yoirremote': self.address})
         #self.poly.saveCustomParams()
         self.poly.updateProfile()
