@@ -99,8 +99,10 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             #logging.debug(f'temp1 {temp}')
             if yolink.online:   
                 #logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
-                if 'meterStepFactor' in yolink.dataAPI[yolink.dData]['attributes']:
+                if 'attributes' in yolink.dataAPI[yolink.dData] and 'meterStepFactor' in yolink.dataAPI[yolink.dData]['attributes']:
                     meter_correction_factor = yolink.dataAPI[yolink.dData]['attributes']['meterStepFactor']
+                elif 'state'  in yolink.dataAPI[yolink.dData] and 'attributes' in yolink.dataAPI[yolink.dData]['state'] and 'meterStepFactor' in yolink.dataAPI[yolink.dData]['state']['attributes']:
+                    meter_correction_factor = yolink.dataAPI[yolink.dData]['state']['attributes']['meterStepFactor']                    
                 else:
                     meter_correction_factor = 1.0   
                 #logging.debug(f'logic {yolink.dState in yolink.dataAPI[yolink.dData]}')
