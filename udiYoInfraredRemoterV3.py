@@ -201,7 +201,10 @@ class udiYoInfraredRemoter(udi_interface.Node):
                 self.codes_used.append(code)
                 nde_address =self.address[-11:] +'x'+ str(code)
                 logging.debug(f'ircode {self.primary} {code} {nde_address}')
-                self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
+                if code < 9:
+                    self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code 0'+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
+                else:
+                    self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
         
         #self.poly.setCustomParams({'yoirremote': self.address})
         #self.poly.saveCustomParams()
@@ -317,7 +320,10 @@ class udiYoInfraredRemoter(udi_interface.Node):
                 logging.info(f'Learned code {code} successfully')
                 logging.info(f'Code {code} learned - creating new node')
                 nde_address =self.address[-11:] +'x'+ str(code)
-                self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
+                if code < 9:
+                    self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code 0'+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
+                else:
+                    self.code_nodes[code] = self.poly.addNode(udiYoInfraredCode(self.poly, self.primary, nde_address, 'Code '+ str(code+1),code, self.yoIRrem ), conn_status = None, rename = True)
                                                                    
                 self.yoIRrem.refreshDevice()
                 #self.updateData()
