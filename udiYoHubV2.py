@@ -21,11 +21,13 @@ import time
 from yolinkHubV2 import YoLinkHu
 
 class udiYoHub(udi_interface.Node):
-  
+    from  udiYolinkLib import my_setDriver, wait_for_node_done, node_queue
     id = 'yohub'
     drivers = [
             #{'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
@@ -65,14 +67,7 @@ class udiYoHub(udi_interface.Node):
         self.adr_list = []
         self.adr_list.append(address)        
     
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
-
+ 
 
     def start(self):
         logging.info('start - udiYoHub')
@@ -92,7 +87,9 @@ class udiYoHub(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoHub')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
+
         self.yoHub.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -115,9 +112,11 @@ class udiYoHub(udi_interface.Node):
                 #    self.node.setDriver('GV0', 0, True, True)
                 #else:
                 #    self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('ST', 1)
+                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
             else:
-                self.node.setDriver('ST', 0)
+                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV30', 0)
                 #self.pollDelays()
 
     def updateStatus(self, data):
@@ -167,7 +166,7 @@ class udiYoHub(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'QUERY' :update
+  
                 }
 
 

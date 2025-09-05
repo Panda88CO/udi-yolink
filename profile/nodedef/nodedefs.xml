@@ -258,7 +258,8 @@
          <st id="GV18" editor="stMin" />
          <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="dimlvl" />'
+         <st id="GV30"  editor="status" />'
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                    
       </sts>
@@ -814,9 +815,11 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="unixtime" />                              
+         <st id="TIME" editor="unixtime" />         
+         <st id="ST"  editor="doorstate" />                     
       </sts>
       <cmds>
          <sends>
@@ -842,7 +845,8 @@
       <sts>
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />    
+         <st id="GV30"  editor="status" />     
       </sts>
       <cmds>
          <sends>
@@ -938,9 +942,11 @@
          <st id="GV7" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="unixtime" />                           
+         <st id="TIME" editor="unixtime" />      
+         <st id="ST"  editor="deviceAlert" />                     
       </sts>
       <cmds>
          <sends>
@@ -994,6 +1000,24 @@
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yohub" nls="nlshub">
+      <editors />
+      <sts>
+         <st id="ST"  editor="poweralert" /> 
+         <st id="GV0" editor="powerstate" />
+         <st id="GV20" editor="suspendstate" />  
+         <st id="GV30"  editor="status" />
+         <st id="TIME" editor="unixtime" />         
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            </cmd >
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
    <nodeDef id="yospeakerh" nls="nlsspeakerh">
       <editors />

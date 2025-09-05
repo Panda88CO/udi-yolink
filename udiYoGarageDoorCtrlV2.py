@@ -21,7 +21,7 @@ from yolinkGarageDoorToggleV2 import YoLinkGarageDoorCtrl
 
 
 class udiYoGarageDoor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver
+    from  udiYolinkLib import my_setDriver, wait_for_node_done, node_queue
     id = 'yogarage'
     
     '''
@@ -33,6 +33,7 @@ class udiYoGarageDoor(udi_interface.Node):
         
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},   
             #{'driver': 'ST', 'value': 1, 'uom': 25},
 
@@ -62,22 +63,15 @@ class udiYoGarageDoor(udi_interface.Node):
         self.adr_list = []
         self.adr_list.append(address)
 
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
-
-
 
     def start(self):
         logging.info('start - udiYoGarageDoor')
         self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.my_setDriver('ST', 1)
+        self.my_setDriver('GV30', 1)
         #time.sleep(3)
         self.node_ready = True
 
@@ -99,6 +93,7 @@ class udiYoGarageDoor(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoGarageDoor')
         self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoDoorControl.shut_down()
 
     
@@ -112,6 +107,7 @@ class udiYoGarageDoor(udi_interface.Node):
 
         if self.yoDoorControl.online:
             self.my_setDriver('ST', 1)
+            self.my_setDriver('GV30', 1)
         else:
             self.my_setDriver('GV20', 2)
             #self.node.setDriver('ST', 0, True, True)

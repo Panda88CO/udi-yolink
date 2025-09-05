@@ -34,6 +34,7 @@ class udiYoSubOutlet(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV4', 'value': 0, 'uom': 25},           
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             ]
 
     
@@ -268,6 +269,7 @@ class udiYoSubUSB(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},    
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             ]
 
     def  __init__(self, polyglot, primary, address, name, usbPort, yolink):
@@ -424,6 +426,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             {'driver': 'GV22', 'value': 99, 'uom': 25}, #start Min              
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 0, 'uom': 25},
              {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},            
             ]

@@ -37,7 +37,8 @@ class udiYoWaterMeterController(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},  # Water flowing
+            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},  # Water flowing
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 69}, #water use total
             {'driver': 'GV10', 'value': 99, 'uom': 25}, #water use daily             
