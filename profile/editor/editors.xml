@@ -133,6 +133,9 @@
  <editor id="poweralert"> 
      <range uom="25" subset="0-2,99" nls="poweralert" />
   </editor>
+   <editor id="powerstate"> 
+     <range uom="25" subset="0-3,99" nls="powerstate" />
+  </editor>
  <editor id="alertstate"> 
      <range uom="25" subset="0-1,99" nls="alertstate" />
   </editor>

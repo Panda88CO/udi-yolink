@@ -1000,7 +1000,7 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yohub" nls="nlshub">
+   <nodeDef id="yohubbat" nls="nlshubbat">
       <editors />
       <sts>
          <st id="ST"  editor="poweralert" /> 
@@ -1019,6 +1019,23 @@
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yohub" nls="nlshub">
+      <editors />
+      <sts>
+         <st id="ST"  editor="status" /> 
+         <st id="GV20" editor="suspendstate" />  
+         <st id="GV30"  editor="status" />
+         <st id="TIME" editor="unixtime" />         
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            </cmd >
+         </accepts>
+      </cmds>
+   </nodeDef> 
    <nodeDef id="yospeakerh" nls="nlsspeakerh">
       <editors />
       <sts>

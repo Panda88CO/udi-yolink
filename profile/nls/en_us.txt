@@ -336,6 +336,21 @@ CMD-nlsvibrasens-SETCMD-NAME=Select Command Action
 CMD-nlsvibrasens-DON-NAME=Vibration Detected
 CMD-nlsvibrasens-DOF-NAME=Normal
 
+ND-yohub-NAME=YoLink Hub
+ND-yohub-ICON=Output
+ST-nlshub-ST=Status
+ST-nlshub-GV20-NAME=Connection State
+ST-nlshub-GV30-NAME=Online
+CMD-nlshub-UPDATE-NAME=Update
+
+ND-yohubbat-NAME=YoLink Hub w Battery
+ND-yohubbat-ICON=Output
+ST-nlshubbat-ST=Supply Status
+ST-nlshubbat-GV0=Battery Status
+ST-nlshubbat-GV20-NAME=Connection State
+ST-nlshubbat-GV30-NAME=Online
+CMD-nlshubbat-UPDATE-NAME=Update
+
 ND-yospeakerh-NAME=YoLink Speaker Hub
 ND-yospeakerh-ICON=Output
 ST-nlsspeakerh-NAME=Nodeserver Status
@@ -674,6 +689,12 @@ sirenctrl-1=Alert
 pfamute-0=Not muted
 pfamute-1=Muted
 pfamute-99=Unknown
+powerstate-0=TBD-Unknown?
+powerstate-1=TBD-Empty Battery?
+powerstate-2=Supplying  
+powerstate-3=Charging    
+powerstate-99=Unknow 
+
 
 poweralert-0=Normal
 poweralert-1=Alert
