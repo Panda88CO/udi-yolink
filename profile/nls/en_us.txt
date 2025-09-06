@@ -694,9 +694,9 @@ pfamute-0=Not muted
 pfamute-1=Muted
 pfamute-99=Unknown
 powerstate-0=TBD-Unknown?
-powerstate-1=TBD-Empty Battery?
-powerstate-2=Supplying  
-powerstate-3=Charging    
+powerstate-1=Supplying?
+powerstate-2=Charging  
+powerstate-3=Full
 powerstate-99=Unknow 
 
 
