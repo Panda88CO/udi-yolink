@@ -27,6 +27,7 @@ class udiYoBatteryHub(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 99, 'uom': 25},
             {'driver': 'GV30', 'value': 99, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},   
             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
@@ -147,6 +148,7 @@ class udiYoHub(udi_interface.Node):
             #{'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV30', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},   
             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
