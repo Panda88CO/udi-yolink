@@ -210,7 +210,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.debug(f'HUB date {dev}')
                     if  model in ['YS1613', 'YS1605', 'YS1606']: #Need to add local hub????
                         temp = udiYoBatteryHub(self.poly, address, address, name, self.yoAccess, dev)
-                    else
+                    else:
                         temp = udiYoHub(self.poly, address, address, name, self.yoAccess, dev)
                     while not temp.node_ready:
                         logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
