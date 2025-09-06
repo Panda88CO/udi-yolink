@@ -113,8 +113,13 @@ class udiYoBatteryHub(udi_interface.Node):
                 if  'batteryState' in pwr_info:
                     self.my_setDriver('GV0', pwr_info['batteryState'])  
                 self.my_setDriver('GV30', 1)
+                if self.yoHub.suspended:
+                    self.my_setDriver('GV20', 1)
+                else:
+                    self.my_setDriver('GV20', 0)
             else:
                 self.my_setDriver('GV30', 0)
+                self.my_setDriver('GV20', 2)
                 #self.pollDelays()
 
     def updateStatus(self, data):
@@ -227,9 +232,15 @@ class udiYoHub(udi_interface.Node):
                 #    self.node.setDriver('GV0', 99, True, True)
                 self.my_setDriver('ST', 1)
                 self.my_setDriver('GV30', 1)
+                if self.yoHub.suspended:
+                    self.my_setDriver('GV20', 1)
+                else:
+                    self.my_setDriver('GV20', 0)
+
             else:
                 self.my_setDriver('ST', 0)
                 self.my_setDriver('GV30', 0)
+                self.my_setDriver('GV20', 2)
                 #self.pollDelays()
 
     def updateStatus(self, data):
