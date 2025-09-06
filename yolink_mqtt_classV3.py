@@ -359,7 +359,7 @@ class YoLinkMQTTDevice(object):
             else:
                 return(None)
         except Exception as E:
-            logging.debug('getData exceptiom: {}'.format(E) )
+            logging.debug('getData exception: {}'.format(E) )
             return( )
 
     #@measure_time
@@ -379,7 +379,7 @@ class YoLinkMQTTDevice(object):
                 logging.debug('getValue NO MATCH - {} {}'.format(key, yolink.dataAPI[yolink.dData]))
                 return(None)
         except Exception as E:
-            logging.debug('getData exceptiom: {}'.format(E) )
+            logging.debug('getData exception: {}'.format(E) )
             return( )    
 
     #@measure_time
@@ -403,7 +403,7 @@ class YoLinkMQTTDevice(object):
             else:
                 return(99)
         except Exception as e:
-            logging.debug('getData exceptiom: {}'.format(e) )
+            logging.debug('getData exception: {}'.format(e) )
             return( )
     
     #@measure_time
@@ -515,7 +515,7 @@ class YoLinkMQTTDevice(object):
             logging.debug(yolink.type +' - getDataAll')
             return(yolink.dataAPI[yolink.dData])
         except Exception as e:
-            logging.debug('getData exceptiom: {}'.format(e) )
+            logging.debug('getDataAll exception: {}'.format(e) )
             return(None)
 
     #@measure_time
@@ -536,7 +536,7 @@ class YoLinkMQTTDevice(object):
             logging.debug(yolink.type +' - getData')
             return(yolink.dataAPI[yolink.dData][yolink.dState])
         except Exception as e:
-            logging.debug('getData exceptiom: {}'.format(e) )
+            logging.debug('getData exception: {}'.format(e) )
             return(None)
 
     '''

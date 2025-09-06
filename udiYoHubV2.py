@@ -103,7 +103,7 @@ class udiYoBatteryHub(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            state =  self.yoHub.getState().upper()
+
             if self.yoHub.online:
                 pwr_info = self.yoHub.getPowerInfo()
                 if 'powered' in pwr_info and pwr_info['powered'] != True: 
@@ -217,7 +217,7 @@ class udiYoHub(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            state =  self.yoHub.getState().upper()
+
             if self.yoHub.online:
                 #if state == 'ON':
                 #    self.node.setDriver('GV0', 1, True, True)
