@@ -89,20 +89,20 @@ class udiYoManipulator(udi_interface.Node):
 
     def start(self):
         logging.info('Start - udiYoManipulator')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoManipulator = YoLinkManipul(self.yoAccess, self.devInfo, self.updateStatus)
         
         time.sleep(4)
         self.yoManipulator.initNode()
         time.sleep(2)
-        #self.my_setDriver('ST', 1)
+        #self.my_setDriver('GV30', 1)
         self.yoManipulator.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         self.yoManipulator.refreshSchedules()
         self.node_ready = True
 
     def stop (self):
         logging.info('Stop udiYoManipulator')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoManipulator.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -138,7 +138,7 @@ class udiYoManipulator(udi_interface.Node):
                     self.my_setDriver('GV0', 99)
                     
                 self.last_state = state
-                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)
@@ -155,7 +155,7 @@ class udiYoManipulator(udi_interface.Node):
                 #self.my_setDriver('GV1', 0)     
                 #self.my_setDriver('GV2', 0)
                 #self.my_setDriver('BATLVL', 99)
-                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV30', 0)
                 self.my_setDriver('GV20', 2)
                 #self.my_setDriver('GV13', self.schedule_selected)
                 #self.my_setDriver('GV14', 99)
@@ -192,6 +192,7 @@ class udiYoManipulator(udi_interface.Node):
                         if max_delay < timeRemaining[delayInfo]['off']:
                             max_delay = timeRemaining[delayInfo]['off']
                     self.my_setDriver('GV0', self.valveState )
+                    self.my_setDriver('ST', self.valveState )
         self.timer_expires = time.time()+max_delay
   
     def manipuControl(self, command):
@@ -200,13 +201,15 @@ class udiYoManipulator(udi_interface.Node):
         if state == 1:
             self.yoManipulator.setState('open')
             self.valveState = 1
-            self.my_setDriver('GV0',self.valveState  )
+            self.my_setDriver('GV0',self.valveState  )  
+            self.my_setDriver('ST',self.valveState  )  
    
             #self.node.reportCmd('DON')
         elif state == 0:
             self.yoManipulator.setState('closed')
             self.valveState  = 0
             self.my_setDriver('GV0',self.valveState )
+            self.my_setDriver('ST',self.valveState  )
             #self.node.reportCmd('DOF')
         elif state == 5:
             logging.info('manipuControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))
@@ -221,6 +224,7 @@ class udiYoManipulator(udi_interface.Node):
         self.yoManipulator.setState('open')
         self.valveState  = 1
         self.my_setDriver('GV0',self.valveState  )
+        self.my_setDriver('ST',self.valveState  )
 
         #self.node.reportCmd('DON')
 
@@ -229,6 +233,7 @@ class udiYoManipulator(udi_interface.Node):
         self.yoManipulator.setState('closed')
         self.valveState  = 0
         self.my_setDriver('GV0',self.valveState  )
+        self.my_setDriver('ST',self.valveState  )
 
         #self.node.reportCmd('DOF')
 
@@ -240,6 +245,7 @@ class udiYoManipulator(udi_interface.Node):
         #self.yoManipulator.setOnDelay(delay)
         #self.my_setDriver('GV1', delay*60)
         #self.my_setDriver('GV0',self.valveState  )
+        #self.my_setDriver('ST',self.valveState  )
 
     def prepOffDelay(self, command):
         logging.info('setOnDelay Executed')
@@ -249,7 +255,7 @@ class udiYoManipulator(udi_interface.Node):
         #self.yoManipulator.setOffDelay(delay)
         #self.my_setDriver('GV2', delay*60)
         #self.my_setDriver('GV0',self.valveState  )
-
+        #$self.my_setDriver('ST',self.valveState  )
 
 
     def update(self, command = None):
@@ -287,7 +293,6 @@ class udiYoManipulator(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'QUERY' : update,
                 'DON'   : set_open,
                 'DOF'   : set_close,
                 'MANCTRL': manipuControl, 

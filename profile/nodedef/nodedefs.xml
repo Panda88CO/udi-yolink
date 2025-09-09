@@ -56,7 +56,7 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
@@ -129,7 +129,7 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
@@ -202,7 +202,7 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
@@ -288,7 +288,7 @@
             <cmd id="FDDOWN"  /> 
             <cmd id="FDSTOP"  />
 
-            <cmd id="QUERY" /> 
+
             <cmd id="DIMLVL" > 
                <p id="" editor="dimlvl" init="GV3" /> 
             </cmd >
@@ -369,7 +369,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="swstate" /> 
             <cmd id="DOF" editor="swstate" /> 
-            <cmd id="QUERY" /> 
+
 
 
             <cmd id="SWCTRL" > 
@@ -446,7 +446,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+
 
 
             <cmd id="SWCTRL" > 
@@ -511,7 +511,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
             <cmd id="LOOKUP_SCH" > 
                <p id="" editor="sch_indexM" init="GV13" /> 
              </cmd >
@@ -556,7 +556,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="swstate" /> 
             <cmd id="DOF" editor="swstate" /> 
-            <cmd id="QUERY" /> 
+
 
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
@@ -590,7 +590,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="usbstate"  /> 
             <cmd id="DOF" editor="usbstate"  /> 
-            <cmd id="QUERY" /> 
+
 
             <cmd id="USBCTRL" > 
                <p id="" editor="usbctrl" init="1" /> 
@@ -631,7 +631,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="manstate"/> 
             <cmd id="DOF" editor="manstate"/> 
-            <cmd id="QUERY" /> 
+
 
             <cmd id="MANCTRL" > 
                <p id="" editor="manctrl" init="1" /> 
@@ -709,7 +709,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" init="1" /> 
                <p id="L_OFF" editor="set_enable" init="1" />       
@@ -761,7 +761,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" init="1" /> 
                <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
@@ -803,7 +803,7 @@
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" />             
+     
          </accepts>
       </cmds>
    </nodeDef> 
@@ -834,7 +834,7 @@
             <!-- <cmd id="DON" /> 
             <cmd id="DOF" />          -->
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -854,7 +854,7 @@
          <accepts>
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+
             <cmd id="TOGGLE" />  
          </accepts>
       </cmds>
@@ -889,7 +889,7 @@
             <cmd id="DOF" />  -->
 
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
             
          </accepts>
       </cmds>
@@ -922,7 +922,7 @@
             <!--<cmd id="DON" /> 
             <cmd id="DOF" /> -->       
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -963,7 +963,7 @@
             <!--<cmd id="DON" /> 
             <cmd id="DOF" /> -->         
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -995,7 +995,7 @@
             <!-- <cmd id="DON" /> 
             <cmd id="DOF" /> -->
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1053,11 +1053,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <!--<cmd id="DON" /> 
-            <cmd id="DOF" /> 
-            <cmd id="QUERY" /> -->
-
-
             <cmd id="PLAY" > 
                <p id="message" editor="messages" init="GV4" />
                <p id="volume" editor="volume" init="GV0" />
@@ -1101,7 +1096,6 @@
                <p id="" editor="lock" init="GV0" />
             </cmd > 
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1177,7 +1171,7 @@
                <p id="" editor="cmdsetting" init="GV7" /> 
             </cmd >           
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1233,7 +1227,7 @@
                <p id="" editor="sirenctrl" init="1" /> 
             </cmd >
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1256,7 +1250,7 @@
          </sends>
          <accepts>                                          
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
