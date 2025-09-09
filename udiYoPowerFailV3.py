@@ -78,7 +78,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        #self.my_setDriver('ST', 0)
+        #self.my_setDriver('GV30', 0)
         self.adr_list = []
         self.adr_list.append(address)
 
@@ -87,17 +87,17 @@ class udiYoPowerFailSenor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoPowerFailSenor')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoPowerFail  = YoLinkPowerFailSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoPowerFail.initNode()
         self.node_ready = True
-        #self.my_setDriver('ST', 1)
+        #self.my_setDriver('GV30', 1)
 
     
     def stop (self):
         logging.info('Stop udiYoPowerFailSenor')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoPowerFail.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -119,6 +119,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
                 state = self.yoPowerFail.getAlertState()
                 logging.debug('state GV0 : {}'.format(state))
                 self.my_setDriver('GV0', state)
+                self.my_setDriver('ST', state)
                 if state != self.last_state:
                     if state ==1 and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')
@@ -135,7 +136,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
                 muted = self.yoPowerFail.muted()
                 logging.debug('Muted GV4 : {}'.format(muted))
                 self.my_setDriver('GV4', self.bool2ISY(muted))
-                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
                 if self.yoPowerFail.suspended:
                     self.my_setDriver('GV20', 1)
                 else:
@@ -147,7 +148,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
                 #self.my_setDriver('GV3', 99)
                 #self.my_setDriver('GV4', 99)
 
-                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
                 self.my_setDriver('GV20', 2)
 
 
@@ -182,7 +183,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
     commands = {
                 'SETCMD': set_cmd,
                 'UPDATE': update,
-                'QUERY' : update, 
+
                 #'DON'   : noop,
                 #'DOF'   : noop
                 }
