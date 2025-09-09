@@ -33,12 +33,12 @@ class udiYoWaterMeterController(udi_interface.Node):
             'BATLVL' = BatteryLevel
             'GV4-9' = alarms
             'GV10' = Supply type
-            'ST' = Online
+            'ST' = GV0 
             ]
     ''' 
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 0, 'uom': 25},  # Water flowing
+            {'driver': 'ST', 'value': 0, 'uom': 25}, # Water flowing
+            {'driver': 'GV30', 'value': 0, 'uom': 25},  #online
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 69}, #water use total
             {'driver': 'GV10', 'value': 99, 'uom': 25}, #water use daily             
@@ -97,21 +97,21 @@ class udiYoWaterMeterController(udi_interface.Node):
 
     def start(self):
         logging.info('Start - udiYoWaterMeterController')
-        #self.my_setDriver('ST', 1)
+        self.my_setDriver('GV30', 1)
         self.my_setDriver('GV20', 0)
         self.yoWaterCtrl= YoLinkWaterMeter(self.yoAccess, self.devInfo, self.updateStatus)
         
         time.sleep(4)
         self.yoWaterCtrl.initNode()
         time.sleep(2)
-        #self.my_setDriver('ST', 1)
+        #self.my_setDriver('GV30', 1)
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         self.node_ready = True
         self.updateData()
 
     def stop (self):
         logging.info('Stop udiYoWaterMeterController')
-        #self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoWaterCtrl.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -146,7 +146,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             if self.node is not None:
                 self.my_setDriver('TIME', self.yoWaterCtrl.getLastUpdateTime(), 151)
                 if self.yoWaterCtrl.online:
-                    #self.my_setDriver('ST', 1)
+                    self.my_setDriver('GV30', 1)
                     state =  self.yoWaterCtrl.getValveState()
                     if state != None:
                         if state.upper() == 'OPEN':
@@ -250,7 +250,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     #self.my_setDriver('GV9', 99, 25)
                     #self.my_setDriver('GV10', 99, 25)
                     #self.my_setDriver('BATLVL', 99, 25)
-                    self.my_setDriver('ST', 0)
+                    self.my_setDriver('GV30', 0)
                     #self.my_setDriver('BATLVL', 99, 25)
                     self.my_setDriver('GV20', 2)
                 

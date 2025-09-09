@@ -32,8 +32,6 @@ class udiYoSpeakerHub(udi_interface.Node):
             {'driver': 'GV5', 'value': 0, 'uom': 56},        
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV30', 'value': 0, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25}, 
             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
             ]
@@ -81,7 +79,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoSpeakerHub')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoSpeakerHub  = YoLinkSpeakerH(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.volume = 8
@@ -98,7 +96,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.yoSpeakerHub.initNode()
         self.node_ready = True
         self.updateData()
-        #self.my_setDriver('ST', 1)
+        #self.my_setDriver('GV30', 1)
         #time.sleep(3)
 
  
@@ -122,7 +120,7 @@ class udiYoSpeakerHub(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoSpeakerHub')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoSpeakerHub.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -147,14 +145,15 @@ class udiYoSpeakerHub(udi_interface.Node):
                 self.my_setDriver('GV2', self.bool2ISY(self.mute))
                 self.my_setDriver('GV3', self.tone_list.index(self.tone))
                 self.my_setDriver('GV4', self.messageNbr)
+                self.my_setDriver('ST', self.messageNbr)
                 self.my_setDriver('GV5', self.repeat)
-                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
                 if self.yoSpeakerHub.suspended:
                     self.my_setDriver('GV20', 1)
                 else:
                      self.my_setDriver('GV20', 0)
             else:
-                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV30', 0)
                 self.my_setDriver('GV20', 2)
                 #self.pollDelays()
 

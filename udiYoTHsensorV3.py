@@ -108,7 +108,7 @@ class udiYoTHsensor(udi_interface.Node):
 
     def start(self):
         logging.info('Start udiYoTHsensor')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoTHsensor  = YoLinkTHSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(1)
         self.yoTHsensor.initNode()
@@ -116,7 +116,7 @@ class udiYoTHsensor(udi_interface.Node):
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.node_ready = True
         self.alarm_state = self.get_alarms_state()
-        #self.my_setDriver('ST', 1)
+        #self.my_setDriver('GV30', 1)
 
     def initNode(self):
         self.yoTHsensor.refreshSensor()
@@ -124,7 +124,7 @@ class udiYoTHsensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoTHsensor')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoTHsensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -167,21 +167,25 @@ class udiYoTHsensor(udi_interface.Node):
                 logging.debug("yoTHsensor temp: {}".format(self.yoTHsensor.getTempValueC()))
                 if self.temp_unit == 0:
                     self.my_setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC(),1),  4)
+                    self.my_setDriver('ST', round(self.yoTHsensor.getTempValueC(),1),  4)
                     if 'tempLimit' in limits:
                         self.my_setDriver('GV10', limits['tempLimit']['min'],  4)
                         self.my_setDriver('GV11', limits['tempLimit']['max'],  4)
                 elif self.temp_unit == 1:
                     self.my_setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC()*9/5+32,1),  17)
+                    self.my_setDriver('ST', round(self.yoTHsensor.getTempValueC()*9/5+32,1),  17)
                     if 'tempLimit' in limits:
                         self.my_setDriver('GV10', round(limits['tempLimit']['min']*9/5+32,1),  17)
                         self.my_setDriver('GV11', round(limits['tempLimit']['max']*9/5+32,1),  17)                    
                 elif self.temp_unit == 2:
                     self.my_setDriver('CLITEMP', round(self.yoTHsensor.getTempValueC()+273.15,1), 26)
+                    self.my_setDriver('ST', round(self.yoTHsensor.getTempValueC()+273.15,1), 26)
                     if 'tempLimit' in limits:
                         self.my_setDriver('GV10', round(limits['tempLimit']['min']+273.15,1), 26)
                         self.my_setDriver('GV11', round(limits['tempLimit']['max']+273.15,1),  26)    
                 else:
                     self.my_setDriver('CLITEMP', 99, 25)
+                    self.my_setDriver('ST', 99, 25)
 
                 self.my_setDriver('GV1', self.yoTHsensor.bool2Nbr(alarms['lowTemp']))
                 self.my_setDriver('GV2', self.yoTHsensor.bool2Nbr(alarms['highTemp']))
@@ -205,7 +209,7 @@ class udiYoTHsensor(udi_interface.Node):
                 self.my_setDriver('GV9', self.cmd_state)
    
 
-                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
 
                 if self.yoTHsensor.suspended:
                     self.my_setDriver('GV20', 1)
@@ -221,7 +225,7 @@ class udiYoTHsensor(udi_interface.Node):
                 #self.my_setDriver('GV5',99)
                 #self.my_setDriver('BATLVL', 99)
                 #self.my_setDriver('GV7',99)
-                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV30', 0)
                 self.my_setDriver('GV20', 2)
 
 

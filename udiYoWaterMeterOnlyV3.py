@@ -97,7 +97,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
 
     def start(self):
         logging.info('Start - udiYoWaterMeterController')
-        #self.my_setDriver('ST', 1)
+        self.my_setDriver('GV30', 1)
         self.my_setDriver('GV20', 0)
         self.yoWaterCtrl= YoLinkWaterMeter(self.yoAccess, self.devInfo, self.updateStatus)
         
@@ -111,7 +111,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoWaterMeterController')
-        #self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoWaterCtrl.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -146,7 +146,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
             if self.node is not None:
                 self.my_setDriver('TIME', self.yoWaterCtrl.getLastUpdateTime(), 151)
                 if self.yoWaterCtrl.online:
-                    #self.my_setDriver('ST', 1)
+                    self.my_setDriver('GV30', 1)
                     '''
                     state =  self.yoWaterCtrl.getValveState()
                     if state != None:
