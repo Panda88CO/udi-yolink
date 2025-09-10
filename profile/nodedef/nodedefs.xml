@@ -56,7 +56,7 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
@@ -129,7 +129,7 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
@@ -202,7 +202,7 @@
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-            <cmd id="QUERY" /> 
+
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="1" /> 
             </cmd >
@@ -258,7 +258,8 @@
          <st id="GV18" editor="stMin" />
          <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="dimlvl" />'
+         <st id="GV30"  editor="status" />'
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                    
       </sts>
@@ -287,7 +288,7 @@
             <cmd id="FDDOWN"  /> 
             <cmd id="FDSTOP"  />
 
-            <cmd id="QUERY" /> 
+
             <cmd id="DIMLVL" > 
                <p id="" editor="dimlvl" init="GV3" /> 
             </cmd >
@@ -368,7 +369,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="swstate" /> 
             <cmd id="DOF" editor="swstate" /> 
-            <cmd id="QUERY" /> 
+
 
 
             <cmd id="SWCTRL" > 
@@ -445,7 +446,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+
 
 
             <cmd id="SWCTRL" > 
@@ -510,7 +511,7 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
             <cmd id="LOOKUP_SCH" > 
                <p id="" editor="sch_indexM" init="GV13" /> 
              </cmd >
@@ -555,7 +556,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="swstate" /> 
             <cmd id="DOF" editor="swstate" /> 
-            <cmd id="QUERY" /> 
+
 
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
@@ -589,7 +590,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="usbstate"  /> 
             <cmd id="DOF" editor="usbstate"  /> 
-            <cmd id="QUERY" /> 
+
 
             <cmd id="USBCTRL" > 
                <p id="" editor="usbctrl" init="1" /> 
@@ -630,7 +631,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="manstate"/> 
             <cmd id="DOF" editor="manstate"/> 
-            <cmd id="QUERY" /> 
+
 
             <cmd id="MANCTRL" > 
                <p id="" editor="manctrl" init="1" /> 
@@ -708,7 +709,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" init="1" /> 
                <p id="L_OFF" editor="set_enable" init="1" />       
@@ -760,7 +761,7 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" init="1" /> 
                <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
@@ -802,7 +803,7 @@
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" />             
+     
          </accepts>
       </cmds>
    </nodeDef> 
@@ -814,9 +815,10 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
-         <st id="TIME" editor="unixtime" />                              
+         <st id="TIME" editor="unixtime" />         
+         <st id="ST"  editor="doorstate" />                     
       </sts>
       <cmds>
          <sends>
@@ -831,7 +833,7 @@
             <!-- <cmd id="DON" /> 
             <cmd id="DOF" />          -->
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -842,7 +844,8 @@
       <sts>
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="GV20" editor="suspendstate" />    
+         <st id="GV30"  editor="status" />     
       </sts>
       <cmds>
          <sends>
@@ -850,7 +853,7 @@
          <accepts>
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-            <cmd id="QUERY" /> 
+
             <cmd id="TOGGLE" />  
          </accepts>
       </cmds>
@@ -885,7 +888,7 @@
             <cmd id="DOF" />  -->
 
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
             
          </accepts>
       </cmds>
@@ -918,7 +921,7 @@
             <!--<cmd id="DON" /> 
             <cmd id="DOF" /> -->       
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -938,9 +941,11 @@
          <st id="GV7" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="unixtime" />                           
+         <st id="TIME" editor="unixtime" />      
+         <st id="ST"  editor="deviceAlert" />                     
       </sts>
       <cmds>
          <sends>
@@ -957,7 +962,7 @@
             <!--<cmd id="DON" /> 
             <cmd id="DOF" /> -->         
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
@@ -989,12 +994,45 @@
             <!-- <cmd id="DON" /> 
             <cmd id="DOF" /> -->
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yohubbat" nls="nlshubbat">
+      <editors />
+      <sts>
+         <st id="ST"  editor="poweralert" /> 
+         <st id="GV0" editor="powerstate" />
+         <st id="GV20" editor="suspendstate" />  
+         <st id="GV30"  editor="status" />
+         <st id="TIME" editor="unixtime" />         
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
+   <nodeDef id="yohub" nls="nlshub">
+      <editors />
+      <sts>
+         <st id="ST"  editor="status" /> 
+         <st id="GV20" editor="suspendstate" />  
+         <st id="GV30"  editor="status" />
+         <st id="TIME" editor="unixtime" />         
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
    <nodeDef id="yospeakerh" nls="nlsspeakerh">
       <editors />
       <sts>
@@ -1014,11 +1052,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <!--<cmd id="DON" /> 
-            <cmd id="DOF" /> 
-            <cmd id="QUERY" /> -->
-
-
             <cmd id="PLAY" > 
                <p id="message" editor="messages" init="GV4" />
                <p id="volume" editor="volume" init="GV0" />
@@ -1062,7 +1095,6 @@
                <p id="" editor="lock" init="GV0" />
             </cmd > 
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1072,7 +1104,7 @@
       <sts>
          <st id="GV0" editor="nbrcodes" />
          <st id="GV1" editor="batlevel" />
-         <st id="GV2" editor="cmdstatus" />
+         <st id="GV2" editor="ircmdstatus" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
@@ -1081,24 +1113,38 @@
       <cmds>
          <sends>
             <!--<cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    -->
+            <cmd id="DOF" editor="lock"  />    
             <cmd id="DON"   />               
-            <cmd id="DOF"   />    
-         
+            <cmd id="DOF"   />    -->
          </sends>
 
          <accepts>
             <!-- <cmd id="DON" />
             <cmd id="DOF" />    -->
-            <cmd id="TXCODE" >   
-               <p id="" editor="txcode" />
-            </cmd > 
+            <cmd id="LEARNCODE" />   
             <cmd id="UPDATE" /> 
-            <cmd id="QUERY" /> 
+
          </accepts>
       </cmds>
    </nodeDef> 
-   
+
+   <nodeDef id="yoircode" nls="nlsircode">
+      <editors />
+      <sts>
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="ircmdstatus" />
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="unixtime" />                     
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"   />                 
+         </sends>
+         <accepts>
+            <cmd id="TXCODE" />   
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
    <nodeDef id="yopwralarm" nls="nlspwralarm">
       <editors />
@@ -1203,7 +1249,6 @@
          </sends>
          <accepts>                                          
             <cmd id="UPDATE" /> 
-  
          </accepts>
       </cmds>
    </nodeDef> 

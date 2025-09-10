@@ -138,12 +138,14 @@ class udiRemoteKey(udi_interface.Node):
             if self.short_press_state  != 'UNKNOWN':
                 self.node.reportCmd(self.short_press_state )
             self.node.setDriver('GV0', isy_val)
+
             logging.debug('send short press command cmd:{} driver{}'.format(self.short_press_state, isy_val))
         else:
             self.long_press_state, isy_val = self. get_new_state(self.cmd_struct['long_press'], self.long_press_state)
             if self.long_press_state  != 'UNKNOWN':
                 self.node.reportCmd(self.long_press_state )
             self.node.setDriver('GV0', isy_val)
+   
             logging.debug('send long press command cmd:{} driver{}'.format(self.long_press_state, isy_val))
             
 
@@ -247,6 +249,7 @@ class udiYoSmartRemoter(udi_interface.Node):
             {'driver': 'GV3', 'value': 99, 'uom': 25},
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},
             ]
 
@@ -307,13 +310,13 @@ class udiYoSmartRemoter(udi_interface.Node):
     def start(self):
 
         logging.info('start - udiYoSmartRemoter')
-        self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('GV30', 0, True, True)
         self.yoSmartRemote  = YoLinkSmartRemote(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.yoSmartRemote.initNode()
         time.sleep(2)
-        #self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('GV30', 1, True, True)
         for key in range(0, self.nbr_keys):
             k_address =  self.address[4:14]+'key' + str(key)
             k_address = self.poly.getValidAddress(str(k_address))
@@ -329,7 +332,7 @@ class udiYoSmartRemoter(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoSmartRemoter')
-        self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('GV30', 0, True, True)
         self.yoSmartRemote.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -374,6 +377,7 @@ class udiYoSmartRemoter(udi_interface.Node):
                             self.yoSmartRemote.clearEventData()
                             logging.debug('clearEventData')
                         self.node.setDriver('GV0', remote_key + press)
+                        self.node.setDriver('ST', remote_key + press)
                         self.node.setDriver('GV1', remote_key)
                         self.node.setDriver('GV2', press)                        
                     self.node.setDriver('GV3', self.yoSmartRemote.getBattery())
@@ -386,14 +390,14 @@ class udiYoSmartRemoter(udi_interface.Node):
                         self.node.setDriver('CLITEMP', round(self.yoSmartRemote.getDevTemperature()+273.15,1), True, True, 26)
                     else:
                         self.node.setDriver('CLITEMP', 99, True, True, 25)
-                    self.node.setDriver('ST', 1)
+                    self.node.setDriver('GV30', 1)
                     if self.yoSmartRemote.suspended:
                         self.node.setDriver('GV20', 1)
                     else:
                         self.node.setDriver('GV20', 0)
                 else:
 
-                    self.node.setDriver('ST', 0, True, True)
+                    self.node.setDriver('GV30', 0, True, True)
                     self.node.setDriver('GV20', 2)
         except Exception as e:
             logging.error('Smart Remote  updateData exeption: {}'.format(e))

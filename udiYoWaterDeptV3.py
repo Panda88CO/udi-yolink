@@ -48,7 +48,8 @@ class udiYoWaterDept(udi_interface.Node):
             {'driver': 'GV4', 'value': 0, 'uom': 25},
             {'driver': 'GV5', 'value': 0, 'uom': 25},
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},            
+            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},            
             {'driver': 'GV20', 'value': 0, 'uom': 25},            
             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
 
@@ -92,14 +93,14 @@ class udiYoWaterDept(udi_interface.Node):
 
     def start(self):
         logging.info('Start udiYoWaterDept')
-        self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('GV30', 0, True, True)
         self.yoWaterDept  = YoLinkWaterDept(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoWaterDept.initNode()
         time.sleep(2)
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.node_ready = True
-        #self.node.setDriver('ST', 1, True, True)
+        #self.node.setDriver('GV30', 1, True, True)
 
     def initNode(self):
         self.yoWaterDept.refreshSensor()
@@ -107,7 +108,7 @@ class udiYoWaterDept(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoWaterDept')
-        self.node.setDriver('ST', 0, True, True)
+        self.node.setDriver('GV30', 0, True, True)
         self.yoWaterDept.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -130,6 +131,7 @@ class udiYoWaterDept(udi_interface.Node):
                 if self.yoWaterDept.online:
                     logging.debug("yoWaterDept : UpdateData")
                     self.my_setDriver('GV0', self.yoWaterDept.getWaterDepth())
+                    self.my_setDriver('ST', self.yoWaterDept.getWaterDepth())
                     settings = self.yoWaterDept.getAlarmSettings()
                     logging.debug(f'settings {settings}')
                     if settings != {}:
@@ -146,13 +148,13 @@ class udiYoWaterDept(udi_interface.Node):
                     logging.debug('Last  tamp {}'.format(int(self.yoWaterDept.lastUpdate()/60)))
                     logging.debug('date tamp {}'.format(int(self.yoWaterDept.getDataTimestamp()/60)))
                     #self.my_setDriver('TIME', int(self.yoWaterDept.getDataTimestamp()/60), 44)
-                    self.my_setDriver('ST', 1)
+                    self.my_setDriver('GV30', 1)
                     if self.yoWaterDept.suspended:
                         self.my_setDriver('GV20', 1)
                     else:
                         self.my_setDriver('GV20', 0)                    
                 else:
-                    self.my_setDriver('ST', 0)
+                    self.my_setDriver('GV30', 0)
                     self.my_setDriver('GV20', 0)  
         except Exception as e:
                     logging.error(f'Exception updateData {e}')

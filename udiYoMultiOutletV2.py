@@ -34,6 +34,7 @@ class udiYoSubOutlet(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
             {'driver': 'GV4', 'value': 0, 'uom': 25},           
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             ]
 
     
@@ -63,8 +64,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.poly.ready()
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(self.address)
-        
+        self.node = polyglot.getNode(self.address)        
         time.sleep(1)
 
         
@@ -72,31 +72,33 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-        while 5 != len(self.drivers):
-            logging.debug('Waiting for node {} to get created'.format(self.name))
-            time.sleep(1)
+        #while 6 != len(self.drivers):
+        #    logging.debug('Waiting for node {} to get created'.format(self.name))
+        #time.sleep(1)
         while self.node == None:
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
 
-        self.my_setDriver('ST', 1)
+        self.my_setDriver('GV30', 1)
         self.my_setDriver('GV4', self.port)
         try:
             state = self.yolink.getMultiOutPortState(self.port)
-            #self.my_setDriver('ST', 1) 
+            #self.my_setDriver('GV30', 1) 
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
                 self.my_setDriver('GV0', 1) 
+                self.my_setDriver('ST', 1) 
                 self.portState = 1
             else:
                 self.my_setDriver('GV0', 0) 
+                self.my_setDriver('ST', 0) 
                 self.portState = 0
         except Exception as e:
             logging.debug('Exception: {}'.format(e))
-            self.my_setDriver('ST', 0) 
+            self.my_setDriver('GV30', 0) 
 
     def stop (self):
         logging.debug('udiYoSubOutlet - stop')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
        
     def checkOnline(self):
         pass
@@ -109,19 +111,22 @@ class udiYoSubOutlet(udi_interface.Node):
         if outletstate == 1:
             self.portState = 1
             self.my_setDriver('GV0', 1)
+            self.my_setDriver('ST', 1) 
             #if self.last_state != outletstate:
             #    self.node.reportCmd('DON')
-            self.my_setDriver('ST', 1) 
+            self.my_setDriver('GV30', 1) 
         elif outletstate == 0:
             self.portState = 0
             self.my_setDriver('GV0', 0)
+            self.my_setDriver('ST', 0) 
             #if self.last_state != outletstate:
             #    self.node.reportCmd('DOF')
-            self.my_setDriver('ST', 1)        
+            self.my_setDriver('GV30', 1)        
         else:
             self.portState = 99
             self.my_setDriver('GV0', 99)
-            #self.my_setDriver('ST', 0) 
+            self.my_setDriver('ST', 99) 
+            #self.my_setDriver('GV30', 0) 
         self.last_state = outletstate
         self.my_setDriver('GV1', onDelay)
         self.my_setDriver('GV2', offDelay)
@@ -155,6 +160,7 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.info('udiYoSubOutlet set_port_on')
         self.yolink.setMultiOutState(self.port, 'ON')
         self.my_setDriver('GV0',1 )
+        self.my_setDriver('ST', 1) 
         #self.node.reportCmd('DON')
         self.portState = 1
 
@@ -162,6 +168,7 @@ class udiYoSubOutlet(udi_interface.Node):
         logging.info('udiYoSubOutlet set_port_off')
         self.yolink.setMultiOutState(self.port, 'OFF')
         self.my_setDriver('GV0',0 )
+        self.my_setDriver('ST', 0) 
         #self.node.reportCmd('DOF')
         self.portState = 0
 
@@ -172,11 +179,14 @@ class udiYoSubOutlet(udi_interface.Node):
         if ctrl == 0:
             self.yolink.setMultiOutState(self.port, 'OFF')
             self.my_setDriver('GV0',0 )
+            self.my_setDriver('ST', 0) 
             self.node.reportCmd('DOF')
+
             self.portState = 0        
         elif ctrl == 1:
             self.yolink.setMultiOutState(self.port, 'ON')
             self.my_setDriver('GV0',1 )
+            self.my_setDriver('ST', 1) 
             self.node.reportCmd('DON')
             self.portState = 1
 
@@ -184,23 +194,26 @@ class udiYoSubOutlet(udi_interface.Node):
             if self.portState == 1 :
                 self.yolink.setMultiOutState(self.port, 'OFF')
                 self.my_setDriver('GV0',0 )
+                self.my_setDriver('ST', 0) 
                 self.node.reportCmd('DOF')
                 self.portState = 0
             elif self.portState == 0:
                 self.yolink.setMultiOutState(self.port, 'ON')
                 self.my_setDriver('GV0',1 )
+                self.my_setDriver('ST', 1) 
                 self.node.reportCmd('DON')
                 self.portState = 1
         
         #elif ctrl == 3: #Fast OFF
         #    self.yolink.setMultiOutState(self.port, 'OFF')
         #    self.my_setDriver('GV0',0 )
+        #    self.my_setDriver('ST', ) 
         #    self.node.reportCmd('DOF')
         #    self.portState = 0
         #                
         #elif ctrl == 4: # Fast ON
         #    self.yolink.setMultiOutState(self.port, 'ON')
-        #    self.my_setDriver('GV0',1 )
+        #    self.my_setDriver('ST',1 )
         #    self.node.reportCmd('DFON')
         #    self.portState = 1
         
@@ -251,7 +264,6 @@ class udiYoSubOutlet(udi_interface.Node):
                 #'OFFDELAY' : prepOffDelay,
                 'DELAY_CTRL'    : program_delays, 
                 'UPDATE'   : update,
-                'QUERY'    : update,
                 'DON'      : set_port_on,
                 'DOF'      : set_port_off,
                 }
@@ -268,6 +280,7 @@ class udiYoSubUSB(udi_interface.Node):
     drivers = [
             {'driver': 'GV0', 'value': 99, 'uom': 25},    
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             ]
 
     def  __init__(self, polyglot, primary, address, name, usbPort, yolink):
@@ -302,29 +315,33 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB {} - start'.format(self.name))
-        while 2 != len(self.drivers):
+        #while 3 != len(self.drivers):
+        #    logging.debug('Waiting for node {} to get created'.format(self.name))
+        #    time.sleep(1)
+        while self.node == None:
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
 
-
-        #self.my_setDriver('ST', 1)
+        #self.my_setDriver('GV30', 1)
         try:
             state = self.yolink.getMultiOutUsbState(self.usbPort)
             if state.upper() == 'ON' or  state.upper() == 'OPEN':
                 self.my_setDriver('GV0', 1) 
+                self.my_setDriver('ST', 1) 
                 self.portState = 1
             else:
                 self.my_setDriver('GV0', 0) 
+                self.my_setDriver('ST', 0) 
                 self.portState = 0
 
     
         except Exception as e:
             logging.debug('Exception: {}'.format(e))
-            #self.my_setDriver('ST', 0)
+            #self.my_setDriver('GV30', 0)
 
     def stop (self):
         logging.info('udiYoSubUSB - stop')
-        self.my_setDriver('ST', 0) 
+        self.my_setDriver('GV30', 0) 
     
     def checkOnline(self):
         pass
@@ -337,14 +354,9 @@ class udiYoSubUSB(udi_interface.Node):
 
     def updateUsbNode(self, gv0):
         logging.info('udiYoSubUSB - updateUsbNode: {}'.format(gv0))
+        self.my_setDriver('GV30', 1)
         self.my_setDriver('GV0', gv0)
-        self.my_setDriver('ST', 1)
-        #if self.last_state != gv0:
-        #    if 1 == gv0:
-        #        self.node.reportCmd('DON')
-        #    elif 0 == gv0:
-        #        self.node.reportCmd('DOF')
-        self.my_setDriver('GV0', gv0)
+        self.my_setDriver('ST', gv0)
         self.last_state = gv0
         self.portState = gv0
         
@@ -356,22 +368,26 @@ class udiYoSubUSB(udi_interface.Node):
         if ctrl == 1:
             self.yolink.setUsbState(self.usbPort, 'ON')
             self.my_setDriver('GV0', 1)
+            self.my_setDriver('ST', 1) 
             self.node.reportCmd('DON')
             self.portState = 1
         elif ctrl == 0:
             self.yolink.setUsbState(self.usbPort, 'OFF')
             self.my_setDriver('GV0', 0)
+            self.my_setDriver('ST', 0) 
             self.node.reportCmd('DOF')  
             self.portState = 0    
         elif ctrl == 2:
             if self.portState == 1:
                 self.yolink.setUsbState(self.usbPort, 'OFF')
                 self.my_setDriver('GV0', 0)
+                self.my_setDriver('ST', 0) 
                 self.node.reportCmd('DOF')  
                 self.portState = 0
             elif self.portState == 0:
                 self.yolink.setUsbState(self.usbPort, 'ON')
                 self.my_setDriver('GV0', 1)
+                self.my_setDriver('ST', 1)
                 self.node.reportCmd('DON')
                 self.portState = 1
 
@@ -379,7 +395,8 @@ class udiYoSubUSB(udi_interface.Node):
     def usb_on(self, command = None ):
         logging.info('udiYoSubUSB - usb_on')
         self.yolink.setUsbState(self.usbPort, 'ON')
-        self.my_setDriver('GV0', 1)
+        self.my_setDriver('GV0', 1) 
+        self.my_setDriver('ST', 1)
         #self.node.reportCmd('DON')
         self.portState = 1
 
@@ -387,6 +404,7 @@ class udiYoSubUSB(udi_interface.Node):
         logging.info('udiYoSubUSB - usb_off')
         self.yolink.setUsbState(self.usbPort, 'OFF')
         self.my_setDriver('GV0', 0)
+        self.my_setDriver('ST', 0)
         #self.node.reportCmd('DOF')  
         self.portState = 0    
 
@@ -397,7 +415,6 @@ class udiYoSubUSB(udi_interface.Node):
     commands = {
                  'USBCTRL': usbControl, 
                  'UPDATE' : update,
-                 'QUERY'  : update, 
                  'DON'    : usb_on,
                  'DOF'    : usb_off,
                 }
@@ -424,6 +441,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             {'driver': 'GV22', 'value': 99, 'uom': 25}, #start Min              
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 0, 'uom': 25},
              {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},            
             ]
@@ -479,12 +497,12 @@ class udiYoMultiOutlet(udi_interface.Node):
         #self.node_fully_config = False
         #self.usbExists = True
         logging.debug('start - udiYoMultiOutlet: {}'.format(self.devInfo['name']))
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoMultiOutlet  = YoLinkMultiOut(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoMultiOutlet.nbrOutlets = self.nbrOutlets
         self.yoMultiOutlet.nbrUsb = self.nbrUsb
         
-        #self.my_setDriver('ST', 1)
+        #self.my_setDriver('GV30', 1)
         #time.sleep(1)
         #self.yoMultiOutlet.initNode()
         #time.sleep(3)
@@ -492,7 +510,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         #    logging.warning('Device {} not on-line -  Cannot determine number of outlets and USBs'.format(self.devInfo['name']))
         #    self.ports = 0
         #    self.nbrOutlets = 0
-        #    self.my_setDriver('ST', 0)
+        #    self.my_setDriver('GV30', 0)
         #    #self.node_fully_config = False
 
         #logging.debug('before start {} {}'.format(self.yoMultiOutlet.nbrOutlets, self.node_fully_config ))
@@ -515,7 +533,7 @@ class udiYoMultiOutlet(udi_interface.Node):
             self.subUsbAdr = {}
             self.outletName = 'outlet'
             self.usbName = 'usb'
-            #self.my_setDriver('ST', 1)
+            #self.my_setDriver('GV30', 1)
             logging.debug('Checking/creating  Outlets  {}'.format(self.nbrOutlets))
             for port in range(0,self.nbrOutlets):
                 try:
@@ -565,7 +583,7 @@ class udiYoMultiOutlet(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoMultiOutlet ')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoMultiOutlet.shut_down()
 
     def checkOnline(self):
@@ -582,7 +600,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         outletStates =  self.yoMultiOutlet.getMultiOutStates()
 
         if self.node_fully_config:
-            self.my_setDriver('ST',1)
+            self.my_setDriver('GV30',1)
             self.my_setDriver('TIME', self.yoMultiOutlet.getLastUpdateTime(), 151)
 
             for outlet in range(0,self.nbrOutlets):
@@ -624,15 +642,15 @@ class udiYoMultiOutlet(udi_interface.Node):
                 self.subUsb[usb].updateUsbNode(state)
         else:
 
-            self.my_setDriver('ST',0)
+            self.my_setDriver('GV30',0)
             self.my_setDriver('GV20', 2)
 
         if not self.yoMultiOutlet.online:
             logging.error( '{} - not on line'.format(self.nodeName))
-            #self.my_setDriver('ST', 0)
+            #self.my_setDriver('GV30', 0)
             self.my_setDriver('GV20', 2)
         else:
-            self.my_setDriver('ST', 1)
+            self.my_setDriver('GV30', 1)
             if self.yoMultiOutlet.suspended:
                 self.my_setDriver('GV20', 1)
             else:
@@ -692,7 +710,6 @@ class udiYoMultiOutlet(udi_interface.Node):
 
     commands = {
                 'UPDATE'        : update,
-                'QUERY'         : update,
                 'LOOKUP_SCH'    : lookup_schedule,
                 'DEFINE_SCH'    : define_schedule,
                 'CTRL_SCH'      : control_schedule,

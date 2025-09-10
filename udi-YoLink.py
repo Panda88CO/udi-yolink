@@ -27,7 +27,7 @@ from udiYoMultiOutletV2 import udiYoMultiOutlet
 from udiYoManipulatorV2 import udiYoManipulator
 from udiYoSpeakerHubV2 import udiYoSpeakerHub
 from udiYoLockV2 import udiYoLock
-from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
+from udiYoInfraredRemoterV3 import udiYoInfraredRemoter
 from udiYoDimmerV2 import udiYoDimmer
 from udiYoVibrationSensorV3 import udiYoVibrationSensor
 from udiYoSmartRemoterV3 import udiYoSmartRemoter
@@ -35,7 +35,7 @@ from udiYoPowerFailV3 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
 from udiYoWaterMeterControllerV3 import udiYoWaterMeterController
 from udiYoWaterMeterOnlyV3 import udiYoWaterMeterOnly
-#from udiYoHubV2 import udiYoHub
+from udiYoHubV2 import udiYoHub, udiYoBatteryHub
 import udiProfileHandler
 
 try:
@@ -50,7 +50,7 @@ except ImportError:
 
 
 
-version = '1.4.26'
+version = '1.5.3'
 
 
 
@@ -206,9 +206,17 @@ class YoLinkSetup (udi_interface.Node):
                 self.Parameters[address] =  dev['name']
 
                 logging.info('adding/checking device : {} - {}'.format(dev['name'], dev['type']))
-                if dev['type'] == 'Hub':     
-                    logging.info('Hub not added - ISY cannot do anything useful with it')    
-
+                if dev['type'] == 'Hub':   
+                    logging.debug(f'HUB date {dev}')
+                    if  model in ['YS1613', 'YS1605', 'YS1606']: #Need to add local hub????
+                        temp = udiYoBatteryHub(self.poly, address, address, name, self.yoAccess, dev)
+                    else:
+                        temp = udiYoHub(self.poly, address, address, name, self.yoAccess, dev)
+                    while not temp.node_ready:
+                        logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
+                        time.sleep(4)
+                    for adr in temp.adr_list:
+                        self.assigned_addresses.append(adr)
                 elif dev['type'] in ['SpeakerHub']:
 
                     logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        

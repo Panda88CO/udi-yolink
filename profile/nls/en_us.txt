@@ -2,9 +2,10 @@
 ND-setup-NAME=YoLink Setup
 ND-setup-ICON=GenericCtrl
 ST-nlssetup-GV1-NAME=Status
-ST-nlssetup-ST-NAME=Nodeserver 
+#ST-nlssetup-ST-NAME=Nodeserver 
 ST-nlssetup-TIME-NAME=LastPoll Time
 ST-nlssetup-GV20-NAME=Connection State
+ST-nlssetup-GV30-NAME=Online State
 CMD-nlssetup-DON-NAME=Heart Beat On
 CMD-nlssetup-DOF-NAME=Heart Beat Off
 CMD-nlssetup-EPOCHTIME-NAME=Update Time
@@ -276,7 +277,7 @@ CMD-nlsgarage-TOGGLE-NAME=Toggle Door
 
 ND-yodoorsens-NAME=YoLink Door Sensor
 ND-yodoorsens-ICON=Input
-ST-nlsdoorsens-NAME=Nodeserver Status
+ST-nlsdoorsens-ST-NAME=Door State
 ST-nlsdoorsens-GV0-NAME=Door State
 ST-nlsdoorsens-GV1-NAME=Sensor Battery Level
 ST-nlsdoorsens-GV2-NAME=Command Setting
@@ -336,9 +337,24 @@ CMD-nlsvibrasens-SETCMD-NAME=Select Command Action
 CMD-nlsvibrasens-DON-NAME=Vibration Detected
 CMD-nlsvibrasens-DOF-NAME=Normal
 
+ND-yohub-NAME=YoLink Hub
+ND-yohub-ICON=Output
+ST-nlshub-ST=Status
+ST-nlshub-GV20-NAME=Connection State
+ST-nlshub-GV30-NAME=Online
+CMD-nlshub-UPDATE-NAME=Update
+
+ND-yohubbat-NAME=YoLink Hub w Battery
+ND-yohubbat-ICON=Output
+ST-nlshubbat-ST-NAME=Supply Status
+ST-nlshubbat-GV0-NAME=Battery Status
+ST-nlshubbat-GV20-NAME=Connection State
+ST-nlshubbat-GV30-NAME=Online
+CMD-nlshubbat-UPDATE-NAME=Update
+
 ND-yospeakerh-NAME=YoLink Speaker Hub
 ND-yospeakerh-ICON=Output
-ST-nlsspeakerh-NAME=Nodeserver Status
+ST-nlsspeakerh-ST-NAME=Nodeserver Status
 ST-nlsspeakerh-GV0-NAME=Speaker volume
 ST-nlsspeakerh-GV1-NAME=Command Beep
 ST-nlsspeakerh-GV2-NAME=Mute
@@ -361,7 +377,7 @@ CMD-nlsspeakerh-UPDATE-NAME=Update Data
 
 ND-yolock-NAME=YoLink Smart Lock
 ND-yolock-ICON=DoorLock
-ST-nlslock-NAME=Nodeserver Status
+ST-nlslock-ST-NAME=Nodeserver Status
 ST-nlslock-GV0-NAME=Lock State
 ST-nlslock-GV1-NAME=Battery Level
 ST-nlslock-GV2-NAME=Doorbell Active
@@ -377,7 +393,8 @@ CMD-nlslock-LOCKCTRL-NAME=Set Lock
 
 ND-yodimmer-NAME=YoLink Dimmer
 ND-yodimmer-ICON=Switch
-ST-nlsdimmer-NAME=Nodeserver Status
+ST-nlsdimmer-ST-NAME=Dim Setting
+ST-nlsdimmer-GV0-NAME=Switch State
 ST-nlsdimmer-GV0-NAME=Switch State
 ST-nlsdimmer-GV1-NAME=On Delay
 ST-nlsdimmer-GV2-NAME=Off Delay
@@ -394,6 +411,7 @@ ST-nlsdimmer-GV18-NAME=Off Minute
 ST-nlsdimmer-GV22-NAME=Off Sec
 ST-nlsdimmer-GV19-NAME=Active Days
 ST-nlsdimmer-GV20-NAME=Connection State
+ST-nlsdimmer-GV30-NAME=Online State
 ST-nlsdimmer-TIME-NAME=Last device update
 ST-nlsdimmer-CLITEMP-NAME=Sensor Temperature
 ST-nlsdimmer-CLIHUM-NAME=Current Rel Humidity (%)
@@ -421,12 +439,23 @@ ST-nlsirremote-BATLVL-NAME=Battery Level
 ST-nlsirremote-TIME-NAME=Last device update
 ST-nlsirremote-CLITEMP-NAME=Sensor Temperature
 ST-nlsirremote-CLIHUM-NAME=Current Rel Humidity (%)
-CMD-nlsirremote-TXCODE-NAME=Send Code
+CMD-nlsirremote-LEARNCODE-NAME=Learn New Code
+CMD-nlsirremote-UPDATE-NAME=Update
+
+ND-yoircode-NAME=YoLink Ir Code
+ND-yoircode-ICON=Output
+ST-nlsircode-NAME=Send IR code
+ST-nlsircode-ST=TX success
+ST-nlsircode-GV20-NAME=Connection State
+ST-nlsircode-TIME-NAME=Last device update
+CMD-nlsircode-TXCODE-NAME=Send IR Code
+
 
 
 ND-yoCOSmokesens-NAME=YoLink COSmokeSensor
 ND-yoCOSmokesens-ICON=Input
-ST-nlssmokesens-NAME=Nodeserver Status
+#ST-nlssmokesens-NAME=Nodeserver Status
+ST-nlssmokesens-ST-NAME=Alarm
 ST-nlssmokesens-ALARM-NAME=Alert Detected
 ST-nlssmokesens-GV0-NAME=Smoke Detection
 ST-nlssmokesens-GV1-NAME=CO Detection
@@ -437,6 +466,7 @@ ST-nlssmokesens-GV4-NAME=Sensor Battery Level
 ST-nlssmokesens-GV7-NAME=Command Setting
 ST-nlssmokesens-BATLVL-NAME=Battery Level
 ST-nlssmokesens-GV20-NAME=Connection State
+ST-nlssmokesens-GV30-NAME=Online State
 ST-nlssmokesens-TIME-NAME=Last device update
 ST-nlssmokesens-CLITEMP-NAME=Sensor Temperature
 ST-nlssmokesens-CLIHUM-NAME=Current Rel Humidity (%)
@@ -448,7 +478,7 @@ CMD-nlssmokesens-DOF-NAME=Normal
 
 ND-yopwralarm-NAME=YoLink Power Failure Alarm
 ND-yopwralarm-ICON=Input
-ST-nlspwralarm-NAME=Nodeserver Status
+ST-nlspwralarm-ST-NAME=Nodeserver Status
 ST-nlspwralarm-GV0-NAME=Unit State
 ST-nlspwralarm-GV1-NAME=Battery Level
 ST-nlspwralarm-GV2-NAME=Alert Pending
@@ -465,11 +495,10 @@ CMD-nlspwralarm-SETCMD-NAME=Select Command Action
 
 ND-yosiren-NAME=YoLink Siren
 ND-yosiren-ICON=Output
-ST-nlssiren-NAME=Nodeserver Status
+ST-nlssiren-ST-NAME=Nodeserver Status
 ST-nlssiren-GV0-NAME=Siren State
 ST-nlssiren-GV1-NAME=Siren Duration
 ST-nlssiren-GV2-NAME=Supply State
-ST-nlssiren-ST-NAME=Nodeserver Status
 ST-nlssiren-ST-NAME=Nodeserver Status
 ST-nlssiren-GV20-NAME=Connection State
 ST-nlssiren-BATLVL-NAME=Battery Level
@@ -480,7 +509,7 @@ CMD-nlssiren-SIRENCTRL-NAME=Set Control
 
 ND-yosmremote-NAME=YoLink Smart Remoter
 ND-yosmremote-ICON=Input
-ST-nlssmremote-NAME=Nodeserver Status
+ST-nlssmremote-ST-NAME=Nodeserver Status
 ST-nlssmremote-GV0-NAME=ComboPress
 ST-nlssmremote-GV1-NAME=Key presstype
 ST-nlssmremote-GV2-NAME=Press type
@@ -495,7 +524,7 @@ CMD-nlssmremote-NAME=Update Status
 
 ND-smremotekey-NAME=YoLink Smart Remoter
 ND-smremotekey-ICON=Input
-ST-nlssmkey-NAME=Nodeserver Status
+ST-nlssmkey-ST-NAME=Nodeserver Status
 ST-nlssmkey-GV0-NAME=Last Command
 ST-nlssmkey-GV1-NAME=Short Press Type
 ST-nlssmkey-GV2-NAME=Long Press Type
@@ -517,7 +546,7 @@ CMD-nlssmkey-KEY4LDEF-NAME=Key4 Long Scene Function
 
 ND-yowatermeter-NAME=YoLink Water Meter Controller
 ND-yowatermeter-ICON=PulseCounter
-ST-nlswatermeter-NAME=Nodeserver Status
+ST-nlswatermeter-ST-NAME=Nodeserver Status
 ST-nlswatermeter-GV0-NAME=Valve State
 ST-nlswatermeter-GV1-NAME=Water Meter Total
 ST-nlswatermeter-GV10-NAME=Water Meter Day Use
@@ -666,6 +695,12 @@ sirenctrl-1=Alert
 pfamute-0=Not muted
 pfamute-1=Muted
 pfamute-99=Unknown
+powerstate-0=TBD-Unknown?
+powerstate-1=Supplying?
+powerstate-2=Charging  
+powerstate-3=Full
+powerstate-99=Unknow 
+
 
 poweralert-0=Normal
 poweralert-1=Alert
@@ -733,8 +768,12 @@ presstype-0=Normal
 presstype-8=Long press
 presstype-99=Unknown
 
+ircmdstatus-0=Ready
+ircmdstatus-1=Success
+ircmdstatus-2=Fail
+ircmdstatus-99=Unknown
 
-cmdstatus-0=Code Not learn code
+cmdstatus-0=Fail
 cmdstatus-1=Success
 cmdstatus-2=TX Key Wrong
 cmdstatus-99=Unknown

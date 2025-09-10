@@ -25,6 +25,7 @@ class udiYoDimmer(udi_interface.Node):
     from  udiYolinkLib import  my_setDriver, save_cmd_struct, retrieve_cmd_struct, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
     id = 'yodimmer'
     drivers = [
+            {'driver': 'ST', 'value': 0, 'uom': 51},
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 57}, 
             {'driver': 'GV2', 'value': 0, 'uom': 57}, 
@@ -41,7 +42,7 @@ class udiYoDimmer(udi_interface.Node):
             {'driver': 'GV22', 'value': 99, 'uom': 25}, #start sec             
             {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
                  
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},            
             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
             ]
@@ -104,7 +105,8 @@ class udiYoDimmer(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoDimmer')
-        self.my_setDriver('ST', 0)
+        #self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoDimmer  = YoLinkDim(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoDimmer.initNode()
@@ -136,7 +138,8 @@ class udiYoDimmer(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiyoDimmer')
-        self.my_setDriver('ST', 0)
+        #self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoDimmer.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -159,7 +162,8 @@ class udiYoDimmer(udi_interface.Node):
             state =  self.yoDimmer.getState().upper()
             self.dim_setting['dim'] = self.yoDimmer.brightness
             if self.yoDimmer.online:
-                self.my_setDriver('ST', 1)
+                #self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)               
                 if state == 'ON':
                     
                     if self.last_state != state:
@@ -193,6 +197,7 @@ class udiYoDimmer(udi_interface.Node):
                     self.dim_setting['previous'] = self.dim_setting['dim']
                     self.save_cmd_struct(self.dim_setting)
                 self.my_setDriver('GV3', self.dim_setting['dim'], 51)
+                self.my_setDriver('ST', self.dim_setting['dim'], 51)
                 self.my_setDriver('GV4', self.dim_setting['dim_down'], 51)
                 self.my_setDriver('GV5', self.dim_setting['dim_up'], 51)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
@@ -204,7 +209,8 @@ class udiYoDimmer(udi_interface.Node):
                 else:
                     self.my_setDriver('GV20', 0)
             else:
-                self.my_setDriver('ST', 0)
+                #self.my_setDriver('ST', 0)
+                self.my_setDriver('GV30', 0)    
                 self.my_setDriver('GV20', 2)
 
             sch_info = self.yoDimmer.getScheduleInfo(self.schedule_selected)
@@ -245,6 +251,7 @@ class udiYoDimmer(udi_interface.Node):
         self.yoDimmer.brightness += self.dimmer_step
         self.yoDimmer.setBrightness(self.yoDimmer.brightness)
         self.my_setDriver('GV3', self.yoDimmer.brightness)
+        self.my_setDriver('ST', self.yoDimmer.brightness)
         #self.my_setDriver('GV0',0 )
         #self.node.reportCmd('DFOF')
 
@@ -253,6 +260,7 @@ class udiYoDimmer(udi_interface.Node):
         self.yoDimmer.brightness -= self.dimmer_step
         self.yoDimmer.setBrightness(self.yoDimmer.brightness) 
         self.my_setDriver('GV3', self.yoDimmer.brightness)
+        self.my_setDriver('ST', self.yoDimmer.brightness)
         #self.my_setDriver('GV0',0 )
         #self.node.reportCmd('DFOF')
 
@@ -264,14 +272,14 @@ class udiYoDimmer(udi_interface.Node):
             self.dim_setting['dim'] = self.dim_setting['dim_up']
             self.yoDimmer.setBrightness(self.dim_setting['dim'], True)
             
-            #self.my_setDriver('GV3', self.dim_setting['dim'])
+
             
             self.save_cmd_struct(self.dim_setting)
         elif ctrl == 'FDDOWN':
             logging.debug('FDDOWN detected')
             self.dim_setting['dim'] = self.dim_setting['dim_down']
             self.yoDimmer.setBrightness(self.dim_setting['dim'], True)
-            #self.my_setDriver('GV3', self.dim_setting['dim'])            
+        
             self.save_cmd_struct(self.dim_setting)
         elif ctrl == 'FDSTOP':
             logging.debug('FDSTOP detected')
@@ -287,6 +295,7 @@ class udiYoDimmer(udi_interface.Node):
             brightness = 100
         self.yoDimmer.setBrightness(brightness) #????
         self.my_setDriver('GV3',brightness )
+        self.my_setDriver('ST',brightness )
         self.dim_setting['dim'] = brightness
         self.save_cmd_struct(self.dim_setting)
 

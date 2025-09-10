@@ -20,21 +20,22 @@ from os import truncate
 import time
 from yolinkHubV2 import YoLinkHu
 
-class udiYoHub(udi_interface.Node):
-  
-    id = 'yohub'
+class udiYoBatteryHub(udi_interface.Node):
+    from  udiYolinkLib import my_setDriver, wait_for_node_done, node_queue
+    id = 'yohubbat'
     drivers = [
-            #{'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV0', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 99, 'uom': 25},
+            {'driver': 'GV30', 'value': 99, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},   
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
        drivers = [
-            'GV0' =  switch State
-            'GV1' = OnDelay
-            'GV2' = OffDelay
-
-            'ST' = Online
+            'ST' =  Powered
+            'GV1' = Battery Level
+            'GV30' = Online
             ]
 
     ''' 
@@ -65,14 +66,7 @@ class udiYoHub(udi_interface.Node):
         self.adr_list = []
         self.adr_list.append(address)        
     
-    def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
-
+ 
 
     def start(self):
         logging.info('start - udiYoHub')
@@ -92,7 +86,130 @@ class udiYoHub(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoHub')
-        self.node.setDriver('ST', 0, True, True)
+        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
+
+        self.yoHub.shut_down()
+        #if self.node:
+        #    self.poly.delNode(self.node.address)
+
+
+    def checkOnline(self):
+        self.yoHub.refreshDevice() 
+
+    def checkDataUpdate(self):
+        if self.yoHub.data_updated():
+            self.updateData()
+
+
+    def updateData(self):
+        if self.node is not None:
+
+            if self.yoHub.online:
+                pwr_info = self.yoHub.getPowerInfo()
+                if 'powered' in pwr_info and pwr_info['powered'] != True: 
+                    self.my_setDriver('ST', 1)
+                else:
+                    self.my_setDriver('ST', 0)
+                if  'batteryState' in pwr_info:
+                    self.my_setDriver('GV0', pwr_info['batteryState'])  
+                self.my_setDriver('GV30', 1)
+                if self.yoHub.suspended:
+                    self.my_setDriver('GV20', 1)
+                else:
+                    self.my_setDriver('GV20', 0)
+            else:
+                self.my_setDriver('GV30', 0)
+                self.my_setDriver('GV20', 2)
+                #self.pollDelays()
+
+    def updateStatus(self, data):
+        logging.info('updateStatus - Hub')
+        self.yoHub.updateStatus(data)
+        self.updateData()
+           
+
+    def update(self, command = None):
+        logging.info('udiYoHub Update Status')
+        self.yoHub.refreshDevice()
+        #self.yoHub.refreshSchedules()     
+
+
+    commands = {
+                'UPDATE': update,
+                }
+
+
+
+class udiYoHub(udi_interface.Node):
+    from  udiYolinkLib import my_setDriver, wait_for_node_done, node_queue
+    id = 'yohub'
+    drivers = [
+            #{'driver': 'GV0', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},   
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
+            #{'driver': 'ST', 'value': 0, 'uom': 25},
+            ]
+    '''
+       drivers = [
+            'ST' =  Online
+            'GV1' = Battery Level
+            'GV30' = Online
+            ]
+
+    ''' 
+
+    def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
+        super().__init__( polyglot, primary, address, name)   
+        logging.debug('udiYoHub INIT- {}'.format(deviceInfo['name']))
+        self.devInfo =  deviceInfo   
+        self.yoAccess = yoAccess
+        self.yoHub = None
+        self.node_ready = False
+        self.n_queue = [] 
+        
+        #self.Parameters = Custom(polyglot, 'customparams')
+        # subscribe to the events we want
+        #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
+        #polyglot.subscribe(polyglot.POLL, self.poll)
+        polyglot.subscribe(polyglot.START, self.start, self.address)
+        polyglot.subscribe(polyglot.STOP, self.stop)
+        self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+               
+
+        # start processing events and create add our controller node
+        polyglot.ready()
+        self.poly.addNode(self, conn_status = None, rename = True)
+        self.wait_for_node_done()
+        self.node = self.poly.getNode(address)
+        self.adr_list = []
+        self.adr_list.append(address)        
+    
+ 
+
+    def start(self):
+        logging.info('start - udiYoHub')
+        self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
+        time.sleep(2)
+        self.yoHub.initNode()
+        #self.node.setDriver('ST', 1, True, True)
+        
+        #if not self.yoHub.online:
+        #    logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
+        #else:
+        #    self.node.setDriver('ST', 1, True, True)
+        self.node_ready = True
+
+    def updateDelayCountdown (self, delayRemaining ) :
+        logging.debug('updateDelayCountdown {}'.format(delayRemaining))
+
+    def stop (self):
+        logging.info('Stop udiYoHub')
+        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
+
         self.yoHub.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -107,7 +224,7 @@ class udiYoHub(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            state =  self.yoHub.getState().upper()
+
             if self.yoHub.online:
                 #if state == 'ON':
                 #    self.node.setDriver('GV0', 1, True, True)
@@ -115,9 +232,17 @@ class udiYoHub(udi_interface.Node):
                 #    self.node.setDriver('GV0', 0, True, True)
                 #else:
                 #    self.node.setDriver('GV0', 99, True, True)
-                self.node.setDriver('ST', 1)
+                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
+                if self.yoHub.suspended:
+                    self.my_setDriver('GV20', 1)
+                else:
+                    self.my_setDriver('GV20', 0)
+
             else:
-                self.node.setDriver('ST', 0)
+                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV30', 0)
+                self.my_setDriver('GV20', 2)
                 #self.pollDelays()
 
     def updateStatus(self, data):
@@ -125,39 +250,6 @@ class udiYoHub(udi_interface.Node):
         self.yoHub.updateStatus(data)
         self.updateData()
            
-    def setWiFi (self, command):
-        logging ('setWiFi')
-        
-    def setSSID (self, command):
-        logging ('setSSID')
-        ssidStr = command.get('value')
-
-    def setPassword (self, command ):
-
-        logging ('setPassword')
-        passwordStr = command.get('value')
-        
-    '''
-    def switchControl(self, command):
-        logging.info('udiYoHub switchControl')
-        state = int(command.get('value'))     
-        if state == 1:
-            self.yoHub.setState('ON')
-        else:
-            self.yoHub.setState('OFF')
-        
-    def setOnDelay(self, command ):
-        logging.info('udiYoHub setOnDelay')
-        delay =int(command.get('value'))
-        self.yoHub.setOnDelay(delay)
-        self.node.setDriver('GV1', delay*60, True, True)
-
-    def setOffDelay(self, command):
-        logging.info('udiYoHub setOffDelay')
-        delay =int(command.get('value'))
-        self.yoHub.setOffDelay(delay)
-        self.node.setDriver('GV2', delay*60, True, True)
-    '''
 
     def update(self, command = None):
         logging.info('udiYoHub Update Status')
@@ -167,9 +259,4 @@ class udiYoHub(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'QUERY' :update
                 }
-
-
-
-

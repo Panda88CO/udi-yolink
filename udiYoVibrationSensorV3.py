@@ -38,7 +38,8 @@ class udiYoVibrationSensor(udi_interface.Node):
             {'driver': 'GV1', 'value': 99, 'uom': 25},
             {'driver': 'GV2', 'value': 0, 'uom': 25},            
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},    
+            {'driver': 'ST', 'value': 99, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},    
             {'driver': 'GV20', 'value': 99, 'uom': 25},
              {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                   
             ]
@@ -77,7 +78,8 @@ class udiYoVibrationSensor(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoVibrationSensor')
-        self.my_setDriver('ST', 0)
+        #self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoVibrationSensor  = YoLinkVibrationSen(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoVibrationSensor.initNode()
@@ -87,7 +89,8 @@ class udiYoVibrationSensor(udi_interface.Node):
     
     def stop (self):
         logging.info('Stop udiYoVibrationSensor')
-        self.my_setDriver('ST', 0)
+        #self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoVibrationSensor.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -107,18 +110,21 @@ class udiYoVibrationSensor(udi_interface.Node):
                 vib_state = self.getVibrationState()
                 if vib_state == 1:
                     self.my_setDriver('GV0', 1)
+                    self.my_setDriver('ST', 1)
                     if self.last_state != vib_state and self.cmd_state in [0,1]:
                         self.node.reportCmd('DON')   
                 elif vib_state == 0:
                     self.my_setDriver('GV0', 0)
+                    self.my_setDriver('ST', 0)
                     if self.last_state != vib_state and self.cmd_state in [0,2]:
                         self.node.reportCmd('DOF')  
                 else:
                     self.my_setDriver('GV0', 99) 
+                    self.my_setDriver('ST', 99)
                 self.last_state = vib_state
                 self.my_setDriver('GV1', self.yoVibrationSensor.getBattery())
-                self.my_setDriver('ST', 1)
-                
+                #self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
                 devTemp =  self.yoVibrationSensor.getDeviceTemperature()
                 if devTemp != 'NA':
                     if self.temp_unit == 0:
@@ -137,7 +143,8 @@ class udiYoVibrationSensor(udi_interface.Node):
                 #self.my_setDriver('GV0', 99)
                 #self.my_setDriver('GV1', 99)
                 #self.my_setDriver('CLITEMP', 99, 25)
-                self.my_setDriver('ST', 0)
+                #self.my_setDriver('ST', 0)
+                self.my_setDriver('GV30', 0)
                 self.my_setDriver('GV20', 2)
 
 

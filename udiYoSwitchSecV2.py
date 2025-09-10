@@ -25,23 +25,24 @@ class udiYoSwitchSec(udi_interface.Node):
     id = 'yoswitchsec'
 
     drivers = [
-        {'driver': 'GV0', 'value': 99, 'uom': 25},
-        {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-        {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-        
-        {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
-        {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
-        {'driver': 'GV15', 'value': 99, 'uom': 25}, #On Hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25}, #On Min
-        {'driver': 'GV21', 'value': 99, 'uom': 25}, #onSec
-        {'driver': 'GV17', 'value': 99, 'uom': 25}, #off Hour                                              
-        {'driver': 'GV18', 'value': 99, 'uom': 25}, #off Min
-        {'driver': 'GV22', 'value': 99, 'uom': 25}, #offSec            
-        {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
-        {'driver': 'GV20', 'value': 99, 'uom': 25},                          
-        {'driver': 'ST', 'value': 0, 'uom': 25},
-         {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},        
-        ]
+            {'driver': 'GV0', 'value': 99, 'uom': 25},
+            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
+            
+            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
+            {'driver': 'GV15', 'value': 99, 'uom': 25}, #On Hour
+            {'driver': 'GV16', 'value': 99, 'uom': 25}, #On Min
+            {'driver': 'GV21', 'value': 99, 'uom': 25}, #onSec
+            {'driver': 'GV17', 'value': 99, 'uom': 25}, #off Hour                                              
+            {'driver': 'GV18', 'value': 99, 'uom': 25}, #off Min
+            {'driver': 'GV22', 'value': 99, 'uom': 25}, #offSec            
+            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
+            {'driver': 'GV20', 'value': 99, 'uom': 25},                          
+            {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
+            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},        
+            ]
 
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -91,12 +92,12 @@ class udiYoSwitchSec(udi_interface.Node):
 
     def start(self):
         logging.info('start - udiYoSwitch')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoSwitch  = YoLinkSW(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(3)
         self.yoSwitch.initNode()
         time.sleep(2)
-        #self.my_setDriver('ST', 1)
+        #self.my_setDriver('GV30', 1)
         self.yoSwitch.delayTimerCallback (self.updateDelayCountdown, self.timer_update )
         self.yoSwitch.refreshSchedules()
         self.node_ready = True
@@ -132,7 +133,7 @@ class udiYoSwitchSec(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoSwitch')
-        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV30', 0)
         self.yoSwitch.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -153,15 +154,18 @@ class udiYoSwitchSec(udi_interface.Node):
             self.my_setDriver('TIME', self.yoSwitch.getLastUpdateTime(), 151)
 
             if self.yoSwitch.online:
-                self.my_setDriver('ST', 1)
+                self.my_setDriver('GV30', 1)
                 if state == 'ON':
                     self.my_setDriver('GV0', 1)
+                    self.my_setDriver('ST', 1)
                     self.node.reportCmd('DON')  
                 elif  state == 'OFF':
                     self.my_setDriver('GV0', 0)
+                    self.my_setDriver('ST', 0)
                     self.node.reportCmd('DOF')  
                 else:
                     self.my_setDriver('GV0', 99)
+                    self.my_setDriver('ST', 99)
                 self.last_state = state
                 
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
@@ -174,7 +178,7 @@ class udiYoSwitchSec(udi_interface.Node):
                     self.my_setDriver('GV20', 0)
 
             else:
-                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV30', 0)
 
                 self.my_setDriver('GV20', 2)
 
@@ -254,24 +258,28 @@ class udiYoSwitchSec(udi_interface.Node):
         logging.info('udiYoSwitch set_switch_on')  
         self.yoSwitch.setState('ON')
         self.my_setDriver('GV0',1 )
+        self.my_setDriver('ST',1 )
         #self.node.reportCmd('DON')
 
     def set_switch_off(self, command = None):
         logging.info('udiYoSwitch set_switch_off')  
         self.yoSwitch.setState('OFF')
         self.my_setDriver('GV0',0 )
+        self.my_setDriver('ST',0 )
         #self.node.reportCmd('DOF')
 
     def set_switch_fon(self, command = None):
         logging.info('udiYoSwitch set_switch_on')  
         self.yoSwitch.setState('ON')
         self.my_setDriver('GV0',1 )
+        self.my_setDriver('ST',1 )
         #self.node.reportCmd('DFON')
 
     def set_switch_foff(self, command = None):
         logging.info('udiYoSwitch set_switch_off')  
         self.yoSwitch.setState('OFF')
         self.my_setDriver('GV0',0 )
+        self.my_setDriver('ST',0 )
         #self.node.reportCmd('DFOF')
 
 
@@ -281,20 +289,24 @@ class udiYoSwitchSec(udi_interface.Node):
         if ctrl == 1:
             self.yoSwitch.setState('ON')
             self.my_setDriver('GV0',1 )
+            self.my_setDriver('ST',1 )
             #self.node.reportCmd('DON')
         elif ctrl == 0:
             self.yoSwitch.setState('OFF')
             self.my_setDriver('GV0',0 )
+            self.my_setDriver('ST',0 )
             #self.node.reportCmd('DOF')
         elif ctrl == 2: #toggle
             state = str(self.yoSwitch.getState()).upper() 
             if state == 'ON':
                 self.yoSwitch.setState('OFF')
                 self.my_setDriver('GV0',0 )
+                self.my_setDriver('ST',0 )
                 #self.node.reportCmd('DOF')
             elif state == 'OFF':
                 self.yoSwitch.setState('ON')
                 self.my_setDriver('GV0',1 )
+                self.my_setDriver('ST',1 )
                 #self.node.reportCmd('DON')
         elif ctrl == 5:
             logging.info('switchControl set Delays Executed: {} {}'.format(self.onDelay, self.offDelay))

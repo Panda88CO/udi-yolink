@@ -119,16 +119,22 @@
      <range uom="51" min="0" max="100" prec="0" />
   </editor>
  <editor id="nbrcodes"> 
-     <range uom="107" min="0" max="64" prec="0" />
+     <range uom="56" min="0" max="64" prec="0" />
   </editor>
  <editor id="cmdstatus"> 
      <range uom="25" subset="0-2,99" nls="cmdstatus" />
+  </editor>
+   <editor id="ircmdstatus"> 
+     <range uom="25" subset="0-2,99" nls="ircmdstatus" />
   </editor>
  <editor id="txcode"> 
      <range uom="107" min="0" max="63" prec="0" />
   </editor>
  <editor id="poweralert"> 
      <range uom="25" subset="0-2,99" nls="poweralert" />
+  </editor>
+   <editor id="powerstate"> 
+     <range uom="25" subset="0-3,99" nls="powerstate" />
   </editor>
  <editor id="alertstate"> 
      <range uom="25" subset="0-1,99" nls="alertstate" />

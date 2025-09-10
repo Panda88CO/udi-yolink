@@ -37,6 +37,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV2', 'value': 99, 'uom': 25}, 
             {'driver': 'ST', 'value': 0, 'uom': 25},
+            {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},       
              {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                 
             ]

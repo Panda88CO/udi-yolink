@@ -47,6 +47,20 @@ class YoLinkHu(YoLinkMQTTDevice):
         else:
             logging.error('WiFi is not enabled so one cannot change ssid and password')
 
+    def getPowerInfo(yolink):
+        logging.debug('getPowerInfo')
+        try:
+            temp = {}
+            if 'other' in yolink.dataAPI['data'] and 'power' in yolink.dataAPI['data']['other']:
+                temp['powered'] = yolink.dataAPI['data']['other']['power']['dc']
+                temp['battery'] = yolink.dataAPI['data']['other']['power']['battery']
+                temp['batteryState'] = yolink.dataAPI['data']['other']['power']['batteryState']
+            return(temp)
+        except KeyError as e: 
+            logging.error(f'No Battery Info available {yolink.dataAPI}')
+            return(temp)
+
+
     def getWiFiInfo(yolink):
         logging.debug('getWiFiInfo')
         return(yolink.dataAPI['lastMessage']['data']['wifi'])
