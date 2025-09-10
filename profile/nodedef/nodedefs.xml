@@ -815,7 +815,6 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
          <!-- <st id="GV8" editor="online" /> -->
-
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />         

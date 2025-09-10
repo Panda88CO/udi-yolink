@@ -142,7 +142,7 @@ class udiYoDoorSensor(udi_interface.Node):
                 self.my_setDriver('GV1', self.yoDoorSensor.getBattery())
                 self.my_setDriver('GV2', self.cmd_state)
                 #self.my_setDriver('ST', 1)
-                self.my_setDriver('GV30 ', 1)
+                self.my_setDriver('GV30', 1)
                 if self.yoDoorSensor.suspended:
                     self.my_setDriver('GV20', 1)
                 else:
