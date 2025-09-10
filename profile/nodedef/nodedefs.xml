@@ -1249,7 +1249,6 @@
          </sends>
          <accepts>                                          
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
