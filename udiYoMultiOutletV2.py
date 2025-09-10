@@ -64,8 +64,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.poly.ready()
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
-        self.node = polyglot.getNode(self.address)
-        
+        self.node = polyglot.getNode(self.address)        
         time.sleep(1)
 
         
@@ -73,9 +72,9 @@ class udiYoSubOutlet(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubOutlet - start')
-        while 6 != len(self.drivers):
-            logging.debug('Waiting for node {} to get created'.format(self.name))
-            time.sleep(1)
+        #while 6 != len(self.drivers):
+        #    logging.debug('Waiting for node {} to get created'.format(self.name))
+        #time.sleep(1)
         while self.node == None:
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
@@ -316,10 +315,12 @@ class udiYoSubUSB(udi_interface.Node):
 
     def start (self):
         logging.debug('udiYoSubUSB {} - start'.format(self.name))
-        while 3 != len(self.drivers):
+        #while 3 != len(self.drivers):
+        #    logging.debug('Waiting for node {} to get created'.format(self.name))
+        #    time.sleep(1)
+        while self.node == None:
             logging.debug('Waiting for node {} to get created'.format(self.name))
             time.sleep(1)
-
 
         #self.my_setDriver('GV30', 1)
         try:
