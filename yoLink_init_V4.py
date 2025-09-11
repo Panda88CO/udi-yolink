@@ -818,7 +818,7 @@ class YoLinkInitPAC(object):
                 logging.debug('transfer_data - response received  message_id {} completed_message_id {}'.format(message_id, completed_message_id))
             yoAccess.processing_access.release()
         except Exception as e:
-            logging.debug('Exception publish_data - {}'.format(e))
+            #logging.debug('Exception publish_data - {}'.format(e))
             yoAccess.processing_access.release()
             pass # go wait again unless stop is called
 
