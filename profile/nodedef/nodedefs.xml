@@ -1125,7 +1125,7 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="ircmdstatus" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="nbrcodes" />
+         <st id="ST"  editor="ircmdstatus" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />                     

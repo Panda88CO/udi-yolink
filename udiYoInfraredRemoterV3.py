@@ -247,7 +247,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             self.my_setDriver('TIME', self.yoIRrem.getLastUpdateTime(), 151)
 
         if  self.yoIRrem.online:
-            self.my_setDriver('ST', 1)
+            self.my_setDriver('ST', self.err_code2nbr(self.yoIRrem.get_status_code()))
             self.my_setDriver('GV0',len(self.codes_used) )                 
             self.my_setDriver('GV1',self.yoIRrem.getBattery())
             self.my_setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()))
