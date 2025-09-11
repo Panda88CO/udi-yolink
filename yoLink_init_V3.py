@@ -413,7 +413,7 @@ class YoLinkInitPAC(object):
             msg = yoAccess.messageQueue.get(timeout = 10) 
             logging.debug('Received message - Q size={}'.format(yoAccess.messageQueue.qsize()))
             payload = json.loads(msg.payload.decode("utf-8"))
-            logging.debug('process_message : {}'.format(payload))
+            #logging.debug('process_message : {}'.format(payload))
             
             deviceId = 'unknown'
             if 'targetDevice' in payload:
@@ -447,11 +447,12 @@ class YoLinkInitPAC(object):
 
                 elif msg.topic == yoAccess.mqttList[deviceId]['response']:
                     logging.debug('processing response: {}'.format(payload))                   
-
+                    
                     if payload['code'] == '000000':
                         tempCallback(payload)
                     else:
                         logging.error('Non-000000 code {} : {}'.format(payload['desc'], str(json.dumps(payload))))
+
                         tempCallback(payload)
                     if yoAccess.debug:
                         fileData= {}

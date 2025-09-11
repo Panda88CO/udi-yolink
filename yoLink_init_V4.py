@@ -40,7 +40,7 @@ class YoLinkInitPAC(object):
         yoAccess.TimeTableLock = Lock()
         yoAccess.processing_access = Lock()
         yoAccess.publishQueue = Queue()
-        yoAccess.processingQueue = Queue()
+        yoAccess.FinishQueue = Queue()
         #yoAccess.delayQueue = Queue()
         yoAccess.messageQueue = Queue()
         yoAccess.fileQueue = Queue()
@@ -462,6 +462,7 @@ class YoLinkInitPAC(object):
                         yoAccess.fileQueue.put(fileData)
                         resp_fileThread = Thread(target = yoAccess.save_packet_info )
                         resp_fileThread.start()
+                        yoAccess.FinishQueue.put(payload['msgid'])
                         logging.debug('resp_fileThread - starting')
                         
                 elif msg.topic == yoAccess.mqttList[deviceId]['request']:
@@ -763,7 +764,7 @@ class YoLinkInitPAC(object):
         yoAccess.lastTransferTime = int(time.time())
         
         try:
-            #yoAccess.processing_access.acquire()
+            yoAccess.processing_access.acquire()
             data = yoAccess.publishQueue.get(timeout = 10)
 
             deviceId = data['targetDevice']
@@ -806,7 +807,13 @@ class YoLinkInitPAC(object):
             else:
                 yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True
+            
+            completed_message_id = yoAccess.FinishQueue.get(time_out = 2)
+            while message_id != completed_message_id:
+                completed_message_id = yoAccess.FinishQueue.get(time_out = 2)
+            yoAccess.processing_access.release()
         except Exception as e:
+            yoAccess.processing_access.release()
             pass # go wait again unless stop is called
 
     #@measure_time
