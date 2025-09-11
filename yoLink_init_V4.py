@@ -38,7 +38,9 @@ class YoLinkInitPAC(object):
         yoAccess.tokenLock = Lock()
         yoAccess.fileLock = Lock()
         yoAccess.TimeTableLock = Lock()
+        yoAccess.processing_access = Lock()
         yoAccess.publishQueue = Queue()
+        yoAccess.processingQueue = Queue()
         #yoAccess.delayQueue = Queue()
         yoAccess.messageQueue = Queue()
         yoAccess.fileQueue = Queue()
@@ -475,7 +477,7 @@ class YoLinkInitPAC(object):
                         logging.debug('req_fileThread - starting')
 
                 else:
-                    logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
+                    logging.error('Topic not matching:' + msg.topic + '  ' + str(json.dumps(payload)))
                     if yoAccess.debug:
                         fileData= {}
                         fileData['type'] = 'MISC'
@@ -761,6 +763,7 @@ class YoLinkInitPAC(object):
         yoAccess.lastTransferTime = int(time.time())
         
         try:
+            #yoAccess.processing_access.acquire()
             data = yoAccess.publishQueue.get(timeout = 10)
 
             deviceId = data['targetDevice']
@@ -778,12 +781,14 @@ class YoLinkInitPAC(object):
                     time.sleep(delay_s)
                     # As this is multi threaded we can just sleep  - if another call is ready and can go though is will so in a differnt thread    
                 data['time'] = str(int(time.time_ns()/1e6))  # update time to actual packet time (to include delays)
+                message_id = data['time'] 
                 dataStr = str(json.dumps(data))
                 yoAccess.tmpData[deviceId] = dataStr
                 yoAccess.lastDataPacket[deviceId] = data
 
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, yoAccess.QoS)
+                
             else:
                 logging.error('device {} not in mqtt list'.format(deviceId))
                 return (False)
