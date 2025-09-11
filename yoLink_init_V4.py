@@ -451,6 +451,7 @@ class YoLinkInitPAC(object):
                     logging.debug('processing response: {}'.format(payload))
                     logging.debug('FinishQueue PUT: {}'.format(payload['msgid']))                   
                     yoAccess.FinishQueue.put(payload['msgid'])
+                    logging.debug(f'FinishQueue PUT size: {yoAccess.FinishQueue.qsize()}')    
                     if payload['code'] == '000000':
                         tempCallback(payload)
                     else:
