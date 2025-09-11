@@ -601,6 +601,8 @@ class udiYoMultiOutlet(udi_interface.Node):
 
         if self.node_fully_config:
             self.my_setDriver('GV30',1)
+            self.my_setDriver('ST',1)
+            
             self.my_setDriver('TIME', self.yoMultiOutlet.getLastUpdateTime(), 151)
 
             for outlet in range(0,self.nbrOutlets):
@@ -643,6 +645,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         else:
 
             self.my_setDriver('GV30',0)
+            self.my_setDriver('ST',0)
             self.my_setDriver('GV20', 2)
 
         if not self.yoMultiOutlet.online:
