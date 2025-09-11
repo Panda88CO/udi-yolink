@@ -475,7 +475,7 @@ class YoLinkInitPAC(object):
                         logging.debug('req_fileThread - starting')
 
                 else:
-                    logging.error('Topic not mathing:' + msg.topic + '  ' + str(json.dumps(payload)))
+                    logging.error('Topic not matching:' + msg.topic + '  ' + str(json.dumps(payload)))
                     if yoAccess.debug:
                         fileData= {}
                         fileData['type'] = 'MISC'
