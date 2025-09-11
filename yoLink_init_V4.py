@@ -448,12 +448,14 @@ class YoLinkInitPAC(object):
 
 
                 elif msg.topic == yoAccess.mqttList[deviceId]['response']:
-                    logging.debug('processing response: {}'.format(payload))                   
-
+                    logging.debug('processing response: {}'.format(payload))
+                    logging.debug('FinishQueue PUT: {}'.format(payload['msgid']))                   
+                    yoAccess.FinishQueue.put(payload['msgid'])
                     if payload['code'] == '000000':
                         tempCallback(payload)
                     else:
                         logging.error('Non-000000 code {} : {}'.format(payload['desc'], str(json.dumps(payload))))
+                        
                         tempCallback(payload)
                     if yoAccess.debug:
                         fileData= {}
@@ -462,7 +464,7 @@ class YoLinkInitPAC(object):
                         yoAccess.fileQueue.put(fileData)
                         resp_fileThread = Thread(target = yoAccess.save_packet_info )
                         resp_fileThread.start()
-                        yoAccess.FinishQueue.put(payload['msgid'])
+                        
                         logging.debug('resp_fileThread - starting')
                         
                 elif msg.topic == yoAccess.mqttList[deviceId]['request']:
@@ -809,8 +811,10 @@ class YoLinkInitPAC(object):
                 yoAccess.online = True
             
             completed_message_id = yoAccess.FinishQueue.get(time_out = 2)
+            logging.debug('transfer_data - response received message_id {} completed_message_id {}'.format(message_id, completed_message_id))
             while message_id != completed_message_id:
                 completed_message_id = yoAccess.FinishQueue.get(time_out = 2)
+                logging.debug('transfer_data - response received  message_id {} completed_message_id {}'.format(message_id, completed_message_id))
             yoAccess.processing_access.release()
         except Exception as e:
             yoAccess.processing_access.release()
