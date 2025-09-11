@@ -38,7 +38,8 @@
          <st id="GV18" editor="stMin" />    
          <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="swstate" />
+         <st id="GV30"  editor="status" />'
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />                  
       </sts>
@@ -111,7 +112,8 @@
          <st id="GV18" editor="stMin" />    
          <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="swstate" />
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />                  
       </sts>
@@ -184,7 +186,8 @@
          <st id="GV18" editor="stMin" />    
          <st id="GV22" editor="stSec" />              
          <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="swstate" />
+         <st id="GV30"  editor="status" />         
          <st id="GV20" editor="suspendstate" />         
          <st id="TIME" editor="unixtime" />            
       </sts>
@@ -356,7 +359,8 @@
          <st id="GV18" editor="stMin" />   
          <st id="GV22" editor="stSec" />             
          <st id="GV19" editor="binDays" />   
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="swstate" />
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                     
       </sts>
@@ -433,7 +437,8 @@
          <st id="GV18" editor="stMin" />  
          <st id="GV22" editor="stSec" />             
          <st id="GV19" editor="binDays" />   
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="swstate" />
+         <st id="GV30"  editor="status" />         
          <st id="GV20" editor="suspendstate" />         
          <st id="TIME" editor="unixtime" />            
       </sts>
@@ -503,6 +508,7 @@
          <st id="GV22" editor="stSec" />     
          <st id="GV19" editor="binDays" />      
          <st id="ST"  editor="status" />   
+         <st id="GV30"  editor="status" />   
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                     
       </sts>
@@ -544,6 +550,7 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
+         <st id="GV30"  editor="swstate" />
          <st id="ST"  editor="status" />
       </sts>
       <cmds>
@@ -579,7 +586,8 @@
       <editors />
       <sts>
          <st id="GV0" editor="usbstate" />
-         <st id="ST"  editor="status" />   
+         <st id="ST"  editor="usbstate" />   
+         <st id="GV30"  editor="status" />   
       </sts>
       <cmds>
          <sends>
@@ -615,7 +623,8 @@
          <st id="GV18" editor="stMin" />    
          <st id="GV22" editor="stSec" />              
          <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="manstate" />
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />               
       </sts>
@@ -673,6 +682,7 @@
       <editors />
       <sts>
          <st id="ST" editor="waterrun" /> <!-- water runing-->
+
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="flow" />
          <st id="GV10" editor="flow" />     
@@ -695,6 +705,7 @@
          <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
          <st id="GV17" editor="enable" /> <!-- Overrun time autoshutoff -->
          <st id="GV20" editor="suspendstate" />
+         <st id="GV30" editor="status" />
          <st id="TIME" editor="unixtime" />                  
       </sts>
       <cmds>
@@ -746,6 +757,7 @@
          <st id="GV12" editor="flow" /> <!-- leak limit -->
          <st id="GV14" editor="flow" /> <!-- Overrun Volume  -->        
          <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
+         <st id="GV30" editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                  
       </sts>
@@ -775,6 +787,7 @@
    <nodeDef id="yothsens" nls="nlsthsens">
       <editors />
       <sts>
+         <st id="ST" editor="tempC" />
          <st id="CLITEMP" editor="tempC" />
          <st id="GV1" editor="alarm" />
          <st id="GV2" editor="alarm" />
@@ -791,6 +804,7 @@
          <st id="GV12" editor="humidity" />
          <st id="GV13" editor="humidity" />
          <st id="GV20" editor="suspendstate" />
+         <st id="GV30" editor="status" />
          <st id="TIME" editor="unixtime" />                              
       </sts>
       <cmds>
@@ -868,8 +882,9 @@
          <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
+         <st id="GV30"  editor="status" />  
          <st id="TIME" editor="unixtime" />                             
       </sts>
       <cmds>
@@ -902,7 +917,8 @@
          <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="waterstate" />
+         <st id="GV30"  editor="status" />  
          <st id="GV20" editor="suspendstate" /> 
          <st id="TIME" editor="unixtime" />                             
       </sts>
@@ -941,11 +957,11 @@
          <st id="GV7" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
-
+         <st id="ST"  editor="deviceAlert" />     
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />      
-         <st id="ST"  editor="deviceAlert" />                     
+                
       </sts>
       <cmds>
          <sends>
@@ -975,7 +991,8 @@
          <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="tempC" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="vibrastate" />
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
          <st id="TIME" editor="unixtime" />                         
       </sts>
@@ -1045,6 +1062,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />  
+         <st id="GV30"  editor="status" />
          <st id="TIME" editor="unixtime" />         
       </sts>
       <cmds>
@@ -1075,8 +1093,9 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="doorbell" />
          <st id="GV3" editor="doorstate" /> 
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="lockstate" />
          <st id="GV20" editor="suspendstate" />  
+         <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />                      
       </sts>
       <cmds>
@@ -1106,8 +1125,9 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="ircmdstatus" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="nbrcodes" />
          <st id="GV20" editor="suspendstate" />   
+         <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />                     
       </sts>
       <cmds>
@@ -1134,6 +1154,7 @@
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="ircmdstatus" />
          <st id="GV20" editor="suspendstate" />   
+         <st id="GV30"  editor="status" />              
          <st id="TIME" editor="unixtime" />                     
       </sts>
       <cmds>
@@ -1155,8 +1176,9 @@
          <st id="GV3" editor="powered" />
          <st id="GV4" editor="pfamute" />
          <st id="GV7" editor="cmdstatus" />
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="poweralert" />
          <st id="GV20" editor="suspendstate" />   
+         <st id="GV30"  editor="status" />     
          <st id="TIME" editor="unixtime" />                     
 
       </sts>
@@ -1186,8 +1208,9 @@
          <st id="GV4" editor="alarm" />
          <st id="GV5" editor="alarm" />
          <st id="BATLVL" editor="batlevel" />    
-         <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />       
+         <st id="ST"  editor="waterlevel" />
+         <st id="GV20" editor="suspendstate" />    
+         <st id="GV30"  editor="status" />                 
          <st id="TIME" editor="unixtime" />
 
       </sts>
@@ -1212,8 +1235,9 @@
          <st id="GV0" editor="sirenstate" />
          <st id="GV1" editor="sirenduration" />
          <st id="GV2" editor="sirenbatlevel" />
-         <st id="ST"  editor="status" />
+         <st id="ST"  editor="sirenstate" />
          <st id="GV20" editor="suspendstate" />
+         <st id="GV30"  editor="status" />                    
          <st id="TIME" editor="unixtime" />               
       </sts>
       <cmds>
@@ -1241,8 +1265,9 @@
          <st id="CLITEMP" editor="tempC" />
 
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="status" />
-         <st id="GV20" editor="suspendstate" />         
+         <st id="ST"  editor="keypress" />
+         <st id="GV20" editor="suspendstate" />   
+         <st id="GV30"  editor="status" />        
       </sts>
       <cmds>
          <sends>
