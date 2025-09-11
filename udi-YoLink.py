@@ -9,7 +9,7 @@ import time
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
-from yoLink_init_V3 import YoLinkInitPAC
+from yoLink_init_V4 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoSwitchSecV2 import udiYoSwitchSec
 from udiYoSwitchPwrSecV2 import udiYoSwitchPwrSec
