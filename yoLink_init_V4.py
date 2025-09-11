@@ -811,13 +811,14 @@ class YoLinkInitPAC(object):
                 yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True
             logging.debug(f'waiting for response to be received - message_id {message_id} - queue size  {yoAccess.FinishQueue.qsize()}' )
-            completed_message_id = yoAccess.FinishQueue.get(time_out = 2)
+            completed_message_id = yoAccess.FinishQueue.get(time_out = 5)
             logging.debug('transfer_data - response received message_id {} completed_message_id {}'.format(message_id, completed_message_id))
             while message_id != completed_message_id:
                 completed_message_id = yoAccess.FinishQueue.get(time_out = 2)
                 logging.debug('transfer_data - response received  message_id {} completed_message_id {}'.format(message_id, completed_message_id))
             yoAccess.processing_access.release()
         except Exception as e:
+            logging.debug('Exception publish_data - {}'.format(e))
             yoAccess.processing_access.release()
             pass # go wait again unless stop is called
 
