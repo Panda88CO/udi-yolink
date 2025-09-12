@@ -278,10 +278,10 @@ class udiYoOutlet(udi_interface.Node):
                 'SWCTRL'        : outletControl, 
                 #'ONDELAY'       : prepOnDelay,
                 #'OFFDELAY'      : prepOffDelay,
-                'DELAY_CTRL'    : program_delays, 
-                'LOOKUP_SCH'    : lookup_schedule,
-                'DEFINE_SCH'    : define_schedule,
-                'CTRL_SCH'      : control_schedule,
+                'DELAYCTRL'    : program_delays, 
+                'LOOKUPSCH'    : lookup_schedule,
+                'DEFINESCH'    : define_schedule,
+                'CTRLSCH'      : control_schedule,
                 }
 
 

@@ -67,16 +67,16 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >-->
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
 
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="DEFINESCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="bindays" editor="binDays" init="GV19" />       
@@ -88,7 +88,7 @@
                <p id="offS" editor="stSecI" init="GV22" />   
                                    
              </cmd >
-            <cmd id="CTRL_SCH" > 
+            <cmd id="CTRLSCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >                
@@ -141,16 +141,16 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >-->
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
 
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="DEFINESCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="bindays" editor="binDays" init="GV19" />       
@@ -162,7 +162,7 @@
                <p id="offS" editor="stSecI" init="GV22" />   
                                    
              </cmd >
-            <cmd id="CTRL_SCH" > 
+            <cmd id="CTRLSCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >                
@@ -215,16 +215,16 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd > -->
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
 
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="DEFINESCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="bindays" editor="binDays" init="GV19" />       
@@ -235,7 +235,7 @@
                <p id="offM" editor="stMinI" init="GV18" />   
                <p id="offS" editor="stSecI" init="GV22" />                                    
              </cmd >
-            <cmd id="CTRL_SCH" > 
+            <cmd id="CTRLSCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >                
@@ -311,15 +311,15 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >-->
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="DEFINESCH" > 
 
 
                <p id="index" editor="sch_indexS" init="GV13" /> 
@@ -333,7 +333,7 @@
                <p id="offS" editor="stSecI" init="GV22" />                
                                        
              </cmd >
-            <cmd id="CTRL_SCH" > 
+            <cmd id="CTRLSCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >     
@@ -385,15 +385,15 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd > -->
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="DEFINESCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
@@ -404,7 +404,7 @@
                <p id="offS" editor="stSecI" init="GV22" />                  
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
-            <cmd id="CTRL_SCH" > 
+            <cmd id="CTRLSCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >            
@@ -463,15 +463,15 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >-->
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="DEFINESCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
@@ -482,7 +482,7 @@
                <p id="offS" editor="stSecI" init="GV22" />                       
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
-            <cmd id="CTRL_SCH" > 
+            <cmd id="CTRLSCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >            
@@ -518,10 +518,10 @@
          <accepts>
             <cmd id="UPDATE" /> 
 
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexM" init="GV13" /> 
              </cmd >
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="DEFINESCH" > 
                <p id="outport" editor="outport" init="GV12" /> 
                <p id="index" editor="sch_indexM" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
@@ -533,7 +533,7 @@
                <p id="offS" editor="stSecI" init="GV22" />   
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
-            <cmd id="CTRL_SCH" > 
+            <cmd id="CTRLSCH" > 
                <p id="index" editor="sch_indexM" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >
@@ -574,7 +574,7 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >-->
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >                
@@ -651,15 +651,15 @@
             <cmd id="OFFDELAY" > 
                <p id="" editor="delaymin" init="GV2" /> 
              </cmd >-->
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
 
-            <cmd id="LOOKUP_SCH" > 
+            <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexS" init="GV13" /> 
              </cmd >
-            <cmd id="DEFINE_SCH" > 
+            <cmd id="DEFINESCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
@@ -670,7 +670,7 @@
                <p id="offS" editor="stSecI" init="GV22" />   
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
-            <cmd id="CTRL_SCH" > 
+            <cmd id="CTRLSCH" > 
                <p id="index" editor="sch_indexS" init="GV13" /> 
                <p id="active" editor="sch_activeI" init="GV14" />                                     
              </cmd >                
@@ -729,7 +729,7 @@
                <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
                <p id="ORT_OFF" editor="set_enable" init="1" />   
             </cmd >
-            <cmd id="DELAY_CTRL" > 
+            <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
