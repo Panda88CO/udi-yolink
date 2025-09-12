@@ -77,6 +77,7 @@ class YoLinkInitPAC(object):
         
         yoAccess.QoS = 1
         yoAccess.keepAlive = 60
+        yoAccess.MAX_RETRY = 5
 
 
         yoAccess.unassigned_nodes = []
@@ -448,6 +449,9 @@ class YoLinkInitPAC(object):
 
 
                 elif msg.topic == yoAccess.mqttList[deviceId]['response']:
+                    return_msg={'code': None, 'msgid': None}
+                    return_msg['msgid'] = payload['msgid']
+                    return_msg['code'] = payload['code']    
                     logging.debug('processing response: {}'.format(payload))
                     logging.debug('FinishQueue PUT: {}'.format(payload['msgid']))                   
                     yoAccess.FinishQueue.put(payload['msgid'])
@@ -456,7 +460,6 @@ class YoLinkInitPAC(object):
                         tempCallback(payload)
                     else:
                         logging.error('Non-000000 code {} : {}'.format(payload['desc'], str(json.dumps(payload))))
-                        
                         tempCallback(payload)
                     if yoAccess.debug:
                         fileData= {}
@@ -811,12 +814,29 @@ class YoLinkInitPAC(object):
                 yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True
             logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue size  {yoAccess.FinishQueue.qsize()}' )
+            message= yoAccess.FinishQueue.get(timeout = 3)
             completed_message_id = yoAccess.FinishQueue.get(timeout = 3)
+            completed_message_id = message['msgid']
+            msg_code = message['code']
             logging.debug('transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             while message_id != completed_message_id:
-                completed_message_id = yoAccess.FinishQueue.get(timeout = 3)
+                message = yoAccess.FinishQueue.get(timeout = 3)
+                completed_message_id = message['msgid']
+                msg_code = message['code']
             logging.debug('transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             yoAccess.processing_access.release()
+            if msg_code != '000000' and msg_code != None:
+                time.sleep(5)
+                if 'retry' in data:
+                    if data['retry'] < yoAccess.MAX_RETRY: # stop after MAX_RETRY attempts
+                        data['retry'] = data['retry'] + 1
+                        logging.debug('Retrying command - {}th retry'.format(data['retry']))
+                        yoAccess.publishQueue.put(data, timeout = 5*data['retry']) # retry                    
+                else:  
+                    data['retry'] = 1
+                    logging.debug('Retrying command - {}st retry'.format(data['retry']))
+                    yoAccess.publishQueue.put(data, 5*data['retry']) # retry
+ 
         except Exception as e:
             #logging.debug('Exception publish_data - {}'.format(e))
             yoAccess.processing_access.release()
