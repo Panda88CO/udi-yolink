@@ -181,16 +181,23 @@ class udiYoOutletPwr(udi_interface.Node):
                 #    self.my_setDriver('GV0', 99)
                 self.last_state = state           
                 self.updateAlerts()                
-                if self.supportPower():
-                    tmp =  self.yoOutlet.getEnergy()
-                    if tmp is not None:
+
+                tmp =  self.yoOutlet.getEnergy()
+                if tmp is not None:
+                    if 'power' in tmp:
                         power = round(tmp['power']/10000,3) # reports 1/10W
-                        energy = round(tmp['watt']/10000,3) # reports 1/10Wh
                         self.my_setDriver('GV3', power, 30)
+                    else:
+                        self.my_setDriver('GV3', 99, 30)
+                    if 'watt' in tmp:                    
+                        energy = round(tmp['watt']/10000,3) # reports 1/10Wh                    
                         self.my_setDriver('GV4', energy, 33)
+                    else:
+                        self.my_setDriver('GV4', 99, 25)
                 else:
-                    self.my_setDriver('GV3', 98, 25)
-                    self.my_setDriver('GV4', 98, 25)
+                    self.my_setDriver('GV3', 99, 25)
+                    self.my_setDriver('GV4', 99, 25)
+                    
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)
