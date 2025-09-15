@@ -58,6 +58,11 @@ class udiYoInfraredCode(udi_interface.Node):
 
             self.updateData()
     
+    
+    def checkOnline(self):
+            pass  #is it a sub node - do nothing
+    
+
     def updateData(self):
         if self.node is not None:
             logging.debug('updateData - {}'.format(self.yoIRrem.online))

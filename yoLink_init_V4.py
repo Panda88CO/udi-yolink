@@ -815,7 +815,7 @@ class YoLinkInitPAC(object):
                 yoAccess.online = True
             logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue size  {yoAccess.FinishQueue.qsize()}' )
             message= yoAccess.FinishQueue.get(timeout = 3)
-            completed_message_id = yoAccess.FinishQueue.get(timeout = 3)
+            #completed_message_id = yoAccess.FinishQueue.get(timeout = 3)
             completed_message_id = message['msgid']
             msg_code = message['code']
             logging.debug('transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
@@ -825,17 +825,20 @@ class YoLinkInitPAC(object):
                 msg_code = message['code']
             logging.debug('transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             yoAccess.processing_access.release()
-            if msg_code != '000000' and msg_code != None:
-                time.sleep(5)
+            if msg_code == '000201': # device off line``
+                logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, data))
+                
                 if 'retry' in data:
                     if data['retry'] < yoAccess.MAX_RETRY: # stop after MAX_RETRY attempts
                         data['retry'] = data['retry'] + 1
                         logging.debug('Retrying command - {}th retry'.format(data['retry']))
-                        yoAccess.publishQueue.put(data, timeout = 5*data['retry']) # retry                    
+                        time.sleep(5*data['retry'])
+                        yoAccess.publishQueue.put(data, timeout = 5) # retry                    
                 else:  
                     data['retry'] = 1
                     logging.debug('Retrying command - {}st retry'.format(data['retry']))
-                    yoAccess.publishQueue.put(data, 5*data['retry']) # retry
+                    time.sleep(5*data['retry'])
+                    yoAccess.publishQueue.put(data, 5) # retry
  
         except Exception as e:
             #logging.debug('Exception publish_data - {}'.format(e))
