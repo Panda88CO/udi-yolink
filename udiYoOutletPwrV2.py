@@ -153,10 +153,10 @@ class udiYoOutletPwr(udi_interface.Node):
             else:
                 self.my_setDriver('GV8', 99)
         else:
-            self.my_setDriver('GV5', 98)
-            self.my_setDriver('GV6', 98)
-            self.my_setDriver('GV7', 98)
-            self.my_setDriver('GV8', 98)
+            self.my_setDriver('GV5', 98, 25)
+            self.my_setDriver('GV6', 98, 25)
+            self.my_setDriver('GV7', 98, 25)
+            self.my_setDriver('GV8', 98, 25)
 
 
     def updateData(self):
