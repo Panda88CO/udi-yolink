@@ -214,19 +214,18 @@ class YoLinkMQTTDevice(object):
               
     #@measure_time
     def lastUpdate(yolink):
-        logging.debug('{} - Checking last update'.format(yolink.type))
-        logging.debug('Data: {}'.format(yolink.dataAPI))
+        #logging.debug('{} - {}  - data {}'.format(yolink.type, yolink.dataAPI))
         if 'stateChangedAt' in yolink.dataAPI[yolink.dData]:
-            logging.debug('lastUpdate stateChangedAt {}'.format(yolink.dataAPI[yolink.dData]['stateChangedAt']))
+            logging.debug('{} - stateChangedAt {}'.format(yolink.type, yolink.dataAPI[yolink.dData]['stateChangedAt']))
             return(yolink.dataAPI[yolink.dData]['stateChangedAt'])
         elif 'lastStateTime' in yolink.dataAPI:
-            logging.debug('lastUpdate lastStateTime {}'.format(yolink.dataAPI['lastStateTime' ]))
+            logging.debug(' {} - lastStateTime {}'.format(yolink.type,yolink.dataAPI['lastStateTime' ]))
             if type(yolink.dataAPI['lastStateTime']) in [int, float]:
                 return(yolink.dataAPI['lastStateTime'] )
             else:
                 return(0)        
         elif yolink.lastUpd in yolink.dataAPI:
-            logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
+            logging.debug('{} - lastUpdTime {}'.format(yolink.type,yolink.dataAPI[yolink.lastUpd ]))
             if type(yolink.dataAPI[yolink.lastUpd ]) in [int, float]:
                 return(yolink.dataAPI[yolink.lastUpd ])
             else:
@@ -235,10 +234,10 @@ class YoLinkMQTTDevice(object):
             timestamp = yolink.dataAPI['reportAt']
             dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             
-            logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
+            logging.debug('{} - reportAt {}'.format(yolink.type,int(dt.timestamp())))
             return(dt.timestamp()*1000) # make in ms
         elif 'time' in  yolink.dataAPI:
-            logging.debug('lastUpdate time {}'.format(yolink.dataAPI['time']))
+            logging.debug('{} - time {}'.format(yolink.type, yolink.dataAPI['time']))
 
             return(yolink.dataAPI['time'])
         else:
@@ -256,7 +255,7 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def data_updated(yolink):
         tmp = yolink.lastUpdate()
-        logging.debug('data_updated {} vs {}'.format(tmp, yolink.lastUpdateTime))
+        #logging.debug('data_updated {} vs {}'.format(tmp, yolink.lastUpdateTime))
         if tmp == {}:
             return(False)        
         if yolink.lastUpdateTime == 0:
@@ -264,7 +263,7 @@ class YoLinkMQTTDevice(object):
 
         if ( tmp > yolink.lastUpdateTime):
             yolink.lastUpdateTime = tmp 
-            logging.debug('{} - Data Updated'.format(yolink.type))
+            #logging.debug('{} - Data Updated'.format(yolink.type))
             return(True)
         else:
             return(False)
