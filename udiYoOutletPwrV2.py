@@ -189,8 +189,8 @@ class udiYoOutletPwr(udi_interface.Node):
                         self.my_setDriver('GV3', power, 30)
                         self.my_setDriver('GV4', energy, 33)
                 else:
-                    self.my_setDriver('GV3', 98)
-                    self.my_setDriver('GV4', 98)
+                    self.my_setDriver('GV3', 98, 25)
+                    self.my_setDriver('GV4', 98, 25)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
                     self.my_setDriver('GV1', 0)

@@ -13,11 +13,11 @@
   </editor>
   <editor id="watt"> 
       <range uom="30" min="-1" max="2000" prec="2" />
-      <range uom="25" subset="0,99" nls="nosupport" />
+      <range uom="25" subset="0,98,99" nls="nosupport" />
   </editor>
   <editor id="energy"> 
      <range uom="33" min="-1" max="2000" prec="2" />
-     <range uom="25" subset="0,99" nls="nosupport" />
+     <range uom="25" subset="0,98,99" nls="nosupport" />
   </editor>
   <editor id="waterlevel"> 
     <range uom="56" min="0" max="1000" prec="0" />
