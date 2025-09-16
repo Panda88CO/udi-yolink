@@ -825,7 +825,7 @@ class YoLinkInitPAC(object):
                 msg_code = message['code']
             logging.debug('transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             yoAccess.processing_access.release()
-            if msg_code == '000201': # device off line``
+            if msg_code in ['000201', '020104']: # device off line or busy 
                 logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, data))
                 
                 if 'retry' in data:

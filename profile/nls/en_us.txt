@@ -93,7 +93,6 @@ CMD-nlsswitch-CTRL_SCH-NAME=Set Schedule
 CMD-nlsswitch-LOOKUP_SCH-NAME=Lookup Schedule
 CMD-nlsswitch-DELAY_CTRL-NAME=Program Delays
 CMD-nlsswitch-UPDATE-NAME=Update Status
-CMD-nlsswitch-QUERY-NAME=Query
 CMD-nlsswitch-ONDELAY-NAME=Set On Delay
 CMD-nlsswitch-OFFDELAY-NAME=Set Off Delay (0 if no delay)
 CMD-nlsswitch-SWCTRL-NAME=Switch control
@@ -136,7 +135,6 @@ CMD-nlsoutlet-DELAY_CTRL-NAME=Program Delays
 CMD-nlsoutlet-DEFINE_SCH-NAME=Define Schedule
 CMD-nlsoutlet-CTRL_SCH-NAME=Set Schedule
 CMD-nlsoutlet-LOOKUP_SCH-NAME=Lookup Schedule
-
 CMD-nlsoutlet-UPDATE-NAME=Update Status
 CMD-nlsoutlet-QUERY-NAME=Query
 CMD-nlsoutlet-ONDELAY-NAME=Set On Delay
@@ -277,6 +275,7 @@ ST-nlsthsens-TIME-NAME=Last device update
 ST-nlsthsens-CLITEMP-NAME=Sensor Temperature
 ST-nlsthsens-CLIHUM-NAME=Current Rel Humidity (%)
 CMD-nlsthsens-SETCMD-NAME=Select Command Action
+CMD-nlsthsens-UPDATE-NAME=Update Status
 
 ND-yogarage-NAME=YoLink Garage Controller
 ND-yogarage-ICON=Switch
@@ -300,7 +299,7 @@ ST-nlsdoorsens-CLIHUM-NAME=Current Rel Humidity (%)
 CMD-nlsdoorsens-SETCMD-NAME=Select Command Action
 CMD-nlsdoorsens-DON-NAME=Open
 CMD-nlsdoorsens-DOF-NAME=Closed
-
+CMD-nlsdoorsens-UPDATE-NAME=Update Status
 
 ND-yomotionsens-NAME=YoLink Motion Sensor
 ND-yomotionsens-ICON=MotionSensor
@@ -317,6 +316,7 @@ ST-nlsmotionsens-CLIHUM-NAME=Current Rel Humidity (%)
 CMD-nlsmotionsens-SETCMD-NAME=Select Command Action
 CMD-nlsmotionsens-DON-NAME=Motion
 CMD-nlsmotionsens-DOF-NAME=No Motion
+CMD-nlsmotionsens-UPDATE-NAME=Update Status
 
 ND-yoleaksens-NAME=YoLink Water Sensor
 ND-yoleaksens-ICON=Input
@@ -336,6 +336,8 @@ ST-nlsleaksens-CLIHUM-NAME=Current Rel Humidity (%)
 CMD-nlsleaksens-SETCMD-NAME=Select Command Action
 CMD-nlsleaksens-DON-NAME=Water Alert Detected
 CMD-nlsleaksens-DOF-NAME=Normal
+CMD-nlsleaksens-UPDATE-NAME=Update Status
+
 
 ND-yovibrasens-NAME=YoLink Vibrations Sensor
 ND-yovibrasens-ICON=MotionSensor
@@ -352,6 +354,7 @@ ST-nlsvibrasens-CLIHUM-NAME=Current Rel Humidity (%)
 CMD-nlsvibrasens-SETCMD-NAME=Select Command Action
 CMD-nlsvibrasens-DON-NAME=Vibration Detected
 CMD-nlsvibrasens-DOF-NAME=Normal
+CMD-nlsvibrasens-UPDATE-NAME=Update Status
 
 ND-yohub-NAME=YoLink Hub
 ND-yohub-ICON=Output
@@ -383,6 +386,7 @@ ST-nlsspeakerh-GV30-NAME=Online State
 ST-nlsspeakerh-TIME-NAME=Last device update
 ST-nlsspeakerh-CLITEMP-NAME=Sensor Temperature
 ST-nlsspeakerh-CLIHUM-NAME=Current Rel Humidity (%)
+CMD-nlsspeakerh-UPDATE-NAME=Update
 CMD-nlsspeakerh-PLAY-NAME=Play Message
 CMDP-volume-NAME=Volume
 CMD-nlsspeakerh-BEEP-NAME=Beep
@@ -408,6 +412,7 @@ ST-nlslock-CLIHUM-NAME=Current Rel Humidity (%)
 CMD-nlslock-LOCK-NAME=Lock Lock
 CMD-nlslock-UNLOCK-NAME=Unlock Lock
 CMD-nlslock-LOCKCTRL-NAME=Set Lock
+CMD-nlsspeakerh-UPDATE-NAME=Update
 
 ND-yodimmer-NAME=YoLink Dimmer
 ND-yodimmer-ICON=Switch
