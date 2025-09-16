@@ -42,6 +42,7 @@ class udiYoTHsensor(udi_interface.Node):
     ''' 
         
     drivers = [
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'CLITEMP', 'value': 0, 'uom': 4},
             {'driver': 'GV1', 'value': 2, 'uom': 25}, 
             {'driver': 'GV2', 'value': 2, 'uom': 25}, 
@@ -52,13 +53,11 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'GV7', 'value': 2, 'uom': 25},
             {'driver': 'GV8', 'value': 2, 'uom': 25},
             {'driver': 'GV9', 'value': 99, 'uom': 25},
-
-
             {'driver': 'GV10', 'value': 0, 'uom': 4},
             {'driver': 'GV11', 'value': 0, 'uom': 4},
             {'driver': 'GV12', 'value': 0, 'uom': 51},
             {'driver': 'GV13', 'value': 0, 'uom': 51},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
+
             {'driver': 'GV30', 'value': 0, 'uom': 25},            
             {'driver': 'GV20', 'value': 99, 'uom': 25},            
              {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},    
@@ -251,7 +250,6 @@ class udiYoTHsensor(udi_interface.Node):
     commands = {
                 'SETCMD': set_cmd,             
                 'UPDATE': update,
-                'QUERY' : update, 
                 }
 
 

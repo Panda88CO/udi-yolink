@@ -798,7 +798,6 @@
          <st id="GV7" editor="alarm" />
          <st id="GV8" editor="alarm" />
          <st id="GV9" editor="cmdsetting" />
-         <st id="ST"  editor="status" />
          <st id="GV10" editor="tempC" />
          <st id="GV11" editor="tempC" />
          <st id="GV12" editor="humidity" />
