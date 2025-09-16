@@ -135,7 +135,7 @@ class udiYoOutletPwr(udi_interface.Node):
 
         temp = self.yoOutlet.getAlertInfo()
         logging.debug('self.getAlerts {}'.format(temp))
-        if self.supportPower() and temp is not None:            
+        if temp is not None:            
             if 'overload' in temp:
                 self.my_setDriver('GV5', self.bool2ISY(temp['overload']))
             else:

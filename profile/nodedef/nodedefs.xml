@@ -25,10 +25,10 @@
          <st id="GV2" editor="delay" />
          <st id="GV3" editor="watt" />
          <st id="GV4" editor="energy" />
-         <st id="GV5" editor="alert" />
-         <st id="GV6" editor="alert" />
-         <st id="GV7" editor="alert" />
-         <st id="GV8" editor="alert" />
+         <st id="GV5" editor="poweralert" />
+         <st id="GV6" editor="poweralert" />
+         <st id="GV7" editor="poweralert" />
+         <st id="GV8" editor="poweralert" />
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
          <st id="GV15" editor="stHour" />      
@@ -420,10 +420,10 @@
          <st id="GV2" editor="delay" />
          <st id="GV3" editor="watt" />
          <st id="GV4" editor="energy" />
-         <st id="GV5" editor="alert" />
-         <st id="GV6" editor="alert" />
-         <st id="GV7" editor="alert" />
-         <st id="GV8" editor="alert" />
+         <st id="GV5" editor="poweralert" />
+         <st id="GV6" editor="poweralert" />
+         <st id="GV7" editor="poweralert" />
+         <st id="GV8" editor="poweralert" />
 
 
          <!-- <st id="GV8" editor="online" /> -->

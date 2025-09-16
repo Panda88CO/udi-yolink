@@ -223,7 +223,7 @@
      <range uom="25" subset="0-1" nls="sch_active" />
    </editor>   
    <editor id="sch_index"> 
-     <range uom="25" subset="0-9,98,99" nls="sch_index" />
+     <range uom="25" subset="0-9,98,99" nls="sch_indexM" />
    </editor>  
    <editor id="sch_indexM"> 
      <range uom="25" subset="0-9,99" nls="sch_indexM" />

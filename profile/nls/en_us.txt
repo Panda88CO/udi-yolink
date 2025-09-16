@@ -405,9 +405,10 @@ ST-nlslock-BATLVL-NAME=Battery Level
 ST-nlslock-TIME-NAME=Last device update
 ST-nlslock-CLITEMP-NAME=Sensor Temperature
 ST-nlslock-CLIHUM-NAME=Current Rel Humidity (%)
-CMD-nlslock-LOCK-NAME=Lock Lock
-CMD-nlslock-UNLOCK-NAME=Unlock Lock
+CMD-nlslock-LOCK-NAME=Lock
+CMD-nlslock-UNLOCK-NAME=Unlock
 CMD-nlslock-LOCKCTRL-NAME=Set Lock
+CMD-nlslock-UPDATE-NAME=Update 
 
 ND-yodimmer-NAME=YoLink Dimmer
 ND-yodimmer-ICON=Switch
