@@ -817,7 +817,6 @@
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
-     
          </accepts>
       </cmds>
    </nodeDef> 

@@ -79,12 +79,7 @@ class udiYoOutletPwr(udi_interface.Node):
         self.onDelay = 0
         self.offDelay = 0
         self.schedule_selected = None
-        model = str(self.devInfo['modelName'][:6])
-        if model in ['YS6602', 'YS6803']:
-            self.meas_support = ['pwr']
-        else:
-            self.meas_support = []
-
+  
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
@@ -128,8 +123,7 @@ class udiYoOutletPwr(udi_interface.Node):
         #    self.my_setDriver('GV2', 0, True, False)
 
 
-    def supportPower(self):
-        return('pwr' in self.meas_support)
+
 
     def updateAlerts(self):
 
