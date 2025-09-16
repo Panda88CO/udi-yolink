@@ -183,6 +183,7 @@ class udiYoOutletPwr(udi_interface.Node):
                 self.updateAlerts()                
 
                 tmp =  self.yoOutlet.getEnergy()
+                logging.debug('Power/Energy info : {} '. format(tmp))
                 if tmp is not None:
                     if 'power' in tmp:
                         power = round(tmp['power']/10000,3) # reports 1/10W
