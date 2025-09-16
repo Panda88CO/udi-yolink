@@ -73,13 +73,10 @@ class udiYoBatteryHub(udi_interface.Node):
         self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoHub.initNode()
-        #self.node.setDriver('ST', 1, True, True)
-        
-        #if not self.yoHub.online:
-        #    logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
-        #else:
-        #    self.node.setDriver('ST', 1, True, True)
         self.node_ready = True
+        time.sleep(1)
+        self.yoHub.refreshDevice()
+
 
     def updateDelayCountdown (self, delayRemaining ) :
         logging.debug('updateDelayCountdown {}'.format(delayRemaining))
