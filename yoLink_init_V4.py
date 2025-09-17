@@ -816,6 +816,7 @@ class YoLinkInitPAC(object):
             logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue size  {yoAccess.FinishQueue.qsize()}' )
             message= yoAccess.FinishQueue.get(timeout = 3)
             #completed_message_id = yoAccess.FinishQueue.get(timeout = 3)
+            logging.debug(f'FinishQueue message received {message}')
             completed_message_id = message['msgid']
             msg_code = message['code']
             logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
