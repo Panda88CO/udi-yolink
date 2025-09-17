@@ -34,7 +34,10 @@ class YoLinkSir(YoLinkMQTTDevice):
         #    
         #yolink.refreshFW
     ''' 
-
+    def shut_down(yolink):
+        logging.debug(yolink.type+' - shut_down')
+        # Any thing specfic to do when polyglot stops
+        return(True)
     
     def updateStatus(yolink, data):
         yolink.updateCallbackStatus(data, False)
