@@ -823,6 +823,7 @@ class YoLinkInitPAC(object):
                 message = yoAccess.FinishQueue.get(timeout = 3)
                 completed_message_id = message['msgid']
                 msg_code = message['code']
+                logging.debug(f'while loop {message} {completed_message_id} {msg_code} size {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             yoAccess.processing_access.release()
             if msg_code in ['000201', '020104']: # device off line or busy 
@@ -841,7 +842,7 @@ class YoLinkInitPAC(object):
                     yoAccess.publishQueue.put(data, 5) # retry
  
         except Exception as e:
-            #logging.debug('Exception publish_data - {}'.format(e))
+            logging.debug('Exception publish_data - {}'.format(e))
             yoAccess.processing_access.release()
             pass # go wait again unless stop is called
 
