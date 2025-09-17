@@ -193,7 +193,7 @@ CMD-nlsubout-UPDATE-NAME=Update Status
 CMD-nlsubout-ONDELAY-NAME=Set On Delay
 CMD-nlsubout-OFFDELAY-NAME=Set Off Delay (0 if no delay)
 CMD-nlsubout-SWCTRL-NAME=Switch control
-
+CMD-nlsubout-DELAYCTRL-NAME=Program Delays
 
 
 ND-yosubusb-NAME=YoLink USB Ports
