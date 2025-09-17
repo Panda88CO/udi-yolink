@@ -161,18 +161,17 @@ ST-nlsmultiout-GV20-NAME=Connection State
 ST-nlsmultiout-GV30-NAME=Online State
 ST-nlsmultiout-TIME-NAME=Last device update
 ST-nlsmultiout-CLITEMP-NAME=Sensor Temperature
-ST-nlsmultiout-CLIHUM-NAME=Current Rel Humidity (%)
+ST--CLIHUM-NAME=Current Rel Humidity (%)
+
+CMD-nlsmultiout-DELAYCTRL-NAME=Program Delays
+CMD-nlsmultiout-DEFINESCH-NAME=Define Schedule
+CMD-nlsmultiout-CTRLSCH-NAME=Set Schedule
+CMD-nlsmultiout-LOOKUPSCH-NAME=Lookup Schedule
+CMD-nlsmultiout-UPDATE-NAME=Update Status
+CMD-nlsmultiout-ONDELAY-NAME=Set On Delay
+CMD-nlsmultiout-OFFDELAY-NAME=Set Off Delay (0 if no delay)
+CMD-nlsmultiout-SWCTRL-NAME=Switch control
 CMDP-outport-NAME=Outlet Port
-CMD-nlsoutlet-DELAYCTRL-NAME=Program Delays
-CMD-nlsoutlet-DEFINESCH-NAME=Define Schedule
-CMD-nlsoutlet-CTRLSCH-NAME=Set Schedule
-CMD-nlsoutlet-LOOKUPSCH-NAME=Lookup Schedule
-
-CMD-nlsoutlet-UPDATE-NAME=Update Status
-CMD-nlsoutlet-ONDELAY-NAME=Set On Delay
-CMD-nlsoutlet-OFFDELAY-NAME=Set Off Delay (0 if no delay)
-CMD-nlsoutlet-SWCTRL-NAME=Switch control
-
  
 ND-yosubout-NAME=YoLink subOutlet
 ND-yosubout-ICON=Switch
