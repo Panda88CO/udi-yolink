@@ -10,7 +10,7 @@ from  datetime import datetime
 try:
     import udi_interface
     logging = udi_interface.LOGGER
-    #logging = getlogger('yolink_init_V2')
+    #logging = getlogger('yolink_init_V4')
     Custom = udi_interface.Custom
 except ImportError:
     import logging
@@ -818,12 +818,12 @@ class YoLinkInitPAC(object):
             #completed_message_id = yoAccess.FinishQueue.get(timeout = 3)
             completed_message_id = message['msgid']
             msg_code = message['code']
-            logging.debug('transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
+            logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             while message_id != completed_message_id:
                 message = yoAccess.FinishQueue.get(timeout = 3)
                 completed_message_id = message['msgid']
                 msg_code = message['code']
-            logging.debug('transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
+            logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             yoAccess.processing_access.release()
             if msg_code in ['000201', '020104']: # device off line or busy 
                 logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, data))
