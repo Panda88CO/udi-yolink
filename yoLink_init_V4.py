@@ -813,10 +813,11 @@ class YoLinkInitPAC(object):
             else:
                 yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True
-            logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue size  {yoAccess.FinishQueue.qsize()}' )
+            time.sleep(0.1) # give some time to process the publish before waiting for response
+            logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue GET size  {yoAccess.FinishQueue.qsize()}' )
             message= yoAccess.FinishQueue.get(timeout = 3)
             #completed_message_id = yoAccess.FinishQueue.get(timeout = 3)
-            logging.debug(f'FinishQueue message received {message}')
+            logging.debug(f'FinishQueue GET {message} size {yoAccess.FinishQueue.qsize()}')
             completed_message_id = message['msgid']
             msg_code = message['code']
             logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
