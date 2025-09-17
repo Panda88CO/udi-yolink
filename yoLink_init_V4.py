@@ -774,7 +774,7 @@ class YoLinkInitPAC(object):
         try:
             yoAccess.processing_access.acquire()
             data = yoAccess.publishQueue.get(timeout = 10)
-
+            logging.debug( 'transfer_data - data from publishQueue: {} - size {}'.format(data, yoAccess.publishQueue.qsize()))
             deviceId = data['targetDevice']
 
             #logging.debug('mqttList : {}'.format(yoAccess.mqttList))
@@ -792,7 +792,7 @@ class YoLinkInitPAC(object):
                 data['time'] = str(int(time.time_ns()/1e6))  # update time to actual packet time (to include delays)
                 message_id = data['time'] 
                 dataStr = str(json.dumps(data))
-                yoAccess.tmpData[deviceId] = dataStr
+                #yoAccess.tmpData[deviceId] = dataStr
                 yoAccess.lastDataPacket[deviceId] = data
 
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
