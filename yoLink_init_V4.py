@@ -450,12 +450,14 @@ class YoLinkInitPAC(object):
 
                 elif msg.topic == yoAccess.mqttList[deviceId]['response']:
                     return_msg={'code': None, 'msgid': None}
-                    return_msg['msgid'] = payload['msgid']
-                    return_msg['code'] = payload['code']    
-                    logging.debug('processing response: {}'.format(payload))
-                    logging.debug('FinishQueue PUT: {}'.format(payload['msgid']))                   
+                    if 'msgid' in payload:
+                        return_msg['msgid'] = payload['msgid']
+                    if 'code' in payload:                           
+                        return_msg['code'] = payload['code']                        
+                    logging.debug('FinishQueue PUT: {}'.format(return_msg))                   
                     yoAccess.FinishQueue.put(return_msg)
                     logging.debug(f'FinishQueue PUT size: {yoAccess.FinishQueue.qsize()}')    
+                    logging.debug('processing response: {}'.format(payload))
                     if payload['code'] == '000000':
                         tempCallback(payload)
                     else:
@@ -815,17 +817,17 @@ class YoLinkInitPAC(object):
                 yoAccess.online = True
             time.sleep(0.1) # give some time to process the publish before waiting for response
             logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue GET size  {yoAccess.FinishQueue.qsize()}' )
-            message= yoAccess.FinishQueue.get(timeout = 3)
+            message= yoAccess.FinishQueue.get(timeout = 10)
             logging.debug(f'FinishQueue GET {message} size {yoAccess.FinishQueue.qsize()}')
             completed_message_id = message['msgid']
             msg_code = message['code']
             logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             while message_id != completed_message_id:
-                message = yoAccess.FinishQueue.get(timeout = 3)
+                message = yoAccess.FinishQueue.get(timeout = 10)
                 completed_message_id = message['msgid']
                 msg_code = message['code']
                 logging.debug(f'while loop {message} {completed_message_id} {msg_code} size {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
-            logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
+                logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             yoAccess.processing_access.release()
             if msg_code in ['000201', '020104']: # device off line or busy 
                 logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, data))
@@ -843,7 +845,7 @@ class YoLinkInitPAC(object):
                     yoAccess.publishQueue.put(data, 5) # retry
  
         except Exception as e:
-            logging.debug('Exception publish_data - {}'.format(e))
+            logging.error('Exception publish_data - {}'.format(e))
             yoAccess.processing_access.release()
             pass # go wait again unless stop is called
 
