@@ -837,13 +837,14 @@ class YoLinkInitPAC(object):
                     data['retry'] = data['retry'] + 1
                 else:  
                     data['retry'] = 1
-                if data['retry'] < yoAccess.MAX_RETRY: # stop after MAX_RETRY attempts
-                    logging.debug('Retrying command - {}st retry'.format(data['retry']))
+                if data['retry'] <= yoAccess.MAX_RETRY: # stop after MAX_RETRY attempts
+                    logging.debug('Retrying command - retry {}'.format(data['retry']))
                     time.sleep(5*data['retry'])
                     data['time'] = str(int(time.time_ns()/1e6)) #update time to actual packet time 
+                    logging.debug('Issuing Retry command: {}'.format(data))
                     yoAccess.publishQueue.put(data, timeout = 5) # retry
                 else:
-                    logging.error('Max retries reached - giving up on command {}'.format(data))
+                    logging.error('Max retries reached - giving up on command {}'.format(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
  
         except Exception as e:
             logging.error('Exception publish_data - {}'.format(e))
