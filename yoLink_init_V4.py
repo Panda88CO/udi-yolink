@@ -842,7 +842,7 @@ class YoLinkInitPAC(object):
                     time.sleep(5*data['retry'])
                     data['time'] = str(int(time.time_ns()/1e6)) #update time to actual packet time 
                     logging.debug('Issuing Retry command: {}'.format(data))
-                    yoAccess.publishQueue.put(data, timeout = 5) # retry
+                    yoAccess.publish_data(data) # retry
                 else:
                     logging.error('Max retries reached - giving up on command {}'.format(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
  
