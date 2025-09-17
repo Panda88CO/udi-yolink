@@ -262,7 +262,7 @@ class udiYoSubOutlet(udi_interface.Node):
                 'SWCTRL'   : switchControl, 
                 #'ONDELAY'  : prepOnDelay,
                 #'OFFDELAY' : prepOffDelay,
-                'DELAY_CTRL'    : program_delays, 
+                'DELAYCTRL'    : program_delays, 
                 'UPDATE'   : update,
                 'DON'      : set_port_on,
                 'DOF'      : set_port_off,

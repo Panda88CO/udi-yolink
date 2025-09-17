@@ -496,7 +496,6 @@
       <sts>
          <!-- <st id="GV8" editor="online" /> -->
 
-
          <st id="GV12" editor="outport" />    
          <st id="GV13" editor="sch_index" />      
          <st id="GV14" editor="sch_active" />    
@@ -517,7 +516,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="sch_indexM" init="GV13" /> 
              </cmd >

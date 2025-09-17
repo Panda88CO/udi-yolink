@@ -213,7 +213,7 @@ CMD-nlssubusb-UPDATE-NAME=Update Status
 CMD-nlssubusb-ONDELAY-NAME=Set On Delay
 CMD-nlssubusb-OFFDELAY-NAME=Set Off Delay (0 if no delay)
 CMD-nlssubusb-SWCTRL-NAME=Switch control
-
+CMD-nlssubusb-DELAYCTRL-NAME=Program Delays
 
 ND-yomanipu-NAME=YoLink Manipulator
 ND-yomanipu-ICON=GenericCtrl
