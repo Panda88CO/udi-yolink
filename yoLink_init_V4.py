@@ -830,7 +830,7 @@ class YoLinkInitPAC(object):
                 logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
             yoAccess.processing_access.release()
             if msg_code in ['000201', '020104']: # device off line or busy 
-                logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, data))
+                logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
                 
                 if 'retry' in data:
 
