@@ -454,7 +454,7 @@ class YoLinkInitPAC(object):
                     return_msg['code'] = payload['code']    
                     logging.debug('processing response: {}'.format(payload))
                     logging.debug('FinishQueue PUT: {}'.format(payload['msgid']))                   
-                    yoAccess.FinishQueue.put(payload['msgid'])
+                    yoAccess.FinishQueue.put(return_msg)
                     logging.debug(f'FinishQueue PUT size: {yoAccess.FinishQueue.qsize()}')    
                     if payload['code'] == '000000':
                         tempCallback(payload)
@@ -816,7 +816,6 @@ class YoLinkInitPAC(object):
             time.sleep(0.1) # give some time to process the publish before waiting for response
             logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue GET size  {yoAccess.FinishQueue.qsize()}' )
             message= yoAccess.FinishQueue.get(timeout = 3)
-            #completed_message_id = yoAccess.FinishQueue.get(timeout = 3)
             logging.debug(f'FinishQueue GET {message} size {yoAccess.FinishQueue.qsize()}')
             completed_message_id = message['msgid']
             msg_code = message['code']
