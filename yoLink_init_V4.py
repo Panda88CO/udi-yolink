@@ -833,7 +833,6 @@ class YoLinkInitPAC(object):
                 logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
                 
                 if 'retry' in data:
-
                     data['retry'] = data['retry'] + 1
                 else:  
                     data['retry'] = 1
@@ -841,6 +840,10 @@ class YoLinkInitPAC(object):
                     logging.debug('Retrying command - retry {}'.format(data['retry']))
                     time.sleep(5*data['retry'])
                     data['time'] = str(int(time.time_ns()/1e6)) #update time to actual packet time 
+                    logging.debug('publishQueue before retry: {}'.format(list(yoAccess.publishQueue.queue)))
+                    if yoAccess.publishQueue.qsize() != 0:
+                        logging.debug('publishQueue not empty - checking if newer entr exists')
+                        yoAccess.publishQueue.queue.appendleft(data) # put retry at front of queue
                     logging.debug('Issuing Retry command: {}'.format(data))
                     yoAccess.publish_data(data) # retry
                 else:
