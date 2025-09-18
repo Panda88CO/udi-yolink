@@ -6,7 +6,7 @@ MIT License
 
 import sys
 import time
-from apscheduler.schedulers.background import BackgroundScheduler
+#from apscheduler.schedulers.background import BackgroundScheduler
 
 
 from yoLink_init_V3 import YoLinkInitPAC
@@ -38,6 +38,7 @@ from udiYoWaterMeterOnlyV3 import udiYoWaterMeterOnly
 from udiYoHubV2 import udiYoHub, udiYoBatteryHub
 import udiProfileHandler
 
+
 try:
     import udi_interface
     logging = udi_interface.LOGGER
@@ -45,8 +46,6 @@ try:
 except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
-
-
 
 
 
@@ -114,14 +113,8 @@ class YoLinkSetup (udi_interface.Node):
 
 
 
-    def convert_temp_unit(self, tempStr):
-        if tempStr.capitalize()[:1] == 'F':
-            return(1)
-        elif tempStr.capitalize()[:1] == 'K':
-            return(2)
-        else:
-            return(0)
 
+    '''
     def configDoneHandler(self):
         # We use this to discover devices, or ask to authenticate if user has not already done so
         self.poly.Notices.clear()
@@ -130,6 +123,7 @@ class YoLinkSetup (udi_interface.Node):
         self.nodes_in_db = self.poly.getNodesFromDb()
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
         self.configDone = True
+    '''
 
     def start (self):
         logging.info('Executing start - udi-YoLink')

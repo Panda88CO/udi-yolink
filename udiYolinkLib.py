@@ -21,6 +21,20 @@ import time
 import json
 import math
 
+def updateEpochTime(self, command=None ):
+    logging.info('updateEpochTime ')
+    #unit = int(command.get('value'))
+    self.my_setDriver('TIME', int(time.time()))
+    
+def convert_temp_unit(self, tempStr):
+    if tempStr.capitalize()[:1] == 'F':
+        return(1)
+    elif tempStr.capitalize()[:1] == 'K':
+        return(2)
+    else:
+        return(0)
+
+
 def save_cmd_state(self, cmd_state):
     logging.debug('save_cmd_state {} - {}'.format(cmd_state, self.address))
     temp = {}

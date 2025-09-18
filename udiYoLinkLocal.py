@@ -7,37 +7,7 @@ MIT License
 import sys
 import time
 #from apscheduler.schedulers.background import BackgroundScheduler
-
-
 from yoLink_init_V3 import YoLinkInitPAC
-#from yoLink_local_init_V3 import YoLinkInitLocal
-from udiYoSwitchV2 import udiYoSwitch
-#from udiYoSwitchV3H import udiYoSwitchL
-from udiYoSwitchSecV2 import udiYoSwitchSec
-from udiYoSwitchPwrSecV2 import udiYoSwitchPwrSec
-from udiYoTHsensorV3 import udiYoTHsensor 
-from udiYoWaterDeptV3 import udiYoWaterDept 
-from udiYoGarageDoorCtrlV2 import udiYoGarageDoor
-from udiYoGarageFingerCtrlV2 import udiYoGarageFinger
-from udiYoMotionSensorV3 import udiYoMotionSensor
-from udiYoLeakSensorV3 import udiYoLeakSensor
-from udiYoCOSmokeSensorV3 import udiYoCOSmokeSensor
-from udiYoDoorSensorV3 import udiYoDoorSensor
-from udiYoOutletV2 import udiYoOutlet
-from udiYoOutletPwrV2 import udiYoOutletPwr
-from udiYoMultiOutletV2 import udiYoMultiOutlet
-from udiYoManipulatorV2 import udiYoManipulator
-from udiYoSpeakerHubV2 import udiYoSpeakerHub
-from udiYoLockV2 import udiYoLock
-from udiYoInfraredRemoterV2 import udiYoInfraredRemoter
-from udiYoDimmerV2 import udiYoDimmer
-from udiYoVibrationSensorV3 import udiYoVibrationSensor
-from udiYoSmartRemoterV3 import udiYoSmartRemoter
-from udiYoPowerFailV3 import udiYoPowerFailSenor
-from udiYoSirenV2 import udiYoSiren
-from udiYoWaterMeterControllerV2 import udiYoWaterMeterController
-#from udiYoHubV2 import udiYoHub
-import udiProfileHandler
 
 try:
     import udi_interface
@@ -47,14 +17,12 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-
-
-
 version = '0.0.7'
 
 
 class YoLinkSetup (udi_interface.Node):
-    from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit
+    from udiCommonLib import systemPoll, addNodes, stop, heartbeat, configDoneHandler, checkNodes, handleLevelChange
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  
         
@@ -119,6 +87,7 @@ class YoLinkSetup (udi_interface.Node):
         self.nodeDefineDone = True
 
 
+    '''
     def convert_temp_unit(self, tempStr):
         if tempStr.capitalize()[:1] == 'F':
             return(1)
@@ -126,7 +95,9 @@ class YoLinkSetup (udi_interface.Node):
             return(2)
         else:
             return(0)
+    '''
 
+    '''
     def configDoneHandler(self):
         # We use this to discover devices, or ask to authenticate if user has not already done so
         self.poly.Notices.clear()
@@ -135,6 +106,7 @@ class YoLinkSetup (udi_interface.Node):
         self.nodes_in_db = self.poly.getNodesFromDb()
         logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
         self.configDone = True
+    '''
 
 
     def parse_device_lists (self, cloud_list, local_list) -> list:
@@ -277,13 +249,15 @@ class YoLinkSetup (udi_interface.Node):
             self.addNodes(self.deviceList)
         else:
             self.my_setDriver('ST', 0)
-        #self.poly.updateProfile()
-        
+
+            
+        #self.poly.updateProfile()        
         #self.scheduler = BackgroundScheduler()
         #self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
         #self.scheduler.start()
         #self.updateEpochTime()
 
+    '''
     def addNodes (self, deviceList):
         for dev in deviceList:
             logging.debug(f'DEVICE ANALYZED {dev}')
@@ -573,7 +547,7 @@ class YoLinkSetup (udi_interface.Node):
         self.yolink_nodes = self.poly.getNodes()
         self.my_setDriver('GV1', 1)
         self.pollStart = True
-
+    
     def stop(self):
         try:
             logging.info('Stop Called:')
@@ -594,6 +568,7 @@ class YoLinkSetup (udi_interface.Node):
 
             self.poly.stop()
 
+    
     def heartbeat(self):
         logging.debug('heartbeat: ' + str(self.hb))
         connected = False
@@ -613,7 +588,7 @@ class YoLinkSetup (udi_interface.Node):
                 self.hb = 0
         else:
             self.my_setDriver('ST', 0)
-
+    '''
     #def display_update(self):
     #    logging.debug('display_update')
     #    self.updateEpochTime()
@@ -633,7 +608,7 @@ class YoLinkSetup (udi_interface.Node):
     #            devList.append(dev)
     #            self.addNodes(devList)
 
-
+    '''
     def systemPoll (self, polltype):
         if self.pollStart:
             logging.debug('System Poll executing: {}'.format(polltype))
@@ -680,7 +655,7 @@ class YoLinkSetup (udi_interface.Node):
             #else:
             #    self.my_setDriver('ST', 0)
                 
-
+        '''
 
     def handleLevelChange(self, level):
         logging.info('New log level: {}'.format(level))
@@ -812,10 +787,7 @@ class YoLinkSetup (udi_interface.Node):
             logging.debug('Error: {} {}'.format(e, userParam))
 
 
-    def updateEpochTime(self, command=None ):
-        logging.info('updateEpochTime ')
-        #unit = int(command.get('value'))
-        self.my_setDriver('TIME', int(time.time()))
+
 
 
     id = 'setup'
