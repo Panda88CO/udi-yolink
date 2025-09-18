@@ -816,7 +816,7 @@ class YoLinkInitPAC(object):
                 yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True
             time.sleep(0.1) # give some time to process the publish before waiting for response
-            logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue GET size  {yoAccess.FinishQueue.qsize()}' )
+            logging.debug(f'waiting for response to be received - message_id {message_id} - FinishQueue GET size  {yoAccess.FinishQueue.qsize()} {list(yoAccess.publishQueue.queue)}' )
             message= yoAccess.FinishQueue.get(timeout = 10)
             logging.debug(f'FinishQueue GET {message} size {yoAccess.FinishQueue.qsize()}')
             completed_message_id = message['msgid']
