@@ -50,7 +50,7 @@ except ImportError:
 
 
 
-version = '1.5.12'
+version = '1.5.13'
 
 
 
