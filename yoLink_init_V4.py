@@ -671,11 +671,11 @@ class YoLinkInitPAC(object):
         publishThread = Thread(target = yoAccess.transfer_data )
         publishThread.start()
         logging.debug('publishThread - starting')
-        while not yoAccess.publishQueue.empty():
-            time.sleep(0.1)
-            yoAccess.publishQueue.put(data, timeout = 5)
-            publishThread = Thread(target = yoAccess.transfer_data )
-            publishThread.start()
+        #while not yoAccess.publishQueue.empty():
+        #    time.sleep(0.1)
+        #    yoAccess.publishQueue.put(data, timeout = 5)
+        #    publishThread = Thread(target = yoAccess.transfer_data )
+        #    publishThread.start()
         logging.debug('publishThread - starting')
         return(True)
 
@@ -848,9 +848,13 @@ class YoLinkInitPAC(object):
                     time.sleep(5*data['retry'])
                     data['time'] = str(int(time.time_ns()/1e6)) #update time to actual packet time 
                     logging.debug('publishQueue before retry: {}'.format(list(yoAccess.publishQueue.queue)))
-                    if yoAccess.publishQueue.qsize() != 0:
-                        logging.debug('publishQueue not empty - checking if newer entr exists')
-                        yoAccess.publishQueue.queue.appendleft(data) # put retry at front of queue
+                    if not yoAccess.publishQueue.empty():
+                        logging.debug('publishQueue not empty - checking if newer entries exists')
+                        publish_list = list (yoAccess.publishQueue.queue) # put retry at front of queue
+                        for Q_data in publish_list:
+                            if Q_data['targetDevice'] == data['targetDevice']:
+                                logging.debug('Newer command found for device {} - cancelling retry of {}'.format(data['targetDevice'], data))
+                                return(True) # newer command exists - do not retry
                     logging.debug('Issuing Retry command: {}'.format(data))
                     yoAccess.publish_data(data) # retry
                 else:
