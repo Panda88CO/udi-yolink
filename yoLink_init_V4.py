@@ -838,15 +838,23 @@ class YoLinkInitPAC(object):
             yoAccess.processing_access.release()
             if msg_code in ['000201', '020104']: # device off line or busy 
                 logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
-                
+                if not yoAccess.publishQueue.empty():
+                    logging.debug('publishQueue not empty - checking if newer entries exists')
+                    publish_list = list (yoAccess.publishQueue.queue) # put retry at front of queue
+                    for Q_data in publish_list:
+                        if Q_data['targetDevice'] == data['targetDevice']:
+                            logging.debug('Newer command found for device {} - cancelling retry of {}'.format(data['targetDevice'], data))
+                            return(True) # newer command exists - do not retry                
                 if 'retry' in data:
                     data['retry'] = data['retry'] + 1
                 else:  
                     data['retry'] = 1
+
+
                 if data['retry'] <= yoAccess.MAX_RETRY: # stop after MAX_RETRY attempts
                     logging.debug('Retrying command - retry {}'.format(data['retry']))
+                    logging.debug('Issuing Retry command: {}'.format(data))
                     time.sleep(5*data['retry'])
-                    data['time'] = str(int(time.time_ns()/1e6)) #update time to actual packet time 
                     logging.debug('publishQueue before retry: {}'.format(list(yoAccess.publishQueue.queue)))
                     if not yoAccess.publishQueue.empty():
                         logging.debug('publishQueue not empty - checking if newer entries exists')
@@ -855,7 +863,8 @@ class YoLinkInitPAC(object):
                             if Q_data['targetDevice'] == data['targetDevice']:
                                 logging.debug('Newer command found for device {} - cancelling retry of {}'.format(data['targetDevice'], data))
                                 return(True) # newer command exists - do not retry
-                    logging.debug('Issuing Retry command: {}'.format(data))
+
+                    data['time'] = str(int(time.time_ns()/1e6)) #update time to actual packet time
                     yoAccess.publish_data(data) # retry
                 else:
                     logging.error('Max retries reached - giving up on command {}'.format(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
