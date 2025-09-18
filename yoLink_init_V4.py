@@ -671,6 +671,12 @@ class YoLinkInitPAC(object):
         publishThread = Thread(target = yoAccess.transfer_data )
         publishThread.start()
         logging.debug('publishThread - starting')
+        while not yoAccess.publishQueue.empty():
+            time.sleep(0.1)
+            yoAccess.publishQueue.put(data, timeout = 5)
+            publishThread = Thread(target = yoAccess.transfer_data )
+            publishThread.start()
+        logging.debug('publishThread - starting')
         return(True)
 
     #@measure_time
@@ -773,6 +779,7 @@ class YoLinkInitPAC(object):
         
         try:
             yoAccess.processing_access.acquire()
+            #while yoAccess.publishQueue.qsize() != 0:
             data = yoAccess.publishQueue.get(timeout = 10)
             logging.debug( 'transfer_data - data from publishQueue: {} - size {}'.format(data, yoAccess.publishQueue.qsize()))
             deviceId = data['targetDevice']
