@@ -17,8 +17,8 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-version = '0.0.7'
-
+#version = '0.0.0
+from udiCommonLib import version
 
 class YoLinkSetup (udi_interface.Node):
     from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit

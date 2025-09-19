@@ -547,7 +547,7 @@ class YoLinkInitPAC(object):
 
             elif (rc == 2):
                 if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
-                    logging.error('Authentication error 2 - Token no longer valid - Need to reconnect ')
+                    logging.error(f'Authentication error 2 - Token no longer valid - Need to reconnect ')
                     #netid = yoAccess.check_connection(yoAccess.mqttPort)
                     #logging.debug('netid = {}'.format(netid))
                     yoAccess.connectedToBroker = False
@@ -559,7 +559,7 @@ class YoLinkInitPAC(object):
 
             elif (rc >= 4):
                 if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
-                    logging.error('Authentication error {rc} - Token no longer valid - Need to reconnect ')
+                    logging.error(f'Authentication error {rc} - Token no longer valid - Need to reconnect ')
                     netid = yoAccess.check_connection(yoAccess.mqttPort)
                     logging.debug('netid = {}'.format(netid))
 
@@ -575,7 +575,7 @@ class YoLinkInitPAC(object):
                         yoAccess.client.disconnect()
 
                 else:
-                    logging.error('Authentication error {rc}} - check credentials and try again  ')
+                    logging.error(f'Authentication error {rc} - check credentials and try again  ')
 
 
 
