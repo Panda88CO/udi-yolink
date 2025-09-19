@@ -159,6 +159,7 @@ class YoLinkSetup (udi_interface.Node):
                 self.poly.Notices['cloud'] = 'UAID and secretKey must be provided to start node server in cloud or hybrid mode'
                 exit() 
             else:
+                logging.debug(f'initialiing Cloud mode {self.uaid} {self.secretKey}')
                 self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey )
         if 'local' in self.access_mode:
             if self.client_id == None or self.client_id == '' or self.client_secret==None or self.client_secret=='':
@@ -168,6 +169,7 @@ class YoLinkSetup (udi_interface.Node):
             else:
                 tokenURL = self.local_URL+'/open/yolink/token'
                 apiURL = self.local_URL+'/open/yolink/v2/api'
+                logging.debug(f'initializing Local mode {self.client_id} {self.client_secret} {tokenURL} {apiURL} {self.local_ip} {self.local_MQTT_port} {self.subnet_id} ')
                 self.yoLocal = YoLinkInitPAC (self.client_id, self.client_secret, tokenURL, apiURL, self.local_ip, self.local_MQTT_port, self.subnet_id  )
    
 
