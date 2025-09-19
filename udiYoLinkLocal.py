@@ -109,7 +109,7 @@ class YoLinkSetup (udi_interface.Node):
     '''
 
 
-    def parse_device_lists (self, cloud_list, local_list) -> list:
+    def parse_device_lists (self, cloud_list = [], local_list =[]) -> list:
         logging.debug('parse_device_lists')
 #[{'deviceId': 'd88b4c010004b251', 'deviceUDID': '49ddf0bc10664337a834310b63850ed3', 'name': 'Motion Sensor', 'token': 'BBBFA35BC4870C56325A7A30C72D22CC', 'type': 'MotionSensor', 'parentDeviceId': None, 'modelName': 'YS7805-UC', 'serviceZone': 'us_west_1'
         device_list = []
