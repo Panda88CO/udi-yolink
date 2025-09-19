@@ -85,7 +85,7 @@ class YoLinkSetup (udi_interface.Node):
         self.assigned_addresses.append(self.address)   
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
-
+        self.access_mode = ['cloud']      #default to cloud only
 
     '''
     def convert_temp_unit(self, tempStr):
@@ -153,14 +153,14 @@ class YoLinkSetup (udi_interface.Node):
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         logging.debug(f'credentials {self.access_mode} {self.uaid} {self.secretKey} {self.client_id} {self.client_secret}')
-        if self.access_mode in ['cloud', 'hybrid']:
+        if 'cloud' in self.access_mode:
             if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
                 logging.error('UAID and secretKey must be provided to start node server')
                 self.poly.Notices['cloud'] = 'UAID and secretKey must be provided to start node server in cloud or hybrid mode'
                 exit() 
             else:
                 self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey )
-        if self.access_mode in ['local', 'hybrid']:
+        if 'local' in self.access_mode:
             if self.client_id == None or self.client_id == '' or self.client_secret==None or self.client_secret=='':
                 logging.error('Client ID  and Client Secret must be provided to start node server')
                 self.poly.Notices['local'] = 'Client ID  and Client Secret must be provided to start node server in local or hybrid mode'
@@ -732,8 +732,12 @@ class YoLinkSetup (udi_interface.Node):
             # LOCAL ACCESS
             if 'MODE'in userParam:
                 mode = userParam['MODE']
-                if mode in ['local', 'cloud', 'hybrid']:
-                    self.access_mode = mode
+                if mode in ['local']:
+                    self.access_mode = ['local']
+                elif mode in ['cloud']:
+                    self.access_mode = ['cloud']
+                elif mode in ['hybrid']:
+                    self.access_mode = ['local', 'cloud']
                 else:
                     self.poly.Notices['mode'] = 'Missing MODE parameter'
             if 'LOCAL_CLIENT_ID' in userParam:

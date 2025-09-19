@@ -76,7 +76,7 @@ class YoLinkInitPAC(object):
         
         yoAccess.QoS = 1
         yoAccess.keepAlive = 60
-        yoAccess.access_mode = 'cloud' #default to cloud access
+        #yoAccess.access_mode = 'cloud' #default to cloud access
 
         yoAccess.unassigned_nodes = []
         try:
@@ -107,25 +107,26 @@ class YoLinkInitPAC(object):
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
             time.sleep(1)
+            logging.debug(f'info:{yoAccess.access_mode} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             if yoAccess.homeID is None:
-                yoAccess.mode = 'cloud'
-                if yoAccess.token != None:
-                    yoAccess.retrieve_homeID()
-                    yoAccess.mqtt_str = 'yl-home/'
-                    yoAccess.retrieve_device_list()
-                else:
+                if 'cloud' in yoAccess.access_mode:
                     if yoAccess.token != None:
-                       yoAccess.mqtt_str = 'ylsubnet/'
+                        yoAccess.retrieve_homeID()
+                        yoAccess.mqtt_str = 'yl-home/'
+                        yoAccess.retrieve_device_list()
+                    else:
+            
+                        yoAccess.mqtt_str = 'ylsubnet/'
             else:
-                yoAccess.mode = 'local'
+                yoAccess.access_mmode = ['local']
                 yoAccess.mqtt_str = 'ylsubnet/'   
-            #logging.debug('initialize MQTT' )
-            try:
-                yoAccess.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-            except Exception as e:
-                logging.debug('Using non pG3x code')
-                yoAccess.client = mqtt.Client(yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-
+            logging.debug(f'initialize MQTT {yoAccess.homeID}' )
+            #try:
+            yoAccess.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+            #except Exception as e:
+            #    logging.debug('Using non pG3x code {e}')
+            #    yoAccess.client = mqtt.Client(yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+            logging.debug(f'info: {yoAccess.homeID} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             yoAccess.client.on_connect = yoAccess.on_connect
             yoAccess.client.on_message = yoAccess.on_message
             yoAccess.client.on_subscribe = yoAccess.on_subscribe
@@ -417,18 +418,18 @@ class YoLinkInitPAC(object):
             yoAccess.retrieve_device_list()
             #yoAccess.retrieve_homeID()
             time.sleep(1)
-            logging.debug(f'info:{yoAccess.mode} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
-            if yoAccess.mode == 'cloud': 
+            logging.debug(f'info:{yoAccess.access_mode} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
+            if 'cloud' in yoAccess.access_mode:
                 logging.debug('cloud : {}'.format(yoAccess.token['access_token']))
                 yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-            elif yoAccess.mode == 'local':
+            elif 'local' in yoAccess.access_mode:
                 logging.debug(f'local ; {yoAccess.local_client_id} {yoAccess.local_client_secret}')
                 yoAccess.client.username_pw_set(username=yoAccess.local_client_id, password=yoAccess.local_client_secret)
 
             logging.debug(f'info: {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             temp = yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= yoAccess.keepAlive)
             logging.debug(f'yoAccess.client.connect: {temp}' )  
-            
+
             yoAccess.client.loop_start()
             time.sleep(2)
             yoAccess.connectedToBroker = True   
