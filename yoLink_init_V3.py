@@ -57,9 +57,16 @@ class YoLinkInitPAC(object):
         yoAccess.mqttPort = mqttPort
         yoAccess.connectedToBroker = False
         yoAccess.loopRunning = False
-        yoAccess.uaID = uaID
-        yoAccess.secID = secID
-        yoAccess.apiType = 'UAC'
+        if home_id is None:
+            yoAccess.access_mode = ['cloud']
+            yoAccess.local = uaID
+            yoAccess.secID = secID
+
+        else:
+            yoAccess.access_mode = ['local']
+            yoAccess.local_client_id = uaID 
+            yoAccess.local_client_secret = secID
+
         yoAccess.tokenExpTime = 0
         yoAccess.timeExpMarging = 3600 # 1 hour - most devices report once per hour
         yoAccess.lastTransferTime = int(time.time())
@@ -108,17 +115,12 @@ class YoLinkInitPAC(object):
             logging.info('Retrieving YoLink API info')
             time.sleep(1)
             logging.debug(f'Start info: {yoAccess.homeID } {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
-            if yoAccess.homeID is None:
-                yoAccess.access_mode = ['cloud']
+            if yoAccess.access_mode in['cloud']:
+                yoAccess.mqtt_str = 'yl-home/'
                 if yoAccess.token != None:
-                    yoAccess.retrieve_homeID()
-                    yoAccess.mqtt_str = 'yl-home/'
+                    yoAccess.retrieve_homeID()                    
                     yoAccess.retrieve_device_list()
-                else:
-        
-                    yoAccess.mqtt_str = 'ylsubnet/'
             else:
-                yoAccess.access_mode = ['local']
                 yoAccess.mqtt_str = 'ylsubnet/'   
             logging.debug(f'initialize MQTT {yoAccess.homeID}' )
             #try:
@@ -939,9 +941,3 @@ class YoLinkInitPAC(object):
         yoAccess.debug = debug
 
 
-class YoLinkInitCSID(object):
-    def __init__(yoAccess,  csName, csid, csSeckey, yoAccess_URL ='https://api.yosmart.com/openApi' , mqtt_URL= 'api.yosmart.com', mqtt_port = 8003 ):
-        yoAccess.csName = csName
-        yoAccess.csid = csid
-        yoAccess.cssSeckey = csSeckey
-        yoAccess.apiType = 'CSID'
