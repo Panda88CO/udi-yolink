@@ -57,11 +57,10 @@ class YoLinkInitPAC(object):
         yoAccess.mqttPort = mqttPort
         yoAccess.connectedToBroker = False
         yoAccess.loopRunning = False
+        yoAccess.uaID = uaID
+        yoAccess.secID = secID
         if home_id is None:
             yoAccess.access_mode = ['cloud']
-            yoAccess.local = uaID
-            yoAccess.secID = secID
-
         else:
             yoAccess.access_mode = ['local']
             yoAccess.local_client_id = uaID 
@@ -116,6 +115,11 @@ class YoLinkInitPAC(object):
             time.sleep(1)
             logging.debug(f'Start info: {yoAccess.homeID } {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             if yoAccess.access_mode in['cloud']:
+                while not yoAccess.refresh_token():
+                    time.sleep(35) # Wait 35 sec and try again - 35 sec ensures less than 10 attemps in 5min - API restriction
+                    logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
+                logging.info('Retrieving YoLink API info')
+                time.sleep(1)
                 yoAccess.mqtt_str = 'yl-home/'
                 if yoAccess.token != None:
                     yoAccess.retrieve_homeID()                    
