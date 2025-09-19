@@ -85,7 +85,7 @@ class YoLinkSetup (udi_interface.Node):
         self.assigned_addresses.append(self.address)   
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
-        self.access_mode = ['cloud']      #default to cloud only
+        #self.access_mode = ['cloud']      #default to cloud only
 
     '''
     def convert_temp_unit(self, tempStr):

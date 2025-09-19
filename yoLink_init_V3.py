@@ -107,7 +107,7 @@ class YoLinkInitPAC(object):
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
             time.sleep(1)
-            logging.debug(f'info:{yoAccess.homeID } {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
+            logging.debug(f'info: {yoAccess.homeID } {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             if yoAccess.homeID is None:
                 yoAccess.access_mode = ['cloud']
                 if yoAccess.token != None:
