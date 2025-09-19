@@ -107,7 +107,7 @@ class YoLinkInitPAC(object):
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
             time.sleep(1)
-            logging.debug(f'info: {yoAccess.homeID } {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
+            logging.debug(f'Start info: {yoAccess.homeID } {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             if yoAccess.homeID is None:
                 yoAccess.access_mode = ['cloud']
                 if yoAccess.token != None:
@@ -126,7 +126,7 @@ class YoLinkInitPAC(object):
             #except Exception as e:
             #    logging.debug('Using non pG3x code {e}')
             #    yoAccess.client = mqtt.Client(yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-            logging.debug(f'info: {yoAccess.homeID} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
+            logging.debug(f'MQTT info: {yoAccess.homeID} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             yoAccess.client.on_connect = yoAccess.on_connect
             yoAccess.client.on_message = yoAccess.on_message
             yoAccess.client.on_subscribe = yoAccess.on_subscribe
@@ -418,7 +418,7 @@ class YoLinkInitPAC(object):
             yoAccess.retrieve_device_list()
             #yoAccess.retrieve_homeID()
             time.sleep(1)
-            logging.debug(f'info:{yoAccess.access_mode} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
+            logging.debug(f'Connect info: {yoAccess.access_mode} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             if 'cloud' in yoAccess.access_mode:
                 logging.debug('cloud : {}'.format(yoAccess.token['access_token']))
                 yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
@@ -426,7 +426,7 @@ class YoLinkInitPAC(object):
                 logging.debug(f'local ; {yoAccess.local_client_id} {yoAccess.local_client_secret}')
                 yoAccess.client.username_pw_set(username=yoAccess.local_client_id, password=yoAccess.local_client_secret)
 
-            logging.debug(f'info: {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
+            logging.debug(f'Connect 2 info: {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
             temp = yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= yoAccess.keepAlive)
             logging.debug(f'yoAccess.client.connect: {temp}' )  
 
