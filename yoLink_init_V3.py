@@ -118,7 +118,7 @@ class YoLinkInitPAC(object):
         
                     yoAccess.mqtt_str = 'ylsubnet/'
             else:
-                yoAccess.access_mmode = ['local']
+                yoAccess.access_mode = ['local']
                 yoAccess.mqtt_str = 'ylsubnet/'   
             logging.debug(f'initialize MQTT {yoAccess.homeID}' )
             #try:
