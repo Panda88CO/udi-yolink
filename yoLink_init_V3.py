@@ -265,7 +265,7 @@ class YoLinkInitPAC(object):
 
 
         except Exception as e:
-            logging.debug('Exeption occcured during refresh_token : {}'.format(e))
+            logging.error(f'Exeption occcured during refresh_token {yoAccess.access_mode} : {e}')
             #return(yoAccess.request_new_token())
 
     #@measure_time
@@ -405,7 +405,7 @@ class YoLinkInitPAC(object):
 
 
         except Exception as e:
-            logging.debug(f'Exeption occcured during refresh {e}')            
+            logging.debug(f'Exeption occcured during local token refresh {e}')            
     ########################################
     # MQTT stuff
     ########################################
@@ -448,7 +448,7 @@ class YoLinkInitPAC(object):
             return(True)
 
         except Exception as e:
-            logging.error('Exception  - connect_to_broker: {}'.format(e))
+            logging.error(f'Exception {yoAccess.access_mode}  - connect_to_broker: {e}')
             #if yoAccess.token == None:
             #    yoAccess.request_new_token()
             #else:
@@ -679,7 +679,7 @@ class YoLinkInitPAC(object):
                 yoAccess.online = False
          
         except Exception as e:
-            logging.error('Exception  -  on_connect: ' + str(e))       
+            logging.error(f'Exception {yoAccess.access_mode} -  on_connect: {e}')       
 
     #@measure_time
     def on_disconnect(yoAccess, client, userdata,rc=0):
@@ -716,7 +716,7 @@ class YoLinkInitPAC(object):
 
 
             except Exception as e:
-                logging.error('Exeption occcured during on_ disconnect : {}'.format(e))
+                logging.error(f'Exeption occcured during on_ disconnect : {e}')
                 if yoAccess:
                     yoAccess.refresh_token()
                 else:
@@ -843,7 +843,7 @@ class YoLinkInitPAC(object):
             return(int(math.ceil(t_delay/1000)))
             #return(int(math.ceil(t_delay/1000)), int(math.ceil(t_all_delay)), int(math.ceil(t_all_delay)))
         except Exception as e:
-            logging.debug(' Exception Timetrack : {}'.format(e))
+            logging.error(f' Exception Timetrack : {e}')
             yoAccess.TimeTableLock.release()
         #yoAccess.time_tracking_dict[dev_id].append(time)
 
