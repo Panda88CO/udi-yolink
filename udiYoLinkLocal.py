@@ -51,8 +51,8 @@ class YoLinkSetup (udi_interface.Node):
         self.uaid = ''
         self.secretKey = ''
         self.nbrTTS = None
-        self.client_id = None
-        self.client_secret = None
+        self.local_client_id = None
+        self.local_client_secret = None
         self.local_ip = ''
         self.local_port = ':1080'
         self.local_URL = ''
@@ -110,10 +110,8 @@ class YoLinkSetup (udi_interface.Node):
 
 
     def parse_device_lists (self, cloud_list = [], local_list =[]) -> list:
-        logging.debug('parse_device_lists')
-#[{'deviceId': 'd88b4c010004b251', 'deviceUDID': '49ddf0bc10664337a834310b63850ed3', 'name': 'Motion Sensor', 'token': 'BBBFA35BC4870C56325A7A30C72D22CC', 'type': 'MotionSensor', 'parentDeviceId': None, 'modelName': 'YS7805-UC', 'serviceZone': 'us_west_1'
-        device_list = []
-        
+        logging.debug(f'parse_device_lists {cloud_list} {local_list}')
+        device_list = []        
         cloud_devs = {}
         for dev in cloud_list:
             cloud_devs[dev['deviceId']] = dev       
@@ -152,7 +150,7 @@ class YoLinkSetup (udi_interface.Node):
         self.supportedLocalYoTypes = self.supportedYoTypes 
         #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
-        logging.debug(f'credentials {self.access_mode} {self.uaid} {self.secretKey} {self.client_id} {self.client_secret}')
+        logging.debug(f'credentials {self.access_mode} {self.uaid} {self.secretKey} {self.local_client_id} {self.local_client_secret}')
         if 'cloud' in self.access_mode:
             if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
                 logging.error('UAID and secretKey must be provided to start node server')
@@ -162,42 +160,17 @@ class YoLinkSetup (udi_interface.Node):
                 logging.debug(f'initialiing Cloud mode {self.uaid} {self.secretKey}')
                 self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey )
         if 'local' in self.access_mode:
-            if self.client_id == None or self.client_id == '' or self.client_secret==None or self.client_secret=='':
+            if self.local_client_id == None or self.local_client_id == '' or self.local_client_secret==None or self.local_client_secret=='':
                 logging.error('Client ID  and Client Secret must be provided to start node server')
                 self.poly.Notices['local'] = 'Client ID  and Client Secret must be provided to start node server in local or hybrid mode'
                 exit() 
             else:
                 tokenURL = self.local_URL+'/open/yolink/token'
                 apiURL = self.local_URL+'/open/yolink/v2/api'
-                logging.debug(f'initializing Local mode {self.client_id} {self.client_secret} {tokenURL} {apiURL} {self.local_ip} {self.local_MQTT_port} {self.subnet_id} ')
-                self.yoLocal = YoLinkInitPAC (self.client_id, self.client_secret, tokenURL, apiURL, self.local_ip, self.local_MQTT_port, self.subnet_id  )
+                logging.debug(f'initializing Local mode {self.local_client_id} {self.local_client_secret} {tokenURL} {apiURL} {self.local_ip} {self.local_MQTT_port} {self.subnet_id} ')
+                self.yoLocal = YoLinkInitPAC (self.local_client_id, self.local_client_secret, tokenURL, apiURL, self.local_ip, self.local_MQTT_port, self.subnet_id  )
    
 
-                       
-        #if self.client_id in [None, ''] or self.client_secret  in [None, ''] or self.local_ip in [None, '']:
-        #    logging.error('ClientAcces, ClientSecret and localIPmust be provided to start node server')
-        #    self.poly.Notices['local_access'] = 'ClientAcces, ClientSecret and localIP must be specified in configuration'
-        #    exit() 
-            
-        #else:
-        #     self.yoLocal = YoLinkInitLocal(self.client_id, self.client_secret, self.local_URL:'+self.local_port, )
-        #     if self.yoLocal:
-        #        self.local_access = True
-        #        self.deviceList = self.yoLocal.retrieve_device_list()
-        #        self.addLocalNodes(self.deviceList )
-
-        
-        
-        
-        
-        #exit()
-
-
-        #if self.uaid == None or self.uaid == '' or self.secretKey==None or self.secretKey=='':
-        #    logging.error('UAID and secretKey must be provided to start node server')
-        #    exit() 
-
-        #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
         if self.yoAccess or self.yoLocal:
             self.my_setDriver('ST', 0)
         if 'TEMP_UNIT' in self.Parameters:
@@ -288,7 +261,7 @@ class YoLinkSetup (udi_interface.Node):
                     logging.info('Hub not added - ISY cannot do anything useful with it')    
                     #if  model in ['YS1606',]:
                     #    self.local_access = True
-                    #    self.yoAccess.initializeLocalAccess(self.client_id, self.client_secret, self.local_ip)
+                    #    self.yoAccess.initializeLocalAccess(self.local_client_id, self.local_client_secret, self.local_ip)
                     #    self.poly.Notices['local_access'] = 'Local Hub detected - Enabling local access'
 
 
@@ -743,19 +716,19 @@ class YoLinkSetup (udi_interface.Node):
                 else:
                     self.poly.Notices['mode'] = 'Missing MODE parameter'
             if 'LOCAL_CLIENT_ID' in userParam:
-                self.client_id = userParam['LOCAL_CLIENT_ID']
+                self.local_client_id = userParam['LOCAL_CLIENT_ID']
             else:
-                self.client_id = None
+                self.local_client_id = None
         
             if 'LOCAL_CLIENT_SECRET' in userParam:
-                self.client_secret = userParam['LOCAL_CLIENT_SECRET']
+                self.local_client_secret = userParam['LOCAL_CLIENT_SECRET']
             else:
-                self.client_secret = None
+                self.local_client_secret = None
 
             if 'SUBNET_ID' in userParam:
                 self.subnet_id = userParam['SUBNET_ID']
             else:
-                self.client_secret = None
+                self.subnet_id = None
             if 'LOCAL_IP' in  userParam:
                 self.local_ip = str(userParam['LOCAL_IP'])
                 self.local_ip = self.local_ip.strip()

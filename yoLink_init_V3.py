@@ -225,8 +225,9 @@ class YoLinkInitPAC(object):
     def refresh_token(yoAccess):
         
         try:
-            logging.info('Refreshing Token ')
+            logging.info(f'Refreshing Token {yoAccess.token }')
             now = int(time.time())
+            
             if yoAccess.token != None:
                 if now < yoAccess.token['expirationTime']:
                     response = requests.post( yoAccess.tokenURL,
@@ -241,9 +242,11 @@ class YoLinkInitPAC(object):
                             "client_id" : yoAccess.uaID,
                             "client_secret" : yoAccess.secID }, timeout= 5
                 )
+                logging.debug(f'Refresh response : {response} {response.ok} {response.text}')
                 if response.ok:
                     yoAccess.token =  response.json()
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
+
                     return(True)
                 else:
                     logging.error('Was not able to refresh token')
@@ -254,6 +257,7 @@ class YoLinkInitPAC(object):
                         "client_id" : yoAccess.uaID,
                         "client_secret" : yoAccess.secID }, timeout= 5
                 )
+                logging.debug(f'Refresh response : {response} {response.ok} {response.text}')
                 if response.ok:
                     yoAccess.token =  response.json()
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
@@ -288,7 +292,7 @@ class YoLinkInitPAC(object):
     #@measure_time
     def retrieve_device_list(yoAccess):
         try:
-            logging.debug('retrieve_device_list')
+            logging.debug(f'retrieve_device_list {yoAccess.access_mode}')
             data= {}
             data['method'] = 'Home.getDeviceList'
             data['time'] = str(int(time.time_ns()/1e6))
@@ -298,7 +302,7 @@ class YoLinkInitPAC(object):
             r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1, timeout=5) 
             info = r.json()
             yoAccess.deviceList = info['data']['devices']
-            logging.debug('yoAccess.deviceList : {}'.format(yoAccess.deviceList))
+            logging.debug('yoAccess.deviceList {} : {}'.format(yoAccess.access_mode, yoAccess.deviceList))
         except Exception as e:
             logging.error('Exception  -  retrieve_device_list : {}'.format(e))             
 
@@ -421,7 +425,7 @@ class YoLinkInitPAC(object):
                 time.sleep(35) # Wait 35 sec and try again (35sec ensure less than 10 attempts in 5 min)
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
             logging.info('Retrieving YoLink API info')
-            yoAccess.retrieve_device_list()
+            #yoAccess.retrieve_device_list()
             #yoAccess.retrieve_homeID()
             time.sleep(1)
             logging.debug(f'Connect info: {yoAccess.access_mode} {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
@@ -743,9 +747,13 @@ class YoLinkInitPAC(object):
     #@measure_time
     def publish_data(yoAccess, data):
         logging.debug( 'Publish Data to Queue: {}'.format(data))
+        sleeping = False
         while not yoAccess.connectedToBroker:
             logging.debug('Connection to Broker not established - waiting')
             time.sleep(1)       
+            sleeping = True
+        if sleeping:
+            time.sleep(2) # give some time to settle after connection established
 
         yoAccess.publishQueue.put(data, timeout = 5)
         

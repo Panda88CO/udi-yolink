@@ -137,7 +137,7 @@ def configDoneHandler(self):
 
 def addNodes (self, deviceList):
     for dev in deviceList:
-        logging.debug(f'DEVICE ANALYZED {dev}')
+        logging.debug(f'DEVICE BEING ANALYZED {dev}')
         if dev['type']  in self.supportedYoTypes:            
             nodename = str(dev['deviceId'][-14:])
             address = self.poly.getValidAddress(nodename)
