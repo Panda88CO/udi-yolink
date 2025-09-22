@@ -161,7 +161,7 @@ def addNodes (self, deviceList):
                 logging.debug(f'HUB date {dev}')
                 if  model in [ 'YS1606']: #Need to add local hub as local - but it is not a device in the local network
                     dev_access = self.yoLocal
-                if model ['YS1613', 'YS1605', 'YS1606']:
+                if model in ['YS1613', 'YS1605', 'YS1606']:
                     temp = udiYoBatteryHub(self.poly, address, address, name, dev_access, dev)
                 else:
                     temp = udiYoHub(self.poly, address, address, name, dev_access, dev)
