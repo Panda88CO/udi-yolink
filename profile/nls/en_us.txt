@@ -351,7 +351,7 @@ CMD-nlsvibrasens-UPDATE-NAME=Update Status
 
 ND-yohub-NAME=YoLink Hub
 ND-yohub-ICON=Output
-ST-nlshub-ST=Status
+ST-nlshub-ST-NAME=Status
 ST-nlshub-GV20-NAME=Connection State
 ST-nlshub-GV30-NAME=Online
 CMD-nlshub-UPDATE-NAME=Update

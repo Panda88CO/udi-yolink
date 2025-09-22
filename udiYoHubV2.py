@@ -190,8 +190,9 @@ class udiYoHub(udi_interface.Node):
         logging.info('start - udiYoHub')
         self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
+        self.my_setDriver('ST', 1)
         self.yoHub.initNode()
-        #self.node.setDriver('ST', 1, True, True)
+
         
         #if not self.yoHub.online:
         #    logging.warning('Device {} not on-line'.format(self.devInfo['name']))            
