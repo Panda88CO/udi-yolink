@@ -114,19 +114,20 @@ class YoLinkInitPAC(object):
             
 
             logging.info('Connecting to YoLink MQTT server')
-            while not yoAccess.refresh_token():
-                time.sleep(35) # Wait 35 sec and try again - 35 sec ensures less than 10 attemps in 5min - API restriction
-                logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
-            logging.info('Retrieving YoLink API info')
+            #while not yoAccess.refresh_token():
+            #    time.sleep(35) # Wait 35 sec and try again - 35 sec ensures less than 10 attemps in 5min - API restriction
+            #    logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
+            #logging.info('Retrieving YoLink API info')
             time.sleep(1)
             logging.debug(f'Start info: {yoAccess.homeID } {yoAccess.mqttURL} {yoAccess.mqttPort} {yoAccess.keepAlive} {yoAccess.token}')
-            if yoAccess.access_mode in['cloud']:
+            if 'cloud' in yoAccess.access_mode:
                 while not yoAccess.refresh_token():
                     time.sleep(35) # Wait 35 sec and try again - 35 sec ensures less than 10 attemps in 5min - API restriction
                     logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
                 logging.info('Retrieving YoLink API info')
                 time.sleep(1)
                 yoAccess.mqtt_str = 'yl-home/'
+                logging.debug(f'cloud mode {yoAccess.mqtt_str} {yoAccess.token}')
                 if yoAccess.token != None:
                     yoAccess.retrieve_homeID()                    
                     yoAccess.retrieve_device_list()
