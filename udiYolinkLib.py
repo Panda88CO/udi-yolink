@@ -91,12 +91,15 @@ def wait_for_node_done(self):
     self.n_queue.pop()
 
 def my_setDriver(self, key, value, Unit=None):
-    logging.debug(f'my_setDriver : {key} {value} {Unit}')
+    logging.debug(f'my_setDriver : {key} {value} {Unit} ')
     try:
         if value is None:
             logging.debug('None value passed = seting 99, UOM 25')
             self.node.setDriver(key, 99, True, True, 25)
         else:
+            if key in ['GV20']: # Connection state o
+                if self.yoLink.local_connection():
+                    value = value + 3
             if Unit:
                 self.node.setDriver(key, value, True, True, Unit)
             else:

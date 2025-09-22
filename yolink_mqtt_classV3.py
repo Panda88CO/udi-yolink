@@ -253,6 +253,17 @@ class YoLinkMQTTDevice(object):
             yolink.online = False
         return(yolink.online)
 
+
+    #@measure_time
+    def local_connection(yolink):
+        try:
+            return( 'local' in  yolink.yoAccess.access_mode)
+
+        except Exception as e:
+            logging.error('connection_mode Exception: {}'.format(e))
+            return(False)
+
+
     #@measure_time
     def data_updated(yolink):
         tmp = yolink.lastUpdate()
