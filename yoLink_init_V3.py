@@ -520,7 +520,7 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def subscribe_mqtt(yoAccess, deviceId, callback):
-        logging.info('Subscribing deviceId {} to MQTT {} {}'.format(deviceId, yoAccess.mqtt_str +yoAccess.homeID, yoAccess.mode))
+        logging.info('Subscribing deviceId {} to MQTT {} {}'.format(deviceId, yoAccess.mqtt_str +yoAccess.homeID, yoAccess.access_mode))
         topicReq = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/request'
         topicResp = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/response'
         topicReport = yoAccess.mqtt_str+ yoAccess.homeID+'/'+ deviceId +'/report'
@@ -541,7 +541,7 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def update_mqtt_subscription (yoAccess, deviceId):
-        logging.info('update_mqtt_subscription {} {} '.format(deviceId, yoAccess.mode))
+        logging.info('update_mqtt_subscription {} {} '.format(deviceId, yoAccess.access_mode))
         topicReq = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/request'
         topicResp = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/response'
         topicReport = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/report'
