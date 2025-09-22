@@ -98,8 +98,12 @@ def my_setDriver(self, key, value, Unit=None):
             self.node.setDriver(key, 99, True, True, 25)
         else:
             if key in ['GV20']: # Connection state o
-                if self.yoLink.local_connection():
-                    value = value + 3
+                try:
+                    if self.yoLink.local_connection():
+                        logging.debug('Local connection - value + 3')
+                        value = value + 3
+                except Exception as e:
+                    logging.debug('Local connection - yolink class not ready - continue : {}'.format(e))
             if Unit:
                 self.node.setDriver(key, value, True, True, Unit)
             else:
