@@ -525,7 +525,8 @@ class YoLinkInitPAC(object):
         topicResp = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/response'
         topicReport = yoAccess.mqtt_str+ yoAccess.homeID+'/'+ deviceId +'/report'
         #topicReportAll = 'yl-home/'+yoAccess.homeID+'/+/report'
-        
+        logging.debug('Subscribing to topics: {} {} {}'.format(topicReq, topicResp, topicReport))
+
         if not deviceId in yoAccess.mqttList :
             yoAccess.client.subscribe(topicReq, yoAccess.QoS)
             yoAccess.client.subscribe(topicResp, yoAccess.QoS)
@@ -546,7 +547,8 @@ class YoLinkInitPAC(object):
         topicResp = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/response'
         topicReport = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/report'
         #topicReportAll = yoAccess.mqtt_str +yoAccess.homeID+'/+/report'
-        
+        logging.debug('update_mqtt_subscription to topics: {} {} {}'.format(topicReq, topicResp, topicReport))
+
         if  deviceId in yoAccess.mqttList :
             logging.debug('unsubscribe {}'.format(deviceId))
             yoAccess.client.unsubscribe(yoAccess.mqttList[deviceId]['request'] )
@@ -786,8 +788,9 @@ class YoLinkInitPAC(object):
                     logging.error('Lost credential info - need to restart node server')
 
     #@measure_time
-    def on_subscribe(yoAccess, client, userdata, mID, granted_QoS):        
-        logging.debug('on_subscribe')
+    def on_subscribe(yoAccess, client, userdata, mID, granted_QoS):     
+
+        logging.debug('on_subscribe {} {} {} {}'.format(client, userdata, mID, granted_QoS))
         #logging.debug('client = ' + str(client))
         #logging.debug('userdata = ' + str(userdata))
         #logging.debug('mID = '+str(mID))
@@ -796,7 +799,8 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def on_publish(yoAccess, client, userdata, mID):
-        logging.debug('on_publish')
+        logging.debug('on_publish {} {} {}'.format(client, userdata, mID))
+
         #logging.debug('client = ' + str(client))
         #logging.debug('userdata = ' + str(userdata))
         #logging.debug('mID = '+str(mID))
