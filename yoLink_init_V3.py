@@ -33,7 +33,7 @@ DEBUG = False
 
 
 class YoLinkInitPAC(object):
-    def __init__(yoAccess, uaID, secID, tokenURL='https://api.yosmart.com/open/yolink/token', pacURL = 'https://api.yosmart.com/open/yolink/v2/api' , mqttURL= 'api.yosmart.com', mqttPort = 8003, home_id = None):
+    def __init__(yoAccess, ID, secret, tokenURL='https://api.yosmart.com/open/yolink/token' , apiURL='https://api.yosmart.com/open/yolink/v2/api', mqttURL= 'api.yosmart.com', mqttPort = 8003, home_id = None):
         yoAccess.homeID  = home_id
         yoAccess.disconnect_occured = False 
         yoAccess.tokenLock = Lock()
@@ -52,23 +52,29 @@ class YoLinkInitPAC(object):
         yoAccess.pending_messages = 0
         yoAccess.time_since_last_message_RX = 0
         yoAccess.tokenURL = tokenURL
-        yoAccess.apiv2URL = pacURL
+        yoAccess.apiv2URL = apiURL
         yoAccess.mqttURL = mqttURL
         yoAccess.mqttPort = mqttPort
         yoAccess.connectedToBroker = False
         yoAccess.loopRunning = False
-        yoAccess.uaID = uaID
-        yoAccess.secID = secID
+        yoAccess.uaID = ID
+        yoAccess.secID = secret
         if home_id is None:
             yoAccess.access_mode = ['cloud']
         else:
             yoAccess.access_mode = ['local']
-            yoAccess.local_client_id = uaID 
-            yoAccess.local_client_secret = secID
-
+            yoAccess.local_client_id = ID 
+            yoAccess.local_client_secret = secret
+            yoAccess.local_URL = ''
+            yoAccess.local_port_str = ':1080'
+            yoAccess.local_client_id = ID
+            yoAccess.local_client_secret = secret
         yoAccess.tokenExpTime = 0
         yoAccess.timeExpMarging = 3600 # 1 hour - most devices report once per hour
         yoAccess.lastTransferTime = int(time.time())
+
+
+
         #yoAccess.timeExpMarging = 7170 #min for testing 
         yoAccess.tmpData = {}
         yoAccess.lastDataPacket = {}
@@ -79,7 +85,7 @@ class YoLinkInitPAC(object):
         yoAccess.online = False
         yoAccess.deviceList = []
         yoAccess.token = None
-        
+        yoAccess.mqtt_str = ''
         yoAccess.QoS = 1
         yoAccess.keepAlive = 60
         #yoAccess.access_mode = 'cloud' #default to cloud access
@@ -151,6 +157,127 @@ class YoLinkInitPAC(object):
             logging.error('Exception - init- MQTT: {}'.format(E))
 
         yoAccess.messagePending = False
+   ############################
+    #  Local ACCESS FUNCTIONS
+
+
+    def initializeLocalAccess(yoAccess, client_id, client_secret, local_ip):
+        logging.debug(f'initializeLocalAccess {client_id} {client_secret} {local_ip}')
+        yoAccess.local_client_id = client_id
+        yoAccess.local_client_secret = client_secret
+        yoAccess.local_URL = 'http://'+local_ip+yoAccess.local_port_str
+        response = requests.post(yoAccess.local_URL+'/open/yolink/token', 
+                                 data={ "grant_type": "client_credentials",
+                                        "client_id" :  yoAccess.local_client_id ,
+                                        "client_secret":yoAccess.local_client_secret }, timeout= 5)
+        if response.ok:
+            temp = response.json()
+            logging.debug('Local yoAccess Token : {}'.format(temp))
+        
+        if 'state' not in temp:
+            yoAccess.local_token = temp
+            yoAccess.local_token['expirationTime'] = int(yoAccess.token['expires_in'] + int(time.time()) )
+            logging.debug('Local yoAccess Token : {}'.format(yoAccess.token ))
+        else:
+            if temp['state'] != 'error':
+                logging.error('Authentication error')
+
+    def local_refresh_token(yoAccess):
+        
+        try:
+            logging.info('Refreshing Token ')
+            now = int(time.time())
+            if yoAccess.token != None:
+                if now < yoAccess.token['expirationTime']:
+                    response = requests.post( yoAccess.tokenURL,
+                        data={"grant_type": "refresh_token",
+                            "client_id" :  yoAccess.uaID,
+                            "refresh_token":yoAccess.token['refresh_token'], 
+                            }, timeout= 5
+                    )
+                else:
+                    response = requests.post( yoAccess.tokenURL,
+                        data={"grant_type": "client_credentials",
+                            "client_id" : yoAccess.uaID,
+                            "client_secret" : yoAccess.secID }, timeout= 5
+                )
+                if response.ok:
+                    yoAccess.token =  response.json()
+                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
+                    return(True)
+                else:
+                    logging.error('Was not able to refresh token')
+                    return(False)
+            else:
+                response = requests.post( yoAccess.tokenURL,
+                    data={"grant_type": "client_credentials",
+                        "client_id" : yoAccess.uaID,
+                        "client_secret" : yoAccess.secID }, timeout= 5
+                )
+                if response.ok:
+                    yoAccess.token =  response.json()
+                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
+                    return(True)
+                else:
+                    logging.error('Was not able to refresh token')
+                    return(False)       
+
+
+
+        except Exception as e:
+            logging.debug(f'Exeption occcured during refresh {e}')
+
+
+
+
+
+    '''
+    def local_refresh_token(yoAccess):
+        
+        try:
+            logging.info('Refreshing Local Token ')
+            now = int(time.time())
+            if yoAccess.token != None:
+                if now < yoAccess.local_token['expirationTime']:
+                    response = requests.post( yoAccess.local_URL+'/open/yolink/token',
+                        data={"grant_type": "refresh_token",
+                            "client_id" :  yoAccess.local_client_id,
+                            "refresh_token":yoAccess.local_token['refresh_token'], 
+                            }, timeout= 5
+                    )
+                else:
+                    response = requests.post( yoAccess.local_URL+'/open/yolink/token',
+                                 data={ "grant_type": "client_credentials",
+                                        "client_id" :  yoAccess.local_client_id ,
+                                        "client_secret":yoAccess.local_client_secret }, timeout= 5)
+            if response.ok:
+                if response.ok:
+                    yoAccess.local_token =  response.json()
+                    yoAccess.local_token['expirationTime'] = int(yoAccess.local_token['expires_in']) + now
+                    return(True)
+                else:
+                    logging.error('Was not able to refresh token')
+                    return(False)
+            else:
+                response = requests.post( yoAccess.local_URL+'/open/yolink/token',
+                        data={"grant_type": "refresh_token",
+                            "client_id" :  yoAccess.local_client_id,
+                            "refresh_token":yoAccess.local_token['refresh_token'], 
+                            }, timeout= 5
+                    )
+                if response.ok:
+                    yoAccess.local_token =  response.json()
+                    yoAccess.local_token['expirationTime'] = int(yoAccess.local_token['expires_in']) + now
+                    return(True)
+                else:
+                    logging.error('Was not able to refresh token')
+                    return(False)       
+
+        except Exception as e:
+            logging.debug('Exeption occcured during refresh_token : {}'.format(e))
+            #return(yoAccess.request_new_token())
+
+    '''
 
     #######################################
     #check if connected to YoLink Cloud server
@@ -341,75 +468,7 @@ class YoLinkInitPAC(object):
                 yoAccess.client.loop_stop()
         except Exception as E:
             logging.error('Shut down exception {}'.format(E))
-    ############################
-    #  Local ACCESS FUNCTIONS
-
-
-    def initializeLocalAccess(yoAccess, client_id, client_secret, local_ip):
-        logging.debug(f'initializeLocalAccess {client_id} {client_secret} {local_ip}')
-        yoAccess.local_client_id = client_id
-        yoAccess.local_client_secret = client_secret
-        yoAccess.local_URL = 'http://'+local_ip+yoAccess.local_port_str
-        response = requests.post(yoAccess.local_URL+'/open/yolink/token', 
-                                 data={ "grant_type": "client_credentials",
-                                        "client_id" :  yoAccess.local_client_id ,
-                                        "client_secret":yoAccess.local_client_secret }, timeout= 5)
-        if response.ok:
-            temp = response.json()
-            logging.debug('Local yoAccess Token : {}'.format(temp))
-        
-        if 'state' not in temp:
-            yoAccess.local_token = temp
-            yoAccess.local_token['expirationTime'] = int(yoAccess.token['expires_in'] + int(time.time()) )
-            logging.debug('Local yoAccess Token : {}'.format(yoAccess.token ))
-        else:
-            if temp['state'] != 'error':
-                logging.error('Authentication error')
-
-    def local_refresh_token(yoAccess):
-        
-        try:
-            logging.info('Refreshing Token ')
-            now = int(time.time())
-            if yoAccess.token != None:
-                if now < yoAccess.token['expirationTime']:
-                    response = requests.post( yoAccess.tokenURL,
-                        data={"grant_type": "refresh_token",
-                            "client_id" :  yoAccess.uaID,
-                            "refresh_token":yoAccess.token['refresh_token'], 
-                            }, timeout= 5
-                    )
-                else:
-                    response = requests.post( yoAccess.tokenURL,
-                        data={"grant_type": "client_credentials",
-                            "client_id" : yoAccess.uaID,
-                            "client_secret" : yoAccess.secID }, timeout= 5
-                )
-                if response.ok:
-                    yoAccess.token =  response.json()
-                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
-                    return(True)
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)
-            else:
-                response = requests.post( yoAccess.tokenURL,
-                    data={"grant_type": "client_credentials",
-                        "client_id" : yoAccess.uaID,
-                        "client_secret" : yoAccess.secID }, timeout= 5
-                )
-                if response.ok:
-                    yoAccess.token =  response.json()
-                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
-                    return(True)
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)       
-
-
-
-        except Exception as e:
-            logging.debug(f'Exeption occcured during local token refresh {e}')            
+ 
     ########################################
     # MQTT stuff
     ########################################
@@ -461,10 +520,10 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def subscribe_mqtt(yoAccess, deviceId, callback):
-        logging.info('Subscribing deviceId {} to MQTT'.format(deviceId))
-        topicReq = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/request'
-        topicResp = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/response'
-        topicReport = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/report'
+        logging.info('Subscribing deviceId {} to MQTT {} {}'.format(deviceId, yoAccess.mqtt_str +yoAccess.homeID, yoAccess.mode))
+        topicReq = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/request'
+        topicResp = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/response'
+        topicReport = yoAccess.mqtt_str+ yoAccess.homeID+'/'+ deviceId +'/report'
         #topicReportAll = 'yl-home/'+yoAccess.homeID+'/+/report'
         
         if not deviceId in yoAccess.mqttList :
@@ -482,11 +541,11 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def update_mqtt_subscription (yoAccess, deviceId):
-        logging.info('update_mqtt_subscription {} '.format(deviceId))
-        topicReq = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/request'
-        topicResp = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/response'
-        topicReport = 'yl-home/'+yoAccess.homeID+'/'+ deviceId +'/report'
-        #topicReportAll = 'yl-home/'+yoAccess.homeID+'/+/report'
+        logging.info('update_mqtt_subscription {} {} '.format(deviceId, yoAccess.mode))
+        topicReq = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/request'
+        topicResp = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/response'
+        topicReport = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/report'
+        #topicReportAll = yoAccess.mqtt_str +yoAccess.homeID+'/+/report'
         
         if  deviceId in yoAccess.mqttList :
             logging.debug('unsubscribe {}'.format(deviceId))
