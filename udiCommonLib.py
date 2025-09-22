@@ -430,6 +430,7 @@ def addNodes (self, deviceList):
     self.my_setDriver('GV1', 1)
     self.pollStart = True
 
+'''
 def stop(self):
     try:
         logging.info('Stop Called:')
@@ -446,6 +447,7 @@ def stop(self):
         if self.yoAccess:
             self.yoAccess.shut_down()
         self.poly.stop()
+'''
 
 def heartbeat(self):
     logging.debug('heartbeat: ' + str(self.hb))

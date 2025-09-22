@@ -231,6 +231,28 @@ class YoLinkSetup (udi_interface.Node):
         #self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
         #self.scheduler.start()
         #self.updateEpochTime()
+    def stop(self):
+        try:
+            logging.info('Stop Called:')
+            #self.yoAccess.writeTtsFile() #save current TTS messages
+
+            self.my_setDriver('ST', 0)
+
+            if self.yoAccess:
+                self.yoAccess.shut_down()
+            if self.yoLocal:
+                self.yoLocal.shut_down()
+
+            exit()
+        except Exception as e:
+            logging.error(f'Stop Exception : {e}')
+            if self.yoAccess:
+                self.yoAccess.shut_down()
+            if self.yoLocal:
+                self.yoLocal.shut_down()
+
+            self.poly.stop()
+
 
     '''
     def addNodes (self, deviceList):
