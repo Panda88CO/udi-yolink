@@ -97,9 +97,10 @@ def my_setDriver(self, key, value, Unit=None):
             logging.debug('None value passed = seting 99, UOM 25')
             self.node.setDriver(key, 99, True, True, 25)
         else:
+            
             if key in ['GV20']: # Connection state o
                 try:
-                    if self.yoLink.local_connection():
+                    if self.yoAccess.local:
                         logging.debug('Local connection - value + 3')
                         value = value + 3
                 except Exception as e:

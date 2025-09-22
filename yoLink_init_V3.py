@@ -61,8 +61,10 @@ class YoLinkInitPAC(object):
         yoAccess.secID = secret
         if home_id is None:
             yoAccess.access_mode = ['cloud']
+            yoAccess.local = False
         else:
             yoAccess.access_mode = ['local']
+            yoAccess.local = True
             yoAccess.local_client_id = ID 
             yoAccess.local_client_secret = secret
             yoAccess.local_URL = ''
