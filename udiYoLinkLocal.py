@@ -22,7 +22,7 @@ from udiCommonLib import version
 
 class YoLinkSetup (udi_interface.Node):
     from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit
-    from udiCommonLib import systemPoll, addNodes, stop, heartbeat, configDoneHandler, checkNodes, handleLevelChange
+    from udiCommonLib import systemPoll, addNodes, heartbeat, configDoneHandler, checkNodes, handleLevelChange
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  
         
