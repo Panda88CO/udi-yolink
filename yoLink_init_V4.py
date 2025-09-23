@@ -804,6 +804,7 @@ class YoLinkInitPAC(object):
 
                 logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], dataStr))
                 result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, yoAccess.QoS)
+                #####  Check if deviceID is in retry queue - if so remove it 
                 
             else:
                 logging.error('device {} not in mqtt list'.format(deviceId))
@@ -838,6 +839,12 @@ class YoLinkInitPAC(object):
             yoAccess.processing_access.release()
             if msg_code in ['000201', '020104']: # device off line or busy 
                 logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
+                # 
+                # add to retry list 
+                # pust to rety queue 
+                
+                
+                
                 if not yoAccess.publishQueue.empty():
                     logging.debug('publishQueue not empty - checking if newer entries exists')
                     publish_list = list (yoAccess.publishQueue.queue) # put retry at front of queue
