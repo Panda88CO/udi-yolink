@@ -54,7 +54,9 @@ version = '1.5.13'
 
 
 class YoLinkSetup (udi_interface.Node):
-    from  udiYolinkLib import my_setDriver,node_queue, wait_for_node_done
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit
+    from udiCommonLib import systemPoll, addNodes, heartbeat, configDoneHandler, checkNodes, handleLevelChange
+
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  
         
@@ -91,7 +93,9 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
         self.n_queue = []
-  
+        self.yoLocal = None
+        self.yoAccess = None 
+        
         self.Parameters = Custom(self.poly, 'customparams')
         self.Notices = Custom(self.poly, 'notices')
         logging.debug('YoLinkSetup init')
@@ -186,6 +190,7 @@ class YoLinkSetup (udi_interface.Node):
         #self.scheduler.start()
         #self.updateEpochTime()
 
+    '''
     def addNodes (self, deviceList):
         for dev in deviceList:
             if dev['type']  in self.supportedYoTypes:
@@ -470,7 +475,8 @@ class YoLinkSetup (udi_interface.Node):
         self.yolink_nodes = self.poly.getNodes()
         self.my_setDriver('GV1', 1)
         self.pollStart = True
-
+        '''
+    
     def stop(self):
         try:
             logging.info('Stop Called:')
@@ -487,7 +493,7 @@ class YoLinkSetup (udi_interface.Node):
             if self.yoAccess:
                 self.yoAccess.shut_down()
             self.poly.stop()
-
+    '''
     def heartbeat(self):
         logging.debug('heartbeat: ' + str(self.hb))
         if self.yoAccess.online:
@@ -567,7 +573,7 @@ class YoLinkSetup (udi_interface.Node):
         logging.setLevel(level['level'])
 
 
-
+    '''
     def handleParams (self, userParam ):
         logging.debug('handleParams')
         supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]

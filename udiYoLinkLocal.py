@@ -68,7 +68,9 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
         self.n_queue = []
-  
+        self.yoLocal = None
+        self.yoAccess = None
+        
         self.Parameters = Custom(self.poly, 'customparams')
         self.Notices = Custom(self.poly, 'notices')
         logging.debug('YoLinkSetup init')
@@ -652,12 +654,12 @@ class YoLinkSetup (udi_interface.Node):
             #else:
             #    self.my_setDriver('ST', 0)
                 
-        '''
+       
 
     def handleLevelChange(self, level):
         logging.info('New log level: {}'.format(level))
         logging.setLevel(level['level'])
-
+    '''
 
 
     def handleParams (self, userParam ):

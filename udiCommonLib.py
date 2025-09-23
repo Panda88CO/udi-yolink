@@ -145,7 +145,7 @@ def addNodes (self, deviceList):
             #if address in self.Parameters:
             #    name = self.Parameters[address]
             #else:
-            if dev['access'] == 0 and self.yoLocal is not None:
+            if self.yoLocal is not None and dev['access'] == 0:
                 logging.debug('Local Access selected {}'.format(dev['name']))
                 dev_access = self.yoLocal
             else:
