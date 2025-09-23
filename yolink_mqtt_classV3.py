@@ -30,7 +30,7 @@ except ImportError:
 
 
 from queue import Queue
-from yolink_delay_timerV2 import CountdownTimer
+from yolink_delay_timer import CountdownTimer
 """
 Object representation for YoLink MQTT Client
 """
