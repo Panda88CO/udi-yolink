@@ -171,7 +171,6 @@ def addNodes (self, deviceList):
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)
             elif dev['type'] in ['SpeakerHub']:
-
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoSpeakerHub(self.poly, address, address, name,  dev_access, dev )                    
                 self.msgList=[]
