@@ -353,7 +353,7 @@ ND-yohub-NAME=YoLink Hub
 ND-yohub-ICON=Output
 ST-nlshub-ST-NAME=Status
 ST-nlshub-GV20-NAME=Connection State
-ST-nlshub-GV30-NAME=Online
+ST-nlshub-GV30-NAME=Online State
 CMD-nlshub-UPDATE-NAME=Update
 
 ND-yohubbat-NAME=YoLink Hub w Battery
@@ -361,7 +361,7 @@ ND-yohubbat-ICON=Output
 ST-nlshubbat-ST-NAME=Supply Status
 ST-nlshubbat-GV0-NAME=Battery Status
 ST-nlshubbat-GV20-NAME=Connection State
-ST-nlshubbat-GV30-NAME=Online
+ST-nlshubbat-GV30-NAME=Online State
 CMD-nlshubbat-UPDATE-NAME=Update
 
 ND-yospeakerh-NAME=YoLink Speaker Hub
@@ -665,6 +665,9 @@ pwrmode-99=Unknown
 suspended-0=Online
 suspended-1=Suspended
 suspended-2=Offline
+suspended-3=Online - Local
+suspended-4=Suspended - Local
+suspended-5=Offline - Local
 suspended-99=Unknown
 
 

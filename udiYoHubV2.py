@@ -42,7 +42,7 @@ class udiYoBatteryHub(udi_interface.Node):
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   
-        logging.debug('udiYoHub INIT- {}'.format(deviceInfo['name']))
+        logging.debug('udiYoBatteryHub INIT- {}'.format(deviceInfo['name']))
         self.devInfo =  deviceInfo   
         self.yoAccess = yoAccess
         self.yoHub = None
@@ -69,7 +69,7 @@ class udiYoBatteryHub(udi_interface.Node):
  
 
     def start(self):
-        logging.info('start - udiYoHub')
+        logging.info('start - udiYoBatteryHub')
         self.yoHub  = YoLinkHu(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.yoHub.initNode()
@@ -82,7 +82,7 @@ class udiYoBatteryHub(udi_interface.Node):
         logging.debug('updateDelayCountdown {}'.format(delayRemaining))
 
     def stop (self):
-        logging.info('Stop udiYoHub')
+        logging.info('Stop udiYoBatteryHub')
         self.my_setDriver('ST', 0)
         self.my_setDriver('GV30', 0)
 

@@ -189,7 +189,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
         self.yoIRrem.initNode()
         time.sleep(2)
         #self.my_setDriver('ST', 1)
-
+        self.my_setDriver('GV30', 1)
         code_dict_temp = self.yoIRrem.get_code_dict()
         logging.debug(f'Code dict temp: {code_dict_temp}')
         while not self.yoIRrem.check_system_online():
@@ -254,6 +254,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             self.my_setDriver('GV0',len(self.codes_used) )                 
             self.my_setDriver('GV1',self.yoIRrem.getBattery())
             self.my_setDriver('GV2',self.err_code2nbr(self.yoIRrem.get_status_code()))
+            self.my_setDriver('GV30', 1)
             if self.yoIRrem.suspended:
                 self.my_setDriver('GV20', 1)
             else:
@@ -264,7 +265,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             #self.my_setDriver('GV2', 99)
             self.my_setDriver('ST', 0)
             self.my_setDriver('GV20', 2)
-
+            self.my_setDriver('GV30', 0)
 
 
     def updateStatus(self, data):

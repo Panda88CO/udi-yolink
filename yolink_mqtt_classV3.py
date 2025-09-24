@@ -30,7 +30,7 @@ except ImportError:
 
 
 from queue import Queue
-from yolink_delay_timerV2 import CountdownTimer
+from yolink_delay_timer import CountdownTimer
 """
 Object representation for YoLink MQTT Client
 """
@@ -252,6 +252,17 @@ class YoLinkMQTTDevice(object):
         else:
             yolink.online = False
         return(yolink.online)
+
+
+    #@measure_time
+    def local_connection(yolink):
+        try:
+            return( 'local' in  yolink.yoAccess.access_mode)
+
+        except Exception as e:
+            logging.error('connection_mode Exception: {}'.format(e))
+            return(False)
+
 
     #@measure_time
     def data_updated(yolink):

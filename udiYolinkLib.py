@@ -21,6 +21,20 @@ import time
 import json
 import math
 
+def updateEpochTime(self, command=None ):
+    logging.info('updateEpochTime ')
+    #unit = int(command.get('value'))
+    self.my_setDriver('TIME', int(time.time()))
+    
+def convert_temp_unit(self, tempStr):
+    if tempStr.capitalize()[:1] == 'F':
+        return(1)
+    elif tempStr.capitalize()[:1] == 'K':
+        return(2)
+    else:
+        return(0)
+
+
 def save_cmd_state(self, cmd_state):
     logging.debug('save_cmd_state {} - {}'.format(cmd_state, self.address))
     temp = {}
@@ -77,12 +91,20 @@ def wait_for_node_done(self):
     self.n_queue.pop()
 
 def my_setDriver(self, key, value, Unit=None):
-    logging.debug(f'my_setDriver : {key} {value} {Unit}')
+    logging.debug(f'my_setDriver : {key} {value} {Unit} ')
     try:
         if value is None:
             logging.debug('None value passed = seting 99, UOM 25')
             self.node.setDriver(key, 99, True, True, 25)
         else:
+            
+            if key in ['GV20']: # Connection state o
+                try:
+                    if self.yoAccess.local:
+                        logging.debug('Local connection - value + 3')
+                        value = value + 3
+                except Exception as e:
+                    logging.debug('Local connection - yolink class not ready - continue : {}'.format(e))
             if Unit:
                 self.node.setDriver(key, value, True, True, Unit)
             else:
