@@ -89,26 +89,6 @@ class YoLinkSetup (udi_interface.Node):
         self.nodeDefineDone = True
         #self.access_mode = ['cloud']      #default to cloud only
 
-    '''
-    def convert_temp_unit(self, tempStr):
-        if tempStr.capitalize()[:1] == 'F':
-            return(1)
-        elif tempStr.capitalize()[:1] == 'K':
-            return(2)
-        else:
-            return(0)
-    '''
-
-    '''
-    def configDoneHandler(self):
-        # We use this to discover devices, or ask to authenticate if user has not already done so
-        self.poly.Notices.clear()
-        logging.info('configDoneHandler called')
-        #self.myNetatmo.updateOauthConfig()
-        self.nodes_in_db = self.poly.getNodesFromDb()
-        logging.debug('Nodes in Nodeserver - before cleanup: {} - {}'.format(len(self.nodes_in_db),self.nodes_in_db))
-        self.configDone = True
-    '''
 
 
     def parse_device_lists (self, cloud_list = [], local_list =[]) -> list:
