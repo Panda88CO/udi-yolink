@@ -668,6 +668,7 @@ class YoLinkInitPAC(object):
 
         yoAccess.publishQueue.put(data, timeout = 5)
         
+        
         publishThread = Thread(target = yoAccess.transfer_data )
         publishThread.start()
         logging.debug('publishThread - starting')
