@@ -52,7 +52,7 @@ except ImportError:
 
 
 
-version = '1.5.14'
+version = '1.6.0'
 
 
 def udiTssProfileUpdate(messages):
