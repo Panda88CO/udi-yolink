@@ -850,6 +850,7 @@ class YoLinkInitPAC(object):
             completed_message_id = message['msgid']
             msg_code = message['code']
             logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} FinishQueue size {yoAccess.FinishQueue.qsize()}')
+            logging.debug(f'retry queue {list (yoAccess.retryQueue.queue) }')
             while message_id != completed_message_id:
                 message = yoAccess.FinishQueue.get(timeout = 10)
                 completed_message_id = message['msgid']
