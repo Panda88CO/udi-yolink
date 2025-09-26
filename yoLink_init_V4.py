@@ -152,7 +152,7 @@ class YoLinkInitPAC(object):
 
             while not yoAccess.connect_to_broker():
                 time.sleep(2)
-            
+            yoAccess.start_retry_queue()
             #yoAccess.connectionMonitorThread.start()
             
             #logging.debug('Connectoin Established: {}'.format(yoAccess.check_connection( yoAccess.mqttPort )))
@@ -940,6 +940,21 @@ class YoLinkInitPAC(object):
             yoAccess.TimeTableLock.release()
         #yoAccess.time_tracking_dict[dev_id].append(time)
 
+    def start_retry_queue(yoAccess):
+        '''start_retry_queue'''
+        while True:
+            try:
+                logging.debug(f'Testing for command retry - queue size {yoAccess.retryQueue.qsize()}  ')                
+                if not yoAccess.retryQueue.empty():
+                    data = yoAccess.retryQueue.get(timeout = 5)
+                    yoAccess._clean_retry_queue(data['targetDevice'], data['method']) # clean up any duplicates in retry queue    
+                    logging.debug('Re-adding {} from retry queue to publish queue'.format(data))                    
+                    yoAccess.publishQueue.put(data, timeout = 5)
+                time.sleep(30)                
+            except Exception as e:
+                logging.error('Exception start_retry_queue - {}'.format(e))
+                pass
+
     #@measure_time
     def _clean_retry_queue(yoAccess, deviceId, method):
         '''_clean_retry_queue'''
@@ -1064,14 +1079,6 @@ class YoLinkInitPAC(object):
                 '''
         except Exception as e:
             logging.error('Exception No new data to publish - {}'.format(e))
-            #if yoAccess.retryQueue.qsize() > 0: 
-            #    logging.debug( 'Cleaning up retry queue if not empty: {}'.format(yoAccess.retryQueue.qsize()))
-            #    data = yoAccess.retryQueue.get(timeout = 5)
-            #    deviceId = data['targetDevice']
-            #    method = data['method']
-            #    yoAccess._clean_retry_queue(deviceId, method)            
-            #    yoAccess.publish_data(data) 
-            #    logging.debug('publish_data - from retry queue: {}'.format(data))
             yoAccess.processing_access.release()
             pass # go wait again unless stop is called
 
