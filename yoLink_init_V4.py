@@ -978,7 +978,7 @@ class YoLinkInitPAC(object):
                             else:
                                 yoAccess.retryQueue.put(retry_data, timeout = 5)
 
-                                     
+                time.sleep(10)   
             except Exception as e:
                 logging.error('Exception check_retry_queue - {}'.format(e))
                 for temp in temp_list: # restore what was processed until now
