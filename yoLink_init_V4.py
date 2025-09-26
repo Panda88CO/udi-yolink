@@ -958,7 +958,7 @@ class YoLinkInitPAC(object):
                         temp_list.append(yoAccess.retryQueue.get(timeout = 5))
                     logging.debug(f'temp_retry_list {temp_list}')
                     time_now = int(time.time())
-                    first_retry = 0 # time now - no need to retry unless delay time is less than 0 (passed delay)
+                    selected_retry = 0 # time now - no need to retry unless delay time is less than 0 (passed delay)
                     selected_data = None
                     for retry_data in temp_list:
                         if 'retry' in retry_data:
@@ -967,8 +967,8 @@ class YoLinkInitPAC(object):
                             retry_fact = 0
                             retry_data['retry'] = retry_fact
                         delay = yoAccess.RETRY_STEP*2 ** retry_fact #double delay every iteration
-                        if retry_data['time']+delay - time_now < first_retry:
-                            first_retry = retry_data['time']+delay - time_now 
+                        if retry_data['time']+delay - time_now < selected_retry:
+                            selected_retry = retry_data['time']+delay - time_now 
                             selected_data = retry_data
                     if selected_data: # found data the needs to retried  
                         yoAccess.publishQueue.put(selected_data, timeout = 5) # place selected_data in publishQueue
