@@ -941,7 +941,12 @@ class YoLinkInitPAC(object):
         #yoAccess.time_tracking_dict[dev_id].append(time)
 
     def start_retry_queue(yoAccess, ):
-        '''start_retry_queue'''
+        logging.debug('Starting Retry Queue cecking')
+        retryThread = Thread(target = yoAccess.check_retry_queue )
+        retryThread.start()
+
+    def check_retry_queue(yoAccess):
+        '''check_retry_queue'''
         first = True
         while True:
             try:
@@ -955,7 +960,7 @@ class YoLinkInitPAC(object):
                     time.sleep(30)                
                     first = False
             except Exception as e:
-                logging.error('Exception start_retry_queue - {}'.format(e))
+                logging.error('Exception check_retry_queue - {}'.format(e))
                 pass
 
     #@measure_time
