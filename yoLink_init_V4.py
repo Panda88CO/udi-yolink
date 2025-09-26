@@ -940,8 +940,9 @@ class YoLinkInitPAC(object):
             yoAccess.TimeTableLock.release()
         #yoAccess.time_tracking_dict[dev_id].append(time)
 
-    def start_retry_queue(yoAccess):
+    def start_retry_queue(yoAccess, ):
         '''start_retry_queue'''
+        first = True
         while True:
             try:
                 logging.debug(f'Testing for command retry - queue size {yoAccess.retryQueue.qsize()}  ')                
@@ -950,7 +951,9 @@ class YoLinkInitPAC(object):
                     yoAccess._clean_retry_queue(data['targetDevice'], data['method']) # clean up any duplicates in retry queue    
                     logging.debug('Re-adding {} from retry queue to publish queue'.format(data))                    
                     yoAccess.publishQueue.put(data, timeout = 5)
-                time.sleep(30)                
+                if not first :
+                    time.sleep(30)                
+                    first = False
             except Exception as e:
                 logging.error('Exception start_retry_queue - {}'.format(e))
                 pass
