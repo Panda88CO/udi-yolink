@@ -868,7 +868,7 @@ class YoLinkInitPAC(object):
                 yoAccess.time_tracking_dict[dev_id] = []
                 #logging.debug('Adding timetrack for {}'.format(dev_id))            
             t_now = int(time.time_ns()/1e6)
-            logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
+            #logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
             max_dev_id = 5 # commands per dev_time_limit to same dev (add margin)
             max_dev_all = 99 # commands per call_time_limit to same dev (add margin)
             dev_time_limit = 60000 # 1 min =  60 sec = 60000 ms
@@ -936,7 +936,7 @@ class YoLinkInitPAC(object):
             logging.debug('Adding {} delay to t_now {}  =  {} to TimeTrack - dev delay={}, all_delay={}, dev2dev={}'.format(t_delay, t_now, t_now + t_delay, t_dev_delay, t_all_delay, t_dev_2_dev))
             yoAccess.time_tracking_dict[dev_id].append(t_now + t_delay)
             yoAccess.TimeTableLock.release()
-            logging.debug('TimeTrack after: time {} dev: {} delay: {} -  {}'.format(t_now, dev_id, int(math.ceil(t_delay/1000)), yoAccess.time_tracking_dict))
+            #logging.debug('TimeTrack after: time {} dev: {} delay: {} -  {}'.format(t_now, dev_id, int(math.ceil(t_delay/1000)), yoAccess.time_tracking_dict))
             return(int(math.ceil(t_delay/1000)))
             #return(int(math.ceil(t_delay/1000)), int(math.ceil(t_all_delay)), int(math.ceil(t_all_delay)))
         except Exception as e:
@@ -1103,7 +1103,7 @@ class YoLinkInitPAC(object):
                 logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} finishQueue size {yoAccess.finishQueue.qsize()}')
             yoAccess.processing_access.release()
             if msg_code in ['000201', '020104']: # device off line or busy 
-                logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
+                logging.error('Error code {} received for message {} - initiating retry'.format(msg_code, data))
                 if 'retry' in data:
                     data['retry']= data['retry']+1
                 else:
