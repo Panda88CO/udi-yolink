@@ -153,7 +153,9 @@ class YoLinkInitPAC(object):
 
             while not yoAccess.connect_to_broker():
                 time.sleep(2)
+            yoAccess.stop_queues = False    
             yoAccess.start_retry_queue()
+  
             #yoAccess.connectionMonitorThread.start()
             
             #logging.debug('Connectoin Established: {}'.format(yoAccess.check_connection( yoAccess.mqttPort )))
@@ -471,6 +473,7 @@ class YoLinkInitPAC(object):
                 yoAccess.STOP.set()
                 yoAccess.client.disconnect()
                 yoAccess.client.loop_stop()
+                yoAccess.stop_queues = True
         except Exception as E:
             logging.error('Shut down exception {}'.format(E))
  
@@ -948,8 +951,7 @@ class YoLinkInitPAC(object):
 
     def check_retry_queue(yoAccess):
         '''check_retry_queue'''
-        while True:
-            delay_list = []
+        while not yoAccess.stop_queues:
             try:
                 logging.debug(f'Testing for command retry - queue size {yoAccess.retryQueue.qsize()}  ')                
                 if not yoAccess.retryQueue.empty():
