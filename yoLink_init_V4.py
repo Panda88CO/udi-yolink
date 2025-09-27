@@ -975,8 +975,8 @@ class YoLinkInitPAC(object):
                             selected_data = retry_data
                     if selected_data: # found data the needs to retried  
                         logging.debug(f'ADDING RETRY TO PUBLISH QUEUE {selected_data}')
-                        yoAccess.publishQueue.put(selected_data, timeout = 5) # place selected_data in publishQueue
-                        for retry_data in temp_list:                   
+                        yoAccess.publish_data(selected_data) # place selected_data in publishQueue
+                        for retry_data in temp_list: # remove other pending retried of this device            
                             if retry_data['targetDevice'] == selected_data['targetDevice'] and retry_data['method'] == selected_data['method'] :                    
                                 logging.debug('Removing {} from retry queue as publish was successful'.format(retry_data))                    
                             else:
