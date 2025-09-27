@@ -968,7 +968,8 @@ class YoLinkInitPAC(object):
                         else:
                             retry_fact = 0
                             retry_data['retry'] = retry_fact
-                        delay = yoAccess.RETRY_STEP*2 ** retry_fact #double delay every iteration
+
+                        delay = min(yoAccess.RETRY_STEP*2 ** retry_fact, 3600) #double delay every iteration until 1 hour (3600 sec)
                         logging.debug('retry time {}  delay {} timenow {} selected_retry {}'.format(int(retry_data['first_time'])/1000, delay, time_now, selected_retry ))
                         if int(retry_data['first_time'])/1000+delay - time_now < selected_retry:
                             selected_retry = int(retry_data['first_time'])+delay - time_now 
