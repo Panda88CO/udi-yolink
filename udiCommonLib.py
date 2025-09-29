@@ -13,7 +13,7 @@ import os
 import xml.etree.ElementTree as ET
 
 
-from yoLink_init_V3 import YoLinkInitPAC
+#from yoLink_init_V4 import YoLinkInitPAC
 from udiYoSwitchV2 import udiYoSwitch
 from udiYoSwitchSecV2 import udiYoSwitchSec
 from udiYoSwitchPwrSecV2 import udiYoSwitchPwrSec
@@ -52,7 +52,7 @@ except ImportError:
 
 
 
-version = '1.5.14'
+version = '1.6.0'
 
 
 def udiTssProfileUpdate(messages):

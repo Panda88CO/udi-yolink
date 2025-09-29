@@ -10,7 +10,7 @@ from  datetime import datetime
 try:
     import udi_interface
     logging = udi_interface.LOGGER
-    #logging = getlogger('yolink_init_V2')
+    #logging = getlogger('yolink_init_V3')
     Custom = udi_interface.Custom
 except ImportError:
     import logging
@@ -708,7 +708,7 @@ class YoLinkInitPAC(object):
 
             elif (rc == 2):
                 if yoAccess.connectedToBroker: # Already connected - need to disconnect before reconnecting
-                    logging.error(f'Authentication error 2 - Token no longer valid - Need to reconnect ')
+                    logging.error(f'Authentication error {rc} - Token no longer valid - Need to reconnect ')
                     #netid = yoAccess.check_connection(yoAccess.mqttPort)
                     #logging.debug('netid = {}'.format(netid))
                     yoAccess.connectedToBroker = False
