@@ -24,13 +24,13 @@ class udiYoSpeakerHub(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, bool2ISY, node_queue, wait_for_node_done
     id = 'yospeakerh'
     drivers = [
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV0', 'value': 7, 'uom': 56}, 
             {'driver': 'GV1', 'value': 0, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25}, 
             {'driver': 'GV3', 'value': 0, 'uom': 25}, 
             {'driver': 'GV4', 'value': 0, 'uom': 56}, 
             {'driver': 'GV5', 'value': 0, 'uom': 56},        
-            {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25}, 
             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
@@ -80,6 +80,7 @@ class udiYoSpeakerHub(udi_interface.Node):
     def start(self):
         logging.info('start - udiYoSpeakerHub')
         self.my_setDriver('GV30', 0)
+        self.my_setDriver('ST', 0)
         self.yoSpeakerHub  = YoLinkSpeakerH(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
         self.volume = 8
@@ -121,6 +122,7 @@ class udiYoSpeakerHub(udi_interface.Node):
     def stop (self):
         logging.info('Stop udiYoSpeakerHub')
         self.my_setDriver('GV30', 0)
+        self.my_setDriver('ST', 0)
         self.yoSpeakerHub.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -148,12 +150,14 @@ class udiYoSpeakerHub(udi_interface.Node):
                 self.my_setDriver('ST', self.messageNbr)
                 self.my_setDriver('GV5', self.repeat)
                 self.my_setDriver('GV30', 1)
+                self.my_setDriver('ST', 1)
                 if self.yoSpeakerHub.suspended:
                     self.my_setDriver('GV20', 1)
                 else:
                      self.my_setDriver('GV20', 0)
             else:
                 self.my_setDriver('GV30', 0)
+                self.my_setDriver('ST', 0)
                 self.my_setDriver('GV20', 2)
                 #self.pollDelays()
 

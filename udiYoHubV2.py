@@ -24,8 +24,8 @@ class udiYoBatteryHub(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, wait_for_node_done, node_queue
     id = 'yohubbat'
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 99, 'uom': 25},
+            {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV30', 'value': 99, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},   
             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
@@ -83,7 +83,7 @@ class udiYoBatteryHub(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoBatteryHub')
-        self.my_setDriver('ST', 0)
+        #self.my_setDriver('ST', 0)
         self.my_setDriver('GV30', 0)
 
         self.yoHub.shut_down()
