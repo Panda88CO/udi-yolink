@@ -147,7 +147,7 @@ class udiYoSpeakerHub(udi_interface.Node):
                 self.my_setDriver('GV2', self.bool2ISY(self.mute))
                 self.my_setDriver('GV3', self.tone_list.index(self.tone))
                 self.my_setDriver('GV4', self.messageNbr)
-                self.my_setDriver('ST', self.messageNbr)
+                #self.my_setDriver('ST', self.messageNbr)
                 self.my_setDriver('GV5', self.repeat)
                 self.my_setDriver('GV30', 1)
                 self.my_setDriver('ST', 1)
