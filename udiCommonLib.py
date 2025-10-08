@@ -53,7 +53,7 @@ except ImportError:
 
 
 
-version = '1.6.0'
+version = '1.6.1'
 
 
 
@@ -288,7 +288,7 @@ def addNodes (self, deviceList):
                     self.assigned_addresses.append(adr)                     
                         
             elif dev['type'] in  ['Outlet']:     
-                if  model in ['YS6803','YS6602','YS5716']:
+                if  model in ['YS6803','YS6602','YS5716', 'YS6614']:
                     logging.info('Adding device w. power {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoOutletPwr(self.poly, address, address, name, dev_access, dev )
                 else:
