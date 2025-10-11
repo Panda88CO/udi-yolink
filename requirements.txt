@@ -1,6 +1,6 @@
-udi_interface>=3.3.14
-requests>=2.31.0
-paho-mqtt>=1.6.1
-psutil>=5.9.2
-apscheduler>=3.10.4
+udi_interface>=3.3.16
+requests>=2.32.4
+paho-mqtt>=2.1.0
+psutil>=7.0.0
+apscheduler>=3.11.0
 
