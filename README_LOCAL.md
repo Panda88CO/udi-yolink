@@ -10,7 +10,7 @@
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
     'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren'
-    'WaterMeterController','WaterDepthSensor','LockV2', 'WaterMeterMultiController'
+    'WaterMeterController','WaterDepthSensor', 'LockV2'
 
     
     Code uses MQTT communications
@@ -29,25 +29,44 @@
     Coded in Python 3 - MIT license 
 
 ## Installation
-    Credentials needs to be added to configuration in YoLink node server under PG3.  In YoLink app goto Settings->Account->Advanced Settings -> User Access Credentials and copy UAID and SecretKey (alternaltive path in app is Profile->Advanced Settings -> User Access Credentials )
-    It is possible to get credentials for each home that is defined but the nodes server can only handle one of them currently 
-
-    Enter both UAID and SecretKey under configuration in the node in PG#'s browser page (scroll down if you do not see the fields to enter) - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
-    Sometimes a reboot of the ISY is required to make the node server show up correctly.  
+MODE
+    Mode sets the operation of the nodeserver
+    local - uses local only operation - This allows all local devices to be controlled (even without enternet access once installed) Note some devices do not work in local only mode - e.g. speakerhub 
+    hybrid - operates both local and cloud operation - This is default if you have the yolink local hub (YS1606)
+    clould - operates like the yolink node (separte node) - only uses cloud to access/control the devices 
 
 UUAD/SectretKey
     Credentials needs to be added to configuration in YoLink node server under PG3.  In YoLink app goto Settings->Account->Advanced Settings -> User Access Credentials and copy UAID and SecretKey (alternaltive path in app is Profile->Advanced Settings -> User Access Credentials )
-    It is possible to get credentials for each separate home that is defined in the Yolink app, but the node server can only handle one of them currently.
+    It is possible to get credentials for each home that is defined but the nodes server can only handle one of them currently 
     
+    Enter both UAID and SecretKey under configuration in the node in PG#'s browser page (scroll down if you do not see the fields to enter) - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
+    Sometimes a reboot of the ISY is required to make the node server show up correctly.  
+
+LOCAL_CLIENT_ID, LOCAL_CLIENT_SECRET (needed for local or hybrid mode)
+    These can only be obtained from the yolink Local hub
+    In Yolink app - select thelocal hub - select local network, select integrations
+    Copy client_id to LOCAL_CLIENT_IF and copy Client_sceret to LOCAL_CLIENT_SECRET
+
+SUBNET_ID (needed for local or hybrid mode)
+    This can only be obtained from the yolink Local hub
+    In Yolink app - select thelocal hub - select local network, select General
+    Copy Net id to SUBNET_ID
+
+LOCAL_IP (needed for local or hybrid mode)
+    IP address of the local hub
+    This can only be obtained from the yolink Local hub - select | (upper right corner)
+    Copy IP address to LOCAL_IP
+
+
+
 TEMP_UNIT
     Select F or C
      
 NBR_TTS
     Number of speakerhub Text to Speech messages to support (see below)
-    
 
 ## Notes 
-    One node server can only handle 1 home - you can get credential for each home in the APP by selecting the home and get credentials - multiple credentials can exist at the same time, but the node server can only handle one
+    One node server can only handle 1 home - you can get separate credential for each home in the APP by selecting the home and get credentials - multiple credentials can exist at the same time, but the node server can only handle one
 
     Remaining delay time shown in ISY is estimated - count down is running on node server - not device
 
@@ -61,4 +80,7 @@ NBR_TTS
     Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)
     
     The latest version of the node report latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions 
+
+    Yolink and Yolink local uses the same device code
+    Note
     
