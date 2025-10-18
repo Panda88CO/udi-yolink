@@ -567,8 +567,10 @@ CMD-nlssmkey-KEY3LDEF-NAME=Key3 Long Scene Function
 CMD-nlssmkey-KEY4LDEF-NAME=Key4 Long Scene Function
 CMD-nlssmkey-NAME=Update Status
 
-ND-yowatermeter-NAME=YoLink Water Meter Controller
-ND-yowatermeter-ICON=PulseCounter
+ND-yowatermeterCtrl-NAME=YoLink Water Meter Controller
+ND-yowatermeterCtrl-ICON=PulseCounter
+ND-yowatermeterOnly-NAME=YoLink Water Meter Controller
+ND-yowatermeterOnly-ICON=PulseCounter
 ST-nlswatermeter-ST-NAME=Water Running
 ST-nlswatermeter-GV0-NAME=Valve State
 ST-nlswatermeter-GV1-NAME=Water Meter Total
