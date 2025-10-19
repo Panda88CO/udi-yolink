@@ -435,7 +435,11 @@ class YoLinkInitPAC(object):
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
             r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1, timeout=5) 
             info = r.json()
-            yoAccess.deviceList = info['data']['devices']
+            logging.debug('info : {}'.format(format(json.dumps(info, indent=4, separators=(',', ': ') ))))
+            if yoAccess.access_mode in ['cloud']:
+                yoAccess.deviceList = info['data']['devices']
+            elif yoAccess.access_mode in ['local']:
+                yoAccess.deviceList = info['data']
             logging.debug('yoAccess.deviceList {} : {}'.format(yoAccess.access_mode, yoAccess.deviceList))
         except Exception as e:
             logging.error('Exception  -  retrieve_device_list : {}'.format(e))             
