@@ -967,6 +967,7 @@ class YoLinkInitPAC(object):
                     selected_retry = 0 # time now - no need to retry unless delay time is less than 0 (passed delay)
                     selected_data = None
                     for retry_data in temp_list:
+                        selected_data = None ### fix?
                         if 'retry' in retry_data:
                             retry_fact = retry_data['retry']
                         else:
@@ -978,17 +979,17 @@ class YoLinkInitPAC(object):
                         if int(retry_data['first_time'])/1000+delay - time_now < selected_retry:
                             selected_retry = int(retry_data['first_time'])+delay - time_now 
                             selected_data = retry_data
-                    if selected_data: # found data the needs to retried  
-                        logging.debug(f'ADDING RETRY TO PUBLISH QUEUE {selected_data}')
-                        yoAccess.publish_data(selected_data) # place selected_data in publishQueue
-                        for retry_data in temp_list: # remove other pending retried of this device            
-                            if retry_data['targetDevice'] == selected_data['targetDevice'] and retry_data['method'] == selected_data['method'] :                    
-                                logging.debug('Removing {} from retry queue as publish was successful'.format(retry_data))                    
-                            else:
+                        if selected_data: # found data the needs to retried  
+                            logging.debug(f'ADDING RETRY TO PUBLISH QUEUE {selected_data}')
+                            yoAccess.publish_data(selected_data) # place selected_data in publishQueue
+                            for retry_data in temp_list: # remove other pending retried of this device            
+                                if retry_data['targetDevice'] == selected_data['targetDevice'] and retry_data['method'] == selected_data['method'] :                    
+                                    logging.debug('Removing {} from retry queue as publish was successful'.format(retry_data))                    
+                                else:
+                                    yoAccess.retryQueue.put(retry_data, timeout = 5)
+                        else:
+                            for retry_data in temp_list:  # return data to retryQueue
                                 yoAccess.retryQueue.put(retry_data, timeout = 5)
-                    else:
-                        for retry_data in temp_list:  # return data to retryQueue
-                            yoAccess.retryQueue.put(retry_data, timeout = 5)
                     logging.debug(f'temp_retry_list {list (yoAccess.retryQueue.queue)}')
 
                 time.sleep(10)   
