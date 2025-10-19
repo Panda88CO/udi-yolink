@@ -730,7 +730,7 @@
       </cmds>
    </nodeDef> 
 
-<nodeDef id="yowatermeteronly" nls="nlswatermeter">
+<nodeDef id="yowatermeterOnly" nls="nlswatermeter">
       <editors />
    <sts>
          <st id="ST" editor="waterrun" /> <!-- water runing-->
