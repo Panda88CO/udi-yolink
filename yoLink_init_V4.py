@@ -953,7 +953,7 @@ class YoLinkInitPAC(object):
         retryThread = Thread(target = yoAccess.check_retry_queue )
         retryThread.start()
 
-    def check_retry_queue(yoAccess):
+    def check_retry_queue(yoAccess):   #### NEED TO CHECK FOR MULTIPLE
         '''check_retry_queue'''
         while not yoAccess.stop_queues:
             try:
@@ -979,6 +979,7 @@ class YoLinkInitPAC(object):
                         if int(retry_data['first_time'])/1000+delay - time_now < selected_retry:
                             selected_retry = int(retry_data['first_time'])+delay - time_now 
                             selected_data = retry_data
+
                         if selected_data: # found data the needs to retried  
                             logging.debug(f'ADDING RETRY TO PUBLISH QUEUE {selected_data}')
                             yoAccess.publish_data(selected_data) # place selected_data in publishQueue
