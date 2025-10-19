@@ -268,7 +268,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
     #    yolink.send_data(yolink.last_set_data)
 
     def getMultiOutStates(yolink):
-        logging.debug(yolink.type+' - getMultiOutletState')
+        logging.debug(yolink.type+' - getMultiOutStates')
         #yolink.refreshMultiOutlet()
         states= {}
         temp = yolink.getInfoAPI()
@@ -296,7 +296,7 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
 
 
     def getMultiOutPortState(yolink, portStr):
-        logging.debug(yolink.type+' - getMultiOutletState')
+        logging.debug(yolink.type+' - getMultiOutPortState')
         #yolink.refreshMultiOutlet()
         port = yolink.extractStrNbr(portStr)
         port = port + yolink.nbrUsb
@@ -309,12 +309,12 @@ class YoLinkMultiOut(YoLinkMQTTDevice):
             return('unknown')
         
     def getMultiOutUsbState(yolink, usbStr):
-        logging.debug(yolink.type+' - getMultiOutletState')
+        logging.debug(yolink.type+' - getMultiOutUsbState')
         #yolink.refreshMultiOutlet()
         usb = yolink.extractStrNbr(usbStr)
         temp = yolink.getInfoAPI()
         temp = temp['data'] # Need to look at include USB in API
-        #logging.debug('getMultiOutletPortState  {} {} {}'.format(port,temp['state'], temp ))
+        logging.debug('getMultiOutUsbState  {} {}'.format(usbStr , temp ))
         if yolink.nbrUsb > 0 and usb < yolink.nbrUsb:
             return(temp['state'][usb])
         else:
