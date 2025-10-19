@@ -53,7 +53,7 @@ except ImportError:
 
 
 
-version = '1.6.1'
+version = '1.6.2'
 
 
 
@@ -395,8 +395,11 @@ def addNodes (self, deviceList):
                 logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))                       
                 if  model in ['YS5007']:    
                     temp = udiYoWaterMeterOnly(self.poly, address, address, name, dev_access, dev )
-                else: #YS5018 or YS5008 
+                elif model not in ['YS5009', 'YS5029']: #YS5018 or YS5008 
                     temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
+                else:
+                    logging.warning('Currently unsupported Water Meter Controller model: {} - {}'.format(model, dev['name'] ))
+                    continue
                 while not temp.node_ready:
                     logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                     time.sleep(4)

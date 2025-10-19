@@ -62,3 +62,5 @@ NBR_TTS
     
     The latest version of the node report latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions 
     
+
+    
