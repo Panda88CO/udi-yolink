@@ -2,7 +2,7 @@
 ND-setup-NAME=YoLink Setup
 ND-setup-ICON=GenericCtrl
 ST-nlssetup-GV1-NAME=Status
-#ST-nlssetup-ST-NAME=Nodeserver 
+ST-nlssetup-ST-NAME=Nodeserver 
 ST-nlssetup-TIME-NAME=LastPoll Time
 ST-nlssetup-GV20-NAME=Connection State
 ST-nlssetup-GV30-NAME=Online State

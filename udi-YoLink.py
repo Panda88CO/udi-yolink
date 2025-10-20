@@ -118,7 +118,7 @@ class YoLinkSetup (udi_interface.Node):
 
         self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
         if self.yoAccess:
-            self.my_setDriver('ST', 0)
+            self.my_setDriver('ST', 1)
         if 'TEMP_UNIT' in self.Parameters:
             self.temp_unit = self.convert_temp_unit(self.Parameters['TEMP_UNIT'])
         else:
