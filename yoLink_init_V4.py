@@ -1116,8 +1116,17 @@ class YoLinkInitPAC(object):
                     data['retry'] = 0 # starting retry
                     data['first_time'] = data['time']
                 yoAccess.retryQueue.put(data, timeout = 5)
-            elif msg_code in ['0000000']:
-                yoAccess._clean_retry_queue(deviceId, method) # remove pending retries for this call 
+            elif msg_code in ['0000000'] :
+                if data is None: 
+                    logging.error('No data received - device not ready - initiating retry'.format( data))
+                    data['retry'] = 0 # starting retry
+                    data['first_time'] = data['time']
+                    yoAccess.retryQueue.put(data, timeout = 5)
+                elif 'retry' in data and len(data) == 1:
+                    data['retry']= data['retry']+1
+                    yoAccess.retryQueue.put(data, timeout = 5)
+                else:
+                    yoAccess._clean_retry_queue(deviceId, method) # remove pending retries for this call 
                 '''
                 if not yoAccess.publishQueue.empty():
                     logging.debug('publishQueue not empty - checking if newer entries exists')
