@@ -730,6 +730,67 @@
       </cmds>
    </nodeDef> 
 
+  <nodeDef id="yowatermeterMulti" nls="nlswatermeter">
+      <editors />
+      <sts>
+         <st id="ST" editor="waterrun" /> <!-- water runing-->
+
+         <st id="GV0" editor="manstate" />
+         <st id="GV1" editor="flow" />
+         <st id="GV10" editor="flow" />     
+         <st id="GV2" editor="flow" /> <!-- recent use -->
+
+         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
+         <st id="BATLVL" editor="batlevel" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV4" editor="alarm" />
+         <st id="GV5" editor="alarm" />
+         <st id="GV6" editor="alarm" />
+         <st id="GV7" editor="alarm" />
+         <st id="GV8" editor="alarm" />
+         <st id="GV9" editor="alarm" />         
+         <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
+         <st id="GV12" editor="flow" /> <!-- leak limit -->
+         <st id="GV13" editor="enable" /> <!-- Leak auto shutoff -->
+         <st id="GV14" editor="flow" /> <!-- Overrun Volume  -->        
+         <st id="GV15" editor="enable" /> <!-- Overrun Volume autoshutoff -->
+         <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
+         <st id="GV17" editor="enable" /> <!-- Overrun time autoshutoff -->
+         <st id="GV20" editor="suspendstate" />
+         <st id="GV30" editor="status" />
+         <st id="TIME" editor="unixtime" />                  
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />   -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+
+            <cmd id="SETATTRIB">
+               <p id="L_LIMIT" editor="leaklimit" init="1" /> 
+               <p id="L_OFF" editor="set_enable" init="1" />       
+               <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
+               <p id="OR_OFF" editor="set_enable" init="1" />   
+               <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
+               <p id="ORT_OFF" editor="set_enable" init="1" />   
+            </cmd >
+            <cmd id="DELAYCTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" />                                     
+             </cmd >   
+  
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+
 <nodeDef id="yowatermeterOnly" nls="nlswatermeter">
       <editors />
    <sts>

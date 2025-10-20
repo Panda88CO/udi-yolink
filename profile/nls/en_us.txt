@@ -569,8 +569,11 @@ CMD-nlssmkey-NAME=Update Status
 
 ND-yowatermeterCtrl-NAME=YoLink Water Meter Controller
 ND-yowatermeterCtrl-ICON=PulseCounter
-ND-yowatermeterOnly-NAME=YoLink Water Meter Controller
+ND-yowatermeterOnly-NAME=YoLink Water Meter 
 ND-yowatermeterOnly-ICON=PulseCounter
+ND-yowatermeterMulti-NAME=YoLink Water Meter Multi Controller
+ND-yowatermeterMulti-ICON=PulseCounter
+
 ST-nlswatermeter-ST-NAME=Water Running
 ST-nlswatermeter-GV0-NAME=Valve State
 ST-nlswatermeter-GV1-NAME=Water Meter Total

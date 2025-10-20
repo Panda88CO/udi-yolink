@@ -122,15 +122,12 @@ class YoLinkSetup (udi_interface.Node):
             time.sleep(1)
             logging.debug ('waiting for inital node to get created')
 
-        self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-                                'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-                                'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
-                                'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-                                'WaterDepthSensor']
+        #self.supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+        #                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
+        #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
+        #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+        #                        'WaterDepthSensor', 'WaterMeterMultiController']
         
-        #self.supportedYoTypes = ['Switch','VibrationSensor', 'Outlet']
-        self.supportedLocalYoTypes = self.supportedYoTypes 
-        #self.supportedYoTypes = [ 'WaterDepthSensor', 'VibrationSensor']    
         self.updateEpochTime()
         logging.debug(f'credentials {self.access_mode} {self.uaid} {self.secretKey} {self.local_client_id} {self.local_client_secret}')
         if 'cloud' in self.access_mode:
