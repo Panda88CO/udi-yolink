@@ -953,7 +953,7 @@ class YoLinkInitPAC(object):
         retryThread = Thread(target = yoAccess.check_retry_queue )
         retryThread.start()
 
-    def check_retry_queue(yoAccess):   #### NEED TO CHECK FOR MULTIPLE
+    def check_retry_queue(yoAccess):
         '''check_retry_queue'''
         while not yoAccess.stop_queues:
             try:
@@ -967,7 +967,7 @@ class YoLinkInitPAC(object):
                     selected_retry = 0 # time now - no need to retry unless delay time is less than 0 (passed delay)
                     selected_data = None
                     for retry_data in temp_list:
-                        selected_data = None ### fix?
+                        selected_data = None ###
                         if 'retry' in retry_data:
                             retry_fact = retry_data['retry']
                         else:
@@ -979,11 +979,9 @@ class YoLinkInitPAC(object):
                         if int(retry_data['first_time'])/1000+delay - time_now < selected_retry:
                             selected_retry = int(retry_data['first_time'])+delay - time_now 
                             selected_data = retry_data
-                            yoAccess.publish_data(selected_data) # place selected_data in publishQueue
-
                     if selected_data: # found data the needs to retried  
                         logging.debug(f'ADDING RETRY TO PUBLISH QUEUE {selected_data}')
-                        #yoAccess.publish_data(selected_data) # place selected_data in publishQueue
+                        yoAccess.publish_data(selected_data) # place selected_data in publishQueue
                         for retry_data in temp_list: # remove other pending retried of this device            
                             if retry_data['targetDevice'] == selected_data['targetDevice'] and retry_data['method'] == selected_data['method'] :                    
                                 logging.debug('Removing {} from retry queue as publish was successful'.format(retry_data))                    
