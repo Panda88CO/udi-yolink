@@ -145,7 +145,7 @@ CMD-nlsoutlet-SWCTRL-NAME=Switch control
 
 ND-yomultiout-NAME=YoLink Outlet
 ND-yomultiout-ICON=Switch
-ST-nlsmultiout-ST-NAME=Nodeserver Status
+ST-nlsmultiout-ST-AME=Nodeserver Status
 #ST-nlsmultiout-GV8-NAME=Device Online
 ST-nlsmultiout-GV12-NAME=Port
 ST-nlsmultiout-GV13-NAME=Schedule Index
@@ -460,8 +460,8 @@ CMD-nlsirremote-UPDATE-NAME=Update
 
 ND-yoircode-NAME=YoLink Ir Code
 ND-yoircode-ICON=Output
-ST-nlsircode-ST-NAME=Send IR code
-#ST-nlsircode-ST-NAME=TX success
+ST-nlsircode-NAME=Send IR code
+ST-nlsircode-ST=TX success
 ST-nlsircode-GV20-NAME=Connection State
 ST-nlsircode-GV30-NAME=Online State
 ST-nlsircode-TIME-NAME=Last device update
@@ -518,7 +518,7 @@ ST-nlssiren-ST-NAME=Siren State
 ST-nlssiren-GV0-NAME=Siren State
 ST-nlssiren-GV1-NAME=Siren Duration
 ST-nlssiren-GV2-NAME=Supply State
-
+ST-nlssiren-ST-NAME=Nodeserver Status
 ST-nlssiren-GV20-NAME=Connection State
 ST-nlssiren-GV30-NAME=Online State
 ST-nlssiren-BATLVL-NAME=Battery Level
@@ -567,13 +567,8 @@ CMD-nlssmkey-KEY3LDEF-NAME=Key3 Long Scene Function
 CMD-nlssmkey-KEY4LDEF-NAME=Key4 Long Scene Function
 CMD-nlssmkey-NAME=Update Status
 
-ND-yowatermeterCtrl-NAME=YoLink Water Meter Controller
-ND-yowatermeterCtrl-ICON=PulseCounter
-ND-yowatermeterOnly-NAME=YoLink Water Meter 
-ND-yowatermeterOnly-ICON=PulseCounter
-ND-yowatermeterMulti-NAME=YoLink Water Meter Multi Controller
-ND-yowatermeterMulti-ICON=PulseCounter
-
+ND-yowatermeter-NAME=YoLink Water Meter Controller
+ND-yowatermeter-ICON=PulseCounter
 ST-nlswatermeter-ST-NAME=Water Running
 ST-nlswatermeter-GV0-NAME=Valve State
 ST-nlswatermeter-GV1-NAME=Water Meter Total

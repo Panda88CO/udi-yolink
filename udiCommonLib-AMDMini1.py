@@ -38,7 +38,6 @@ from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV3 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
 from udiYoWaterMeterControllerV3 import udiYoWaterMeterController
-from udiYoWaterMeterMultiControllerV3 import udiYoWaterMeterMultiController
 from udiYoWaterMeterOnlyV3 import udiYoWaterMeterOnly
 from udiYoHubV2 import udiYoHub, udiYoBatteryHub
 #import udiProfileHandler
@@ -54,7 +53,7 @@ except ImportError:
 
 
 
-version = '1.6.3'
+version = '1.6.1'
 
 
 
@@ -139,16 +138,9 @@ def configDoneHandler(self):
 
 
 def addNodes (self, deviceList):
-    supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
-                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-                        'WaterDepthSensor', 'WaterMeterMultiController']
-    
-
     for dev in deviceList:
         logging.debug(f'DEVICE BEING ANALYZED {dev}')
-        if dev['type']  in supportedYoTypes:            
+        if dev['type']  in self.supportedYoTypes:            
             nodename = str(dev['deviceId'][-14:])
             address = self.poly.getValidAddress(nodename)
             model = str(dev['modelName'][:6])
@@ -403,28 +395,14 @@ def addNodes (self, deviceList):
                 logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))                       
                 if  model in ['YS5007']:    
                     temp = udiYoWaterMeterOnly(self.poly, address, address, name, dev_access, dev )
-                elif model not in ['YS5009', 'YS5029']: #YS5018 or YS5008 
-                    temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
-                else:
-                    logging.warning('Currently unsupported Water Meter Controller model: {} - {}'.format(model, dev['name'] ))
-                    continue
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(4)
-                for adr in temp.adr_list:
-                    self.assigned_addresses.append(adr)     
-
-            elif dev['type'] in ['WaterMeterMultiController']:
-                logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))                       
-                if  model in ['YS5007']:    
-                    temp = udiYoWaterMeterOnly(self.poly, address, address, name, dev_access, dev )
                 else: #YS5018 or YS5008 
                     temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
                 while not temp.node_ready:
                     logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
                     time.sleep(4)
                 for adr in temp.adr_list:
-                    self.assigned_addresses.append(adr)                                                 
+                    self.assigned_addresses.append(adr)                        
+                                            
         else:
             logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
     time.sleep(1)

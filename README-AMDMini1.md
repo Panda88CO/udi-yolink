@@ -10,7 +10,7 @@
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
     'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren'
-    'WaterMeterController','WaterDepthSensor','LockV2', 'WaterMeterMultiController'
+    'WaterMeterController','WaterDepthSensor', 'LockV2'
 
     
     Code uses MQTT communications
@@ -34,17 +34,7 @@
 
     Enter both UAID and SecretKey under configuration in the node in PG#'s browser page (scroll down if you do not see the fields to enter) - then restart - some times it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find pattern)
     Sometimes a reboot of the ISY is required to make the node server show up correctly.  
-
-UUAD/SectretKey
-    Credentials needs to be added to configuration in YoLink node server under PG3.  In YoLink app goto Settings->Account->Advanced Settings -> User Access Credentials and copy UAID and SecretKey (alternaltive path in app is Profile->Advanced Settings -> User Access Credentials )
-    It is possible to get credentials for each separate home that is defined in the Yolink app, but the node server can only handle one of them currently.
-    
-TEMP_UNIT
-    Select F or C
      
-NBR_TTS
-    Number of speakerhub Text to Speech messages to support (see below)
-    
 
 ## Notes 
     One node server can only handle 1 home - you can get credential for each home in the APP by selecting the home and get credentials - multiple credentials can exist at the same time, but the node server can only handle one
@@ -61,6 +51,4 @@ NBR_TTS
     Schedules are not supported (you can use ISY for the same and the YoLink APP can beused to set schdules)
     
     The latest version of the node report latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions 
-    
-
     

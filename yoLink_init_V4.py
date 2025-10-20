@@ -435,7 +435,11 @@ class YoLinkInitPAC(object):
             headers1['Authorization'] = 'Bearer '+ yoAccess.token['access_token']
             r = requests.post(yoAccess.apiv2URL, data=json.dumps(data), headers=headers1, timeout=5) 
             info = r.json()
-            yoAccess.deviceList = info['data']['devices']
+            logging.debug('info : {}'.format(format(json.dumps(info, indent=4, separators=(',', ': ') ))))
+            if 'cloud' in yoAccess.access_mode:
+                yoAccess.deviceList = info['data']['devices']
+            elif 'local' in yoAccess.access_mode:
+                yoAccess.deviceList = info['data']['devices']
             logging.debug('yoAccess.deviceList {} : {}'.format(yoAccess.access_mode, yoAccess.deviceList))
         except Exception as e:
             logging.error('Exception  -  retrieve_device_list : {}'.format(e))             
@@ -963,6 +967,7 @@ class YoLinkInitPAC(object):
                     selected_retry = 0 # time now - no need to retry unless delay time is less than 0 (passed delay)
                     selected_data = None
                     for retry_data in temp_list:
+                        selected_data = None ###
                         if 'retry' in retry_data:
                             retry_fact = retry_data['retry']
                         else:

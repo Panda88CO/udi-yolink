@@ -120,15 +120,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                     if 'duration' in yolink.dataAPI[yolink.dData]['recentUsage']:
                         temp['recent_duration'] = yolink.dataAPI[yolink.dData]['recentUsage']['duration']
                 if 'dailyUsage' in yolink.dataAPI[yolink.dData]:
-                    if isinstance(yolink.dataAPI[yolink.dData]['dailyUsage'], dict):
-                        if 'amount' in yolink.dataAPI[yolink.dData]['dailyUsage']:
-                            temp['daily_usage'] = round(yolink.dataAPI[yolink.dData]['dailyUsage']['amount']/meter_correction_factor,1)
-                        if 'duration' in yolink.dataAPI[yolink.dData]['dailyUsage']:
-                            temp['daily_duration'] = yolink.dataAPI[yolink.dData]['dailyUsage']['duration']           
-                        else:
-                            temp['daily_duration'] = None     
-                    elif isinstance(yolink.dataAPI[yolink.dData]['dailyUsage'], int) or isinstance(yolink.dataAPI[yolink.dData]['dailyUsage'], float):
-                        temp['daily_usage'] = round(yolink.dataAPI[yolink.dData]['dailyUsage']/meter_correction_factor,1)
+                    temp['daily_usage'] = round(yolink.dataAPI[yolink.dData]['dailyUsage']/meter_correction_factor,1)
             #logging.debug(f' temp {temp}')             
             return(temp)
 
