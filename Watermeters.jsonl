@@ -1,0 +1,235 @@
+    "state": {
+        "valves": {
+            "0": "close",
+            "1": "close"
+        },
+        "meters": {
+            "0": 0,
+            "1": 0
+        },
+        "waterFlowing": {
+            "0": false,
+            "1": false
+        }
+    },
+    "alarm": {
+        "durationOverrun": {
+            "0": false,
+            "1": false
+        },
+        "timesOverrun24H": {
+            "0": false,
+            "1": false
+        },
+        "amountOverrun24H": {
+            "0": false,
+            "1": false
+        },
+        "leak": false,
+        "valveError": {
+            "0": false,
+            "1": false
+        },
+        "reminder": false
+    },
+    "battery": 4,
+    "version": "2901",
+    "tz": -7,
+    "attributes": {
+        "alertInterval": 5,
+        "beep": true,
+        "autoCloseValve": {
+            "leakDetection": true,
+            "overrunTimes24H": {
+                "0": false,
+                "1": false
+            },
+            "overrunAmount24H": {
+                "0": true,
+                "1": true
+            },
+            "overrunDurationOnce": {
+                "0": true,
+                "1": true
+            }
+        },
+        "screenMeterUnit": 0,
+        "meterUnit": 3,
+        "meterStepFactor": 1117,
+        "overrunDuration": {
+            "0": 900,
+            "1": 900
+        },
+        "overrunTimes24H": {
+            "0": 250,
+            "1": 250
+        },
+        "overrunAmount24H": {
+            "0": 169445,
+            "1": 169445
+        }
+    },
+    "recentUsage": {
+        "amount": {
+            "0": 0,
+            "1": 0
+        },
+        "duration": {
+            "0": 0,
+            "1": 0
+        }
+    },
+    "dailyUsage": {
+        "amount": {
+            "0": 0,
+            "1": 0
+        },
+        "times": {
+            "0": 0,
+            "1": 0
+        }
+    },
+    "valveMaintance": {
+        "type": "monthly",
+        "day": 1,
+        "time": "0:0"
+    },
+    "loraInfo": {
+        "netId": "010201",
+        "devNetType": "D",
+        "signal": -18,
+        "gatewayId": "d88b4c1606000023",
+        "gateways": 2,
+        "location": {
+            "latitude": 0,
+            "longitude": 0,
+            "altitude": 0
+        }
+    }
+}
+
+    "state": {
+        "valve": "close",
+        "meter": 0,
+        "waterFlowing": false
+    },
+    "alarm": {
+        "leak": false,
+        "overrunTimes24H": false,
+        "overrunAmount24H": false,
+        "overrunDurationOnce": false,
+        "valveError": false,
+        "reminder": false
+    },
+    "battery": 4,
+    "powerSupply": "battery",
+    "version": "0903",
+    "tz": 0,
+    "attributes": {
+        "screenMeterUnit": 0,
+        "meterUnit": 3,
+        "alertInterval": 5,
+        "meterStepFactor": 1117,
+        "autoCloseValve": {
+            "leakDetection": true,
+            "overrunTimes24H": true,
+            "overrunAmount24H": true,
+            "overrunDurationOnce": true
+        },
+        "overrunDurationOnce": 600,
+        "overrunTimes24H": 20,
+        "overrunAmount24H": 50833,
+        "beep": true
+    },
+    "recentUsage": {
+        "amount": 0,
+        "duration": 0
+    },
+    "dailyUsage": {
+        "amount": 0,
+        "times": 0
+    },
+    "valveMaintance": {
+        "type": "monthly",
+        "day": 1,
+        "time": "0:0"
+    },
+    "loraInfo": {
+        "netId": "010203",
+        "devNetType": "D",
+        "signal": -15,
+        "gatewayId": "d88b4c1606000023",
+        "gateways": 3,
+        "location": {
+            "latitude": 0,
+            "longitude": 0,
+            "altitude": 0
+        }
+    }
+}
+    "code": "000000",
+    "time": 1761070002240,
+    "msgid": "1761070000370",
+    "method": "WaterMeterController.getState",
+    "data": {
+        "state": {
+            "valve": "close",
+            "meter": 0,
+            "waterFlowing": false
+        },
+        "alarm": {
+            "leak": false,
+            "overrunTimes24H": false,
+            "overrunAmount24H": false,
+            "overrunDurationOnce": false,
+            "valveError": false,
+            "reminder": false
+        },
+        "battery": 4,
+        "powerSupply": "battery",
+        "version": "0903",
+        "tz": 0,
+        "attributes": {
+            "screenMeterUnit": 0,
+            "meterUnit": 3,
+            "alertInterval": 5,
+            "meterStepFactor": 1117,
+            "autoCloseValve": {
+                "leakDetection": true,
+                "overrunTimes24H": true,
+                "overrunAmount24H": true,
+                "overrunDurationOnce": true
+            },
+            "overrunDurationOnce": 600,
+            "overrunTimes24H": 20,
+            "overrunAmount24H": 50833,
+            "beep": true
+        },
+        "recentUsage": {
+            "amount": 0,
+            "duration": 0
+        },
+        "dailyUsage": {
+            "amount": 0,
+            "times": 0
+        },
+        "valveMaintance": {
+            "type": "monthly",
+            "day": 1,
+            "time": "0:0"
+        },
+        "loraInfo": {
+            "netId": "010203",
+            "devNetType": "D",
+            "signal": -15,
+            "gatewayId": "d88b4c1606000023",
+            "gateways": 3,
+            "location": {
+                "latitude": 0,
+                "longitude": 0,
+                "altitude": 0
+            }
+        }
+    },
+    "targetDevice": "d88b4c01000ca8d6"
+}
