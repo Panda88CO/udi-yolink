@@ -403,10 +403,13 @@ def addNodes (self, deviceList):
                 logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))                       
                 if  model in ['YS5007']:    
                     temp = udiYoWaterMeterOnly(self.poly, address, address, name, dev_access, dev )
-                elif model not in ['YS5009', 'YS5029']: #YS5018 or YS5008 
+                elif model in ['YS5029']: 
+                    temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
+                elif model in ['YS5018', 'YS5008', 'YS5009']:  
                     temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
                 else:
-                    logging.warning('Currently unsupported Water Meter Controller model: {} - {}'.format(model, dev['name'] ))
+                    logging.warning('Currently unsupported Water Meter Controller model: {} - {} - trying default '.format(model, dev['name'] ))
+                    temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
                     continue
                 while not temp.node_ready:
                     logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
@@ -418,7 +421,9 @@ def addNodes (self, deviceList):
                 logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))                       
                 if  model in ['YS5007']:    
                     temp = udiYoWaterMeterOnly(self.poly, address, address, name, dev_access, dev )
-                else: #YS5018 or YS5008 
+                elif model in ['YS5029']: 
+                    temp = udiYoWaterMeterMultiController(self.poly, address, address, name, dev_access, dev )
+                else: #YS5018 or YS5008 YS5009
                     temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
                 while not temp.node_ready:
                     logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
