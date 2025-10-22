@@ -965,7 +965,7 @@ class YoLinkInitPAC(object):
                     logging.debug(f'temp_retry_list {temp_list}')
                     time_now = int(time.time())
                     selected_retry = 0 # time now - no need to retry unless delay time is less than 0 (passed delay)
-                    selected_data_list = None
+                    selected_data_list = []
                     for retry_data in temp_list:
                         #selected_data = None ###
                         if 'retry' in retry_data:
