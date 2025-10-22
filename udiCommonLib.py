@@ -3,6 +3,7 @@
 Yolink Control Main Node  program 
 MIT License
 """
+version = '1.6.4'
 
 import sys
 import re
@@ -54,7 +55,7 @@ except ImportError:
 
 
 
-version = '1.6.3'
+
 
 
 
