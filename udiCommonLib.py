@@ -144,7 +144,11 @@ def addNodes (self, deviceList):
                         'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
                         'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
                         'WaterDepthSensor', 'WaterMeterMultiController']
-    
+    supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
+                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
+                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+                        'WaterDepthSensor', ]    
 
     for dev in deviceList:
         logging.debug(f'DEVICE BEING ANALYZED {dev}')
