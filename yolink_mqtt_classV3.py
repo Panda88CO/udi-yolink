@@ -181,7 +181,7 @@ class YoLinkMQTTDevice(object):
          #   time.sleep(10)
          #   yolink.refreshDevice()
         #count = 0
-        time.sleep(2)
+        time.sleep(1)
         #while not yolink.online  and count < maxCount and not yolink.disconnect:
         #    time.sleep(4)
         #    yolink.refreshDevice()
@@ -209,7 +209,7 @@ class YoLinkMQTTDevice(object):
             #    time.sleep(2)
             #    attempt = attempt + 1
             yolink.lastControlPacket = data
-            time.sleep(2)
+            time.sleep(1)
             yolink.check_system_online()
               
     #@measure_time
@@ -332,9 +332,9 @@ class YoLinkMQTTDevice(object):
         logging.debug('{} -     def getDataValue {}: '.format(yolink.type, key))
         try:
             count = 1
-            while key not in yolink.dataAPI[yolink.dData] and count <3:
-                time.sleep(1)
-                count = count + 1
+            #while key not in yolink.dataAPI[yolink.dData] and count <3:
+            #    time.sleep(1)
+            #    count = count + 1
             #logging.debug('DEBUGME getDataValue {}-{} : {}'.format(yolink.type, key, yolink.dataAPI[yolink.dData] ))
             if key in yolink.dataAPI[yolink.dData]:
                 yolink.online = yolink.check_system_online()
@@ -358,9 +358,9 @@ class YoLinkMQTTDevice(object):
             yolink.online = yolink.check_system_online()
             #logging.debug("getStateValue Online: {}".format(yolink.online))
             if yolink.online :
-                while key not in yolink.dataAPI[yolink.dData][yolink.dState] and count <3:
-                    time.sleep(1)
-                    count = count + 1
+                #while key not in yolink.dataAPI[yolink.dData][yolink.dState] and count <3:
+                #    time.sleep(1)
+                #    count = count + 1
                 #logging.debug('DEBUGME getDataStateValue {}-{} : {}'.format(yolink.type, key, yolink.dataAPI[yolink.dData][yolink.dState] ))
                 if key in yolink.dataAPI[yolink.dData][yolink.dState]:
                     return(yolink.dataAPI[yolink.dData][yolink.dState][key])
@@ -378,9 +378,9 @@ class YoLinkMQTTDevice(object):
         logging.debug('{} -     def getValue {}: '.format(yolink.type, key))
         try:
             count = 1
-            while key not in yolink.dataAPI[yolink.dData] and count <3:
-                time.sleep(1)
-                count = count + 1
+            #while key not in yolink.dataAPI[yolink.dData] and count <3:
+            #    time.sleep(1)
+            #    count = count + 1
             #logging.debug('DEBUG getValue {}-{} : {}'.format(yolink.type, key, yolink.dataAPI[yolink.dData] ))
             if key in yolink.dataAPI[yolink.dData]:
                 yolink.online = yolink.check_system_online()
