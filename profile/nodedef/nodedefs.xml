@@ -741,8 +741,8 @@
          <st id="GV2" editor="flow" /> <!-- recent use -->
 
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="BATLVL" editor="batlevel" />
-         <!-- <st id="GV8" editor="online" /> -->
+         <!--<st id="BATLVL" editor="batlevel" />
+          <st id="GV8" editor="online" /> -->
          <st id="GV4" editor="alarm" />
          <!--<st id="GV5" editor="alarm" />-->
          <st id="GV6" editor="alarm" />
