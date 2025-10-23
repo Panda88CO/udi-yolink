@@ -149,7 +149,9 @@ def addNodes (self, deviceList):
                         'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
                         'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
                         'WaterDepthSensor', ]    
-
+    
+    supportedYoTypes = ['Outlet']    
+    
     for dev in deviceList:
         logging.debug(f'DEVICE BEING ANALYZED {dev}')
         if dev['type']  in supportedYoTypes:            
