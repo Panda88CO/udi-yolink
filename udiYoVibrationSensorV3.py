@@ -49,7 +49,8 @@ class udiYoVibrationSensor(udi_interface.Node):
         super().__init__( polyglot, primary, address, name)   
 
         logging.debug('udiYoVibrationSensor INIT- {}'.format(deviceInfo['name']))
-        self.adress = address
+        self.address = address
+        self.name = name
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo
         self.temp_unit = self.yoAccess.get_temp_unit()
@@ -78,6 +79,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         
         self.adr_list = []
         self.adr_list.append(address)
+        logging.debug(f'udiYoVibrationSensor INIT- DONE {self.id}n  {self.name} {self.address} {self.temp_unit}')
 
 
     def start(self):
