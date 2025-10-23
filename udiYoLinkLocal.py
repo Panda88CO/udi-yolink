@@ -200,7 +200,7 @@ class YoLinkSetup (udi_interface.Node):
         if self.yoAccess or self.yoLocal:
             self.my_setDriver('ST', 1)
 
-            self.addNodes(self.deviceList)
+            self.deviceList = self.addNodes(self.deviceList)
         else:
             self.my_setDriver('ST', 0)
 
