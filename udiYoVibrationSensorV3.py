@@ -21,7 +21,7 @@ from yolinkVibrationSensorV2 import YoLinkVibrationSen
 class udiYoVibrationSensor(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
-    id = 'yovibrasens'
+    id = 'yovibrasensC'
     
     '''
        drivers = [
@@ -52,11 +52,15 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.adress = address
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo
+        self.temp_unit = self.yoAccess.get_temp_unit()
+        if self.temp_unit == 1:
+            self.id = 'yovibrasensF'
         self.yoVibrationSensor  = None
         self.node_ready = False
         self.last_state = 99
         self.cmd_state = self.retrieve_cmd_state()
         self.n_queue = []
+        
         #self.Parameters = Custom(polyglot, 'customparams')
         # subscribe to the events we want
         #polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
@@ -71,7 +75,7 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
-        self.temp_unit = self.yoAccess.get_temp_unit()
+        
         self.adr_list = []
         self.adr_list.append(address)
 
@@ -131,8 +135,6 @@ class udiYoVibrationSensor(udi_interface.Node):
                         self.my_setDriver('CLITEMP', round(devTemp,0), 4)
                     elif self.temp_unit == 1:
                         self.my_setDriver('CLITEMP', round(devTemp*9/5+32,0), 17)
-                    elif self.temp_unit == 2:
-                        self.my_setDriver('CLITEMP', round(devTemp+273.15,0), 26)
                 else:
                     self.my_setDriver('CLITEMP', 99,  25)
                 if self.yoVibrationSensor.suspended:

@@ -150,7 +150,7 @@ def addNodes (self, deviceList):
                         'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
                         'WaterDepthSensor', ]    
     
-    supportedYoTypes = ['Outlet']    
+    supportedYoTypes = ['Outlet', 'VibrationsSensor']    
     
     for dev in deviceList:
         logging.debug(f'DEVICE BEING ANALYZED {dev}')

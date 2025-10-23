@@ -837,7 +837,8 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yothsens" nls="nlsthsens">
+ 
+  <nodeDef id="yothsensC" nls="nlsthsens">
       <editors />
       <sts>
          <st id="ST" editor="tempC" />
@@ -873,6 +874,41 @@
       </cmds>
    </nodeDef> 
 
+     <nodeDef id="yothsensF" nls="nlsthsens">
+      <editors />
+      <sts>
+         <st id="ST" editor="tempF" />
+         <st id="CLITEMP" editor="tempF" />
+         <st id="GV1" editor="alarm" />
+         <st id="GV2" editor="alarm" />
+         <st id="CLIHUM" editor="humidity" />
+         <st id="GV4" editor="alarm" />
+         <st id="GV5" editor="alarm" />
+         <st id="BATLVL" editor="batlevel" />
+         <st id="GV7" editor="alarm" />
+         <st id="GV8" editor="alarm" />
+         <st id="GV9" editor="cmdsetting" />
+         <st id="GV10" editor="tempF" />
+         <st id="GV11" editor="tempF" />
+         <st id="GV12" editor="humidity" />
+         <st id="GV13" editor="humidity" />
+         <st id="GV20" editor="suspendstate" />
+         <st id="GV30" editor="status" />
+         <st id="TIME" editor="unixtime" />                              
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+         </sends>
+         <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >          
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
    <nodeDef id="yodoorsens" nls="nlsdoorsens">
       <editors />
       <sts>
@@ -1034,7 +1070,7 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yovibrasens" nls="nlsvibrasens">
+   <nodeDef id="yovibrasensC" nls="nlsvibrasens">
       <editors />
       <sts>
          <st id="GV0" editor="vibrastate" />
@@ -1066,7 +1102,38 @@
          </accepts>
       </cmds>
    </nodeDef> 
+   <nodeDef id="yovibrasensF" nls="nlsvibrasens">
+      <editors />
+      <sts>
+         <st id="GV0" editor="vibrastate" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
+         <st id="CLITEMP" editor="tempF" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="vibrastate" />
+         <st id="GV30"  editor="status" />
+         <st id="GV20" editor="suspendstate" />     
+         <st id="TIME" editor="unixtime" />                         
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="vibrastate"  />
+            <cmd id="DOF" editor="vibrastate"  /> -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
 
+         </sends>
+         <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
+            <!-- <cmd id="DON" /> 
+            <cmd id="DOF" /> -->
+            <cmd id="UPDATE" /> 
+
+         </accepts>
+      </cmds>
+   </nodeDef> 
    <nodeDef id="yohubbat" nls="nlshubbat">
       <editors />
       <sts>
