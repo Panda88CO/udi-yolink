@@ -34,7 +34,7 @@ DEBUG = False
 
 class YoLinkInitPAC(object):
     def __init__(yoAccess, ID, secret, tokenURL='https://api.yosmart.com/open/yolink/token' , apiURL='https://api.yosmart.com/open/yolink/v2/api', mqttURL= 'api.yosmart.com', mqttPort = 8003, home_id = None):
-        yoAccess.RETRY_STEP = 10
+        yoAccess.RETRY_STEP = 5
         yoAccess.homeID  = home_id
         yoAccess.disconnect_occured = False 
         yoAccess.tokenLock = Lock()
@@ -973,10 +973,10 @@ class YoLinkInitPAC(object):
                         else:
                             retry_fact = 0
                             retry_data['retry'] = retry_fact
-
-                        delay = min(yoAccess.RETRY_STEP*2 ** retry_fact, 3600) #double delay every iteration until 1 hour (3600 sec)
-                        logging.debug('retry time {}  delay {} timenow {}'.format(int(retry_data['last_retry_time'])/1000, delay, time_now ))
-                        if int(retry_data['last_retry_time'])/1000+delay - time_now < 0:
+                        logging.debug('retry_fact {} for data {}'.format(retry_fact, retry_data))
+                        delay = min(yoAccess.RETRY_STEP + 2**retry_fact, 3600) #double delay every iteration until 1 hour (3600 sec)
+                        logging.debug('{} - retry if negative {}, retry time {} delay {} timenow {} '.format(retry_data['targetDevice'], int(retry_data['last_retry_time']/1000+delay) - time_now, int(retry_data['last_retry_time']/1000), delay, time_now  ))
+                        if int(retry_data['last_retry_time']/1000+delay) - time_now < 0:
                             #selected_retry = int(retry_data['last_retry_time'])+delay - time_now 
                             selected_data_list.append(retry_data)
                     if selected_data_list: # found data the needs to retried  
