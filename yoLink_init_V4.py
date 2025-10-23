@@ -977,11 +977,11 @@ class YoLinkInitPAC(object):
                         delay = min(yoAccess.RETRY_STEP + 2**retry_fact, 3600) #double delay every iteration until 1 hour (3600 sec)
                         logging.debug(f'delay {delay}')
                         logging.debug(f'timenow {time_now}')
-                        logging.debug(f"retry if negative { int(retry_data['last_retry_time']/1000+delay) - time_now}")
+                        logging.debug(f"retry if negative { int(retry_data['last_retry_time'])/1000+delay - time_now}")
                         logging.debug('{} - target device - {}'.format(retry_data['targetDevice'], yoAccess.access_mode  ))
                         
                         
-                        if int(retry_data['last_retry_time']/1000+delay) - time_now < 0:
+                        if int((retry_data['last_retry_time'])/1000+delay) - time_now < 0:
                             #selected_retry = int(retry_data['last_retry_time'])+delay - time_now 
                             selected_data_list.append(retry_data)
                     if selected_data_list: # found data the needs to retried  
