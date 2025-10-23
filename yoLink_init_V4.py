@@ -957,7 +957,7 @@ class YoLinkInitPAC(object):
         '''check_retry_queue'''
         while not yoAccess.stop_queues:
             try:
-                logging.debug(f'Testing for command retry - queue size {yoAccess.retryQueue.qsize()}  ')                
+                logging.debug(f'{yoAccess.access_mode } - Testing for command retry - queue size {yoAccess.retryQueue.qsize()}  ')                
                 if not yoAccess.retryQueue.empty():
                     temp_list = []
                     while not yoAccess.retryQueue.empty():
@@ -980,20 +980,19 @@ class YoLinkInitPAC(object):
                             #selected_retry = int(retry_data['last_retry_time'])+delay - time_now 
                             selected_data_list.append(retry_data)
                     if selected_data_list: # found data the needs to retried  
-                        for retry_data in selected_data_list:
-                            logging.debug(f'ADDING RETRY TO PUBLISH QUEUE {retry_data}')
-                            
+                        for retry_data in selected_data_list:                            
                             for data in temp_list: # remove other pending retried of this device            
                                 if data['targetDevice'] == retry_data['targetDevice'] and data['method'] == retry_data['method'] :                    
                                     logging.debug('Removing {} from retry queue as publish was successful'.format(retry_data))                    
                                 else:
                                     yoAccess.retryQueue.put(data, timeout = 5)
+                            logging.debug(f'{yoAccess.access_mode} ADDING RETRY TO PUBLISH QUEUE {retry_data}')
                             yoAccess.publish_data(retry_data) # place selected_data in publishQueue
                             time.sleep(2) # give some time to process the publish before waiting for response
                     else:
                         for retry_data in temp_list:  # return data to retryQueue
                             yoAccess.retryQueue.put(retry_data, timeout = 5)
-                    logging.debug(f'temp_retry_list {list (yoAccess.retryQueue.queue)}')
+                    logging.debug(f'{yoAccess.access_mode} temp_retry_list {list (yoAccess.retryQueue.queue)}')
 
                 time.sleep(10)   
             except Exception as e:
