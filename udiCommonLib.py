@@ -150,7 +150,9 @@ def addNodes (self, deviceList) -> list:
                         'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
                         'WaterDepthSensor', ]    
     
-    supportedYoTypes = ['Outlet', 'VibrationsSensor']    
+    supportedYoTypes = ['Outlet', 'VibrationSensor']    
+
+    
     remove_list= []
     for dev in deviceList:
         logging.debug(f'DEVICE BEING ANALYZED {dev}')
