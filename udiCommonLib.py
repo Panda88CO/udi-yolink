@@ -3,7 +3,7 @@
 Yolink Control Main Node  program 
 MIT License
 """
-version = '1.6.5'
+version = '1.6.6'
 import sys
 import re
 import time
@@ -144,13 +144,13 @@ def addNodes (self, deviceList) -> list:
                         'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
                         'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
                         'WaterDepthSensor', 'WaterMeterMultiController']
-    supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-                        'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
-                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-                        'WaterDepthSensor', ]    
+    #supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+    #                    'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
+    #                    'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
+    #                    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+    #                    'WaterDepthSensor', ]    
     
-    supportedYoTypes = ['Outlet']    
+    #supportedYoTypes = ['Outlet']    
 
     
     remove_list= []
