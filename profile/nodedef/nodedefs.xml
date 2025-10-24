@@ -1329,7 +1329,28 @@
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yosmremoteF" nls="nlssmremote">
+      <editors />
+      <sts>
+         <st id="GV0" editor="keypress" />
+         <st id="GV1" editor="keynumber" />
+         <st id="GV2" editor="presstype" />                  
+         <st id="GV3" editor="batlevel" />
+         <st id="CLITEMP" editor="tempF" />
 
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="keypress" />
+         <st id="GV20" editor="suspendstate" />   
+         <st id="GV30"  editor="status" />        
+      </sts>
+      <cmds>
+         <sends>
+         </sends>
+         <accepts>                                          
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
    <nodeDef id="smremotekey" nls="nlssmkey">
       <editors />
