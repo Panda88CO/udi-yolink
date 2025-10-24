@@ -299,7 +299,7 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def check_connection(yoAccess, port):
-        logging.debug( 'check_connection: port {}'.format(port))
+        logging.debug(f'{yoAccess.access_mode} check_connection: port {port}')
         connectons = psutil.net_connections()
         #logging.debug('connections: {}'.format(connectons))
         for netid in connectons:
@@ -359,7 +359,7 @@ class YoLinkInitPAC(object):
     def refresh_token(yoAccess):
         
         try:
-            logging.info(f'Refreshing Token {yoAccess.token }')
+            logging.info(f'{yoAccess.access_mode} Refreshing Token {yoAccess.token }')
             now = int(time.time())
             
             if yoAccess.token != None:
@@ -406,6 +406,55 @@ class YoLinkInitPAC(object):
             logging.error(f'Exeption occcured during refresh_token {yoAccess.access_mode} : {e}')
             #return(yoAccess.request_new_token())
 
+    '''
+    def local_refresh_token(yoAccess):
+        
+        try:
+            logging.info('Refreshing Local Token ')
+            now = int(time.time())
+            if yoAccess.token != None:
+                if now < yoAccess.local_token['expirationTime']:
+                    response = requests.post( yoAccess.local_URL+'/open/yolink/token',
+                        data={"grant_type": "refresh_token",
+                            "client_id" :  yoAccess.local_client_id,
+                            "refresh_token":yoAccess.local_token['refresh_token'], 
+                            }, timeout= 5
+                    )
+                else:
+                    response = requests.post( yoAccess.local_URL+'/open/yolink/token',
+                                 data={ "grant_type": "client_credentials",
+                                        "client_id" :  yoAccess.local_client_id ,
+                                        "client_secret":yoAccess.local_client_secret }, timeout= 5)
+            if response.ok:
+                if response.ok:
+                    yoAccess.local_token =  response.json()
+                    yoAccess.local_token['expirationTime'] = int(yoAccess.local_token['expires_in']) + now
+                    return(True)
+                else:
+                    logging.error('Was not able to refresh token')
+                    return(False)
+            else:
+                response = requests.post( yoAccess.local_URL+'/open/yolink/token',
+                        data={"grant_type": "refresh_token",
+                            "client_id" :  yoAccess.local_client_id,
+                            "refresh_token":yoAccess.local_token['refresh_token'], 
+                            }, timeout= 5
+                    )
+                if response.ok:
+                    yoAccess.local_token =  response.json()
+                    yoAccess.local_token['expirationTime'] = int(yoAccess.local_token['expires_in']) + now
+                    return(True)
+                else:
+                    logging.error('Was not able to refresh token')
+                    return(False)       
+
+        except Exception as e:
+            logging.debug('Exeption occcured during refresh_token : {}'.format(e))
+            #return(yoAccess.request_new_token())
+
+    '''
+
+
     #@measure_time
     def get_access_token(yoAccess):
         yoAccess.tokenLock.acquire()
@@ -426,7 +475,7 @@ class YoLinkInitPAC(object):
     #@measure_time
     def retrieve_device_list(yoAccess):
         try:
-            logging.debug(f'retrieve_device_list {yoAccess.access_mode}')
+            logging.debug(f' {yoAccess.access_mode} retrieve_device_list')
             data= {}
             data['method'] = 'Home.getDeviceList'
             data['time'] = str(int(time.time_ns()/1e6))
@@ -440,7 +489,7 @@ class YoLinkInitPAC(object):
                 yoAccess.deviceList = info['data']['devices']
             elif 'local' in yoAccess.access_mode:
                 yoAccess.deviceList = info['data']['devices']
-            logging.debug('yoAccess.deviceList {} : {}'.format(yoAccess.access_mode, yoAccess.deviceList))
+            logging.debug(f'{yoAccess.access_mode} yoAccess.deviceList: { yoAccess.deviceList}')
         except Exception as e:
             logging.error('Exception  -  retrieve_device_list : {}'.format(e))             
 
@@ -491,7 +540,7 @@ class YoLinkInitPAC(object):
         Connect to MQTT broker
         """
         try: 
-            logging.info("Connecting to broker...")
+            logging.info(f"{yoAccess.access_mode} Connecting to broker...")
             while not yoAccess.refresh_token():
                 time.sleep(35) # Wait 35 sec and try again (35sec ensure less than 10 attempts in 5 min)
                 logging.info('Trying to obtain new Token - Network/YoLink connection may be down')
@@ -533,7 +582,7 @@ class YoLinkInitPAC(object):
     #@measure_time
     def subscribe_mqtt(yoAccess, deviceId, callback):
 
-        logging.info('Subscribing deviceId {} to MQTT {}+{} - {}'.format(deviceId, yoAccess.mqtt_str, yoAccess.homeID, yoAccess.access_mode))
+        logging.info(f'{yoAccess.access_mode} Subscribing deviceId {deviceId} to MQTT {yoAccess.mqtt_str}+{ yoAccess.homeID}')
         topicReq = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/request'
         topicResp = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/response'
         topicReport = yoAccess.mqtt_str+ yoAccess.homeID+'/'+ deviceId +'/report'
@@ -555,7 +604,7 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def update_mqtt_subscription (yoAccess, deviceId):
-        logging.info('update_mqtt_subscription {} {} '.format(deviceId, yoAccess.access_mode))
+        logging.info(f'{yoAccess.access_mode} update_mqtt_subscription {deviceId}')
         topicReq = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/request'
         topicResp = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/response'
         topicReport = yoAccess.mqtt_str +yoAccess.homeID+'/'+ deviceId +'/report'
@@ -582,7 +631,7 @@ class YoLinkInitPAC(object):
         try:
             #yoAccess.messageLock.acquire()
             msg = yoAccess.messageQueue.get(timeout = 10) 
-            logging.debug('Received message - Q size={}'.format(yoAccess.messageQueue.qsize()))
+            logging.debug(f'{yoAccess.access_mode} Received message - Q size={yoAccess.messageQueue.qsize()}')
             payload = json.loads(msg.payload.decode("utf-8"))
             #logging.debug('process_message : {}'.format(payload))
             
