@@ -461,9 +461,11 @@ def addNodes (self, deviceList) -> list:
                 logging.debug('Params {}'.format(self.Parameters[node['address']]))
                 self.Parameters.delete(node['address'])
             self.poly.delNode(node['address'])
+    
     for remove_dev in remove_list:
         deviceList.remove(remove_dev)
-
+        
+    logging.debug('Device list after removals: {}'.format(deviceList))
     return (deviceList)
 
 

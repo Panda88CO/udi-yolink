@@ -210,6 +210,7 @@ class YoLinkSetup (udi_interface.Node):
         #self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
         #self.scheduler.start()
         #self.updateEpochTime()
+        
     def stop(self):
         try:
             logging.info('Stop Called:')
