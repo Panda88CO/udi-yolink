@@ -87,7 +87,7 @@ class YoLinkSetup (udi_interface.Node):
         self.assigned_addresses.append(self.address)   
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
-        self.access_mode = ['cloud']      #default to cloud only
+        #self.access_mode = ['cloud']      #default to cloud only
 
 
 
@@ -116,7 +116,7 @@ class YoLinkSetup (udi_interface.Node):
 
     def start (self):
         logging.info('Executing start - udi-YoLink')
-        logging.info ('Access using PAC/UAC')
+        
         #logging.setLevel(30)
         while not self.nodeDefineDone and self.handleParamsDone:
             time.sleep(1)
@@ -127,7 +127,7 @@ class YoLinkSetup (udi_interface.Node):
         #                        'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
         #                        'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
         #                        'WaterDepthSensor', 'WaterMeterMultiController']
-        
+        logging.info (f'Access mode : {self.access_mode}')
         self.updateEpochTime()
         logging.debug(f'credentials {self.access_mode} {self.uaid} {self.secretKey} {self.local_client_id} {self.local_client_secret}')
         if 'cloud' in self.access_mode:

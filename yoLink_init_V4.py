@@ -643,7 +643,7 @@ class YoLinkInitPAC(object):
             else:
                 logging.debug('Unknow device in payload : {}'.format(payload))
 
-            logging.debug('process_message for {}: {} {}'.format(deviceId, payload, msg.topic))
+            logging.debug(f'{yoAccess.access_mode} process_message for {deviceId}: {payload} {msg.topic}')
             
 
             if deviceId in yoAccess.mqttList:
