@@ -728,7 +728,7 @@ class YoLinkInitPAC(object):
         """
         Callback for broker published events
         """
-        logging.debug'{} on_message: {}'.format(yoAccess.access_mode,  json.loads(msg.payload.decode("utf-8"))) )
+        logging.debug(f'{yoAccess.access_mode} on_message: {json.loads(msg.payload.decode("utf-8"))}')
         yoAccess.messageQueue.put(msg)
         qsize = yoAccess.messageQueue.qsize()
         logging.debug('Message received and put in queue (size : {})'.format(qsize))
