@@ -3,7 +3,7 @@
 Yolink Control Main Node  program 
 MIT License
 """
-
+version = '1.6.5'
 import sys
 import re
 import time
@@ -54,7 +54,7 @@ except ImportError:
 
 
 
-version = '1.6.3'
+
 
 
 
@@ -138,7 +138,7 @@ def configDoneHandler(self):
 
 
 
-def addNodes (self, deviceList):
+def addNodes (self, deviceList) -> list:
     supportedYoTypes = ['Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
                         'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
                         'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
@@ -150,11 +150,17 @@ def addNodes (self, deviceList):
                         'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
                         'WaterDepthSensor', ]    
     
-    supportedYoTypes = ['Outlet']    
+    supportedYoTypes = ['Outlet', 'VibrationSensor']    
+
     
+    remove_list= []
     for dev in deviceList:
         logging.debug(f'DEVICE BEING ANALYZED {dev}')
-        if dev['type']  in supportedYoTypes:            
+        
+        if dev['type'] not  in supportedYoTypes:            
+            logging.warning('Currently unsupported device type found: {} - {}'.format(dev['type'], dev['name'] ))        
+            remove_list.append(dev)
+        else:
             nodename = str(dev['deviceId'][-14:])
             address = self.poly.getValidAddress(nodename)
             model = str(dev['modelName'][:6])
@@ -436,8 +442,7 @@ def addNodes (self, deviceList):
                     time.sleep(4)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                                                 
-        else:
-            logging.debug('Currently unsupported device : {}'.format(dev['type'] ))
+        
     time.sleep(1)
     # need to go through nodes to see if there are nodes that no longer exist in device list                
     logging.debug('assigned addresses nodes  :{} - {}'.format(len(self.assigned_addresses), self.assigned_addresses))
@@ -456,6 +461,13 @@ def addNodes (self, deviceList):
                 logging.debug('Params {}'.format(self.Parameters[node['address']]))
                 self.Parameters.delete(node['address'])
             self.poly.delNode(node['address'])
+    
+    for remove_dev in remove_list:
+        deviceList.remove(remove_dev)
+        
+    logging.debug('Device list after removals: {}'.format(deviceList))
+    return (deviceList)
+
 
     time.sleep(1)
     # checking params for erassed nodes

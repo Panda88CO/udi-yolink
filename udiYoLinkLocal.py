@@ -87,7 +87,7 @@ class YoLinkSetup (udi_interface.Node):
         self.assigned_addresses.append(self.address)   
         logging.debug('YoLinkSetup init DONE')
         self.nodeDefineDone = True
-        #self.access_mode = ['cloud']      #default to cloud only
+        self.access_mode = ['cloud']      #default to cloud only
 
 
 
@@ -200,7 +200,7 @@ class YoLinkSetup (udi_interface.Node):
         if self.yoAccess or self.yoLocal:
             self.my_setDriver('ST', 1)
 
-            self.addNodes(self.deviceList)
+            self.deviceList = self.addNodes(self.deviceList)
         else:
             self.my_setDriver('ST', 0)
 
@@ -210,6 +210,7 @@ class YoLinkSetup (udi_interface.Node):
         #self.scheduler.add_job(self.display_update, 'interval', seconds=self.display_update_sec)
         #self.scheduler.start()
         #self.updateEpochTime()
+        
     def stop(self):
         try:
             logging.info('Stop Called:')
@@ -303,7 +304,7 @@ class YoLinkSetup (udi_interface.Node):
 
             # LOCAL ACCESS
             if 'MODE'in userParam:
-                mode = userParam['MODE']
+                mode = userParam['MODE'].lower()
                 if mode in ['local']:
                     self.access_mode = ['local']
                 elif mode in ['cloud']:
@@ -312,6 +313,8 @@ class YoLinkSetup (udi_interface.Node):
                     self.access_mode = ['local', 'cloud']
                 else:
                     self.poly.Notices['mode'] = 'Missing MODE parameter'
+
+            logging.debug('Access mode set to: {}'.format(self.access_mode))
             if 'LOCAL_CLIENT_ID' in userParam:
                 self.local_client_id = userParam['LOCAL_CLIENT_ID']
             else:

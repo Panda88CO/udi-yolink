@@ -161,7 +161,7 @@ class YoLinkMQTTDevice(object):
     def shut_down(yolink):
         yolink.disconnect = True
         yolink.online = False
-        #yolink.yoAccess.shut_down()
+
 
     #@measure_time
     def deviceError(yolink, data):
