@@ -164,127 +164,7 @@ class YoLinkInitPAC(object):
             logging.error('Exception - init- MQTT: {}'.format(E))
 
         yoAccess.messagePending = False
-   ############################
-    #  Local ACCESS FUNCTIONS
-    '''
 
-    def initializeLocalAccess(yoAccess, client_id, client_secret, local_ip):
-        logging.debug(f'initializeLocalAccess {client_id} {client_secret} {local_ip}')
-        yoAccess.local_client_id = client_id
-        yoAccess.local_client_secret = client_secret
-        yoAccess.local_URL = 'http://'+local_ip+yoAccess.local_port_str
-        response = requests.post(yoAccess.local_URL+'/open/yolink/token', 
-                                 data={ "grant_type": "client_credentials",
-                                        "client_id" :  yoAccess.local_client_id ,
-                                        "client_secret":yoAccess.local_client_secret }, timeout= 5)
-        if response.ok:
-            temp = response.json()
-            logging.debug('Local yoAccess Token : {}'.format(temp))
-        
-        if 'state' not in temp:
-            yoAccess.local_token = temp
-            yoAccess.local_token['expirationTime'] = int(yoAccess.token['expires_in'] + int(time.time()) )
-            logging.debug('Local yoAccess Token : {}'.format(yoAccess.token ))
-        else:
-            if temp['state'] != 'error':
-                logging.error('Authentication error')
-
-    def local_refresh_token(yoAccess):
-        
-        try:
-            logging.info('Refreshing Token ')
-            now = int(time.time())
-            if yoAccess.token != None:
-                if now < yoAccess.token['expirationTime']:
-                    response = requests.post( yoAccess.tokenURL,
-                        data={"grant_type": "refresh_token",
-                            "client_id" :  yoAccess.uaID,
-                            "refresh_token":yoAccess.token['refresh_token'], 
-                            }, timeout= 5
-                    )
-                else:
-                    response = requests.post( yoAccess.tokenURL,
-                        data={"grant_type": "client_credentials",
-                            "client_id" : yoAccess.uaID,
-                            "client_secret" : yoAccess.secID }, timeout= 5
-                )
-                if response.ok:
-                    yoAccess.token =  response.json()
-                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
-                    return(True)
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)
-            else:
-                response = requests.post( yoAccess.tokenURL,
-                    data={"grant_type": "client_credentials",
-                        "client_id" : yoAccess.uaID,
-                        "client_secret" : yoAccess.secID }, timeout= 5
-                )
-                if response.ok:
-                    yoAccess.token =  response.json()
-                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
-                    return(True)
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)       
-
-
-
-        except Exception as e:
-            logging.debug(f'Exeption occcured during refresh {e}')
-
-
-    '''
-
-
-    '''
-    def local_refresh_token(yoAccess):
-        
-        try:
-            logging.info('Refreshing Local Token ')
-            now = int(time.time())
-            if yoAccess.token != None:
-                if now < yoAccess.local_token['expirationTime']:
-                    response = requests.post( yoAccess.local_URL+'/open/yolink/token',
-                        data={"grant_type": "refresh_token",
-                            "client_id" :  yoAccess.local_client_id,
-                            "refresh_token":yoAccess.local_token['refresh_token'], 
-                            }, timeout= 5
-                    )
-                else:
-                    response = requests.post( yoAccess.local_URL+'/open/yolink/token',
-                                 data={ "grant_type": "client_credentials",
-                                        "client_id" :  yoAccess.local_client_id ,
-                                        "client_secret":yoAccess.local_client_secret }, timeout= 5)
-            if response.ok:
-                if response.ok:
-                    yoAccess.local_token =  response.json()
-                    yoAccess.local_token['expirationTime'] = int(yoAccess.local_token['expires_in']) + now
-                    return(True)
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)
-            else:
-                response = requests.post( yoAccess.local_URL+'/open/yolink/token',
-                        data={"grant_type": "refresh_token",
-                            "client_id" :  yoAccess.local_client_id,
-                            "refresh_token":yoAccess.local_token['refresh_token'], 
-                            }, timeout= 5
-                    )
-                if response.ok:
-                    yoAccess.local_token =  response.json()
-                    yoAccess.local_token['expirationTime'] = int(yoAccess.local_token['expires_in']) + now
-                    return(True)
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)       
-
-        except Exception as e:
-            logging.debug('Exeption occcured during refresh_token : {}'.format(e))
-            #return(yoAccess.request_new_token())
-
-    '''
 
     #######################################
     #check if connected to YoLink Cloud server
@@ -406,53 +286,7 @@ class YoLinkInitPAC(object):
             logging.error(f'Exeption occcured during refresh_token {yoAccess.access_mode} : {e}')
             #return(yoAccess.request_new_token())
 
-    '''
-    def local_refresh_token(yoAccess):
-        
-        try:
-            logging.info('Refreshing Local Token ')
-            now = int(time.time())
-            if yoAccess.token != None:
-                if now < yoAccess.local_token['expirationTime']:
-                    response = requests.post( yoAccess.local_URL+'/open/yolink/token',
-                        data={"grant_type": "refresh_token",
-                            "client_id" :  yoAccess.local_client_id,
-                            "refresh_token":yoAccess.local_token['refresh_token'], 
-                            }, timeout= 5
-                    )
-                else:
-                    response = requests.post( yoAccess.local_URL+'/open/yolink/token',
-                                 data={ "grant_type": "client_credentials",
-                                        "client_id" :  yoAccess.local_client_id ,
-                                        "client_secret":yoAccess.local_client_secret }, timeout= 5)
-            if response.ok:
-                if response.ok:
-                    yoAccess.local_token =  response.json()
-                    yoAccess.local_token['expirationTime'] = int(yoAccess.local_token['expires_in']) + now
-                    return(True)
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)
-            else:
-                response = requests.post( yoAccess.local_URL+'/open/yolink/token',
-                        data={"grant_type": "refresh_token",
-                            "client_id" :  yoAccess.local_client_id,
-                            "refresh_token":yoAccess.local_token['refresh_token'], 
-                            }, timeout= 5
-                    )
-                if response.ok:
-                    yoAccess.local_token =  response.json()
-                    yoAccess.local_token['expirationTime'] = int(yoAccess.local_token['expires_in']) + now
-                    return(True)
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)       
-
-        except Exception as e:
-            logging.debug('Exeption occcured during refresh_token : {}'.format(e))
-            #return(yoAccess.request_new_token())
-
-    '''
+   
 
 
     #@measure_time
@@ -655,8 +489,10 @@ class YoLinkInitPAC(object):
                 #if payload['msgid'] in yoAccess.pendingDict:
                 #    yoAccess.pendingDict.pop(payload['msgid'] )
                 if  msg.topic == yoAccess.mqttList[deviceId]['report']: 
-                    logging.debug('processing report: {}'.format(json.dumps(payload, indent=4, separators=(',', ': ') )))                   
+                    logging.debug('processing report: {}'.format(json.dumps(payload, indent=4, separators=(',', ': ') )))   
                     tempCallback(payload)
+                    # Remove device from retry queue if event received from device (when device comes back on-line )
+                    yoAccess._clean_retry_queue(payload['deviceId'], payload['event'])#####
                     if yoAccess.debug:
                             fileData= {}
                             fileData['type'] = 'EVENT'
@@ -677,9 +513,10 @@ class YoLinkInitPAC(object):
                     if 'method' in payload: # only put commands in finish queue - no need to add events as they are generated by device and not node commands
                         return_msg['method'] = payload['method']
                         yoAccess.finishQueue.put(return_msg)
-                        logging.debug(f'finishQueue PUT size: {yoAccess.finishQueue.qsize()}')    
+                        logging.debug(f'finishQueue PUT size: {yoAccess.finishQueue.qsize()}') 
+
                     logging.debug('processing response: {}'.format(json.dumps(payload, indent=4, separators=(',', ': ') )))
-                    if payload['code'] == '000000':
+                    if 'code' in payload and payload['code'] == '000000':
                         tempCallback(payload)
                     else:
                         logging.error('Non-000000 code {} : {}'.format(payload['desc'], str(json.dumps(payload))))
@@ -1008,7 +845,7 @@ class YoLinkInitPAC(object):
         '''check_retry_queue'''
         while not yoAccess.stop_queues:
             try:
-                logging.debug(f'{yoAccess.access_mode } - Testing for command retry - queue size {yoAccess.retryQueue.qsize()}  ')                
+                logging.debug(f'{yoAccess.access_mode} - Testing for command retry - queue size {yoAccess.retryQueue.qsize()}  ')                
                 if not yoAccess.retryQueue.empty():
                     temp_list = []
                     while not yoAccess.retryQueue.empty():
@@ -1024,14 +861,11 @@ class YoLinkInitPAC(object):
                         else:
                             retry_fact = 0
                             retry_data['retry'] = retry_fact
-                        logging.debug('retry_fact {} for data {}'.format(retry_fact, retry_data))
                         delay = min(yoAccess.RETRY_STEP + 2**retry_fact, 3600) #double delay every iteration until 1 hour (3600 sec)
-                        logging.debug(f'delay {delay}')
-                        logging.debug(f'timenow {time_now}')
-                        logging.debug(f"retry if negative { int(retry_data['last_retry_time']/1000+delay) - time_now}")
-                        logging.debug('{} - target device - {}'.format(retry_data['targetDevice'], yoAccess.access_mode  ))
-                        
-                        
+                        logging.debug(f'{yoAccess.access_mode} delay {delay}')
+                        logging.debug(f"{yoAccess.access_mode} retry if negative { int(retry_data['last_retry_time']/1000+delay) - time_now}")
+                        logging.debug('{} - target device - {}'.format( yoAccess.access_mode, retry_data['targetDevice'] ))
+                                                
                         if int(retry_data['last_retry_time']/1000+delay) - time_now < 0:
                             #selected_retry = int(retry_data['last_retry_time'])+delay - time_now 
                             selected_data_list.append(retry_data)

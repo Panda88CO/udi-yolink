@@ -199,7 +199,8 @@ class udiYoWaterMeterOnly(udi_interface.Node):
                         self.my_setDriver('BATLVL', 98, 25)
                     else:
                         self.my_setDriver('BATLVL', bat_lvl, 25)
-
+                    self.my_setDriver('CLITEMP', self.yoWaterCtrl.getWaterTemperature())
+                    
                     alarms = self.yoWaterCtrl.getAlarms()
                     if alarms:
                         #if 'openReminder' in alarms:
