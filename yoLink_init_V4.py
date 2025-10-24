@@ -728,7 +728,7 @@ class YoLinkInitPAC(object):
         """
         Callback for broker published events
         """
-        logging.debug('on_message: {}'.format(json.loads(msg.payload.decode("utf-8"))) )
+        logging.debug'{} on_message: {}'.format(yoAccess.access_mode,  json.loads(msg.payload.decode("utf-8"))) )
         yoAccess.messageQueue.put(msg)
         qsize = yoAccess.messageQueue.qsize()
         logging.debug('Message received and put in queue (size : {})'.format(qsize))
@@ -754,7 +754,7 @@ class YoLinkInitPAC(object):
         """
         netstate = []
         try:
-            logging.debug('on_connect - Connected with result code {}'.format(rc))
+            logging.debug(f'{yoAccess.access_mode} on_connect - Connected with result code {rc}')
             #// Possible values for client.state()
             #define MQTT_CONNECTION_TIMEOUT     -4
             #define MQTT_CONNECTION_LOST        -3
@@ -821,7 +821,7 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def on_disconnect(yoAccess, client, userdata,rc=0):
-        logging.debug('Disconnect - stop loop')
+        logging.debug(f'{yoAccess.access_mode} Disconnect - stop loop')
         #yoAccess.connectedToBroker = False
         yoAccess.disconnect_occured = True
         if yoAccess.disconnect:
@@ -863,7 +863,7 @@ class YoLinkInitPAC(object):
     #@measure_time
     def on_subscribe(yoAccess, client, userdata, mID, granted_QoS):     
 
-        logging.debug('on_subscribe {} {} {} {}'.format(client, userdata, mID, granted_QoS))
+        logging.debug(f'{yoAccess.access_mode} on_subscribe {client} {userdata} {mID} {granted_QoS}')
         #logging.debug('client = ' + str(client))
         #logging.debug('userdata = ' + str(userdata))
         #logging.debug('mID = '+str(mID))
@@ -872,7 +872,7 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def on_publish(yoAccess, client, userdata, mID):
-        logging.debug('on_publish {} {} {}'.format(client, userdata, mID))
+        logging.debug(f'{yoAccess.access_mode} on_publish {client} {userdata} {mID}')
 
         #logging.debug('client = ' + str(client))
         #logging.debug('userdata = ' + str(userdata))
@@ -882,7 +882,7 @@ class YoLinkInitPAC(object):
 
     #@measure_time
     def publish_data(yoAccess, data):
-        logging.debug( 'Publish Data to Queue: {}'.format(data))
+        logging.debug( f'{yoAccess.access_mode} Publish Data to Queue: {data}')
         sleeping = False
         while not yoAccess.connectedToBroker:
             logging.debug('Connection to Broker not established - waiting')
@@ -895,7 +895,7 @@ class YoLinkInitPAC(object):
         
         publishThread = Thread(target = yoAccess.transfer_data )
         publishThread.start()
-        logging.debug('publishThread - starting')
+        logging.debug(f'{yoAccess.access_mode} publishThread - starting')
         #while not yoAccess.publishQueue.empty():
         #    time.sleep(0.1)
         #    yoAccess.publishQueue.put(data, timeout = 5)
