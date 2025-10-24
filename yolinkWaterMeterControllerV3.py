@@ -75,6 +75,16 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         return(pwr_mode, bat_lvl)
     
 
+    def getWaterTemperature(yolink) - > float:
+        logging.debug(yolink.type+' - getWaterTemperature')
+        water_temp = None
+        #yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            if yolink.dState in yolink.dataAPI[yolink.dData]:
+                if 'temperature' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    water_temp = yolink.dataAPI[yolink.dData][yolink.dState]['temperature']
+        return(water_temp)
+
     def getValveState(yolink):
         logging.debug(yolink.type+' - getValveState')
         #yolink.online = yolink.getOnlineStatus()

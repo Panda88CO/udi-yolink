@@ -51,6 +51,7 @@ class udiYoWaterMeterMultiController(udi_interface.Node):
             {'driver': 'GV8', 'value': 99, 'uom': 25},                                              
             {'driver': 'GV9', 'value': 99, 'uom': 25}, 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'GV11', 'value': 99, 'uom' : 25}, # Unit
             {'driver': 'GV12', 'value': 99, 'uom' : 6}, #  leak limit
             {'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
@@ -58,7 +59,7 @@ class udiYoWaterMeterMultiController(udi_interface.Node):
             {'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
             {'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
-            #{'driver': 'CLITEMP', 'value': 99, 'uom': 25},
+
             {'driver': 'GV20', 'value': 0, 'uom': 25},
             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
             ]
@@ -70,6 +71,10 @@ class udiYoWaterMeterMultiController(udi_interface.Node):
         logging.debug('udiYoWaterMeterMultiController INIT- {}'.format(deviceInfo['name']))
         self.n_queue = []
         self.yoAccess = yoAccess
+
+        self.temp_unit = self.yoAccess.get_temp_unit()        
+        if self.temp_unit == 1:
+            self.id = 'yowatermeterMultiF'        
         self.devInfo =  deviceInfo
         self.yoWaterCtrl= None
         self.node_ready = False

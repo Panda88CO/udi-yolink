@@ -74,11 +74,11 @@ class udiYoTHsensor(udi_interface.Node):
         self.devInfo =  deviceInfo
         self.yoTHsensor  = None
         self.node_ready = False
-        self.temp_unit = self.yoAccess.get_temp_unit()
-           
+
+        self.temp_unit = self.yoAccess.get_temp_unit()   
         if self.temp_unit == 1:
             self.id = 'yothsensF'
-            
+
         self.cmd_state = self.retrieve_cmd_state()
         model = str(self.devInfo['modelName'][:6])
         if model in ['YS8017', 'YS8014', 'YS8004', 'US8008']:
