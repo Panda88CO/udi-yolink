@@ -838,7 +838,7 @@
    </nodeDef> 
 
  
-  <nodeDef id="yothsensC" nls="nlsthsens">
+  <nodeDef id="yothsens" nls="nlsthsens">
       <editors />
       <sts>
          <st id="ST" editor="tempC" />
@@ -995,6 +995,40 @@
          </accepts>
       </cmds>
    </nodeDef> 
+   <nodeDef id="yomotionsensF" nls="nlsmotionsens">
+      <editors />
+      <sts>
+         <st id="GV0" editor="motionstate" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
+          <st id="CLITEMP" editor="tempF" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="motionstate" />
+         <st id="GV20" editor="suspendstate" /> 
+         <st id="GV30"  editor="status" />  
+         <st id="TIME" editor="unixtime" />                             
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="motionstate"  />               
+            <cmd id="DOF" editor="motionstate"  />  -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  /> 
+
+         </sends>
+         <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
+            <!-- <cmd id="DON" /> 
+            <cmd id="DOF" />  -->
+
+            <cmd id="UPDATE" /> 
+
+            
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
    <nodeDef id="yoleaksens" nls="nlsleaksens">
       <editors />
@@ -1029,6 +1063,38 @@
       </cmds>
    </nodeDef> 
 
+   <nodeDef id="yoleaksensF" nls="nlsleaksens">
+      <editors />
+      <sts>
+         <st id="GV0" editor="waterstate" />
+         <st id="GV1" editor="batlevel" />
+         <st id="GV2" editor="cmdsetting" />
+         <st id="CLITEMP" editor="tempF" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="waterstate" />
+         <st id="GV30"  editor="status" />  
+         <st id="GV20" editor="suspendstate" /> 
+         <st id="TIME" editor="unixtime" />                             
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="waterstate"  /> 
+            <cmd id="DOF" editor="waterstate"  />    -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+
+         </sends>
+         <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV2" /> 
+            </cmd >  
+            <!--<cmd id="DON" /> 
+            <cmd id="DOF" /> -->       
+            <cmd id="UPDATE" /> 
+
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
    <nodeDef id="yoCOSmokesens" nls="nlssmokesens">
       <editors />
@@ -1070,7 +1136,47 @@
       </cmds>
    </nodeDef> 
 
-   <nodeDef id="yovibrasensC" nls="nlsvibrasens">
+   <nodeDef id="yoCOSmokesensF" nls="nlssmokesens">
+      <editors />
+      <sts>
+         <st id="ALARM" editor="deviceAlert" />
+         <st id="GV0" editor="SmokeAlert" />
+         <st id="GV1" editor="COAlert" />
+         <st id="GV2" editor="TempAlert" />
+         <st id="GV3" editor="BatteryAlert" />
+         <st id="GV4" editor="batlevel" />
+         <!--st id="GV6" editor="AlertInterval" /-->
+         <st id="GV5" editor="SelfcheckState" />
+         <st id="GV7" editor="cmdsetting" />
+         <st id="CLITEMP" editor="tempF" />
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="ST"  editor="deviceAlert" />     
+         <st id="GV30"  editor="status" />
+         <st id="GV20" editor="suspendstate" />   
+         <st id="TIME" editor="unixtime" />      
+                
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="deviceAlert"  /> 
+            <cmd id="DOF" editor="deviceAlert"  /> -->
+            <cmd id="DON"   />               
+            <cmd id="DOF"   />    
+
+         </sends>
+         <accepts>
+            <cmd id="SETCMD" > 
+               <p id="" editor="cmdsetting" init="GV7" /> 
+            </cmd >          
+            <!--<cmd id="DON" /> 
+            <cmd id="DOF" /> -->         
+            <cmd id="UPDATE" /> 
+
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+   <nodeDef id="yovibrasens" nls="nlsvibrasens">
       <editors />
       <sts>
          <st id="GV0" editor="vibrastate" />
@@ -1102,6 +1208,7 @@
          </accepts>
       </cmds>
    </nodeDef> 
+
    <nodeDef id="yovibrasensF" nls="nlsvibrasens">
       <editors />
       <sts>

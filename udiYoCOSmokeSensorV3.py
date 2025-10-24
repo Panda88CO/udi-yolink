@@ -69,6 +69,11 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         logging.debug('udiYoCOSmokeSensor  INIT - {}'.format(deviceInfo['name']))
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo
+
+        self.temp_unit = self.yoAccess.get_temp_unit()           
+        if self.temp_unit == 1:
+            self.id = 'yoCOSmokesensF' 
+
         self.yoCOSmokeSensor  = None
         self.node_ready = False
         self.last_state = 99
