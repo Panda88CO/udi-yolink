@@ -32,12 +32,12 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         yolink.WMcount = None
         yolink.refreshDevice()
         if yolink.online:
-            if 'state' in yolink.dataAPI[yolink.dData]:
-
-                if 'meters' in yolink.dataAPI[yolink.dData]['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['meters'], dict):
-                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['meters'])
-                elif 'valves' in yolink.dataAPI[yolink.dData]['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['valves'], dict):
-                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['valves'])
+            if 'state' in yolink.dataAPI[yolink.dData] and 'state' in yolink.dataAPI[yolink.dData]['state']:
+            
+                if 'meters' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['meters'], dict):
+                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['meters'])
+                elif 'valves' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['valves'], dict):
+                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['valves'])
                 else:
                     yolink.water_meter_count = 1 
                 logging.info(f'Water Meter Controller - {yolink.water_meter_count} meters found')
@@ -244,18 +244,33 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
 
     def getBattery(yolink):
         logging.debug(yolink.type+' - getBattery')
-        bat_lvl = 99
-        pwr_mode = 'Unknown'
+        bat_lvl = None
+        pwr_mode = None
         logging.debug('online {} , data {}'.format(yolink.online, yolink.dataAPI[yolink.dData] ))
         if yolink.online:   
             if 'battery' in yolink.dataAPI[yolink.dData]:
                 bat_lvl = yolink.dataAPI[yolink.dData]['battery']
-            if 'powerSupply' in yolink.dataAPI[yolink.dData]:
+            elif yolink.dState in yolink.dataAPI[yolink.dData] and 'battery' in yolink.dataAPI[yolink.dData][yolink.dState]: 
+                bat_lvl = yolink.dataAPI[yolink.dData][yolink.dState]['battery']    
+            if 'powerSupply' in yolink.dataAPI[yolink.dData]:                
                 pwr_mode = yolink.dataAPI[yolink.dData]['powerSupply']
+            elif yolink.dState in yolink.dataAPI[yolink.dData] and 'powerSupply' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                pwr_mode = yolink.dataAPI[yolink.dData][yolink.dState]['powerSupply']                   
         return(pwr_mode, bat_lvl)
     
 
-    def getValveState(yolink):
+    def getWaterTemperature(yolink):
+        logging.debug(yolink.type+' - getWaterTemperature')
+        water_temp = None
+        #yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            if yolink.dState in yolink.dataAPI[yolink.dData]:
+                if 'temperature' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    water_temp = yolink.dataAPI[yolink.dData][yolink.dState]['temperature']
+        return(water_temp)
+    
+
+    def getValveState(yolink, WM_index = None):
         logging.debug(yolink.type+' - getValveState')
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
@@ -267,10 +282,61 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                         return('closed')
                     else:
                         return('Unkown')
+                elif yolink.dState in yolink.dataAPI[yolink.dData][yolink.dState] and 'valves' in yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState] :
+                    if isinstance(yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState]['valves'], dict):
+                        valves = yolink.dataAPI[yolink.dData][yolink.dState][yolink.dState]['valves']
+                        if isinstance( WM_index, int):
+                            if str(WM_index) in valves:
+                                if valves[str(WM_index)] == 'open':
+                                    return('open')
+                                elif valves[str(WM_index)] == 'close':
+                                    return('closed')
+                                else:
+                                    return('Unkown')
             else:
                 return(None)
     
-    def getMeterReading(yolink):
+    
+    def getData(yolink, category, key, WM_index = None):    
+        try:
+            logging.debug(yolink.type+f' - getData category {category} key {key} ')
+            if yolink.online: 
+                if category is None:
+                    if key in yolink.dataAPI[yolink.dData]:
+                        return(yolink.dataAPI[yolink.dData][key])
+                if category in yolink.dataAPI[yolink.dData]:
+                    logging.debug('category found')
+                    if key in yolink.dataAPI[yolink.dData][category]:
+                        return(yolink.dataAPI[yolink.dData][category][key])
+
+                elif yolink.dState in yolink.dataAPI[yolink.dData]:
+                    if category in yolink.dataAPI[yolink.dData][yolink.dState]:
+                        logging.debug('category found in state')
+                        if key in yolink.dataAPI[yolink.dData][yolink.dState][category]:
+                            return(yolink.dataAPI[yolink.dData][yolink.dState][category][key])  
+                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    if category in yolink.dataAPI[yolink.dData][yolink.dState]['state']:
+                        logging.debug(f'category {category} found in [state][state]')
+                        if isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state'][category], dict):
+                            if key in yolink.dataAPI[yolink.dData][yolink.dState]['state'][category]:                            
+                                items = yolink.dataAPI[yolink.dData][yolink.dState]['state'][category][key]
+                                logging.debug(f'items for {key} found {items}')
+                            if isinstance( WM_index, int):
+                                if str(WM_index) in items:
+                                    return(items[str(WM_index)])
+                            else:
+                                logging.error('WM_index not provided')
+                                return(None)
+                else:
+                    return(None)       
+            return(None)
+        except KeyError as e:
+            logging.error(f'EXCEPTION - getData {e}') 
+            return(None)
+
+
+    
+    def getMeterReading(yolink, WM_index = None):
         try:
             meter_correction_factor = 1
             logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData], indent=4)}')
@@ -279,21 +345,40 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
             logging.debug(f'temp1 {temp}')
             if yolink.online:   
                 #logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
-                if 'attributes' in yolink.dataAPI[yolink.dData] and 'meterStepFactor' in yolink.dataAPI[yolink.dData]['attributes']:
-                    meter_correction_factor = yolink.dataAPI[yolink.dData]['attributes']['meterStepFactor']
-                elif yolink.dState in yolink.dataAPI[yolink.dData] and 'attributes' in yolink.dataAPI[yolink.dData][yolink.dState] and 'meterStepFactor' in yolink.dataAPI[yolink.dData][yolink.dState]['attributes']:
-                    meter_correction_factor = yolink.dataAPI[yolink.dData]['state']['attributes']['meterStepFactor']                    
-                else:
+                #if 'attributes' in yolink.dataAPI[yolink.dData] and 'meterStepFactor' in yolink.dataAPI[yolink.dData]['attributes']:
+                #    meter_correction_factor = yolink.dataAPI[yolink.dData]['attributes']['meterStepFactor']
+                meter_correction_factor = yolink.getData('attributes', 'meterStepFactor', WM_index)
+                if meter_correction_factor is None:     
                     meter_correction_factor = 1.0   
                 #logging.debug(f'logic {yolink.dState in yolink.dataAPI[yolink.dData]}')
+                meter = yolink.getData(yolink.dState, 'meter', WM_index)
+                waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
+                    temp['total'] = round(meter/meter_correction_factor,1)
+                    temp['water_runing'] = waterFlowing
                     #logging.debug('next {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['meter']))
-                    if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                        temp['total'] = round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/meter_correction_factor,1)
-                    if 'waterFlowing' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                        temp['water_runing'] = yolink.dataAPI[yolink.dData][yolink.dState]['waterFlowing']
+                    #if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    #    temp['total'] = round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/meter_correction_factor,1)
+                    #if 'waterFlowing' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    #    temp['water_runing'] = yolink.dataAPI[yolink.dData][yolink.dState]['waterFlowing']
                     #logging.debug('next 2 {}'.format(temp ))
 
+                recent_amount  = yolink.getData('recentUsage', 'amount', WM_index)
+                recent_duration = yolink.getData('recentUsage', 'duration', WM_index)
+                daily_usage = yolink.getData('dailyUsage', 'amount', WM_index)
+                daily_duration = yolink.getData('dailyUsage', 'duration', WM_index) 
+                if recent_amount is not None:
+                    temp['recent_amount'] = round(recent_amount/meter_correction_factor,1)
+                if recent_duration is not None:
+                    temp['recent_duration'] = recent_duration
+                if daily_usage is not None:
+                    temp['daily_usage'] = round(daily_usage/meter_correction_factor,1)  
+                else:
+                    daily_usage = yolink.getData(None, 'dailyUsage', WM_index)
+                if daily_duration is not None:
+                    temp['daily_duration'] = daily_duration
+
+                '''
                 if 'recentUsage' in yolink.dataAPI[yolink.dData]:
                     if 'amount' in yolink.dataAPI[yolink.dData]['recentUsage']:
                         temp['recent_amount'] = round(yolink.dataAPI[yolink.dData]['recentUsage']['amount']/meter_correction_factor,1)
@@ -309,7 +394,8 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                             temp['daily_duration'] = None     
                     elif isinstance(yolink.dataAPI[yolink.dData]['dailyUsage'], int) or isinstance(yolink.dataAPI[yolink.dData]['dailyUsage'], float):
                         temp['daily_usage'] = round(yolink.dataAPI[yolink.dData]['dailyUsage']/meter_correction_factor,1)
-            #logging.debug(f' temp {temp}')             
+                '''
+            logging.debug(f' temp {temp}')   
             return(temp)
 
         except KeyError as e:
