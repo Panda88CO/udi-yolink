@@ -16,7 +16,7 @@ from os import truncate
 #import sys
 import time
 from yolinkWaterMeterControllerV3 import YoLinkWaterMultiMeter
-#from yolinkLeakSensorV2 import YoLinkLeakSensor
+
 
 class udiYoWaterMeterMulti(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, w_unit2ISY, save_cmd_state, retrieve_cmd_state, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
@@ -43,7 +43,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 69},  #wateruse recent
             {'driver': 'GV3', 'value': 0, 'uom': 44},  #Wateruse duration
             #{'driver': 'GV4', 'value': 99, 'uom': 25}, #alarm
-            #{'driver': 'GV5', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV5', 'value': 99, 'uom': 25}, #Leak
             #{'driver': 'GV6', 'value': 99, 'uom': 25}, 
             #{'driver': 'GV7', 'value': 99, 'uom': 25}, 
             #{'driver': 'GV8', 'value': 99, 'uom': 25},                                              
@@ -187,6 +187,10 @@ class udiYoSubWaterMeter(udi_interface.Node):
         logging.debug(f'udiYoWaterMeterSub- {name}')
         self.n_queue = []
         self.yoAccess = yoAccess
+        self.temp_unit = self.yoAccess.get_temp_unit()     
+        if self.temp_unit == 1:
+            self.id = 'udiYoWaterMeterSubF'    
+
         self.WM_index = WMindex
         
         self.yoWaterCtrl= wmAccess
