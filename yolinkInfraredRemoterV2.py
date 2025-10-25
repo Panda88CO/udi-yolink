@@ -137,7 +137,13 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
 
     def getBattery(yolink):
         try:
-            return(yolink.dataAPI[yolink.dData]['battery'])
+            if 'battery' not in yolink.dataAPI[yolink.dData]:
+                return(yolink.dataAPI[yolink.dData]['battery'])
+            
+            elif yolink.dState in yolink.dataAPI[yolink.dData] and 'battery' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                return(yolink.dataAPI[yolink.dData][yolink.dState]['battery'])
+            else:
+                return(None)
         except Exception as E:
             logging.error('battery not defined : {}'.format(E))
        
