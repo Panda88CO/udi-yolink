@@ -96,7 +96,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         else:
             self.yoWaterCtrl.initNode()
             if self.yoWaterCtrl.water_meter_count > 1:
-                wm_nodes= {}
+                self.wm_nodes= {}
                 for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
                     address = f'{self.address[-12:]}_{wm_index}'
                     wm_address = self.poly.getValidAddress(address)
