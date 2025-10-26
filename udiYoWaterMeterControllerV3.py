@@ -265,6 +265,8 @@ class udiYoWaterMeterController(udi_interface.Node):
                 
         except KeyError as e:
             logging.error(f'EXCEPTION - {e}')
+
+            
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoWaterMeterController')
         self.yoWaterCtrl.updateStatus(data)

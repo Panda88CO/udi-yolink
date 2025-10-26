@@ -163,9 +163,6 @@ class udiYoWaterMeterMulti(udi_interface.Node):
                     for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
                         if wm_index in self.wm_nodes:
                             self.wm_nodes[wm_index].updateData()
-
-
-                
                 
                 else:
                     self.my_setDriver('ST', 0)
@@ -178,6 +175,10 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         logging.info('Update Status Executed')
         self.yoWaterCtrl.refreshDevice()
                     
+    def updateStatus(self, data):
+        logging.info('updateStatus - udiYoWaterMeterController')
+        self.yoWaterCtrl.updateStatus(data)
+        self.updateData()
 
     commands = {
                 'UPDATE': update,
@@ -266,7 +267,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         logging.info('Start - udiYoWaterMeterMultiController')
         self.my_setDriver('GV30', 1)
         self.my_setDriver('GV20', 0)
-        #self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.devInfo, self.updateStatus)
         
         time.sleep(4)
         self.yoWaterCtrl.initNode()
@@ -420,6 +421,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                 
         except KeyError as e:
             logging.error(f'EXCEPTION - {e}')
+
     def updateStatus(self, data):
         logging.info('updateStatus - udiYoWaterMeterMultiController')
         self.yoWaterCtrl.updateStatus(data)
@@ -551,6 +553,11 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.my_setDriver('GV1', self.onDelay * 60)
         self.my_setDriver('GV2', self.offDelay * 60 )
         self.yoWaterCtrl.setDelayList([{'on':self.onDelay, 'off':self.offDelay}]) 
+
+    def updateStatus(self, data):
+        logging.info('updateStatus - udiYoWaterMeterController')
+        self.yoWaterCtrl.updateStatus(data)
+        self.updateData()
 
     commands = {
                 'UPDATE': update,
