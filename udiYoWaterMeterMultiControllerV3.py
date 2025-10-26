@@ -89,20 +89,22 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         self.my_setDriver('GV20', 0)
         self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.devInfo, self.updateStatus)
         self.water_meter_list = []
+        logging.debug(f'Water_meter_could {self.yoWaterCtrl.water_meter_count}')
         if self.yoWaterCtrl is None:
             logging.error('YoLinkWaterMultiMeter not created')
             return
-    
-        elif self.yoWaterCtrl.water_meter_count > 1:
-            wm_nodes= {}
-            for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
-                address = f'{self.address[-12:]}_{wm_index}'
-                wm_address = self.poly.getValidAddress(address)
-                wm_name = self.poly.getValidName(f'{self.name} CH{wm_index+1}')
+        else:
+            self.yoWaterCtrl.initNode()
+            if self.yoWaterCtrl.water_meter_count > 1:
+                wm_nodes= {}
+                for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
+                    address = f'{self.address[-12:]}_{wm_index}'
+                    wm_address = self.poly.getValidAddress(address)
+                    wm_name = self.poly.getValidName(f'{self.name} CH{wm_index+1}')
 
-                self.wm_nodes[wm_index] = udiYoSubWaterMeter(self.poly, self.address, wm_address, wm_name, wm_index, self.yoAccess, self.yoWaterCtrl)
-                self.adr_list.append(wm_address)
-                logging.info(f'Added Water Meter Node: {wm_name} at {wm_address}')
+                    self.wm_nodes[wm_index] = udiYoSubWaterMeter(self.poly, self.address, wm_address, wm_name, wm_index, self.yoAccess, self.yoWaterCtrl)
+                    self.adr_list.append(wm_address)
+                    logging.info(f'Added Water Meter Node: {wm_name} at {wm_address}')
 
             
         time.sleep(4)
