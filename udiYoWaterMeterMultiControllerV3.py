@@ -89,12 +89,12 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         self.my_setDriver('GV20', 0)
         self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.devInfo, self.updateStatus)
         self.water_meter_list = []
-        logging.debug(f'Water_meter_could {self.yoWaterCtrl.water_meter_count}')
         if self.yoWaterCtrl is None:
             logging.error('YoLinkWaterMultiMeter not created')
             return
         else:
             self.yoWaterCtrl.initNode()
+            logging.debug(f'Water_meter_count {self.yoWaterCtrl.water_meter_count}')
             if self.yoWaterCtrl.water_meter_count > 1:
                 self.wm_nodes= {}
                 for wm_index in range(0, self.yoWaterCtrl.water_meter_count):

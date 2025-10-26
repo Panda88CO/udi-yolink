@@ -76,18 +76,35 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     #    logging.debug(yolink.type+' - setAttributes')
     #    return(yolink.setAttributes(attributes))
 
+
+    
     def getBattery(yolink):
         logging.debug(yolink.type+' - getBattery')
-        bat_lvl = 99
-        pwr_mode = 'Unknown'
+        bat_lvl = None
+        pwr_mode = None
         logging.debug('online {} , data {}'.format(yolink.online, yolink.dataAPI[yolink.dData] ))
         if yolink.online:   
             if 'battery' in yolink.dataAPI[yolink.dData]:
                 bat_lvl = yolink.dataAPI[yolink.dData]['battery']
-            if 'powerSupply' in yolink.dataAPI[yolink.dData]:
+            elif yolink.dState in yolink.dataAPI[yolink.dData] and 'battery' in yolink.dataAPI[yolink.dData][yolink.dState]: 
+                bat_lvl = yolink.dataAPI[yolink.dData][yolink.dState]['battery']    
+            if 'powerSupply' in yolink.dataAPI[yolink.dData]:                
                 pwr_mode = yolink.dataAPI[yolink.dData]['powerSupply']
+            elif yolink.dState in yolink.dataAPI[yolink.dData] and 'powerSupply' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                pwr_mode = yolink.dataAPI[yolink.dData][yolink.dState]['powerSupply']                   
         return(pwr_mode, bat_lvl)
     
+
+    def getWaterTemperature(yolink):
+        logging.debug(yolink.type+' - getWaterTemperature')
+        water_temp = None
+        #yolink.online = yolink.getOnlineStatus()
+        if yolink.online:   
+            if yolink.dState in yolink.dataAPI[yolink.dData]:
+                if 'temperature' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    water_temp = yolink.dataAPI[yolink.dData][yolink.dState]['temperature']
+        return(water_temp)
+       
 
     def getValveState(yolink):
         logging.debug(yolink.type+' - getValveState')
