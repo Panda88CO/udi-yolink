@@ -38,7 +38,7 @@ from udiYoSmartRemoterV3 import udiYoSmartRemoter
 from udiYoPowerFailV3 import udiYoPowerFailSenor
 from udiYoSirenV2 import udiYoSiren
 from udiYoWaterMeterControllerV3 import udiYoWaterMeterController
-from udiYoWaterMeterMultiControllerV3 import udiYoWaterMeterMultiController
+from udiYoWaterMeterMultiControllerV3 import YoLinkWaterMultiMeter
 from udiYoWaterMeterOnlyV3 import udiYoWaterMeterOnly
 from udiYoHubV2 import udiYoHub, udiYoBatteryHub
 #import udiProfileHandler
@@ -434,7 +434,7 @@ def addNodes (self, deviceList) -> list:
                 if  model in ['YS5007']:    
                     temp = udiYoWaterMeterOnly(self.poly, address, address, name, dev_access, dev )
                 elif model in ['YS5029']: 
-                    temp = udiYoWaterMeterMultiController(self.poly, address, address, name, dev_access, dev )
+                    temp = YoLinkWaterMultiMeter(self.poly, address, address, name, dev_access, dev )
                 else: #YS5018 or YS5008 YS5009
                     temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
                 while not temp.node_ready:
