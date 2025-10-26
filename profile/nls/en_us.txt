@@ -249,6 +249,8 @@ CMD-nlsmanipu-SWCTRL-NAME=Switch control
 
 ND-yothsens-NAME=YoLink THsensor
 ND-yothsens-ICON=TempSensor
+ND-yothsensF-NAME=YoLink THsensor
+ND-yothsensF-ICON=TempSensor
 ST-nlsthsens-ST-NAME=Sensor Temperature
 ST-nlsthsens-GV1-NAME=Low Temp Alarm
 ST-nlsthsens-GV2-NAME=High Temp Alarm
@@ -280,6 +282,8 @@ CMD-nlsgarage-TOGGLE-NAME=Toggle Door
 
 ND-yodoorsens-NAME=YoLink Door Sensor
 ND-yodoorsens-ICON=Input
+ND-yodoorsensF-NAME=YoLink Door Sensor
+ND-yodoorsensF-ICON=Input
 ST-nlsdoorsens-ST-NAME=Door State
 ST-nlsdoorsens-GV0-NAME=Door State
 ST-nlsdoorsens-GV1-NAME=Sensor Battery Level
@@ -297,6 +301,8 @@ CMD-nlsdoorsens-UPDATE-NAME=Update Status
 
 ND-yomotionsens-NAME=YoLink Motion Sensor
 ND-yomotionsens-ICON=MotionSensor
+ND-yomotionsensF-NAME=YoLink Motion Sensor
+ND-yomotionsensF-ICON=MotionSensor
 ST-nlsmotionsens-ST-NAME=Motion State
 ST-nlsmotionsens-GV0-NAME=Motion State
 ST-nlsmotionsens-GV1-NAME=Sensor Battery Level
@@ -314,6 +320,8 @@ CMD-nlsmotionsens-UPDATE-NAME=Update Status
 
 ND-yoleaksens-NAME=YoLink Water Sensor
 ND-yoleaksens-ICON=Input
+ND-yoleaksensF-NAME=YoLink Water Sensor
+ND-yoleaksensF-ICON=Input
 ST-nlsleaksens-ST-NAME=Water Sensor
 ST-nlsleaksens-GV0-NAME=Water Sensor
 ST-nlsleaksens-GV1-NAME=Sensor Battery Level
@@ -334,6 +342,9 @@ CMD-nlsleaksens-UPDATE-NAME=Update Status
 
 ND-yovibrasens-NAME=YoLink Vibrations Sensor
 ND-yovibrasens-ICON=MotionSensor
+ND-yovibrasensF-NAME=YoLink Vibrations Sensor
+ND-yovibrasensF-ICON=MotionSensor
+
 ST-nlsvibrasens-ST-NAME=Vibration State
 ST-nlsvibrasens-GV0-NAME=Vibration State
 ST-nlsvibrasens-GV1-NAME=Sensor Battery Level
@@ -445,6 +456,9 @@ CMD-nlsdimmer-SWCTRL-NAME=Switch control
 
 ND-yoirremote-NAME=YoLink Ir Remoter
 ND-yoirremote-ICON=Output
+ND-yoirremoteF-NAME=YoLink Ir Remoter
+ND-yoirremoteF-ICON=Output
+
 ST-nlsirremote-ST-NAME=Last Command Status
 ST-nlsirremote-GV0-NAME=Number of Learned codes
 ST-nlsirremote-GV1-NAME=Battery Level
@@ -472,6 +486,8 @@ CMD-nlsircode-UPDATE-NAME=Update Status
 
 ND-yoCOSmokesens-NAME=YoLink COSmokeSensor
 ND-yoCOSmokesens-ICON=Input
+ND-yoCOSmokesensF-NAME=YoLink COSmokeSensor
+ND-yoCOSmokesensF-ICON=Input
 #ST-nlssmokesens-NAME=Nodeserver Status
 ST-nlssmokesens-ST-NAME=Alarm
 ST-nlssmokesens-ALARM-NAME=Alert Detected
@@ -496,6 +512,8 @@ CMD-nlssmokesens-DOF-NAME=Normal
 
 ND-yopwralarm-NAME=YoLink Power Failure Alarm
 ND-yopwralarm-ICON=Input
+ND-yopwralarmF-NAME=YoLink Power Failure Alarm
+ND-yopwralarmF-ICON=Input
 ST-nlspwralarm-ST-NAME=Unit State
 ST-nlspwralarm-GV0-NAME=Unit State
 ST-nlspwralarm-GV1-NAME=Battery Level
@@ -514,6 +532,8 @@ CMD-nlspwralarm-UPDATE-NAME=Update Status
 
 ND-yosiren-NAME=YoLink Siren
 ND-yosiren-ICON=Output
+ND-yosirenF-NAME=YoLink Siren
+ND-yosirenF-ICON=Output
 ST-nlssiren-ST-NAME=Siren State
 ST-nlssiren-GV0-NAME=Siren State
 ST-nlssiren-GV1-NAME=Siren Duration
@@ -530,6 +550,8 @@ CMD-nlssiren-UPDATE-NAME=Update Status
 
 ND-yosmremote-NAME=YoLink Smart Remoter
 ND-yosmremote-ICON=Input
+ND-yosmremoteF-NAME=YoLink Smart Remoter
+ND-yosmremoteF-ICON=Input
 ST-nlssmremote-ST-NAME=Press type
 ST-nlssmremote-GV0-NAME=ComboPress
 ST-nlssmremote-GV1-NAME=Key presstype
@@ -573,6 +595,10 @@ ND-yowatermeterOnly-NAME=YoLink Water Meter
 ND-yowatermeterOnly-ICON=PulseCounter
 ND-yowatermeterMulti-NAME=YoLink Water Meter Multi Controller
 ND-yowatermeterMulti-ICON=PulseCounter
+ND-yowatermeterCtrlF-NAME=YoLink Water Meter Controller
+ND-yowatermeterCtrlF-ICON=PulseCounter
+ND-yowatermeterOnlyF-NAME=YoLink Water Meter 
+ND-yowatermeterOnlyF-ICON=PulseCounter
 
 ST-nlswatermeter-ST-NAME=Water Running
 ST-nlswatermeter-GV0-NAME=Valve State
@@ -619,6 +645,8 @@ CMD-nlswatermeter-UPDATE-NAME=Update Node
 
 ND-yowaterdept-NAME=YoLink Water Level Sensor
 ND-yowaterdept-ICON=Input
+ND-yowaterdeptF-NAME=YoLink Water Level Sensor
+ND-yowaterdeptF-ICON=Input
 ST-nlswaterdept-NAME=Nodeserver Status
 ST-nlswaterdept-ST-NAME=Water Level (0-1000)
 ST-nlswaterdept-GV0-NAME=Water Level (0-1000)
