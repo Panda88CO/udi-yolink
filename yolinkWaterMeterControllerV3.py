@@ -399,6 +399,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                 logging.debug(f'meter {meter} waterFlowing {waterFlowing} ')
                 
                 #if yolink.dState in yolink.dataAPI[yolink.dData]:
+                logging.debug(f'type of meter {type(meter)} type of waterFlowing {type(waterFlowing)} ')
                 if meter is not isinstance(meter, dict):
                     temp['total'] = round(meter/meter_correction_factor,1)
                     temp['water_runing'] = waterFlowing
