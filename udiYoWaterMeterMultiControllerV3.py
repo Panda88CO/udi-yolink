@@ -85,7 +85,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
     def start(self):
         logging.info('Start - udiYoWaterMeterMultiController')
-        self.my_setDriver('GV30', 1)
+        #self.my_setDriver('GV30', 1)
         self.my_setDriver('GV20', 0)
         self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.devInfo, self.updateStatus)
         self.water_meter_list = []
@@ -120,7 +120,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
     def stop (self):
         logging.info('Stop udiYoWaterMeterMultiController')
-        self.my_setDriver('GV30', 0)
+        #self.my_setDriver('GV30', 0)
         self.yoWaterCtrl.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
