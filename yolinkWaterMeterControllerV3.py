@@ -363,7 +363,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                                 if str(WM_index) in items:
                                     ret_val = items[str(WM_index)]
                             else:
-                                ret_val = items
+                                ret_val = yolink.dataAPI[yolink.dData][yolink.dState][category][key]
                         else:
                             ret_val = items                                
             logging.debug(f'ret_val {ret_val}')
