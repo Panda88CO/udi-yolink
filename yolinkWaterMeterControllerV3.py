@@ -393,21 +393,20 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                 if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
                     meter = yolink.getData(yolink.dState, 'meter', WM_index)
                     waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
-                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState] and 'meters' in yolink.dataAPI[yolink.dData][yolink.dState]['state'] and isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state']['meters'], dict):
-                    
+                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState] and 'meters' in yolink.dataAPI[yolink.dData][yolink.dState]['state'] and isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state']['meters'], dict):                    
                     meter = yolink.getData(yolink.dState, 'meters', WM_index)
                     waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
                 logging.debug(f'meter {meter} waterFlowing {waterFlowing} ')
                 
-                if yolink.dState in yolink.dataAPI[yolink.dData]:
+                #if yolink.dState in yolink.dataAPI[yolink.dData]:
+                if meter is not isinstance(meter, dict):
                     temp['total'] = round(meter/meter_correction_factor,1)
                     temp['water_runing'] = waterFlowing
-                    #logging.debug('next {}'.format(yolink.dataAPI[yolink.dData][yolink.dState]['meter']))
-                    #if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                    #    temp['total'] = round(yolink.dataAPI[yolink.dData][yolink.dState]['meter']/meter_correction_factor,1)
-                    #if 'waterFlowing' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                    #    temp['water_runing'] = yolink.dataAPI[yolink.dData][yolink.dState]['waterFlowing']
-                    #logging.debug('next 2 {}'.format(temp ))
+                else:
+                    for index in meter:
+                        meter[WM_index] = round(meter[index]/meter_correction_factor,1)
+                    temp['total'] = meter
+                    temp['water_runing'] = waterFlowing
 
                 recent_amount  = yolink.getData('recentUsage', 'amount', WM_index)
                 recent_duration = yolink.getData('recentUsage', 'duration', WM_index)
