@@ -350,20 +350,22 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                         logging.debug(f'category {category} found in state')
                         if key in yolink.dataAPI[yolink.dData][yolink.dState][category] and not isinstance(yolink.dataAPI[yolink.dData][yolink.dState][category][key], dict):
                             ret_val = yolink.dataAPI[yolink.dData][yolink.dState][category][key]
-                if 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                    logging.debug(f' [state][state] selected')
-                    if category in yolink.dataAPI[yolink.dData][yolink.dState]['state']:
-                        logging.debug(f'category {category} found in [state][state]')
-                        if isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state'][category], dict):
-                            logging.debug(f"category {category} is a dict {yolink.dataAPI[yolink.dData][yolink.dState]['state'][category]}")
-                            if key in yolink.dataAPI[yolink.dData][yolink.dState]['state'][category]:                            
-                                items = yolink.dataAPI[yolink.dData][yolink.dState]['state'][category][key]
-                                logging.debug(f'items for {key} found {items}')
+                if category in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    logging.debug(f" {category} found in [state] selected - {yolink.dataAPI[yolink.dData][yolink.dState][category]}")
+
+                    if key in yolink.dataAPI[yolink.dData][yolink.dState][category]:
+                        logging.debug(f'key {key} found in [state][{category}]')
+                        if isinstance(yolink.dataAPI[yolink.dData][yolink.dState][category][key], dict):
+                            logging.debug(f"key {key} is a dict {yolink.dataAPI[yolink.dData][yolink.dState][category][key]}")
+                            items = yolink.dataAPI[yolink.dData][yolink.dState][category][key]                      
+                            logging.debug(f'items for {key} found {items}')
                             if isinstance( WM_index, int):
                                 if str(WM_index) in items:
                                     ret_val = items[str(WM_index)]
                             else:
                                 ret_val = items
+                        else:
+                            ret_val = items                                
             logging.debug(f'ret_val {ret_val}')
             return(ret_val)
         
