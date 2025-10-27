@@ -388,7 +388,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                 if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
                     meter = yolink.getData(yolink.dState, 'meter', WM_index)
                     waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
-                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState] and 'meters' in yolink.dataAPI[yolink.dData][yolink.dState]['state '] and isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state']['meters'], dict):
+                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState] and 'meters' in yolink.dataAPI[yolink.dData][yolink.dState]['state'] and isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state']['meters'], dict):
                     meter = yolink.getData(yolink.dState, 'meters', WM_index)
                     waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
                 logging.debug(f'meter {meter} waterFlowing {waterFlowing} ')

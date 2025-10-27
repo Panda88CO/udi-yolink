@@ -265,21 +265,20 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
     def start(self):
         logging.info('Start - udiYoWaterMeterMultiController')
-        self.my_setDriver('GV30', 1)
-        self.my_setDriver('GV20', 0)
-        self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.yoWaterCtrl.devInfo, self.updateStatus)
+
+        #self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.yoWaterCtrl.devInfo, self.updateStatus)
         
         time.sleep(4)
         self.yoWaterCtrl.initNode()
         time.sleep(2)
-        #self.my_setDriver('GV30', 1)
+
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         self.node_ready = True
         self.updateData()
 
     def stop (self):
         logging.info('Stop udiYoWaterMeterMultiController')
-        self.my_setDriver('GV30', 0)
+
         self.yoWaterCtrl.shut_down()
         #if self.node:
         #    self.poly.delNode(self.node.address)
@@ -355,10 +354,10 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
                     pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                     logging.debug('udiYoWaterMeterMultiController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
-                    if pwr_mode == 'PowerLine':
-                        self.my_setDriver('BATLVL', 98, 25)
-                    else:
-                        self.my_setDriver('BATLVL', bat_lvl, 25)
+                    #if pwr_mode == 'PowerLine':
+                    #    self.my_setDriver('BATLVL', 98, 25)
+                    #else:
+                    #    self.my_setDriver('BATLVL', bat_lvl, 25)
 
                     alarms = self.yoWaterCtrl.getAlarms()
                     if alarms:
@@ -368,8 +367,8 @@ class udiYoSubWaterMeter(udi_interface.Node):
                         if 'leak' in alarms:
                             self.my_setDriver('GV5', self.bool2ISY(alarms['leak']))
         
-                        if 'amountOverrun' in alarms:
-                            self.my_setDriver('GV6', self.bool2ISY(alarms['amountOverrun']))
+                        #if 'amountOverrun' in alarms:
+                        #    self.my_setDriver('GV6', self.bool2ISY(alarms['amountOverrun']))
 
                         if 'durationOverrun' in alarms:
                             self.my_setDriver('GV7', self.bool2ISY(alarms['durationOverrun']))
@@ -398,27 +397,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                             self.my_setDriver('GV16', attributes['overrunDuration'], 44)
 
 
-                    if self.yoWaterCtrl.suspended:
-                        self.my_setDriver('GV20', 1)
-                    else:
-                        self.my_setDriver('GV20', 0)
 
-                else:
-                    #self.my_setDriver('GV0', 99, 25)
-                    #self.my_setDriver('GV1', 99, 25)
-                    
-                    #self.my_setDriver('GV4', 99, 25)
-                    #self.my_setDriver('GV5', 99, 25)
-                    #self.my_setDriver('GV6', 99, 25)
-                    #self.my_setDriver('GV7', 99, 25)
-                    #self.my_setDriver('GV8', 99, 25)
-                    #self.my_setDriver('GV9', 99, 25)
-                    #self.my_setDriver('GV10', 99, 25)
-                    #self.my_setDriver('BATLVL', 99, 25)
-                    self.my_setDriver('GV30', 0)
-                    #self.my_setDriver('BATLVL', 99, 25)
-                    self.my_setDriver('GV20', 2)
-                
         except KeyError as e:
             logging.error(f'EXCEPTION - {e}')
 
