@@ -334,6 +334,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
     def getData(yolink, category, key, WM_index = None):    
         try:
             logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
+            ret_val = None  
             if yolink.online: 
                 if category is None:
                     if key in yolink.dataAPI[yolink.dData]:
@@ -343,13 +344,12 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                     logging.debug(f'{category} found wing single value')
                     if key in yolink.dataAPI[yolink.dData][category]:
                         ret_val = yolink.dataAPI[yolink.dData][category][key]
-
-                elif yolink.dState in yolink.dataAPI[yolink.dData] :
+                if yolink.dState in yolink.dataAPI[yolink.dData] :
                     if category in yolink.dataAPI[yolink.dData][yolink.dState] :
                         logging.debug(f'{category} found in state')
                         if key in yolink.dataAPI[yolink.dData][yolink.dState][category] and not isinstance(yolink.dataAPI[yolink.dData][yolink.dState][category][key], dict):
                             ret_val = yolink.dataAPI[yolink.dData][yolink.dState][category][key]
-                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                if 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
                     if category in yolink.dataAPI[yolink.dData][yolink.dState]['state']:
                         logging.debug(f'category {category} found in [state][state]')
                         if isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state'][category], dict):
@@ -361,13 +361,6 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                                     ret_val = items[str(WM_index)]
                             else:
                                 ret_val = items
-                        else:
-                            logging.error('WM_index not provided')
-                            ret_val = None
-                else:
-                    ret_val= None
-            else:
-                ret_val = None
             logging.debug(f'ret_val {ret_val}')
             return(ret_val)
         
