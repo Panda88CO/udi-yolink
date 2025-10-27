@@ -267,7 +267,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         logging.info('Start - udiYoWaterMeterMultiController')
         self.my_setDriver('GV30', 1)
         self.my_setDriver('GV20', 0)
-        self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.devInfo, self.updateStatus)
+        self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.yoWaterCtrl.devInfo, self.updateStatus)
         
         time.sleep(4)
         self.yoWaterCtrl.initNode()

@@ -11,6 +11,62 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
+def getData(yolink, category, key, WM_index = None):    
+        try:
+            logging.debug(yolink.type+f' - getData category {category} key {key} ')
+            if yolink.online: 
+                if category is None:
+                    if key in yolink.dataAPI[yolink.dData]:
+                        return(yolink.dataAPI[yolink.dData][key])
+                if category in yolink.dataAPI[yolink.dData]:
+                    logging.debug('category found')
+                    if key in yolink.dataAPI[yolink.dData][category]:
+                        return(yolink.dataAPI[yolink.dData][category][key])
+
+                elif yolink.dState in yolink.dataAPI[yolink.dData]:
+                    if category in yolink.dataAPI[yolink.dData][yolink.dState]:
+                        logging.debug('category found in state')
+                        if key in yolink.dataAPI[yolink.dData][yolink.dState][category]:
+                            return(yolink.dataAPI[yolink.dData][yolink.dState][category][key])  
+                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    if category in yolink.dataAPI[yolink.dData][yolink.dState]['state']:
+                        logging.debug(f'category {category} found in [state][state]')
+                        if isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state'][category], dict):
+                            if key in yolink.dataAPI[yolink.dData][yolink.dState]['state'][category]:                            
+                                items = yolink.dataAPI[yolink.dData][yolink.dState]['state'][category][key]
+                                logging.debug(f'items for {key} found {items}')
+                            if isinstance( WM_index, int):
+                                if str(WM_index) in items:
+                                    return(items[str(WM_index)])
+                            else:
+                                logging.error('WM_index not provided')
+                                return(None)
+                else:
+                    return(None)       
+            return(None)
+        except KeyError as e:
+            logging.error(f'EXCEPTION - getData {e}') 
+            return(None)
+
+def getMeterCount(yolink):
+    if yolink.online:
+            if 'state' in yolink.dataAPI[yolink.dData] and 'state' in yolink.dataAPI[yolink.dData]['state']:
+            
+                if 'meters' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['meters'], dict):
+                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['meters'])
+                elif 'valves' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['valves'], dict):
+                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['valves'])
+                else:
+                    yolink.water_meter_count = 1 
+                logging.info(f'Water Meter Controller - {yolink.water_meter_count} meters found')
+
+
+
+
+
+
+
+
 class YoLinkWaterMeter(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__( yoAccess,  deviceInfo, callback)
@@ -31,16 +87,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         
         yolink.WMcount = None
         yolink.refreshDevice()
-        if yolink.online:
-            if 'state' in yolink.dataAPI[yolink.dData] and 'state' in yolink.dataAPI[yolink.dData]['state']:
-            
-                if 'meters' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['meters'], dict):
-                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['meters'])
-                elif 'valves' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['valves'], dict):
-                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['valves'])
-                else:
-                    yolink.water_meter_count = 1 
-                logging.info(f'Water Meter Controller - {yolink.water_meter_count} meters found')
+        yolink.getMeterCount()
         time.sleep(2)   
         if not yolink.online:
             logging.error('Water Meter Controller device not online')
@@ -379,12 +426,18 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                 #logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
                 #if 'attributes' in yolink.dataAPI[yolink.dData] and 'meterStepFactor' in yolink.dataAPI[yolink.dData]['attributes']:
                 #    meter_correction_factor = yolink.dataAPI[yolink.dData]['attributes']['meterStepFactor']
-                meter_correction_factor = yolink.getData('attributes', 'meterStepFactor', WM_index)
+                meter_correction_factor = float(yolink.getData('attributes', 'meterStepFactor', WM_index))
                 if meter_correction_factor is None:     
                     meter_correction_factor = 1.0   
                 #logging.debug(f'logic {yolink.dState in yolink.dataAPI[yolink.dData]}')
-                meter = yolink.getData(yolink.dState, 'meter', WM_index)
-                waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
+                if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    meter = yolink.getData(yolink.dState, 'meter', WM_index)
+                    waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
+                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState] and 'meters' in yolink.dataAPI[yolink.dData][yolink.dState]['state '] and isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state']['meters'], dict):
+                    meter = yolink.getData(yolink.dState, 'meters', WM_index)
+                    waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
+                logging.debug(f'meter {meter} waterFlowing {waterFlowing} ')
+                
                 if yolink.dState in yolink.dataAPI[yolink.dData]:
                     temp['total'] = round(meter/meter_correction_factor,1)
                     temp['water_runing'] = waterFlowing
