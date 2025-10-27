@@ -282,16 +282,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
         
         yolink.WMcount = None
         yolink.refreshDevice()
-        if yolink.online:
-            if 'state' in yolink.dataAPI[yolink.dData] and 'state' in yolink.dataAPI[yolink.dData]['state']:
-            
-                if 'meters' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['meters'], dict):
-                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['meters'])
-                elif 'valves' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['valves'], dict):
-                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['valves'])
-                else:
-                    yolink.water_meter_count = 1 
-                logging.info(f'Water Meter Controller - {yolink.water_meter_count} meters found')
+        yolink.getMeterCount()
         time.sleep(2)   
         if not yolink.online:
             logging.error('Water Meter Controller device not online')
