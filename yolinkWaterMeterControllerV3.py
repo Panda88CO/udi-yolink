@@ -333,20 +333,21 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
     
     def getData(yolink, category, key, WM_index = None):    
         try:
-            logging.debug(yolink.type+f' - getData category {category} key {key} ')
+            logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index}')
             if yolink.online: 
                 if category is None:
                     if key in yolink.dataAPI[yolink.dData]:
                         return(yolink.dataAPI[yolink.dData][key])
-                if category in yolink.dataAPI[yolink.dData]:
-                    logging.debug('category found')
+                    
+                if category in yolink.dataAPI[yolink.dData] and not isinstance(yolink.dataAPI[yolink.dData][category], dict):
+                    logging.debug('category found wing single value')
                     if key in yolink.dataAPI[yolink.dData][category]:
                         return(yolink.dataAPI[yolink.dData][category][key])
 
-                elif yolink.dState in yolink.dataAPI[yolink.dData]:
-                    if category in yolink.dataAPI[yolink.dData][yolink.dState]:
+                elif yolink.dState in yolink.dataAPI[yolink.dData] :
+                    if category in yolink.dataAPI[yolink.dData][yolink.dState] :
                         logging.debug('category found in state')
-                        if key in yolink.dataAPI[yolink.dData][yolink.dState][category]:
+                        if key in yolink.dataAPI[yolink.dData][yolink.dState][category] and not isinstance(yolink.dataAPI[yolink.dData][yolink.dState][category][key], dict):
                             return(yolink.dataAPI[yolink.dData][yolink.dState][category][key])  
                 elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
                     if category in yolink.dataAPI[yolink.dData][yolink.dState]['state']:
