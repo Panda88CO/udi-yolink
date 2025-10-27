@@ -333,22 +333,22 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
     
     def getData(yolink, category, key, WM_index = None):    
         try:
-            logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index}')
+            logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
             if yolink.online: 
                 if category is None:
                     if key in yolink.dataAPI[yolink.dData]:
-                        return(yolink.dataAPI[yolink.dData][key])
+                        ret_val = yolink.dataAPI[yolink.dData][key]
                     
                 if category in yolink.dataAPI[yolink.dData] and not isinstance(yolink.dataAPI[yolink.dData][category], dict):
-                    logging.debug('category found wing single value')
+                    logging.debug(f'{category} found wing single value')
                     if key in yolink.dataAPI[yolink.dData][category]:
-                        return(yolink.dataAPI[yolink.dData][category][key])
+                        ret_val = yolink.dataAPI[yolink.dData][category][key]
 
                 elif yolink.dState in yolink.dataAPI[yolink.dData] :
                     if category in yolink.dataAPI[yolink.dData][yolink.dState] :
-                        logging.debug('category found in state')
+                        logging.debug(f'{category} found in state')
                         if key in yolink.dataAPI[yolink.dData][yolink.dState][category] and not isinstance(yolink.dataAPI[yolink.dData][yolink.dState][category][key], dict):
-                            return(yolink.dataAPI[yolink.dData][yolink.dState][category][key])  
+                            ret_val = yolink.dataAPI[yolink.dData][yolink.dState][category][key]
                 elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState]:
                     if category in yolink.dataAPI[yolink.dData][yolink.dState]['state']:
                         logging.debug(f'category {category} found in [state][state]')
@@ -358,13 +358,19 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                                 logging.debug(f'items for {key} found {items}')
                             if isinstance( WM_index, int):
                                 if str(WM_index) in items:
-                                    return(items[str(WM_index)])
+                                    ret_val = items[str(WM_index)]
                             else:
-                                logging.error('WM_index not provided')
-                                return(None)
+                                ret_val = items
+                        else:
+                            logging.error('WM_index not provided')
+                            ret_val = None
                 else:
-                    return(None)       
-            return(None)
+                    ret_val= None
+            else:
+                ret_val = None
+            logging.debug(f'ret_val {ret_val}')
+            return(ret_val)
+        
         except KeyError as e:
             logging.error(f'EXCEPTION - getData {e}') 
             return(None)
