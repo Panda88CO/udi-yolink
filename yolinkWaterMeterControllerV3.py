@@ -117,15 +117,59 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             else:
                 return(None)
     
+    def getData(yolink, category, key, WM_index = None):    
+        try:
+            logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
+            ret_val = None  
+            if yolink.online: 
+                if category is None:
+                    if key in yolink.dataAPI[yolink.dData]:
+                        ret_val = yolink.dataAPI[yolink.dData][key]
+                    
+                if category in yolink.dataAPI[yolink.dData] and not isinstance(yolink.dataAPI[yolink.dData][category], dict):
+                    logging.debug(f'{category} found as single value')
+                    if key in yolink.dataAPI[yolink.dData][category]:
+                        ret_val = yolink.dataAPI[yolink.dData][category][key]
+                if yolink.dState in yolink.dataAPI[yolink.dData] :
+                    logging.debug(f'[state] selected')
+                    if category in yolink.dataAPI[yolink.dData][yolink.dState] :
+                        logging.debug(f'category {category} found in state')
+                        if key in yolink.dataAPI[yolink.dData][yolink.dState][category] and not isinstance(yolink.dataAPI[yolink.dData][yolink.dState][category][key], dict):
+                            ret_val = yolink.dataAPI[yolink.dData][yolink.dState][category][key]
+                if category in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    logging.debug(f" {category} found in [state] selected - {yolink.dataAPI[yolink.dData][yolink.dState][category]}")
+
+                    if key in yolink.dataAPI[yolink.dData][yolink.dState][category]:
+                        logging.debug(f'key {key} found in [state][{category}]')
+                        if isinstance(yolink.dataAPI[yolink.dData][yolink.dState][category][key], dict):
+                            logging.debug(f"key {key} is a dict {yolink.dataAPI[yolink.dData][yolink.dState][category][key]}")
+                            items = yolink.dataAPI[yolink.dData][yolink.dState][category][key]                      
+                            logging.debug(f'items for {key} found {items}')
+                            if isinstance( WM_index, int):
+                                if str(WM_index) in items:
+                                    ret_val = items[str(WM_index)]
+                            else:
+                                ret_val = items
+                        else:
+                            ret_val = yolink.dataAPI[yolink.dData][yolink.dState][category][key]                              
+            logging.debug(f'ret_val {ret_val} {key}  {category}')
+            return(ret_val)
+        
+        except KeyError as e:
+            logging.error(f'EXCEPTION - getData {e}') 
+            return(None)
+
+
+
     def getMeterReading(yolink):
         try:
             meter_correction_factor = 1
             logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData], indent=4)}')
             temp = {'total':None, 'water_runing':None, 'recent_amount':None, 'recent_duration':None, 'daily_usage':None}
             #yolink.online = yolink.getOnlineStatus()
-            logging.debug(f'temp1 {temp}')
+            logging.debug(f'temp1 Non-multi {temp}')
             if yolink.online:   
-                #logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
+                logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
                 if 'attributes' in yolink.dataAPI[yolink.dData] and 'meterStepFactor' in yolink.dataAPI[yolink.dData]['attributes']:
                     meter_correction_factor = yolink.dataAPI[yolink.dData]['attributes']['meterStepFactor']
                 elif yolink.dState in yolink.dataAPI[yolink.dData] and 'attributes' in yolink.dataAPI[yolink.dData][yolink.dState] and 'meterStepFactor' in yolink.dataAPI[yolink.dData][yolink.dState]['attributes']:
@@ -366,15 +410,13 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
                                 ret_val = items
                         else:
                             ret_val = yolink.dataAPI[yolink.dData][yolink.dState][category][key]                              
-            logging.debug(f'ret_val {ret_val}')
+            logging.debug(f'ret_val {ret_val} {key}  {category}')
             return(ret_val)
         
         except KeyError as e:
             logging.error(f'EXCEPTION - getData {e}') 
             return(None)
 
-
-    
     def getMeterReading(yolink, WM_index = None):
         try:
             meter_correction_factor = 1
@@ -450,6 +492,86 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
         except ValueError as e:
             logging.error(f'EXCEPTION - getMeterReading Value error {e}') 
             return(None)
+
+    
+    '''
+    def getMeterReading(yolink, WM_index = None):
+        try:
+            meter_correction_factor = 1
+            logging.debug(yolink.type+f' - getMeterReading {json.dumps(yolink.dataAPI[yolink.dData], indent=4)}')
+            temp = {'total':None, 'water_runing':None, 'recent_amount':None, 'recent_duration':None, 'daily_usage':None}
+            #yolink.online = yolink.getOnlineStatus()
+            logging.debug(f'temp1 {temp}')
+            if yolink.online:   
+                #logging.debug(f'yolink.dataAPI[yolink.dData][yolink.dState]: {yolink.dataAPI[yolink.dData][yolink.dState]} ')
+                #if 'attributes' in yolink.dataAPI[yolink.dData] and 'meterStepFactor' in yolink.dataAPI[yolink.dData]['attributes']:
+                #    meter_correction_factor = yolink.dataAPI[yolink.dData]['attributes']['meterStepFactor']
+                meter_correction_factor = float(yolink.getData('attributes', 'meterStepFactor', WM_index))
+                if meter_correction_factor is None:     
+                    meter_correction_factor = 1.0   
+                #logging.debug(f'logic {yolink.dState in yolink.dataAPI[yolink.dData]}')
+                if 'meter' in yolink.dataAPI[yolink.dData][yolink.dState]:
+                    meter = yolink.getData(yolink.dState, 'meter', WM_index)
+                    waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
+                elif 'state' in yolink.dataAPI[yolink.dData][yolink.dState] and 'meters' in yolink.dataAPI[yolink.dData][yolink.dState]['state'] and isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state']['meters'], dict):                    
+                    meter = yolink.getData(yolink.dState, 'meters', WM_index)
+                    waterFlowing = yolink.getData(yolink.dState, 'waterFlowing', WM_index)
+                logging.debug(f'meter {meter} waterFlowing {waterFlowing} ')
+                
+                #if yolink.dState in yolink.dataAPI[yolink.dData]:
+                logging.debug(f'type of meter {type(meter)} type of waterFlowing {type(waterFlowing)} ')
+                if not isinstance(meter, dict):
+                    temp['total'] = round(meter/meter_correction_factor,1)
+                    temp['water_runing'] = waterFlowing
+                else:
+                    for index in meter:
+                        meter[WM_index] = round(meter[index]/meter_correction_factor,1)
+                    temp['total'] = meter
+                    temp['water_runing'] = waterFlowing
+
+                recent_amount  = yolink.getData('recentUsage', 'amount', WM_index)
+                recent_duration = yolink.getData('recentUsage', 'duration', WM_index)
+                daily_usage = yolink.getData('dailyUsage', 'amount', WM_index)
+                daily_duration = yolink.getData('dailyUsage', 'duration', WM_index) 
+                if recent_amount is not None:
+                    temp['recent_amount'] = round(recent_amount/meter_correction_factor,1)
+                if recent_duration is not None:
+                    temp['recent_duration'] = recent_duration
+                if daily_usage is not None:
+                    temp['daily_usage'] = round(daily_usage/meter_correction_factor,1)  
+                else:
+                    daily_usage = yolink.getData(None, 'dailyUsage', WM_index)
+                if daily_duration is not None:
+                    temp['daily_duration'] = daily_duration
+
+                
+                if 'recentUsage' in yolink.dataAPI[yolink.dData]:
+                    if 'amount' in yolink.dataAPI[yolink.dData]['recentUsage']:
+                        temp['recent_amount'] = round(yolink.dataAPI[yolink.dData]['recentUsage']['amount']/meter_correction_factor,1)
+                    if 'duration' in yolink.dataAPI[yolink.dData]['recentUsage']:
+                        temp['recent_duration'] = yolink.dataAPI[yolink.dData]['recentUsage']['duration']
+                if 'dailyUsage' in yolink.dataAPI[yolink.dData]:
+                    if isinstance(yolink.dataAPI[yolink.dData]['dailyUsage'], dict):
+                        if 'amount' in yolink.dataAPI[yolink.dData]['dailyUsage']:
+                            temp['daily_usage'] = round(yolink.dataAPI[yolink.dData]['dailyUsage']['amount']/meter_correction_factor,1)
+                        if 'duration' in yolink.dataAPI[yolink.dData]['dailyUsage']:
+                            temp['daily_duration'] = yolink.dataAPI[yolink.dData]['dailyUsage']['duration']           
+                        else:
+                            temp['daily_duration'] = None     
+                    elif isinstance(yolink.dataAPI[yolink.dData]['dailyUsage'], int) or isinstance(yolink.dataAPI[yolink.dData]['dailyUsage'], float):
+                        temp['daily_usage'] = round(yolink.dataAPI[yolink.dData]['dailyUsage']/meter_correction_factor,1)
+                
+            logging.debug(f' temp {temp}')   
+            return(temp)
+
+        except KeyError as e:
+            logging.error(f'EXCEPTION - getMeterReading Key error {e}') 
+            return(None)
+        except ValueError as e:
+            logging.error(f'EXCEPTION - getMeterReading Value error {e}') 
+            return(None)
+    '''
+
     def getAlarms(yolink):
         try:
             logging.debug(yolink.type+' - getAlarms')
