@@ -328,7 +328,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                         self.last_state = state
 
 
-                    meter  = self.yoWaterCtrl.getMeterReading()
+                    meter  = self.yoWaterCtrl.getMeterReading(self.WM_inde)
                     logging.debug(f'meter: {meter}')
                     if meter != None:
                         if 'water_runing' in meter:
@@ -359,7 +359,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     #else:
                     #    self.my_setDriver('BATLVL', bat_lvl, 25)
 
-                    alarms = self.yoWaterCtrl.getAlarms()
+                    alarms = self.yoWaterCtrl.getAlarms(self.WM_inde)
                     if alarms:
                         if 'openReminder' in alarms:
                             self.my_setDriver('GV4', self.bool2ISY(alarms['openReminder']))
@@ -379,7 +379,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                         if 'reminder' in alarms:
                             self.my_setDriver('GV9', self.bool2ISY(alarms['reminder']))
 
-                    attributes = self.yoWaterCtrl.getAttributes()
+                    attributes = self.yoWaterCtrl.getAttributes(self.WM_inde)
                     if attributes:
                         if 'meterUnit' in attributes:
                             self.my_setDriver('GV11', attributes['meterUnit'], 25)                    
