@@ -54,8 +54,8 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         self.poly = polyglot
         self.yoAccess = yoAccess
         #self.temp_unit = self.yoAccess.get_temp_unit()     # Curent multi unit does not report temp
-        #if self.temp_unit == 1:
-        #    self.id = 'yowatermeterMultiF'    
+        if self.temp_unit == 1:
+            self.id = 'yowatermeterMultiF'    
         self.devInfo =  deviceInfo
         self.name = name
         self.address = address
@@ -235,7 +235,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()     
         if self.temp_unit == 1:
-            self.id = 'udiYoWaterMeterSubF'    
+            self.id = 'yowatermeterMultiF'    
 
         self.WM_index = WMindex
         
