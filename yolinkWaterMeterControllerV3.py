@@ -573,7 +573,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
     
    
 
-    def getAlarms(yolink):
+    def getAlarms(yolink, WM_index = None):
         try:
             logging.debug(yolink.type+' - getAlarms')
             if yolink.online:   
@@ -588,7 +588,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
             return(None)
         
 
-    def getAttributes(yolink):
+    def getAttributes(yolink, WM_index = None):
         try:
             logging.debug(yolink.type+' - getAttributes')
             if yolink.online:   
