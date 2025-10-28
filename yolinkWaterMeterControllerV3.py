@@ -606,13 +606,6 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
         
 
 
-        
-
-    #def getData(yolink):
-        #yolink.online = yolink.getOnlineStatus()
-    #    if yolink.online:   
-    #        return(yolink.getData())
-
 
 class YoLinkWaterMeterCtrl(YoLinkWaterMeter):
     def __init__(yolink, yoAccess,  deviceInfo):
