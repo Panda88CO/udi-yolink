@@ -152,8 +152,11 @@ class udiYoWaterMeterController(udi_interface.Node):
             if self.node is not None:
                 self.my_setDriver('TIME', self.yoWaterCtrl.getLastUpdateTime(), 151)
                 if self.yoWaterCtrl.online:
-                    self.my_setDriver('GV30', 1)
+                    #self.my_setDriver('GV30', 1)
                     state =  self.yoWaterCtrl.getValveState()
+
+                    state = self.yoWaterCtrl.getData('state', 'valve')
+                    logging.debug(f'valve state: {state}')
                     if state != None:
                         if state.upper() == 'OPEN':
                             self.valveState = 1
@@ -173,10 +176,12 @@ class udiYoWaterMeterController(udi_interface.Node):
                     meter  = self.yoWaterCtrl.getMeterReading()
                     logging.debug(f'meter: {meter}')
                     if meter != None:
-                        if 'water_runing' in meter:
-                            self.my_setDriver('ST', meter['water_runing'])
-                        else:
-                            self.my_setDriver('ST', None)
+                        #if 'water_runing' in meter:
+                        #    self.my_setDriver('ST', meter['water_runing'])
+                        self.my_setDriver('ST', self.bool2ISY(self.yoWaterCtrl.getData('state','waterFlowing')))
+                        #else:
+                        #    self.my_setDriver('ST', None)
+                        '''
                         if 'total' in meter:
                             self.my_setDriver('GV1', meter['total'],  self.unit2uom())
                         else:
@@ -193,7 +198,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                             self.my_setDriver('GV3', meter['recent_duration'],  44)
                         else:
                             self.my_setDriver('GV3', None)
-
+                        '''
                     pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                     logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
                     if pwr_mode == 'PowerLine':
