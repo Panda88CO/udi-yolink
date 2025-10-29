@@ -173,32 +173,32 @@ class udiYoWaterMeterController(udi_interface.Node):
                         self.last_state = state
 
 
-                    meter  = self.yoWaterCtrl.getMeterReading()
-                    logging.debug(f'meter: {meter}')
-                    if meter != None:
+                    #meter  = self.yoWaterCtrl.getMeterReading()
+                    #logging.debug(f'meter: {meter}')
+                    #if meter != None:
                         #if 'water_runing' in meter:
                         #    self.my_setDriver('ST', meter['water_runing'])
-                        self.my_setDriver('ST', self.bool2ISY(self.yoWaterCtrl.getData('state','waterFlowing')))
+                    self.my_setDriver('ST', self.bool2ISY(self.yoWaterCtrl.getData('state','waterFlowing')))
                         #else:
                         #    self.my_setDriver('ST', None)
-                        '''
-                        if 'total' in meter:
-                            self.my_setDriver('GV1', meter['total'],  self.unit2uom())
-                        else:
-                            self.my_setDriver('GV1', None)
-                        if 'daily_usage' in meter:
-                            self.my_setDriver('GV10', meter['daily_usage'],  self.unit2uom())
-                        else:
-                            self.my_setDriver('GV10', None)
-                        if 'recent_amount' in meter:
-                            self.my_setDriver('GV2', meter['recent_amount'],  self.unit2uom())
-                        else:
-                            self.my_setDriver('GV2', None)
-                        if 'recent_duration' in meter:
-                            self.my_setDriver('GV3', meter['recent_duration'],  44)
-                        else:
-                            self.my_setDriver('GV3', None)
-                        '''
+                    '''
+                    if 'total' in meter:
+                        self.my_setDriver('GV1', meter['total'],  self.unit2uom())
+                    else:
+                        self.my_setDriver('GV1', None)
+                    if 'daily_usage' in meter:
+                        self.my_setDriver('GV10', meter['daily_usage'],  self.unit2uom())
+                    else:
+                        self.my_setDriver('GV10', None)
+                    if 'recent_amount' in meter:
+                        self.my_setDriver('GV2', meter['recent_amount'],  self.unit2uom())
+                    else:
+                        self.my_setDriver('GV2', None)
+                    if 'recent_duration' in meter:
+                        self.my_setDriver('GV3', meter['recent_duration'],  44)
+                    else:
+                        self.my_setDriver('GV3', None)
+                    '''
                     pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                     logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
                     if pwr_mode == 'PowerLine':
