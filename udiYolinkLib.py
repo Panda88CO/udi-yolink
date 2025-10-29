@@ -95,7 +95,7 @@ def my_setDriver(self, key, value, Unit=None):
     try:
         if value is None:
             logging.debug('None value passed = seting 99, UOM 25')
-            self.node.setDriver(key, 99, True, True, 25)
+            self.node.setDriver(key, 99, False, False, 25)
         else:
             
             if key in ['GV20']: # Connection state o
@@ -106,10 +106,11 @@ def my_setDriver(self, key, value, Unit=None):
                 except Exception as e:
                     logging.debug('Local connection - yolink class not ready - continue : {}'.format(e))
             if Unit:
-                self.node.setDriver(key, value, True, True, Unit)
+                self.node.setDriver(key, value, False, False, Unit)
             else:
-                self.node.setDriver(key, value, True, True)
+                self.node.setDriver(key, value, False, False)
     except ValueError: #A non number was passed 
+        logging.error('Non numeric value passed to my_setDriver - setting 99 ')
         self.node.setDriver(key, 99, True, True, 25)
         
 
@@ -169,6 +170,14 @@ def state2Nbr(self, val):
     if val == 'normal':
         return(0)
     elif val == 'alert':
+        return(1)
+    else:
+        return(99)
+
+def state2ISY(self, val):
+    if val in ['normal', 'off' , False, 'closed']:
+        return(0)
+    elif val in ['alert', 'on', True, 'open']:
         return(1)
     else:
         return(99)
