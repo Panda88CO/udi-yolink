@@ -102,21 +102,25 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         return(water_temp)
        
 
-    def getValveState(yolink):
+    def getValveState(yolink, WM_index = None):
         logging.debug(yolink.type+' - getValveState')
         #yolink.online = yolink.getOnlineStatus()
+        valves = None
         if yolink.online:   
             if yolink.dState in yolink.dataAPI[yolink.dData]:
                 if 'valve' in yolink.dataAPI[yolink.dData][yolink.dState]:
-                    if  yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'open':
-                        return('open')
-                    elif yolink.dataAPI[yolink.dData][yolink.dState]['valve'] == 'close':
-                        return('closed')
-                    else:
-                        return('Unkown')
-            else:
-                return(None)
+                    valves = yolink.dataAPI[yolink.dData][yolink.dState]['valve']
+                if 'state' in yolink.dataAPI[yolink.dData][yolink.dState] and 'valves' in yolink.dataAPI[yolink.dData][yolink.dState]['state'] :                    
+                    valves = yolink.dataAPI[yolink.dData][yolink.dState]['state']['valves']
+                    if isinstance(yolink.dataAPI[yolink.dData][yolink.dState]['state']['valves'], dict):
+                        valves = yolink.dataAPI[yolink.dData][yolink.dState]['state']['valves']
+                        if isinstance( WM_index, int):
+                            if str(WM_index) in valves:
+                                valves[str(WM_index)] == yolink.dataAPI[yolink.dData][yolink.dState]['state']['valves'][str(WM_index)]
+
+        return(valves)
     
+
     def getData(yolink, category, key, WM_index = None):    
         try:
             logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
@@ -284,33 +288,43 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             return(None)
     '''
     
-    def getAlarms(yolink):
+    def getAlarms(yolink, WM_index = None):
         try:
             logging.debug(yolink.type+' - getAlarms')
+            alarms = {}
             if yolink.online:   
 
                 if 'alarm' in yolink.dataAPI[yolink.dData]:
                     alarms = yolink.dataAPI[yolink.dData]['alarm']
-                    return(alarms)
-                else:
-                    return(None)
+                    if isinstance( WM_index, int):
+                        for item in yolink.dataAPI[yolink.dData]['alarm']:
+                            if isinstance(yolink.dataAPI[yolink.dData]['alarm'][item], dict):
+                                if str(WM_index) in item:
+                                    alarms[item] = yolink.dataAPI[yolink.dData]['alarm'][item][str(WM_index)]
+            return(alarms)
+
         except KeyError as e:
             logging.error(f'Exception : {e}')
             return(None)
         
 
-    def getAttributes(yolink):
+    def getAttributes(yolink,  WM_index = None):
         try:
             logging.debug(yolink.type+' - getAttributes')
+            attributes = {}
             if yolink.online:   
                 if 'attributes' in yolink.dataAPI[yolink.dData]:
                     attributes = yolink.dataAPI[yolink.dData]['attributes' ]
                     if 'meterUnit' in attributes and yolink.uom is None:
                         yolink.uom = attributes['meterUnit']
-                    return(attributes)
-                
-                else:
-                    return(None)
+                    if isinstance( WM_index, int):
+                        for item in yolink.dataAPI[yolink.dData]['attributes']:
+                            if isinstance(yolink.dataAPI[yolink.dData]['attributes'][item], dict):
+                                if str(WM_index) in item:
+                                    attributes[item] = yolink.dataAPI[yolink.dData]['alarm'][item][str(WM_index)]                        
+                                    
+            return(attributes)
+
         except KeyError as e:
             logging.error(f'Exception : {e}')
             return(None)
