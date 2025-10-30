@@ -340,7 +340,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         #yolink.online = yolink.getOnlineStatus()
     #    if yolink.online:   
     #        return(yolink.getData())
-
+"""
 class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__( yoAccess,  deviceInfo, callback)
@@ -621,7 +621,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
             logging.error(f'Exception : {e}')
             return(None)
         
-
+"""
 
 
 class YoLinkWaterMeterCtrl(YoLinkWaterMeter):
