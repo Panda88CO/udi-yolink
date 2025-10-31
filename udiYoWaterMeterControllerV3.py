@@ -21,7 +21,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterController(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, w_unit2ISY, save_cmd_state, retrieve_cmd_state, state2ISY, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, w_unit2ISY, water_meter_unit2uom, state2ISY, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yowatermeterCtrl'
     '''
@@ -112,23 +112,16 @@ class udiYoWaterMeterController(udi_interface.Node):
         time.sleep(2)
         #self.my_setDriver('GV30', 1)
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
-        meter_unit = self.yoWaterCtrl.getData('attributes', 'meterUnit')
-        logging.debug(f'meter unit : {meter_unit}')
-        self.my_setDriver('GV4', meter_unit, 25)          
-        isy_uom = None
-        if meter_unit == 0:
-           self.water_uom = 69 # gallon
-        if self.yoWaterCtrl.uom == 1:
-            self.water_uom = 6 #ft^3
-        if self.yoWaterCtrl.uom == 2:
-            self.water_uom = 8 #m^3
-        if self.yoWaterCtrl.uom == 3:
-            self.water_uom = 35 # liter   
-        else:
-            self.water_uom = None
-
+      
+        logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
+        self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
+        self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
         self.node_ready = True
         self.updateData()
+
+
+    
+
 
     def stop (self):
         logging.info('Stop udiYoWaterMeterController')
@@ -170,21 +163,10 @@ class udiYoWaterMeterController(udi_interface.Node):
                 self.my_setDriver('TIME', self.yoWaterCtrl.getLastUpdateTime(), 151)
                 if self.yoWaterCtrl.online:
                     self.my_setDriver('GV30', 1)
-                    if self.water_uom is None:
-                        meter_unit = self.yoWaterCtrl.getData('attributes', 'meterUnit')
-                        logging.debug(f'meter unit : {meter_unit}')
-                        self.my_setDriver('GV4', meter_unit, 25)          
-                        isy_uom = None
-                        if meter_unit == 0:
-                           self.water_uom = 69 # gallon
-                        if self.yoWaterCtrl.uom == 1:
-                            self.water_uom = 6 #ft^3
-                        if self.yoWaterCtrl.uom == 2:
-                            self.water_uom = 8 #m^3
-                        if self.yoWaterCtrl.uom == 3:
-                            self.water_uom = 35 # liter   
-                        else:
-                            self.water_uom = None
+                    if self.meter_uom is None:
+                        logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
+                        self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
+                        self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
 
                     state = self.yoWaterCtrl.getData('state', 'valve')
                     logging.debug(f'valve state: {state}')                    
@@ -216,14 +198,14 @@ class udiYoWaterMeterController(udi_interface.Node):
 
                     total_meter = self.yoWaterCtrl.getData('state','meter')
                     logging.debug(f'total meter : {total_meter}')
-                    self.my_setDriver('GV10', total_meter,  self.water_uom)
+                    self.my_setDriver('GV10', total_meter,  self.meter_uom)
 
                     daily_use = self.yoWaterCtrl.getData('dailyUsage', 'amount')
                     logging.debug(f'daily use : {daily_use}')   
-                    self.my_setDriver('GV1', daily_use,  self.water_uom)
+                    self.my_setDriver('GV1', daily_use,  self.meter_uom)
                     recent_amount = self.yoWaterCtrl.getData('recentUsage','amount')
                     logging.debug(f'recent amount : {recent_amount}')
-                    self.my_setDriver('GV2', recent_amount,  self.water_uom)
+                    self.my_setDriver('GV2', recent_amount,  self.meter_uom)
                     recent_duration = self.yoWaterCtrl.getData('recentUsage','duration')
                     logging.debug(f'recent duration : {recent_duration}')
                     self.my_setDriver('GV3', recent_duration,  44)  
@@ -296,7 +278,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             
                     #leak_limit = self.yoWaterCtrl.getData('attributes', 'leakLimit')    
                     #logging.debug(f'leak limit : {leak_limit}')  
-                    #self.my_setDriver('GV12', leak_limit, self.water_uom)
+                    #self.my_setDriver('GV12', leak_limit, self.meter_uom)
                     #auto_close = self.yoWaterCtrl.getData('attributes', 'autoCloseValve')    
                     #logging.debug(f'auto close : {auto_close}') 
                     #self.my_setDriver('GV13', self.bool2ISY( auto_close), 25)
@@ -308,7 +290,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     #self.my_setDriver('GV17', self.bool2ISY(overrun_duration_acv), 25)
                     #overrun_amount = self.yoWaterCtrl.getData('attributes', 'overrunAmount')    
                     #logging.debug(f'overrun amount : {overrun_amount}')     
-                    #self.my_setDriver('GV14', overrun_amount, self.water_uom)
+                    #self.my_setDriver('GV14', overrun_amount, self.meter_uom)
                     #overrun_duration = self.yoWaterCtrl.getData('attributes', 'overrunDuration')    
                     #logging.debug(f'overrun duration : {overrun_duration}')
                     #self.my_setDriver('GV16', overrun_duration, 44) 
@@ -317,7 +299,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                    # if 'meterUnit' in attributes:
                    #     self.my_setDriver('GV11', attributes['meterUnit'], 25)                    
                     if 'leakLimit' in attributes:
-                        self.my_setDriver('GV12', attributes['leakLimit'], self.water_uom)
+                        self.my_setDriver('GV12', attributes['leakLimit'], self.meter_uom)
                     if 'autoCloseValve' in attributes:
                         self.my_setDriver('GV13', self.bool2ISY(attributes['autoCloseValve']), 25)
                     if 'overrunAmountACV' in attributes:
@@ -325,7 +307,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     if 'overrunDurationACV' in attributes:
                         self.my_setDriver('GV17', self.bool2ISY(attributes['overrunDurationACV']), 25)
                     if 'overrunAmount' in attributes:
-                        self.my_setDriver('GV14', attributes['overrunAmount'],self.water_uom)
+                        self.my_setDriver('GV14', attributes['overrunAmount'],self.meter_uom)
                     if 'overrunDuration' in attributes:
                         self.my_setDriver('GV16', attributes['overrunDuration'], 44)
                     '''

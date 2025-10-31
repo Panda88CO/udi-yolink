@@ -91,7 +91,7 @@ def wait_for_node_done(self):
     self.n_queue.pop()
 
 def my_setDriver(self, key, value, Unit=None):
-    logging.debug(f'my_setDriver : {key} {value} {Unit} {self.drivers} ')
+    logging.debug(f'my_setDriver : {key} {value} {Unit} ')
     try:
         if any(item.get('driver') == key for item in self.drivers):
             if value is None:
@@ -110,6 +110,9 @@ def my_setDriver(self, key, value, Unit=None):
                     self.node.setDriver(key, value, False, False, Unit)
                 else:
                     self.node.setDriver(key, value, False, False)
+        else:
+            logging.debug(f'Passed driver {key} does not exist in {self.drivers}')
+
     except ValueError: #A non number was passed 
         logging.error('Non numeric value passed to my_setDriver - setting 99 ')
         self.node.setDriver(key, 99, True, True, 25)
@@ -141,7 +144,18 @@ def w_unit2ISY(self, unit):
         return(unit)
     else:
         return(None)
-    
+
+def water_meter_unit2uom(self, meter_unit ):
+    water_uom = None
+    if meter_unit == 0:
+        water_uom  = 69 # gallon
+    if meter_unit == 1:
+        water_uom = 6 #ft^3
+    if meter_unit == 2:
+        water_uom = 8 #m^3
+    if meter_unit == 3:
+        water_uom = 35 # liter   
+    return(water_uom)
 
 def bool2Nbr (self, data):
     if data is True:
