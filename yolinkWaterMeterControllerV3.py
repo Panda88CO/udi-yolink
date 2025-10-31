@@ -48,24 +48,27 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     
 
     
-    def updateStatus(yolink, data):
+    def updateStatus(yolink, data, WM_index = None):
         yolink.updateCallbackStatus(data, False)
 
 
-    def setState(yolink, state):
-        logging.debug(yolink.type+' - setState')
+
+
+
+    def setValveState(yolink, state):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
-            if state.lower() not in yolink.stateList:
-                logging.error('Unknows state passed')
-                return(False)
-            if state.lower() == 'on':
-                state = 'open'
-            if state.lower() == 'off':
-                state = 'closed'
             data = {}
             data['params'] = {}
-            data['params']['valve'] = state.lower()
+            if isinstance(state, str):
+                if state.lower() in ['on', 'open']:
+                    state = 'open'
+                if state.lower() in ['off', 'closed']:
+                    state = 'closed'
+                data['params']['valve'] = state.lower()
+            elif isinstance(state, dict) and len(state) > 0:
+                data['params']['valves'] = state
+
             return(yolink.setDevice(data))
         
     #def setAttrib(yolink, attributes):
@@ -337,7 +340,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         #yolink.online = yolink.getOnlineStatus()
     #    if yolink.online:   
     #        return(yolink.getData())
-
+"""
 class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__( yoAccess,  deviceInfo, callback)
@@ -618,7 +621,7 @@ class YoLinkWaterMultiMeter(YoLinkMQTTDevice):
             logging.error(f'Exception : {e}')
             return(None)
         
-
+"""
 
 
 class YoLinkWaterMeterCtrl(YoLinkWaterMeter):
