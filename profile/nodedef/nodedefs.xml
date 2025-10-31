@@ -674,27 +674,27 @@
       <editors />
       <sts>
          <st id="ST" editor="waterrun" /> <!-- water runing-->
-
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="flow" />
          <st id="GV10" editor="flow" />     
          <st id="GV2" editor="flow" /> <!-- recent use -->
-
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="tempF" />
          <st id="GV4" editor="waterunit" />
-         <st id="GV5" editor="alarm" />
-         <st id="GV6" editor="alarm" />
-         <st id="GV7" editor="alarm" />
-         <st id="GV8" editor="alarm" />
-         <st id="GV9" editor="alarm" />         
-         <st id="GV11" editor="alarm" /> <!-- meaure unit -->
-         <st id="GV12" editor="alarm" /> <!-- leak limit -->
-         <st id="GV13" editor="alarm" /> <!-- Leak auto shutoff -->
+         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
+         <st id="GV6" editor="alarm" /> <!--overrun-->
+         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
+         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
+         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
+         <st id="GV11" editor="alarm" /> <!-- open reminder -->
+         <st id="GV12" editor="alarm" /> <!-- valve error -->
+         <st id="GV13" editor="alarm" /> <!-- high temp-->
+         <st id="GV14" editor="alarm" /> <!-- Low temp-->
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />     
+     </sts>         
       <cmds>
          <sends>
             <!--<cmd id="DON" editor="manstate"  />               

@@ -249,11 +249,11 @@ class udiYoWaterMeterController(udi_interface.Node):
 
                     high_T_error = self.yoWaterCtrl.getData('alarm', 'highTemp')   #valveError
                     logging.debug(f'high temp error : {high_T_error}')
-                    self.my_setDriver('GV12', self.state2ISY(high_T_error))    
+                    self.my_setDriver('GV13', self.state2ISY(high_T_error))    
 
                     low_T_error = self.yoWaterCtrl.getData('alarm', 'lowTemp')   #valveError
                     logging.debug(f'low temp error : {low_T_error}')
-                    self.my_setDriver('GV13', self.state2ISY(low_T_error))
+                    self.my_setDriver('GV14', self.state2ISY(low_T_error))
 
 
 
