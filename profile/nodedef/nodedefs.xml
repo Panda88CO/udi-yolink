@@ -59,7 +59,7 @@
             <cmd id="DFOF"  />
 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="1" /> 
+               <p id="" editor="swctrl" init="GV0"> 
             </cmd >
             <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
@@ -133,7 +133,7 @@
             <cmd id="DFOF"  />
 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="1" /> 
+               <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
             <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
@@ -207,7 +207,7 @@
             <cmd id="DFOF"  />
 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="1" /> 
+               <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
             <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
@@ -303,7 +303,7 @@
             </cmd >
 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="1" /> 
+               <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
             <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
@@ -593,7 +593,7 @@
 
 
             <cmd id="USBCTRL" > 
-               <p id="" editor="usbctrl" init="1" /> 
+               <p id="" editor="usbctrl" init="GV0" /> 
             </cmd >
          </accepts>
       </cmds>
@@ -635,7 +635,7 @@
 
 
             <cmd id="MANCTRL" > 
-               <p id="" editor="manctrl" init="1" /> 
+               <p id="" editor="manctrl" init="GV0" /> 
             </cmd >
             <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
@@ -709,12 +709,12 @@
             <cmd id="DOF" /> 
 
             <cmd id="SETATTRIB">
-               <p id="L_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="L_OFF" editor="set_enable" init="1" />       
-               <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="OR_OFF" editor="set_enable" init="1" />   
-               <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
-               <p id="ORT_OFF" editor="set_enable" init="1" />   
+               <p id="L_LIMIT" editor="leaklimit"  /> 
+               <p id="L_OFF" editor="set_enable"  />       
+               <p id="OR_LIMIT" editor="leaklimit"  /> 
+               <p id="OR_OFF" editor="set_enable"  />   
+               <p id="ORT_LIMIT" editor="setminutes"  /> 
+               <p id="ORT_OFF" editor="set_enable"  />   
             </cmd >
             <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
@@ -763,12 +763,12 @@
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
             <cmd id="SETATTRIB">
-               <p id="L_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="L_OFF" editor="set_enable" init="1" />       
-               <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="OR_OFF" editor="set_enable" init="1" />   
-               <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
-               <p id="ORT_OFF" editor="set_enable" init="1" />   
+               <p id="L_LIMIT" editor="leaklimit"  /> 
+               <p id="L_OFF" editor="set_enable"  />       
+               <p id="OR_LIMIT" editor="leaklimit"  /> 
+               <p id="OR_OFF" editor="set_enable"  />   
+               <p id="ORT_LIMIT" editor="setminutes" /> 
+               <p id="ORT_OFF" editor="set_enable" />   
             </cmd >
             <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
@@ -840,12 +840,12 @@
             <cmd id="DOF" /> 
 
             <cmd id="SETATTRIB">
-               <p id="L_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="L_OFF" editor="set_enable" init="1" />       
-               <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="OR_OFF" editor="set_enable" init="1" />   
-               <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
-               <p id="ORT_OFF" editor="set_enable" init="1" />   
+               <p id="L_LIMIT" editor="leaklimit"  /> 
+               <p id="L_OFF" editor="set_enable" />       
+               <p id="OR_LIMIT" editor="leaklimit"  /> 
+               <p id="OR_OFF" editor="set_enable"  />   
+               <p id="ORT_LIMIT" editor="setminutes" /> 
+               <p id="ORT_OFF" editor="set_enable"/>   
             </cmd >
             <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
@@ -895,9 +895,9 @@
             <cmd id="DOF" /> 
 
             <!--<cmd id="SETATTRIB">
-               <p id="L_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
+               <p id="L_LIMIT" editor="leaklimit"  /> 
+               <p id="OR_LIMIT" editor="leaklimit" /> 
+               <p id="ORT_LIMIT" editor="setminutes" /> 
             </cmd >-->
  
          </accepts>
@@ -941,9 +941,9 @@
             <cmd id="DOF" /> 
 
             <cmd id="SETATTRIB">
-               <p id="L_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="OR_LIMIT" editor="leaklimit" init="1" /> 
-               <p id="ORT_LIMIT" editor="setminutes" init="1" /> 
+               <p id="L_LIMIT" editor="leaklimit" /> 
+               <p id="OR_LIMIT" editor="leaklimit" /> 
+               <p id="ORT_LIMIT" editor="setminutes" /> 
             </cmd >
  
          </accepts>
@@ -1584,7 +1584,7 @@
          </sends>
          <accepts> 
             <cmd id="SIRENCTRL" > 
-               <p id="" editor="sirenctrl" init="1" /> 
+               <p id="" editor="sirenctrl" init="GV0" 
             </cmd >
             <cmd id="UPDATE" /> 
 
