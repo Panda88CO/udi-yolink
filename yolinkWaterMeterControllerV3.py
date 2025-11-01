@@ -155,6 +155,9 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
             ret_val = None  
             if yolink.online: 
+                if yolink.dataAPI[yolink.dData] is {}:
+                    logging.info(f'No data exists (no data returned)')
+                    return(ret_val)
                 if category is None:
                     if key in yolink.dataAPI[yolink.dData]:
                         ret_val = yolink.dataAPI[yolink.dData][key]

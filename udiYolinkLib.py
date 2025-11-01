@@ -91,7 +91,7 @@ def wait_for_node_done(self):
     self.n_queue.pop()
 
 def my_setDriver(self, key, value, Unit=None):
-    logging.debug(f'my_setDriver : {key} {value} {Unit} {self.drivers}')
+    logging.debug(f'my_setDriver : {key} {value} {Unit} ')
     try:
         if any(item.get('driver') == key for item in self.drivers):
             if value is None:
