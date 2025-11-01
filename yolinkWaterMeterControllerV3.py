@@ -77,26 +77,26 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
 
     def setValveState(yolink, state, WM_index=None):
         #yolink.online = yolink.getOnlineStatus()
-        if yolink.online:   
-            data = {}
-            data['params'] = {}
-            if isinstance(state, str):
-                if state.lower() in ['on', 'open']:
-                    state = 'open'
-                if state.lower() in ['off', 'closed']:
-                    state = 'closed'
-                if isinstance(WM_index, int):
-                    data['params'][]
-                
-                if isinstance(WM_index, int):
-                    data['params']['valves']={str(WM_index):state}
-                else:
-                    data['params']['valve'] = state
-            elif isinstance(state, dict) and len(state) > 0:
-                data['params']['valves'] = state
+        try:
+            if yolink.online:   
+                data = {}
+                state = state.lower()
+                data['params'] = {}
+                if isinstance(state, str):
+                    if state in ['on', 'open']:
+                        state = 'open'
+                    if state in ['off', 'closed']:
+                        state = 'closed'              
+                    if isinstance(WM_index, int) :
+                        data['params']['valves']={str(WM_index):state}
+                    else:
+                        data['params']['valve'] = state
+                elif isinstance(state, dict) and len(state) > 0:
+                    data['params']['valves'] = state
 
-            return(yolink.setDevice(data))
-        
+                return(yolink.setDevice(data))
+        except Exception as e:
+            logging.error(f'Exception for {state}, {WM_index} as {e} ')
     #def setAttrib(yolink, attributes):
     #    logging.debug(yolink.type+' - setAttributes')
     #    return(yolink.setAttributes(attributes))
