@@ -85,8 +85,8 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 if isinstance(state, str):
                     if state in ['on', 'open']:
                         state = 'open'
-                    if state in ['off', 'closed']:
-                        state = 'closed'              
+                    if state in ['off', 'closed', 'close']:
+                        state = 'close'              
                     if isinstance(WM_index, int) :
                         data['params']['valves']={str(WM_index):state}
                     else:

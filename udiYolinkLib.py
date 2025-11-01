@@ -190,9 +190,9 @@ def state2Nbr(self, val):
         return(99)
 
 def state2ISY(self, val):
-    if val in ['normal', 'off' , False, 'closed']:
+    if val in ['normal', 'off' , False, 'closed', 'close']:
         return(0)
-    elif val in ['alert', 'on', True, 'open']:
+    elif val in ['alert', 'on', True, 'opened', 'open']:
         return(1)
     else:
         return(99)
