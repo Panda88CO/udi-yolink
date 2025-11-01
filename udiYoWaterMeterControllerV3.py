@@ -44,7 +44,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV10', 'value': 99, 'uom': 25}, #water use daily             
             {'driver': 'GV2', 'value': 0, 'uom': 69},  #wateruse recent
             {'driver': 'GV3', 'value': 0, 'uom': 44},  #Wateruse duration
-            {'driver': 'GV4', 'value': 99, 'uom': 25}, #alarm
+            {'driver': 'GV4', 'value': 99, 'uom': 25}, #Measure Unit
             {'driver': 'GV5', 'value': 99, 'uom': 25}, 
             {'driver': 'GV6', 'value': 99, 'uom': 25}, 
             {'driver': 'GV7', 'value': 99, 'uom': 25}, 
@@ -52,9 +52,9 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV9', 'value': 99, 'uom': 25}, 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
-            {'driver': 'GV11', 'value': 99, 'uom' : 25}, # Unit
-            {'driver': 'GV12', 'value': 99, 'uom' : 6}, #  leak limit
-            #{'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
+            {'driver': 'GV11', 'value': 99, 'uom' : 25}, # 
+            {'driver': 'GV12', 'value': 99, 'uom' : 25}, #  leak limit
+            {'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
             #{'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
             #{'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             #{'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
