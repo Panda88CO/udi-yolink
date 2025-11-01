@@ -75,7 +75,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 logging.info(f'Water Meter Controller - meter unit set to {yolink.meter_unit}')
 
 
-    def setValveState(yolink, state):
+    def setValveState(yolink, state, WM_index=None):
         #yolink.online = yolink.getOnlineStatus()
         if yolink.online:   
             data = {}
@@ -85,7 +85,13 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                     state = 'open'
                 if state.lower() in ['off', 'closed']:
                     state = 'closed'
-                data['params']['valve'] = state.lower()
+                if isinstance(WM_index, int):
+                    data['params'][]
+                
+                if isinstance(WM_index, int):
+                    data['params']['valves']={str(WM_index):state}
+                else:
+                    data['params']['valve'] = state
             elif isinstance(state, dict) and len(state) > 0:
                 data['params']['valves'] = state
 

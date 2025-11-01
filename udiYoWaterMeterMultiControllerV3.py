@@ -434,7 +434,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
     def set_open(self, command = None):
         logging.info('udiYoWaterMeterMultiController - set_open')
-        self.yoWaterCtrl.setState('open')
+        self.yoWaterCtrl.setValveState('open', self.WM_index)
         self.valveState  = 1
         self.my_setDriver('GV0',self.valveState )
 
@@ -442,7 +442,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
     def set_close(self, command = None):
         logging.info('udiYoWaterMeterMultiController - set_close')
-        self.yoWaterCtrl.setState('closed')
+        self.yoWaterCtrl.setValveState('closed', self.WM_index)
         self.valveState  = 0
         self.my_setDriver('GV0',self.valveState )
         #self.node.reportCmd('DOF')
