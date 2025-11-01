@@ -91,7 +91,7 @@ def wait_for_node_done(self):
     self.n_queue.pop()
 
 def my_setDriver(self, key, value, Unit=None):
-    logging.debug(f'my_setDriver : {key} {value} {Unit} ')
+    logging.debug(f'my_setDriver : {key} {value} {Unit} {self.drivers}')
     try:
         if any(item.get('driver') == key for item in self.drivers):
             if value is None:
@@ -106,10 +106,10 @@ def my_setDriver(self, key, value, Unit=None):
                             value = value + 3
                     except Exception as e:
                         logging.debug('Local connection - yolink class not ready - continue : {}'.format(e))
-                if Unit:
-                    self.node.setDriver(key, value, False, False, Unit)
+                if isinstance(Unit, int):
+                    self.node.setDriver(key, value, True, False, uom=Unit)
                 else:
-                    self.node.setDriver(key, value, False, False)
+                    self.node.setDriver(key, value,True, False)
         else:
             logging.debug(f'Passed driver {key} does not exist in {self.drivers}')
 
