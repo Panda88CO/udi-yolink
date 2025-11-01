@@ -59,7 +59,7 @@
             <cmd id="DFOF"  />
 
             <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="GV0"> 
+               <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
             <!--<cmd id="ONDELAY" > 
                <p id="" editor="delaymin" init="GV1" /> 
@@ -1584,7 +1584,7 @@
          </sends>
          <accepts> 
             <cmd id="SIRENCTRL" > 
-               <p id="" editor="sirenctrl" init="GV0" 
+               <p id="" editor="sirenctrl" init="GV0" />
             </cmd >
             <cmd id="UPDATE" /> 
 
