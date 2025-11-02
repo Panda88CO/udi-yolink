@@ -35,7 +35,6 @@
   <editor id="tempC"> 
         <range uom="4" min="-40" max="105" prec="1" />
         <range uom="17" min="-40" max="221" prec="1" />
-        
         <range uom="25" subset="98,99" nls="wl_state" />
   </editor>
   <editor id="tempunit"> 
