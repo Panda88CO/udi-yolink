@@ -704,7 +704,7 @@ suspended-2=Offline
 suspended-3=Online - Local
 suspended-4=Suspended - Local
 suspended-5=Offline - Local
-suspended-6=NO DATA-DATA not updated
+suspended-6=Command failure - No data returned
 suspended-99=Unknown
 
 
