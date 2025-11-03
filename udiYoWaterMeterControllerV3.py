@@ -55,7 +55,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV11', 'value': 99, 'uom' : 25}, # 
             {'driver': 'GV12', 'value': 99, 'uom' : 25}, #  leak limit
             {'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
-            #{'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
+            {'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
             #{'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             #{'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
             #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
