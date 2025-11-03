@@ -35,7 +35,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
     def initNode(yolink):
         logging.debug('init node')
         yolink.WMcount = None
-        yolink.water_unit = None
+        yolink.meter_unit = None
         yolink.water_meter_count = 1 
         yolink.refreshDevice()
         time.sleep(2)
@@ -69,12 +69,11 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                 logging.info(f'Water Meter Controller - {yolink.water_meter_count} meters found')
 
     def getMeterUnit(yolink):   
-        yolink.water_unit = None
+        yolink.meter_unit = None
         if yolink.online:
             meter_unit = yolink.getData('attributes', 'meterUnit')
-            if meter_unit is not None:
-                yolink.meter_unit = meter_unit
-                logging.info(f'Water Meter Controller - meter unit set to {yolink.meter_unit}')
+            yolink.meter_unit = meter_unit
+            logging.info(f'Water Meter Controller - meter unit set to {yolink.meter_unit}')
 
 
     def setValveState(yolink, state, WM_index=None):
