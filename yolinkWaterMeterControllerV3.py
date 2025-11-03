@@ -29,18 +29,21 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         yolink.MQTT_type = 'c'
         yolink.uom = None
         #time.sleep(1)
-        yolink.water_unit = None
-        yolink.water_meter_count = 1 
+
 
     
     def initNode(yolink):
         logging.debug('init node')
         yolink.WMcount = None
+        yolink.water_unit = None
+        yolink.water_meter_count = 1 
+
         yolink.refreshDevice()
+        time.sleep(2)
         yolink.getMeterCount()
         yolink.getMeterUnit()
         
-        time.sleep(2)   
+
         if not yolink.online:
             logging.error('Water Meter Controller device not online')
         logging.debug(f'After init Unit: {yolink.water_unit } count: {yolink.water_meter_count}')
