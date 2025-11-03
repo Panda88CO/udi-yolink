@@ -478,7 +478,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                 'DOF'   : set_close,
                 #'SETATTRIB' : set_attributes,
                 #'VALVECTRL': waterCtrlControl, 
-                'DELAYCTRL' : program_delays,
+                #'DELAYCTRL' : program_delays,
                 #'OFFDELAY' : prepOffDelay 
                 }
 
