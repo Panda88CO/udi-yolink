@@ -181,7 +181,7 @@
      <range uom="25" subset="0,1,2,3" nls="cmdsetting" />
    </editor> 
    <editor id="suspendstate"> 
-     <range uom="25" subset="0,1,2,3,4,5, 99" nls="suspended" />
+     <range uom="25" subset="0,1,2,3,4,5,6, 99" nls="suspended" />
    </editor> 
    <editor id="alarm"> 
      <range uom="25" subset="0,1, 98,99" nls="alarm" />

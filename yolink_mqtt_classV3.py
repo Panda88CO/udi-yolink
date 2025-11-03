@@ -90,6 +90,7 @@ class YoLinkMQTTDevice(object):
                             , yolink.lastMessage:{}
                             ,'lastStateTime':{}
                             , yolink.dOnline:False
+                            ,'emptyData': False
                             , yolink.dData :{yolink.dState:{}
                                              }
                             }
@@ -100,6 +101,7 @@ class YoLinkMQTTDevice(object):
                             , yolink.lastMessage:{}
                             ,'lastStateTime':{}
                             , yolink.dOnline:False
+                            ,'emptyData': False                            
                             , yolink.dData :{   yolink.dState:{}
                                                 ,yolink.dSchedule : [] 
                                                 }
@@ -111,6 +113,7 @@ class YoLinkMQTTDevice(object):
                             , yolink.lastMessage:{}
                             ,'lastStateTime':{}
                             , yolink.dOnline :False
+                            ,'emptyData': False                            
                             , yolink.dData :{ yolink.dState:{} }
                             }  
             yolink.extDelayTimer = None
@@ -1205,11 +1208,21 @@ class YoLinkMQTTDevice(object):
     def updateHourlyData(yolink, data):
         logging.debug('{} - updateHourlyData : {}'.format(yolink.type , json.dumps(data, indent=4)))
 
+    def emptyData(yolink):
+        logging.debug('{} - emptyData : {}'.format(yolink.type , yolink.dataAPI['emptyData']))
+        return(yolink.dataAPI['emptyData'] )
+
     #@measure_time
     def updateStatusData  (yolink, data):
         try:
             logging.debug('{} - updateStatusData : {}'.format(yolink.type , json.dumps(data, indent=4)))
-            #yolink.setOnline(data)
+            if data[yolink.dData] == {}:    
+                logging.debug('Empty data received - do not update data to blank data')
+                yolink.dataAPI['emptyData'] = True
+                return
+            else:
+                yolink.dataAPI['emptyData'] = False
+        
             if 'reportAt' in data[yolink.dData] :
                 reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
                 yolink.dataAPI['lastStateTime'] = (reportAt.timestamp() -  yolink.timezoneOffsetSec)*1000
