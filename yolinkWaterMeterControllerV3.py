@@ -40,11 +40,8 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         yolink.refreshDevice()
         time.sleep(2)
 
-        
-
         if not yolink.online:
             logging.error('Water Meter Controller device not online')
-        logging.debug(f'After init Unit: {yolink.water_unit } count: {yolink.water_meter_count}')
         #    yolink.refreshSchedules()
         #else:
         #    
