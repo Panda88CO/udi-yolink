@@ -850,8 +850,8 @@
             </cmd >
             <!--<cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
-               <p id="offdelay" editor="delaymin" init="GV2" /> -->
-             </cmd >   
+               <p id="offdelay" editor="delaymin" init="GV2" /> 
+             </cmd >   -->
   
          </accepts>
       </cmds>
