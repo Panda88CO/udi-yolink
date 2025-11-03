@@ -37,11 +37,9 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         yolink.WMcount = None
         yolink.water_unit = None
         yolink.water_meter_count = 1 
-
         yolink.refreshDevice()
         time.sleep(2)
-        yolink.getMeterCount()
-        yolink.getMeterUnit()
+
         
 
         if not yolink.online:
