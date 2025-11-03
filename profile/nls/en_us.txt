@@ -161,7 +161,7 @@ ST-nlsmultiout-GV20-NAME=Connection State
 ST-nlsmultiout-GV30-NAME=Online State
 ST-nlsmultiout-TIME-NAME=Last device update
 ST-nlsmultiout-CLITEMP-NAME=Sensor Temperature
-ST--CLIHUM-NAME=Current Rel Humidity (%)
+ST-nlsmultiout-CLIHUM-NAME=Current Rel Humidity (%)
 
 CMD-nlsmultiout-DELAYCTRL-NAME=Program Delays
 CMD-nlsmultiout-DEFINESCH-NAME=Define Schedule
