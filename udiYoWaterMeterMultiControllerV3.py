@@ -100,6 +100,8 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             self.yoWaterCtrl.getMeterCount()
             self.yoWaterCtrl.getMeterUnit()
             logging.debug(f'Water_meter_count {self.yoWaterCtrl.water_meter_count} unit {self.yoWaterCtrl.meter_unit}')
+            self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
+            self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
             if self.yoWaterCtrl.water_meter_count > 1:
                 self.wm_nodes= {}
                 for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
@@ -143,7 +145,15 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             if self.node is not None:
                 self.my_setDriver('TIME', self.yoWaterCtrl.getLastUpdateTime(), 151)
                 if self.yoWaterCtrl.online:
-                    self.my_setDriver('ST', 1)                
+                    self.my_setDriver('ST', 1)   
+                    if self.yoWaterCtrl.emptyData():
+                        logging.debug('Empty data received - skip updateData')
+                        self.my_setDriver('GV20', 6)
+                        return
+                    if self.meter_uom is None:
+                        logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
+                        self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
+                        self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)            
                     pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                     logging.debug('udiYoWaterMeterMultiController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
                     if pwr_mode == 'PowerLine':
@@ -153,9 +163,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
                     leak = self.yoWaterCtrl.getData('alarm', 'leak')
                     logging.debug(f'leak : {leak}')
                     self.my_setDriver('GV5', self.state2ISY(leak))                 
-                    meter_unit = self.yoWaterCtrl.getData('attributes', 'meterUnit')
-                    logging.debug(f'meter unit : {meter_unit}')  
-                    self.my_setDriver('GV4', meter_unit, 25)                    
+               
                     if self.yoWaterCtrl.suspended:
                         self.my_setDriver('GV20', 1)
                     else:
@@ -189,7 +197,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
 
 class udiYoSubWaterMeter(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, w_unit2ISY, save_cmd_state, retrieve_cmd_state, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, w_unit2ISY, save_cmd_state, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yowatermeterSub'
     '''
@@ -301,8 +309,18 @@ class udiYoSubWaterMeter(udi_interface.Node):
         try:
             if self.node is not None:
                 if self.yoWaterCtrl.online:
-
+                    self.my_setDriver('GV30', 1)
+                    if self.yoWaterCtrl.emptyData():
+                        logging.debug('Empty data received - skip updateData')
+                        self.my_setDriver('GV20', 6)
+                        return
+                    if self.meter_uom is None:
+                        logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
+                        self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
+                        self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
                     state =  self.yoWaterCtrl.getData('state', 'valve', self.WM_index)
+                    #Needs to update 
+                    
                     if state != None:
                         if state.lower() == 'open':
                             self.valveState = 1
