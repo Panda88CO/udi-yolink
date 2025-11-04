@@ -85,7 +85,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
     def start(self):
         logging.info('Start - udiYoWaterMeterMultiController')
-        #self.my_setDriver('GV30', 1)
+        self.my_setDriver('GV30', 1)
         self.my_setDriver('GV20', 0)
         self.yoWaterCtrl= YoLinkWaterMeter(self.yoAccess, self.devInfo, self.updateStatus)
         self.water_meter_list = []
@@ -94,7 +94,12 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             return
         else:
             self.yoWaterCtrl.initNode()
-            logging.debug(f'Water_meter_count {self.yoWaterCtrl.water_meter_count}')
+            while not self.yoWaterCtrl.online:
+                logging.info('waiting for watermeter to be online')
+                time.sleep(1)
+            self.yoWaterCtrl.getMeterCount()
+            self.yoWaterCtrl.getMeterUnit()
+            logging.debug(f'Water_meter_count {self.yoWaterCtrl.water_meter_count} unit {self.yoWaterCtrl.meter_unit}')
             if self.yoWaterCtrl.water_meter_count > 1:
                 self.wm_nodes= {}
                 for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
