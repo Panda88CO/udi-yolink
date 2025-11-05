@@ -288,7 +288,6 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
     def checkDataUpdate(self):
         if self.yoWaterCtrl.data_updated():
-
             self.updateData()
 
 
