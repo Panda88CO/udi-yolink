@@ -704,9 +704,8 @@ suspended-2=Offline
 suspended-3=Online - Local
 suspended-4=Suspended - Local
 suspended-5=Offline - Local
-suspended-6=Command failure - No data returned
+suspended-6=Low Power Mode - Control Not Possible
 suspended-99=Unknown
-
 
 
 deviceAlert-0=Normal
