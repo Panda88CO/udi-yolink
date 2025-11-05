@@ -844,9 +844,9 @@ class YoLinkInitPAC(object):
     def check_retry_queue(yoAccess):
         '''check_retry_queue'''
         while not yoAccess.stop_queues:
-            try:
-                logging.debug(f'{yoAccess.access_mode} - Testing for command retry - queue size {yoAccess.retryQueue.qsize()}  ')                
+            try:    
                 if not yoAccess.retryQueue.empty():
+                    logging.debug(f'{yoAccess.access_mode} - Checking retry - queue size {yoAccess.retryQueue.qsize()}  ')                
                     temp_list = []
                     while not yoAccess.retryQueue.empty():
                         temp_list.append(yoAccess.retryQueue.get(timeout = 5))
