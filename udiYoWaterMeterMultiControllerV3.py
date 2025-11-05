@@ -244,8 +244,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.timer_cleared = True
         self.timer_update = 5
         self.timer_expires = 0
-        self.onDelay = 0
-        self.offDelay = 0
+        self.meter_uom = None
         self.valveState = 99 # needed as class c device - keep value until online again 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -268,7 +267,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         #self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.yoWaterCtrl.devInfo, self.updateStatus)
         
         time.sleep(4)
-        self.yoWaterCtrl.initNode()
+        #self.yoWaterCtrl.initNode()
         time.sleep(2)
 
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
