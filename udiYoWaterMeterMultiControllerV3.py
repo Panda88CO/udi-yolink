@@ -231,7 +231,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()     
         if self.temp_unit == 1:
-            self.id = 'yowatermeterMultiF'    
+            self.id = 'yowatermeterSubF'    
 
         self.WM_index = WMindex
         
@@ -539,7 +539,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                 'QUERY' : update,
                 'DON'   : set_open,
                 'DOF'   : set_close,
-                #SETATTRIB' : set_attributes,
+                'SETATTRIB' : set_attributes,
                 #'VALVECTRL': waterCtrlControl, 
                 #'DELAYCTRL' : program_delays,
                 #'OFFDELAY' : prepOffDelay 

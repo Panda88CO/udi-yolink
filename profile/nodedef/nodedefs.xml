@@ -804,7 +804,31 @@
       </cmds>
    </nodeDef> 
 
+  <nodeDef id="yowatermeterMultiF" nls="nlswatermeter">
+      <editors />
+      <sts>
+         <st id="ST" editor="status" /> <!-- On line-->
+         <st id="BATLVL" editor="batlevel" />
+         <st id="CLITEMP" editor="tempF" />
+         <st id="GV5" editor="alarm" /> 
+         <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
+         <st id="GV20" editor="suspendstate" />
+         
+         <st id="TIME" editor="unixtime" />                  
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />   -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
 
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" />  
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
  <nodeDef id="yowatermeterSub" nls="nlswatermeter">
       <editors />
@@ -857,7 +881,57 @@
       </cmds>
    </nodeDef> 
 
- 
+  <nodeDef id="yowatermeterSubF" nls="nlswatermeter">
+      <editors />
+      <sts>
+         <st id="ST" editor="waterrun" /> <!-- water runing-->
+
+         <st id="GV0" editor="manstate" />
+         <st id="GV1" editor="flow" />
+         <st id="GV10" editor="flow" />     
+         <st id="GV2" editor="flow" /> <!-- recent use -->
+         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
+         <st id="GV4" editor="waterunit" />
+         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
+         <st id="GV6" editor="alarm" /> <!--overrun-->
+         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
+         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
+         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
+         <st id="GV11" editor="alarm" /> <!-- open reminder -->
+         <st id="GV12" editor="alarm" /> <!-- valve error -->
+         <st id="GV13" editor="alarm" /> <!-- high temp-->
+         <st id="GV14" editor="alarm" /> <!-- Low temp-->
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />   -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+
+            <cmd id="SETATTRIB">
+               <p id="L_LIMIT" editor="leaklimit"  /> 
+               <p id="L_OFF" editor="set_enable" />       
+               <p id="OR_LIMIT" editor="leaklimit"  /> 
+               <p id="OR_OFF" editor="set_enable"  />   
+               <p id="ORT_LIMIT" editor="setminutes" /> 
+               <p id="ORT_OFF" editor="set_enable"/>   
+            </cmd >
+            <!--<cmd id="DELAYCTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" /> 
+             </cmd >   -->
+  
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
 
 <nodeDef id="yowatermeterOnly" nls="nlswatermeter">
       <editors />
