@@ -864,14 +864,14 @@
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
 
-            <!--<cmd id="SETATTRIB">
+            <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit"  /> 
                <p id="L_OFF" editor="set_enable" />       
                <p id="OR_LIMIT" editor="leaklimit"  /> 
                <p id="OR_OFF" editor="set_enable"  />   
                <p id="ORT_LIMIT" editor="setminutes" /> 
                <p id="ORT_OFF" editor="set_enable"/>   
-            </cmd >-->
+            </cmd >
             <!--<cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" /> 
@@ -988,7 +988,7 @@
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
          <st id="BATLVL" editor="batlevel" />
-         <st id="CLITEMP" editor="tempC" />
+         <st id="CLITEMP" editor="tempF" />
          <st id="GV5" editor="alarm" />
          <st id="GV6" editor="alarm" />
          <st id="GV7" editor="alarm" />

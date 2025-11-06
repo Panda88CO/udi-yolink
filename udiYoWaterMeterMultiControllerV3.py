@@ -230,8 +230,8 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.n_queue = []
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()     
-        if self.temp_unit == 1:
-            self.id = 'yowatermeterSubF'    
+        #if self.temp_unit == 1:
+        #    self.id = 'yowatermeterSubF'    
 
         self.WM_index = WMindex
         
