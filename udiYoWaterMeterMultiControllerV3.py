@@ -36,9 +36,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25}, # On line
-           
             {'driver': 'GV5', 'value': 99, 'uom': 25}, #Leak
-
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'GV4', 'value': 99, 'uom' : 25}, # Unit
             {'driver': 'GV20', 'value': 0, 'uom': 25},
@@ -216,9 +214,9 @@ class udiYoSubWaterMeter(udi_interface.Node):
             {'driver': 'GV8', 'value': 99, 'uom': 25},                                              
             {'driver': 'GV9', 'value': 99, 'uom': 25}, 
             {'driver': 'GV11', 'value': 99, 'uom' : 25}, # alarm
-            {'driver': 'GV12', 'value': 99, 'uom' : 6}, #  alarm
+            {'driver': 'GV12', 'value': 99, 'uom' : 25}, #  alarm
             {'driver': 'GV13', 'value': 99, 'uom' : 25}, # alarm
-            {'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
+            {'driver': 'GV14', 'value': 99, 'uom' : 25}, # Water flowing
              
             ]
 
