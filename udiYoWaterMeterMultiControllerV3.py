@@ -361,20 +361,20 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     #leak = self.yoWaterCtrl.getData('alarm', 'leak')
                     #logging.debug(f'leak : {leak}')
                     #self.my_setDriver('GV5', self.state2ISY(leak))
-                    amount_overrun = self.yoWaterCtrl.getData('alarm', 'overrunAmount24H', self.WM_index ) #amountOverrun24H,amountOverrun 
+                    amount_overrun = self.yoWaterCtrl.getData('alarm', 'amountOverrun24H', self.WM_index ) #amountOverrun24H,amountOverrun 
                     if amount_overrun is None: # try alternate key
                         amount_overrun = self.yoWaterCtrl.getData('alarm', 'amountOverrun')
                     logging.debug(f'overrunAmount24H : {amount_overrun}')     
                     self.my_setDriver('GV6', self.state2ISY(amount_overrun))
 
 
-                    duration_overrun = self.yoWaterCtrl.getData('alarm', 'overrunDurationOnce', self.WM_index) #durationOverrun overrunDurationOnce
+                    duration_overrun = self.yoWaterCtrl.getData('alarm', 'durationOverrun', self.WM_index) #durationOverrun overrunDurationOnce
                     if duration_overrun is None: # try alternate key
-                        duration_overrun = self.yoWaterCtrl.getData('alarm', 'durationOverrun', self.WM_index)
+                        duration_overrun = self.yoWaterCtrl.getData('alarm', 'overrunDurationOnce', self.WM_index)
                     logging.debug(f'duration overrun : {duration_overrun}')     
                     self.my_setDriver('GV7', self.state2ISY( duration_overrun))
 
-                    times_overrun_24h = self.yoWaterCtrl.getData('alarm', 'overrunTimes24H', self.WM_index) #overrunTimes24H
+                    times_overrun_24h = self.yoWaterCtrl.getData('alarm', 'timesOverrun24H', self.WM_index) #overrunTimes24H
                     logging.debug(f'times overrun 24h : {times_overrun_24h}')   
                     self.my_setDriver('GV8', self.state2ISY(times_overrun_24h))
 
