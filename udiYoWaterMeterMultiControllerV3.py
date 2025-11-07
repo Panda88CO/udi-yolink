@@ -265,10 +265,10 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
         #self.yoWaterCtrl= YoLinkWaterMultiMeter(self.yoAccess, self.yoWaterCtrl.devInfo, self.updateStatus)
         
-        time.sleep(4)
+        #time.sleep(4)
         #self.yoWaterCtrl.initNode()
         time.sleep(2)
-
+        self.yoWaterCtrl.getMeterUnit()
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         self.node_ready = True
         self.updateData()
@@ -306,7 +306,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         try:
             if self.node is not None:
                 if self.yoWaterCtrl.online:
-                    self.my_setDriver('GV30', 1)
+                    #self.my_setDriver('GV30', 1)
                     if self.yoWaterCtrl.emptyData():
                         logging.debug('Empty data received - skip updateData')
                         self.my_setDriver('GV20', 6)
