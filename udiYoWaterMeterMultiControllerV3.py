@@ -212,11 +212,12 @@ class udiYoSubWaterMeter(udi_interface.Node):
             {'driver': 'GV2', 'value': 0, 'uom': 69},  #wateruse recent
             {'driver': 'GV3', 'value': 0, 'uom': 44},  #Wateruse duration
             {'driver': 'GV4', 'value': 99, 'uom': 25}, #WATER uNITS
+
             {'driver': 'GV6', 'value': 99, 'uom': 25}, #alarm
             {'driver': 'GV7', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 99, 'uom': 25},                                              
-            {'driver': 'GV9', 'value': 99, 'uom': 25}, 
-            #{'driver': 'GV11', 'value': 99, 'uom' : 25}, # alarm
+            #{'driver': 'GV9', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV11', 'value': 99, 'uom' : 25}, # alarm
             {'driver': 'GV12', 'value': 99, 'uom' : 25}, #  alarm
             #{'driver': 'GV13', 'value': 99, 'uom' : 25}, # alarm
             #{'driver': 'GV14', 'value': 99, 'uom' : 25}, # Water flowing

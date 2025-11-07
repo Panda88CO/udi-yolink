@@ -783,9 +783,9 @@
       <sts>
          <st id="ST" editor="status" /> <!-- On line-->
          <st id="BATLVL" editor="batlevel" />
-         <st id="CLITEMP" editor="tempC" />
+         <!--<st id="CLITEMP" editor="tempC" />-->
          <st id="GV5" editor="alarm" /> 
-         <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
+         <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
          <st id="GV20" editor="suspendstate" />
          
          <st id="TIME" editor="unixtime" />                  
@@ -809,9 +809,9 @@
       <sts>
          <st id="ST" editor="status" /> <!-- On line-->
          <st id="BATLVL" editor="batlevel" />
-         <st id="CLITEMP" editor="tempF" />
+         <!--<st id="CLITEMP" editor="tempF" />-->
          <st id="GV5" editor="alarm" /> 
-         <st id="GV11" editor="waterunit" /> <!-- meaure unit -->
+         <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
          <st id="GV20" editor="suspendstate" />
          
          <st id="TIME" editor="unixtime" />                  
@@ -841,7 +841,7 @@
          <st id="GV2" editor="flow" /> <!-- recent use -->
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="GV4" editor="waterunit" />
-         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
+         <!--<st id="GV5" editor="alarm" />--> <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
          <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
