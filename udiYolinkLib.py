@@ -96,7 +96,7 @@ def my_setDriver(self, key, value, Unit=None, force=False):
         if any(item.get('driver') == key for item in self.drivers):
             if value is None:
                 logging.debug('None value passed = seting 99, UOM 25')
-                self.node.setDriver(key, 99, False, False, 25)
+                self.node.setDriver(key, 99, True, force, 25)
             else:
                 
                 if key in ['GV20']: # Connection state o

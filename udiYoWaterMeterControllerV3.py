@@ -91,6 +91,11 @@ class udiYoWaterMeterController(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        #known_meters = ['YS5007','YS5018', 'YS5008', 'YS5009', ]
+        #if self.yoWaterCtrl.devInfo['model'] in known_meters:
+        #    logging.debug(f'Known water meter model {self.yoWaterCtrl.devInfo["model"]}')   
+        #    if self.yoWaterCtrl.devInfo['model'] in ['YS5029']: # dual channel model  -  no temps and not 
+
 
         # start processing events and create add our controller node
         polyglot.ready()

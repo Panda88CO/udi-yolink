@@ -49,6 +49,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         super().__init__( polyglot, primary, address, name, )   
         logging.debug('udiYoWaterMeterMultiController INIT- {}'.format(deviceInfo['name']))
         self.n_queue = []
+        
         self.poly = polyglot
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()     # Curent multi unit does not report temp
@@ -60,6 +61,8 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         self.yoWaterCtrl= None
         self.node_ready = False
         self.last_state = ''
+        self.meter_uom = None
+        known_meters = ['']
         self.onDelay = 0
         self.offDelay = 0
         self.valveState = 99 # needed as class c device - keep value until online again 
@@ -213,10 +216,10 @@ class udiYoSubWaterMeter(udi_interface.Node):
             {'driver': 'GV7', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 99, 'uom': 25},                                              
             {'driver': 'GV9', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV11', 'value': 99, 'uom' : 25}, # alarm
+            #{'driver': 'GV11', 'value': 99, 'uom' : 25}, # alarm
             {'driver': 'GV12', 'value': 99, 'uom' : 25}, #  alarm
-            {'driver': 'GV13', 'value': 99, 'uom' : 25}, # alarm
-            {'driver': 'GV14', 'value': 99, 'uom' : 25}, # Water flowing
+            #{'driver': 'GV13', 'value': 99, 'uom' : 25}, # alarm
+            #{'driver': 'GV14', 'value': 99, 'uom' : 25}, # Water flowing
              
             ]
 
@@ -242,6 +245,10 @@ class udiYoSubWaterMeter(udi_interface.Node):
         polyglot.subscribe(polyglot.START, self.start, self.address)
         polyglot.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        #known_meters = ['YS5007','YS5018', 'YS5008', 'YS5009', 'YS5029']
+        #if self.yoWaterCtrl.devInfo['model'] in known_meters:
+        #    logging.debug(f'Known water meter model {self.yoWaterCtrl.devInfo["model"]}')   
+        #    if self.yoWaterCtrl.devInfo['model'] in ['YS5029']: # dual channel model  -  no temps and not 
 
         # start processing events and create add our controller node
         polyglot.ready()
@@ -370,9 +377,9 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     logging.debug(f'times overrun 24h : {times_overrun_24h}')   
                     self.my_setDriver('GV8', self.state2ISY(times_overrun_24h))
 
-                    reminder = self.yoWaterCtrl.getData('alarm', 'reminder', self.WM_index) #reminder
-                    logging.debug(f'reminder : {reminder}')     
-                    self.my_setDriver('GV9', self.state2ISY(reminder))
+                    #reminder = self.yoWaterCtrl.getData('alarm', 'reminder', self.WM_index) #reminder
+                    #logging.debug(f'reminder : {reminder}')     
+                    #self.my_setDriver('GV9', self.state2ISY(reminder))
 
                     open_reminder = self.yoWaterCtrl.getData('alarm', 'openReminder', self.WM_index) #openReminder
                     logging.debug(f'open reminder : {open_reminder}')
@@ -383,13 +390,13 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     self.my_setDriver('GV12', self.state2ISY(valve_error))   
 
 
-                    high_T_error = self.yoWaterCtrl.getData('alarm', 'highTemp', self.WM_index)   #valveError
-                    logging.debug(f'high temp error : {high_T_error}')
-                    self.my_setDriver('GV12', self.state2ISY(high_T_error))    
+                    #high_T_error = self.yoWaterCtrl.getData('alarm', 'highTemp', self.WM_index)   #valveError
+                    #logging.debug(f'high temp error : {high_T_error}')
+                    #self.my_setDriver('GV12', self.state2ISY(high_T_error))    
 
-                    low_T_error = self.yoWaterCtrl.getData('alarm', 'lowTemp',self.WM_index)   #valveError
-                    logging.debug(f'low temp error : {low_T_error}')
-                    self.my_setDriver('GV13', self.state2ISY(low_T_error))
+                    #low_T_error = self.yoWaterCtrl.getData('alarm', 'lowTemp',self.WM_index)   #valveError
+                    #logging.debug(f'low temp error : {low_T_error}')
+                    #self.my_setDriver('GV13', self.state2ISY(low_T_error))
                     
 
         except KeyError as e:

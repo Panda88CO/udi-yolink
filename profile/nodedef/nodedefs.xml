@@ -845,11 +845,11 @@
          <st id="GV6" editor="alarm" /> <!--overrun-->
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
          <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
-         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
+         <!--<st id="GV9" editor="alarm" />-->  <!-- open reminder-->       
          <st id="GV11" editor="alarm" /> <!-- open reminder -->
          <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <st id="GV13" editor="alarm" /> <!-- high temp-->
-         <st id="GV14" editor="alarm" /> <!-- Low temp-->
+         <!--<st id="GV13" editor="alarm" />--> <!-- high temp-->
+         <!--<st id="GV14" editor="alarm" />--> <!-- Low temp-->
       </sts>
       <cmds>
          <sends>
