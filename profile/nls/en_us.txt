@@ -12,8 +12,6 @@ CMD-nlssetup-EPOCHTIME-NAME=Update Time
 
 # common commands #############
 
-#ST-ST-NAME=Nodeserver Status
-#ST-GV20-NAME=Connection State
 #ST-BATLVL-NAME=Battery Level
 #ST-CLITEMP-NAME=Sensor Temperature
 #ST-CLIHUM-NAME=Current Rel Humidity (%)
@@ -145,7 +143,7 @@ CMD-nlsoutlet-SWCTRL-NAME=Switch control
 
 ND-yomultiout-NAME=YoLink Outlet
 ND-yomultiout-ICON=Switch
-ST-nlsmultiout-ST-AME=Nodeserver Status
+ST-nlsmultiout-ST-NAME=Nodeserver Status
 #ST-nlsmultiout-GV8-NAME=Device Online
 ST-nlsmultiout-GV12-NAME=Port
 ST-nlsmultiout-GV13-NAME=Schedule Index
@@ -319,7 +317,6 @@ ST-nlsleaksens-GV0-NAME=Water Sensor
 ST-nlsleaksens-GV1-NAME=Sensor Battery Level
 ST-nlsleaksens-GV2-NAME=Command Setting
 ST-nlsleaksens-CLITEMP-NAME=Sensor Temperature
-ST-nlsleaksens-ST-NAME=Nodeserver Status
 ST-nlsleaksens-GV20-NAME=Connection State
 ST-nlsleaksens-GV30-NAME=Online State
 ST-nlsleaksens-BATLVL-NAME=Battery Level
@@ -518,7 +515,6 @@ ST-nlssiren-ST-NAME=Siren State
 ST-nlssiren-GV0-NAME=Siren State
 ST-nlssiren-GV1-NAME=Siren Duration
 ST-nlssiren-GV2-NAME=Supply State
-ST-nlssiren-ST-NAME=Nodeserver Status
 ST-nlssiren-GV20-NAME=Connection State
 ST-nlssiren-GV30-NAME=Online State
 ST-nlssiren-BATLVL-NAME=Battery Level
