@@ -271,7 +271,7 @@ CMD-nlsthsens-UPDATE-NAME=Update Status
 
 ND-yogarage-NAME=YoLink Garage Controller
 ND-yogarage-ICON=Switch
-ST-nlsgarage-NAME=Nodeserver Status
+ST-nlsgarage-ST-NAME=Nodeserver Status
 CMD-nlsgarage-TOGGLE-NAME=Toggle Door
 
 
@@ -469,7 +469,7 @@ CMD-nlsircode-UPDATE-NAME=Update Status
 
 ND-yoCOSmokesens-NAME=YoLink COSmokeSensor
 ND-yoCOSmokesens-ICON=Input
-#ST-nlssmokesens-NAME=Nodeserver Status
+
 ST-nlssmokesens-ST-NAME=Alarm
 ST-nlssmokesens-ALARM-NAME=Alert Detected
 ST-nlssmokesens-GV0-NAME=Smoke Detection
