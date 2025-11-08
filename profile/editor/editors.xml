@@ -46,10 +46,10 @@
       <range uom="25" subset="0,98,99" nls="nosupport" />
   </editor>
   <editor id="batlevel"> 
-     <range uom="25" subset="0-4,98,99" nls="batlevel" />
+     <range uom="25" subset="0,1,2,3,4,98,99" nls="batlevel" />
   </editor>
   <editor id="doorstate"> 
-     <range uom="25" subset="0-1,99" nls="doorstate" />
+     <range uom="25" subset="0,1,99" nls="doorstate" />
   </editor>
   <editor id="online"> 
      <range uom="25" subset="0-1" nls="online" />
