@@ -39,7 +39,7 @@
          <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
          <st id="ST"  editor="swstate" />
-         <st id="GV30"  editor="status" />'
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />                  
       </sts>
@@ -261,8 +261,8 @@
          <st id="GV18" editor="stMin" />
          <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="dimlvl" />'
-         <st id="GV30"  editor="status" />'
+         <st id="ST"  editor="dimlvl" />
+         <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                    
       </sts>
