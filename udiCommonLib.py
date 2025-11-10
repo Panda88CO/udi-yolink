@@ -4,7 +4,7 @@ Yolink Control Main Node  program
 MIT License
 """
 
-version = '1.6.4'
+version = '1.6.8'
 
 import sys
 import re
