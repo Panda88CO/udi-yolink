@@ -581,14 +581,16 @@ ND-yowatermeterOnly-NAME=YoLink Water Meter
 ND-yowatermeterOnly-ICON=PulseCounter
 ND-yowatermeterMulti-NAME=YoLink Water Meter Multi Controller
 ND-yowatermeterMulti-ICON=PulseCounter
-
+ND-yowatermeterMultiF-ICON=PulseCounter
+ND-yowatermeterSub-NAME=YoLink Water Meter Controller
+ND-yowatermeterMultiF-ICON=PulseCounter
 ND-yowatermeterCtrlF-NAME=YoLink Water Meter Controller
 ND-yowatermeterCtrlF-ICON=PulseCounter
 ND-yowatermeterOnlyF-NAME=YoLink Water Meter 
 ND-yowatermeterOnlyF-ICON=PulseCounter
 ND-yowatermeterMultiF-NAME=YoLink Water Meter Multi Controller
-ND-yowatermeterMultiF-ICON=PulseCounter
-
+ND-yowatermeterSubF-NAME=YoLink Water Meter Controller
+ND-yowatermeterSubF-ICON=PulseCounter
 ST-nlswatermeter-ST-NAME=Water Running
 ST-nlswatermeter-GV0-NAME=Valve State
 ST-nlswatermeter-GV1-NAME=Water Meter Total

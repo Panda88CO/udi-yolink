@@ -207,17 +207,17 @@ class udiYoSubWaterMeter(udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25}, # Water flowing
             {'driver': 'GV0', 'value': 99, 'uom': 25},#Valve state
-            {'driver': 'GV1', 'value': 0, 'uom': 69}, #water use total
-            {'driver': 'GV10', 'value': 99, 'uom': 25}, #water use daily             
-            {'driver': 'GV2', 'value': 0, 'uom': 69},  #wateruse recent
-            {'driver': 'GV3', 'value': 0, 'uom': 44},  #Wateruse duration
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, #water use total
+            {'driver': 'GV10', 'value':99, 'uom': 25}, #water use daily             
+            {'driver': 'GV2', 'value': 99, 'uom': 25},  #wateruse recent
+            {'driver': 'GV3', 'value': 99, 'uom': 25},  #Wateruse duration
             {'driver': 'GV4', 'value': 99, 'uom': 25}, #WATER uNITS
 
             {'driver': 'GV6', 'value': 99, 'uom': 25}, #alarm
             {'driver': 'GV7', 'value': 99, 'uom': 25}, 
             {'driver': 'GV8', 'value': 99, 'uom': 25},                                              
-            #{'driver': 'GV9', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV11', 'value': 99, 'uom' : 25}, # alarm
+            {'driver': 'GV9', 'value': 99, 'uom': 25}, 
+            #{'driver': 'GV11', 'value': 99, 'uom' : 25}, # alarm
             {'driver': 'GV12', 'value': 99, 'uom' : 25}, #  alarm
             #{'driver': 'GV13', 'value': 99, 'uom' : 25}, # alarm
             #{'driver': 'GV14', 'value': 99, 'uom' : 25}, # Water flowing
@@ -271,6 +271,8 @@ class udiYoSubWaterMeter(udi_interface.Node):
         time.sleep(2)
         self.yoWaterCtrl.getMeterUnit()
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
+        self.my_setDriver('GV1', 0,  self.unit2uom())
+        self.my_setDriver('GV1', 0,  self.unit2uom())
         self.node_ready = True
         self.updateData()
 
@@ -341,7 +343,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
                     daily_use = self.yoWaterCtrl.getData('dailyUsage', 'amount', self.WM_index)
                     logging.debug(f'daily use : {daily_use}')   
-                    self.my_setDriver('GV0', daily_use,  self.unit2uom())
+                    self.my_setDriver('GV1', daily_use,  self.unit2uom())
                     recent_amount = self.yoWaterCtrl.getData('recentUsage','amount', self.WM_index)
                     logging.debug(f'recent amount : {recent_amount}')
                     self.my_setDriver('GV2', recent_amount,  self.unit2uom())
@@ -382,9 +384,9 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     #logging.debug(f'reminder : {reminder}')     
                     #self.my_setDriver('GV9', self.state2ISY(reminder))
 
-                    open_reminder = self.yoWaterCtrl.getData('alarm', 'openReminder', self.WM_index) #openReminder
+                    open_reminder = self.yoWaterCtrl.getData('alarm', 'reminder', self.WM_index) #openReminder
                     logging.debug(f'open reminder : {open_reminder}')
-                    self.my_setDriver('GV11', self.state2ISY(open_reminder))
+                    self.my_setDriver('GV9', self.state2ISY(open_reminder))
 
                     valve_error = self.yoWaterCtrl.getData('alarm', 'valveError', self.WM_index)   #valveError
                     logging.debug(f'valve error : {valve_error}')   
