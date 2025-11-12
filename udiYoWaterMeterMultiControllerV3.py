@@ -197,7 +197,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 class udiYoSubWaterMeter(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, w_unit2ISY, calculate_water_volume, save_cmd_state,water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
-    id = 'yowatermeterSub'
+    id = 'yowatermeterSubL'
     '''
        drivers = [
             'GV0' = Manipulator State
@@ -238,10 +238,14 @@ class udiYoSubWaterMeter(udi_interface.Node):
         logging.debug(f'udiYoWaterMeterSub- {name}')
         self.n_queue = []
         self.yoAccess = yoAccess
-        self.temp_unit = self.yoAccess.get_temp_unit()     
-        #if self.temp_unit == 1:
-        #    self.id = 'yowatermeterSubF'    
-
+        self.temp_unit = self.yoAccess.get_temp_unit() 
+        self.water_unit = self.yoAccess.get_water_unit()    
+        if self.water_unit == 0:
+            self.id = 'yowatermeterSubG'    
+        elif self.water_unit == 3:
+            self.id = 'yowatermeterSubG'   
+        else:
+            logging.error('Only Litere and Gallon supported for now')
         self.WM_index = WMindex
         
         self.yoWaterCtrl= wmAccess
@@ -278,7 +282,6 @@ class udiYoSubWaterMeter(udi_interface.Node):
         time.sleep(2)
         self.yoWaterCtrl.getMeterUnit()
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
-        self.my_setDriver('GV1', 0,  self.unit2uom())
         self.my_setDriver('GV1', 0,  self.unit2uom())
         self.node_ready = True
         self.updateData()
