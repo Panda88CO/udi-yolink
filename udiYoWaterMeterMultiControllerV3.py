@@ -195,7 +195,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
 
 class udiYoSubWaterMeter(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, w_unit2ISY, save_cmd_state,water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, w_unit2ISY, calculate_water_volume, save_cmd_state,water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yowatermeterSub'
     '''
