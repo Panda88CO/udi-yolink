@@ -33,7 +33,49 @@ def convert_temp_unit(self, tempStr):
         return(2)
     else:
         return(0)
+    
+def convert_water_unit(self, tempStr):
+    if tempStr.capitalize()[:1] == 'G': #Gallon
+        return(0)
+    elif tempStr.capitalize()[:1] == 'C': #CCF
+        return(1) 
+    elif tempStr.capitalize()[:1] == 'M': #m3
+        return(2)
+    else:
+        return(3) #liter
 
+def calculate_water_volume(self, volume, volumeunit, targetunit):
+    # Placeholder for actual calculation logic
+
+    if volumeunit == 0 and targetunit == 1:  # Gallon to CCF
+        temp_volume = volume * 0.133681/100
+    elif volumeunit == 0 and targetunit == 2:  # Gallon to m3
+        temp_volume = volume * 0.00378541
+    elif volumeunit == 0 and targetunit == 3:  # Gallon to Liter
+        temp_volume = volume * 3.78541
+    elif volumeunit == 1 and targetunit == 0:  # CCF to Gallon
+        temp_volume = volume * 7.48052*100
+    elif volumeunit == 1 and targetunit == 2:  # CCF to m3
+        temp_volume = volume * 0.0283168*100
+    elif volumeunit == 1 and targetunit == 3:  # CCF to Liter   
+        temp_volume = volume * 28.3168*100
+    elif volumeunit == 2 and targetunit == 0:  # m3 to Gallon
+        temp_volume = volume * 264.172
+    elif volumeunit == 2 and targetunit == 1:  # m3 to CCF
+        temp_volume = volume * 35.3147/100
+    elif volumeunit == 2 and targetunit == 3:  # m3 to Liter
+        temp_volume = volume * 1000
+    else:
+        temp_volume = volume
+    return temp_volume
+
+def convert_water_unit(self, tempStr):
+    if tempStr.capitalize()[:1] == 'G': #Gallon
+        return(0)
+    elif tempStr.capitalize()[:1] == 'C': #CCF
+        return(1)
+    else:
+        return(0)
 
 def save_cmd_state(self, cmd_state):
     logging.debug('save_cmd_state {} - {}'.format(cmd_state, self.address))

@@ -683,7 +683,7 @@
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="BATLVL" editor="batlevel" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="CLITEMP" editor="tempC" />
+         <st id="CLITEMP" editor="celsius" />
          <st id="GV4" editor="waterunit" />
          <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
@@ -716,7 +716,7 @@
                <p id="L_OFF" editor="set_enable"  />       
                <p id="OR_LIMIT" editor="leaklimit"  /> 
                <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="setminutes"  /> 
+               <p id="ORT_LIMIT" editor="minutes_set"  /> 
                <p id="ORT_OFF" editor="set_enable"  />   
             </cmd >-->
          <!--   <cmd id="DELAYCTRL" > 
@@ -739,7 +739,7 @@
          <st id="GV2" editor="flow" /> <!-- recent use -->
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="BATLVL" editor="batlevel" />
-         <st id="CLITEMP" editor="tempF" />
+         <st id="CLITEMP" editor="farenheit" />
          <st id="GV4" editor="waterunit" />
          <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
@@ -770,7 +770,7 @@
                <p id="L_OFF" editor="set_enable"  />       
                <p id="OR_LIMIT" editor="leaklimit"  /> 
                <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="setminutes" /> 
+               <p id="ORT_LIMIT" editor="minutes_set" /> 
                <p id="ORT_OFF" editor="set_enable" />   
             </cmd >-->
             <!--<cmd id="DELAYCTRL" > 
@@ -786,7 +786,7 @@
       <sts>
          <st id="ST" editor="status" /> <!-- On line-->
          <st id="BATLVL" editor="batlevel" />
-         <!--<st id="CLITEMP" editor="tempC" />-->
+         <!--<st id="CLITEMP" editor="celsius" />-->
          <st id="GV5" editor="alarm" /> 
          <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
          <st id="GV20" editor="suspendstate" />
@@ -812,7 +812,7 @@
       <sts>
          <st id="ST" editor="status" /> <!-- On line-->
          <st id="BATLVL" editor="batlevel" />
-         <!--<st id="CLITEMP" editor="tempF" />-->
+         <!--<st id="CLITEMP" editor="farenheit" />-->
          <st id="GV5" editor="alarm" /> 
          <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
          <st id="GV20" editor="suspendstate" />
@@ -872,7 +872,7 @@
                <p id="L_OFF" editor="set_enable" />       
                <p id="OR_LIMIT" editor="leaklimit"  /> 
                <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="setminutes" /> 
+               <p id="ORT_LIMIT" editor="minutes_set" /> 
                <p id="ORT_OFF" editor="set_enable"/>   
             </cmd >
             <!--<cmd id="DELAYCTRL" > 
@@ -884,17 +884,16 @@
       </cmds>
    </nodeDef> 
 
-  <nodeDef id="yowatermeterSubF" nls="nlswatermeter">
+  <nodeDef id="yowatermeterSubL" nls="nlswatermeter">
       <editors />
       <sts>
          <st id="ST" editor="waterrun" /> <!-- water runing-->
 
          <st id="GV0" editor="manstate" />
-         <st id="GV1" editor="flow" />
-         <st id="GV10" editor="flow" />     
-         <st id="GV2" editor="flow" /> <!-- recent use -->
+         <st id="GV1" editor="liter" />
+         <st id="GV10" editor="liter" />     
+         <st id="GV2" editor="liter" /> <!-- recent use -->
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="GV4" editor="waterunit" />
          <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
@@ -904,6 +903,14 @@
          <st id="GV12" editor="alarm" /> <!-- valve error -->
          <st id="GV13" editor="alarm" /> <!-- high temp-->
          <st id="GV14" editor="alarm" /> <!-- Low temp-->
+         <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
+         <st id="GV23" editor="liter" /> <!-- aoverrun AC --> 
+         <st id="GV24" editor="minutes" />
+
+         <st id="GV26" editor="enable" /> <!--leak-->
+         <st id="GV27" editor="enable" /> <!--Overrun amount-->
+         <st id="GV28" editor="enable" /> <!--Overrun duration-->
+
       </sts>
       <cmds>
          <sends>
@@ -919,11 +926,11 @@
             <cmd id="DOF" /> 
 
             <cmd id="SETATTRIB">
-               <p id="L_LIMIT" editor="leaklimit"  /> 
+               <p id="L_LIMIT" editor="liter_set"  /> 
                <p id="L_OFF" editor="set_enable" />       
-               <p id="OR_LIMIT" editor="leaklimit"  /> 
+               <p id="OR_LIMIT" editor="liter_set"  /> 
                <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="setminutes" /> 
+               <p id="ORT_LIMIT" editor="minutes_set" /> 
                <p id="ORT_OFF" editor="set_enable"/>   
             </cmd >
             <!--<cmd id="DELAYCTRL" > 
@@ -934,7 +941,63 @@
          </accepts>
       </cmds>
    </nodeDef> 
+  <nodeDef id="yowatermeterSubG" nls="nlswatermeter">
+      <editors />
+      <sts>
+         <st id="ST" editor="waterrun" /> <!-- water runing-->
 
+         <st id="GV0" editor="manstate" />
+         <st id="GV1" editor="gallon" />
+         <st id="GV10" editor="gallon" />     
+         <st id="GV2" editor="gallon" /> <!-- recent use -->
+         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
+         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
+         <st id="GV6" editor="alarm" /> <!--overrun-->
+         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
+         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
+         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
+         <st id="GV11" editor="alarm" /> <!-- open reminder -->
+         <st id="GV12" editor="alarm" /> <!-- valve error -->
+         <st id="GV13" editor="alarm" /> <!-- high temp-->
+         <st id="GV14" editor="alarm" /> <!-- Low temp-->
+         <st id="GV22" editor="gallon" /> <!-- recent use -->
+         <st id="GV23" editor="gallon" /> <!-- Recent duration --> 
+         <st id="GV24" editor="minutes" />
+
+         <st id="GV26" editor="enable" /> <!--overrun-->
+         <st id="GV27" editor="enable" /> <!--Overrun duration-->
+         <st id="GV28" editor="enable" /> <!--overrun time 24H-->
+
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />   -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+
+            <cmd id="SETATTRIB">
+               <p id="L_LIMIT" editor="gallon_set"  /> 
+               <p id="L_OFF" editor="set_enable" />       
+               <p id="OR_LIMIT" editor="gallon_set"  /> 
+               <p id="OR_OFF" editor="set_enable"  />   
+               <p id="ORT_LIMIT" editor="minutes_set" /> 
+               <p id="ORT_OFF" editor="set_enable"/>   
+            </cmd >
+            <!--<cmd id="DELAYCTRL" > 
+               <p id="ondelay" editor="delaymin" init="GV1" /> 
+               <p id="offdelay" editor="delaymin" init="GV2" /> 
+             </cmd >   -->
+  
+         </accepts>
+      </cmds>
+   </nodeDef> 
 
 <nodeDef id="yowatermeterOnly" nls="nlswatermeter">
       <editors />
@@ -948,7 +1011,7 @@
          <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
 
          <st id="BATLVL" editor="batlevel" />
-         <st id="CLITEMP" editor="tempF" />
+         <st id="CLITEMP" editor="farenheit" />
 
          <!-- <st id="GV8" editor="online" /> -->
          <st id="GV5" editor="alarm" />
@@ -980,7 +1043,7 @@
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" /> 
                <p id="OR_LIMIT" editor="leaklimit"  /> 
-               <p id="ORT_LIMIT" editor="setminutes"  /> 
+               <p id="ORT_LIMIT" editor="minutes_set"  /> 
             </cmd >
  
          </accepts>
@@ -990,8 +1053,8 @@
    <nodeDef id="yothsens" nls="nlsthsens">
       <editors />
       <sts>
-         <st id="ST" editor="tempC" />
-         <st id="CLITEMP" editor="tempC" />
+         <st id="ST" editor="celsius" />
+         <st id="CLITEMP" editor="celsius" />
          <st id="GV1" editor="alarm" />
          <st id="GV2" editor="alarm" />
          <st id="CLIHUM" editor="humidity" />
@@ -1001,8 +1064,8 @@
          <st id="GV7" editor="alarm" />
          <st id="GV8" editor="alarm" />
          <st id="GV9" editor="cmdsetting" />
-         <st id="GV10" editor="tempC" />
-         <st id="GV11" editor="tempC" />
+         <st id="GV10" editor="celsius" />
+         <st id="GV11" editor="celsius" />
          <st id="GV12" editor="humidity" />
          <st id="GV13" editor="humidity" />
          <st id="GV20" editor="suspendstate" />
@@ -1026,8 +1089,8 @@
        <nodeDef id="yothsensF" nls="nlsthsens">
       <editors />
       <sts>
-         <st id="ST" editor="tempF" />
-         <st id="CLITEMP" editor="tempF" />
+         <st id="ST" editor="farenheit" />
+         <st id="CLITEMP" editor="farenheit" />
          <st id="GV1" editor="alarm" />
          <st id="GV2" editor="alarm" />
          <st id="CLIHUM" editor="humidity" />
@@ -1037,8 +1100,8 @@
          <st id="GV7" editor="alarm" />
          <st id="GV8" editor="alarm" />
          <st id="GV9" editor="cmdsetting" />
-         <st id="GV10" editor="tempF" />
-         <st id="GV11" editor="tempF" />
+         <st id="GV10" editor="farenheit" />
+         <st id="GV11" editor="farenheit" />
          <st id="GV12" editor="humidity" />
          <st id="GV13" editor="humidity" />
          <st id="GV20" editor="suspendstate" />
@@ -1117,7 +1180,7 @@
          <st id="GV0" editor="motionstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
-          <st id="CLITEMP" editor="tempC" />
+          <st id="CLITEMP" editor="celsius" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
@@ -1152,7 +1215,7 @@
          <st id="GV0" editor="motionstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
-          <st id="CLITEMP" editor="tempF" />
+          <st id="CLITEMP" editor="farenheit" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
@@ -1188,7 +1251,7 @@
          <st id="GV0" editor="waterstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
-         <st id="CLITEMP" editor="tempC" />
+         <st id="CLITEMP" editor="celsius" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="waterstate" />
          <st id="GV30"  editor="status" />  
@@ -1221,7 +1284,7 @@
          <st id="GV0" editor="waterstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
-         <st id="CLITEMP" editor="tempF" />
+         <st id="CLITEMP" editor="farenheit" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="waterstate" />
          <st id="GV30"  editor="status" />  
@@ -1261,7 +1324,7 @@
          <!--st id="GV6" editor="AlertInterval" /-->
          <st id="GV5" editor="SelfcheckState" />
          <st id="GV7" editor="cmdsetting" />
-         <st id="CLITEMP" editor="tempC" />
+         <st id="CLITEMP" editor="celsius" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="deviceAlert" />     
          <st id="GV30"  editor="status" />
@@ -1301,7 +1364,7 @@
          <!--st id="GV6" editor="AlertInterval" /-->
          <st id="GV5" editor="SelfcheckState" />
          <st id="GV7" editor="cmdsetting" />
-         <st id="CLITEMP" editor="tempF" />
+         <st id="CLITEMP" editor="farenheit" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="deviceAlert" />     
          <st id="GV30"  editor="status" />
@@ -1336,7 +1399,7 @@
          <st id="GV0" editor="vibrastate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
-         <st id="CLITEMP" editor="tempC" />
+         <st id="CLITEMP" editor="celsius" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="vibrastate" />
          <st id="GV30"  editor="status" />
@@ -1369,7 +1432,7 @@
          <st id="GV0" editor="vibrastate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
-         <st id="CLITEMP" editor="tempF" />
+         <st id="CLITEMP" editor="farenheit" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="vibrastate" />
          <st id="GV30"  editor="status" />
@@ -1642,7 +1705,7 @@
          <st id="GV1" editor="keynumber" />
          <st id="GV2" editor="presstype" />                  
          <st id="GV3" editor="batlevel" />
-         <st id="CLITEMP" editor="tempC" />
+         <st id="CLITEMP" editor="celsius" />
 
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="keypress" />
@@ -1665,7 +1728,7 @@
          <st id="GV1" editor="keynumber" />
          <st id="GV2" editor="presstype" />                  
          <st id="GV3" editor="batlevel" />
-         <st id="CLITEMP" editor="tempF" />
+         <st id="CLITEMP" editor="farenheit" />
 
          <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="keypress" />

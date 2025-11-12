@@ -1103,6 +1103,12 @@ class YoLinkInitPAC(object):
     def get_temp_unit(yoAccess):
         return(yoAccess.temp_unit)
 
+    def set_water_unit(yoAccess, unit):
+        yoAccess.water_unit = unit
+
+    def get_water_unit(yoAccess):
+        return(yoAccess.water_unit)  
+
     def set_debug(yoAccess, debug):
         yoAccess.debug = debug
 

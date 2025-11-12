@@ -21,7 +21,7 @@ except ImportError:
 from udiCommonLib import version
 
 class YoLinkSetup (udi_interface.Node):
-    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit, convert_water_unit
     from udiCommonLib import systemPoll, addNodes, heartbeat, configDoneHandler, checkNodes, handleLevelChange
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  
@@ -272,7 +272,10 @@ class YoLinkSetup (udi_interface.Node):
                 self.temp_unit = self.convert_temp_unit(userParam['TEMP_UNIT'])
             else:
                 self.temp_unit = 0
-
+            if 'WATER_UNIT' in userParam:
+                self.water_unit = self.convert_water_unit(userParam['WATER_UNIT'])
+            else:
+                self.water_unit = 3
             if 'UAID' in userParam:
                 self.uaid = str(userParam['UAID'])
                 self.uaid = self.uaid.strip()

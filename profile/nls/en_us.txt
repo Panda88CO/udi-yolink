@@ -612,6 +612,13 @@ ST-nlswatermeter-GV16-NAME=Overrun time Limit
 ST-nlswatermeter-GV17-NAME=Overrun Time Auto Shutoff
 #ST-nlswatermeter-GV10-NAME=Supply Mode
 ST-nlswatermeter-GV20-NAME=Connection State
+ST-nlswatermeter-GV22-NAME=Leak limit
+ST-nlswatermeter-GV23-NAME=Overrun Amount Limit
+ST-nlswatermeter-GV24-NAME=Overrun Duration Limit 
+ST-nlswatermeter-GV26-NAME=Leak Auto Close
+ST-nlswatermeter-GV27-NAME=Overrun Amount Auto Close
+ST-nlswatermeter-GV28-NAME=Overrun Time Auto Close
+
 ST-nlswatermeter-GV30-NAME=Online State
 ST-nlswatermeter-BATLVL-NAME=Battery Level
 ST-nlswatermeter-CLITEMP-NAME=Water Temperature

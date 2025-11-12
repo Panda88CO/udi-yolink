@@ -23,7 +23,7 @@ from udiCommonLib import version
 
 
 class YoLinkSetup (udi_interface.Node):
-    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit, convert_water_unit
     from udiCommonLib import systemPoll, addNodes, heartbeat, configDoneHandler, checkNodes, handleLevelChange
 
     def  __init__(self, polyglot, primary, address, name):
@@ -124,9 +124,15 @@ class YoLinkSetup (udi_interface.Node):
         else:
             self.temp_unit = 0  
             self.Parameters['TEMP_UNIT'] = 'C'
-            logging.debug('TEMP_UNIT: {}'.format(self.temp_unit ))
-
+        logging.debug('TEMP_UNIT: {}'.format(self.temp_unit ))
         self.yoAccess.set_temp_unit(self.temp_unit )
+        if 'WATER_UNIT' in self.Parameters:
+            self.water_unit = self.convert_water_unit(self.Parameters['WATER_UNIT'])
+        else:
+            self.water_unit = 3
+            self.Parameters['WATER_UNIT'] = 'Liters'
+        logging.debug('WATER_UNIT: {}'.format(self.water_unit ))
+        self.yoAccess.set_water_unit(self.water_unit )
 
         if 'DEBUG_EN' in self.Parameters:
             self.debug = self.Parameters['DEBUG_EN']
@@ -211,6 +217,11 @@ class YoLinkSetup (udi_interface.Node):
                 self.temp_unit = self.convert_temp_unit(userParam['TEMP_UNIT'])
             else:
                 self.temp_unit = 0
+            
+            if 'WATER_UNIT' in userParam:
+                self.water_unit = self.convert_water_unit(userParam['WATER_UNIT'])
+            else:
+                self.water_unit = 3
 
             if 'UAID' in userParam:
                 self.uaid = str(userParam['UAID'])
