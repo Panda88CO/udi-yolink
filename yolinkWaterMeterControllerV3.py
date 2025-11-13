@@ -194,11 +194,14 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                         if not isinstance(yolink.dataAPI[yolink.dData][category], dict):
                             if key in yolink.dataAPI[yolink.dData][category]:
                                 ret_val = yolink.dataAPI[yolink.dData][category][key]
-                        else:   
+                        else: 
+                            logging.debug(f'category {category} is a dict - {yolink.dataAPI[yolink.dData][category]}')
                             if key in yolink.dataAPI[yolink.dData][category]:
                                 if not isinstance(yolink.dataAPI[yolink.dData][category][key], dict):
+                                    logging.debug(f'key {key} found in [ {category} ]  {yolink.dataAPI[yolink.dData][category][key]}')
                                     ret_val = yolink.dataAPI[yolink.dData][category][key]
                                 else:
+                                    logging.debug(f"key {key} is a dict {yolink.dataAPI[yolink.dData][category][key]}")
                                     items = yolink.dataAPI[yolink.dData][category][key]
                                     logging.debug(f'items for {key} found {items}')
                                     if isinstance( WM_index, int):
