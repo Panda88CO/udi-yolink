@@ -148,10 +148,11 @@ ST-nlsmultiout-GV12-NAME=Port
 ST-nlsmultiout-GV13-NAME=Schedule Index
 ST-nlsmultiout-GV14-NAME=Activated
 ST-nlsmultiout-GV15-NAME=On Hour
+ST-nlsmultiout-GV21-NAME=On Sec
 ST-nlsmultiout-GV16-NAME=On Minute
 ST-nlsmultiout-GV17-NAME=Off Hour
 ST-nlsmultiout-GV18-NAME=Off Minute
-ST-nlsmultiout-GV21-NAME=On Sec
+ST-nlsmultiout-GV22-NAME=Off Sec
 ST-nlsmultiout-GV19-NAME=Active Days
 ST-nlsmultiout-GV20-NAME=Connection State
 ST-nlsmultiout-GV30-NAME=Online State
@@ -222,6 +223,7 @@ ST-nlsmanipu-GV16-NAME=On Minute
 ST-nlsmanipu-GV21-NAME=On Sec
 ST-nlsmanipu-GV17-NAME=Off Hour
 ST-nlsmanipu-GV18-NAME=Off Minute
+ST-nlsmanipu-GV22-NAME=Off Sec
 ST-nlsmanipu-GV19-NAME=Active Days
 ST-nlsmanipu-GV20-NAME=Connection State
 ST-nlsmanipu-GV30-NAME=Online State
@@ -269,6 +271,9 @@ CMD-nlsthsens-UPDATE-NAME=Update Status
 ND-yogarage-NAME=YoLink Garage Controller
 ND-yogarage-ICON=Switch
 ST-nlsgarage-ST-NAME=Nodeserver Status
+ST-nlsgarage-GV20-NAME=Connection State
+ST-nlsgarage-GV30-NAME=Online State
+
 CMD-nlsgarage-TOGGLE-NAME=Toggle Door
 
 
@@ -355,6 +360,7 @@ ND-yohub-ICON=Output
 ST-nlshub-ST-NAME=Status
 ST-nlshub-GV20-NAME=Connection State
 ST-nlshub-GV30-NAME=Online State
+ST-nlshub-TIME-NAME=Last device update
 CMD-nlshub-UPDATE-NAME=Update
 
 ND-yohubbat-NAME=YoLink Hub w Battery
@@ -363,6 +369,7 @@ ST-nlshubbat-ST-NAME=Supply Status
 ST-nlshubbat-GV0-NAME=Battery Status
 ST-nlshubbat-GV20-NAME=Connection State
 ST-nlshubbat-GV30-NAME=Online State
+ST-nlshubbat-TIME-NAME=Last device update
 CMD-nlshubbat-UPDATE-NAME=Update
 
 ND-yospeakerh-NAME=YoLink Speaker Hub
@@ -555,7 +562,7 @@ CMD-nlssmremote-NAME=Update Status
 ND-smremotekey-NAME=YoLink Smart Remoter
 ND-smremotekey-ICON=Input
 ST-nlssmkey-ST-NAME=Last Command
-ST-nlssmkey-GV0-NAME=Last Command
+#ST-nlssmkey-GV0-NAME=Last Command
 ST-nlssmkey-GV1-NAME=Short Press Type
 ST-nlssmkey-GV2-NAME=Long Press Type
 ST-nlssmkey-GV20-NAME=Connection State

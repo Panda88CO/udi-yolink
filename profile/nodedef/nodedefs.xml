@@ -1746,7 +1746,7 @@
    <nodeDef id="smremotekey" nls="nlssmkey">
       <editors />
       <sts>
-         <st id="GV0" editor="keyscenedef" />
+         <st id="ST" editor="keyscenedef" />
          <st id="GV1" editor="keyscenedef" />
          <st id="GV2" editor="keyscenedef" />
       </sts>
