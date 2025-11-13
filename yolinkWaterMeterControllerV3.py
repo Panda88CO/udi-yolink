@@ -207,7 +207,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                                     for temp_key in yolink.dataAPI[yolink.dData][temp_cat][category]:
 
                                         if key in temp_key:
-                                            logging.debug(f'key {key} found in [ {temp_cat} ][ {category} ][ {temp_key} ] ')                                                      ')    
+                                            logging.debug(f'key {key} found in [ {temp_cat} ][ {category} ][ {temp_key} ] ')  
                                             ret_val = yolink.dataAPI[yolink.dData][temp_cat][category][temp_key][key]
                                             break
                                               
