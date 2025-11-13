@@ -904,7 +904,7 @@
          <st id="GV13" editor="alarm" /> <!-- high temp-->
          <st id="GV14" editor="alarm" /> <!-- Low temp-->
          <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
-         <st id="GV23" editor="liter" /> <!-- aoverrun AC --> 
+         <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
          <st id="GV24" editor="minutes" />
 
          <st id="GV26" editor="enable" /> <!--leak-->
@@ -961,8 +961,9 @@
          <st id="GV13" editor="alarm" /> <!-- high temp-->
          <st id="GV14" editor="alarm" /> <!-- Low temp-->
          <st id="GV22" editor="gallon" /> <!-- recent use -->
-         <st id="GV23" editor="gallon" /> <!-- Recent duration --> 
-         <st id="GV24" editor="minutes" />
+         <st id="GV23" editor="minutes" /> <!--  duration -->         
+         <st id="GV24" editor="count" /> <!-- count/Times --> 
+
 
          <st id="GV26" editor="enable" /> <!--overrun-->
          <st id="GV27" editor="enable" /> <!--Overrun duration-->

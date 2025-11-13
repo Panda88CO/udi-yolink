@@ -346,9 +346,10 @@
     <range uom="44" min="0" max="1440" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
-  <!--<editor id="setminutes">
-    <range uom="44" min="0" max="1440" />
-  </editor>-->
+  <editor id="count">
+    <range uom="70" min="0" max="1440" />
+    <range uom="25" subset="98,99" nls="error" />
+  </editor>
   <editor id="minutes_set">
     <range uom="44" min="0" max="1440" />
   </editor>  
