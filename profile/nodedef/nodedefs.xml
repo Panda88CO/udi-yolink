@@ -541,7 +541,7 @@
    </nodeDef> 
 
 
-   <nodeDef id="yosubout" nls="nlsubout">
+   <nodeDef id="yosubout" nls="nlssubout">
       <editors />
       <sts>
          <st id="GV0" editor="swstate" />
@@ -1156,7 +1156,6 @@
    <nodeDef id="yogarage" nls="nlsgarage">
       <editors />
       <sts>
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />    
          <st id="GV30"  editor="status" />     
