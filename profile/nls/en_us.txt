@@ -268,6 +268,8 @@ CMD-nlsthsens-UPDATE-NAME=Update Status
 ND-yogarage-NAME=YoLink Garage Controller
 ND-yogarage-ICON=Switch
 ST-nlsgarage-ST-NAME=Nodeserver Status
+ST-nlsgarage-GV20-NAME=Connection State
+ST-nlsgarage-GV30-NAME=Online State
 CMD-nlsgarage-TOGGLE-NAME=Toggle Door
 
 
@@ -346,6 +348,7 @@ ND-yohub-ICON=Output
 ST-nlshub-ST-NAME=Status
 ST-nlshub-GV20-NAME=Connection State
 ST-nlshub-GV30-NAME=Online State
+ST-nlshub-TIME-NAME=Last device update
 CMD-nlshub-UPDATE-NAME=Update
 
 ND-yohubbat-NAME=YoLink Hub w Battery
@@ -354,6 +357,7 @@ ST-nlshubbat-ST-NAME=Supply Status
 ST-nlshubbat-GV0-NAME=Battery Status
 ST-nlshubbat-GV20-NAME=Connection State
 ST-nlshubbat-GV30-NAME=Online State
+ST-nlshubbat-TIME-NAME=Last device update
 CMD-nlshubbat-UPDATE-NAME=Update
 
 ND-yospeakerh-NAME=YoLink Speaker Hub
@@ -451,8 +455,8 @@ CMD-nlsirremote-UPDATE-NAME=Update
 
 ND-yoircode-NAME=YoLink Ir Code
 ND-yoircode-ICON=Output
-ST-nlsircode-NAME=Send IR code
-ST-nlsircode-ST=TX success
+
+ST-nlsircode-ST-NAME=TX success
 ST-nlsircode-GV20-NAME=Connection State
 ST-nlsircode-GV30-NAME=Online State
 ST-nlsircode-TIME-NAME=Last device update

@@ -23,7 +23,7 @@ class udiRemoteKey(udi_interface.Node):
 
     id = 'smremotekey'
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25}, # Command
+            {'driver': 'ST', 'value': 99, 'uom': 25}, # Command
             {'driver': 'GV1', 'value': 0, 'uom': 25}, # Short Keypress setting
             {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
             ]
@@ -87,7 +87,7 @@ class udiRemoteKey(udi_interface.Node):
             self.cmd_struct['long_press'] = 1
         '''
 
-        self.node.setDriver('GV0', 99)
+        self.node.setDriver('ST', 99)
         self.node.setDriver('GV1', self.cmd_struct['short_press'])
         self.node.setDriver('GV2', self.cmd_struct['long_press'])
 
@@ -137,14 +137,14 @@ class udiRemoteKey(udi_interface.Node):
             self.short_press_state, isy_val = self. get_new_state(self.cmd_struct['short_press'], self.short_press_state)
             if self.short_press_state  != 'UNKNOWN':
                 self.node.reportCmd(self.short_press_state )
-            self.node.setDriver('GV0', isy_val)
+            self.node.setDriver('ST', isy_val)
 
             logging.debug('send short press command cmd:{} driver{}'.format(self.short_press_state, isy_val))
         else:
             self.long_press_state, isy_val = self. get_new_state(self.cmd_struct['long_press'], self.long_press_state)
             if self.long_press_state  != 'UNKNOWN':
                 self.node.reportCmd(self.long_press_state )
-            self.node.setDriver('GV0', isy_val)
+            self.node.setDriver('ST', isy_val)
    
             logging.debug('send long press command cmd:{} driver{}'.format(self.long_press_state, isy_val))
             
