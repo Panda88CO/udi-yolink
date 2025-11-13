@@ -147,8 +147,77 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
 
         return(valves)
     
+    def step_in (self, dict_data, category, key):
+        ret_val = None
+        for temp_cat in dict_data:
+            if isinstance(temp_cat, dict):
+                logging.debug(f'dict identified {temp_cat} in data')
+                if category in dict_data[temp_cat]:
+                    logging.debug(f'category {category} found in data under {temp_cat}')    
+                    if key in dict_data[temp_cat][category]:
+                        ret_val = dict_data[temp_cat][category][key]
+                    elif isinstance(dict_data[temp_cat][category], dict):
+                        logging.debug(f'going deeper into dict for key {key}')  
+                        for temp_key in dict_data[temp_cat][category]:
+                            if key in temp_key:
+                                ret_val = dict_data[temp_cat][category][temp_key][key]
+                                break
+        return ret_val
 
     def getData(yolink, category, key, WM_index = None):    
+        try:
+            logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
+            ret_val = None  
+            if yolink.online and yolink.dData in yolink.dataAPI : 
+                if yolink.dataAPI[yolink.dData] is {}:
+                    logging.info(f'No data exists (no data returned)')
+                    return("no data")
+                if category is None:
+                    if key in yolink.dataAPI[yolink.dData]:
+                        ret_val = yolink.dataAPI[yolink.dData][key]
+                # parse category/key
+                       
+                if category in yolink.dataAPI[yolink.dData] and not isinstance(yolink.dataAPI[yolink.dData][category], dict):
+                    logging.debug(f'{category} found as single value')
+                    if key in yolink.dataAPI[yolink.dData][category]:
+                        ret_val = yolink.dataAPI[yolink.dData][category][key]
+
+                if isinstance(yolink.dataAPI[yolink.dData], dict): # dict detected
+                    logging.debug(f'[dict] selected')
+                    
+                    if category in yolink.dataAPI[yolink.dData]:
+                        logging.debug(f'category {category} found in data')
+                        if key in yolink.dataAPI[yolink.dData][category] and not isinstance(yolink.dataAPI[yolink.dData][category][key], dict):
+                            ret_val = yolink.dataAPI[yolink.dData][category][key]
+                    else:
+                        for temp_cat in yolink.dataAPI[yolink.dData]:
+                            if isinstance(temp_cat, dict) and category in yolink.dataAPI[yolink.dData][temp_cat]:
+                                logging.debug(f'category {category} found in data under {temp_cat}')
+                                if key in yolink.dataAPI[yolink.dData][temp_cat][category] and not isinstance(yolink.dataAPI[yolink.dData][temp_cat][category][key], dict):
+                                    ret_val = yolink.dataAPI[yolink.dData][temp_cat][category][key]
+                                elif key in yolink.dataAPI[yolink.dData][temp_cat][category] and isinstance(yolink.dataAPI[yolink.dData][temp_cat][category][key], dict):
+                                    items = yolink.dataAPI[yolink.dData][temp_cat][category][key]                      
+                                    logging.debug(f'items for {key} found {items}')
+                                    if isinstance( WM_index, int):
+                                        if str(WM_index) in items:
+                                            ret_val = items[str(WM_index)]
+                                    else:
+                                        ret_val = items
+                                else: # go further in
+                                    for temp_key in yolink.dataAPI[yolink.dData][temp_cat][category]:
+
+                                        if key in temp_key:
+                                            logging.debug(f'key {key} found in [ {temp_cat} ][ {category} ][ {temp_key} ] ')                                                      ')    
+                                            ret_val = yolink.dataAPI[yolink.dData][temp_cat][category][temp_key][key]
+                                            break
+                                              
+            logging.debug(f'ret_val {ret_val} {key}  {category}')
+            return(ret_val)
+        
+        except KeyError as e:
+            logging.error(f'EXCEPTION - getData {e}') 
+
+    def getDataOLD(yolink, category, key, WM_index = None):    
         try:
             logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
             ret_val = None  
