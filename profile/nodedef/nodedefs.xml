@@ -694,6 +694,14 @@
          <st id="GV12" editor="alarm" /> <!-- valve error -->
          <st id="GV13" editor="alarm" /> <!-- high temp-->
          <st id="GV14" editor="alarm" /> <!-- Low temp-->
+         <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
+         <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
+         <st id="GV24" editor="minutes" />
+
+         <st id="GV26" editor="enable" /> <!--leak-->
+         <st id="GV27" editor="enable" /> <!--Overrun amount-->
+         <st id="GV28" editor="enable" /> <!--Overrun duration-->
+
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />     
@@ -750,6 +758,14 @@
          <st id="GV12" editor="alarm" /> <!-- valve error -->
          <st id="GV13" editor="alarm" /> <!-- high temp-->
          <st id="GV14" editor="alarm" /> <!-- Low temp-->
+         <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
+         <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
+         <st id="GV24" editor="minutes" />
+
+         <st id="GV26" editor="enable" /> <!--leak-->
+         <st id="GV27" editor="enable" /> <!--Overrun amount-->
+         <st id="GV28" editor="enable" /> <!--Overrun duration-->         
+
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />                  

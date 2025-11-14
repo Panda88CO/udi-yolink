@@ -40,13 +40,13 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'ST', 'value': 0, 'uom': 25}, # Water flowing
             {'driver': 'GV30', 'value': 0, 'uom': 25},  #online
             {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 69}, #water use total
+            {'driver': 'GV1', 'value': 99, 'uom': 25}, #water use total
             {'driver': 'GV10', 'value': 99, 'uom': 25}, #water use daily             
-            {'driver': 'GV2', 'value': 0, 'uom': 69},  #wateruse recent
+            {'driver': 'GV2', 'value': 99, 'uom': 25},  #wateruse recent
             {'driver': 'GV3', 'value': 0, 'uom': 44},  #Wateruse duration
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},            
-            {'driver': 'GV4', 'value': 99, 'uom': 25}, #Measure Unit
+            #{'driver': 'GV4', 'value': 99, 'uom': 25}, #Measure Unit
             {'driver': 'GV5', 'value': 99, 'uom': 25}, #alarm
             {'driver': 'GV6', 'value': 99, 'uom': 25}, 
             {'driver': 'GV7', 'value': 99, 'uom': 25}, 
@@ -60,7 +60,13 @@ class udiYoWaterMeterController(udi_interface.Node):
             #{'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             #{'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
             #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
-            
+            {'driver': 'GV22', 'value': 99, 'uom': 25}, #LeakLimit
+            {'driver': 'GV23', 'value': 99, 'uom': 25}, #Overrtun limit
+            {'driver': 'GV24', 'value': 99, 'uom': 25}, #Overrun Time
+    
+            {'driver': 'GV26', 'value': 99, 'uom': 25}, #LEakAC
+            {'driver': 'GV27', 'value': 99, 'uom': 25}, #Overrun AC
+            {'driver': 'GV28', 'value': 99, 'uom': 25}, #OverrunTIme AC        
             {'driver': 'GV20', 'value': 0, 'uom': 25},
             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
             ]
@@ -122,7 +128,7 @@ class udiYoWaterMeterController(udi_interface.Node):
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
       
         logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
-        self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
+        #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
         self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
         self.node_ready = True
         self.updateData()
@@ -281,7 +287,34 @@ class udiYoWaterMeterController(udi_interface.Node):
                     logging.debug(f'low temp error : {low_T_error}')
                     self.my_setDriver('GV14', self.state2ISY(low_T_error))
 
+                    overrun24 = self.yoWaterCtrl.getData('attributes', 'overrunAmount24H')
 
+                    if overrun24 is not None:
+                        overrun24= round(float(self.calculate_water_volume(overrun24, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
+                    logging.debug(f'Overrun24  limit : {overrun24}')
+                    self.my_setDriver('GV22', overrun24, self.unit2uom())
+                    nbroverrun = self.yoWaterCtrl.getData('attributes', 'overrunTimes24H')
+                    #if nbroverrun is not None:
+                    #    overrun_amount = round(float(self.calculate_water_volume(overrun_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)                          
+                    logging.debug(f'overrun times limit : {nbroverrun}')
+                    self.my_setDriver('GV23', nbroverrun, 70)
+                    overrun_duration = self.yoWaterCtrl.getData('attributes', 'overrunDuration')
+                    logging.debug(f'overrun duration limit : {overrun_duration}')
+                    self.my_setDriver('GV24', overrun_duration, 44)
+
+                    leak_ac = self.yoWaterCtrl.getData('autoCloseValve', 'leakDetection')
+                    logging.debug(f'leak ACV : {leak_ac}')
+                    self.my_setDriver('GV25', self.bool2ISY(leak_ac))
+                    overrun_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunAmount24H')
+                    logging.debug(f'overrun amount24 ACV : {overrun_ac}')
+                    self.my_setDriver('GV26', self.bool2ISY(overrun_ac))
+                    overrun_time_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunDurationOnce')
+                    logging.debug(f'overrun duration ACV : {overrun_time_ac}')
+                    self.my_setDriver('GV27', self.bool2ISY(overrun_time_ac))
+                    overrun_time_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunTimes24H')
+                    logging.debug(f'overrun times ACV : {overrun_time_ac}')
+                    self.my_setDriver('GV28', self.bool2ISY(overrun_time_ac))
+                    
 
                     #attributes = self.yoWaterCtrl.getAttributes()
                     #if attributes:
