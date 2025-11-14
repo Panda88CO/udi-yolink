@@ -360,7 +360,6 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     recent_amount = self.yoWaterCtrl.getData('recentUsage','amount', self.WM_index) 
                     if recent_amount is not None:
                         recent_amount = round(float(self.calculate_water_volume(recent_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
-
                     logging.debug(f'recent amount : {recent_amount}')
                     self.my_setDriver('GV2', recent_amount,  self.unit2uom())
                     recent_duration = self.yoWaterCtrl.getData('recentUsage','duration', self.WM_index)

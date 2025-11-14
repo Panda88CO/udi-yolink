@@ -684,7 +684,7 @@
          <st id="BATLVL" editor="batlevel" />
          <!-- <st id="GV8" editor="online" /> -->
          <st id="CLITEMP" editor="celsius" />
-         <st id="GV4" editor="waterunit" />
+         <!--<st id="GV4" editor="waterunit" />-->
          <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
@@ -740,7 +740,7 @@
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="farenheit" />
-         <st id="GV4" editor="waterunit" />
+         <!--<st id="GV4" editor="waterunit" />-->
          <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
@@ -788,7 +788,7 @@
          <st id="BATLVL" editor="batlevel" />
          <!--<st id="CLITEMP" editor="celsius" />-->
          <st id="GV5" editor="alarm" /> 
-         <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
+         <!--<st id="GV4" editor="waterunit" />--> <!-- meaure unit -->
          <st id="GV20" editor="suspendstate" />
          
          <st id="TIME" editor="unixtime" />                  
@@ -814,7 +814,7 @@
          <st id="BATLVL" editor="batlevel" />
          <!--<st id="CLITEMP" editor="farenheit" />-->
          <st id="GV5" editor="alarm" /> 
-         <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
+         <!--<st id="GV4" editor="waterunit" />--> <!-- meaure unit -->
          <st id="GV20" editor="suspendstate" />
          
          <st id="TIME" editor="unixtime" />                  
@@ -843,7 +843,7 @@
          <st id="GV10" editor="flow" />     
          <st id="GV2" editor="flow" /> <!-- recent use -->
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="GV4" editor="waterunit" />
+         <!--<st id="GV4" editor="waterunit" />-->
          <!--<st id="GV5" editor="alarm" />--> <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
