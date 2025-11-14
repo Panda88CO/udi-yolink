@@ -1,7 +1,7 @@
 import json
 import time
 
-
+from typing import Any, Union, List, Dict
 from yolink_mqtt_classV3 import YoLinkMQTTDevice
 try:
     import udi_interface
@@ -164,7 +164,84 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                                 break
         return ret_val
 
+    def check_for_cat_key(cat, key, WM_index, data_dict):
+        ret_val = None
+        if cat in data_dict:
+            logging.debug(f'category {cat} found in data {data_dict[cat]}')
+            if key in data_dict[cat]:
+                if not isinstance(data_dict[cat][key], dict):
+                    logging.debug(f'key {key} found in [ {cat} ]  {data_dict[cat][key]}')
+                    ret_val = data_dict[cat][key]
+            elif isinstance(data_dict[cat], dict):
+                logging.debug(f'going deeper into dict for key {key}')  
+                for temp_key in data_dict[cat]:
+                    if key in temp_key:
+                        ret_val = data_dict[cat][temp_key][key]
+                        break
+        return ret_val
+
+
+
+    def extract_two_level(data: Union[Dict, List], key1: str, key2: str) -> List[Any]:
+        """
+        Extracts values from a nested data structure where the first level is key1
+        and the second level is key2. Works with dicts and lists of dicts.
+
+        Args:
+            data: The nested data structure (dict or list of dicts).
+            key1: The first-level key.
+            key2: The second-level key.
+
+        Returns:
+            A list of extracted values (empty if not found).
+        """
+        results = []
+
+        #def safe_get(d: Any, k: str) -> Any:
+        #    """Safely get a key from a dict, return None if not found."""
+        #    return d.get(k) if isinstance(d, dict) else None
+
+        def traverse(obj: Any):
+            """Recursively traverse dicts/lists to find matching keys."""
+            if isinstance(obj, dict):
+                if key1 in obj and isinstance(obj[key1], dict):
+                    if key2 in obj[key1]:
+                        results.append(obj[key1][key2])
+                for v in obj.values():
+                    traverse(v)
+            elif isinstance(obj, list):
+                for item in obj:
+                    traverse(item)
+        traverse(data)
+        return results
+
     def getData(yolink, category, key, WM_index = None):    
+        try:
+            logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
+            ret_val = None  
+            if yolink.online and yolink.dData in yolink.dataAPI : 
+                if yolink.dataAPI[yolink.dData] is {}:
+                    logging.info(f'No data exists (no data returned)')
+                    return("no data")
+                if category is None:
+                    if key in yolink.dataAPI[yolink.dData]:
+                        logging.debug(f'ret_val0 {ret_val} {key}  {category}')
+                        return(yolink.dataAPI[yolink.dData][key])
+            res = yolink.extract_two_level(yolink.dataAPI[yolink.dData], category, key)
+            logging.debug(f'extract_two_level result: {res}')
+            if res:
+                if isinstance( WM_index, int):
+                    if str(WM_index) in res:
+                            ret_val = res[str(WM_index)]
+                    else:
+                        ret_val = res
+            return(ret_val)
+        except KeyError as e:
+            logging.error(f'EXCEPTION - getData {e}')           
+
+
+
+    def getData1(yolink, category, key, WM_index = None):    
         try:
             logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
             ret_val = None  
@@ -212,9 +289,9 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                         logging.debug(f'ret_val2 {ret_val}  {key}  {category}')               
                         return(ret_val)
                     else:
-                        for temp_cat in yolink.dataAPI[yolink.dData]:
+                        for temp_cat, temp_val in yolink.dataAPI[yolink.dData].items():
                             logging.debug(f'temp_cat {temp_cat} ')
-                            if isinstance(temp_cat, dict):
+                            if isinstance(temp_val, dict):
                                 if category in yolink.dataAPI[yolink.dData][temp_cat]:
                                     logging.debug(f'category {category} found in data under {temp_cat}')
                                     if key in yolink.dataAPI[yolink.dData][temp_cat][category] and not isinstance(yolink.dataAPI[yolink.dData][temp_cat][category][key], dict):
@@ -227,12 +304,12 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                                                 ret_val = items[str(WM_index)]
                                         else:
                                             ret_val = items
-                                    else: # go further in
-                                        for temp_key in yolink.dataAPI[yolink.dData][temp_cat][category]:
+                                    else: # 
+                                        for temp_cat2, temp_val2 in yolink.dataAPI[yolink.dData][temp_cat][category].items():
 
-                                            if key in temp_key:
-                                                logging.debug(f'key {key} found in [ {temp_cat} ][ {category} ][ {temp_key} ] ')  
-                                                ret_val = yolink.dataAPI[yolink.dData][temp_cat][category][temp_key][key]
+                                            if key in temp_val2:
+                                                logging.debug(f'key {key} found in [ {temp_cat} ][ {category} ][ {temp_cat2} ]  [ {temp_val2}]')  
+                                                ret_val = yolink.dataAPI[yolink.dData][temp_cat][category][temp_cat2][key]
                                                 break
                                 else: # going deeper
                                     for temp_cat2 in temp_cat:
