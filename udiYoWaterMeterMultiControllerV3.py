@@ -376,9 +376,9 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     #else:
                     #    self.my_setDriver('BATLVL', bat_lvl, 25)
 
-                    #leak = self.yoWaterCtrl.getData('alarm', 'leak')
-                    #logging.debug(f'leak : {leak}')
-                    #self.my_setDriver('GV5', self.state2ISY(leak))
+                    leak = self.yoWaterCtrl.getData('alarm', 'leak')
+                    logging.debug(f'leak : {leak}')
+                    self.my_setDriver('GV5', self.state2ISY(leak))
                     amount_overrun = self.yoWaterCtrl.getData('alarm', 'amountOverrun24H', self.WM_index ) #amountOverrun24H,amountOverrun 
                     if amount_overrun is None: # try alternate key
                         amount_overrun = self.yoWaterCtrl.getData('alarm', 'amountOverrun')

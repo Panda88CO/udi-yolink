@@ -182,7 +182,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
 
 
 
-    def extract_two_level(data: Union[Dict, List], key1: str, key2: str) -> List[Any]:
+    def extract_two_level(yolink, key1: str, key2: str) -> List[Any]:
         """
         Extracts values from a nested data structure where the first level is key1
         and the second level is key2. Works with dicts and lists of dicts.
@@ -212,8 +212,8 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             elif isinstance(obj, list):
                 for item in obj:
                     traverse(item)
-        traverse(data)
-        return results
+        traverse(yolink.dataAPI[yolink.dData]['state'])
+        return results[0] if results else None
 
     def getData(yolink, category, key, WM_index = None):    
         try:
@@ -227,14 +227,17 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                     if key in yolink.dataAPI[yolink.dData]:
                         logging.debug(f'ret_val0 {ret_val} {key}  {category}')
                         return(yolink.dataAPI[yolink.dData][key])
-            res = yolink.extract_two_level(yolink.dataAPI[yolink.dData], category, key)
+                    
+            res = yolink.extract_two_level(category, key)
             logging.debug(f'extract_two_level result: {res}')
-            if res:
+            if res and isinstance(res, dict):
                 if isinstance( WM_index, int):
                     if str(WM_index) in res:
                             ret_val = res[str(WM_index)]
-                    else:
-                        ret_val = res
+                else:
+                    ret_val = res
+            else:
+                ret_val = res
             return(ret_val)
         except KeyError as e:
             logging.error(f'EXCEPTION - getData {e}')           

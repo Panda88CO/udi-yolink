@@ -956,10 +956,10 @@
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
          <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
          <st id="GV9" editor="alarm" />  <!-- open reminder-->       
-         <st id="GV11" editor="alarm" /> <!-- open reminder -->
+         <!--<st id="GV11" editor="alarm" />--> <!-- open reminder -->
          <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <st id="GV13" editor="alarm" /> <!-- high temp-->
-         <st id="GV14" editor="alarm" /> <!-- Low temp-->
+         <!--<st id="GV13" editor="alarm" />--> <!-- high temp-->
+         <!--<st id="GV14" editor="alarm" />--> <!-- Low temp-->
          <st id="GV22" editor="gallon" /> <!-- recent use -->
          <st id="GV23" editor="minutes" /> <!--  duration -->         
          <st id="GV24" editor="count" /> <!-- count/Times --> 
