@@ -21,7 +21,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterOnly(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, w_unit2ISY, save_cmd_state, retrieve_cmd_state, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, w_unit2ISY, water_meter_unit2uom, calculate_water_volume, save_cmd_state, retrieve_cmd_state, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yowatermeterOnly'
     '''
@@ -73,6 +73,15 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.temp_unit = self.yoAccess.get_temp_unit()
         if self.temp_unit == 1:
             self.id = 'yowatermeterOnlyF'
+
+        self.water_unit = self.yoAccess.get_water_unit()              
+        if self.water_unit == 0:
+            self.id = 'yowatermeterSubG'    
+        elif self.water_unit == 3:
+            self.id = 'yowatermeterSubG'   
+        else:
+            logging.error('Only Litere and Gallon supported for now')
+
         self.devInfo =  deviceInfo
         self.yoWaterCtrl= None
         self.node_ready = False

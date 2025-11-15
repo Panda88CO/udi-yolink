@@ -1017,7 +1017,7 @@
    </nodeDef> 
 
 <nodeDef id="yowatermeterOnly" nls="nlswatermeter">
-      <editors />
+   <editors />
    <sts>
          <st id="ST" editor="waterrun" /> <!-- water runing-->
          <st id="GV1" editor="flow" />
@@ -1025,7 +1025,57 @@
          <st id="GV2" editor="flow" /> <!-- recent use -->
 
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="GV4" editor="waterunit" /> <!-- meaure unit -->
+         <!--<st id="GV4" editor="waterunit" />--> <!-- meaure unit -->
+
+         <st id="BATLVL" editor="batlevel" />
+         <st id="CLITEMP" editor="celsius" />
+
+         <!-- <st id="GV8" editor="online" /> -->
+         <st id="GV5" editor="alarm" />
+         <st id="GV6" editor="alarm" />
+         <st id="GV7" editor="alarm" />
+         <st id="GV9" editor="alarm" />         
+         <st id="GV11" editor="alarm" /> <!-- open reminder -->
+         <st id="GV12" editor="alarm" /> <!-- valve error -->
+         <st id="GV13" editor="alarm" /> <!-- high temp-->
+         <st id="GV14" editor="alarm" /> <!-- Low temp-->   
+
+         <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
+         <st id="GV30" editor="status" />
+         <st id="GV20" editor="suspendstate" />
+         <st id="TIME" editor="unixtime" />                  
+      </sts>
+      <cmds>
+         <sends>
+            <!--<cmd id="DON" editor="manstate"  />               
+            <cmd id="DOF" editor="manstate"  />   -->
+            <cmd id="DON"  />               
+            <cmd id="DOF"  />    
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+
+            <cmd id="SETATTRIB">
+               <p id="L_LIMIT" editor="leaklimit" /> 
+               <p id="OR_LIMIT" editor="leaklimit"  /> 
+               <p id="ORT_LIMIT" editor="minutes_set"  /> 
+            </cmd >
+         </accepts>
+      </cmds>
+   </nodeDef> 
+
+<nodeDef id="yowatermeterOnlyF" nls="nlswatermeter">
+   <editors />
+   <sts>
+         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="GV1" editor="flow" />
+         <st id="GV10" editor="flow" />     
+         <st id="GV2" editor="flow" /> <!-- recent use -->
+
+         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
+         <!--<st id="GV4" editor="waterunit" />--> <!-- meaure unit -->
 
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="farenheit" />
@@ -1062,11 +1112,9 @@
                <p id="OR_LIMIT" editor="leaklimit"  /> 
                <p id="ORT_LIMIT" editor="minutes_set"  /> 
             </cmd >
- 
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yothsens" nls="nlsthsens">
       <editors />
       <sts>

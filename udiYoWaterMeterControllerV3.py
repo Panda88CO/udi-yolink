@@ -21,7 +21,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterController(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, w_unit2ISY, water_meter_unit2uom, state2ISY, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, w_unit2ISY, water_meter_unit2uom, calculate_water_volume, state2ISY, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yowatermeterCtrl'
     '''
@@ -82,6 +82,14 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.temp_unit = self.yoAccess.get_temp_unit()
         if self.temp_unit == 1:
             self.id = 'yowatermeterCtrlF'
+
+        self.water_unit = self.yoAccess.get_water_unit()              
+        if self.water_unit == 0:
+            self.id = 'yowatermeterSubG'    
+        elif self.water_unit == 3:
+            self.id = 'yowatermeterSubG'   
+        else:
+            logging.error('Only Litere and Gallon supported for now')
 
         self.devInfo =  deviceInfo
         self.yoWaterCtrl= None
@@ -183,7 +191,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                         return
                     if self.meter_uom is None:
                         logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
-                        self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
+                        #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
                         self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
 
                     state = self.yoWaterCtrl.getData('state', 'valve')
@@ -215,19 +223,22 @@ class udiYoWaterMeterController(udi_interface.Node):
                     self.my_setDriver('ST', self.state2ISY(water_flowing ))
 
                     total_meter = self.yoWaterCtrl.getData('state','meter')
+                    total_meter =round(float(self.calculate_water_volume(total_meter, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
                     logging.debug(f'total meter : {total_meter}')
                     self.my_setDriver('GV10', total_meter,  self.meter_uom)
 
                     daily_use = self.yoWaterCtrl.getData('dailyUsage', 'amount')
-                    logging.debug(f'daily use : {daily_use}')   
+                    daily_use =round(float(self.calculate_water_volume(daily_use, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
+                    logging.debug(f'daily use : {daily_use}')
                     self.my_setDriver('GV1', daily_use,  self.meter_uom)
                     recent_amount = self.yoWaterCtrl.getData('recentUsage','amount')
+                    recent_amount =round(float(self.calculate_water_volume(recent_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
                     logging.debug(f'recent amount : {recent_amount}')
                     self.my_setDriver('GV2', recent_amount,  self.meter_uom)
+
                     recent_duration = self.yoWaterCtrl.getData('recentUsage','duration')
                     logging.debug(f'recent duration : {recent_duration}')
                     self.my_setDriver('GV3', recent_duration,  44)  
-
 
                     pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                     logging.debug('udiYoWaterMeterController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
