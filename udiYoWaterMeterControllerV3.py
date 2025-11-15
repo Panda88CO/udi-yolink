@@ -164,7 +164,7 @@ class udiYoWaterMeterController(udi_interface.Node):
         #    self.my_setDriver('GV1', 0)
         #    self.my_setDriver('GV2', 0)
 
-    """
+    
     def unit2uom(self) -> int:
         logging.debug(f'unit2uom {self.yoWaterCtrl.uom}')
         isy_uom = None
@@ -178,7 +178,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             isy_uom = 35 # liter          
         logging.debug(f'unit2uom {isy_uom}')             
         return(isy_uom)
-    """
+    
     def updateData(self):
         try:
             if self.node is not None:
