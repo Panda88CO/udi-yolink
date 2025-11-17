@@ -826,13 +826,12 @@
   <nodeDef id="yowatermeterMultiF" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="status" /> <!-- On line-->
+         <st id="ST" editor="waterrun" /> <!-- On line-->
          <st id="BATLVL" editor="batlevel" />
          <!--<st id="CLITEMP" editor="farenheit" />-->
          <st id="GV5" editor="alarm" /> 
          <!--<st id="GV4" editor="waterunit" />--> <!-- meaure unit -->
          <st id="GV20" editor="suspendstate" />
-         
          <st id="TIME" editor="unixtime" />                  
       </sts>
       <cmds>
