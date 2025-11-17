@@ -562,7 +562,8 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         try:
             logging.debug(yolink.type+' - getAttributes')
             attributes = {}
-            if yolink.online:   
+            if yolink.online: 
+                data = yolink.getData('attributes', 'meterUnit')  
                 if 'attributes' in yolink.dataAPI[yolink.dData]:
                     attributes = yolink.dataAPI[yolink.dData]['attributes' ]
                     if 'meterUnit' in attributes and yolink.uom is None:
@@ -571,7 +572,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                         for item in yolink.dataAPI[yolink.dData]['attributes']:
                             if isinstance(yolink.dataAPI[yolink.dData]['attributes'][item], dict):
                                 if str(WM_index) in item:
-                                    attributes[item] = yolink.dataAPI[yolink.dData]['alarm'][item][str(WM_index)]                        
+                                    attributes[item] = yolink.dataAPI[yolink.dData]['attributes'][item][str(WM_index)]                        
                                     
             return(attributes)
 

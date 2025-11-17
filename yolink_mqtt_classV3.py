@@ -1252,8 +1252,8 @@ class YoLinkMQTTDevice(object):
                                 del temp_dict['loraInfo']
                             
                             for key in temp_dict:
-                                logging.debug(f'key {key}')
-                                logging.debug(f'value {temp_dict[key]} ')
+                                #ogging.debug(f'key {key}')
+                                #logging.debug(f'value {temp_dict[key]} ')
                                 if key == yolink.dDelay and yolink.type in yolink.delaySupport:
                                     temp = []
                                     temp.append(temp_dict[yolink.dDelay])
@@ -1263,7 +1263,7 @@ class YoLinkMQTTDevice(object):
                                     yolink.dataAPI[yolink.dData][yolink.dState][key] = temp_dict[key]  
                             for info in data[yolink.dData]: 
                                 if info != yolink.dState:
-                                    logging.debug(f'info loop {info}')
+                                    #logging.debug(f'info loop {info}')
                                     yolink.dataAPI[yolink.dData][info] = data[yolink.dData][info]
 
                             logging.debug('After parsing {}'.format(json.dumps(yolink.dataAPI[yolink.dData], indent=4)))

@@ -910,7 +910,7 @@
          <st id="GV10" editor="liter" />     
          <st id="GV2" editor="liter" /> <!-- recent use -->
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
+         <!--<st id="GV5" editor="alarm" />--> <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
          <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
@@ -967,7 +967,7 @@
          <st id="GV10" editor="gallon" />     
          <st id="GV2" editor="gallon" /> <!-- recent use -->
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
+         <!--<st id="GV5" editor="alarm" />-->  <!-- overrunAmount 24H-->
          <st id="GV6" editor="alarm" /> <!--overrun-->
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
          <st id="GV8" editor="alarm" /> <!--overrun time 24H-->

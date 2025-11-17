@@ -300,15 +300,15 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
 
     def unit2uom(self) -> int:
-        logging.debug('unit2uom')
+        logging.debug(f'unit2uom {self.water_unit}')
         isy_uom = None
-        if self.yoWaterCtrl.uom == 0:
+        if self.water_unit== 0:
             isy_uom = 69 # gallon
-        if self.yoWaterCtrl.uom == 1:
+        if self.water_unit == 1:
             isy_uom = 6 #ft^3
-        if self.yoWaterCtrl.uom == 2:
+        if self.water_unit == 2:
             isy_uom = 8 #m^3
-        if self.yoWaterCtrl.uom == 3:
+        if self.water_unit == 3:
             isy_uom = 35 # liter                       
         return(isy_uom)
 
@@ -344,7 +344,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     water_flowing = self.yoWaterCtrl.getData('state','waterFlowing', self.WM_index)
                     logging.debug(f'water flowing : {water_flowing}')       
                     self.my_setDriver('ST', self.state2ISY(water_flowing ))
-                    total_meter = self.yoWaterCtrl.getData('state','meter', self.WM_index)
+                    total_meter = self.yoWaterCtrl.getData('state','meters', self.WM_index)
                     if total_meter is not None:
                         total_meter = round((float(self.calculate_water_volume(total_meter, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit))), 1)  
                     self.my_setDriver('GV10', total_meter,  self.unit2uom())
@@ -372,9 +372,10 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     #else:
                     #    self.my_setDriver('BATLVL', bat_lvl, 25)
 
-                    leak = self.yoWaterCtrl.getData('alarm', 'leak')
-                    logging.debug(f'leak : {leak}')
-                    self.my_setDriver('GV5', self.state2ISY(leak))
+                    #leak = self.yoWaterCtrl.getData('alarm', 'leak')
+                    #logging.debug(f'leak : {leak}')
+                    #self.my_setDriver('GV5', self.state2ISY(leak))
+                    
                     amount_overrun = self.yoWaterCtrl.getData('alarm', 'amountOverrun24H', self.WM_index ) #amountOverrun24H,amountOverrun 
                     if amount_overrun is None: # try alternate key
                         amount_overrun = self.yoWaterCtrl.getData('alarm', 'amountOverrun')
