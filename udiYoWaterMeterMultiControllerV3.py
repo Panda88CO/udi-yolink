@@ -170,7 +170,6 @@ class udiYoWaterMeterMulti(udi_interface.Node):
                     for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
                         if wm_index in self.wm_nodes:
                             self.wm_nodes[wm_index].updateData()
-                
                 else:
                     self.my_setDriver('ST', 0)
                     self.my_setDriver('GV20', 2)
@@ -189,9 +188,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-
                 }
-
 
 
 class udiYoSubWaterMeter(udi_interface.Node):
@@ -243,7 +240,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         if self.water_unit == 0:
             self.id = 'yowatermeterSubG'    
         elif self.water_unit == 3:
-            self.id = 'yowatermeterSubG'   
+            self.id = 'yowatermeterSubL'   
         else:
             logging.error('Only Litere and Gallon supported for now')
         self.WM_index = WMindex

@@ -676,9 +676,9 @@
          <st id="ST" editor="waterrun" /> <!-- water runing-->
 
          <st id="GV0" editor="manstate" />
-         <st id="GV1" editor="flow" />
-         <st id="GV10" editor="flow" />     
-         <st id="GV2" editor="flow" /> <!-- recent use -->
+         <st id="GV1" editor="liter" />
+         <st id="GV10" editor="liter" />     
+         <st id="GV2" editor="liter" /> <!-- recent use -->
 
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="BATLVL" editor="batlevel" />
@@ -742,9 +742,9 @@
          <st id="ST" editor="waterrun" /> <!-- water runing-->
 
          <st id="GV0" editor="manstate" />
-         <st id="GV1" editor="flow" />
-         <st id="GV10" editor="flow" />     
-         <st id="GV2" editor="flow" /> <!-- recent use -->
+         <st id="GV1" editor="gallon" />
+         <st id="GV10" editor="gallon" />     
+         <st id="GV2" editor="gallon" /> <!-- recent use -->
          <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="farenheit" />
@@ -758,7 +758,7 @@
          <st id="GV12" editor="alarm" /> <!-- valve error -->
          <st id="GV13" editor="alarm" /> <!-- high temp-->
          <st id="GV14" editor="alarm" /> <!-- Low temp-->
-         <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
+         <st id="GV22" editor="gallon" /> <!-- Leaklimit AC -->
          <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
          <st id="GV24" editor="minutes" />
 
