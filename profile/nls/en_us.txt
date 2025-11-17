@@ -582,22 +582,33 @@ CMD-nlssmkey-KEY3LDEF-NAME=Key3 Long Scene Function
 CMD-nlssmkey-KEY4LDEF-NAME=Key4 Long Scene Function
 CMD-nlssmkey-NAME=Update Status
 
-ND-yowatermeterCtrl-NAME=YoLink Water Meter Controller
-ND-yowatermeterCtrl-ICON=PulseCounter
+
 ND-yowatermeterOnly-NAME=YoLink Water Meter
 ND-yowatermeterOnly-ICON=PulseCounter
-ND-yowatermeterMulti-NAME=YoLink Water Meter Multi Controller
-ND-yowatermeterMulti-ICON=PulseCounter
-ND-yowatermeterMultiF-ICON=PulseCounter
-ND-yowatermeterSub-NAME=YoLink Water Meter Controller
-ND-yowatermeterMultiF-ICON=PulseCounter
-ND-yowatermeterCtrlF-NAME=YoLink Water Meter Controller
-ND-yowatermeterCtrlF-ICON=PulseCounter
 ND-yowatermeterOnlyF-NAME=YoLink Water Meter 
 ND-yowatermeterOnlyF-ICON=PulseCounter
-ND-yowatermeterMultiF-NAME=YoLink Water Meter Multi Controller
-ND-yowatermeterSubF-NAME=YoLink Water Meter Controller
+ND-yowatermeterCtrl-NAME=YoLink Water Meter Controller
+ND-yowatermeterCtrl-ICON=PulseCounter
+ND-yowatermeterCtrlL-NAME=YoLink Water Meter Controller
+ND-yowatermeterCtrlL-ICON=PulseCounter
+ND-yowatermeterCtrlG-NAME=YoLink Water Meter Controller
+ND-yowatermeterCtrlG-ICON=PulseCounter
+
+
+ND-yowatermeterMulti-NAME=YoLink Water Meter Multi Controller
+ND-yowatermeterMulti-ICON=PulseCounter
+ND-yowatermeterMultiL-NAME=YoLink Water Meter Multi Controller
+ND-yowatermeterMultiL-ICON=PulseCounter
+ND-yowatermeterMultiG-NAME=YoLink Water Meter Multi Controller
+ND-yowatermeterMultiG-ICON=PulseCounter
+ND-yowatermeterSub-NAME=YoLink Water Meter Sub Controller
+ND-yowatermeterSub-ICON=PulseCounter
+ND-yowatermeterSubF-NAME=YoLink Water Meter Sub Controller
 ND-yowatermeterSubF-ICON=PulseCounter
+ND-yowatermeterSubG-NAME=YoLink Water Meter Sub Controller
+ND-yowatermeterSubG-ICON=PulseCounter
+
+
 ST-nlswatermeter-ST-NAME=Water Running
 ST-nlswatermeter-GV0-NAME=Valve State
 ST-nlswatermeter-GV1-NAME=Water Meter Total
