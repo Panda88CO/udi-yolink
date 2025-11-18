@@ -112,12 +112,21 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.my_setDriver('GV30', 1)
         self.my_setDriver('GV20', 0)
         self.yoWaterCtrl= YoLinkWaterMeter(self.yoAccess, self.devInfo, self.updateStatus)
-        
+
         time.sleep(4)
         self.yoWaterCtrl.initNode()
         time.sleep(2)
         #self.my_setDriver('ST', 1)
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
+        self.yoWaterCtrl.getMeterCount()
+        self.yoWaterCtrl.getMeterUnit()
+        #self.my_setDriver('GV30', 1)
+        #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
+
+        ISYwater_unit = self.yoAccess.get_water_unit()
+        #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
+        self.meter_ISYuom = self.water_meter_unit2uom(ISYwater_unit)
+        logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit} ISY unit: {ISYwater_unit} uom: {self.meter_ISYuom}')
         self.node_ready = True
         self.updateData()
 
@@ -139,19 +148,6 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         #if time.time() >= self.timer_expires - self.timer_update:
         #    self.my_setDriver('GV1', 0)
         #    self.my_setDriver('GV2', 0)
-
-    def unit2uom(self) -> int:
-        logging.debug('unit2uom')
-        isy_uom = None
-        if self.water_unit== 0:
-            isy_uom = 69 # gallon
-        if self.water_unit == 1:
-            isy_uom = 6 #ft^3
-        if self.water_unit == 2:
-            isy_uom = 8 #m^3
-        if self.water_unit == 3:
-            isy_uom = 35 # liter        
-        return isy_uom               
 
 
     def updateData(self):
@@ -186,15 +182,15 @@ class udiYoWaterMeterOnly(udi_interface.Node):
                         else:
                             self.my_setDriver('ST', None)
                         if 'total' in meter:
-                            self.my_setDriver('GV1', meter['total'],  self.unit2uom())
+                            self.my_setDriver('GV1', meter['total'],   self.meter_ISYuom )
                         else:
                             self.my_setDriver('GV1', None)
                         if 'daily_usage' in meter:
-                            self.my_setDriver('GV10', meter['daily_usage'],  self.unit2uom())
+                            self.my_setDriver('GV10', meter['daily_usage'],   self.meter_ISYuom )
                         else:
                             self.my_setDriver('GV10', None)
                         if 'recent_amount' in meter:
-                            self.my_setDriver('GV2', meter['recent_amount'],  self.unit2uom())
+                            self.my_setDriver('GV2', meter['recent_amount'],   self.meter_ISYuom )
                         else:
                             self.my_setDriver('GV2', None)
                         if 'recent_duration' in meter:
@@ -235,7 +231,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
                         if 'meterUnit' in attributes:
                             self.my_setDriver('GV11', attributes['meterUnit'], 25)                    
                         if 'leakLimit' in attributes:
-                            self.my_setDriver('GV12', attributes['leakLimit'], self.unit2uom())
+                            self.my_setDriver('GV12', attributes['leakLimit'],  self.meter_ISYuom )
                         #if 'autoCloseValve' in attributes:
                         #    self.my_setDriver('GV13', self.bool2ISY(attributes['autoCloseValve']), 25)
                         #if 'overrunAmountACV' in attributes:
@@ -243,7 +239,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
                         #if 'overrunDurationACV' in attributes:
                         #    self.my_setDriver('GV17', self.bool2ISY(attributes['overrunDurationACV']), 25)
                         if 'overrunAmount' in attributes:
-                            self.my_setDriver('GV14', attributes['overrunAmount'],self.unit2uom())
+                            self.my_setDriver('GV14', attributes['overrunAmount'], self.meter_ISYuom )
                         if 'overrunDuration' in attributes:
                             self.my_setDriver('GV16', attributes['overrunDuration'], 44)
 

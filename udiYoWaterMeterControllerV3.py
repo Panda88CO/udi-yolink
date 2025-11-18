@@ -136,10 +136,11 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.yoWaterCtrl.getMeterUnit()
         #self.my_setDriver('GV30', 1)
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
-      
-        logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
+
+        ISYwater_unit = self.yoAccess.get_water_unit()
         #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
-        self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
+        self.meter_ISYuom = self.water_meter_unit2uom(ISYwater_unit)
+        logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit} ISY unit: {ISYwater_unit} uom: {self.meter_ISYuom}')
         self.node_ready = True
         self.updateData()
 
@@ -191,10 +192,10 @@ class udiYoWaterMeterController(udi_interface.Node):
                         logging.debug('Empty data received - skip updateData')
                         self.my_setDriver('GV20', 6)
                         return
-                    if self.meter_uom is None:
+                    if self.meter_ISYuom is None:
                         logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
                         #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
-                        self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
+                        self.meter_ISYuom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
 
                     state = self.yoWaterCtrl.getData('state', 'valve')
                     logging.debug(f'valve state: {state}')                    
@@ -225,18 +226,18 @@ class udiYoWaterMeterController(udi_interface.Node):
                     self.my_setDriver('ST', self.state2ISY(water_flowing ))
 
                     total_meter = self.yoWaterCtrl.getData('state','meter')
-                    total_meter =round(float(self.calculate_water_volume(total_meter, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
+                    total_meter =round(float(self.calculate_water_volume(total_meter, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit())), 1)
                     logging.debug(f'total meter : {total_meter}')
-                    self.my_setDriver('GV10', total_meter,  self.meter_uom)
+                    self.my_setDriver('GV10', total_meter,  self.meter_ISYuom)
 
                     daily_use = self.yoWaterCtrl.getData('dailyUsage', 'amount')
                     daily_use =round(float(self.calculate_water_volume(daily_use, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
                     logging.debug(f'daily use : {daily_use}')
-                    self.my_setDriver('GV1', daily_use,  self.meter_uom)
+                    self.my_setDriver('GV1', daily_use,  self.meter_ISYuom)
                     recent_amount = self.yoWaterCtrl.getData('recentUsage','amount')
                     recent_amount =round(float(self.calculate_water_volume(recent_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
                     logging.debug(f'recent amount : {recent_amount}')
-                    self.my_setDriver('GV2', recent_amount,  self.meter_uom)
+                    self.my_setDriver('GV2', recent_amount,  self.meter_ISYuom)
 
                     recent_duration = self.yoWaterCtrl.getData('recentUsage','duration')
                     logging.debug(f'recent duration : {recent_duration}')
@@ -305,7 +306,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     if overrun24 is not None:
                         overrun24= round(float(self.calculate_water_volume(overrun24, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
                     logging.debug(f'Overrun24  limit : {overrun24}')
-                    self.my_setDriver('GV22', overrun24, self.unit2uom())
+                    self.my_setDriver('GV22', overrun24, self.meter_ISYuom)
                     nbroverrun = self.yoWaterCtrl.getData('attributes', 'overrunTimes24H')
                     #if nbroverrun is not None:
                     #    overrun_amount = round(float(self.calculate_water_volume(overrun_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)                          
@@ -338,7 +339,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             
                     #leak_limit = self.yoWaterCtrl.getData('attributes', 'leakLimit')    
                     #logging.debug(f'leak limit : {leak_limit}')  
-                    #self.my_setDriver('GV12', leak_limit, self.meter_uom)
+                    #self.my_setDriver('GV12', leak_limit, self.meter_ISYuom)
                     #auto_close = self.yoWaterCtrl.getData('attributes', 'autoCloseValve')    
                     #logging.debug(f'auto close : {auto_close}') 
                     #self.my_setDriver('GV13', self.bool2ISY( auto_close), 25)
@@ -350,7 +351,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     #self.my_setDriver('GV17', self.bool2ISY(overrun_duration_acv), 25)
                     #overrun_amount = self.yoWaterCtrl.getData('attributes', 'overrunAmount')    
                     #logging.debug(f'overrun amount : {overrun_amount}')     
-                    #self.my_setDriver('GV14', overrun_amount, self.meter_uom)
+                    #self.my_setDriver('GV14', overrun_amount, self.meter_ISYuom)
                     #overrun_duration = self.yoWaterCtrl.getData('attributes', 'overrunDuration')    
                     #logging.debug(f'overrun duration : {overrun_duration}')
                     #self.my_setDriver('GV16', overrun_duration, 44) 
@@ -359,7 +360,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                    # if 'meterUnit' in attributes:
                    #     self.my_setDriver('GV11', attributes['meterUnit'], 25)                    
                     if 'leakLimit' in attributes:
-                        self.my_setDriver('GV12', attributes['leakLimit'], self.meter_uom)
+                        self.my_setDriver('GV12', attributes['leakLimit'], self.meter_ISYuom)
                     if 'autoCloseValve' in attributes:
                         self.my_setDriver('GV13', self.bool2ISY(attributes['autoCloseValve']), 25)
                     if 'overrunAmountACV' in attributes:
@@ -367,7 +368,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     if 'overrunDurationACV' in attributes:
                         self.my_setDriver('GV17', self.bool2ISY(attributes['overrunDurationACV']), 25)
                     if 'overrunAmount' in attributes:
-                        self.my_setDriver('GV14', attributes['overrunAmount'],self.meter_uom)
+                        self.my_setDriver('GV14', attributes['overrunAmount'],self.meter_ISYuom)
                     if 'overrunDuration' in attributes:
                         self.my_setDriver('GV16', attributes['overrunDuration'], 44)
                     '''

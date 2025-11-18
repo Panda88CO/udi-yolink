@@ -61,7 +61,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         self.yoWaterCtrl= None
         self.node_ready = False
         self.last_state = ''
-        self.meter_uom = None
+        self.meter_ISYuom= None
         known_meters = ['']
         self.onDelay = 0
         self.offDelay = 0
@@ -98,8 +98,12 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             self.yoWaterCtrl.getMeterCount()
             self.yoWaterCtrl.getMeterUnit()
             logging.debug(f'Water_meter_count {self.yoWaterCtrl.water_meter_count} unit {self.yoWaterCtrl.meter_unit}')
-            #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
-            self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
+            #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)   
+            ISYwater_unit = self.yoAccess.get_water_unit()     
+            self.meter_ISYuom= self.water_meter_unit2uom(ISYwater_unit)
+            logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit} ISY unit: {ISYwater_unit} uom: {self.meter_uom}')
+
+            self.my_setDriver('GV1', self.yoWaterCtrl.water_meter_count)
             if self.yoWaterCtrl.water_meter_count > 1:
                 self.wm_nodes= {}
                 for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
@@ -148,10 +152,10 @@ class udiYoWaterMeterMulti(udi_interface.Node):
                         logging.debug('Empty data received - skip updateData')
                         self.my_setDriver('GV20', 6)
                         return
-                    if self.meter_uom is None:
+                    if self.meter_ISYuom is None:
                         logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
                         #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
-                        self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)            
+                        self.meter_ISYuom= self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)            
                     water_state = self.yoWaterCtrl.getData('state', 'waterFlowing')
                     logging.debug(f'water flowing : {water_state}')
                     if water_state is not None and len(water_state) == 2:   
@@ -251,7 +255,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.yoWaterCtrl= wmAccess
         self.node_ready = False
         self.last_state = ''
-        self.meter_uom = None
+        self.meter_ISYuom= None
         self.valveState = 99 # needed as class c device - keep value until online again 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -281,8 +285,11 @@ class udiYoSubWaterMeter(udi_interface.Node):
         #self.yoWaterCtrl.initNode()
         time.sleep(2)
         self.yoWaterCtrl.getMeterUnit()
+        ISYwater_unit = self.yoAccess.get_water_unit()     
+        self.meter_ISYuom= self.water_meter_unit2uom(ISYwater_unit)
+        logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit} ISY unit: {ISYwater_unit} uom: {self.meter_ISYuom}')
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
-        self.my_setDriver('GV1', 0,  self.unit2uom())
+        self.my_setDriver('GV1', 0,  self.meter_ISYuom)
         self.node_ready = True
         self.updateData()
 
@@ -302,19 +309,6 @@ class udiYoSubWaterMeter(udi_interface.Node):
             self.updateData()
 
 
-    def unit2uom(self) -> int:
-        logging.debug(f'unit2uom {self.water_unit}')
-        isy_uom = None
-        if self.water_unit== 0:
-            isy_uom = 69 # gallon
-        if self.water_unit == 1:
-            isy_uom = 6 #ft^3
-        if self.water_unit == 2:
-            isy_uom = 8 #m^3
-        if self.water_unit == 3:
-            isy_uom = 35 # liter                       
-        return(isy_uom)
-
     def updateData(self):
         try:
             if self.node is not None:
@@ -324,10 +318,10 @@ class udiYoSubWaterMeter(udi_interface.Node):
                         logging.debug('Empty data received - skip updateData')
                         self.my_setDriver('GV20', 6)
                         return
-                    if self.meter_uom is None:
+                    if self.meter_ISYuom is None:
                         logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit}')
                         #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)          
-                        self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
+                        self.meter_ISYuom= self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)
                     state =  self.yoWaterCtrl.getData('state', 'valve', self.WM_index)
                     #Needs to update 
                     
@@ -349,19 +343,19 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     self.my_setDriver('ST', self.state2ISY(water_flowing ))
                     total_meter = self.yoWaterCtrl.getData('state','meters', self.WM_index)
                     if total_meter is not None:
-                        total_meter = round((float(self.calculate_water_volume(total_meter, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit))), 1)  
-                    self.my_setDriver('GV10', total_meter,  self.unit2uom())
+                        total_meter = round((float(self.calculate_water_volume(total_meter, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit()))), 1)  
+                    self.my_setDriver('GV10', total_meter,  self.meter_ISYuom)
 
                     daily_use = self.yoWaterCtrl.getData('dailyUsage', 'amount', self.WM_index)
                     if daily_use is not None:
-                        daily_use = round(float(self.calculate_water_volume(daily_use, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)),1)
+                        daily_use = round(float(self.calculate_water_volume(daily_use, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit())),1)
                     logging.debug(f'daily use : {daily_use}')   
-                    self.my_setDriver('GV1', daily_use,  self.unit2uom())
+                    self.my_setDriver('GV1', daily_use,  self.meter_ISYuom)
                     recent_amount = self.yoWaterCtrl.getData('recentUsage','amount', self.WM_index) 
                     if recent_amount is not None:
-                        recent_amount = round(float(self.calculate_water_volume(recent_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
+                        recent_amount = round(float(self.calculate_water_volume(recent_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit())), 1)
                     logging.debug(f'recent amount : {recent_amount}')
-                    self.my_setDriver('GV2', recent_amount,  self.unit2uom())
+                    self.my_setDriver('GV2', recent_amount,  self.meter_ISYuom)
                     recent_duration = self.yoWaterCtrl.getData('recentUsage','duration', self.WM_index)
                     logging.debug(f'recent duration : {recent_duration}')
                     self.my_setDriver('GV3', recent_duration,  44)  
@@ -408,7 +402,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     logging.debug(f'valve error : {valve_error}')   
                     self.my_setDriver('GV12', self.state2ISY(valve_error))   
                     #logging.debug(f'leak limit : {leak_limit}')
-                    #self.my_setDriver('GV21', leak_limit, self.unit2uom())
+                    #self.my_setDriver('GV21', leak_limit, self.meter_ISYuom)
                     #overrun_amount = self.yoWaterCtrl.getData('attributes', 'overrunAmount', self.WM_index)
                     #if overrun_amount is not None:
                     #    overrun_amount = round(float(self.calculate_water_volume(overrun_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)                          
@@ -418,7 +412,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     if overrun24 is not None:
                         overrun24= round(float(self.calculate_water_volume(overrun24, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)
                     logging.debug(f'Overrun24  limit : {overrun24}')
-                    self.my_setDriver('GV22', overrun24, self.unit2uom())
+                    self.my_setDriver('GV22', overrun24, self.meter_ISYuom)
                     nbroverrun = self.yoWaterCtrl.getData('attributes', 'overrunTimes24H', self.WM_index)
                     #if nbroverrun is not None:
                     #    overrun_amount = round(float(self.calculate_water_volume(overrun_amount, self.yoWaterCtrl.meter_unit, self.yoAccess.water_unit)), 1)                          
