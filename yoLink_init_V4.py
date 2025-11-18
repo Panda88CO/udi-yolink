@@ -1103,7 +1103,7 @@ class YoLinkInitPAC(object):
     def get_temp_unit(yoAccess):
         return(yoAccess.temp_unit)
 
-    def set_water_unit(yoAccess, unit):
+    def set_watre_unit(yoAccess, unit):
         yoAccess.water_unit = unit
 
     def get_water_unit(yoAccess):

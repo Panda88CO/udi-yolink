@@ -74,8 +74,12 @@ def convert_water_unit(self, tempStr):
         return(0)
     elif tempStr.capitalize()[:1] == 'C': #CCF
         return(1)
+    elif tempStr.capitalize()[:1] == 'M': #M^3
+        return(2)
+    elif tempStr.capitalize()[:1] == 'L': #Liter
+        return(3)    
     else:
-        return(0)
+        return(None)
 
 def save_cmd_state(self, cmd_state):
     logging.debug('save_cmd_state {} - {}'.format(cmd_state, self.address))

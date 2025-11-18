@@ -164,6 +164,7 @@ class YoLinkSetup (udi_interface.Node):
 
         if 'WATER_UNIT' in self.Parameters:
             self.water_unit = self.convert_water_unit(self.Parameters['WATER_UNIT'])
+            logging.debug('WATER_UNIT: {}'.format(self.water_unit ))
         else:
             self.water_unit = 0  
             self.Parameters['WATER_UNIT'] = 'L'

@@ -434,7 +434,9 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     overrun_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunAmount24H', self.WM_index)
                     logging.debug(f'overrun amount24 ACV : {overrun_ac}')
                     self.my_setDriver('GV26', self.bool2ISY(overrun_ac))
-                    overrun_time_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunDurationOnce', self.WM_index)
+                    overrun_time_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunDuration', self.WM_index)
+                    if overrun_time_ac is None:
+                        overrun_time_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunDurationOnce', self.WM_index)
                     logging.debug(f'overrun duration ACV : {overrun_time_ac}')
                     self.my_setDriver('GV27', self.bool2ISY(overrun_time_ac))
                     overrun_time_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunTimes24H', self.WM_index)
