@@ -54,16 +54,21 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
 
 
     def getMeterCount(yolink):
+        yolink.water_meter_count = None
         if yolink.online:
-            if 'state' in yolink.dataAPI[yolink.dData] and 'state' in yolink.dataAPI[yolink.dData]['state']:
+            valve_list = yolink.getData('state','valves')
+            logging.debug(f'valve_list: {valve_list}')  
+            yolink.water_meter_count = len(valve_list)
+            #if 'state' in yolink.dataAPI[yolink.dData] and 'state' in yolink.dataAPI[yolink.dData]['state']:
             
-                if 'meters' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['meters'], dict):
-                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['meters'])
-                elif 'valves' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['valves'], dict):
-                    yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['valves'])
-                else:
-                    yolink.water_meter_count = 1 
-                logging.info(f'Water Meter Controller - {yolink.water_meter_count} meters found')
+            #    if 'meters' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['meters'], dict):
+            #        yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['meters'])
+            #    elif 'valves' in yolink.dataAPI[yolink.dData]['state']['state'] and isinstance(yolink.dataAPI[yolink.dData]['state']['state']['valves'], dict):
+            #        yolink.water_meter_count = len(yolink.dataAPI[yolink.dData]['state']['state']['valves'])
+            #    else:
+            #        yolink.water_meter_count = 1 
+            #    logging.info(f'Water Meter Controller - {yolink.water_meter_count} meters found')
+        return(yolink.water_meter_count)
 
     def getMeterUnit(yolink):   
         yolink.meter_unit = None

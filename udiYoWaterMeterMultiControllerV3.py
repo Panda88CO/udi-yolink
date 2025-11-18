@@ -95,16 +95,21 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             while not self.yoWaterCtrl.online:
                 logging.info('waiting for watermeter to be online')
                 time.sleep(1)
-            self.yoWaterCtrl.getMeterCount()
+            self.meter_count = self.yoWaterCtrl.getMeterCount()
+            if self.meter_count is None:
+                logging.error('Water meter count not found')
+                self.poly.Notices['nometer'] = 'No multi meter found - may be off line'
+                return
+            
             self.meter_unit =  self.yoWaterCtrl.getMeterUnit()
             self.ISYwater_unit = self.yoAccess.get_water_unit()     
             self.ISYmeter_uom= self.water_meter_unit2uom( self.ISYwater_unit)
             logging.debug(f'meter unit : { self.meter_unit} ISY unit: { self.ISYwater_unit} uom: {self.ISYmeter_uom}')
 
             self.my_setDriver('GV1', self.yoWaterCtrl.water_meter_count)
-            if self.yoWaterCtrl.water_meter_count > 1:
+            if self.meter_count > 1:
                 self.wm_nodes= {}
-                for wm_index in range(0, self.yoWaterCtrl.water_meter_count):
+                for wm_index in range(0, self.meter_count):
                     address = f'{self.address[-12:]}_{wm_index}'
                     wm_address = self.poly.getValidAddress(address)
                     wm_name = self.poly.getValidName(f'{self.name} CH{wm_index+1}')
