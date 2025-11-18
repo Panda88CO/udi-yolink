@@ -212,7 +212,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             elif isinstance(obj, list):
                 for item in obj:
                     traverse(item)
-        traverse(yolink.dataAPI[yolink.dData]['state'])
+        traverse(yolink.dataAPI[yolink.dData])
         return results[0] if results else None
 
     def getData(yolink, category, key, WM_index = None):    

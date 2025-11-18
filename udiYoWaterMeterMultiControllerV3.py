@@ -154,7 +154,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
                         self.meter_uom = self.water_meter_unit2uom(self.yoWaterCtrl.meter_unit)            
                     water_state = self.yoWaterCtrl.getData('state', 'waterFlowing')
                     logging.debug(f'water flowing : {water_state}')
-                    if len(water_state) == 2:   
+                    if water_state is not None and len(water_state) == 2:   
                         self.my_setDriver('ST', self.state2ISY(water_state['0'] or water_state['1']))
                     pwr_mode, bat_lvl =  self.yoWaterCtrl.getBattery()  
                     logging.debug('udiYoWaterMeterMultiController - getBattery: {},  {}  '.format(pwr_mode, bat_lvl))
