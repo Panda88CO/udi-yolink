@@ -143,13 +143,13 @@ class udiYoWaterMeterOnly(udi_interface.Node):
     def unit2uom(self) -> int:
         logging.debug('unit2uom')
         isy_uom = None
-        if self.yoWaterCtrl.uom == 0:
+        if self.water_unit== 0:
             isy_uom = 69 # gallon
-        if self.yoWaterCtrl.uom == 1:
+        if self.water_unit == 1:
             isy_uom = 6 #ft^3
-        if self.yoWaterCtrl.uom == 2:
+        if self.water_unit == 2:
             isy_uom = 8 #m^3
-        if self.yoWaterCtrl.uom == 3:
+        if self.water_unit == 3:
             isy_uom = 35 # liter        
         return isy_uom               
 
