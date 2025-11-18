@@ -71,7 +71,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             meter_unit = yolink.getData('attributes', 'meterUnit')
             yolink.meter_unit = meter_unit
             logging.info(f'Water Meter Controller - meter unit set to {yolink.meter_unit}')
-
+        return(yolink.meter_unit)
 
     def setValveState(yolink, state, WM_index=None):
         #yolink.online = yolink.getOnlineStatus()
