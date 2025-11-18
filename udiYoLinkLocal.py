@@ -165,14 +165,15 @@ class YoLinkSetup (udi_interface.Node):
         if 'WATER_UNIT' in self.Parameters:
             self.water_unit = self.convert_water_unit(self.Parameters['WATER_UNIT'])
             logging.debug('WATER_UNIT: {}'.format(self.water_unit ))
+            if self.yoAccess:
+                self.yoAccess.set_water_unit(self.water_unit )
+            if self.yoLocal:
+                self.yoLocal.set_water_unit(self.water_unit )   
         else:
             self.water_unit = 0  
             self.Parameters['WATER_UNIT'] = 'L'
             logging.debug('WATER_UNIT: {}'.format(self.water_unit ))
-        if self.yoAccess:
-            self.yoAccess.set_water_unit(self.water_unit )
-        if self.yoLocal:
-            self.yoLocal.set_water_unit(self.water_unit )   
+
 
         if 'DEBUG_EN' in self.Parameters:
             self.debug = self.Parameters['DEBUG_EN']
