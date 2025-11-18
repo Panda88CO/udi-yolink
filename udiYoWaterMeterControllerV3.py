@@ -69,7 +69,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV28', 'value': 99, 'uom': 25}, #OverrunTIme AC        
             {'driver': 'GV20', 'value': 99, 'uom': 25},
             {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
+            {'driver': 'TIME', 'value' :0, 'uom': 151},                
             ]
 
 

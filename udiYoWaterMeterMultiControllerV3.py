@@ -40,7 +40,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             #{'driver': 'GV4', 'value': 99, 'uom' : 25}, # Unit
             {'driver': 'GV20', 'value': 0, 'uom': 25},
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
+            {'driver': 'TIME', 'value' :0, 'uom': 151},                
             ]
 
 

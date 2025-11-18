@@ -60,7 +60,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
             {'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
             #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV20', 'value': 0, 'uom': 25},
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
+            {'driver': 'TIME', 'value' :0, 'uom': 151},                
             ]
 
 
