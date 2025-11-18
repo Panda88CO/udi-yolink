@@ -38,12 +38,12 @@ class udiYoWaterMeterController(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25}, # Water flowing
-            {'driver': 'GV30', 'value': 0, 'uom': 25},  #online
+            {'driver': 'GV30', 'value': 99, 'uom': 25},  #online
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 99, 'uom': 25}, #water use total
             {'driver': 'GV10', 'value': 99, 'uom': 25}, #water use daily             
             {'driver': 'GV2', 'value': 99, 'uom': 25},  #wateruse recent
-            {'driver': 'GV3', 'value': 0, 'uom': 44},  #Wateruse duration
+            {'driver': 'GV3', 'value': 99, 'uom': 44},  #Wateruse duration
             {'driver': 'BATLVL', 'value': 99, 'uom': 25},
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},            
             #{'driver': 'GV4', 'value': 99, 'uom': 25}, #Measure Unit
@@ -67,7 +67,8 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV26', 'value': 99, 'uom': 25}, #LEakAC
             {'driver': 'GV27', 'value': 99, 'uom': 25}, #Overrun AC
             {'driver': 'GV28', 'value': 99, 'uom': 25}, #OverrunTIme AC        
-            {'driver': 'GV20', 'value': 0, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25},
+            {'driver': 'GV30', 'value': 99, 'uom': 25},
             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                
             ]
 
