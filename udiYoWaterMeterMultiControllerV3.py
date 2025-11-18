@@ -101,7 +101,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             #self.my_setDriver('GV4', self.yoWaterCtrl.meter_unit, 25)   
             ISYwater_unit = self.yoAccess.get_water_unit()     
             self.meter_ISYuom= self.water_meter_unit2uom(ISYwater_unit)
-            logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit} ISY unit: {ISYwater_unit} uom: {self.meter_uom}')
+            logging.debug(f'meter unit : {self.yoWaterCtrl.meter_unit} ISY unit: {ISYwater_unit} uom: {self.meter_ISYuom}')
 
             self.my_setDriver('GV1', self.yoWaterCtrl.water_meter_count)
             if self.yoWaterCtrl.water_meter_count > 1:
