@@ -796,7 +796,7 @@
   <nodeDef id="yowatermeterMulti" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="status" /> <!-- On line-->
+         <st id="ST" editor="waterrun" /> <!-- On line-->
          <st id="BATLVL" editor="batlevel" />
          <st id="GV5" editor="alarm" />
          <st id="GV20" editor="suspendstate" />
@@ -892,10 +892,10 @@
          <st id="GV7" editor="alarm" /> <!--Overrun duration-->
          <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
          <st id="GV9" editor="alarm" />  <!-- open reminder-->       
-         <st id="GV11" editor="alarm" /> <!-- open reminder -->
+         <!--<st id="GV11" editor="alarm" />--> <!-- open reminder -->
          <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <st id="GV13" editor="alarm" /> <!-- high temp-->
-         <st id="GV14" editor="alarm" /> <!-- Low temp-->
+         <!--<st id="GV13" editor="alarm" />--> <!-- high temp-->
+         <!--<st id="GV14" editor="alarm" />--> <!-- Low temp-->
          <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
          <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
          <st id="GV24" editor="minutes" />
