@@ -578,13 +578,9 @@ class udiYoSubWaterMeter(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'QUERY' : update,
                 'DON'   : set_open,
                 'DOF'   : set_close,
                 'SETATTRIB' : set_attributes,
-                #'VALVECTRL': waterCtrlControl, 
-                #'DELAYCTRL' : program_delays,
-                #'OFFDELAY' : prepOffDelay 
                 }
 
 

@@ -1007,9 +1007,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" /> 
-            <cmd id="DOF" /> 
-
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" /> 
                <p id="OR_LIMIT" editor="leaklimit"  /> 

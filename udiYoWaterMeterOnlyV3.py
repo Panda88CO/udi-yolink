@@ -54,7 +54,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
             {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
             {'driver': 'GV11', 'value': 99, 'uom' : 25}, # Unit
             {'driver': 'GV12', 'value': 99, 'uom' : 6}, #  leak limit
-            #{'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
+            {'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
             #{'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
@@ -391,7 +391,6 @@ class udiYoWaterMeterOnly(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'QUERY' : update,
                 #'DON'   : set_open,
                 #'DOF'   : set_close,
                 'SETATTRIB' : set_attributes,

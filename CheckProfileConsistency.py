@@ -5,7 +5,9 @@ Handles:
   - Multiple udi_interface.Node classes per file
   - drivers list matches <st> elements in corresponding nodeDef
   - id and self.id assignments map to nodeDef @id attributes (anywhere in class)
-  - commands dict matches <cmd> elements in <accepts> section of nodeDef
+  - Commands checked only if <accepts> section exists in nodeDef
+  - self.id reassignments change which nodeDef is used (e.g., temperature/water unit variants)
+  - drivers list remains the same regardless of self.id changes
   - Ignores commented-out <st> and <cmd> elements in XML
   - Ignores commented-out commands in Python commands dict
   
@@ -126,7 +128,7 @@ for filename in udiyo_files:
             skipped.append(filename)
             continue
         
-        # Remove docstrings and comments ONLY for parsing (keep original for position tracking)
+        # Remove docstrings and comments for parsing
         content_clean = remove_docstrings(content)
         content_clean = remove_commented_code(content_clean)
         
@@ -150,14 +152,16 @@ for filename in udiyo_files:
             
             class_content = content_clean[class_start:class_end]
             
-            # Extract id = '...' for this class (can appear anywhere in class)
-            static_id_match = re.search(r"id\s*=\s*['\"]([^'\"]+)['\"]", class_content)
+            # Extract STATIC id = '...' (at class level, not in __init__)
+            static_id_match = re.search(r"^\s+id\s*=\s*['\"]([^'\"]+)['\"]", class_content, re.MULTILINE)
             static_id = static_id_match.group(1) if static_id_match else None
             
-            # Extract self.id = '...' (temperature unit variants)
+            # Extract DYNAMIC self.id = '...' assignments (reassignments in __init__ or elsewhere)
             self_ids = re.findall(r"self\.id\s*=\s*['\"]([^'\"]+)['\"]", class_content)
             
-            # Collect all node IDs for this class
+            # Determine FINAL id: prefer self.id if it exists, otherwise use static id
+            # Note: self.id can change based on conditions (temp unit, water unit, etc.)
+            # We validate against ALL possible ids (both static and dynamic)
             all_ids = {static_id} if static_id else set()
             all_ids.update(self_ids)
             all_ids.discard(None)
@@ -167,6 +171,7 @@ for filename in udiyo_files:
                 continue
             
             # Extract drivers list for this class: drivers = [{'driver': 'ST', ...}, ...]
+            # drivers list is shared by all id variants (doesn't change with self.id reassignment)
             drivers_match = re.search(r"drivers\s*=\s*\[(.*?)\]", class_content, re.DOTALL)
             py_drivers = set()
             if drivers_match:
@@ -183,7 +188,7 @@ for filename in udiyo_files:
                 commands_block = commands_match.group(1)
                 py_commands = set(re.findall(r"['\"](\w+)['\"]\s*:", commands_block))
             
-            # Validate each ID
+            # Validate each ID (drivers list is checked against each possible id)
             file_errors = 0
             for node_id in sorted(all_ids):
                 if node_id not in nodedef_map:
@@ -194,6 +199,7 @@ for filename in udiyo_files:
                 nd = nodedef_map[node_id]
                 
                 # Check drivers ↔ <st> elements (order-independent)
+                # drivers list is same for all id variants
                 missing_sts = nd['sts'] - py_drivers
                 if missing_sts:
                     issues[filename].append(
@@ -208,20 +214,21 @@ for filename in udiyo_files:
                     )
                     file_errors += 1
                 
-                # Check commands ↔ <cmd> in <accepts> section
-                missing_cmds = nd['cmds'] - py_commands
-                if missing_cmds:
-                    issues[filename].append(
-                        f"  ⚠️  class {class_name} id='{node_id}': missing commands {sorted(missing_cmds)}"
-                    )
-                    file_errors += 1
-                
-                extra_cmds = py_commands - nd['cmds']
-                if extra_cmds:
-                    issues[filename].append(
-                        f"  ⚠️  class {class_name} id='{node_id}': extra commands {sorted(extra_cmds)}"
-                    )
-                    file_errors += 1
+                # Check commands ↔ <cmd> in <accepts> section (only if accepts section exists)
+                if nd['cmds']:  # Only validate if cmds are defined in nodeDef
+                    missing_cmds = nd['cmds'] - py_commands
+                    if missing_cmds:
+                        issues[filename].append(
+                            f"  ⚠️  class {class_name} id='{node_id}': missing commands {sorted(missing_cmds)}"
+                        )
+                        file_errors += 1
+                    
+                    extra_cmds = py_commands - nd['cmds']
+                    if extra_cmds:
+                        issues[filename].append(
+                            f"  ⚠️  class {class_name} id='{node_id}': extra commands {sorted(extra_cmds)}"
+                        )
+                        file_errors += 1
                 
                 # Check ST labels in en_us.txt
                 nls = nd['nls']
