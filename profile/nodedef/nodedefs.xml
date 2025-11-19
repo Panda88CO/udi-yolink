@@ -29,8 +29,8 @@
          <st id="GV6" editor="poweralert" />
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
+         <st id="GV13" editor="schIndex" />      
+         <st id="GV14" editor="schActive" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
          <st id="GV21" editor="stSec" />               
@@ -73,12 +73,12 @@
              </cmd >   
 
             <cmd id="LOOKUPSCH" > 
-               <p id="" editor="sch_indexS" init="GV13" /> 
+               <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
 
             <cmd id="DEFINESCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="bindays" editor="binDays" init="GV19" />       
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
@@ -89,8 +89,8 @@
                                    
              </cmd >
             <cmd id="CTRLSCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" />                                     
              </cmd >                
          </accepts>
       </cmds>
@@ -103,8 +103,8 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
 
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
+         <st id="GV13" editor="schIndex" />      
+         <st id="GV14" editor="schActive" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
          <st id="GV21" editor="stSec" />               
@@ -147,12 +147,12 @@
              </cmd >   
 
             <cmd id="LOOKUPSCH" > 
-               <p id="" editor="sch_indexS" init="GV13" /> 
+               <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
 
             <cmd id="DEFINESCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="bindays" editor="binDays" init="GV19" />       
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
@@ -163,8 +163,8 @@
                                    
              </cmd >
             <cmd id="CTRLSCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" />                                     
              </cmd >                
          </accepts>
       </cmds>
@@ -177,8 +177,8 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
 
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
+         <st id="GV13" editor="schIndex" />      
+         <st id="GV14" editor="schActive" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
          <st id="GV21" editor="stSec" />                 
@@ -221,12 +221,12 @@
              </cmd >   
 
             <cmd id="LOOKUPSCH" > 
-               <p id="" editor="sch_indexS" init="GV13" /> 
+               <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
 
             <cmd id="DEFINESCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="bindays" editor="binDays" init="GV19" />       
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
@@ -236,8 +236,8 @@
                <p id="offS" editor="stSecI" init="GV22" />                                    
              </cmd >
             <cmd id="CTRLSCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" />                                     
              </cmd >                
          </accepts>
       </cmds>
@@ -252,8 +252,8 @@
          <st id="GV3" editor="dimlvl" />
          <st id="GV4" editor="dimlvl" />
          <st id="GV5" editor="dimlvl" />         
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
+         <st id="GV13" editor="schIndex" />      
+         <st id="GV14" editor="schActive" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
          <st id="GV21" editor="stSec" />           
@@ -317,13 +317,13 @@
              </cmd >   
 
             <cmd id="LOOKUPSCH" > 
-               <p id="" editor="sch_indexS" init="GV13" /> 
+               <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINESCH" > 
 
 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="bindays" editor="binDays" init="GV19" />   
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
@@ -334,8 +334,8 @@
                                        
              </cmd >
             <cmd id="CTRLSCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" />                                     
              </cmd >     
 
          </accepts>
@@ -350,8 +350,8 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
 
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
+         <st id="GV13" editor="schIndex" />      
+         <st id="GV14" editor="schActive" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
          <st id="GV21" editor="stSec" />    
@@ -391,11 +391,11 @@
              </cmd >   
 
             <cmd id="LOOKUPSCH" > 
-               <p id="" editor="sch_indexS" init="GV13" /> 
+               <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINESCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
                <p id="onS" editor="stSecI" init="GV21" />             
@@ -405,8 +405,8 @@
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRLSCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" />                                     
              </cmd >            
          </accepts>
       </cmds>
@@ -428,8 +428,8 @@
 
          <!-- <st id="GV8" editor="online" /> -->
 
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
+         <st id="GV13" editor="schIndex" />      
+         <st id="GV14" editor="schActive" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
          <st id="GV21" editor="stSec" />           
@@ -469,11 +469,11 @@
              </cmd >   
 
             <cmd id="LOOKUPSCH" > 
-               <p id="" editor="sch_indexS" init="GV13" /> 
+               <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINESCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
                <p id="onS" editor="stSecI" init="GV21" />                       
@@ -483,8 +483,8 @@
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRLSCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" />                                     
              </cmd >            
          </accepts>
       </cmds>
@@ -497,8 +497,8 @@
          <!-- <st id="GV8" editor="online" /> -->
 
          <st id="GV12" editor="outport" />    
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
+         <st id="GV13" editor="schIndex" />      
+         <st id="GV14" editor="schActive" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
          <st id="GV21" editor="stSec" />     
@@ -517,12 +517,12 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="LOOKUPSCH" > 
-               <p id="" editor="sch_indexM" init="GV13" /> 
+               <p id="" editor="schIndexM" init="GV13" /> 
              </cmd >
             <cmd id="DEFINESCH" > 
                <p id="outport" editor="outport" init="GV12" /> 
-               <p id="index" editor="sch_indexM" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="index" editor="schIndexM" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
                <p id="onS" editor="stSecI" init="GV21"/>   
@@ -532,8 +532,8 @@
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRLSCH" > 
-               <p id="index" editor="sch_indexM" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="schIndexM" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" />                                     
              </cmd >
 
          </accepts>
@@ -606,8 +606,8 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="BATLVL" editor="batlevel" />
-         <st id="GV13" editor="sch_index" />      
-         <st id="GV14" editor="sch_active" />    
+         <st id="GV13" editor="schIndex" />      
+         <st id="GV14" editor="schActive" />    
          <st id="GV15" editor="stHour" />      
          <st id="GV16" editor="stMin" />    
          <st id="GV21" editor="stSec" />              
@@ -649,11 +649,11 @@
              </cmd >   
 
             <cmd id="LOOKUPSCH" > 
-               <p id="" editor="sch_indexS" init="GV13" /> 
+               <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINESCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" /> 
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
                <p id="onM" editor="stMinI" init="GV16" /> 
                <p id="onS" editor="stSecI" init="GV21"/>   
@@ -663,8 +663,8 @@
                <p id="bindays" editor="binDays" init="GV19" />                                          
              </cmd >
             <cmd id="CTRLSCH" > 
-               <p id="index" editor="sch_indexS" init="GV13" /> 
-               <p id="active" editor="sch_activeI" init="GV14" />                                     
+               <p id="index" editor="schIndexS" init="GV13" /> 
+               <p id="active" editor="schActiveI" init="GV14" />                                     
              </cmd >                
          </accepts>
       </cmds>
@@ -718,11 +718,11 @@
 
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit"  /> 
-               <p id="L_OFF" editor="set_enable"  />       
+               <p id="L_OFF" editor="enableSet"  />       
                <p id="OR_LIMIT" editor="leaklimit"  /> 
-               <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="minutes_set"  /> 
-               <p id="ORT_OFF" editor="set_enable"  />   
+               <p id="OR_OFF" editor="enableSet"  />   
+               <p id="ORT_LIMIT" editor="minutesSet"  /> 
+               <p id="ORT_OFF" editor="enableSet"  />   
             </cmd >
          <!--   <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
@@ -779,11 +779,11 @@
             <cmd id="DOF" /> 
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit"  /> 
-               <p id="L_OFF" editor="set_enable"  />       
+               <p id="L_OFF" editor="enableSet"  />       
                <p id="OR_LIMIT" editor="leaklimit"  /> 
-               <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="minutes_set" /> 
-               <p id="ORT_OFF" editor="set_enable" />   
+               <p id="OR_OFF" editor="enableSet"  />   
+               <p id="ORT_LIMIT" editor="minutesSet" /> 
+               <p id="ORT_OFF" editor="enableSet" />   
             </cmd >
             <!--<cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
@@ -867,11 +867,11 @@
 
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit"  /> 
-               <p id="L_OFF" editor="set_enable" />       
+               <p id="L_OFF" editor="enableSet" />       
                <p id="OR_LIMIT" editor="leaklimit"  /> 
-               <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="minutes_set" /> 
-               <p id="ORT_OFF" editor="set_enable"/>   
+               <p id="OR_OFF" editor="enableSet"  />   
+               <p id="ORT_LIMIT" editor="minutesSet" /> 
+               <p id="ORT_OFF" editor="enableSet"/>   
             </cmd >
   
          </accepts>
@@ -919,12 +919,12 @@
             <cmd id="DOF" /> 
 
             <cmd id="SETATTRIB">
-               <p id="L_LIMIT" editor="liter_set"  /> 
-               <p id="L_OFF" editor="set_enable" />       
-               <p id="OR_LIMIT" editor="liter_set"  /> 
-               <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="minutes_set" /> 
-               <p id="ORT_OFF" editor="set_enable"/>   
+               <p id="L_LIMIT" editor="literSet"  /> 
+               <p id="L_OFF" editor="enableSet" />       
+               <p id="OR_LIMIT" editor="literSet"  /> 
+               <p id="OR_OFF" editor="enableSet"  />   
+               <p id="ORT_LIMIT" editor="minutesSet" /> 
+               <p id="ORT_OFF" editor="enableSet"/>   
             </cmd >
   
          </accepts>
@@ -968,12 +968,12 @@
             <cmd id="DOF" /> 
 
             <cmd id="SETATTRIB">
-               <p id="L_LIMIT" editor="gallon_set"  /> 
-               <p id="L_OFF" editor="set_enable" />       
-               <p id="OR_LIMIT" editor="gallon_set"  /> 
-               <p id="OR_OFF" editor="set_enable"  />   
-               <p id="ORT_LIMIT" editor="minutes_set" /> 
-               <p id="ORT_OFF" editor="set_enable"/>   
+               <p id="L_LIMIT" editor="gallonSet"  /> 
+               <p id="L_OFF" editor="enableSet" />       
+               <p id="OR_LIMIT" editor="gallonSet"  /> 
+               <p id="OR_OFF" editor="enableSet"  />   
+               <p id="ORT_LIMIT" editor="minutesSet" /> 
+               <p id="ORT_OFF" editor="enableSet"/>   
             </cmd >
   
          </accepts>
@@ -1017,7 +1017,7 @@
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" /> 
                <p id="OR_LIMIT" editor="leaklimit"  /> 
-               <p id="ORT_LIMIT" editor="minutes_set"  /> 
+               <p id="ORT_LIMIT" editor="minutesSet"  /> 
             </cmd >
          </accepts>
       </cmds>
@@ -1060,7 +1060,7 @@
             <cmd id="SETATTRIB">
                <p id="L_LIMIT" editor="leaklimit" /> 
                <p id="OR_LIMIT" editor="leaklimit"  /> 
-               <p id="ORT_LIMIT" editor="minutes_set"  /> 
+               <p id="ORT_LIMIT" editor="minutesSet"  /> 
             </cmd >
          </accepts>
       </cmds>

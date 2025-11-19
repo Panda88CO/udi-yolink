@@ -310,7 +310,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     nbroverrun = self.yoWaterCtrl.getData('attributes', 'overrunTimes24H')
                     #if nbroverrun is not None:
                     #    overrun_amount = round(float(self.calculate_water_volume(overrun_amount,  self.meter_unit,  self.ISYwater_unit)), 1)                          
-                    logging.debug(f'overrun times limit : {nbroverrun}')
+                    logging.debug(f'overrun times limit : {nbroverrun}')                    
                     self.my_setDriver('GV23', nbroverrun, 70)
                     overrun_duration = self.yoWaterCtrl.getData('attributes', 'overrunDuration')
                     if overrun_duration is None:

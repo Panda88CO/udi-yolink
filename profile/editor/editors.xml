@@ -41,7 +41,7 @@
     <range uom="4" min="-40" max="105" prec="1" />
     <range uom="25" subset="98,99" nls="wl_state" />
   </editor>
-    <editor id="celsius_set">
+    <editor id="celsiusSet">
     <range uom="4" min="-40" max="105" prec="1" />
   </editor>
   <!--<editor id="tempF">
@@ -52,7 +52,7 @@
     <range uom="17" min="-40" max="221" prec="1" />
     <range uom="25" subset="98,99" nls="wl_state" />
   </editor>
-    <editor id="farenheit_set">
+    <editor id="farenheitSet">
     <range uom="17" min="-40" max="221" prec="1" />
   </editor>
   <editor id="tempunit">
@@ -233,19 +233,19 @@
   <editor id="outport">
     <range uom="25" subset="0,1,2,3,99" nls="portlist" />
   </editor>
-  <editor id="sch_active">
+  <editor id="schActive">
     <range uom="25" subset="0,1,2,98,99" nls="sch_active" />
   </editor>
-  <editor id="sch_activeI">
+  <editor id="schActiveI">
     <range uom="25" subset="0,1" nls="sch_active" />
   </editor>
-  <editor id="sch_index">
+  <editor id="schIndex">
     <range uom="25" subset="0-9,98,99" nls="sch_indexM" />
   </editor>
-  <editor id="sch_indexM">
+  <editor id="schIndexM">
     <range uom="25" subset="0-9,99" nls="sch_indexM" />
   </editor>
-  <editor id="sch_indexS">
+  <editor id="schIndexS">
     <range uom="25" subset="0,1,2,3,4,5,99" nls="sch_indexS" />
   </editor>
   <editor id="stHour">
@@ -299,33 +299,30 @@
     <range uom="35" min="0" max="100000" prec="1" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
-  <editor id="liter_set">
+  <editor id="literSet">
     <range uom="35" min="0" max="100000" prec="1" />
   </editor>  
   <editor id="gallon">
     <range uom="69" min="0" max="10000" prec="1" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
-    <editor id="gallon_set">
+    <editor id="gallonSet">
     <range uom="69" min="0" max="10000" prec="1" />
   </editor>
   <editor id="ccf">
       <range uom="6" min="0" max="10000" prec="1" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
-    <editor id="ccf_set">
+    <editor id="ccfSet">
       <range uom="6" min="0" max="10000" prec="1" />
     </editor> 
-
-
   <editor id="m3">
     <range uom="8" min="0" max="10000" prec="2" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
-  <editor id="m3_set">
+  <editor id="m3Set">
     <range uom="8" min="0" max="10000" prec="2" />
   </editor> 
-
   <editor id="flow">
     <range uom="69" min="0" max="10000" prec="1" />
     <range uom="6" min="0" max="10000" prec="1" />
@@ -336,7 +333,7 @@
   <editor id="enable">
     <range uom="25" subset="0,1,99" nls="enable" />
   </editor>
-  <editor id="set_enable">
+  <editor id="enableSet">
     <range uom="25" subset="0,1" nls="enable" />
   </editor>
   <editor id="waterrun">
@@ -346,10 +343,12 @@
     <range uom="44" min="0" max="1440" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
-  <!--<editor id="setminutes">
-    <range uom="44" min="0" max="1440" />
-  </editor>-->
-  <editor id="minutes_set">
+  <editor id="minutesSet">
     <range uom="44" min="0" max="1440" />
   </editor>  
+  <editor id="count">
+    <range uom="70" min="0" max="1440" />
+    <range uom="25" subset="0,99" nls="error" />
+  </editor>  
+
 </editors>
