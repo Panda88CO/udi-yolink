@@ -603,10 +603,14 @@ ND-yowatermeterMultiG-NAME=YoLink Water Meter Multi Controller
 ND-yowatermeterMultiG-ICON=PulseCounter
 ND-yowatermeterSub-NAME=YoLink Water Meter Sub Controller
 ND-yowatermeterSub-ICON=PulseCounter
-ND-yowatermeterSubF-NAME=YoLink Water Meter Sub Controller
-ND-yowatermeterSubF-ICON=PulseCounter
+ND-yowatermeterSubL-NAME=YoLink Water Meter Sub Controller
+ND-yowatermeterSubL-ICON=PulseCounter
 ND-yowatermeterSubG-NAME=YoLink Water Meter Sub Controller
 ND-yowatermeterSubG-ICON=PulseCounter
+ND-yowatermeterSubF-NAME=YoLink Water Meter Sub Controller
+ND-yowatermeterSubF-ICON=PulseCounter
+ND-yowatermeterSubC-NAME=YoLink Water Meter Sub Controller
+ND-yowatermeterSubC-ICON=PulseCounter
 
 
 ST-nlswatermeter-ST-NAME=Water Running
