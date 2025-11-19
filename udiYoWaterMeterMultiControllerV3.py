@@ -96,6 +96,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
                 logging.info('waiting for watermeter to be online')
                 time.sleep(1)
             self.meter_count = self.yoWaterCtrl.getMeterCount()
+            logging.debug(f'Meter count: {self.meter_count}')
             if self.meter_count is None:
                 logging.error('Water meter count not found')
                 self.poly.Notices['nometer'] = 'No multi meter found - may be off line'
