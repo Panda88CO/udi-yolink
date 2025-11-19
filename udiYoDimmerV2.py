@@ -392,7 +392,6 @@ class udiYoDimmer(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'QUERY' : update,
                 'DON'   : set_switch_on,
                 'DOF'   : set_switch_off,
                 'DFON'   : set_switch_fon,
@@ -407,8 +406,6 @@ class udiYoDimmer(udi_interface.Node):
                 'CTRLSCH'      : control_schedule,
                 'FDUP'          : scene_dim,
                 'FDDOWN'        : scene_dim,
-                #'BMAN'          : scene_dim,
-                #'SMAN'          : scene_dim,
                 'FDSTOP'        : scene_dim
                 }
 

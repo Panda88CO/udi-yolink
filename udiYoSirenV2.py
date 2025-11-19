@@ -173,7 +173,6 @@ class udiYoSiren(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                'QUERY' : update,
                 'SIRENCTRL': sirenControl, 
                 }
 

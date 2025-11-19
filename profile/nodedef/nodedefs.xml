@@ -272,8 +272,6 @@
             <cmd id="DOF"  />
             <cmd id="DFON"  />               
             <cmd id="DFOF"  />   
-            <!--<cmd id="BRT"  />                
-            <cmd id="DIM"  /> -->
             <cmd id="FDUP"  /> 
             <cmd id="FDDOWN"  /> 
             <cmd id="FDSTOP"  />           
@@ -590,8 +588,6 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="usbstate"  /> 
             <cmd id="DOF" editor="usbstate"  /> 
-
-
             <cmd id="USBCTRL" > 
                <p id="" editor="usbctrl" init="GV0" /> 
             </cmd >
@@ -1159,8 +1155,6 @@
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd > 
-            <!-- <cmd id="DON" /> 
-            <cmd id="DOF" />          -->
             <cmd id="UPDATE" /> 
 
          </accepts>

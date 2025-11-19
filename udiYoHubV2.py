@@ -22,6 +22,16 @@ from yolinkHubV2 import YoLinkHu
 
 class udiYoBatteryHub(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, wait_for_node_done, node_queue
+    '''
+       drivers = [
+            'ST' =  Powered
+            'GV1' = Battery Level
+            'GV30' = Online
+            ]
+
+    ''' 
+    
+    
     id = 'yohubbat'
     drivers = [
             {'driver': 'ST', 'value': 99, 'uom': 25},
@@ -31,14 +41,7 @@ class udiYoBatteryHub(udi_interface.Node):
             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
-    '''
-       drivers = [
-            'ST' =  Powered
-            'GV1' = Battery Level
-            'GV30' = Online
-            ]
 
-    ''' 
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
         super().__init__( polyglot, primary, address, name)   

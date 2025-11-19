@@ -21,7 +21,6 @@ from yolinkInfraredRemoterV2 import YoLinkInfraredRem
 class udiYoInfraredCode(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, node_queue, wait_for_node_done
 
-    id = 'yoircode'
     '''
        drivers = [
 
@@ -29,6 +28,8 @@ class udiYoInfraredCode(udi_interface.Node):
             'GV5' = Online
             ]
     ''' 
+    
+    id = 'yoircode'
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV30', 'value': 0, 'uom': 25},
@@ -131,7 +132,7 @@ class udiYoInfraredCode(udi_interface.Node):
 class udiYoInfraredRemoter(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
-    id = 'yoirremote'
+
     '''
        drivers = [
             'GV0' = Nbr codes
@@ -139,6 +140,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             'GV2' = Command status
             ]
     ''' 
+    id = 'yoirremote'
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV30', 'value': 0, 'uom': 25},
@@ -340,9 +342,8 @@ class udiYoInfraredRemoter(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-
-                #'TXCODE': send_IRcode,
                 'LEARNCODE' : learn_IRcode,
+                #'TXCODE': send_IRcode,                'LEARNCODE' : learn_IRcode,
                 }
 
 

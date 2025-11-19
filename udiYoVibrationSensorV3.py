@@ -186,9 +186,6 @@ class udiYoVibrationSensor(udi_interface.Node):
     commands = {
                 'SETCMD': set_cmd,        
                 'UPDATE': update,
-                'QUERY' : update, 
-                'DON'   : noop,
-                'DOF'   : noop
                 }
 
 

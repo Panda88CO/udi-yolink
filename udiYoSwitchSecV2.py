@@ -398,14 +398,11 @@ class udiYoSwitchSec(udi_interface.Node):
 
     commands = {
                 'UPDATE'        : update,
-                'QUERY'         : update,
                 'DON'           : set_switch_on,
                 'DOF'           : set_switch_off,    
                 'DFON'          : set_switch_fon,
                 'DFOF'          : set_switch_foff,                         
                 'SWCTRL'        : switchControl, 
-                #'ONDELAY'       : prepOnDelay,
-                #'OFFDELAY'      : prepOffDelay,
                 'DELAYCTRL'    : program_delays, 
                 'LOOKUPSCH'    : lookup_schedule,
                 'DEFINESCH'    : define_schedule,

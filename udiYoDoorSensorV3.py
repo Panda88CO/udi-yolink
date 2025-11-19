@@ -31,16 +31,13 @@ class udiYoDoorSensor(udi_interface.Node):
 
     ''' 
         
-    drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
+    drivers = [ {'driver': 'GV0', 'value': 99, 'uom': 25}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25},      
             {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV30', 'value': 0, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25}, 
-            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
-
-              ]
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151}, ]
 
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -182,9 +179,6 @@ class udiYoDoorSensor(udi_interface.Node):
     commands = {
                 'SETCMD': set_cmd,
                 'UPDATE': update,
-                'QUERY' : update, 
-                #'DON'   : noop,
-                #'DOF'   : noop
                 }
 
 

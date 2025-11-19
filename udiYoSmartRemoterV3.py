@@ -220,8 +220,6 @@ class udiRemoteKey(udi_interface.Node):
     commands = {
                 'KEYPRESS'  : short_cmdtype, 
                 'KEYLPRESS' : long_cmdtype,
-                'DON'       : noop,
-                'DOF'       : noop,    
     }
 
 
