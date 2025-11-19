@@ -253,7 +253,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         elif self.water_unit == 3:
             self.id = 'yowatermeterSubL'   
         else:
-            logging.error('Only Litere and Gallon supported for now')
+            logging.error('Only Liter and Gallon supported for now')
         self.WM_index = WMindex
         
         self.yoWaterCtrl= wmAccess
