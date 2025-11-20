@@ -1216,6 +1216,7 @@ class YoLinkMQTTDevice(object):
     def updateStatusData  (yolink, data):
         try:
             logging.debug('{} - updateStatusData : {}'.format(yolink.type , json.dumps(data, indent=4)))
+            yolink.dataAPI.clear() #do not let old
             if data[yolink.dData] == {}:    
                 logging.debug('Empty data received - do not update data to blank data')
                 yolink.dataAPI['emptyData'] = True
@@ -1246,6 +1247,7 @@ class YoLinkMQTTDevice(object):
                         #    yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                         if type(data[yolink.dData][yolink.dState]) is dict:
                             logging.debug('State is Dict: {} '.format(json.dumps(data[yolink.dData][yolink.dState])))
+                            yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState].clear() # maintain data structure
                             temp_dict = data[yolink.dData][yolink.dState]
                             if 'loraInfo' in temp_dict:
                                 lora_inf = temp_dict['loraInfo']
