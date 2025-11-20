@@ -87,9 +87,9 @@ class udiYoWaterMeterController(udi_interface.Node):
 
         self.water_unit = self.yoAccess.get_water_unit()              
         if self.water_unit == 0:
-            self.id = 'yowatermeterSubG'    
+            self.id = 'yowatermeterCtrlF'    
         elif self.water_unit == 3:
-            self.id = 'yowatermeterSubG'   
+            self.id = 'yowatermeterCtrl'   
         else:
             logging.error('Only Litere and Gallon supported for now')
 
