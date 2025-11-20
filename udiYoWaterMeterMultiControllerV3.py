@@ -327,7 +327,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                         logging.debug(f'meter unit : { self.meter_unit}')
                         #self.my_setDriver('GV4',  self.meter_unit, 25)          
                         self.ISYmeter_uom= self.water_meter_unit2uom( self.meter_unit)
-                    state =  self.yoWaterCtrl.getData('state', 'valve', self.WM_index)
+                    state =  self.yoWaterCtrl.getData('state', 'valves', self.WM_index)
                     #Needs to update 
                     
                     if state != None:
