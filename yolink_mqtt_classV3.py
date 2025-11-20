@@ -1247,7 +1247,7 @@ class YoLinkMQTTDevice(object):
                         #    yolink.dataAPI['lastStateTime'] = data[yolink.messageTime]
                         if type(data[yolink.dData][yolink.dState]) is dict:
                             logging.debug('State is Dict: {} '.format(json.dumps(data[yolink.dData][yolink.dState])))
-                            yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState].clear() # maintain data structure
+                            yolink.dataAPI[yolink.dData][yolink.dState] = data[yolink.dData][yolink.dState] # maintain data structure
                             temp_dict = data[yolink.dData][yolink.dState]
                             if 'loraInfo' in temp_dict:
                                 lora_inf = temp_dict['loraInfo']
