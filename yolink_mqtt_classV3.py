@@ -126,6 +126,37 @@ class YoLinkMQTTDevice(object):
         #yolink.updateInterval = 3
         yolink.messagePending = False
     
+    def reset_structure(yolink):
+        if yolink.type in yolink.delaySupport and yolink.type not in yolink.scheduleSupport :
+            yolink.dataAPI = {
+                              yolink.lastUpd:0
+                            , yolink.lastMessage:{}
+                            ,'lastStateTime':{}
+                            , yolink.dOnline:False
+                            ,'emptyData': False
+                            , yolink.dData :{yolink.dState:{} }
+                            }
+            #yolink.extDelayTimer = CountdownTimer()
+        elif yolink.type in yolink.scheduleSupport:
+            yolink.dataAPI = {
+                              yolink.lastUpd:0
+                            , yolink.lastMessage:{}
+                            ,'lastStateTime':{}
+                            , yolink.dOnline:False
+                            ,'emptyData': False                            
+                            , yolink.dData :{  yolink.dState:{}
+                                              ,yolink.dSchedule : [] }
+                            }
+            #yolink.extDelayTimer = CountdownTimer()
+        else:
+            yolink.dataAPI = {
+                              yolink.lastUpd:0
+                            , yolink.lastMessage:{}
+                            ,'lastStateTime':{}
+                            , yolink.dOnline :False
+                            ,'emptyData': False                            
+                            , yolink.dData :{ yolink.dState:{} }
+                            } 
     def delayTimerCallback(yolink, callback, updateTime=5):
 
         yolink.extDelayTimer.timerReportInterval(updateTime)
@@ -1216,7 +1247,8 @@ class YoLinkMQTTDevice(object):
     def updateStatusData  (yolink, data):
         try:
             logging.debug('{} - updateStatusData : {}'.format(yolink.type , json.dumps(data, indent=4)))
-            yolink.dataAPI.clear() #do not let old
+            yolink.reset_structure() #do not let old data persist
+
             if data[yolink.dData] == {}:    
                 logging.debug('Empty data received - do not update data to blank data')
                 yolink.dataAPI['emptyData'] = True
