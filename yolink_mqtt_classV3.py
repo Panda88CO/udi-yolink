@@ -4,7 +4,7 @@ import datetime
 import json
 import re
 #import threading
-
+from typing import Any, Union, List, Dict
 from  datetime import datetime
 from dateutil.tz import *
 
@@ -84,6 +84,7 @@ class YoLinkMQTTDevice(object):
         yolink.forceStop = False
         yolink.eventSupport = False # Support adding to EventQueue
         yolink.disconnect = False
+        yolink.data = {}
         if yolink.type in yolink.delaySupport and yolink.type not in yolink.scheduleSupport :
             yolink.dataAPI = {
                               yolink.lastUpd:0
@@ -1243,12 +1244,77 @@ class YoLinkMQTTDevice(object):
         logging.debug('{} - emptyData : {}'.format(yolink.type , yolink.dataAPI['emptyData']))
         return(yolink.dataAPI['emptyData'] )
 
+
+    def extract_two_level(yolink, key1: str, key2: str) -> List[Any]:
+        """
+        Extracts values from a nested data structure where the first level is key1
+        and the second level is key2. Works with dicts and lists of dicts.
+
+        Args:
+            data: The nested data structure (dict or list of dicts).
+            key1: The first-level key.
+            key2: The second-level key.
+
+        Returns:
+            A list of extracted values (empty if not found).
+        """
+        results = []
+
+        #def safe_get(d: Any, k: str) -> Any:
+        #    """Safely get a key from a dict, return None if not found."""
+        #    return d.get(k) if isinstance(d, dict) else None
+
+        def traverse(obj: Any):
+            """Recursively traverse dicts/lists to find matching keys."""
+            if isinstance(obj, dict):
+                if key1 in obj and isinstance(obj[key1], dict):
+                    if key2 in obj[key1]:
+                        results.append(obj[key1][key2])
+                for v in obj.values():
+                    traverse(v)
+            elif isinstance(obj, list):
+                for item in obj:
+                    traverse(item)
+        traverse(yolink.dataAPI[yolink.dData])
+        return results[0] if results else None
+
+    def getData(yolink, category, key, WM_index = None):    
+        try:
+            logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
+            ret_val = None  
+            if yolink.online and yolink.dData in yolink.dataAPI : 
+                if yolink.data[yolink.dData] is {}:
+                    logging.info(f'No data exists (no data returned)')
+                    return("no data")
+                if category is None:
+                    if key in yolink.dataAPI[yolink.dData]:
+                        logging.debug(f'ret_val0 {ret_val} {key}  {category}')
+                        return(yolink.data[yolink.dData][key])
+                    
+            res = yolink.extract_two_level(category, key)
+            logging.debug(f'extract_two_level result: {res}')
+            if res and isinstance(res, dict):
+                if isinstance( WM_index, int):
+                    if str(WM_index) in res:
+                            ret_val = res[str(WM_index)]
+                else:
+                    ret_val = res
+            else:
+                ret_val = res
+            return(ret_val)
+        except KeyError as e:
+            logging.error(f'EXCEPTION - getData {e}')      
+
+    
+    
+
+    
     #@measure_time
     def updateStatusData  (yolink, data):
         try:
             logging.debug('{} - updateStatusData : {}'.format(yolink.type , json.dumps(data, indent=4)))
             yolink.reset_structure() #do not let old data persist
-
+            yolink.data = data
             if data[yolink.dData] == {}:    
                 logging.debug('Empty data received - do not update data to blank data')
                 yolink.dataAPI['emptyData'] = True
@@ -1450,7 +1516,7 @@ class YoLinkMQTTDevice(object):
                     #logging.debug('END State is not dict 2 - {}'.format(yolink.dataAPI[yolink.dData]))
             #yolink.dataAPI['nbrPorts'] = yolink.nbrPorts
             yolink.online = yolink.Status(data)
-
+            logging.debug('After parsing {}'.format(json.dumps(yolink.data, indent=4)))
 
         except Exception as e:
             logging.error('Exception updateStatusData - {}'.format(e))
