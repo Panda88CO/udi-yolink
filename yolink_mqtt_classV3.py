@@ -577,13 +577,13 @@ class YoLinkMQTTDevice(object):
     #        return(None)
         
     #@measure_time
-    def getData(yolink):
-        try:
-            logging.debug(yolink.type +' - getData')
-            return(yolink.dataAPI[yolink.dData][yolink.dState])
-        except Exception as e:
-            logging.debug('getData exception: {}'.format(e) )
-            return(None)
+    #def getData(yolink):
+    #    try:
+    #        logging.debug(yolink.type +' - getData')
+    #        return(yolink.dataAPI[yolink.dData][yolink.dState])
+    #    except Exception as e:
+    #        logging.debug('getData exception: {}'.format(e) )
+    #        return(None)
 
     '''
     def getOnlineStatus(yolink):
