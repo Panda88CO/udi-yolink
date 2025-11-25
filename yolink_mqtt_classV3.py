@@ -246,7 +246,40 @@ class YoLinkMQTTDevice(object):
             yolink.lastControlPacket = data
             time.sleep(1)
             yolink.check_system_online()
-              
+
+    #@measure_time
+    def latestUpdate(yolink):
+        logging.debug('{} - Checking last update'.format(yolink.type))
+        logging.debug('Data: {}'.format(yolink.dataAPI))
+        if 'stateChangedAt' in yolink.data[yolink.dData]:
+            logging.debug('lastUpdate stateChangedAt {}'.format(yolink.dataAPI[yolink.dData]['stateChangedAt']))
+            return(yolink.data[yolink.dData]['stateChangedAt'])
+        elif 'lastStateTime' in yolink.dataAPI:
+            logging.debug('lastUpdate lastStateTime {}'.format(yolink.dataAPI['lastStateTime' ]))
+            if type(yolink.data['lastStateTime']) in [int, float]:
+                return(yolink.data['lastStateTime'] )
+            else:
+                return(0)        
+        elif yolink.lastUpd in yolink.data:
+            logging.debug('lastUpdate lastUpdTime {}'.format(yolink.dataAPI[yolink.lastUpd ]))
+            if type(yolink.data[yolink.lastUpd ]) in [int, float]:
+                return(yolink.data[yolink.lastUpd ])
+            else:
+                return(0)            
+        elif 'reportAt' in yolink.dataAPI:
+            timestamp = yolink.dataAPI['reportAt']
+            dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
+            
+            logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
+            return(dt.timestamp()*1000) # make in ms
+        elif 'time' in  yolink.dataAPI:
+            logging.debug('lastUpdate time {}'.format(yolink.dataAPI['time']))
+
+            return(yolink.dataAPI['time'])
+        else:
+            return(0)
+
+
     #@measure_time
     def lastUpdate(yolink):
         logging.debug('{} - Checking last update'.format(yolink.type))
@@ -1318,9 +1351,11 @@ class YoLinkMQTTDevice(object):
             if data[yolink.dData] == {}:    
                 logging.debug('Empty data received - do not update data to blank data')
                 yolink.dataAPI['emptyData'] = True
+                yolink.data['emptyData'] = True
                 return
             else:
                 yolink.dataAPI['emptyData'] = False
+                yolink.data['emptyData'] = False
         
             if 'reportAt' in data[yolink.dData] :
                 reportAt = datetime.strptime(data[yolink.dData]['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -1366,7 +1401,7 @@ class YoLinkMQTTDevice(object):
                                     #logging.debug(f'info loop {info}')
                                     yolink.dataAPI[yolink.dData][info] = data[yolink.dData][info]
 
-                            logging.debug('After parsing {}'.format(json.dumps(yolink.dataAPI[yolink.dData], indent=4)))
+                            #logging.debug('After parsing {}'.format(json.dumps(yolink.dataAPI[yolink.dData], indent=4)))
                         elif  type(data[yolink.dData][yolink.dState]) is list:
                             #logging.debug('State is List (multi): {} '.format(data[yolink.dData][yolink.dState]))
                             if yolink.dDelays in data[yolink.dData]:
@@ -1431,7 +1466,8 @@ class YoLinkMQTTDevice(object):
 
                     yolink.updateLoraInfo(data)
                     yolink.updateMessageInfo(data)
-                    logging.debug('updateStatusData - Method data : {}'.format(yolink.dataAPI))                
+                    logging.debug('updateStatusData - Method data : {}'.format(yolink.dataAPI))   
+                logging.debug('After parsing NEW {}'.format(json.dumps(yolink.data, indent=4)))                 
             else: #event
                 if ".setDelay" in data['event']:
                     logging.debug("setDelay detected")
