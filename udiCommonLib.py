@@ -150,7 +150,7 @@ def addNodes (self, deviceList) -> list:
     #                    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
     #                    'WaterDepthSensor', ]    'WaterMeterController', 
     
-    supportedYoTypes = ['MotionSensor', 'WaterMeterController' ]    
+    supportedYoTypes = ['MotionSensor', 'WaterMeterController']     
 
     
     remove_list= []
