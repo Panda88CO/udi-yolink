@@ -105,9 +105,10 @@ def save_cmd_struct(self, cmd_struct):
 def convert_timestr_to_epoch(self, timestr):
     logging.debug('convert_timestr_to_epoch - {}'.format(timestr))
     try:
-        dt = datetime.strptime(timestr, "%Y-%m-%dT%H:%M:%S.%fZ")            
-        logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
-        epoch = int(dt.timestamp()*1000) # make in ms
+        dt =int(datetime.strptime(timestr, "%Y-%m-%dT%H:%M:%S.%fZ"))
+        epoch = int(dt.timestamp())
+        logging.debug('epoch time {} for  {}'.format(epoch, timestr ))
+
     except Exception as e:
         logging.error('Error converting time string to epoch: {}'.format(e))
         epoch = 0
