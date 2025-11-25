@@ -20,6 +20,8 @@ from os import truncate
 import time
 import json
 import math
+#import datetime
+from datetime import datetime
 
 def updateEpochTime(self, command=None ):
     logging.info('updateEpochTime ')
@@ -103,8 +105,9 @@ def save_cmd_struct(self, cmd_struct):
 def convert_timestr_to_epoch(self, timestr):
     logging.debug('convert_timestr_to_epoch - {}'.format(timestr))
     try:
-        pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
-        epoch = int(time.mktime(time.strptime(timestr, pattern)))
+        dt = datetime.strptime(timestr, "%Y-%m-%dT%H:%M:%S.%fZ")            
+        logging.debug('lastUpdate reportAt {}'.format(int(dt.timestamp())))
+        epoch = int(dt.timestamp()*1000) # make in ms
     except Exception as e:
         logging.error('Error converting time string to epoch: {}'.format(e))
         epoch = 0
