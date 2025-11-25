@@ -100,7 +100,15 @@ def save_cmd_struct(self, cmd_struct):
     except IOError as e:
         logging.error('An error occurred saving command state: {}'.format(e))
 
-
+def convert_timestr_to_epoch(self, timestr):
+    logging.debug('convert_timestr_to_epoch - {}'.format(timestr))
+    try:
+        pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
+        epoch = int(time.mktime(time.strptime(timestr, pattern)))
+    except Exception as e:
+        logging.error('Error converting time string to epoch: {}'.format(e))
+        epoch = 0
+    return(epoch)
 
 def retrieve_cmd_state(self):
     logging.debug('retrieve_cmd_state - {}'.format(self.address))

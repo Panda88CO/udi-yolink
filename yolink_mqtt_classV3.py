@@ -1308,32 +1308,33 @@ class YoLinkMQTTDevice(object):
             elif isinstance(obj, list):
                 for item in obj:
                     traverse(item)
-        traverse(yolink.dataAPI[yolink.dData])
+        traverse(yolink.data[yolink.dData])
         return results[0] if results else None
 
     def getData(yolink, category, key, WM_index = None):    
         try:
-            logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
             ret_val = None  
-            if yolink.online and yolink.dData in yolink.dataAPI : 
-                if yolink.data[yolink.dData] is {}:
-                    logging.info(f'No data exists (no data returned)')
-                    return("no data")
-                if category is None:
-                    if key in yolink.dataAPI[yolink.dData]:
-                        logging.debug(f'ret_val0 {ret_val} {key}  {category}')
-                        return(yolink.data[yolink.dData][key])
-                    
-            res = yolink.extract_two_level(category, key)
-            logging.debug(f'extract_two_level result: {res}')
-            if res and isinstance(res, dict):
-                if isinstance( WM_index, int):
-                    if str(WM_index) in res:
-                            ret_val = res[str(WM_index)]
+            if yolink.online and yolink.dData in yolink.data:
+                logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.data[yolink.dData]}')
+                if yolink.online and yolink.dData in yolink.data:
+                    if yolink.data[yolink.dData] is {}:
+                        logging.info(f'No data exists (no data returned)')
+                        return("no data")
+                    if category is None:
+                        if key in yolink.data[yolink.dData]:
+                            logging.debug(f'ret_val0 {ret_val} {key} {category}')
+                            return(yolink.data[yolink.dData][key])
+                        
+                res = yolink.extract_two_level(category, key)
+                logging.debug(f'extract_two_level result: {res}')
+                if res and isinstance(res, dict):
+                    if isinstance( WM_index, int):
+                        if str(WM_index) in res:
+                                ret_val = res[str(WM_index)]
+                    else:
+                        ret_val = res
                 else:
                     ret_val = res
-            else:
-                ret_val = res
             return(ret_val)
         except KeyError as e:
             logging.error(f'EXCEPTION - getData {e}')      

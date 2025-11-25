@@ -21,7 +21,7 @@ from yolinkMotionSensorV2 import YoLinkMotionSens
 
 
 class udiYoMotionSensor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, save_cmd_state, state2ISY, bool2ISY, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
+    from  udiYolinkLib import my_setDriver, save_cmd_state, convert_timestr_to_epoch, state2ISY, bool2ISY, retrieve_cmd_state, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key
 
     id = 'yomotionsens'
     
@@ -127,7 +127,9 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            self.my_setDriver('TIME', self.yoMotionsSensor.getLastUpdateTime(), 151)
+            time_str = self.yoMotionsSensor.getData(None, 'reportAt')
+            unix_time = self.convert_timestr_to_epoch(time_str)
+            self.my_setDriver('TIME', unix_time, 151)
             if self.yoMotionsSensor.online:
                 logging.debug('Motion sensor CMD setting: {}'.format(self.cmd_state))
                 motion_state = self.yoMotionsSensor.getData('state', 'state')
