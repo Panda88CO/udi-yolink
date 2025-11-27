@@ -127,7 +127,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            unix_time = self.yoOutlet.get_report_time('reportAt')
+            unix_time = self.yoMotionsSensor.get_report_time('reportAt')
             self.my_setDriver('TIME', unix_time, 151)
             if self.yoMotionsSensor.online:
                 logging.debug('Motion sensor CMD setting: {}'.format(self.cmd_state))
