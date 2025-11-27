@@ -5,7 +5,7 @@ import json
 import re
 #import threading
 from typing import Any, Union, List, Dict
-from  datetime import datetime
+from  datetime import datetime, timedelta, timezone
 from dateutil.tz import *
 
 try:
@@ -1310,8 +1310,29 @@ class YoLinkMQTTDevice(object):
                     traverse(item)
         traverse(yolink.data[yolink.dData])
         return results[0] if results else None
+    
+    def _get_report_time(yolink):
+        if 'report_time' in yolink.data:
+            return(yolink.data['report_time'])
+        else:
+            return(None)
 
-    def getData(yolink, category, key, WM_index = None):    
+    def get_report_time(yolink,  target_str=None):
+        time_str = yolink.get_data(None, target_str)
+        if time_str is not None:
+            tz_str = int(yolink.get_data(None, 'tz'))
+            dt = datetime.strptime(time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+            # Adjust for the timezone offset
+            dt_with_offset = dt.replace(tzinfo=timezone.utc) + timedelta(hours=int(tz_str))
+            # Convert to epoch time
+            epoch_time = int(dt_with_offset.timestamp())
+        else:
+            epoch_time = yolink._get_report_time()
+        return(epoch_time)
+
+
+    #@measure_time
+    def get_data(yolink, category, key, WM_index = None):    
         try:
             ret_val = None  
             if yolink.online and yolink.dData in yolink.data:
@@ -1339,20 +1360,30 @@ class YoLinkMQTTDevice(object):
         except KeyError as e:
             logging.error(f'EXCEPTION - getData {e}')      
 
-    
-    
 
-    
+
     #@measure_time
     def updateStatusData  (yolink, data):
         try:
             logging.debug('{} - updateStatusData : {}'.format(yolink.type , json.dumps(data, indent=4)))
             yolink.reset_structure() #do not let old data persist
             yolink.data = data
+            yolink.Status()
+            if 'time' in data:
+                logging.debug('Empty data received - do not update time')
+                yolink.data['report_time'] = int(data['time']/1000)
+            else:
+                yolink.data['report_time'] = None
+            if 'data' in data:
+                if data['data'] == {}: 
+                    yolink.data['emptyData'] = True
+                    return
+
+
             if data[yolink.dData] == {}:    
                 logging.debug('Empty data received - do not update data to blank data')
                 yolink.dataAPI['emptyData'] = True
-                yolink.data['emptyData'] = True
+
                 return
             else:
                 yolink.dataAPI['emptyData'] = False

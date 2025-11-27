@@ -197,7 +197,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                         #self.my_setDriver('GV4',  self.meter_unit, 25)          
                         self.ISYmeter_uom = self.water_meter_unit2uom( self.meter_unit)
 
-                    state = self.yoWaterCtrl.getData('state', 'valve')
+                    state = self.yoWaterCtrl.get_data('state', 'valve')
                     logging.debug(f'valve state: {state}')                    
                     self.my_setDriver('GV0', self.state2ISY(state))
                     if state != None:
@@ -221,25 +221,25 @@ class udiYoWaterMeterController(udi_interface.Node):
                     #if meter != None:
                         #if 'water_runing' in meter:
                         #    self.my_setDriver('ST', meter['water_runing'])
-                    water_flowing = self.yoWaterCtrl.getData('state','waterFlowing')
+                    water_flowing = self.yoWaterCtrl.get_data('state','waterFlowing')
                     logging.debug(f'water flowing : {water_flowing}')       
                     self.my_setDriver('ST', self.state2ISY(water_flowing ))
 
-                    total_meter = self.yoWaterCtrl.getData('state','meter')
+                    total_meter = self.yoWaterCtrl.get_data('state','meter')
                     total_meter =round(float(self.calculate_water_volume(total_meter,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'total meter : {total_meter}')
                     self.my_setDriver('GV10', total_meter,  self.ISYmeter_uom)
 
-                    daily_use = self.yoWaterCtrl.getData('dailyUsage', 'amount')
+                    daily_use = self.yoWaterCtrl.get_data('dailyUsage', 'amount')
                     daily_use =round(float(self.calculate_water_volume(daily_use,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'daily use : {daily_use}')
                     self.my_setDriver('GV1', daily_use,  self.ISYmeter_uom)
-                    recent_amount = self.yoWaterCtrl.getData('recentUsage','amount')
+                    recent_amount = self.yoWaterCtrl.get_data('recentUsage','amount')
                     recent_amount =round(float(self.calculate_water_volume(recent_amount,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'recent amount : {recent_amount}')
                     self.my_setDriver('GV2', recent_amount,  self.ISYmeter_uom)
 
-                    recent_duration = self.yoWaterCtrl.getData('recentUsage','duration')
+                    recent_duration = self.yoWaterCtrl.get_data('recentUsage','duration')
                     logging.debug(f'recent duration : {recent_duration}')
                     self.my_setDriver('GV3', recent_duration,  44)  
 
@@ -252,7 +252,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                         
                     self.my_setDriver('CLITEMP', self.yoWaterCtrl.getWaterTemperature())
                     
-                    #meter_unit = self.yoWaterCtrl.getData('attributes', 'meterUnit')
+                    #meter_unit = self.yoWaterCtrl.get_data('attributes', 'meterUnit')
                     #logging.debug(f'meter unit : {meter_unit}')
                     #self.my_setDriver('GV4', meter_unit, 25)        
                     #alarms = self.yoWaterCtrl.getAlarms()
@@ -260,74 +260,74 @@ class udiYoWaterMeterController(udi_interface.Node):
 
                     #   , , highTemp, , lowTemp, , o
 
-                    leak = self.yoWaterCtrl.getData('alarm', 'leak')
+                    leak = self.yoWaterCtrl.get_data('alarm', 'leak')
                     logging.debug(f'leak : {leak}')
                     self.my_setDriver('GV5', self.state2ISY(leak))
-                    amount_overrun = self.yoWaterCtrl.getData('alarm', 'overrunAmount24H') #amountOverrun24H,amountOverrun 
+                    amount_overrun = self.yoWaterCtrl.get_data('alarm', 'overrunAmount24H') #amountOverrun24H,amountOverrun 
                     if amount_overrun is None: # try alternate key
-                        amount_overrun = self.yoWaterCtrl.getData('alarm', 'amountOverrun')
+                        amount_overrun = self.yoWaterCtrl.get_data('alarm', 'amountOverrun')
                     logging.debug(f'overrunAmount24H : {amount_overrun}')     
                     self.my_setDriver('GV6', self.state2ISY(amount_overrun))
 
 
-                    duration_overrun = self.yoWaterCtrl.getData('alarm', 'overrunDurationOnce') #durationOverrun overrunDurationOnce
+                    duration_overrun = self.yoWaterCtrl.get_data('alarm', 'overrunDurationOnce') #durationOverrun overrunDurationOnce
                     if duration_overrun is None: # try alternate key
-                        duration_overrun = self.yoWaterCtrl.getData('alarm', 'durationOverrun')
+                        duration_overrun = self.yoWaterCtrl.get_data('alarm', 'durationOverrun')
                     logging.debug(f'duration overrun : {duration_overrun}')     
                     self.my_setDriver('GV7', self.state2ISY( duration_overrun))
 
-                    times_overrun_24h = self.yoWaterCtrl.getData('alarm', 'overrunTimes24H') #overrunTimes24H
+                    times_overrun_24h = self.yoWaterCtrl.get_data('alarm', 'overrunTimes24H') #overrunTimes24H
                     logging.debug(f'times overrun 24h : {times_overrun_24h}')   
                     self.my_setDriver('GV8', self.state2ISY(times_overrun_24h))
 
-                    reminder = self.yoWaterCtrl.getData('alarm', 'reminder') #reminder
+                    reminder = self.yoWaterCtrl.get_data('alarm', 'reminder') #reminder
                     logging.debug(f'reminder : {reminder}')     
                     self.my_setDriver('GV9', self.state2ISY(reminder))
 
-                    open_reminder = self.yoWaterCtrl.getData('alarm', 'openReminder') #openReminder
+                    open_reminder = self.yoWaterCtrl.get_data('alarm', 'openReminder') #openReminder
                     logging.debug(f'open reminder : {open_reminder}')
                     self.my_setDriver('GV11', self.state2ISY(open_reminder))
 
-                    valve_error = self.yoWaterCtrl.getData('alarm', 'valveError')   #valveError
+                    valve_error = self.yoWaterCtrl.get_data('alarm', 'valveError')   #valveError
                     logging.debug(f'valve error : {valve_error}')   
                     self.my_setDriver('GV12', self.state2ISY(valve_error))   
 
 
-                    high_T_error = self.yoWaterCtrl.getData('alarm', 'highTemp')   #valveError
+                    high_T_error = self.yoWaterCtrl.get_data('alarm', 'highTemp')   #valveError
                     logging.debug(f'high temp error : {high_T_error}')
                     self.my_setDriver('GV13', self.state2ISY(high_T_error))    
 
-                    low_T_error = self.yoWaterCtrl.getData('alarm', 'lowTemp')   #valveError
+                    low_T_error = self.yoWaterCtrl.get_data('alarm', 'lowTemp')   #valveError
                     logging.debug(f'low temp error : {low_T_error}')
                     self.my_setDriver('GV14', self.state2ISY(low_T_error))
 
-                    overrun24 = self.yoWaterCtrl.getData('attributes', 'overrunAmount24H')
+                    overrun24 = self.yoWaterCtrl.get_data('attributes', 'overrunAmount24H')
 
                     if overrun24 is not None:
                         overrun24= round(float(self.calculate_water_volume(overrun24,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'Overrun24  limit : {overrun24}')
                     self.my_setDriver('GV22', overrun24, self.ISYmeter_uom)
-                    nbroverrun = self.yoWaterCtrl.getData('attributes', 'overrunTimes24H')
+                    nbroverrun = self.yoWaterCtrl.get_data('attributes', 'overrunTimes24H')
                     #if nbroverrun is not None:
                     #    overrun_amount = round(float(self.calculate_water_volume(overrun_amount,  self.meter_unit,  self.ISYwater_unit)), 1)                          
                     logging.debug(f'overrun times limit : {nbroverrun}')                    
                     self.my_setDriver('GV23', nbroverrun, 70)
-                    overrun_duration = self.yoWaterCtrl.getData('attributes', 'overrunDuration')
+                    overrun_duration = self.yoWaterCtrl.get_data('attributes', 'overrunDuration')
                     if overrun_duration is None:
-                        overrun_duration = self.yoWaterCtrl.getData('attributes', 'overrunDurationOnce')
+                        overrun_duration = self.yoWaterCtrl.get_data('attributes', 'overrunDurationOnce')
                     logging.debug(f'overrun duration limit : {overrun_duration}')
                     self.my_setDriver('GV24', overrun_duration, 44)
 
-                    leak_ac = self.yoWaterCtrl.getData('autoCloseValve', 'leakDetection')
+                    leak_ac = self.yoWaterCtrl.get_data('autoCloseValve', 'leakDetection')
                     logging.debug(f'leak ACV : {leak_ac}')
                     self.my_setDriver('GV25', self.bool2ISY(leak_ac))
-                    overrun_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunAmount24H')
+                    overrun_ac = self.yoWaterCtrl.get_data('autoCloseValve', 'overrunAmount24H')
                     logging.debug(f'overrun amount24 ACV : {overrun_ac}')
                     self.my_setDriver('GV26', self.bool2ISY(overrun_ac))
-                    overrun_time_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunDurationOnce')
+                    overrun_time_ac = self.yoWaterCtrl.get_data('autoCloseValve', 'overrunDurationOnce')
                     logging.debug(f'overrun duration ACV : {overrun_time_ac}')
                     self.my_setDriver('GV27', self.bool2ISY(overrun_time_ac))
-                    overrun_time_ac = self.yoWaterCtrl.getData('autoCloseValve', 'overrunTimes24H')
+                    overrun_time_ac = self.yoWaterCtrl.get_data('autoCloseValve', 'overrunTimes24H')
                     logging.debug(f'overrun times ACV : {overrun_time_ac}')
                     self.my_setDriver('GV28', self.bool2ISY(overrun_time_ac))
                     
@@ -337,22 +337,22 @@ class udiYoWaterMeterController(udi_interface.Node):
                     
 
             
-                    #leak_limit = self.yoWaterCtrl.getData('attributes', 'leakLimit')    
+                    #leak_limit = self.yoWaterCtrl.get_data('attributes', 'leakLimit')    
                     #logging.debug(f'leak limit : {leak_limit}')  
                     #self.my_setDriver('GV12', leak_limit, self.ISYmeter_uom)
-                    #auto_close = self.yoWaterCtrl.getData('attributes', 'autoCloseValve')    
+                    #auto_close = self.yoWaterCtrl.get_data('attributes', 'autoCloseValve')    
                     #logging.debug(f'auto close : {auto_close}') 
                     #self.my_setDriver('GV13', self.bool2ISY( auto_close), 25)
-                    #overrun_amount_acv = self.yoWaterCtrl.getData('attributes', 'overrunAmountACV')    
+                    #overrun_amount_acv = self.yoWaterCtrl.get_data('attributes', 'overrunAmountACV')    
                     #logging.debug(f'overrun amount acv : {overrun_amount_acv}') 
                     #self.my_setDriver('GV15', self.bool2ISY(overrun_amount_acv), 25)
-                    #overrun_duration_acv = self.yoWaterCtrl.getData('attributes', 'overrunDurationACV')
+                    #overrun_duration_acv = self.yoWaterCtrl.get_data('attributes', 'overrunDurationACV')
                     #logging.debug(f'overrun duration acv : {overrun_duration_acv}') 
                     #self.my_setDriver('GV17', self.bool2ISY(overrun_duration_acv), 25)
-                    #overrun_amount = self.yoWaterCtrl.getData('attributes', 'overrunAmount')    
+                    #overrun_amount = self.yoWaterCtrl.get_data('attributes', 'overrunAmount')    
                     #logging.debug(f'overrun amount : {overrun_amount}')     
                     #self.my_setDriver('GV14', overrun_amount, self.ISYmeter_uom)
-                    #overrun_duration = self.yoWaterCtrl.getData('attributes', 'overrunDuration')    
+                    #overrun_duration = self.yoWaterCtrl.get_data('attributes', 'overrunDuration')    
                     #logging.debug(f'overrun duration : {overrun_duration}')
                     #self.my_setDriver('GV16', overrun_duration, 44) 
 

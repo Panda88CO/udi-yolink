@@ -114,6 +114,9 @@ def convert_timestr_to_epoch(self, timestr):
         epoch = 0
     return(epoch)
 
+
+
+
 def retrieve_cmd_state(self):
     logging.debug('retrieve_cmd_state - {}'.format(self.address))
     try:

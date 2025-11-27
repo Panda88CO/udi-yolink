@@ -112,7 +112,7 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def getMotionState(self):
         if self.yoMotionsSensor.online:
-            if  self.yoMotionsSensor.getData('state', 'state') == 'normal':
+            if  self.yoMotionsSensor.get_data('state', 'state') == 'normal':
                 return(0)
             else:
                 return(1)
@@ -127,12 +127,11 @@ class udiYoMotionSensor(udi_interface.Node):
 
     def updateData(self):
         if self.node is not None:
-            time_str = self.yoMotionsSensor.getData(None, 'reportAt')
-            unix_time = self.convert_timestr_to_epoch(time_str)
+            unix_time = self.yoOutlet.get_report_time('reportAt')
             self.my_setDriver('TIME', unix_time, 151)
             if self.yoMotionsSensor.online:
                 logging.debug('Motion sensor CMD setting: {}'.format(self.cmd_state))
-                motion_state = self.yoMotionsSensor.getData('state', 'state')
+                motion_state = self.yoMotionsSensor.get_data('state', 'state')
                 if motion_state in ['normal'] :
                     self.my_setDriver('GV0', 1)  
                     self.my_setDriver('ST', 1)                
@@ -147,10 +146,10 @@ class udiYoMotionSensor(udi_interface.Node):
                     self.my_setDriver('GV0', 99)
                     self.my_setDriver('ST', 99)
                 self.last_state = motion_state
-                self.my_setDriver('GV1', self.yoMotionsSensor.getData('state', 'battery'))
+                self.my_setDriver('GV1', self.yoMotionsSensor.get_data('state', 'battery'))
                 self.my_setDriver('GV2', self.cmd_state)
                 self.my_setDriver('GV30', 1)
-                devTemp =  self.yoMotionsSensor.getData('state', 'devTemperature')
+                devTemp =  self.yoMotionsSensor.get_data('state', 'devTemperature')
                 if devTemp != None:
                     if self.temp_unit == 0:
                         self.my_setDriver('CLITEMP', round(devTemp,0), 4)
