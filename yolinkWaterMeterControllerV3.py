@@ -148,7 +148,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
                                 valves[str(WM_index)] == yolink.dataAPI[yolink.dData][yolink.dState]['state']['valves'][str(WM_index)]
 
         return(valves)
-    
+    '''
     def step_in (self, dict_data, category, key):
         ret_val = None
         for temp_cat in dict_data:
@@ -367,7 +367,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         
         except KeyError as e:
             logging.error(f'EXCEPTION - getData {e}') 
-
+    
     def getDataOLD(yolink, category, key, WM_index = None):    
         try:
             logging.debug(yolink.type+f' - getData category {category} key {key} {WM_index} {yolink.dataAPI[yolink.dData]}')
@@ -414,7 +414,7 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
         except KeyError as e:
             logging.error(f'EXCEPTION - getData {e}') 
             return(None)
- 
+    '''
     def getMeterReading(yolink, WM_index = None):
         try:
             meter_correction_factor = 1
