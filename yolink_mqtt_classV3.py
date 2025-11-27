@@ -1321,7 +1321,7 @@ class YoLinkMQTTDevice(object):
         time_str = yolink.get_data(None, target_str)
         if time_str is not None:
             tz = yolink.get_data(None, 'tz')
-            logging.debug
+            logging.debug('Time String: {} TZ: {}'.format(time_str, tz))
             dt = datetime.strptime(time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
             if isinstance(dt, int,float): # Adjust for the timezone offset
                 dt = dt.replace(tzinfo=timezone.utc) + timedelta(hours=int(tz))
