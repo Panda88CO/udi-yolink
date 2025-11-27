@@ -25,8 +25,8 @@ from udiYoMotionSensorV4 import udiYoMotionSensor
 from udiYoLeakSensorV3 import udiYoLeakSensor
 from udiYoCOSmokeSensorV3 import udiYoCOSmokeSensor
 from udiYoDoorSensorV3 import udiYoDoorSensor
-from udiYoOutletV2 import udiYoOutlet
-from udiYoOutletPwrV2 import udiYoOutletPwr
+from udiYoOutletV4 import udiYoOutlet
+#from udiYoOutletPwrV2 import udiYoOutletPwr
 from udiYoMultiOutletV2 import udiYoMultiOutlet
 from udiYoManipulatorV2 import udiYoManipulator
 from udiYoSpeakerHubV2 import udiYoSpeakerHub
@@ -150,7 +150,7 @@ def addNodes (self, deviceList) -> list:
     #                    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
     #                    'WaterDepthSensor', ]    'WaterMeterController', 
     
-    supportedYoTypes = ['MotionSensor', 'WaterMeterController']     
+    supportedYoTypes = ['MotionSensor', 'WaterMeterController', 'Outlet']     
 
     
     remove_list= []

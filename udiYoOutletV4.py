@@ -20,7 +20,7 @@ from yolinkOutletV2 import YoLinkOutl
 
 
 
-class udiYoOutletPwr(udi_interface.Node):
+class udiYoOutlet(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, prep_schedule, convert_timestr_to_epoch, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, mask2key
     id = 'yooutlet'
     '''
