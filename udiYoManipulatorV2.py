@@ -30,7 +30,7 @@ class udiYoManipulator(udi_interface.Node):
             'GV2' = OffDelay
             'BATLVL' = BatteryLevel
             
-            'ST' = Online
+            'ST' = Manipulator State
             ]
     ''' 
     drivers = [
@@ -127,21 +127,24 @@ class udiYoManipulator(udi_interface.Node):
                 if state.upper() == 'OPEN':
                     self.valveState = 1
                     self.my_setDriver('GV0', self.valveState )
+                    self.my_setDriver('ST', self.valveState )
                     if self.last_state != state:
                         self.node.reportCmd('DON')
                 elif state.upper() == 'CLOSED':
                     self.valveState = 0
                     self.my_setDriver('GV0', self.valveState )
+                    self.my_setDriver('ST', self.valveState )
                     if self.last_state != state:
                         self.node.reportCmd('DOF')
                 else:
                     self.my_setDriver('GV0', 99)
+                    self.my_setDriver('ST', 99)
                     
                 self.last_state = state
                 self.my_setDriver('GV30', 1)
                 #logging.debug('Timer info : {} '. format(time.time() - self.timer_expires))
                 if time.time() >= self.timer_expires - self.timer_update and self.timer_expires != 0:
-                    self.my_setDriver('GV1', 0)
+                    self.my_setDriver('GV1', 0)                
                     self.my_setDriver('GV2', 0)  
                 #logging.debug('udiYoManipulator - getBattery: {}'.format(self.yoManipulator.getBattery()))    
                 self.my_setDriver('BATLVL', self.yoManipulator.getBattery())          
