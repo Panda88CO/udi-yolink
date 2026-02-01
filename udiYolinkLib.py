@@ -20,6 +20,11 @@ from os import truncate
 import time
 import json
 import math
+import threading
+#import datetime
+#from datetime import datetime
+
+driver_lock = threading.Lock()
 
 def updateEpochTime(self, command=None ):
     logging.info('updateEpochTime ')
