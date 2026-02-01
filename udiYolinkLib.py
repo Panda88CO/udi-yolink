@@ -89,7 +89,7 @@ def wait_for_node_done(self):
     while len(self.n_queue) == 0:
         time.sleep(0.1)
     self.n_queue.pop()
-
+'''
 def my_setDriver(self, key, value, Unit=None):
     logging.debug(f'my_setDriver : {key} {value} {Unit} ')
     try:
@@ -111,7 +111,36 @@ def my_setDriver(self, key, value, Unit=None):
                 self.node.setDriver(key, value, True, True)
     except ValueError: #A non number was passed 
         self.node.setDriver(key, 99, True, True, 25)
-        
+'''
+
+def my_setDriver(self, key, value, Unit=None, force=False, type=None):
+    with driver_lock:
+        logging.debug(f'my_setDriver : {key} {value} {Unit} ')
+        try:
+            if any(item.get('driver') == key for item in self.drivers):
+                if value is None:
+                    if type not in ['report']: #['event', 'setAttributes', 'setState']:
+                        logging.debug('None value passed = seting 99, UOM 25')
+                        self.node.setDriver(key, 99, True, force, 25)
+                else:                
+                    if key in ['GV20']: # Connection state o
+                        try:
+                            if self.yoAccess.local:
+                                logging.debug('Local connection - value + 3')
+                                value = value + 3
+                        except Exception as e:
+                            logging.debug('Local connection - yolink class not ready - continue : {}'.format(e))
+                    if isinstance(Unit, (int, float)):
+                        self.node.setDriver(key, value, True, force, uom=Unit)
+                    else:
+                        self.node.setDriver(key, value,True, force)
+                time.sleep(0.005) # to avoid flooding ISY with updates
+            else:
+                logging.debug(f'Passed driver {key} does not exist in {self.drivers}')
+
+        except ValueError: #A non number was passed 
+            logging.error('Non numeric value passed to my_setDriver - setting 99 ')
+            self.node.setDriver(key, 99, True, True, 25)
 
 def mask2key (self, mask):
     logging.debug('mask2key : {}'.format(mask))
