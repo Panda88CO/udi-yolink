@@ -537,7 +537,7 @@ ST-nlssmremote-GV30-NAME=Online State
 ST-nlssmremote-TIME-NAME=Last device update
 ST-nlssmremote-CLITEMP-NAME=Sensor Temperature
 ST-nlssmremote-CLIHUM-NAME=Current Rel Humidity (%)
-CMD-nlssmremote-NAME=Update Status
+CMD-nlssmremote-UPDATE-NAME=Update Status
 
 
 ND-smremotekey-NAME=YoLink Smart Remoter

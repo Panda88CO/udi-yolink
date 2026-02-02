@@ -105,7 +105,7 @@ class udiYoLeakSensor(udi_interface.Node):
         
     def waterState(self):
         if self.yoLeakSensor.online:
-            if  self.yoLeakSensor.probeState() == 'normal' or self.yoLeakSensor.probeState() == 'dry' :
+            if  self.yoLeakSensor.probeState() in ['normal', 'dry']:
                 return(0)
             else:
                 return(1)
@@ -138,6 +138,7 @@ class udiYoLeakSensor(udi_interface.Node):
                             self.node.reportCmd('DOF')
                 else:
                     self.my_setDriver('GV0', 99)
+                    self.my_setDriver('ST', 99)
                 self.last_state = waterState
                 self.my_setDriver('GV1', self.yoLeakSensor.getBattery())
                 self.my_setDriver('GV2', self.cmd_state)
