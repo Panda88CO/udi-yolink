@@ -4,7 +4,7 @@ Yolink Control Main Node  program
 MIT License
 """
 
-version = '1.6.13'
+version = '1.6.14'
 
 import sys
 import re
@@ -519,10 +519,10 @@ def systemPoll (self, polltype):
                 self.heartbeat()
 
                 #nodes = self.poly.getNodes()
-                for nde in self.yolink_nodes:
-                    if nde != 'setup':   # but not the controller node
-                        self.yolink_nodes[nde].checkDataUpdate()
-                        logging.debug('shortpoll {}'.format(nde))
+                #for nde in self.yolink_nodes:
+                #    if nde != 'setup':   # but not the controller node
+                #        self.yolink_nodes[nde].checkDataUpdate()
+                #        logging.debug('shortpoll {}'.format(nde))
                         # no API calls so no need to spread out 
                         #time.sleep(4)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
         #else:
