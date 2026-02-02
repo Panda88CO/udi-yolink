@@ -139,15 +139,14 @@ def configDoneHandler(self):
 
 
 def addNodes (self, deviceList):
+    logging.debug('addNodes called: Parameters {}'.format(self.Parameters))
     for dev in deviceList:
         logging.debug(f'DEVICE BEING ANALYZED {dev}')
         if dev['type']  in self.supportedYoTypes:            
             nodename = str(dev['deviceId'][-14:])
             address = self.poly.getValidAddress(nodename)
             model = str(dev['modelName'][:6])
-            #if address in self.Parameters:
-            #    name = self.Parameters[address]
-            #else:
+
             if self.yoLocal is not None and dev['access'] == 0:
                 logging.debug('Local Access selected {}'.format(dev['name']))
                 dev_access = self.yoLocal
@@ -159,6 +158,7 @@ def addNodes (self, deviceList):
             name = self.poly.getValidName(name)
             #self.Parameters[address] =  dev['name']
             if address in self.Parameters:
+                logging.debug('Erasing existing param for address: {} - {}'.format(address, self.Parameters[address]))
                 del self.Parameters[address] 
             logging.info('adding/checking device : {} - {}'.format(dev['name'], dev['type']))
             if dev['type'] == 'Hub':   
