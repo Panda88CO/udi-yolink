@@ -31,6 +31,7 @@ class YoLinkSetup (udi_interface.Node):
         
         self.nodeDefineDone = False
         self.handleParamsDone = False
+        self.configDone = False
         self.pollStart = False
         self.debug = False
         self.address = address
@@ -201,6 +202,9 @@ class YoLinkSetup (udi_interface.Node):
 
         logging.debug('{} devices detected : {}'.format(len(self.deviceList), self.deviceList) )
         if self.yoAccess or self.yoLocal:
+            while not self.configDone:
+                time.sleep(1)
+                logging.debug ('waiting for configDone to be set')
             self.my_setDriver('ST', 1)
 
             self.addNodes(self.deviceList)
