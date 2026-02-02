@@ -159,7 +159,7 @@ def addNodes (self, deviceList):
             #self.Parameters[address] =  dev['name']
             if address in self.Parameters:
                 logging.debug('Erasing existing param for address: {} - {}'.format(address, self.Parameters[address]))
-                del self.Parameters[address] 
+                self.Parameters.pop(address) 
             logging.info('adding/checking device : {} - {}'.format(dev['name'], dev['type']))
             if dev['type'] == 'Hub':   
                 logging.debug(f'HUB date {dev}')
@@ -435,6 +435,7 @@ def addNodes (self, deviceList):
     self.yolink_nodes = self.poly.getNodes()
     self.my_setDriver('GV1', 1)
     self.pollStart = True
+    logging.debug('after addNodes called: Parameters {}'.format(self.Parameters))
 
 '''
 def stop(self):
