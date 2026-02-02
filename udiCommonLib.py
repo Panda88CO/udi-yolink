@@ -159,7 +159,7 @@ def addNodes (self, deviceList):
             #self.Parameters[address] =  dev['name']
             if address in self.Parameters:
                 logging.debug('Erasing existing param for address: {} - {}'.format(address, self.Parameters[address]))
-                self.Parameters.pop(address) 
+                self.Parameters.delete(address) 
             logging.info('adding/checking device : {} - {}'.format(dev['name'], dev['type']))
             if dev['type'] == 'Hub':   
                 logging.debug(f'HUB date {dev}')
