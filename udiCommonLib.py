@@ -4,7 +4,7 @@ Yolink Control Main Node  program
 MIT License
 """
 
-version = '1.6.14'
+version = '1.6.15'
 
 import sys
 import re
@@ -145,8 +145,10 @@ def addNodes (self, deviceList):
         if dev['type']  in self.supportedYoTypes:            
             nodename = str(dev['deviceId'][-14:])
             address = self.poly.getValidAddress(nodename)
-            model = str(dev['modelName'][:6])
-
+            if 'modelName' in dev:
+                model = str(dev['modelName'][:6])
+            else:
+                model = 'Unknown'   
             if self.yoLocal is not None and dev['access'] == 0:
                 logging.debug('Local Access selected {}'.format(dev['name']))
                 dev_access = self.yoLocal
