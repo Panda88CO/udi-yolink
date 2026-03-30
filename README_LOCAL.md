@@ -6,11 +6,14 @@
     Enables yoLink (https://shop.yosmart.com/) devices to be controlled using the ISY
     Current list of devices supported is as follows:
     
-    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
+   'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-    'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock', 'Dimmer', 'InfraredRemoter', 
-    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren'
-    'WaterMeterController','WaterDepthSensor', 'LockV2'
+    'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
+    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
+    'WaterDepthSensor', 'WaterMeterMultiController', 'SprinklerV2', 'Thermostat',
+    'SoilThcSensor'
+
+    
 
     
     Code uses MQTT communications
