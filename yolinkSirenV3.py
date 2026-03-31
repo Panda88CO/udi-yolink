@@ -11,7 +11,7 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.DEBUG)
 
-class YoLinkSir(YoLinkMQTTDevice):
+class YoLinkSiren(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__( yoAccess,  deviceInfo, callback)
         yolink.maxSchedules = 6
@@ -117,11 +117,3 @@ class YoLinkSir(YoLinkMQTTDevice):
             return(yolink.getData())
 
 
-class YoLinkSiren(YoLinkSir):
-    def __init__(yolink, yoAccess,  deviceInfo):
-        super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)
-        yolink.initNode()
-
-
-    def updateStatus(yolink, data):
-        yolink.updateCallbackStatus(data, True)

@@ -11,7 +11,7 @@ except ImportError:
     logging.basicConfig(level=logging.DEBUG)
 
 
-class YoLinkInfraredRem(YoLinkMQTTDevice):
+class YoLinkInfraredRemoter(YoLinkMQTTDevice):
     def __init__(yolink, yoAccess,  deviceInfo, callback):
         super().__init__(yoAccess,  deviceInfo, callback)
         
@@ -310,11 +310,3 @@ class YoLinkInfraredRem(YoLinkMQTTDevice):
 
 
         
-class YoLinkInfraredRemoter(YoLinkInfraredRem):
-    def __init__(yolink, yoAccess,  deviceInfo):
-        super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)
-        yolink.initNode()
-
-
-    #def updateStatus(yolink, data):
-    #    yolink.updateCallbackStatus(data, True)

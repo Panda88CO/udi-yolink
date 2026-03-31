@@ -359,7 +359,8 @@ class YoLinkMQTTDevice(object):
    #@measure_time
     def setAttributes(yolink,  data):
         logging.debug(yolink.type+f' - setAttributes {data}')
-
+        if data is None:
+            data = {}
         methodStr = yolink.type+'.setAttributes'
             
         #data['time'] = str(int(time.time_ns()//1e6))# we assign time just before publish
@@ -373,9 +374,9 @@ class YoLinkMQTTDevice(object):
     
     def setDeviceAttributes(yolink,  data):
         logging.debug(yolink.type+f' - setDeviceAttributes {data}')
-
+        if data is None:
+            data = {}  
         methodStr = yolink.type+'.setDeviceAttributes'
-            
         #data['time'] = str(int(time.time_ns()//1e6))# we assign time just before publish
         data['method'] = methodStr
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
@@ -389,6 +390,7 @@ class YoLinkMQTTDevice(object):
     #@measure_time
     def setDevice(yolink,  data):
         logging.debug(yolink.type+' - setDevice')
+
         worked = False
         if 'toggle' in yolink.methodList:
             methodStr = yolink.type+'.toggle'
@@ -397,7 +399,8 @@ class YoLinkMQTTDevice(object):
             methodStr = yolink.type+'.setState'
             worked = True
 
-           
+        if data is None:
+            data = {}           
         #data['time'] = str(int(time.time_ns()//1e6))# we assign time just before publish
         data['method'] = methodStr
         data["targetDevice"] =  yolink.deviceInfo['deviceId']
@@ -1310,17 +1313,29 @@ class YoLinkMQTTDevice(object):
         time_str = yolink.get_data(target_str)
         logging.debug('Getting report time for target_str: {}'.format(target_str))
         if isinstance(time_str, str):
-            tz = yolink.get_data('tz')
-            logging.debug('Time String: {} TZ: {}'.format(time_str, tz))
-
-            dt = datetime.strptime(time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
-            if isinstance(dt, (int,float)): # Adjust for the timezone offset
-                dt = dt.replace(tzinfo=timezone.utc) + timedelta(hours=int(tz))
-            # Convert to epoch time
-            epoch_time = int(dt.timestamp())
-        else:
-            epoch_time = yolink._get_report_time()
-        return(epoch_time)
+            try:
+                tz = yolink.get_data('tz')
+                logging.debug('Time String: {} TZ: {}'.format(time_str, tz))
+                dt = datetime.strptime(time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+                # Optionally adjust for timezone if tz is valid
+                epoch_time = int(dt.timestamp())
+                return epoch_time
+            except Exception as e:
+                logging.debug(f'get_report_time: failed to parse time_str: {e}')
+                pass
+        # If not found or not valid, fall back to lastUpdate logic
+        try:
+            last_update = yolink.lastUpdate()
+            if last_update:
+                # If lastUpdate returns ms, convert to seconds for consistency
+                if last_update > 9999999999:  # ms threshold
+                    return int(last_update // 1000)
+                else:
+                    return int(last_update)
+        except Exception as e:
+            logging.debug(f'get_report_time: lastUpdate fallback failed: {e}')
+        # If all else fails, fallback to _get_report_time
+        return yolink._get_report_time()
 
 
     #@measure_time

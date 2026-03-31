@@ -254,15 +254,3 @@ class YoLinkWaterMeter(YoLinkMQTTDevice):
             logging.error(f'Exception : {e}')
             return(None)
         
-
-
-
-
-class YoLinkWaterMeterCtrl(YoLinkWaterMeter):
-    def __init__(yolink, yoAccess,  deviceInfo):
-        super().__init__(  yoAccess,  deviceInfo, yolink.updateStatus)
-        yolink.initNode()
-
-
-    def updateStatus(yolink, data):
-        yolink.updateCallbackStatus(data, True)

@@ -66,7 +66,7 @@ class YoLinkDim(YoLinkMQTTDevice):
 
     def get_attributes(yolink):
         logging.debug('get_attributes')
-        yolink.setAttributes(None)
+        yolink.setDeviceAttributes(None)
         return()
 
 
