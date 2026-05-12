@@ -310,7 +310,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
 
 class udiYoSubWaterMeter(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   w_unit2ISY, calculate_water_volume, save_cmd_state, water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   w_unit2ISY, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, save_cmd_state, water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync
 
     id = 'yowatermeterSubL'
     '''
@@ -373,6 +373,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.last_state = ''
         self._last_reported_state = None
         self.ISYmeter_uom= None
+        self.meter_correction_factor = 1.0
         self.valveState = 99 # needed as class c device - keep value until online again 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -406,6 +407,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.meter_unit =  self.yoWaterCtrl.getMeterUnit()
         self.ISYwater_unit = self.yoAccess.get_water_unit()     
         self.ISYmeter_uom= self.water_meter_unit2uom( self.ISYwater_unit)
+        self.meter_correction_factor = self.get_meter_correction_factor(self.yoWaterCtrl, self.WM_index)
         logging.debug(f'meter unit : { self.meter_unit} ISY unit: { self.ISYwater_unit} uom: {self.ISYmeter_uom}')
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
         self.my_setDriver('GV1', 0,  self.ISYmeter_uom)
@@ -484,6 +486,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
                         self.meter_unit = ctrl.getMeterUnit()
                         self.ISYwater_unit = self.yoAccess.get_water_unit()
                         self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
+                        self.meter_correction_factor = self.get_meter_correction_factor(ctrl, self.WM_index)
 
                     state = ctrl.get_data('valves', 'state', self.WM_index)
                     logging.debug(f'valve state : {state} {self.WM_index}')
@@ -504,16 +507,16 @@ class udiYoSubWaterMeter(udi_interface.Node):
                     water_flowing = ctrl.get_data('waterFlowing', 'state', self.WM_index)
                     logging.debug(f'water flowing : {water_flowing}')       
                     self.my_setDriver('ST', self.state2ISY(water_flowing ), type=message_type)
-                    total_meter = ctrl.get_data('meters', 'state', self.WM_index)
+                    total_meter = self.apply_meter_correction(ctrl.get_data('meters', 'state', self.WM_index), self.meter_correction_factor)
                     if total_meter is not None:
                         total_meter = round((float(self.calculate_water_volume(total_meter,  self.meter_unit,  self.ISYwater_unit))), 1)  
                     self.my_setDriver('GV10', total_meter,  self.ISYmeter_uom, type=message_type)
-                    daily_use = ctrl.get_data('amount', 'dailyUsage', self.WM_index)
+                    daily_use = self.apply_meter_correction(ctrl.get_data('amount', 'dailyUsage', self.WM_index), self.meter_correction_factor)
                     if daily_use is not None:
                         daily_use = round(float(self.calculate_water_volume(daily_use,  self.meter_unit,  self.ISYwater_unit)),1)
                     logging.debug(f'daily use : {daily_use}')   
                     self.my_setDriver('GV1', daily_use,  self.ISYmeter_uom, type=message_type)
-                    recent_amount = ctrl.get_data('amount', 'recentUsage', self.WM_index) 
+                    recent_amount = self.apply_meter_correction(ctrl.get_data('amount', 'recentUsage', self.WM_index), self.meter_correction_factor)
                     if recent_amount is not None:
                         recent_amount = round(float(self.calculate_water_volume(recent_amount,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'recent amount : {recent_amount}')

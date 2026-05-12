@@ -24,7 +24,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterOnly(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, water_meter_unit2uom, calculate_water_volume, bool2ISY, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync
 
     id = 'yowatermeterOnly'
     '''
@@ -100,6 +100,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.offDelay = 0
         self.ISYmeter_uom = None
         self.ISYwater_unit = None
+        self.meter_correction_factor = 1.0
         self.valveState = 99 # needed as class c device - keep value until online again 
         #polyglot.subscribe(polyglot.POLL, self.poll)
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -143,6 +144,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.ISYwater_unit = self.yoAccess.get_water_unit()
         #self.my_setDriver('GV4',  self.meter_unit, 25)          
         self.ISYmeter_uom = self.water_meter_unit2uom( self.ISYwater_unit)
+        self.meter_correction_factor = self.get_meter_correction_factor(self.yoWaterCtrl)
         logging.debug(f'meter unit : { self.meter_unit} ISY unit: { self.ISYwater_unit} uom: {self.ISYmeter_uom}')
 
 
@@ -213,6 +215,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
                         logging.debug(f'meter unit : { self.meter_unit}')
                         #self.my_setDriver('GV4',  self.meter_unit, 25)          
                         self.ISYmeter_uom = self.water_meter_unit2uom( self.meter_unit)
+                        self.meter_correction_factor = self.get_meter_correction_factor(ctrl)
 
                     #meter  = self.yoWaterCtrl.getMeterReading()
                     #logging.debug(f'meter: {meter}')
@@ -220,19 +223,19 @@ class udiYoWaterMeterOnly(udi_interface.Node):
    
                     self.my_setDriver('ST', self.bool2ISY(ctrl.get_data('waterFlowing', 'state')), type=message_type)
                     #meter_total = self.yoWaterCtrl.get_data('meter', 'state')
-                    total_meter = ctrl.get_data('meter', 'state')
+                    total_meter = self.apply_meter_correction(ctrl.get_data('meter', 'state'), self.meter_correction_factor)
                     if isinstance(total_meter, (int,float)):
                         total_meter =round(float(self.calculate_water_volume(total_meter,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'total meter : {total_meter}')
                     self.my_setDriver('GV1', total_meter,  self.ISYmeter_uom, type=message_type)
 
                     
-                    daily_use = ctrl.get_data('amount', 'dailyUsage')
+                    daily_use = self.apply_meter_correction(ctrl.get_data('amount', 'dailyUsage'), self.meter_correction_factor)
                     if isinstance(daily_use, (int,float)):   
                         daily_use =round(float(self.calculate_water_volume(daily_use,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'daily use : {daily_use}')
                     self.my_setDriver('GV10', daily_use,  self.ISYmeter_uom, type=message_type   )
-                    recent_amount = ctrl.get_data('amount','recentUsage')
+                    recent_amount = self.apply_meter_correction(ctrl.get_data('amount','recentUsage'), self.meter_correction_factor)
                     if isinstance(recent_amount, (int,float)):
                         recent_amount = round(float(self.calculate_water_volume(recent_amount,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'recent amount : {recent_amount}')

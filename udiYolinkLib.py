@@ -75,6 +75,33 @@ def calculate_water_volume(self, volume, volumeunit, targetunit):
         temp_volume = volume
     return temp_volume
 
+
+def get_meter_correction_factor(self, water_ctrl, wm_index=None):
+    """Return meter step-factor correction for a water meter channel (defaults to 1.0)."""
+    correction_factor = 1.0
+    if water_ctrl is None or not hasattr(water_ctrl, 'get_data'):
+        return correction_factor
+    try:
+        step_factor = None
+        if isinstance(wm_index, int):
+            step_factor = water_ctrl.get_data('meterStepFactor', 'attributes', wm_index)
+        if step_factor is None:
+            step_factor = water_ctrl.get_data('meterStepFactor', 'attributes')
+        if isinstance(step_factor, (int, float)) and step_factor != 0:
+            correction_factor = float(step_factor)
+    except Exception as e:
+        logging.debug(f'get_meter_correction_factor failed for {getattr(self, "address", "unknown")}: {e}')
+    return correction_factor
+
+
+def apply_meter_correction(self, meter_value, correction_factor):
+    """Apply meter correction factor to numeric values; passthrough for non-numeric."""
+    if not isinstance(meter_value, (int, float)):
+        return meter_value
+    if not isinstance(correction_factor, (int, float)) or correction_factor == 0:
+        correction_factor = 1.0
+    return meter_value / float(correction_factor)
+
 def convert_water_unit(self, tempStr):
     if tempStr.capitalize()[:1] == 'G': #Gallon
         return(0)

@@ -25,7 +25,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoWaterMeterController(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, water_meter_unit2uom, calculate_water_volume, state2ISY, bool2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, state2ISY, bool2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync
 
     id = 'yowatermeterCtrl'
     '''
@@ -132,6 +132,7 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.valveState = 99 # needed as class c device - keep value until online again 
         self.ISYmeter_uom = None
         self.ISYwater_unit = None
+        self.meter_correction_factor = 1.0
         #polyglot.subscribe(polyglot.POLL, self.poll)
         self.poly.subscribe(self.poly.START, self.start, self.address)
         self.poly.subscribe(self.poly.STOP, self.stop)
@@ -182,7 +183,9 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.meter_unit = self.yoWaterCtrl.getMeterUnit()
         self.ISYwater_unit = self.yoAccess.get_water_unit()
         self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
+        self.meter_correction_factor = self.get_meter_correction_factor(self.yoWaterCtrl)
         logging.debug(f'meter unit : {self.meter_unit} ISY unit: {self.ISYwater_unit} uom: {self.ISYmeter_uom}')
+        
         self.start_done()
 
     def create_schedule_nodes(self):
@@ -289,6 +292,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                     self.meter_unit = water_ctrl.getMeterUnit()
                     self.ISYwater_unit = self.yoAccess.get_water_unit()
                     self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
+                    self.meter_correction_factor = self.get_meter_correction_factor(water_ctrl)
 
                 if message_type and 'Schedules' in str(message_type):
                     # Route valve schedules to valve node
@@ -335,18 +339,19 @@ class udiYoWaterMeterController(udi_interface.Node):
                     logging.debug(f'water flowing : {water_flowing}')       
                     self.my_setDriver('ST', self.state2ISY(water_flowing ), type=message_type)
 
-                    total_meter = water_ctrl.get_data('meter', 'state')
+                    total_meter = self.apply_meter_correction(water_ctrl.get_data('meter', 'state'), self.meter_correction_factor)
+                    
                     if isinstance(total_meter, (int,float)):
                         total_meter =round(float(self.calculate_water_volume(total_meter,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'total meter : {total_meter}')
                     self.my_setDriver('GV1', total_meter,  self.ISYmeter_uom, type=message_type)
     
-                    daily_use = water_ctrl.get_data('amount', 'dailyUsage')
+                    daily_use = self.apply_meter_correction(water_ctrl.get_data('amount', 'dailyUsage'), self.meter_correction_factor)
                     if isinstance(daily_use, (int,float)):   
                         daily_use =round(float(self.calculate_water_volume(daily_use,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'daily use : {daily_use}')
                     self.my_setDriver('GV10', daily_use,  self.ISYmeter_uom, type=message_type   )
-                    recent_amount = water_ctrl.get_data('amount','recentUsage')
+                    recent_amount = self.apply_meter_correction(water_ctrl.get_data('amount','recentUsage'), self.meter_correction_factor)
                     if isinstance(recent_amount, (int,float)):
                         recent_amount = round(float(self.calculate_water_volume(recent_amount,  self.meter_unit,  self.ISYwater_unit)), 1)
                     logging.debug(f'recent amount : {recent_amount}')
