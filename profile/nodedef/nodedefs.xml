@@ -659,7 +659,7 @@
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
          <st id="GV9" editor="LED" />
-         <st id="ST"  editor="swstate" />
+         <st id="ST" editor="swstate" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />
          <st id="TIME" editor="unixtime" />                  
@@ -726,7 +726,7 @@
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
        
-         <st id="ST"  editor="swstate" />
+         <st id="ST" editor="swstate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />                  
@@ -794,7 +794,7 @@
          <st id="GV8" editor="poweralert" />
          <st id="GV9" editor="LED" />
 
-         <st id="ST"  editor="swstate" />
+         <st id="ST" editor="swstate" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />         
       
@@ -1233,7 +1233,7 @@
  <nodeDef id="yosprinkler" nls="nlssprinkler">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> <!-- water running-->
 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="liter" />
@@ -1299,7 +1299,7 @@
   <nodeDef id="yowatermeterCtrl" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> <!-- water running-->
 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="liter" />
@@ -1364,7 +1364,7 @@
   <nodeDef id="yowatermeterCtrlF" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> <!-- water running-->
 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="gallon" />
@@ -1480,7 +1480,7 @@
 <nodeDef id="yowatermeterSub" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> <!-- water running-->
 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="flow" />
@@ -1521,7 +1521,7 @@
   <nodeDef id="yowatermeterSubL" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> <!-- water running-->
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="liter" />
          <st id="GV10" editor="liter" />     
@@ -1573,7 +1573,7 @@
   <nodeDef id="yowatermeterSubG" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> <!-- water running-->
 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="gallon" />
@@ -1625,7 +1625,7 @@
 <nodeDef id="yowatermeterOnly" nls="nlswatermeter">
    <editors />
    <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> <!-- water running-->
          <st id="GV1" editor="flow" />
          <st id="GV10" editor="flow" />     
          <st id="GV2" editor="flow" /> <!-- recent use -->
@@ -1665,7 +1665,7 @@
 <nodeDef id="yowatermeterOnlyF" nls="nlswatermeter">
    <editors />
    <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> <!-- water running-->
          <st id="GV1" editor="flow" />
          <st id="GV10" editor="flow" />     
          <st id="GV2" editor="flow" /> <!-- recent use -->
@@ -1706,7 +1706,7 @@
  <nodeDef id="yosprinklerv2" nls="nlssprinkler">
       <editors />
       <sts>
-         <!--<st id="ST" editor="runningvalue" />  water runing-->
+         <!--<st id="ST" editor="runningvalue" />  water running-->
          <st id="ST" editor="waterrun" /> 
          <!--<st id="GV0" editor="sprinklerstate" />-->
          <st id="GV1" editor="nowateralarm" />
@@ -2012,7 +2012,7 @@
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />         
-         <st id="ST"  editor="doorstate" />                     
+         <st id="ST" editor="doorstate" />                     
       </sts>
       <cmds>
          <sends>
@@ -2059,7 +2059,7 @@
          <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="celsius" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="motionstate" />
+         <st id="ST" editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
          <st id="GV30"  editor="status" />  
          <st id="TIME" editor="unixtime" />                             
@@ -2094,7 +2094,7 @@
          <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="farenheit" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="motionstate" />
+         <st id="ST" editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
          <st id="GV30"  editor="status" />  
          <st id="TIME" editor="unixtime" />                             
@@ -2125,7 +2125,7 @@
       <editors />
       <sts>
 
-         <st id="ST"  editor="waterstate" />      
+         <st id="ST" editor="waterstate" />      
          <st id="GV0" editor="waterstate" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
@@ -2164,7 +2164,7 @@
    <nodeDef id="yoleaksens" nls="nlsleaksens">
       <editors />
       <sts>
-         <st id="ST"  editor="waterstate" />      
+         <st id="ST" editor="waterstate" />      
          <st id="GV0" editor="waterstate" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
@@ -2296,7 +2296,7 @@
          <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="celsius" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="vibrastate" />
+         <st id="ST" editor="vibrastate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
          <st id="TIME" editor="unixtime" />                         
@@ -2329,7 +2329,7 @@
          <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="farenheit" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST"  editor="vibrastate" />
+         <st id="ST" editor="vibrastate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
          <st id="TIME" editor="unixtime" />                         
