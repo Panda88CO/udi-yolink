@@ -66,7 +66,7 @@ class udiYoThermostat(udi_interface.Node):
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.properties_node = None
         self.n_queue = []
-        self.main_node_ready = True
+        self.main_node_ready = False
         self.sub_nodes_ready = False
         
         # Set node ID based on temperature unit
@@ -92,7 +92,7 @@ class udiYoThermostat(udi_interface.Node):
         while not self.sub_nodes_ready:
             time.sleep(0.5)
         self.node_ready = True
-
+        self.main_node_ready = True
 
 
     def start(self):
