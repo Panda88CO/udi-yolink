@@ -66,7 +66,9 @@ class udiYoThermostat(udi_interface.Node):
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.properties_node = None
         self.n_queue = []
-
+        self.main_node_ready = True
+        self.sub_nodes_ready = False
+        
         # Set node ID based on temperature unit
         if self.temp_unit == 1:
             self.id = 'yothermostatf'  # Fahrenheit variant
@@ -86,8 +88,7 @@ class udiYoThermostat(udi_interface.Node):
         self.node = self.poly.getNode(address)
         self.adr_list = [address]
         # Thermostat has one fixed child node created during startup.
-        self.main_node_ready = True
-        self.sub_nodes_ready = False
+
         while not self.sub_nodes_ready:
             time.sleep(0.5)
         self.node_ready = True
