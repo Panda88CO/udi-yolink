@@ -72,10 +72,12 @@ for nodedef in nodedef_root.findall('.//nodeDef'):
             if st_id:
                 sts.add(st_id)
         
-        # Extract <cmd id="..."> elements ONLY from <accepts> section
-        accepts_elem = nodedef.find('.//accepts')
-        if accepts_elem is not None:
-            for cmd in accepts_elem.findall('.//cmd'):
+        # Extract <cmd id="..."> elements from both <sends> and <accepts>
+        # so the checker matches how Polyglot nodedefs expose command IDs.
+        for cmd_section in nodedef.findall('.//cmds/*'):
+            if cmd_section.tag not in {'sends', 'accepts'}:
+                continue
+            for cmd in cmd_section.findall('.//cmd'):
                 cmd_id = cmd.get('id')
                 if cmd_id:
                     cmds.add(cmd_id)
