@@ -88,11 +88,11 @@ class udiYoThermostat(udi_interface.Node):
         self.node = self.poly.getNode(address)
         self.adr_list = [address]
         # Thermostat has one fixed child node created during startup.
-
+        self.main_node_ready = True
         while not self.sub_nodes_ready:
             time.sleep(0.5)
         self.node_ready = True
-        self.main_node_ready = True
+
 
 
     def start(self):
