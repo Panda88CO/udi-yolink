@@ -62,6 +62,8 @@ class udiYoThermostat(udi_interface.Node):
         self.node_ready = False
         self.configDone = False
         self.system_ready = False
+        self.main_node_ready = True
+        self.sub_nodes_ready = False
         self._update_lock = threading.Lock()
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.properties_node = None
@@ -86,8 +88,7 @@ class udiYoThermostat(udi_interface.Node):
         self.node = self.poly.getNode(address)
         self.adr_list = [address]
         # Thermostat has one fixed child node created during startup.
-        self.main_node_ready = True
-        self.sub_nodes_ready = False
+
         while not self.sub_nodes_ready:
             time.sleep(0.5)
         self.node_ready = True
