@@ -95,7 +95,7 @@ class udiYoThermostat(udi_interface.Node):
         self.main_node_ready = True
 
 
-    def start(self):alse
+    def start(self):
         """Initialize and start the thermostat device"""
         logging.info('Start udiYoThermostat')
         while not self.main_node_ready or not self.configDone:

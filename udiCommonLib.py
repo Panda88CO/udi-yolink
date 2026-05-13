@@ -89,12 +89,8 @@ def _resolve_node_ready_poll_seconds(self):
 
 def udiTssProfileUpdate(messages):
     '''
-        if (os.path.exists('./profile/editor/editor.xml')):
-            #logging.debug('reading /devices.json')
-            editor =  minidom.parse('./profile/editor/editor.xml')
-        if (os.path.exists('./profile/nls/en_us.txt')):
-            #logging.debug('reading /devices.json')
-            nls = open(''./profile/nls/en_us.txt')
+        Non-destructive TTS profile update: only modifies TTS entries, preserves all other content
+        exactly as-is to avoid triggering stricter validation in Polyglot v61+
     '''
     foundChanges = False
     NLSstr = None
@@ -124,37 +120,51 @@ def udiTssProfileUpdate(messages):
         return foundChanges
 
     if (os.path.exists('./profile/nls/en_us.txt')):
-        nfile = open('./profile/nls/en_us.txt', 'r')
-        nls = nfile.readlines()
-        nfile.close()
+        with open('./profile/nls/en_us.txt', 'r') as nfile:
+            nls = nfile.readlines()
 
-        # Gather existing message labels so we can compare old vs new values exactly.
+        # Gather existing TTS message labels to compare old vs new values
         removedLines = {}
-        for line in range(len(nls)-1, 0, -1):
-            if nls[line].find(NLSstr, 0, len(NLSstr)) != -1:
-                splitLine = re.split('=', nls[line], maxsplit=1)
+        tts_line_indices = []
+        key_prefix = f'{NLSstr}-'
+        
+        # Identify which lines contain TTS entries (scan backwards to find them)
+        for line_idx in range(len(nls)-1, 0, -1):
+            line_content = nls[line_idx]
+            if key_prefix in line_content:
+                splitLine = re.split('=', line_content, maxsplit=1)
                 key_part = splitLine[0].strip()
-                key_prefix = f'{NLSstr}-'
                 if key_part.startswith(key_prefix):
                     idx_text = key_part[len(key_prefix):].strip()
                     if idx_text.isdigit():
                         index = int(idx_text)
                         TTS = splitLine[1].strip() if len(splitLine) > 1 else ''
                         removedLines[index] = TTS
-                nls.pop(line)
+                        tts_line_indices.append(line_idx)
 
+        # Build new TTS entries
         newLines = {}
-        for line in range(0,len(messages)):
-            msg = str(messages[line]).strip()
-            newLines[line] = msg
-            nls.append('{}-{} = {}\n'.format(NLSstr, line, msg))
+        for idx in range(0, len(messages)):
+            msg = str(messages[idx]).strip()
+            newLines[idx] = msg
 
+        # Only rewrite if TTS content actually changed
         if removedLines != newLines:
             foundChanges = True
+            
+            # Remove old TTS lines (in reverse order to preserve indices)
+            for line_idx in sorted(tts_line_indices, reverse=True):
+                nls.pop(line_idx)
+            
+            # Append new TTS entries preserving format
+            for idx in range(0, len(messages)):
+                msg = str(messages[idx]).strip()
+                nls.append('{}-{} = {}\n'.format(NLSstr, idx, msg))
 
-        nfile = open('./profile/nls/en_us.txt', 'w')
-        nfile.writelines(nls)
-        nfile.close()
+        # Write back only if changes were detected
+        if foundChanges:
+            with open('./profile/nls/en_us.txt', 'w') as nfile:
+                nfile.writelines(nls)
     else:
         logging.error('./profile/nls/en_us.txt NOT FOUND ')
     return(foundChanges)
