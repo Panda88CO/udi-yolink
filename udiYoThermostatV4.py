@@ -62,7 +62,7 @@ class udiYoThermostat(udi_interface.Node):
         self.node_ready = False
         self.configDone = False
         self.system_ready = False
-        self.main_node_ready = True
+        self.main_node_ready = False
         self.sub_nodes_ready = False
         self._update_lock = threading.Lock()
         self.temp_unit = self.yoAccess.get_temp_unit()
@@ -92,10 +92,10 @@ class udiYoThermostat(udi_interface.Node):
         while not self.sub_nodes_ready:
             time.sleep(0.5)
         self.node_ready = True
+        self.main_node_ready = True
 
 
-
-    def start(self):
+    def start(self):alse
         """Initialize and start the thermostat device"""
         logging.info('Start udiYoThermostat')
         while not self.main_node_ready or not self.configDone:
