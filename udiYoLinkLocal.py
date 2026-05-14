@@ -682,7 +682,7 @@ class YoLinkSetup (udi_interface.Node):
 if __name__ == "__main__":
     try:
         polyglot = udi_interface.Interface([])
-
+        logging.info(f'Version {version}')
 
         polyglot.start(version)
 
