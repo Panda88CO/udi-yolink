@@ -5,19 +5,14 @@
          <st id="ST"  editor="connect" />
          <st id="GV1"  editor="ready" />         
          <st id="TIME"  editor="unixtime" />
-         <!--- st id="GV20" editor="suspendstate" /-->
       </sts>
       <cmds>
          <sends>
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
          </sends>
-         <!--<accepts>
-            <cmd id="EPOCHTIME"  /> 
-         </accepts>-->
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoScheduleSec" nls="nlsschedule">
       <editors />
       <sts>
@@ -37,7 +32,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
@@ -59,7 +53,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoMScheduleSec" nls="nlsschedule">
       <editors />
       <sts>
@@ -80,7 +73,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
@@ -103,7 +95,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoirScheduleSec" nls="nlsschedule">
       <editors />
       <sts>
@@ -124,7 +115,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
@@ -167,7 +157,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
@@ -201,7 +190,6 @@
          <st id="GV16" editor="stMin" />              
          <st id="GV17" editor="stHour" />      
          <st id="GV18" editor="stMin" />    
-              
          <st id="GV19" editor="binDays" />                     
       </sts>
       <cmds>
@@ -209,12 +197,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINESCH" > 
-
                <p id="index" editor="schIndexS" init="GV13" /> 
                <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
@@ -241,7 +227,6 @@
          <st id="GV16" editor="stMin" />              
          <st id="GV17" editor="stHour" />      
          <st id="GV18" editor="stMin" />    
-              
          <st id="GV19" editor="binDays" />                     
       </sts>
       <cmds>
@@ -249,12 +234,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
             <cmd id="DEFINESCH" > 
-
                <p id="index" editor="schIndexS" init="GV13" /> 
                <p id="active" editor="schActiveI" init="GV14" /> 
                <p id="onH" editor="stHourI" init="GV15" /> 
@@ -270,7 +253,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoSchedule" nls="nlsschedule">
       <editors />
       <sts>
@@ -281,7 +263,6 @@
          <st id="GV16" editor="stMin" />              
          <st id="GV17" editor="stHour" />      
          <st id="GV18" editor="stMin" />    
-              
          <st id="GV19" editor="binDays" />                     
       </sts>
       <cmds>
@@ -289,7 +270,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
@@ -309,7 +289,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoSprinklerScheduleSec" nls="nlsschedule">
       <editors />
       <sts>
@@ -329,7 +308,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
@@ -351,7 +329,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoSprinklerSchedule" nls="nlsschedule">
       <editors />
       <sts>
@@ -362,7 +339,6 @@
          <st id="GV16" editor="stMin" />              
          <st id="GV17" editor="stHour" />      
          <st id="GV18" editor="stMin" />    
-              
          <st id="GV19" editor="binDays" />                     
       </sts>
       <cmds>
@@ -370,7 +346,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-
             <cmd id="LOOKUPSCH" > 
                <p id="" editor="schIndexS" init="GV13" /> 
              </cmd >
@@ -390,8 +365,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
-   <!-- Water Meter Valve Schedule Nodes (with seconds support) -->
    <nodeDef id="yoWMVlScheduleSec" nls="nlswmvalveschedule">
       <editors />
       <sts>
@@ -412,7 +385,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" />
-
             <cmd id="LOOKUPSCH" >
                <p id="" editor="schIndexS" init="GV13" />
              </cmd >
@@ -434,8 +406,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
-   <!-- Water Meter Valve Schedule Nodes (without seconds support) -->
    <nodeDef id="yoWMVlSchedule" nls="nlswmvalveschedule">
       <editors />
       <sts>
@@ -454,7 +424,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" />
-
             <cmd id="LOOKUPSCH" >
                <p id="" editor="schIndexS" init="GV13" />
              </cmd >
@@ -474,8 +443,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
-   <!-- Water Meter Leak Schedule Nodes (with seconds support) -->
    <nodeDef id="yoWMLkScheduleSec" nls="nlswmleakschedule">
       <editors />
       <sts>
@@ -496,7 +463,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" />
-
             <cmd id="LOOKUPSCH" >
                <p id="" editor="schIndexS" init="GV13" />
              </cmd >
@@ -519,8 +485,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
-   <!-- Water Meter Leak Schedule Nodes (without seconds support) -->
    <nodeDef id="yoWMLkSchedule" nls="nlswmleakschedule">
       <editors />
       <sts>
@@ -539,7 +503,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" />
-
             <cmd id="LOOKUPSCH" >
                <p id="" editor="schIndexS" init="GV13" />
              </cmd >
@@ -560,8 +523,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
-   <!-- Legacy Water Meter Schedule Nodes (deprecated, kept for compatibility) -->
    <nodeDef id="yoWMScheduleSec" nls="nlswmschedule">
       <editors />
       <sts>
@@ -582,7 +543,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" />
-
             <cmd id="LOOKUPSCH" >
                <p id="" editor="schIndexS" init="GV13" />
              </cmd >
@@ -605,7 +565,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
    <nodeDef id="yoWMSchedule" nls="nlswmschedule">
       <editors />
       <sts>
@@ -624,7 +583,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" />
-
             <cmd id="LOOKUPSCH" >
                <p id="" editor="schIndexS" init="GV13" />
              </cmd >
@@ -645,7 +603,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
    <nodeDef id="yoswitchPwr" nls="nlsswitch">
       <editors />
       <sts>
@@ -671,133 +628,39 @@
             <cmd id="DFON"  />               
             <cmd id="DFOF"  />    
          </sends>
-
          <accepts>
             <cmd id="UPDATE"  /> 
             <cmd id="DON"  /> 
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-
             <cmd id="SETATTRIB" > 
                <p id="" editor="LEDctrl" init="GV9" /> 
             </cmd >
-
             <cmd id="DELAYCTRL" >
                <p id="ondelay" editor="delaymin" init="GV1" />
                <p id="offdelay" editor="delaymin" init="GV2" />
             </cmd >
-
-            <!--
-            <cmd id="LOOKUPSCH" > 
-               <p id="" editor="schIndexS" init="GV13" /> 
-             </cmd >
-
-            <cmd id="DEFINESCH" > 
-               <p id="index" editor="schIndexS" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" /> 
-               <p id="bindays" editor="binDays" init="GV19" />       
-               <p id="onH" editor="stHourI" init="GV15" /> 
-               <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="onS" editor="stSecI" init="GV21" /> 
-               <p id="offH" editor="stHourI" init="GV17" /> 
-               <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="offS" editor="stSecI" init="GV22" />   
-                                   
-             </cmd >
-            <cmd id="CTRLSCH" > 
-               <p id="index" editor="schIndexS" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" />                                     
-             </cmd >       
-             -->         
          </accepts>
       </cmds>
    </nodeDef> 
-
-   <!--
-   <nodeDef id="yoswitchsec" nls="nlsswitch">
-      <editors />
-      <sts>
-         <st id="GV0" editor="swstate" />
-         <st id="GV1" editor="delay" />
-         <st id="GV2" editor="delay" />
-       
-         <st id="ST"  editor="swstate" />
-         <st id="GV30"  editor="status" />
-         <st id="GV20" editor="suspendstate" />   
-         <st id="TIME" editor="unixtime" />                  
-      </sts>
-      <cmds>
-         <sends>
-            <cmd id="DON"  />               
-            <cmd id="DOF"  />
-            <cmd id="DFON"  />               
-            <cmd id="DFOF"  />    
-         </sends>
-
-         <accepts>
-            <cmd id="UPDATE"  /> 
-            <cmd id="DON"  /> 
-            <cmd id="DOF"  /> 
-            <cmd id="DFON"  /> 
-            <cmd id="DFOF"  />
-
-            <cmd id="SWCTRL" > 
-               <p id="" editor="swctrl" init="GV0" /> 
-            </cmd >
-
-            <cmd id="DELAYCTRL" > 
-               <p id="ondelay" editor="delaymin" init="GV1" /> 
-               <p id="offdelay" editor="delaymin" init="GV2" />                                     
-             </cmd >   
-
-            <cmd id="LOOKUPSCH" > 
-               <p id="" editor="schIndexS" init="GV13" /> 
-             </cmd >
-
-            <cmd id="DEFINESCH" > 
-               <p id="index" editor="schIndexS" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" /> 
-               <p id="bindays" editor="binDays" init="GV19" />       
-               <p id="onH" editor="stHourI" init="GV15" /> 
-               <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="onS" editor="stSecI" init="GV21" /> 
-               <p id="offH" editor="stHourI" init="GV17" /> 
-               <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="offS" editor="stSecI" init="GV22" />   
-                                   
-             </cmd >
-            <cmd id="CTRLSCH" > 
-               <p id="index" editor="schIndexS" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" />                                     
-             </cmd >                
-         </accepts>
-      </cmds>
-   </nodeDef> 
-   -->
-
    <nodeDef id="yoswitch" nls="nlsswitch">
       <editors />
       <sts>
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
-         <!--<st id="GV3" editor="watt" />
-         <st id="GV4" editor="energy" />-->
          <st id="GV5" editor="poweralert" />
          <st id="GV6" editor="poweralert" />
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
          <st id="GV9" editor="LED" />
-
          <st id="ST"  editor="swstate" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />         
-      
          <st id="TIME" editor="unixtime" />            
       </sts>
       <cmds>
@@ -807,52 +670,25 @@
             <cmd id="DFON"  />               
             <cmd id="DFOF"  />    
          </sends>
-
          <accepts>
             <cmd id="UPDATE"  /> 
             <cmd id="DON"  /> 
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-
             <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
-
             <cmd id="SETATTRIB" > 
                <p id="" editor="LEDctrl" init="GV9" /> 
             </cmd >
-
-            <!--
-            <cmd id="LOOKUPSCH" > 
-               <p id="" editor="schIndexS" init="GV13" /> 
-             </cmd >
-
-            <cmd id="DEFINESCH" > 
-               <p id="index" editor="schIndexS" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" /> 
-               <p id="bindays" editor="binDays" init="GV19" />       
-               <p id="onH" editor="stHourI" init="GV15" /> 
-               <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="onS" editor="stSecI" init="GV21" />                
-               <p id="offH" editor="stHourI" init="GV17" /> 
-               <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="offS" editor="stSecI" init="GV22" />                                    
-             </cmd >
-            <cmd id="CTRLSCH" > 
-               <p id="index" editor="schIndexS" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" />                                     
-             </cmd >   
-             -->             
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoswitchBat" nls="nlsswitch">
       <editors />
       <sts>
@@ -861,7 +697,6 @@
          <st id="GV2" editor="delay" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV9" editor="LED" />
-
          <st id="ST"  editor="swstate" />
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />
@@ -874,30 +709,25 @@
             <cmd id="DFON"  />
             <cmd id="DFOF"  />
          </sends>
-
          <accepts>
             <cmd id="UPDATE"  />
             <cmd id="DON"  />
             <cmd id="DOF"  />
             <cmd id="DFON"  />
             <cmd id="DFOF"  />
-
             <cmd id="SWCTRL" >
                <p id="" editor="swctrl" init="GV0" />
             </cmd >
-
             <cmd id="DELAYCTRL" >
                <p id="ondelay" editor="delaymin" init="GV1" />
                <p id="offdelay" editor="delaymin" init="GV2" />
              </cmd >
-
             <cmd id="SETATTRIB" >
                <p id="" editor="LEDctrl" init="GV9" />
             </cmd >
          </accepts>
       </cmds>
    </nodeDef>
- 
    <nodeDef id="yodimmer" nls="nlsdimmer">
       <editors />
       <sts>
@@ -932,19 +762,15 @@
             <cmd id="FDDOWN"  /> 
             <cmd id="FDSTOP"  />           
          </sends>
-
          <accepts>
             <cmd id="UPDATE"  /> 
             <cmd id="DON"  /> 
             <cmd id="DOF"  /> 
             <cmd id="DFON"  /> 
             <cmd id="DFOF"  />
-
             <cmd id="FDUP"  /> 
             <cmd id="FDDOWN"  /> 
             <cmd id="FDSTOP"  />
-
-
             <cmd id="DIMLVL" > 
                <p id="" editor="dimlvl" init="GV3" /> 
             </cmd >
@@ -954,60 +780,29 @@
             <cmd id="DIMUP" > 
                <p id="" editor="dimlvl" init="GV5" /> 
             </cmd >
-
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-
             <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
              </cmd >   
-
             <cmd id="SETATTRIB" >
                <p id="" editor="LEDctrl" init="GV9" />
             </cmd >
-
-            <!--<cmd id="LOOKUPSCH" > 
-               <p id="" editor="schIndexS" init="GV13" /> 
-             </cmd >
-            <cmd id="DEFINESCH" > 
-
-
-               <p id="index" editor="schIndexS" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" /> 
-               <p id="bindays" editor="binDays" init="GV19" />   
-               <p id="onH" editor="stHourI" init="GV15" /> 
-               <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="onS" editor="stSecI" init="GV21" />                
-               <p id="offH" editor="stHourI" init="GV17" /> 
-               <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="offS" editor="stSecI" init="GV22" />                
-                                       
-             </cmd >
-            <cmd id="CTRLSCH" > 
-               <p id="index" editor="schIndexS" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" />                                     
-             </cmd >     -->
-
          </accepts>
       </cmds>
    </nodeDef> 
-
-
    <nodeDef id="yooutlet" nls="nlsoutlet">
       <editors />
       <sts>
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
-         <!--<st id="GV3" editor="watt" />
-         <st id="GV4" editor="energy" />-->
          <st id="GV5" editor="poweralert" />
          <st id="GV6" editor="poweralert" />
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
-
          <st id="ST"  editor="swstate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
@@ -1022,9 +817,6 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="swstate" /> 
             <cmd id="DOF" editor="swstate" /> 
-
-
-
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
@@ -1035,7 +827,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-   
  <nodeDef id="yooutletPwr" nls="nlsoutlet">
       <editors />
       <sts>
@@ -1048,7 +839,6 @@
          <st id="GV6" editor="poweralert" />
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
-
          <st id="ST"  editor="swstate" />
          <st id="GV30"  editor="status" />         
          <st id="GV20" editor="suspendstate" />         
@@ -1063,18 +853,9 @@
             <cmd id="UPDATE" /> 
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-
-
-
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
-            <!--<cmd id="ONDELAY" > 
-               <p id="" editor="delaymin" init="GV1" /> 
-             </cmd >   
-            <cmd id="OFFDELAY" > 
-               <p id="" editor="delaymin" init="GV2" /> 
-             </cmd >-->
             <cmd id="DELAYCTRL" > 
                <p id="ondelay" editor="delaymin" init="GV1" /> 
                <p id="offdelay" editor="delaymin" init="GV2" />                                     
@@ -1082,13 +863,9 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
-   
    <nodeDef id="yomultiout" nls="nlsmultiout">
       <editors />
       <sts>
-         <!-- <st id="GV8" editor="online" /> -->
-
          <st id="GV12" editor="outport" />    
          <st id="GV13" editor="schIndex" />      
          <st id="GV14" editor="schActive" />    
@@ -1109,31 +886,9 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <!--<cmd id="LOOKUPSCH" > 
-               <p id="" editor="schIndexM" init="GV13" /> 
-             </cmd >
-            <cmd id="DEFINESCH" > 
-               <p id="outport" editor="outport" init="GV12" /> 
-               <p id="index" editor="schIndexM" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" /> 
-               <p id="onH" editor="stHourI" init="GV15" /> 
-               <p id="onM" editor="stMinI" init="GV16" /> 
-               <p id="onS" editor="stSecI" init="GV21"/>   
-               <p id="offH" editor="stHourI" init="GV17" /> 
-               <p id="offM" editor="stMinI" init="GV18" />   
-               <p id="offS" editor="stSecI" init="GV22" />   
-               <p id="bindays" editor="binDays" init="GV19" />                                          
-             </cmd >
-            <cmd id="CTRLSCH" > 
-               <p id="index" editor="schIndexM" init="GV13" /> 
-               <p id="active" editor="schActiveI" init="GV14" />                                     
-             </cmd > -->
-
          </accepts>
       </cmds>
    </nodeDef> 
-
-
    <nodeDef id="yosubout" nls="nlssubout">
       <editors />
       <sts>
@@ -1148,14 +903,11 @@
          <sends>
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-      
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="DON" editor="swstate" /> 
             <cmd id="DOF" editor="swstate" /> 
-
-
             <cmd id="SWCTRL" > 
                <p id="" editor="swctrl" init="GV0" /> 
             </cmd >
@@ -1166,7 +918,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yosubusb" nls="nlssubusb">
       <editors />
       <sts>
@@ -1189,7 +940,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yomanipu" nls="nlsmanipu">
       <editors />
       <sts>
@@ -1206,14 +956,11 @@
          <sends>
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
-
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="MOPEN"/> 
             <cmd id="MCLOSE" /> 
-
-
             <cmd id="MANCTRL" > 
                <p id="" editor="manctrl" init="GV0" /> 
             </cmd >
@@ -1224,60 +971,47 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
-
-
-
-
-
  <nodeDef id="yosprinkler" nls="nlssprinkler">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
-
+         <st id="ST" editor="waterrun" /> 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="liter" />
          <st id="GV10" editor="liter" />     
-         <st id="GV2" editor="liter" /> <!-- recent use -->
-         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
+         <st id="GV2" editor="liter" /> 
+         <st id="GV3" editor="minutes" />  
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="celsius" />
-         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
-         <st id="GV6" editor="alarm" /> <!--overrun-->
-         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
-         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
-         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
-         <st id="GV11" editor="alarm" /> <!-- open reminder -->
-         <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <st id="GV13" editor="alarm" /> <!-- high temp-->
-         <st id="GV14" editor="alarm" /> <!-- Low temp-->
-         <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
-         <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
+         <st id="GV5" editor="alarm" /> 
+         <st id="GV6" editor="alarm" /> 
+         <st id="GV7" editor="alarm" /> 
+         <st id="GV8" editor="alarm" /> 
+         <st id="GV9" editor="alarm" />         
+         <st id="GV11" editor="alarm" /> 
+         <st id="GV12" editor="alarm" /> 
+         <st id="GV13" editor="alarm" /> 
+         <st id="GV14" editor="alarm" /> 
+         <st id="GV22" editor="liter" /> 
+         <st id="GV23" editor="count" />  
          <st id="GV24" editor="minutes" />
-
-         <st id="GV25" editor="enable" /> <!--leak-->
-         <st id="GV26" editor="enable" /> <!--leak-->
-         <st id="GV27" editor="enable" /> <!--Overrun amount-->
-         <st id="GV28" editor="enable" /> <!--Overrun duration-->
-
+         <st id="GV25" editor="enable" /> 
+         <st id="GV26" editor="enable" /> 
+         <st id="GV27" editor="enable" /> 
+         <st id="GV28" editor="enable" /> 
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />     
      </sts>         
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />   -->
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="STARTSTOP" /> 
                <p id="startstop" editor="startstop" />
                <p id="watermode" editor="watermode"/>
-
             <cmd id="SETATTRIB">
                <p id="LLIMIT" editor="leaklimit"  /> 
                <p id="LOFF" editor="enableSet"  />       
@@ -1286,64 +1020,49 @@
                <p id="ORTLIMIT" editor="minutesSet"  /> 
                <p id="ORTOFF" editor="enableSet"  />   
             </cmd >
-         <!--   <cmd id="DELAYCTRL" > 
-               <p id="ondelay" editor="delaymin" init="GV1" /> 
-               <p id="offdelay" editor="delaymin" init="GV2" />                                     
-             </cmd >   -->
-  
          </accepts>
       </cmds>
    </nodeDef> 
-
-
   <nodeDef id="yowatermeterCtrl" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
-
+         <st id="ST" editor="waterrun" /> 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="liter" />
          <st id="GV10" editor="liter" />     
-         <st id="GV2" editor="liter" /> <!-- recent use -->
-         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
+         <st id="GV2" editor="liter" /> 
+         <st id="GV3" editor="minutes" />  
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="celsius" />
-         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
-         <st id="GV6" editor="alarm" /> <!--overrun-->
-         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
-         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
-         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
-         <st id="GV11" editor="alarm" /> <!-- open reminder -->
-         <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <st id="GV13" editor="alarm" /> <!-- high temp-->
-         <st id="GV14" editor="alarm" /> <!-- Low temp-->
-         <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
-         <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
+         <st id="GV5" editor="alarm" /> 
+         <st id="GV6" editor="alarm" /> 
+         <st id="GV7" editor="alarm" /> 
+         <st id="GV8" editor="alarm" /> 
+         <st id="GV9" editor="alarm" />         
+         <st id="GV11" editor="alarm" /> 
+         <st id="GV12" editor="alarm" /> 
+         <st id="GV13" editor="alarm" /> 
+         <st id="GV14" editor="alarm" /> 
+         <st id="GV22" editor="liter" /> 
+         <st id="GV23" editor="count" />  
          <st id="GV24" editor="minutes" />
-
-            <st id="GV25" editor="enable" /> <!--leak-->
-
-         <st id="GV26" editor="enable" /> <!--leak-->
-         <st id="GV27" editor="enable" /> <!--Overrun amount-->
-         <st id="GV28" editor="enable" /> <!--Overrun duration-->
-
+            <st id="GV25" editor="enable" /> 
+         <st id="GV26" editor="enable" /> 
+         <st id="GV27" editor="enable" /> 
+         <st id="GV28" editor="enable" /> 
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />     
      </sts>         
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />   -->
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="VOPEN" /> 
             <cmd id="VCLOSE" /> 
-
             <cmd id="SETATTRIB">
                <p id="LLIMIT" editor="leaklimit"  /> 
                <p id="LOFF" editor="enableSet"  />       
@@ -1352,53 +1071,42 @@
                <p id="ORTLIMIT" editor="minutesSet"  /> 
                <p id="ORTOFF" editor="enableSet"  />   
             </cmd >
-         <!--   <cmd id="DELAYCTRL" > 
-               <p id="ondelay" editor="delaymin" init="GV1" /> 
-               <p id="offdelay" editor="delaymin" init="GV2" />                                     
-             </cmd >   -->
-  
          </accepts>
       </cmds>
    </nodeDef> 
-
   <nodeDef id="yowatermeterCtrlF" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
-
+         <st id="ST" editor="waterrun" /> 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="gallon" />
          <st id="GV10" editor="gallon" />     
-         <st id="GV2" editor="gallon" /> <!-- recent use -->
-         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
+         <st id="GV2" editor="gallon" /> 
+         <st id="GV3" editor="minutes" />  
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="farenheit" />
-         <st id="GV5" editor="alarm" /> <!-- overrunAmount 24H-->
-         <st id="GV6" editor="alarm" /> <!--overrun-->
-         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
-         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
-         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
-         <st id="GV11" editor="alarm" /> <!-- open reminder -->
-         <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <st id="GV13" editor="alarm" /> <!-- high temp-->
-         <st id="GV14" editor="alarm" /> <!-- Low temp-->
-         <st id="GV22" editor="gallon" /> <!-- Leaklimit AC -->
-         <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
+         <st id="GV5" editor="alarm" /> 
+         <st id="GV6" editor="alarm" /> 
+         <st id="GV7" editor="alarm" /> 
+         <st id="GV8" editor="alarm" /> 
+         <st id="GV9" editor="alarm" />         
+         <st id="GV11" editor="alarm" /> 
+         <st id="GV12" editor="alarm" /> 
+         <st id="GV13" editor="alarm" /> 
+         <st id="GV14" editor="alarm" /> 
+         <st id="GV22" editor="gallon" /> 
+         <st id="GV23" editor="count" />  
          <st id="GV24" editor="minutes" />
-
-         <st id="GV25" editor="enable" /> <!--leak-->
-         <st id="GV26" editor="enable" /> <!--leak-->
-         <st id="GV27" editor="enable" /> <!--Overrun amount-->
-         <st id="GV28" editor="enable" /> <!--Overrun duration-->         
-
+         <st id="GV25" editor="enable" /> 
+         <st id="GV26" editor="enable" /> 
+         <st id="GV27" editor="enable" /> 
+         <st id="GV28" editor="enable" />          
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />                  
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />   -->
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
          </sends>
@@ -1414,51 +1122,33 @@
                <p id="ORTLIMIT" editor="minutesSet" /> 
                <p id="ORTOFF" editor="enableSet" />   
             </cmd >
-            <!--<cmd id="DELAYCTRL" > 
-               <p id="ondelay" editor="delaymin" init="GV1" /> 
-               <p id="offdelay" editor="delaymin" init="GV2" />               
-             </cmd >   -->
          </accepts>
       </cmds>
    </nodeDef>    
-
-
-
-
-
-
-
-
-
   <nodeDef id="yowatermeterMulti" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- On line-->
+         <st id="ST" editor="waterrun" /> 
          <st id="GV1" editor="count" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV5" editor="alarm" />
          <st id="GV20" editor="suspendstate" />
-         
          <st id="TIME" editor="unixtime" />                  
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />   -->
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="UPDATE" />  
          </accepts>
       </cmds>
    </nodeDef> 
-
   <nodeDef id="yowatermeterMultiF" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- On line-->
+         <st id="ST" editor="waterrun" /> 
        <st id="GV1" editor="count" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV5" editor="alarm" /> 
@@ -1469,35 +1159,31 @@
          <sends>
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="UPDATE" />  
          </accepts>
       </cmds>
    </nodeDef> 
-
 <nodeDef id="yowatermeterSub" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
-
+         <st id="ST" editor="waterrun" /> 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="flow" />
          <st id="GV10" editor="flow" />     
-         <st id="GV2" editor="flow" /> <!-- recent use -->
-         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="GV6" editor="alarm" /> <!--overrun-->
-         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
-         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
-         <st id="GV9" editor="alarm" />  <!-- open reminder-->  
-         <st id="GV12" editor="alarm" /> <!-- valve error -->
+         <st id="GV2" editor="flow" /> 
+         <st id="GV3" editor="minutes" />  
+         <st id="GV6" editor="alarm" /> 
+         <st id="GV7" editor="alarm" /> 
+         <st id="GV8" editor="alarm" /> 
+         <st id="GV9" editor="alarm" />    
+         <st id="GV12" editor="alarm" /> 
       </sts>
       <cmds>
          <sends>
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="VOPEN" /> 
@@ -1510,50 +1196,36 @@
                <p id="ORTLIMIT" editor="minutesSet" /> 
                <p id="ORTOFF" editor="enableSet"/>   
             </cmd >
-  
          </accepts>
       </cmds>
    </nodeDef> 
-
-
-
-
   <nodeDef id="yowatermeterSubL" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="liter" />
          <st id="GV10" editor="liter" />     
-         <st id="GV2" editor="liter" /> <!-- recent use -->
-         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="GV6" editor="alarm" /> <!--overrun-->
-         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
-         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
-         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
-         <!--<st id="GV11" editor="alarm" />--> <!-- open reminder -->
-         <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <!--<st id="GV13" editor="alarm" />--> <!-- high temp-->
-         <!--<st id="GV14" editor="alarm" />--> <!-- Low temp-->
-         <st id="GV22" editor="liter" /> <!-- Leaklimit AC -->
-         <st id="GV23" editor="count" /> <!-- aoverrun AC --> 
+         <st id="GV2" editor="liter" /> 
+         <st id="GV3" editor="minutes" />  
+         <st id="GV6" editor="alarm" /> 
+         <st id="GV7" editor="alarm" /> 
+         <st id="GV8" editor="alarm" /> 
+         <st id="GV9" editor="alarm" />         
+         <st id="GV12" editor="alarm" /> 
+         <st id="GV22" editor="liter" /> 
+         <st id="GV23" editor="count" />  
          <st id="GV24" editor="minutes" />
-
-         <st id="GV25" editor="enable" /> <!--leak-->
-         <st id="GV26" editor="enable" /> <!--leak-->
-         <st id="GV27" editor="enable" /> <!--Overrun amount-->
-         <st id="GV28" editor="enable" /> <!--Overrun duration-->
-
+         <st id="GV25" editor="enable" /> 
+         <st id="GV26" editor="enable" /> 
+         <st id="GV27" editor="enable" /> 
+         <st id="GV28" editor="enable" /> 
          <st id="GV20" editor="suspendstate" />
-
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />   -->
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="VOPEN" /> 
@@ -1566,49 +1238,40 @@
                <p id="ORTLIMIT" editor="minutesSet" /> 
                <p id="ORTOFF" editor="enableSet"/>   
             </cmd >
-  
          </accepts>
       </cmds>
    </nodeDef> 
   <nodeDef id="yowatermeterSubG" nls="nlswatermeter">
       <editors />
       <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
-
+         <st id="ST" editor="waterrun" /> 
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="gallon" />
          <st id="GV10" editor="gallon" />     
-         <st id="GV2" editor="gallon" /> <!-- recent use -->
-         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
-         <st id="GV6" editor="alarm" /> <!--overrun-->
-         <st id="GV7" editor="alarm" /> <!--Overrun duration-->
-         <st id="GV8" editor="alarm" /> <!--overrun time 24H-->
-         <st id="GV9" editor="alarm" />  <!-- open reminder-->       
-         <st id="GV12" editor="alarm" /> <!-- valve error -->
-
-         <st id="GV22" editor="gallon" /> <!-- recent use -->
-         <st id="GV23" editor="minutes" /> <!--  duration -->         
-         <st id="GV24" editor="count" /> <!-- count/Times --> 
-
-
-         <st id="GV25" editor="enable" /> <!--leak-->
-         <st id="GV26" editor="enable" /> <!--overrun-->
-         <st id="GV27" editor="enable" /> <!--Overrun duration-->
-         <st id="GV28" editor="enable" /> <!--overrun time 24H-->
-
+         <st id="GV2" editor="gallon" /> 
+         <st id="GV3" editor="minutes" />  
+         <st id="GV6" editor="alarm" /> 
+         <st id="GV7" editor="alarm" /> 
+         <st id="GV8" editor="alarm" /> 
+         <st id="GV9" editor="alarm" />         
+         <st id="GV12" editor="alarm" /> 
+         <st id="GV22" editor="gallon" /> 
+         <st id="GV23" editor="minutes" />          
+         <st id="GV24" editor="count" />  
+         <st id="GV25" editor="enable" /> 
+         <st id="GV26" editor="enable" /> 
+         <st id="GV27" editor="enable" /> 
+         <st id="GV28" editor="enable" /> 
          <st id="GV20" editor="suspendstate" />
-
       </sts>
       <cmds>
          <sends>
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="VOPEN" /> 
             <cmd id="VCLOSE" /> 
-
             <cmd id="SETATTRIB">
                <p id="LLIMIT" editor="gallonSet"  /> 
                <p id="LOFF" editor="enableSet" />       
@@ -1617,31 +1280,28 @@
                <p id="ORTLIMIT" editor="minutesSet" /> 
                <p id="ORTOFF" editor="enableSet"/>   
             </cmd >
-  
          </accepts>
       </cmds>
    </nodeDef> 
-
 <nodeDef id="yowatermeterOnly" nls="nlswatermeter">
    <editors />
    <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> 
          <st id="GV1" editor="flow" />
          <st id="GV10" editor="flow" />     
-         <st id="GV2" editor="flow" /> <!-- recent use -->
-         <st id="GV3" editor="minutes" /> <!-- Recent duration -->
+         <st id="GV2" editor="flow" /> 
+         <st id="GV3" editor="minutes" /> 
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="celsius" />
          <st id="GV5" editor="alarm" />
          <st id="GV6" editor="alarm" />
          <st id="GV7" editor="alarm" />
          <st id="GV9" editor="alarm" />         
-         <st id="GV11" editor="alarm" /> <!-- open reminder -->
-         <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <st id="GV13" editor="alarm" /> <!-- high temp-->
-         <st id="GV14" editor="alarm" /> <!-- Low temp-->   
-
-         <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
+         <st id="GV11" editor="alarm" /> 
+         <st id="GV12" editor="alarm" /> 
+         <st id="GV13" editor="alarm" /> 
+         <st id="GV14" editor="alarm" />    
+         <st id="GV16" editor="minutes" />         
          <st id="GV30" editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                  
@@ -1661,27 +1321,25 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
 <nodeDef id="yowatermeterOnlyF" nls="nlswatermeter">
    <editors />
    <sts>
-         <st id="ST" editor="waterrun" /> <!-- water runing-->
+         <st id="ST" editor="waterrun" /> 
          <st id="GV1" editor="flow" />
          <st id="GV10" editor="flow" />     
-         <st id="GV2" editor="flow" /> <!-- recent use -->
-         <st id="GV3" editor="minutes" /> <!-- Recent duration --> 
+         <st id="GV2" editor="flow" /> 
+         <st id="GV3" editor="minutes" />  
          <st id="BATLVL" editor="batlevel" />
          <st id="CLITEMP" editor="farenheit" />
          <st id="GV5" editor="alarm" />
          <st id="GV6" editor="alarm" />
          <st id="GV7" editor="alarm" />
          <st id="GV9" editor="alarm" />         
-         <st id="GV11" editor="alarm" /> <!-- open reminder -->
-         <st id="GV12" editor="alarm" /> <!-- valve error -->
-         <st id="GV13" editor="alarm" /> <!-- high temp-->
-         <st id="GV14" editor="alarm" /> <!-- Low temp-->   
-
-         <st id="GV16" editor="minutes" /> <!-- Overrun time  -->        
+         <st id="GV11" editor="alarm" /> 
+         <st id="GV12" editor="alarm" /> 
+         <st id="GV13" editor="alarm" /> 
+         <st id="GV14" editor="alarm" />    
+         <st id="GV16" editor="minutes" />         
          <st id="GV30" editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                  
@@ -1701,29 +1359,17 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
-
  <nodeDef id="yosprinklerv2" nls="nlssprinkler">
       <editors />
       <sts>
-         <!--<st id="ST" editor="runningvalue" />  water runing-->
          <st id="ST" editor="waterrun" /> 
-         <!--<st id="GV0" editor="sprinklerstate" />-->
          <st id="GV1" editor="nowateralarm" />
-         <!--<st id="GV2" editor="watermode" />  -->
          <st id="GV10" editor="unixtime" />   
-         <!--<st id="GV3" editor="runningmode" />   --> 
-         <!-- <st id="GV4" editor="runningvalue" />  --> 
          <st id="GV5" editor="waterrun" /> 
-         <!--<st id="GV6" editor="wateruse" /> -->
-         <st id="GV7" editor="runningmode" /> <!-- -->
-         <st id="GV8" editor="runningvalue" /> <!-- -->
-         <st id="GV9" editor="nowateralarm" />  <!--  r-->  
-
-         <!--  <st id="GV11" editor="nowateralarm" />-->     
-
-         <st id="GV12" editor="minutes" /> <!--  -->
-      
+         <st id="GV7" editor="runningmode" /> 
+         <st id="GV8" editor="runningvalue" /> 
+         <st id="GV9" editor="nowateralarm" />    
+         <st id="GV12" editor="minutes" /> 
          <st id="BATLVL" editor="batlevel" />
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />         
@@ -1731,8 +1377,6 @@
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="manstate"  />               
-            <cmd id="DOF" editor="manstate"  />   -->
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
          </sends>
@@ -1742,19 +1386,16 @@
                <p id="startstop" editor="startstop" />
                <p id="watermode" editor="watermode" />
             </cmd >
-
             <cmd id="WATTRIB" >
                <p id="wmethod" editor="sprinklermethod"/>
                <p id="wamount" editor="wamount"/>
             </cmd >
             <cmd id="WDELAY" >               
-               <!--<p id="wdelay" editor="wdelay"  />`-->
                <p id="" editor="minutesSet"  /> 
             </cmd >
          </accepts>
       </cmds>
    </nodeDef>    
-
    <nodeDef id="yothsens" nls="nlsthsens">
       <editors />
       <sts>
@@ -1777,7 +1418,6 @@
          <st id="GV15" editor="celsius" />
          <st id="GV16" editor="humidity" />
          <st id="GV17" editor="humidity" />
-
          <st id="GV20" editor="suspendstate" />
          <st id="GV30" editor="status" />
          <st id="TIME" editor="unixtime" />                              
@@ -1795,14 +1435,12 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yosoilsensor" nls="nlssoilsensor">
       <editors />
       <sts>
          <st id="ST" editor="conductivity" />
          <st id="CLITEMP" editor="celsius" />
          <st id="CLIHUM" editor="humidity" />
-    
          <st id="GV1" editor="alarm" />
          <st id="GV2" editor="alarm" />
          <st id="GV3" editor="alarm" />
@@ -1812,7 +1450,6 @@
          <st id="GV7" editor="alarm" />
          <st id="GV8" editor="alarm" />
          <st id="BATLVL" editor="batlevel" />
-
          <st id="GV9" editor="cmdsetting" />
          <st id="GV10" editor="celsius" />
          <st id="GV11" editor="celsius" />
@@ -1820,7 +1457,6 @@
          <st id="GV13" editor="humidity" />
          <st id="GV14" editor="conductivity" />
          <st id="GV15" editor="conductivity" />
-
          <st id="GV20" editor="suspendstate" />
          <st id="GV30" editor="status" />
          <st id="TIME" editor="unixtime" />                              
@@ -1838,8 +1474,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
-
 <nodeDef id="yosoilsensorF" nls="nlssoilsensor">
       <editors />
       <sts>
@@ -1862,7 +1496,6 @@
          <st id="GV13" editor="humidity" />
          <st id="GV14" editor="farenheit" />
          <st id="GV15" editor="farenheit" />
-
          <st id="GV20" editor="suspendstate" />
          <st id="GV30" editor="status" />
          <st id="TIME" editor="unixtime" />                              
@@ -1880,7 +1513,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
        <nodeDef id="yothsensF" nls="nlsthsens">
       <editors />
       <sts>
@@ -1959,7 +1591,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
 <nodeDef id="yotsensF" nls="nlstsens">
       <editors />
       <sts>
@@ -1999,8 +1630,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
-
    <nodeDef id="yodoorsens" nls="nlsdoorsens">
       <editors />
       <sts>
@@ -2008,7 +1637,6 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
          <st id="GV3" editor="unixtime" />   
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />         
@@ -2019,18 +1647,14 @@
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
          </sends>
-         
          <accepts>
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd > 
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
-
    <nodeDef id="yogarage" nls="nlsgarage">
       <editors />
       <sts>
@@ -2044,13 +1668,10 @@
          <accepts>
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
-
             <cmd id="TOGGLE" />  
          </accepts>
       </cmds>
    </nodeDef> 
-
-
    <nodeDef id="yomotionsens" nls="nlsmotionsens">
       <editors />
       <sts>
@@ -2058,7 +1679,6 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="celsius" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
          <st id="GV30"  editor="status" />  
@@ -2066,26 +1686,17 @@
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="motionstate"  />               
-            <cmd id="DOF" editor="motionstate"  />  -->
             <cmd id="DON"  />               
             <cmd id="DOF"  /> 
-
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >  
-            <!-- <cmd id="DON" /> 
-            <cmd id="DOF" />  -->
-
             <cmd id="UPDATE" /> 
-
-            
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yomotionsensF" nls="nlsmotionsens">
       <editors />
       <sts>
@@ -2093,7 +1704,6 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="farenheit" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
          <st id="GV30"  editor="status" />  
@@ -2101,30 +1711,20 @@
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="motionstate"  />               
-            <cmd id="DOF" editor="motionstate"  />  -->
             <cmd id="DON"  />               
             <cmd id="DOF"  /> 
-
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >  
-            <!-- <cmd id="DON" /> 
-            <cmd id="DOF" />  -->
-
             <cmd id="UPDATE" /> 
-
-            
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoleaksensF" nls="nlsleaksens">
       <editors />
       <sts>
-
          <st id="ST"  editor="waterstate" />      
          <st id="GV0" editor="waterstate" />
          <st id="BATLVL" editor="batlevel" />
@@ -2146,7 +1746,6 @@
          <sends>
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
@@ -2156,11 +1755,9 @@
                <p id="" editor="beeping" init="GV4" />
             </cmd >
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoleaksens" nls="nlsleaksens">
       <editors />
       <sts>
@@ -2177,20 +1774,14 @@
          <st id="GV8" editor="freezeAlert" /> 
          <st id="GV9" editor="sensorError" /> 
          <st id="GV10" editor="reminder" /> 
-
-
-
          <st id="GV30"  editor="status" />  
          <st id="GV20" editor="suspendstate" /> 
          <st id="TIME" editor="unixtime" />                             
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="waterstate"  /> 
-            <cmd id="DOF" editor="waterstate"  />    -->
             <cmd id="DON"  />               
             <cmd id="DOF"  />    
-
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
@@ -2199,14 +1790,10 @@
             <cmd id="SETBEEP" >
                <p id="" editor="beeping" init="GV4" />
             </cmd >
-            <!--<cmd id="DON" /> 
-            <cmd id="DOF" /> -->       
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoCOSmokesens" nls="nlssmokesens">
       <editors />
       <sts>
@@ -2216,37 +1803,27 @@
          <st id="GV2" editor="TempAlert" />
          <st id="GV3" editor="BatteryAlert" />
          <st id="GV4" editor="batlevel" />
-         <!--st id="GV6" editor="AlertInterval" /-->
          <st id="GV5" editor="SelfcheckState" />
          <st id="GV7" editor="cmdsetting" />
          <st id="CLITEMP" editor="celsius" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="deviceAlert" />     
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />      
-                
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="deviceAlert"  /> 
-            <cmd id="DOF" editor="deviceAlert"  /> -->
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
-
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV7" /> 
             </cmd >          
-            <!--<cmd id="DON" /> 
-            <cmd id="DOF" /> -->         
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoCOSmokesensF" nls="nlssmokesens">
       <editors />
       <sts>
@@ -2256,38 +1833,27 @@
          <st id="GV2" editor="TempAlert" />
          <st id="GV3" editor="BatteryAlert" />
          <st id="GV4" editor="batlevel" />
-         <!--st id="GV6" editor="AlertInterval" /-->
          <st id="GV5" editor="SelfcheckState" />
          <st id="GV7" editor="cmdsetting" />
          <st id="CLITEMP" editor="farenheit" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="deviceAlert" />     
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />      
-                
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="deviceAlert"  /> 
-            <cmd id="DOF" editor="deviceAlert"  /> -->
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
-
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV7" /> 
             </cmd >          
-            <!--<cmd id="DON" /> 
-            <cmd id="DOF" /> -->         
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
-
    <nodeDef id="yovibrasens" nls="nlsvibrasens">
       <editors />
       <sts>
@@ -2295,7 +1861,6 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="celsius" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="vibrastate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
@@ -2303,24 +1868,17 @@
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="vibrastate"  />
-            <cmd id="DOF" editor="vibrastate"  /> -->
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
-
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >  
-            <!-- <cmd id="DON" /> 
-            <cmd id="DOF" /> -->
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yovibrasensF" nls="nlsvibrasens">
       <editors />
       <sts>
@@ -2328,7 +1886,6 @@
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="farenheit" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="vibrastate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
@@ -2336,24 +1893,17 @@
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="vibrastate"  />
-            <cmd id="DOF" editor="vibrastate"  /> -->
             <cmd id="DON"   />               
             <cmd id="DOF"   />    
-
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
                <p id="" editor="cmdsetting" init="GV2" /> 
             </cmd >  
-            <!-- <cmd id="DON" /> 
-            <cmd id="DOF" /> -->
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yohubbat" nls="nlshubbat">
       <editors />
       <sts>
@@ -2371,7 +1921,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yohub" nls="nlshub">
       <editors />
       <sts>
@@ -2397,7 +1946,6 @@
          <st id="GV3" editor="tone" />
          <st id="GV4" editor="messages" />
          <st id="GV5" editor="repeat" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />  
          <st id="GV30"  editor="status" />
@@ -2423,7 +1971,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yolockv2" nls="nlslock">
       <editors />
       <sts>
@@ -2442,12 +1989,8 @@
          <sends>
             <cmd id="DON"  />               
             <cmd id="DOF"  />
-            <!--<cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    -->
          </sends>
          <accepts>
-            <!-- <cmd id="DON" />
-            <cmd id="DOF" />    -->
             <cmd id="LOCK" /> 
             <cmd id="UNLOCK" /> 
             <cmd id="LOCKCTRL" >   
@@ -2457,8 +2000,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
-
    <nodeDef id="yolock" nls="nlslock">
       <editors />
       <sts>
@@ -2474,12 +2015,8 @@
          <sends>
             <cmd id="DON"  />               
             <cmd id="DOF"  />
-            <!--<cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    -->
          </sends>
          <accepts>
-            <!-- <cmd id="DON" />
-            <cmd id="DOF" />    -->
             <cmd id="LOCK" /> 
             <cmd id="UNLOCK" /> 
             <cmd id="LOCKCTRL" >   
@@ -2489,14 +2026,12 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoirremote" nls="nlsirremote">
       <editors />
       <sts>
          <st id="GV0" editor="nbrcodes" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="ircmdstatus" />
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="ircmdstatus" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />         
@@ -2504,26 +2039,16 @@
       </sts>
       <cmds>
          <sends>
-            <!--<cmd id="DON" editor="lock"  />               
-            <cmd id="DOF" editor="lock"  />    
-            <cmd id="DON"   />               
-            <cmd id="DOF"   />    -->
          </sends>
-
          <accepts>
-            <!-- <cmd id="DON" />
-            <cmd id="DOF" />    -->
             <cmd id="LEARNCODE" />   
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yoircode" nls="nlsircode">
       <editors />
       <sts>
-         <!-- <st id="GV8" editor="online" /> -->
          <st id="ST"  editor="ircmdstatus" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />              
@@ -2538,7 +2063,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yopwralarm" nls="nlspwralarm">
       <editors />
       <sts>
@@ -2552,7 +2076,6 @@
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />     
          <st id="TIME" editor="unixtime" />                     
-
       </sts>
       <cmds>
          <sends>
@@ -2564,15 +2087,12 @@
                <p id="" editor="cmdsetting" init="GV7" /> 
             </cmd >           
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yowaterdept" nls="nlswaterdept">
       <editors />
       <sts>
-
          <st id="GV0" editor="waterlevel" />
          <st id="GV1" editor="waterlevel" />
          <st id="GV2" editor="waterlevel" />
@@ -2584,7 +2104,6 @@
          <st id="GV20" editor="suspendstate" />    
          <st id="GV30"  editor="status" />                 
          <st id="TIME" editor="unixtime" />
-
       </sts>
       <cmds>
          <sends>
@@ -2600,7 +2119,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yosiren" nls="nlssiren">
       <editors />
       <sts>
@@ -2623,18 +2141,15 @@
                <p id="" editor="sirenctrl" init="GV0" /> 
             </cmd >
             <cmd id="UPDATE" /> 
-
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="yosmremote" nls="nlssmremote">
       <editors />
       <sts>
          <st id="ST" editor="remotetype" />
          <st id="GV3" editor="batlevel" />
          <st id="CLITEMP" editor="celsius" />
-
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30" editor="status" />        
       </sts>
@@ -2646,14 +2161,12 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
   <nodeDef id="yosmremoteF" nls="nlssmremote">
       <editors />
       <sts>
          <st id="ST" editor="remotetype" />
          <st id="GV3" editor="batlevel" />
          <st id="CLITEMP" editor="farenheit" />
-
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />        
       </sts>
@@ -2665,7 +2178,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
    <nodeDef id="smremotekey" nls="nlssmkey">
       <editors />
       <sts>
@@ -2691,7 +2203,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
    <nodeDef id="smremotekeydual" nls="nlssmkeydual">
       <editors />
       <sts>
@@ -2717,7 +2228,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
    <nodeDef id="smremotekeysingle" nls="nlssmkeysingle">
       <editors />
       <sts>
@@ -2739,7 +2249,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
    <nodeDef id="yothermostat" nls="nlsthermostat">
       <editors />
       <sts>
@@ -2787,12 +2296,10 @@
                <p id="ecomodeth" editor="IECOMODE" init="CLIEMD"/>                           
                <p id="ecoLowth" editor="ecoSet" init="GV18"/>       
                <p id="ecoHighth" editor="ecoSet" init="GV19"/>                                              
-
             </cmd>
          </accepts>
       </cmds>
    </nodeDef>
-
    <nodeDef id="yothermostatf" nls="nlsthermostat">
       <editors />
       <sts>
@@ -2812,7 +2319,6 @@
          <st id="GV18" editor="farenheit" />
          <st id="GV19" editor="farenheit" />         
          <st id="GV5" editor="IDRRUNNING" />
-
          <st id="GV20" editor="ISUSPENDEDST" />
          <st id="GV30" editor="IONLINEST" />
          <st id="TIME" editor="unixtime" />
@@ -2845,7 +2351,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
    <nodeDef id="yothermprop" nls="nlsthermostatprop">
       <editors />
       <sts>
@@ -2888,7 +2393,6 @@
          </accepts>
       </cmds>
    </nodeDef>
-
    <nodeDef id="yothermpropf" nls="nlsthermostatprop">
       <editors />
       <sts>
