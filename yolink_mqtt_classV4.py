@@ -337,7 +337,7 @@ class YoLinkMQTTDevice(object):
         if not isinstance(unix_time, (int, float)):
             return None
 
-        normalized_time = float(unix_time)
+        normalized_time = int(unix_time)
         if normalized_time <= 0:
             return None
 
@@ -1634,11 +1634,11 @@ class YoLinkMQTTDevice(object):
                     )
             if 'reportAt' in data['data'] :
                 reportAt = datetime.strptime(data['data']['reportAt'], '%Y-%m-%dT%H:%M:%S.%fZ')
-                yolink.data['lastStateTime'] = yolink.unix_time_seconds(reportAt.timestamp()) -  yolink.timezoneOffset_Sec
+                yolink.data['lastStateTime'] = int(yolink.unix_time_seconds(reportAt.timestamp()) -  yolink.timezoneOffset_Sec)
             elif 'stateChangedAt' in data['data']:
-                yolink.data['lastStateTime'] = yolink.unix_time_seconds(data['data']['stateChangedAt'])
+                yolink.data['lastStateTime'] = int(yolink.unix_time_seconds(data['data']['stateChangedAt']))
             else:
-                yolink.data['lastStateTime'] = yolink.unix_time_seconds(data[yolink.messageTime])
+                yolink.data['lastStateTime'] = int(yolink.unix_time_seconds(data[yolink.messageTime]))
             if 'data' in yolink.data and yolink.data['data'] == {}: 
                 logging.debug('Empty data received - do not update data to blank data')
                 yolink.data['emptyData'] = True

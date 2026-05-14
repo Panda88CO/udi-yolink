@@ -235,7 +235,7 @@ class udiYoLeakSensor(udi_interface.Node):
                     self.my_setDriver('GV20', 0)             
             else:
 
-                self.my_setDriver('GV30', 1)
+                self.my_setDriver('GV30', 0)
                 self.my_setDriver('GV20', 2)       
 
     def updateStatus(self, data):

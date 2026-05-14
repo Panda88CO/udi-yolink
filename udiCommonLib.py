@@ -196,6 +196,32 @@ def addNodes (self, deviceList) -> list:
     #supportedYoTypes = ['Hub', 'THSensor', 'LeakSensor']
     remove_list= []
     schedule_queue = []
+
+    # During startup Polyglot can emit UPDATE for previously known nodes before
+    # addNodes has finished. Build previously-known addresses first to reduce
+    # transient "node address ... does not exist" races.
+    existing_addresses = set()
+    for db_node in getattr(self, 'nodes_in_db', []) or []:
+        try:
+            addr = db_node.get('address')
+            if isinstance(addr, str) and addr:
+                existing_addresses.add(addr)
+        except Exception:
+            continue
+
+    if existing_addresses:
+        try:
+            deviceList = sorted(
+                deviceList,
+                key=lambda dev: 0 if str(dev.get('deviceId', ''))[-14:] in existing_addresses else 1,
+            )
+            logging.debug(
+                'addNodes prioritized %s known DB addresses for early creation',
+                len(existing_addresses),
+            )
+        except Exception as e:
+            logging.debug('addNodes priority sort skipped: %s', e)
+
     node_ready_poll = _resolve_node_ready_poll_seconds(self)
     for dev in deviceList:
         logging.debug(f'DEVICE BEING ANALYZED {dev}')
