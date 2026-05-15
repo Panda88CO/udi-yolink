@@ -1073,9 +1073,10 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="STARTSTOP" /> 
+            <cmd id="STARTSTOP" > 
                <p id="startstop" editor="startstop" />
                <p id="watermode" editor="watermode"/>
+            </cmd>
             <cmd id="SETATTRIB">
                <p id="LLIMIT" editor="leaklimit"  /> 
                <p id="LOFF" editor="enableSet"  />       
