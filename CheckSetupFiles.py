@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import re
+import os
 from collections import defaultdict
 
 
@@ -153,6 +154,161 @@ def validate_cmd_in_valid_container(path):
     return issues
 
 
+def remove_docstrings(content):
+    """Remove triple-quoted docstrings from Python code."""
+    content = re.sub(r"'''.*?'''", '', content, flags=re.DOTALL)
+    content = re.sub(r'""".*?"""', '', content, flags=re.DOTALL)
+    return content
+
+
+def remove_commented_code(content):
+    """Remove single-line comments from Python code (preserving strings)."""
+    lines = content.split('\n')
+    cleaned_lines = []
+    for line in lines:
+        in_string = False
+        quote_char = None
+        for i, char in enumerate(line):
+            if char in ('"', "'") and (i == 0 or line[i - 1] != '\\'):
+                if not in_string:
+                    in_string = True
+                    quote_char = char
+                elif char == quote_char:
+                    in_string = False
+            if char == '#' and not in_string:
+                line = line[:i]
+                break
+        cleaned_lines.append(line)
+    return '\n'.join(cleaned_lines)
+
+
+def run_profile_consistency_checks(nodedef_map, st_labels):
+    """Validate udiYo*.py files against nodeDefs and ST label chain."""
+    udiyo_files = sorted([
+        f for f in os.listdir('.') if f.startswith('udiYo') and f.endswith('.py')
+    ])
+
+    consistency_issues = defaultdict(list)
+    consistency_validated = []
+    consistency_skipped = []
+
+    for filename in udiyo_files:
+        try:
+            with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+
+            if 'udi_interface.Node' not in content:
+                consistency_skipped.append(filename)
+                continue
+
+            content_clean = remove_docstrings(content)
+            content_clean = remove_commented_code(content_clean)
+
+            class_matches = list(re.finditer(r'class\s+(\w+)\s*\(\s*udi_interface\.Node\s*\)', content_clean))
+            if not class_matches:
+                consistency_skipped.append(filename)
+                continue
+
+            for class_idx, class_match in enumerate(class_matches):
+                class_name = class_match.group(1)
+                class_start = class_match.start()
+                class_end = class_matches[class_idx + 1].start() if class_idx + 1 < len(class_matches) else len(content_clean)
+                class_content = content_clean[class_start:class_end]
+
+                static_id_match = re.search(r"^\s+id\s*=\s*['\"]([^'\"]+)['\"]", class_content, re.MULTILINE)
+                static_id = static_id_match.group(1) if static_id_match else None
+                self_ids = re.findall(r"self\.id\s*=\s*['\"]([^'\"]+)['\"]", class_content)
+
+                all_ids = {static_id} if static_id else set()
+                all_ids.update(self_ids)
+                all_ids.discard(None)
+
+                if not all_ids:
+                    consistency_issues[filename].append(f"  ❌ class {class_name}: NO id= defined")
+                    continue
+
+                drivers_match = re.search(r"drivers\s*=\s*\[(.*?)\]", class_content, re.DOTALL)
+                py_drivers = set()
+                if drivers_match:
+                    driver_block = drivers_match.group(1)
+                    py_drivers = set(re.findall(r"['\"]driver['\"]\s*:\s*['\"]([^'\"]+)['\"]", driver_block))
+                else:
+                    consistency_issues[filename].append(f"  ❌ class {class_name}: NO drivers list found")
+                    continue
+
+                commands_match = re.search(r"commands\s*=\s*\{(.*?)\}", class_content, re.DOTALL)
+                py_commands = set()
+                if commands_match:
+                    commands_block = commands_match.group(1)
+                    py_commands = set(re.findall(r"['\"](\w+)['\"]\s*:", commands_block))
+
+                valid_ids = [nid for nid in sorted(all_ids) if nid in nodedef_map]
+                cmd_union = set()
+                for nid in valid_ids:
+                    cmd_union.update(nodedef_map[nid]['cmds'])
+
+                file_errors = 0
+                for node_id in sorted(all_ids):
+                    if node_id not in nodedef_map:
+                        consistency_issues[filename].append(
+                            f"  ❌ class {class_name}: id='{node_id}' NOT in nodedefs.xml"
+                        )
+                        file_errors += 1
+                        continue
+
+                    nd = nodedef_map[node_id]
+                    missing_sts = nd['sts'] - py_drivers
+                    if missing_sts:
+                        consistency_issues[filename].append(
+                            f"  ⚠️  class {class_name} id='{node_id}': missing drivers {sorted(missing_sts)}"
+                        )
+                        file_errors += 1
+
+                    extra_sts = py_drivers - nd['sts']
+                    if extra_sts:
+                        consistency_issues[filename].append(
+                            f"  ⚠️  class {class_name} id='{node_id}': extra drivers {sorted(extra_sts)}"
+                        )
+                        file_errors += 1
+
+                    if nd['cmds']:
+                        missing_cmds = nd['cmds'] - py_commands
+                        if missing_cmds:
+                            consistency_issues[filename].append(
+                                f"  ⚠️  class {class_name} id='{node_id}': missing commands {sorted(missing_cmds)}"
+                            )
+                            file_errors += 1
+
+                    for st in nd['sts']:
+                        st_key = (nd['nls'], st)
+                        if st_key not in st_labels:
+                            consistency_issues[filename].append(
+                                f"  ❌ class {class_name} id='{node_id}' state '{st}': missing ST-{nd['nls']}-{st}-NAME in en_us.txt"
+                            )
+                            file_errors += 1
+
+                if cmd_union:
+                    extra_cmds = py_commands - cmd_union
+                    if extra_cmds:
+                        consistency_issues[filename].append(
+                            f"  ⚠️  class {class_name}: extra commands {sorted(extra_cmds)}"
+                        )
+                        file_errors += 1
+
+                if file_errors == 0:
+                    consistency_validated.append((filename, class_name, sorted(all_ids)))
+
+        except Exception as exc:
+            consistency_issues[filename].append(f"  ❌ PARSE ERROR: {exc}")
+
+    return {
+        'files_total': len(udiyo_files),
+        'validated': consistency_validated,
+        'skipped': consistency_skipped,
+        'issues': consistency_issues,
+    }
+
+
 structure_issues = validate_subsection_structure()
 if structure_issues:
     print("=" * 80)
@@ -206,6 +362,14 @@ for line_num, line in enumerate(en_us_lines, 1):
         defined_nls_keys.add(nls_key)
         if nls_key not in nls_key_lines:
             nls_key_lines[nls_key] = line_num
+
+# Extract ST labels used by node definitions
+st_labels = {}
+for line_num, line in enumerate(en_us_lines, 1):
+    match = re.match(r'^ST-([\w\-]+)-([\w\-]+)-NAME=(.+)', line.strip())
+    if match:
+        nls, st_id, label = match.groups()
+        st_labels[(nls, st_id)] = (line_num, label)
 
 # Extract editors used in nodedefs.xml
 used_editors = set()
@@ -270,6 +434,51 @@ print(f"  Total NLS keys defined: {len(defined_nls_keys)}")
 print(f"  Total missing editors: {len(missing_editors)}")
 print(f"  Total missing NLS keys: {len(missing_nls)}")
 print(f"  Total unused editors: {len(unused_editors)}")
+
+# Issue 5: udiYo class consistency against nodeDefs and ST labels
+nodedef_map = {}
+for nodedef in nodedef_root.findall('.//nodeDef'):
+    node_id = nodedef.get('id')
+    nls = nodedef.get('nls')
+    if not node_id:
+        continue
+
+    sts = set()
+    cmds = set()
+    for st in nodedef.findall('.//st'):
+        st_id = st.get('id')
+        if st_id:
+            sts.add(st_id)
+
+    for cmd in nodedef.findall('.//cmds/accepts//cmd'):
+        cmd_id = cmd.get('id')
+        if cmd_id:
+            cmds.add(cmd_id)
+
+    nodedef_map[node_id] = {
+        'nls': nls,
+        'sts': sts,
+        'cmds': cmds,
+    }
+
+consistency_result = run_profile_consistency_checks(nodedef_map, st_labels)
+consistency_issue_files = consistency_result['issues']
+
+print("\n5. UDIYO PROFILE CONSISTENCY (udiYo*.py ↔ nodedefs.xml ↔ en_us.txt):")
+if consistency_issue_files:
+    print(f"  ❌ Files with consistency issues: {len(consistency_issue_files)}")
+    for filename in sorted(consistency_issue_files.keys()):
+        print(f"  {filename}:")
+        for issue in consistency_issue_files[filename]:
+            print(issue)
+else:
+    print("  ✓ All udiYo Node classes are consistent with profile and ST labels")
+
+print("\n6. CONSISTENCY STATS:")
+print(f"  udiYo*.py files scanned: {consistency_result['files_total']}")
+print(f"  Classes validated: {len(consistency_result['validated'])}")
+print(f"  Files skipped (no Node): {len(consistency_result['skipped'])}")
+print(f"  Files with consistency issues: {len(consistency_issue_files)}")
 
 print("\n" + "=" * 80)
 print("RECOMMENDATIONS:")
