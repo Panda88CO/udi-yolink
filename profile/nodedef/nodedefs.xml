@@ -606,6 +606,7 @@
    <nodeDef id="yoswitchPwr" nls="nlsswitch">
       <editors />
       <sts>
+         <st id="ST" editor="swstate" />
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
@@ -616,7 +617,6 @@
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
          <st id="GV9" editor="LED" />
-         <st id="ST" editor="swstate" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />
          <st id="TIME" editor="unixtime" />                  
@@ -652,11 +652,11 @@
    <nodeDef id="yoswitchsec" nls="nlsswitch">
       <editors />
       <sts>
+         <st id="ST" editor="swstate" />
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
        
-         <st id="ST" editor="swstate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />                  
@@ -713,6 +713,7 @@
    <nodeDef id="yoswitch" nls="nlsswitch">
       <editors />
       <sts>
+         <st id="ST" editor="swstate" />
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
@@ -721,7 +722,6 @@
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
          <st id="GV9" editor="LED" />
-         <st id="ST" editor="swstate" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />            
@@ -755,12 +755,12 @@
    <nodeDef id="yoswitchBat" nls="nlsswitch">
       <editors />
       <sts>
+         <st id="ST"  editor="swstate" />
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV9" editor="LED" />
-         <st id="ST"  editor="swstate" />
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />
          <st id="TIME" editor="unixtime" />
@@ -794,6 +794,7 @@
    <nodeDef id="yodimmer" nls="nlsdimmer">
       <editors />
       <sts>
+         <st id="ST"  editor="dimlvl" />
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
@@ -810,7 +811,6 @@
          <st id="GV18" editor="stMin" />
          <st id="GV22" editor="stSec" />               
          <st id="GV19" editor="binDays" />            
-         <st id="ST"  editor="dimlvl" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                    
@@ -859,6 +859,7 @@
    <nodeDef id="yooutlet" nls="nlsoutlet">
       <editors />
       <sts>
+         <st id="ST"  editor="swstate" />
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
@@ -866,7 +867,6 @@
          <st id="GV6" editor="poweralert" />
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
-         <st id="ST"  editor="swstate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                     
@@ -893,6 +893,7 @@
  <nodeDef id="yooutletPwr" nls="nlsoutlet">
       <editors />
       <sts>
+         <st id="ST"  editor="swstate" />
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
@@ -902,7 +903,6 @@
          <st id="GV6" editor="poweralert" />
          <st id="GV7" editor="poweralert" />
          <st id="GV8" editor="poweralert" />
-         <st id="ST"  editor="swstate" />
          <st id="GV30"  editor="status" />         
          <st id="GV20" editor="suspendstate" />         
          <st id="TIME" editor="unixtime" />            
@@ -929,6 +929,7 @@
    <nodeDef id="yomultiout" nls="nlsmultiout">
       <editors />
       <sts>
+         <st id="ST"  editor="status" />   
          <st id="GV12" editor="outport" />    
          <st id="GV13" editor="schIndex" />      
          <st id="GV14" editor="schActive" />    
@@ -939,7 +940,6 @@
          <st id="GV18" editor="stMin" />    
          <st id="GV22" editor="stSec" />     
          <st id="GV19" editor="binDays" />      
-         <st id="ST"  editor="status" />   
          <st id="GV30"  editor="status" />   
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />                     
@@ -955,12 +955,12 @@
    <nodeDef id="yosubout" nls="nlssubout">
       <editors />
       <sts>
+         <st id="ST"  editor="swstate" />
          <st id="GV0" editor="swstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="GV4" editor="outletnbr" />
-         <st id="GV30"  editor="swstate" />
-         <st id="ST"  editor="swstate" />
+         <st id="GV30"  editor="status" />
       </sts>
       <cmds>
          <sends>
@@ -984,8 +984,8 @@
    <nodeDef id="yosubusb" nls="nlssubusb">
       <editors />
       <sts>
-         <st id="GV0" editor="usbstate" />
          <st id="ST"  editor="usbstate" />   
+         <st id="GV0" editor="usbstate" />
          <st id="GV30"  editor="status" />   
       </sts>
       <cmds>
@@ -1006,11 +1006,11 @@
    <nodeDef id="yomanipu" nls="nlsmanipu">
       <editors />
       <sts>
+         <st id="ST"  editor="manstate" />
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="delay" />
          <st id="GV2" editor="delay" />
          <st id="BATLVL" editor="batlevel" />    
-         <st id="ST"  editor="manstate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />               
@@ -1430,8 +1430,8 @@
  <nodeDef id="yosprinklerv2" nls="nlssprinkler">
       <editors />
       <sts>
-         <!--<st id="ST" editor="runningvalue" />  water running-->
          <st id="ST" editor="waterrun" /> 
+         <!--<st id="ST" editor="runningvalue" />  water running-->
          <st id="GV1" editor="nowateralarm" />
          <st id="GV10" editor="unixtime" />   
          <st id="GV5" editor="waterrun" /> 
@@ -1702,6 +1702,7 @@
    <nodeDef id="yodoorsens" nls="nlsdoorsens">
       <editors />
       <sts>
+         <st id="ST" editor="doorstate" />                     
          <st id="GV0" editor="doorstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
@@ -1709,7 +1710,6 @@
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />
          <st id="TIME" editor="unixtime" />         
-         <st id="ST" editor="doorstate" />                     
       </sts>
       <cmds>
          <sends>
@@ -1744,12 +1744,12 @@
    <nodeDef id="yomotionsens" nls="nlsmotionsens">
       <editors />
       <sts>
+         <st id="ST" editor="motionstate" />
          <st id="GV0" editor="motionstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="celsius" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST" editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
          <st id="GV30"  editor="status" />  
          <st id="TIME" editor="unixtime" />                             
@@ -1770,12 +1770,12 @@
    <nodeDef id="yomotionsensF" nls="nlsmotionsens">
       <editors />
       <sts>
+         <st id="ST" editor="motionstate" />
          <st id="GV0" editor="motionstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
           <st id="CLITEMP" editor="farenheit" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST" editor="motionstate" />
          <st id="GV20" editor="suspendstate" /> 
          <st id="GV30"  editor="status" />  
          <st id="TIME" editor="unixtime" />                             
@@ -1796,8 +1796,8 @@
    <nodeDef id="yoleaksensF" nls="nlsleaksens">
       <editors />
       <sts>
-
          <st id="ST" editor="waterstate" />      
+
          <st id="GV0" editor="waterstate" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
@@ -1869,6 +1869,7 @@
    <nodeDef id="yoCOSmokesens" nls="nlssmokesens">
       <editors />
       <sts>
+         <st id="ST"  editor="deviceAlert" />     
          <st id="ALARM" editor="deviceAlert" />
          <st id="GV0" editor="SmokeAlert" />
          <st id="GV1" editor="COAlert" />
@@ -1878,7 +1879,6 @@
          <st id="GV5" editor="SelfcheckState" />
          <st id="GV7" editor="cmdsetting" />
          <st id="CLITEMP" editor="celsius" />
-         <st id="ST"  editor="deviceAlert" />     
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />      
@@ -1899,6 +1899,7 @@
    <nodeDef id="yoCOSmokesensF" nls="nlssmokesens">
       <editors />
       <sts>
+         <st id="ST"  editor="deviceAlert" />     
          <st id="ALARM" editor="deviceAlert" />
          <st id="GV0" editor="SmokeAlert" />
          <st id="GV1" editor="COAlert" />
@@ -1908,7 +1909,6 @@
          <st id="GV5" editor="SelfcheckState" />
          <st id="GV7" editor="cmdsetting" />
          <st id="CLITEMP" editor="farenheit" />
-         <st id="ST"  editor="deviceAlert" />     
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />   
          <st id="TIME" editor="unixtime" />      
@@ -1929,12 +1929,12 @@
    <nodeDef id="yovibrasens" nls="nlsvibrasens">
       <editors />
       <sts>
+         <st id="ST" editor="vibrastate" />
          <st id="GV0" editor="vibrastate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="celsius" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST" editor="vibrastate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
          <st id="TIME" editor="unixtime" />                         
@@ -1955,12 +1955,12 @@
    <nodeDef id="yovibrasensF" nls="nlsvibrasens">
       <editors />
       <sts>
+         <st id="ST" editor="vibrastate" />
          <st id="GV0" editor="vibrastate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
          <st id="CLITEMP" editor="farenheit" />
          <!-- <st id="GV8" editor="online" /> -->
-         <st id="ST" editor="vibrastate" />
          <st id="GV30"  editor="status" />
          <st id="GV20" editor="suspendstate" />     
          <st id="TIME" editor="unixtime" />                         
@@ -2014,13 +2014,13 @@
    <nodeDef id="yospeakerh" nls="nlsspeakerh">
       <editors />
       <sts>
+         <st id="ST"  editor="status" />
          <st id="GV0" editor="volume" />
          <st id="GV1" editor="beepEn" />
          <st id="GV2" editor="mute" />
          <st id="GV3" editor="tone" />
          <st id="GV4" editor="messages" />
          <st id="GV5" editor="repeat" />
-         <st id="ST"  editor="status" />
          <st id="GV20" editor="suspendstate" />  
          <st id="GV30"  editor="status" />
          <st id="TIME" editor="unixtime" />         
@@ -2048,13 +2048,13 @@
    <nodeDef id="yolockv2" nls="nlslock">
       <editors />
       <sts>
+         <st id="ST"  editor="lockstate" />
          <st id="GV0" editor="lockstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="doorbell" />
          <st id="GV3" editor="doorstate" /> 
          <st id="GV4" editor="lockaction" />
          <st id="GV5" editor="locksource" />
-         <st id="ST"  editor="lockstate" />
          <st id="GV20" editor="suspendstate" />  
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />                      
@@ -2077,10 +2077,10 @@
    <nodeDef id="yolock" nls="nlslock">
       <editors />
       <sts>
+         <st id="ST"  editor="lockstate" />
          <st id="GV0" editor="lockstate" />
          <st id="GV1" editor="batlevel" />
          <st id="GV3" editor="doorstate" /> 
-         <st id="ST"  editor="lockstate" />
          <st id="GV20" editor="suspendstate" />  
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />                      
@@ -2103,10 +2103,10 @@
    <nodeDef id="yoirremote" nls="nlsirremote">
       <editors />
       <sts>
+         <st id="ST"  editor="ircmdstatus" />
          <st id="GV0" editor="nbrcodes" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="ircmdstatus" />
-         <st id="ST"  editor="ircmdstatus" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />         
          <st id="TIME" editor="unixtime" />                     
@@ -2140,13 +2140,13 @@
    <nodeDef id="yopwralarm" nls="nlspwralarm">
       <editors />
       <sts>
+         <st id="ST"  editor="poweralert" />
          <st id="GV0" editor="poweralert" />
          <st id="GV1" editor="batlevel" />
          <st id="GV2" editor="alertstate" />
          <st id="GV3" editor="powered" />
          <st id="GV4" editor="pfamute" />
          <st id="GV7" editor="cmdstatus" />
-         <st id="ST"  editor="poweralert" />
          <st id="GV20" editor="suspendstate" />   
          <st id="GV30"  editor="status" />     
          <st id="TIME" editor="unixtime" />                     
@@ -2167,6 +2167,7 @@
    <nodeDef id="yowaterdept" nls="nlswaterdept">
       <editors />
       <sts>
+         <st id="ST"  editor="waterlevel" />
          <st id="GV0" editor="waterlevel" />
          <st id="GV1" editor="waterlevel" />
          <st id="GV2" editor="waterlevel" />
@@ -2174,7 +2175,6 @@
          <st id="GV4" editor="alarm" />
          <st id="GV5" editor="alarm" />
          <st id="BATLVL" editor="batlevel" />    
-         <st id="ST"  editor="waterlevel" />
          <st id="GV20" editor="suspendstate" />    
          <st id="GV30"  editor="status" />                 
          <st id="TIME" editor="unixtime" />
@@ -2196,11 +2196,12 @@
    <nodeDef id="yosiren" nls="nlssiren">
       <editors />
       <sts>
+         <st id="ST"  editor="sirenstate" />
          <st id="GV0" editor="sirenstate" />
          <st id="GV1" editor="sirenduration" />
          <st id="GV2" editor="sirenbatlevel" />
          <st id="GV3" editor="soundlevel" />
-         <st id="ST"  editor="sirenstate" />
+
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />                    
          <st id="TIME" editor="unixtime" />               
@@ -2342,8 +2343,8 @@
          <st id="GV18" editor="celsius" />
          <st id="GV19" editor="celsius" />         
          <st id="GV5" editor="IDRRUNNING" />
-         <st id="GV20" editor="ISUSPENDEDST" />
-         <st id="GV30" editor="IONLINEST" />
+         <st id="GV20" editor="suspendstate" />
+         <st id="GV30" editor="status" />
          <st id="TIME" editor="unixtime" />
       </sts>
       <cmds>
@@ -2393,8 +2394,8 @@
          <st id="GV18" editor="farenheit" />
          <st id="GV19" editor="farenheit" />         
          <st id="GV5" editor="IDRRUNNING" />
-         <st id="GV20" editor="ISUSPENDEDST" />
-         <st id="GV30" editor="IONLINEST" />
+         <st id="GV20" editor="suspendstate" />
+         <st id="GV30" editor="status" />
          <st id="TIME" editor="unixtime" />
       </sts>
       <cmds>

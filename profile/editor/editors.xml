@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <editors>
   <editor id="status">
     <range uom="25" subset="0,1" nls="status" />
@@ -20,20 +20,9 @@
     <range uom="119" min="-1" max="2000" prec="2" />
     <range uom="25" subset="0,98,99" nls="nosupport" />
   </editor>
-  <editor id="kwatt">
-    <range uom="30" min="-1" max="2000" prec="2" />
-    <range uom="25" subset="0,98,99" nls="nosupport" />
-  </editor>
-  <editor id="Kenergy">
-    <range uom="33" min="-1" max="2000" prec="2" />
-    <range uom="25" subset="0,98,99" nls="nosupport" />
-  </editor>
   <editor id="waterlevel">
     <range uom="56" min="0" max="1000" prec="0" />
     <range uom="25" subset="0,97,99" nls="wlstate" />
-  </editor>
-  <editor id="waterlevelNbr">
-    <range uom="56" min="0" max="1000" prec="0" />
   </editor>
   <editor id="delay">
     <range uom="57" min="0" max="86400" prec="0" />
@@ -55,9 +44,6 @@
     <editor id="farenheitSet">
     <range uom="17" min="-40" max="221" prec="1" />
   </editor>
-  <editor id="tempunit">
-    <range uom="51" min="0" max="100" prec="1" />
-  </editor>
   <editor id="humidity">
     <range uom="51" min="0" max="100" prec="1" />
     <range uom="25" subset="0,98,99" nls="nosupport" />
@@ -67,9 +53,6 @@
   </editor>
   <editor id="doorstate">
     <range uom="25" subset="0,1,99" nls="doorstate" />
-  </editor>
-  <editor id="online">
-    <range uom="25" subset="0,1" nls="online" />
   </editor>
   <editor id="motionstate">
     <range uom="25" subset="0,1,99" nls="motionstate" />
@@ -149,9 +132,6 @@
   <editor id="ircmdstatus">
     <range uom="25" subset="0,1,2,99" nls="ircmdstatus" />
   </editor>
-  <editor id="txcode">
-    <range uom="107" min="0" max="63" prec="0" />
-  </editor>
   <editor id="poweralert">
     <range uom="25" subset="0,1,2,99" nls="poweralert" />
   </editor>
@@ -164,17 +144,8 @@
   <editor id="powered">
     <range uom="25" subset="0,1,99" nls="powered" />
   </editor>
-  <editor id="keypress">
-    <range uom="25" subset="0,1,2,3,8-11,99" nls="keypress" />
-  </editor>
   <editor id="remotetype">
     <range uom="25" subset="0,1,99" nls="remotetype" />
-  </editor>
-  <editor id="keynumber">
-    <range uom="25" subset="0,1,2,3,99" nls="keynumber" />
-  </editor>
-  <editor id="presstype">
-    <range uom="25" subset="0,8,99" nls="presstype" />
   </editor>
   <editor id="pfamute">
     <range uom="25" subset="0,1,99" nls="pfamute" />
@@ -184,9 +155,6 @@
   </editor>
   <editor id="keyscene">
     <range uom="25" subset="0,1,2,3,4,5" nls="keyscene" />
-  </editor>
-  <editor id="keycmd">
-    <range uom="25" subset="0,1,2,3,4,5,99" nls="keycmd" />
   </editor>
   <editor id="sirenstate">
     <range uom="25" subset="0,1,2,99" nls="sirenstate" />
@@ -211,16 +179,6 @@
   </editor>
   <editor id="alarm">
     <range uom="25" subset="0,1,98,99" nls="alarm" />
-  </editor>
-  <editor id="alert">
-    <range uom="25" subset="0,1,99" nls="alarm" />
-  </editor>
-  <editor id="watermeter">
-    <range uom="69" min="0" max="2147483647" prec="1" />
-    <range uom="25" subset="0,99" nls="error" />
-  </editor>
-  <editor id="pwrmode">
-    <range uom="25" subset="0,1,99" nls="pwrmode" />
   </editor>
   <editor id="deviceAlert">
     <range uom="25" subset="0,1,99" nls="deviceAlert" />
@@ -255,9 +213,6 @@
   <editor id="schCount">
     <range uom="70" min="0" max="20" />
   </editor>
-  <editor id="schIndexM">
-    <range uom="25" subset="0-9,99" nls="schindexM" />
-  </editor>
   <editor id="schIndexS">
     <range uom="25" subset="0,1,2,3,4,5,99" nls="schindexS" />
   </editor>
@@ -288,19 +243,12 @@
   <editor id="binDays">
     <range uom="25" subset="0-127" nls="bindays" />
   </editor>
-  <editor id="epochtime">
-    <range uom="44" min="0" max="9999999999" prec="0" />
-    <range uom="25" subset="0,99" nls="error" />
-  </editor>
   <editor id="unixtime">
     <range uom="151" min="1737400000" max="9999999999" prec="0" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
   <editor id="ready">
     <range uom="25" subset="0,1" nls="ready" />
-  </editor>
-  <editor id="waterunit">
-    <range uom="25" subset="0,1,2,3,99" nls="waterunit" />
   </editor>
   <editor id="leaklimit">
     <range uom="69" min="0" max="100" prec="0" />
@@ -322,20 +270,6 @@
     <editor id="gallonSet">
     <range uom="69" min="0" max="10000" prec="1" />
   </editor>
-  <editor id="ccf">
-      <range uom="6" min="0" max="10000" prec="1" />
-    <range uom="25" subset="0,99" nls="error" />
-  </editor>
-    <editor id="ccfSet">
-      <range uom="6" min="0" max="10000" prec="1" />
-    </editor> 
-  <editor id="m3">
-    <range uom="8" min="0" max="10000" prec="2" />
-    <range uom="25" subset="0,99" nls="error" />
-  </editor>
-  <editor id="m3Set">
-    <range uom="8" min="0" max="10000" prec="2" />
-  </editor> 
   <editor id="flow">
     <range uom="69" min="0" max="10000" prec="1" />
     <range uom="6" min="0" max="10000" prec="1" />
@@ -370,9 +304,6 @@
   <editor id="startstop">
     <range uom="25" subset="0,1" nls="running" />
   </editor>
-  <editor id="sprinklerstate">
-    <range uom="25" subset="0,1" nls="sprinklerstate" />
-  </editor>
   <editor id="sprinklermethod">
     <range uom="25" subset="0,1" nls="sprinklermethod" />
   </editor>
@@ -391,17 +322,11 @@
     <editor id="watermode">
     <range uom="25" subset="0,1,99" nls="watermode" />
   </editor>
-    <editor id="watermethod"> 
-    <range uom="25" subset="0,1,99" nls="watermethod" />
-  </editor>
     <editor id="nowateralarm"> 
     <range uom="25" subset="0,1,99" nls="nowateralarm" />
   </editor>
   <editor id="beeping">
     <range uom="25" subset="0,1,99" nls="beeping" />
-  </editor>
-  <editor id="beepingIn">
-    <range uom="25" subset="0,1" nls="beeping" />
   </editor>
   <editor id="leakOpMode">
     <range uom="25" subset="0,1,99" nls="leakOpMode" />
@@ -426,26 +351,6 @@
   </editor> 
   <editor id="LEDctrl">
     <range uom="25" subset="0,1" nls="LED" />
-  </editor>
-  <editor id="ITEMPDEG">
-    <range uom="4" min="-40" max="60" prec="1" />
-    <range uom="25" subset="98,99" nls="error" />
-  </editor>
-  <editor id="ITEMPF">
-    <range uom="17" min="-40" max="140" prec="1" />
-    <range uom="25" subset="98,99" nls="error" />
-  </editor>
-  <editor id="ICLISPHDEG">
-    <range uom="4" min="5" max="35" prec="1" />
-  </editor>
-  <editor id="ICLISPHF">
-    <range uom="17" min="40" max="95" prec="1" />
-  </editor>
-  <editor id="ICLISPCDEG">
-    <range uom="4" min="5" max="35" prec="1" />
-  </editor>
-  <editor id="ICLISPCF">
-    <range uom="17" min="40" max="95" prec="1" />
   </editor>
   <editor id="ITSTATMODE">
     <range uom="67" subset="0,1,2,3,99" nls="tstatmode" />
@@ -489,12 +394,6 @@
   </editor>
   <editor id="IMASTERSRC">
     <range uom="25" subset="0,1,2,99" nls="mastersrc" />
-  </editor>
-  <editor id="ISUSPENDEDST">
-    <range uom="25" subset="0,1,2,99" nls="suspended" />
-  </editor>
-  <editor id="IONLINEST">
-    <range uom="25" subset="0,1,99" nls="online" />
   </editor>
   <editor id="ecoSet">
     <range uom="4" min="0" max="5" prec="1" />

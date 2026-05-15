@@ -34,13 +34,15 @@ class udiYoSiren(udi_interface.Node):
             ]
     '''  #Needs update 
     drivers = [
+            {'driver': 'ST', 'value': 0, 'uom': 25},
             {'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 58}, # seconds
             {'driver': 'GV2', 'value': 99, 'uom': 25},
             {'driver': 'GV3', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
+
             {'driver': 'GV20', 'value': 99, 'uom': 25},
+            {'driver': 'GV30', 'value': 99, 'uom': 25},
+
              {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
             ]
 
