@@ -162,6 +162,9 @@ class udiYoOutlet(udi_interface.Node):
         return self.yoOutlet
 
     def checkDataUpdate(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         #if self.yoOutlet.data_updated():
         outlet = self._get_outlet('checkDataUpdate')
         if outlet is None:
@@ -274,6 +277,9 @@ class udiYoOutlet(udi_interface.Node):
 
     
     def checkOnline(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         outlet = self._get_outlet('checkOnline')
         if outlet is None:
             return

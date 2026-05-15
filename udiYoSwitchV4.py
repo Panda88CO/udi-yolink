@@ -208,6 +208,9 @@ class udiYoSwitch(udi_interface.Node):
         self._last_reported_state = normalized_state
             
     def checkOnline(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         switch = self._get_switch('checkOnline')
         if switch is None:
             return
@@ -215,6 +218,9 @@ class udiYoSwitch(udi_interface.Node):
     
     
     def checkDataUpdate(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         switch = self._get_switch('checkDataUpdate')
         if switch is None:
             return

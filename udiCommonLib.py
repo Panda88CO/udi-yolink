@@ -726,15 +726,29 @@ def systemPoll (self, polltype):
                     #    while not self.yoAccess.request_new_token():
                     #            time.sleep(60)
                     #logging.info('Updating device status')
-                    #nodes = self.poly.getNodes()
                     
                     self.saveNodeNames()
-                    for nde in self.yolink_nodes:
+                    # Take a snapshot to avoid "dictionary changed size during iteration" errors
+                    # when child nodes are created during polling (e.g. udiYoSwitch creating udiRemoteKey)
+                    nodes_snapshot = list(self.yolink_nodes.keys())
+                    for nde in nodes_snapshot:
+                        if nde not in self.yolink_nodes:
+                            # Node was removed between snapshot and iteration
+                            continue
                         if nde != 'setup':   # but not the controller node
-                            if hasattr(self.yolink_nodes[nde], 'checkOnline'):
-                                self.yolink_nodes[nde].checkOnline()
-                            if hasattr(self.yolink_nodes[nde], 'checkNameSync'):
-                                self.yolink_nodes[nde].checkNameSync()
+                            node = self.yolink_nodes[nde]
+                            # Defer poll execution until node initialization is complete
+                            if hasattr(node, 'node_ready') and not node.node_ready:
+                                logging.debug('longpoll deferred for {}: node_ready=False'.format(nde))
+                                continue
+                            if hasattr(node, 'configDone') and not node.configDone:
+                                logging.debug('longpoll deferred for {}: configDone=False'.format(nde))
+                                continue
+                            
+                            if hasattr(node, 'checkOnline'):
+                                node.checkOnline()
+                            if hasattr(node, 'checkNameSync'):
+                                node.checkNameSync()
                             logging.debug('longpoll {}'.format(nde))
                             time.sleep(5) # need to limit calls to 100 per  5 min - using 5 to allow other calls - updating is not critical
                 except Exception as e:
@@ -745,10 +759,23 @@ def systemPoll (self, polltype):
             if 'shortPoll' in polltype:
                 self.heartbeat()
 
-                #nodes = self.poly.getNodes()
-                for nde in self.yolink_nodes:
+                # Take a snapshot to avoid "dictionary changed size during iteration" errors
+                nodes_snapshot = list(self.yolink_nodes.keys())
+                for nde in nodes_snapshot:
+                    if nde not in self.yolink_nodes:
+                        # Node was removed between snapshot and iteration
+                        continue
                     if nde != 'setup':   # but not the controller node
-                        self.yolink_nodes[nde].checkDataUpdate()
+                        node = self.yolink_nodes[nde]
+                        # Defer poll execution until node initialization is complete
+                        if hasattr(node, 'node_ready') and not node.node_ready:
+                            logging.debug('shortpoll deferred for {}: node_ready=False'.format(nde))
+                            continue
+                        if hasattr(node, 'configDone') and not node.configDone:
+                            logging.debug('shortpoll deferred for {}: configDone=False'.format(nde))
+                            continue
+                        
+                        node.checkDataUpdate()
                         logging.debug('shortpoll {}'.format(nde))
                         # no API calls so no need to spread out 
                         #time.sleep(node_ready_poll)  # need to limit calls to 100 per  5 min - using 4 to allow other calls

@@ -214,6 +214,9 @@ class udiYoDimmer(udi_interface.Node):
         self._last_reported_state = normalized_state
             
     def checkOnline(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         dimmer = self._get_dimmer('checkOnline')
         if dimmer is None:
             return
@@ -221,6 +224,9 @@ class udiYoDimmer(udi_interface.Node):
     
     
     def checkDataUpdate(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         dimmer = self._get_dimmer('checkDataUpdate')
         if dimmer is None:
             return

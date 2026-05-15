@@ -171,12 +171,18 @@ class udiYoSprinkler(udi_interface.Node):
         return sprinkler
 
     def checkOnline(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         sprinkler = self._get_sprinkler('checkOnline')
         if sprinkler is None:
             return
         sprinkler.refreshDevice()
 
     def checkDataUpdate(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         sprinkler = self._get_sprinkler('checkDataUpdate')
         if sprinkler is None:
             return

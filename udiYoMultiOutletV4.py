@@ -639,6 +639,9 @@ class udiYoMultiOutlet(udi_interface.Node):
         return outlet
 
     def checkOnline(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         outlet = self._get_multi_outlet('checkOnline')
         if outlet is None:
             return
@@ -647,6 +650,9 @@ class udiYoMultiOutlet(udi_interface.Node):
 
 
     def checkDataUpdate(self):
+        # Guard: defer if initialization not complete
+        if not self.node_ready or not self.configDone:
+            return
         outlet = self._get_multi_outlet('checkDataUpdate')
         if outlet is None:
             return
