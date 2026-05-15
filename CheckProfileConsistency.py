@@ -72,15 +72,13 @@ for nodedef in nodedef_root.findall('.//nodeDef'):
             if st_id:
                 sts.add(st_id)
         
-        # Extract <cmd id="..."> elements from both <sends> and <accepts>
-        # so the checker matches how Polyglot nodedefs expose command IDs.
-        for cmd_section in nodedef.findall('.//cmds/*'):
-            if cmd_section.tag not in {'sends', 'accepts'}:
-                continue
-            for cmd in cmd_section.findall('.//cmd'):
-                cmd_id = cmd.get('id')
-                if cmd_id:
-                    cmds.add(cmd_id)
+        # Extract <cmd id="..."> elements from <accepts> only.
+        # Polyglot Node.commands should implement inbound commands; <sends>
+        # are outbound status events and should not be required here.
+        for cmd in nodedef.findall('.//cmds/accepts//cmd'):
+            cmd_id = cmd.get('id')
+            if cmd_id:
+                cmds.add(cmd_id)
         
         nodedef_map[node_id] = {
             'nls': nls,
@@ -190,6 +188,14 @@ for filename in udiyo_files:
                 commands_block = commands_match.group(1)
                 py_commands = set(re.findall(r"['\"](\w+)['\"]\s*:", commands_block))
             
+            # Build an aggregate command set across all valid IDs in this class.
+            # Some classes switch self.id at runtime (e.g., single/dual variants)
+            # and expose a union of handlers in one commands dict.
+            valid_ids = [nid for nid in sorted(all_ids) if nid in nodedef_map]
+            cmd_union = set()
+            for nid in valid_ids:
+                cmd_union.update(nodedef_map[nid]['cmds'])
+
             # Validate each ID (drivers list is checked against each possible id)
             file_errors = 0
             for node_id in sorted(all_ids):
@@ -216,7 +222,7 @@ for filename in udiyo_files:
                     )
                     file_errors += 1
                 
-                # Check commands ↔ <cmd> in <accepts> section (only if accepts section exists)
+                # Check commands ↔ <cmd> in <accepts> section (only if accepts exists)
                 if nd['cmds']:  # Only validate if cmds are defined in nodeDef
                     missing_cmds = nd['cmds'] - py_commands
                     if missing_cmds:
@@ -224,13 +230,16 @@ for filename in udiyo_files:
                             f"  ⚠️  class {class_name} id='{node_id}': missing commands {sorted(missing_cmds)}"
                         )
                         file_errors += 1
-                    
-                    extra_cmds = py_commands - nd['cmds']
-                    if extra_cmds:
-                        issues[filename].append(
-                            f"  ⚠️  class {class_name} id='{node_id}': extra commands {sorted(extra_cmds)}"
-                        )
-                        file_errors += 1
+
+            # Only treat commands as extra if they are not accepted by ANY id
+            # used by this class.
+            if cmd_union:
+                extra_cmds = py_commands - cmd_union
+                if extra_cmds:
+                    issues[filename].append(
+                        f"  ⚠️  class {class_name}: extra commands {sorted(extra_cmds)}"
+                    )
+                    file_errors += 1
                 
                 # Check ST labels in en_us.txt
                 nls = nd['nls']

@@ -353,6 +353,14 @@ class udiYoSprinkler(udi_interface.Node):
         self.my_setDriver('GV9', self.cmd_state)
         self.save_cmd_state(self.cmd_state)
 
+    def start_stop(self, command):
+        # Legacy sprinkler node keeps this command as local command state.
+        self.set_cmd(command)
+
+    def set_attributes(self, command):
+        # Legacy yosprinkler has no attribute write path in this class.
+        logging.info('udiYoSprinkler set_attributes not implemented for legacy node: %s', command)
+
     def update(self, command = None):
         logging.info('THsensor Update')
         sprinkler = self._get_sprinkler('update')
@@ -361,7 +369,8 @@ class udiYoSprinkler(udi_interface.Node):
         sprinkler.refreshDevice()
        
     commands = {
-                'SETCMD': set_cmd,             
+                'STARTSTOP': start_stop,
+                'SETATTRIB': set_attributes,
                 'UPDATE': update,
                 }
 
