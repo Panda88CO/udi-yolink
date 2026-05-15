@@ -142,7 +142,7 @@ class udiYoDimmer(udi_interface.Node):
         self.yoDimmer.get_attributes()
         self.dim_setting['dim'] = self.yoDimmer.get_data('brightness')
         self.yoDimmer.setBrightness(self.dim_setting['dim'])
-        self.dim_setting['previous'] = self.yoDimmer.brightness
+        self.dim_setting['previous'] = self.dim_setting['dim']
         #self.my_setDriver('ST', 1)
         self.yoDimmer.delayTimerCallback(self.updateDelayCountdown, self.timer_update)
         time.sleep(1)
@@ -249,8 +249,9 @@ class udiYoDimmer(udi_interface.Node):
                 dimmer.min_level = dimmer.get_data('calibration', 'deviceAttributes')
                 dimmer.max_level = dimmer.get_data('calibrationHigh', 'deviceAttributes')
 
-            #self.dim_setting['dim'] = self.yoDimmer.brightness
-            self.dim_setting['dim'] = dimmer.get_data('brightness')
+            current_dim = dimmer.get_data('brightness')
+            if isinstance(current_dim, (int, float)):
+                self.dim_setting['dim'] = current_dim
             if dimmer.check_system_online():
                 #self.my_setDriver('ST', 1)
                 self.my_setDriver('GV30', 1)               
@@ -263,20 +264,20 @@ class udiYoDimmer(udi_interface.Node):
                 self._report_binary_state_change(state)
                 self.last_state = state
                 if self.dim_setting['previous'] is None:
-                    self.dim_setting['previous'] = dimmer.brightness
+                    self.dim_setting['previous'] = self.dim_setting['dim']
                 tmp = self.dim_setting['previous']
-                logging.debug(f'dim {dimmer.brightness} {tmp}')
-                if dimmer.brightness >= self.dim_setting['previous'] + self.dimmer_step:
+                logging.debug(f"dim {self.dim_setting['dim']} {tmp}")
+                if self.dim_setting['dim'] >= self.dim_setting['previous'] + self.dimmer_step:
                     #logging.debug('dim UP detected')
                     self.node.reportCmd('FDUP')
-                    dim_change = abs(dimmer.brightness - self.dim_setting['previous'])
+                    dim_change = abs(self.dim_setting['dim'] - self.dim_setting['previous'])
                     dim_time = dimmer.ramp_up_time*(dim_change/(dimmer.max_level-dimmer.min_level))
                     time.sleep(dim_time)
                     self.node.reportCmd('FDSTOP')
-                if dimmer.brightness <= self.dim_setting['previous'] - self.dimmer_step:
+                if self.dim_setting['dim'] <= self.dim_setting['previous'] - self.dimmer_step:
                     #logging.debug('dim DOWN detected')
                     self.node.reportCmd('FDDOWN')
-                    dim_change = abs(dimmer.brightness - self.dim_setting['previous'])
+                    dim_change = abs(self.dim_setting['dim'] - self.dim_setting['previous'])
                     dim_time = dimmer.ramp_down_time*(dim_change/(dimmer.max_level-dimmer.min_level))
                     time.sleep(dim_time)
                     self.node.reportCmd('FDSTOP')
@@ -291,7 +292,11 @@ class udiYoDimmer(udi_interface.Node):
                         self.my_setDriver('GV9', 0)
                 else:
                     self.my_setDriver('GV9', None)
-                self.my_setDriver('GV3', self.dim_setting['dim'], 51)
+                if state in ['ON', 'open', 'on', 'OPEN']:
+                    self.my_setDriver('GV3', self.dim_setting['dim'])
+                else:
+                    self.my_setDriver('GV3', 0)
+
                 self.my_setDriver('ST', self.dim_setting['dim'], 51)
                 self.my_setDriver('GV4', self.dim_setting['dim_down'], 51)
                 self.my_setDriver('GV5', self.dim_setting['dim_up'], 51)
@@ -352,8 +357,10 @@ class udiYoDimmer(udi_interface.Node):
         dimmer = self._get_dimmer('increase_level')
         if dimmer is None:
             return
-        dimmer.brightness += self.dimmer_step
-        dimmer.setBrightness(dimmer.brightness)
+        next_dim = int(self.dim_setting.get('dim', 0)) + self.dimmer_step
+        next_dim = max(0, min(100, next_dim))
+        self.dim_setting['dim'] = next_dim
+        dimmer.setBrightness(next_dim)
 
 
     def decrease_level(self, command = None):
@@ -361,8 +368,10 @@ class udiYoDimmer(udi_interface.Node):
         dimmer = self._get_dimmer('decrease_level')
         if dimmer is None:
             return
-        dimmer.brightness -= self.dimmer_step
-        dimmer.setBrightness(dimmer.brightness) 
+        next_dim = int(self.dim_setting.get('dim', 0)) - self.dimmer_step
+        next_dim = max(0, min(100, next_dim))
+        self.dim_setting['dim'] = next_dim
+        dimmer.setBrightness(next_dim)
 
     def scene_dim(self, command = None):
         logging.info(f'udiYoDimmer scene_dim - {command}')
