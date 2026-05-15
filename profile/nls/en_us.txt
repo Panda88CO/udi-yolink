@@ -988,6 +988,10 @@ watermode-1=Scheduled
 watermode-0=Manual
 watermode-99=Unknown
 
+watermethod-0=Water Volume
+watermethod-1=Time
+watermethod-99=Unknown
+
 nowateralarm-0=Normal (No alarm)
 nowateralarm-1=Alarm - No Water Detected
 nowateralarm-99=Unknown

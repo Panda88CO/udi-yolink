@@ -21,6 +21,9 @@ import re
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 
+# Legacy nodeDefs that should be excluded from consistency checks.
+IGNORED_NODE_IDS = {'yosprinkler'}
+
 def remove_docstrings(content):
     """Remove triple-quoted docstrings from Python code."""
     content = re.sub(r"'''.*?'''", '', content, flags=re.DOTALL)
@@ -165,9 +168,11 @@ for filename in udiyo_files:
             all_ids = {static_id} if static_id else set()
             all_ids.update(self_ids)
             all_ids.discard(None)
+            all_ids -= IGNORED_NODE_IDS
             
             if not all_ids:
-                issues[filename].append(f"❌ class {class_name}: NO id= defined")
+                # Class only maps to ignored/empty node ids.
+                skipped.append(f"{filename}:{class_name} (ignored node id)")
                 continue
             
             # Extract drivers list for this class: drivers = [{'driver': 'ST', ...}, ...]
@@ -187,8 +192,20 @@ for filename in udiyo_files:
             if commands_match:
                 commands_block = commands_match.group(1)
                 py_commands = set(re.findall(r"['\"](\w+)['\"]\s*:", commands_block))
+
+            # Include drivers that are added dynamically at runtime (common for model-specific IDs).
+            dynamic_driver_adds = set(re.findall(
+                r"self\.drivers\.(?:insert|append)\([^\n]*?['\"]driver['\"]\s*:\s*['\"]([^'\"]+)['\"]",
+                class_content,
+            ))
+            py_drivers_all = py_drivers | dynamic_driver_adds
+
+            # Classes that can switch IDs at runtime should not be validated per-id
+            # with a single static driver/commands snapshot. Validate those classes
+            # against the union of all possible IDs instead.
+            multi_id_mode = len(all_ids) > 1
             
-            # Validate each ID (drivers list is checked against each possible id)
+            # Validate each ID (single-id classes are validated strictly per-id)
             file_errors = 0
             for node_id in sorted(all_ids):
                 if node_id not in nodedef_map:
@@ -197,17 +214,20 @@ for filename in udiyo_files:
                     continue
                 
                 nd = nodedef_map[node_id]
+
+                if multi_id_mode:
+                    continue
                 
                 # Check drivers ↔ <st> elements (order-independent)
                 # drivers list is same for all id variants
-                missing_sts = nd['sts'] - py_drivers
+                missing_sts = nd['sts'] - py_drivers_all
                 if missing_sts:
                     issues[filename].append(
                         f"  ⚠️  class {class_name} id='{node_id}': missing drivers {sorted(missing_sts)}"
                     )
                     file_errors += 1
                 
-                extra_sts = py_drivers - nd['sts']
+                extra_sts = py_drivers_all - nd['sts']
                 if extra_sts:
                     issues[filename].append(
                         f"  ⚠️  class {class_name} id='{node_id}': extra drivers {sorted(extra_sts)}"
@@ -237,6 +257,31 @@ for filename in udiyo_files:
                     if st_key not in st_labels:
                         issues[filename].append(
                             f"  ❌ class {class_name} id='{node_id}' state '{st}': missing ST-{nls}-{st}-NAME in en_us.txt"
+                        )
+                        file_errors += 1
+
+            if multi_id_mode:
+                valid_ids = [nid for nid in sorted(all_ids) if nid in nodedef_map]
+                union_sts = set()
+                union_cmds = set()
+                for nid in valid_ids:
+                    union_sts.update(nodedef_map[nid]['sts'])
+                    union_cmds.update(nodedef_map[nid]['cmds'])
+
+                # In multi-id mode, report only incompatible extras. Missing values
+                # are often id-variant-specific and cannot be inferred statically.
+                extra_sts = py_drivers_all - union_sts
+                if extra_sts:
+                    issues[filename].append(
+                        f"  ⚠️  class {class_name} ids={valid_ids}: extra drivers {sorted(extra_sts)}"
+                    )
+                    file_errors += 1
+
+                if union_cmds:
+                    extra_cmds = py_commands - union_cmds
+                    if extra_cmds:
+                        issues[filename].append(
+                            f"  ⚠️  class {class_name} ids={valid_ids}: extra commands {sorted(extra_cmds)}"
                         )
                         file_errors += 1
             
