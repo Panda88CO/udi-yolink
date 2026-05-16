@@ -7,16 +7,30 @@ def _is_comment_or_blank(line):
     stripped = line.strip()
     return not stripped or stripped.startswith('#')
 
+
+def _find_xml_comment_lines(text_lines):
+    comment_lines = []
+    for line_num, line in enumerate(text_lines, 1):
+        if '<!--' in line or '-->' in line:
+            comment_lines.append(line_num)
+    return comment_lines
+
 # Parse nodedefs.xml
+with open('profile/nodedef/nodedefs.xml', 'r', encoding='utf-8') as f:
+    nodedef_lines = f.readlines()
+
 nodedef_tree = ET.parse('profile/nodedef/nodedefs.xml')
 nodedef_root = nodedef_tree.getroot()
 
 # Parse editors.xml
+with open('profile/editor/editors.xml', 'r', encoding='utf-8') as f:
+    editor_lines = f.readlines()
+
 editor_tree = ET.parse('profile/editor/editors.xml')
 editor_root = editor_tree.getroot()
 
 # Parse en_us.txt
-with open('profile/nls/en_us.txt', 'r') as f:
+with open('profile/nls/en_us.txt', 'r', encoding='utf-8') as f:
     en_us_lines = f.readlines()
 
 # Extract editors defined in editors.xml
@@ -314,7 +328,24 @@ else:
         print(f"  ⚠️  line {item['line']} [{item['type']}]: {item['entry']}")
 
 # Issue 8: Summary stats
-print("\n8. STATISTICS:")
+xml_comment_hits = {
+    'profile/nodedef/nodedefs.xml': _find_xml_comment_lines(nodedef_lines),
+    'profile/editor/editors.xml': _find_xml_comment_lines(editor_lines),
+    'profile/nls/en_us.txt': _find_xml_comment_lines(en_us_lines),
+}
+
+print("\n8. XML COMMENT CHECK (<!-- -->):")
+total_xml_comment_lines = sum(len(lines) for lines in xml_comment_hits.values())
+if total_xml_comment_lines == 0:
+    print("  ✓ No XML-style comments found in setup files")
+else:
+    for file_path, lines in xml_comment_hits.items():
+        if lines:
+            line_list = ', '.join(str(n) for n in lines)
+            print(f"  ⚠️  {file_path}: XML-style comment markers on line(s): {line_list}")
+
+# Issue 9: Summary stats
+print("\n9. STATISTICS:")
 print(f"  Total editors defined: {len(defined_editors)}")
 print(f"  Total editors used: {len(used_editors)}")
 print(f"  Total NLS keys defined: {len(defined_nls_keys)}")
@@ -326,6 +357,7 @@ print(f"  Total ND key conflicts: {len(nd_conflicts)}")
 print(f"  Total duplicate ST name groups: {len(duplicate_st_names)}")
 print(f"  Total orphan duplicate ST entries: {len(orphan_duplicate_entries)}")
 print(f"  Total orphan ND/ST/CMD/CMDP entries: {len(orphan_nls_entries)}")
+print(f"  Total XML-style comment marker lines: {total_xml_comment_lines}")
 
 print("\n" + "=" * 80)
 print("RECOMMENDATIONS:")
@@ -343,3 +375,5 @@ if orphan_duplicate_entries:
     print("\n• Remove or correct orphan ST duplicate entries that do not map to nodedef <st> ids.")
 if orphan_nls_entries:
     print("\n• Remove or migrate orphan ND/ST/CMD/CMDP entries in profile/nls/en_us.txt.")
+if total_xml_comment_lines:
+    print("\n• Remove XML-style comments (`<!-- -->`) from setup files if they are not intentional.")
