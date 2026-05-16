@@ -647,8 +647,6 @@
          </accepts>
       </cmds>
    </nodeDef> 
-
-
    <nodeDef id="yoswitch" nls="nlsswitch">
       <editors />
       <sts>
@@ -1049,7 +1047,7 @@
          <st id="GV22" editor="liter" /> 
          <st id="GV23" editor="count" />  
          <st id="GV24" editor="minutes" />
-            <st id="GV25" editor="enable" /> 
+         <st id="GV25" editor="enable" /> 
          <st id="GV26" editor="enable" /> 
          <st id="GV27" editor="enable" /> 
          <st id="GV28" editor="enable" /> 
@@ -1172,7 +1170,6 @@
       <editors />
       <sts>
          <st id="ST" editor="waterrun" />
-
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="flow" />
          <st id="GV10" editor="flow" />     
@@ -1249,7 +1246,6 @@
       <editors />
       <sts>
          <st id="ST" editor="waterrun" />
-
          <st id="GV0" editor="manstate" />
          <st id="GV1" editor="gallon" />
          <st id="GV10" editor="gallon" />     
@@ -1731,7 +1727,6 @@
       <editors />
       <sts>
          <st id="ST" editor="waterstate" />      
-
          <st id="GV0" editor="waterstate" />
          <st id="BATLVL" editor="batlevel" />
          <st id="GV2" editor="cmdsetting" />
@@ -2133,7 +2128,6 @@
          <st id="GV1" editor="sirenduration" />
          <st id="GV2" editor="sirenbatlevel" />
          <st id="GV3" editor="soundlevel" />
-
          <st id="GV20" editor="suspendstate" />
          <st id="GV30"  editor="status" />                    
          <st id="TIME" editor="unixtime" />               
