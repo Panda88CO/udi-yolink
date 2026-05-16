@@ -7,37 +7,13 @@ ST-nlssetup-TIME-NAME=LastPoll Time
 CMD-nlssetup-DON-NAME=Heart Beat On
 CMD-nlssetup-DOF-NAME=Heart Beat Off
 
-# common commands #############
 
-#ST-BATLVL-NAME=Battery Level
-#ST-CLITEMP-NAME=Sensor Temperature
-#ST-CLIHUM-NAME=Current Rel Humidity (%)
-#ST-TIME-NAME=Last device update
 
-#CMD-DEFINESCH-NAME=Define Schedule
-#CMD-CTRLSCH-NAME=Set Schedule
-#CMD-LOOKUPSCH-NAME=Lookup Schedule
-#CMD-DELAYCTRL-NAME=Program Delays
-#CMD-UPDATE-NAME=Update Status
-#CMD-QUERY-NAME=Query
-#CMD-ONDELAY-NAME=Set On Delay
-#CMD-OFFDELAY-NAME=Set Off Delay (0 if no delay)
-#CMD-SWCTRL-NAME=Switch control
-#CMD-KEY1DEF-NAME=Key1 Scene Function
-#CMD-KEY2DEF-NAME=Key2 Scene Function
-#CMD-KEY3DEF-NAME=Key3 Scene Function
-#MD-KEY4DEF-NAME=Key4 Scene Function
-#CMD-KEY1LDEF-NAME=Key1 Long Scene Function
-#CMD-KEY2LDEF-NAME=Key2 Long Scene Function
-#CMD-KEY3LDEF-NAME=Key3 Long Scene Function
-#CMD-KEY4LDEF-NAME=Key4 Long Scene Function
 
 CMDP-ondelay-NAME=On delay (0 if no delay)
 CMDP-offdelay-NAME=Off delay (0 if no delay)
 
-# common commands #############
 
-# Schedules
 ND-yoScheduleSec-NAME=Schedules
 ND-yoScheduleSec-ICON=GenericCtl
 ND-yoMScheduleSec-NAME=Schedules
@@ -69,7 +45,6 @@ ND-yoWMLkSchedule-ICON=GenericCtl
 ST-nlsschedule-GV12-NAME=Selected code/port
 ST-nlsschedule-GV13-NAME=Schedule Index
 ST-nlsschedule-GV14-NAME=Activated
-CMD-nlssoilsensor-SETCMD-NAME=Select Command (Alert) Action
 ST-nlsschedule-GV15-NAME=On Hour
 ST-nlsschedule-GV16-NAME=On Minute
 ST-nlsschedule-GV21-NAME=On Sec
@@ -108,24 +83,21 @@ CMD-nlswmschedule-CTRLSCH-NAME=Set Schedule
 CMD-nlswmschedule-LOOKUPSCH-NAME=Lookup Schedule
 CMD-nlswmschedule-DEFINESCH-NAME=Define Schedule
 CMD-nlswmschedule-UPDATE-NAME=Update Status
-LED-99=Unknown
 ST-nlswmvalveschedule-GV12-NAME=Reserved
 ST-nlswmvalveschedule-GV13-NAME=Schedule Index
 ST-nlswmvalveschedule-GV14-NAME=Activated
 ST-nlswmvalveschedule-GV15-NAME=On Hour
-runningmode-99=Unknown
 ST-nlswmvalveschedule-GV21-NAME=On Sec
 ST-nlswmvalveschedule-GV17-NAME=Off Hour
 ST-nlswmvalveschedule-GV18-NAME=Off Minute
 ST-nlswmvalveschedule-GV22-NAME=Off Sec
 ST-nlswmvalveschedule-GV19-NAME=Active Days
-COAlert-1=CO Alert
 CMD-nlswmvalveschedule-CTRLSCH-NAME=Set Schedule
 CMD-nlswmvalveschedule-LOOKUPSCH-NAME=Lookup Schedule
 CMD-nlswmvalveschedule-DEFINESCH-NAME=Define Schedule
 CMD-nlswmvalveschedule-UPDATE-NAME=Update Status
 
-BatteryAlert-1=Low Battery Alert
+
 ST-nlswmleakschedule-GV13-NAME=Schedule Index
 ST-nlswmleakschedule-GV14-NAME=Activated
 ST-nlswmleakschedule-GV15-NAME=On Hour
@@ -138,11 +110,8 @@ ST-nlswmleakschedule-GV19-NAME=Active Days
 ST-nlswmleakschedule-GV23-NAME=Total Schedules
 CMD-nlswmleakschedule-CTRLSCH-NAME=Set Schedule
 CMD-nlswmleakschedule-LOOKUPSCH-NAME=Lookup Schedule
-powerstate-99=Unknown 
 CMD-nlswmleakschedule-UPDATE-NAME=Update Status
 
-
-# YoLink Switch
 ND-yoswitch-NAME=YoLink Switch
 ND-yoswitch-ICON=Switch
 ND-yoswitchBat-NAME=YoLink Battery Switch
@@ -173,7 +142,6 @@ CMD-nlsswitch-SWCTRL-NAME=Switch control
 CMD-nlsswitch-SETATTRIB-NAME=LED control
 
 
-#YoLink Outlet
 ND-yooutlet-NAME=YoLink Outlet
 ND-yooutlet-ICON=Switch
 ND-yooutletPwr-NAME=YoLink Outlet
@@ -189,10 +157,6 @@ ST-nlsoutlet-GV6-NAME=High Load Alert
 ST-nlsoutlet-GV7-NAME=Low Load Alert
 ST-nlsoutlet-GV8-NAME=High Temperature Alert
 
-#ST-nlsoutlet-GV13-NAME=Schedule Index
-#ST-nlsoutlet-GV14-NAME=Activated
-#ST-nlsoutlet-GV15-NAME=On Hour
-#ST-nlsoutlet-GV16-NAME=On Minute
 ST-nlsoutlet-GV20-NAME=Connection State
 ST-nlsoutlet-GV30-NAME=Online State
 ST-nlsoutlet-TIME-NAME=Last device update
@@ -200,9 +164,6 @@ ST-nlsoutlet-TIME-NAME=Last device update
 CMD-nlsoutlet-DON-NAME=Switch On
 CMD-nlsoutlet-DOF-NAME=Switch Off
 CMD-nlsoutlet-DELAYCTRL-NAME=Program Delays
-#CMD-nlsoutlet-DEFINESCH-NAME=Define Schedule
-#CMD-nlsoutlet-CTRLSCH-NAME=Set Schedule
-#CMD-nlsoutlet-LOOKUPSCH-NAME=Lookup Schedule
 
 CMD-nlsoutlet-UPDATE-NAME=Update Status
 CMD-nlsoutlet-SWCTRL-NAME=Switch control
@@ -212,7 +173,6 @@ CMD-nlsoutlet-SWCTRL-NAME=Switch control
 ND-yomultiout-NAME=YoLink Outlet
 ND-yomultiout-ICON=Switch
 ST-nlsmultiout-ST-NAME=Node Server Status
-#ST-nlsmultiout-GV8-NAME=Device Online
 ST-nlsmultiout-GV12-NAME=Port
 ST-nlsmultiout-GV13-NAME=Schedule Index
 ST-nlsmultiout-GV14-NAME=Activated
@@ -473,7 +433,6 @@ ST-nlsspeakerh-GV2-NAME=Mute
 ST-nlsspeakerh-GV3-NAME=Tone Type
 ST-nlsspeakerh-GV4-NAME=Message
 ST-nlsspeakerh-GV5-NAME=Repeat
-#ST-nlsspeakerh-GV8-NAME=Device Online
 ST-nlsspeakerh-GV20-NAME=Connection State
 ST-nlsspeakerh-GV30-NAME=Online State
 ST-nlsspeakerh-TIME-NAME=Last device update
@@ -635,7 +594,6 @@ CMD-nlssmremote-NAME=Update Status
 ND-smremotekey-NAME=YoLink Smart Remoter
 ND-smremotekey-ICON=Input
 ST-nlssmkey-ST-NAME=Last Command
-#ST-nlssmkey-GV0-NAME=Last Command (Legacy)
 ST-nlssmkey-GV1-NAME=Short Press Command Type
 ST-nlssmkey-GV2-NAME=Long Press Type
 ST-nlssmkey-TIME-NAME=Last key press
@@ -694,7 +652,6 @@ ST-nlswatermeter-GV12-NAME=Valve Error Alarm
 ST-nlswatermeter-GV13-NAME=High Temp Alarm
 ST-nlswatermeter-GV14-NAME=Low Temp Alarm
 ST-nlswatermeter-GV16-NAME=Overrun time Limit
-#ST-nlswatermeter-GV10-NAME=Supply Mode
 ST-nlswatermeter-GV20-NAME=Connection State
 ST-nlswatermeter-GV22-NAME=Overrun Amount 24H Limit
 ST-nlswatermeter-GV23-NAME=Overrun Duration Once Limit
@@ -723,7 +680,6 @@ CMD-nlswatermeter-VOPEN-NAME=Open Valve
 CMD-nlswatermeter-VCLOSE-NAME=Close Valve
 CMD-nlswatermeter-SETATTRIB-NAME=Set Parameters
 CMD-nlswatermeter-UPDATE-NAME=Update Node
-#CMD-nlswatermeter-OFFDELAY-NAME=Prepare off delay
 
 ND-yowaterdept-NAME=YoLink Water Level Sensor
 ND-yowaterdept-ICON=Input
@@ -747,18 +703,11 @@ CMDP-waterHighAlarm-NAME=High Water Alarm (0-1000)
 
 ND-yosprinklerv2-NAME=YoLink Smart Sprinkler V2
 ND-yosprinklerv2-ICON=Irrigation
-#ND-yosprinklerv2G-NAME=YoLink Water Level Sensor
-#ND-yosprinklerv2G-ICON=Irrigation
 ST-nlssprinkler-NAME=Nodeserver Status
 ST-nlssprinkler-ST-NAME=Current State
-#ST-nlssprinkler-GV0-NAME=Water Running
 ST-nlssprinkler-GV1-NAME=Current No Water Alarm
-#ST-nlssprinkler-GV2-NAME=Water Mode Attrib (schedule/Manual)
-#ST-nlssprinkler-GV3-NAME=Water Amount Mode Attrib (Volume/Time)
-#ST-nlssprinkler-GV4-NAME=Water Amount Atttrib
 
 ST-nlssprinkler-GV5-NAME=Latest Operation
-#ST-nlssprinkler-GV6-NAME=Latest Mode used
 ST-nlssprinkler-GV7-NAME=Latest Water Method
 ST-nlssprinkler-GV8-NAME=Latest Water Amount target
 ST-nlssprinkler-GV9-NAME=Latest Water Alarm
@@ -1317,7 +1266,6 @@ sphtts-4=Message 5
 sphtts-5=mes77
 
 
-# Thermostat Node Definitions
 ND-yothermostat-NAME=YoLink Thermostat (C)
 ND-yothermostat-ICON=Thermostat
 ND-yothermostatf-NAME=YoLink Thermostat (F)
@@ -1327,7 +1275,6 @@ ND-yothermprop-ICON=Thermostat
 ND-yothermpropf-NAME=Thermostat Properties (F)
 ND-yothermpropf-ICON=Thermostat
 
-# Thermostat Status Names
 ST-nlsthermostat-ST-NAME=Temperature
 ST-nlsthermostat-CLIHCS-NAME=Running State
 ST-nlsthermostat-CLIHUM-NAME=Humidity
@@ -1362,7 +1309,6 @@ ST-nlsthermostatprop-GV16-NAME=Stage2 Threshold
 ST-nlsthermostatprop-GV17-NAME=Master Source
 
 
-# Thermostat Command Names
 CMD-nlsthermostat-UPDATE-NAME=Update
 CMD-nlsthermostat-SETHEATTEMP-NAME=Set Heat Setpoint
 CMD-nlsthermostat-SETCOOLTEMP-NAME=Set Cool Setpoint
@@ -1383,7 +1329,6 @@ CMD-nlsthermostatprop-SETMENULOCK-NAME=Set Menu Lock
 CMD-nlsthermostatprop-SETMASTER-NAME=Set Master Source
 
 
-# Thermostat Value NLS
 tstatmode-0=Off
 tstatmode-1=Heat
 tstatmode-2=Cool

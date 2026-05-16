@@ -216,6 +216,40 @@ def _find_orphan_nls_definitions(en_us_text_lines, nodedef_usage):
 
     return orphans
 
+
+def _find_duplicate_definition_keys(en_us_text_lines):
+    grouped = defaultdict(list)
+
+    for line_num, line in enumerate(en_us_text_lines, 1):
+        if _is_comment_or_blank(line):
+            continue
+
+        s = line.rstrip('\n')
+        if '=' not in s:
+            continue
+
+        key, value = s.split('=', 1)
+        key = key.strip()
+        if not key:
+            continue
+
+        grouped[key].append({'line': line_num, 'value': value})
+
+    duplicates = []
+    for key, entries in grouped.items():
+        if len(entries) > 1:
+            line_list = ', '.join(str(item['line']) for item in entries)
+            unique_values = sorted({item['value'] for item in entries})
+            duplicates.append({
+                'key': key,
+                'lines': line_list,
+                'count': len(entries),
+                'values': unique_values,
+                'is_conflict': len(unique_values) > 1,
+            })
+
+    return sorted(duplicates, key=lambda x: x['key'])
+
 # Extract editors used in nodedefs.xml
 used_editors = set()
 for st in nodedef_root.findall('.//st'):
@@ -328,13 +362,30 @@ else:
         print(f"  ⚠️  line {item['line']} [{item['type']}]: {item['entry']}")
 
 # Issue 8: Summary stats
+xml_duplicate_defs = _find_duplicate_definition_keys(en_us_lines)
+
+print("\n8. DOUBLE DEFINITIONS IN EN_US.TXT (same key appears more than once):")
+if not xml_duplicate_defs:
+    print("  ✓ No duplicate key definitions in en_us.txt")
+else:
+    print(f"  Found {len(xml_duplicate_defs)} duplicate key definitions:")
+    for dup in xml_duplicate_defs:
+        dup_type = 'conflicting values' if dup['is_conflict'] else 'same value repeated'
+        print(
+            f"  ⚠️  key='{dup['key']}' occurrences={dup['count']} "
+            f"({dup_type}) lines: {dup['lines']}"
+        )
+        if dup['is_conflict']:
+            print(f"      values: {' | '.join(dup['values'])}")
+
+# Issue 9: XML comment check
 xml_comment_hits = {
     'profile/nodedef/nodedefs.xml': _find_xml_comment_lines(nodedef_lines),
     'profile/editor/editors.xml': _find_xml_comment_lines(editor_lines),
     'profile/nls/en_us.txt': _find_xml_comment_lines(en_us_lines),
 }
 
-print("\n8. XML COMMENT CHECK (<!-- -->):")
+print("\n9. XML COMMENT CHECK (<!-- -->):")
 total_xml_comment_lines = sum(len(lines) for lines in xml_comment_hits.values())
 if total_xml_comment_lines == 0:
     print("  ✓ No XML-style comments found in setup files")
@@ -344,8 +395,8 @@ else:
             line_list = ', '.join(str(n) for n in lines)
             print(f"  ⚠️  {file_path}: XML-style comment markers on line(s): {line_list}")
 
-# Issue 9: Summary stats
-print("\n9. STATISTICS:")
+# Issue 10: Summary stats
+print("\n10. STATISTICS:")
 print(f"  Total editors defined: {len(defined_editors)}")
 print(f"  Total editors used: {len(used_editors)}")
 print(f"  Total NLS keys defined: {len(defined_nls_keys)}")
@@ -357,6 +408,7 @@ print(f"  Total ND key conflicts: {len(nd_conflicts)}")
 print(f"  Total duplicate ST name groups: {len(duplicate_st_names)}")
 print(f"  Total orphan duplicate ST entries: {len(orphan_duplicate_entries)}")
 print(f"  Total orphan ND/ST/CMD/CMDP entries: {len(orphan_nls_entries)}")
+print(f"  Total duplicate key definitions in en_us.txt: {len(xml_duplicate_defs)}")
 print(f"  Total XML-style comment marker lines: {total_xml_comment_lines}")
 
 print("\n" + "=" * 80)
@@ -375,5 +427,7 @@ if orphan_duplicate_entries:
     print("\n• Remove or correct orphan ST duplicate entries that do not map to nodedef <st> ids.")
 if orphan_nls_entries:
     print("\n• Remove or migrate orphan ND/ST/CMD/CMDP entries in profile/nls/en_us.txt.")
+if xml_duplicate_defs:
+    print("\n• Remove or consolidate duplicate key definitions in profile/nls/en_us.txt.")
 if total_xml_comment_lines:
     print("\n• Remove XML-style comments (`<!-- -->`) from setup files if they are not intentional.")
