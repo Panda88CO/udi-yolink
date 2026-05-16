@@ -38,15 +38,15 @@ class udiYoDimmer(udi_interface.Node):
             {'driver': 'GV4', 'value': 0, 'uom': 51},
             {'driver': 'GV5', 'value': 0, 'uom': 51},
             {'driver': 'GV9', 'value': 99, 'uom': 25},
-            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
-            {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
-            {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
-            {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
-            {'driver': 'GV21', 'value': 99, 'uom': 25}, #start sec             
-            {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
-            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
-            {'driver': 'GV22', 'value': 99, 'uom': 25}, #start sec             
-            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
+            #{'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
+            #{'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
+            #{'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
+            #{'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min
+            #{'driver': 'GV21', 'value': 99, 'uom': 25}, #start sec             
+            #{'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
+            #{'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
+            #{'driver': 'GV22', 'value': 99, 'uom': 25}, #start sec             
+            #{'driver': 'GV19', 'value': 0, 'uom': 25}, #days
                  
             {'driver': 'GV30', 'value': 99, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},            
