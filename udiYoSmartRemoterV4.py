@@ -431,6 +431,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.my_setDriver('ST', self.remote_type, UOM=25, force=True)
         self.my_setDriver('GV30', 0, UOM=25, force=True)
         self.yoSmartRemote  = YoLinkSmartRemoter(self.yoAccess, self.devInfo, self.updateStatus)
+        self._ensure_key_nodes_created()
         time.sleep(2)
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.yoSmartRemote.initNode()
@@ -444,7 +445,14 @@ class udiYoSmartRemoter(udi_interface.Node):
             tries += 1
         time.sleep(2)
         #self.my_setDriver('GV30', 1, UOM=25, force=True)
+        self._capture_press_baseline(self.yoSmartRemote)
+        self.sub_nodes_ready = True
+        self.start_done()
+
+    def _ensure_key_nodes_created(self):
         for key in range(0, self.nbr_keys):
+            if key in self.keys:
+                continue
             k_address =  self.address[4:14]+'key' + str(key)
             k_address = self.poly.getValidAddress(str(k_address))
 
@@ -461,9 +469,6 @@ class udiYoSmartRemoter(udi_interface.Node):
                 single_press_event_type=self._get_single_press_event_type_for_key(key),
             )
             self.adr_list.append(k_address)
-        self._capture_press_baseline(self.yoSmartRemote)
-        self.sub_nodes_ready = True
-        self.start_done()
 
     def stop (self):
         logging.info('Stop udiYoSmartRemoter')
