@@ -312,6 +312,15 @@ class udiYoThermostat(udi_interface.Node):
         if thermostat is not None:
             thermostat.refreshDevice()
 
+    def checkDataUpdate(self):
+        """Process pending MQTT updates during short poll."""
+        thermostat = self._get_thermostat('checkDataUpdate')
+        if thermostat is None:
+            return
+        has_data_updated = getattr(thermostat, 'data_updated', None)
+        if callable(has_data_updated) and has_data_updated():
+            self.updateData()
+
     def setLowTemp(self, command):
         """Set low temperature setpoint"""
         try:
@@ -558,6 +567,10 @@ class udiYoThermostatProperties(udi_interface.Node):
         yo = self._yo()
         if yo:
             yo.refreshDevice()
+
+    def checkDataUpdate(self):
+        """Child node data is updated by the parent thermostat node."""
+        return
 
     def setMinRuntime(self, command):
         try:
