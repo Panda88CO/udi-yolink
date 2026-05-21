@@ -162,6 +162,7 @@ class udiYoThermostat(udi_interface.Node):
                 time.sleep(0.5)            
             message_info = thermostat.get_message_type()
             message_type = message_info[0] if isinstance(message_info, (list, tuple)) and len(message_info) >= 1 else None
+            message_action = message_info[1] if isinstance(message_info, (list, tuple)) and len(message_info) >= 2 else None
             # Update timestamp
             unix_time = thermostat.get_report_time('time')
             self.my_setDriver('TIME', unix_time, 151)
@@ -288,11 +289,36 @@ class udiYoThermostat(udi_interface.Node):
                 if drRunning is not None:
                     self.my_setDriver('GV5', 1 if drRunning else 0, 25, type=message_type)
 
-                # Properties
+                # Properties can arrive either as data.properties (getState)
+                # or as flat keys under data for setProperties events/responses.
                 properties = thermostat.get_data('properties')
                 if not isinstance(properties, dict):
                     properties = thermostat.get_data('properties', 'state')
-                logging.debug(f'Parsing properties data: {properties}')
+
+                if not isinstance(properties, dict):
+                    property_keys = [
+                        'minRuntime',
+                        'coolLimit',
+                        'heatLimit',
+                        'mute',
+                        'menuLock',
+                        'auxStandby',
+                        'auxMaxSpan',
+                        'auxThreshold',
+                        'stage2Standby',
+                        'stage2MaxSpan',
+                        'stage2Threshold',
+                        'master',
+                    ]
+                    flat_properties = {}
+                    for prop_key in property_keys:
+                        prop_val = thermostat.get_data(prop_key)
+                        if prop_val is not None:
+                            flat_properties[prop_key] = prop_val
+                    if flat_properties:
+                        properties = flat_properties
+
+                logging.debug(f'Parsing properties data ({message_action}): {properties}')
                 if properties and isinstance(properties, dict) and self.properties_node is not None:
                     self.properties_node.updateProperties(properties, message_type)
 

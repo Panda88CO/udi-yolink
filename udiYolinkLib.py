@@ -212,7 +212,7 @@ def my_setDriver(self, key, value, UOM=None, force=None, type=None):
                                 value = value + 3
                         except Exception as e:
                             logging.error('Local connection - yolink class not ready - continue : {}'.format(e))
-                    if self.node:
+                    if getattr(self, 'node', None) is not None:
                         if isinstance(UOM, int):
                             self.node.setDriver(key, value, True, force, uom=UOM)
                         else:
@@ -222,7 +222,7 @@ def my_setDriver(self, key, value, UOM=None, force=None, type=None):
 
         except ValueError: #A non number was passed 
             logging.error('Non numeric value passed to my_setDriver - setting 99 ')
-            if self.node:
+            if getattr(self, 'node', None) is not None:
                 self.node.setDriver(key, 99, True, True, 25)
         
 
