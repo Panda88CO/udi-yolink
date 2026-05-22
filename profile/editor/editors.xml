@@ -35,14 +35,14 @@
     <range uom="25" subset="98,99" nls="wlstate" />
   </editor>
     <editor id="celsiusSet">
-    <range uom="4" min="-40" max="105" prec="1" />
+    <range uom="4" min="5" max="38" prec="0" />
   </editor>
   <editor id="farenheit">
     <range uom="17" min="-40" max="221" prec="1" />
     <range uom="25" subset="98,99" nls="wlstate" />
   </editor>
     <editor id="farenheitSet">
-    <range uom="17" min="-40" max="221" prec="1" />
+    <range uom="17" min="40" max="100" prec="0" />
   </editor>
   <editor id="humidity">
     <range uom="51" min="0" max="100" prec="1" />
