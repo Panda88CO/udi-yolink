@@ -290,9 +290,9 @@ CMD-nlstsens-SETCMD-NAME=Select Command (Alert) Action
 CMD-nlstsens-UPDATE-NAME=Update Status
 
 ND-yosoilsensor-NAME=YoLink Soil Sensor
-ND-yosoilsensor-ICON=Sensor
+ND-yosoilsensor-ICON=Weather
 ND-yosoilsensorF-NAME=YoLink Soil Sensor
-ND-yosoilsensorF-ICON=Sensor
+ND-yosoilsensorF-ICON=Weather
 
 ST-nlssoilsensor-ST-NAME=Soil Conductivity (mS/cm)
 ST-nlssoilsensor-CLITEMP-NAME=Sensor Temperature
@@ -332,7 +332,7 @@ CMD-nlsgarage-TOGGLE-NAME=Toggle Door
 
 
 ND-yodoorsens-NAME=YoLink Door Sensor
-ND-yodoorsens-ICON=Input
+ND-yodoorsens-ICON=DoorLock
 ST-nlsdoorsens-ST-NAME=Door State
 ST-nlsdoorsens-GV0-NAME=Door State (Legacy)
 ST-nlsdoorsens-GV1-NAME=Sensor Battery Level
@@ -364,9 +364,9 @@ CMD-nlsmotionsens-DOF-NAME=No Motion
 CMD-nlsmotionsens-UPDATE-NAME=Update Status
 
 ND-yoleaksens-NAME=YoLink Water Sensor
-ND-yoleaksens-ICON=Input
+ND-yoleaksens-ICON=Irrigation
 ND-yoleaksensF-NAME=YoLink Water Sensor
-ND-yoleaksensF-ICON=Input
+ND-yoleaksensF-ICON=Irrigation
 ST-nlsleaksens-ST-NAME=Water State
 ST-nlsleaksens-GV0-NAME=Water State (Legacy)
 ST-nlsleaksens-GV2-NAME=Command Setting
@@ -408,7 +408,7 @@ CMD-nlsvibrasens-DOF-NAME=Normal
 CMD-nlsvibrasens-UPDATE-NAME=Update Status
 
 ND-yohub-NAME=YoLink Hub
-ND-yohub-ICON=Output
+ND-yohub-ICON=GenericCtl
 ST-nlshub-ST-NAME=Status
 ST-nlshub-GV20-NAME=Connection State
 ST-nlshub-GV30-NAME=Online State
@@ -416,7 +416,7 @@ ST-nlshub-TIME-NAME=Last device update
 CMD-nlshub-UPDATE-NAME=Update
 
 ND-yohubbat-NAME=YoLink Hub w Battery
-ND-yohubbat-ICON=Output
+ND-yohubbat-ICON=GenericCtl
 ST-nlshubbat-ST-NAME=Supply Status
 ST-nlshubbat-GV0-NAME=Battery Status
 ST-nlshubbat-GV20-NAME=Connection State
@@ -425,7 +425,7 @@ ST-nlshubbat-TIME-NAME=Last device update
 CMD-nlshubbat-UPDATE-NAME=Update
 
 ND-yospeakerh-NAME=YoLink Speaker Hub
-ND-yospeakerh-ICON=Output
+ND-yospeakerh-ICON=GenericCtl
 ST-nlsspeakerh-ST-NAME=Nodeserver Status
 ST-nlsspeakerh-GV0-NAME=Speaker volume
 ST-nlsspeakerh-GV1-NAME=Command Beep
@@ -575,9 +575,9 @@ soundlevel-98=No Support
 soundlevel-99=Unknown
 
 ND-yosmremote-NAME=YoLink Smart Remoter
-ND-yosmremote-ICON=Input
+ND-yosmremote-ICON=Output
 ND-yosmremoteF-NAME=YoLink Smart Remoter
-ND-yosmremoteF-ICON=Input
+ND-yosmremoteF-ICON=Output
 ST-nlssmremote-ST-NAME=Remote Type
 ST-nlssmremote-GV3-NAME=Battery Level
 ST-nlssmremote-GV20-NAME=Connection State
@@ -587,7 +587,7 @@ CMD-nlssmremote-NAME=Update Status
 
 
 ND-smremotekey-NAME=YoLink Smart Remoter
-ND-smremotekey-ICON=Input
+ND-smremotekey-ICON=Output
 ST-nlssmkey-ST-NAME=Last Command
 ST-nlssmkey-GV1-NAME=Short Press Command Type
 ST-nlssmkey-GV2-NAME=Long Press Type
@@ -596,7 +596,7 @@ CMD-nlssmkey-KEYPRESS-NAME=Short Press Command Type
 CMD-nlssmkey-KEYLPRESS-NAME=Long Press Command Type
 
 ND-smremotekeydual-NAME=YoLink Smart Remoter
-ND-smremotekeydual-ICON=Input
+ND-smremotekeydual-ICON=Output
 ST-nlssmkeydual-ST-NAME=Last Command
 ST-nlssmkeydual-GV1-NAME=Short Press Command Type
 ST-nlssmkeydual-GV2-NAME=Long Press Command Type
@@ -605,7 +605,7 @@ CMD-nlssmkeydual-KEYPRESS-NAME=Short Press Command
 CMD-nlssmkeydual-KEYLPRESS-NAME=Long Press Command
 
 ND-smremotekeysingle-NAME=YoLink Smart Remoter
-ND-smremotekeysingle-ICON=Input
+ND-smremotekeysingle-ICON=Output
 ST-nlssmkeysingle-ST-NAME=Last Command
 ST-nlssmkeysingle-GV1-NAME=Press Command
 ST-nlssmkeysingle-TIME-NAME=Last key press
@@ -614,21 +614,21 @@ CMD-nlssmkey-NAME=Update Status
 
 
 ND-yowatermeterOnly-NAME=YoLink Water Meter
-ND-yowatermeterOnly-ICON=PulseCounter
+ND-yowatermeterOnly-ICON=Irrigation
 ND-yowatermeterOnlyF-NAME=YoLink Water Meter 
-ND-yowatermeterOnlyF-ICON=PulseCounter
+ND-yowatermeterOnlyF-ICON=Irrigation
 ND-yowatermeterCtrl-NAME=YoLink Water Meter Controller
-ND-yowatermeterCtrl-ICON=PulseCounter
+ND-yowatermeterCtrl-ICON=Irrigation
 
 
 ND-yowatermeterMulti-NAME=YoLink Water Meter Multi Controller
-ND-yowatermeterMulti-ICON=PulseCounter
+ND-yowatermeterMulti-ICON=Irrigation
 ND-yowatermeterSub-NAME=YoLink Water Meter Sub Controller
-ND-yowatermeterSub-ICON=PulseCounter
+ND-yowatermeterSub-ICON=Irrigation
 ND-yowatermeterSubL-NAME=YoLink Water Meter Sub Controller
-ND-yowatermeterSubL-ICON=PulseCounter
+ND-yowatermeterSubL-ICON=Irrigation
 ND-yowatermeterSubG-NAME=YoLink Water Meter Sub Controller
-ND-yowatermeterSubG-ICON=PulseCounter
+ND-yowatermeterSubG-ICON=Irrigation
 
 
 ST-nlswatermeter-ST-NAME=Water Running
@@ -677,7 +677,7 @@ CMD-nlswatermeter-SETATTRIB-NAME=Set Parameters
 CMD-nlswatermeter-UPDATE-NAME=Update Node
 
 ND-yowaterdept-NAME=YoLink Water Level Sensor
-ND-yowaterdept-ICON=Input
+ND-yowaterdept-ICON=Irrigation
 ST-nlswaterdept-NAME=Nodeserver Status
 ST-nlswaterdept-ST-NAME=Water Level (0-1000)
 ST-nlswaterdept-GV0-NAME=Water Level (Legacy)
