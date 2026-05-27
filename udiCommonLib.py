@@ -59,6 +59,9 @@ from yolink_logging import resolve_log_level
 
 
 NODE_READY_POLL_SECONDS = 0.2
+SHORT_POLL_BATCH_SIZE = 8
+LONG_POLL_BATCH_SIZE = 4
+POLL_INTER_NODE_DELAY_SECONDS = 0.05
 
 
 def _resolve_node_ready_poll_seconds(self):
@@ -79,6 +82,83 @@ def _resolve_node_ready_poll_seconds(self):
     if poll_seconds > 2.0:
         return 2.0
     return poll_seconds
+
+
+def _resolve_poll_batch_size(self, poll_name, default_value):
+    attr_name = f'{poll_name}_poll_batch_size'
+    configured_value = getattr(self, attr_name, default_value)
+    try:
+        batch_size = int(configured_value)
+    except (TypeError, ValueError):
+        logging.warning(
+            'Invalid %s=%s, using default %s',
+            attr_name,
+            configured_value,
+            default_value,
+        )
+        return default_value
+
+    if batch_size < 1:
+        return 1
+    if batch_size > 200:
+        return 200
+    return batch_size
+
+
+def _resolve_poll_inter_node_delay_seconds(self):
+    configured_value = getattr(
+        self,
+        'poll_inter_node_delay_seconds',
+        POLL_INTER_NODE_DELAY_SECONDS,
+    )
+    try:
+        poll_delay = float(configured_value)
+    except (TypeError, ValueError):
+        logging.warning(
+            'Invalid poll_inter_node_delay_seconds=%s, using default %.3f',
+            configured_value,
+            POLL_INTER_NODE_DELAY_SECONDS,
+        )
+        return POLL_INTER_NODE_DELAY_SECONDS
+
+    if poll_delay < 0:
+        return 0.0
+    if poll_delay > 2.0:
+        return 2.0
+    return poll_delay
+
+
+def _snapshot_pollable_addresses(self):
+    yolink_nodes = getattr(self, 'yolink_nodes', {})
+    if not isinstance(yolink_nodes, dict):
+        return []
+    return [addr for addr in yolink_nodes.keys() if addr != 'setup']
+
+
+def _next_poll_addresses(self, addresses, cursor_attr, batch_size):
+    total = len(addresses)
+    if total == 0:
+        return []
+
+    try:
+        start = int(getattr(self, cursor_attr, 0)) % total
+    except (TypeError, ValueError):
+        start = 0
+
+    count = max(1, min(batch_size, total))
+    selected = [addresses[(start + index) % total] for index in range(count)]
+    setattr(self, cursor_attr, (start + count) % total)
+    return selected
+
+
+def _is_node_ready_for_poll(node, node_address, poll_name):
+    if hasattr(node, 'node_ready') and not node.node_ready:
+        logging.debug('{} deferred for {}: node_ready=False'.format(poll_name, node_address))
+        return False
+    if hasattr(node, 'configDone') and not node.configDone:
+        logging.debug('{} deferred for {}: configDone=False'.format(poll_name, node_address))
+        return False
+    return True
 
 
 
@@ -728,29 +808,31 @@ def systemPoll (self, polltype):
                     #logging.info('Updating device status')
                     
                     self.saveNodeNames()
-                    # Take a snapshot to avoid "dictionary changed size during iteration" errors
-                    # when child nodes are created during polling (e.g. udiYoSwitch creating udiRemoteKey)
-                    nodes_snapshot = list(self.yolink_nodes.keys())
-                    for nde in nodes_snapshot:
-                        if nde not in self.yolink_nodes:
-                            # Node was removed between snapshot and iteration
+                    poll_delay = _resolve_poll_inter_node_delay_seconds(self)
+                    batch_size = _resolve_poll_batch_size(self, 'long', LONG_POLL_BATCH_SIZE)
+                    nodes_snapshot = _snapshot_pollable_addresses(self)
+                    nodes_to_poll = _next_poll_addresses(
+                        self,
+                        nodes_snapshot,
+                        '_long_poll_cursor',
+                        batch_size,
+                    )
+
+                    for nde in nodes_to_poll:
+                        node = self.yolink_nodes.get(nde)
+                        if node is None:
                             continue
-                        if nde != 'setup':   # but not the controller node
-                            node = self.yolink_nodes[nde]
-                            # Defer poll execution until node initialization is complete
-                            if hasattr(node, 'node_ready') and not node.node_ready:
-                                logging.debug('longpoll deferred for {}: node_ready=False'.format(nde))
-                                continue
-                            if hasattr(node, 'configDone') and not node.configDone:
-                                logging.debug('longpoll deferred for {}: configDone=False'.format(nde))
-                                continue
-                            
-                            if hasattr(node, 'checkOnline'):
-                                node.checkOnline()
-                            if hasattr(node, 'checkNameSync'):
-                                node.checkNameSync()
-                            logging.debug('longpoll {}'.format(nde))
-                            time.sleep(5) # need to limit calls to 100 per  5 min - using 5 to allow other calls - updating is not critical
+                        if not _is_node_ready_for_poll(node, nde, 'longpoll'):
+                            continue
+
+                        if hasattr(node, 'checkOnline'):
+                            node.checkOnline()
+                        if hasattr(node, 'checkNameSync'):
+                            node.checkNameSync()
+                        logging.debug('longpoll {}'.format(nde))
+
+                        if poll_delay > 0:
+                            time.sleep(poll_delay)
                 except Exception as e:
                     logging.error('Exeption occcured during systemPoll : {}'.format(e))
                     #self.yoAccess = YoLinkInitPAC (self.uaid, self.secretKey)
@@ -759,26 +841,28 @@ def systemPoll (self, polltype):
             if 'shortPoll' in polltype:
                 self.heartbeat()
 
-                # Take a snapshot to avoid "dictionary changed size during iteration" errors
-                nodes_snapshot = list(self.yolink_nodes.keys())
-                for nde in nodes_snapshot:
-                    if nde not in self.yolink_nodes:
-                        # Node was removed between snapshot and iteration
+                poll_delay = _resolve_poll_inter_node_delay_seconds(self)
+                batch_size = _resolve_poll_batch_size(self, 'short', SHORT_POLL_BATCH_SIZE)
+                nodes_snapshot = _snapshot_pollable_addresses(self)
+                nodes_to_poll = _next_poll_addresses(
+                    self,
+                    nodes_snapshot,
+                    '_short_poll_cursor',
+                    batch_size,
+                )
+
+                for nde in nodes_to_poll:
+                    node = self.yolink_nodes.get(nde)
+                    if node is None:
                         continue
-                    if nde != 'setup':   # but not the controller node
-                        node = self.yolink_nodes[nde]
-                        # Defer poll execution until node initialization is complete
-                        if hasattr(node, 'node_ready') and not node.node_ready:
-                            logging.debug('shortpoll deferred for {}: node_ready=False'.format(nde))
-                            continue
-                        if hasattr(node, 'configDone') and not node.configDone:
-                            logging.debug('shortpoll deferred for {}: configDone=False'.format(nde))
-                            continue
-                        
-                        node.checkDataUpdate()
-                        logging.debug('shortpoll {}'.format(nde))
-                        # no API calls so no need to spread out 
-                        #time.sleep(node_ready_poll)  # need to limit calls to 100 per  5 min - using 4 to allow other calls
+                    if not _is_node_ready_for_poll(node, nde, 'shortpoll'):
+                        continue
+
+                    node.checkDataUpdate()
+                    logging.debug('shortpoll {}'.format(nde))
+
+                    if poll_delay > 0:
+                        time.sleep(poll_delay)
         #else:
         #    self.my_setDriver('ST', 0)
             
