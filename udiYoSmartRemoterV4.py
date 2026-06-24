@@ -553,6 +553,13 @@ class udiYoSmartRemoter(udi_interface.Node):
 
         key_mask = event_data.get('keyMask')
         press_type = event_data.get('type')
+
+        # Some Smart Remoter payloads include stale event snapshots with type=report.
+        # Treat those as non-press updates and ignore keyMask/type for command dispatch.
+        if isinstance(press_type, str) and press_type.lower() == 'report':
+            logging.debug('SmartRemoter (%s) ignoring stale report event payload: %s', self.address, event_data)
+            return None
+
         if not isinstance(key_mask, int) or not isinstance(press_type, str):
             return None
 
