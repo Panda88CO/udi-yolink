@@ -554,12 +554,6 @@ class udiYoSmartRemoter(udi_interface.Node):
         key_mask = event_data.get('keyMask')
         press_type = event_data.get('type')
 
-        # Some Smart Remoter payloads include stale event snapshots with type=report.
-        # Treat those as non-press updates and ignore keyMask/type for command dispatch.
-        if isinstance(press_type, str) and press_type.lower() == 'report':
-            logging.debug('SmartRemoter (%s) ignoring stale report event payload: %s', self.address, event_data)
-            return None
-
         if not isinstance(key_mask, int) or not isinstance(press_type, str):
             return None
 
@@ -592,6 +586,8 @@ class udiYoSmartRemoter(udi_interface.Node):
                 while not self.node_ready or not self.system_ready or not self.configDone:
                     time.sleep(0.5)
                 message_info = remote.get_message_type()
+                message_type = message_info[0] if isinstance(message_info, (list, tuple)) and len(message_info) >= 1 else None
+                message_action = message_info[1] if isinstance(message_info, (list, tuple)) and len(message_info) >= 2 else None
                 if remote.check_system_online():      
 
 
@@ -601,8 +597,12 @@ class udiYoSmartRemoter(udi_interface.Node):
                     if press_info is not None:
                         remote_key = press_info['remote_key']
 
-                        # Only send command for actual event messages, not status responses (getState)
-                        if message_info[0] == 'event' and press_info['signature'] != self._last_processed_press_signature:
+                        # Ignore stale SmartRemoter.Report payload snapshots that can carry old keyMask/type.
+                        if isinstance(message_action, str) and message_action.lower() == 'report':
+                            logging.debug('SmartRemoter (%s) ignoring keyMask/type from Report packet', self.address)
+
+                        # Only send command for non-report event messages.
+                        elif message_type == 'event' and press_info['signature'] != self._last_processed_press_signature:
                             self.keys[remote_key].send_command(press_info['press_type'])
                             self._last_processed_press_signature = press_info['signature']
                     if isinstance(self.remote_type, int):
