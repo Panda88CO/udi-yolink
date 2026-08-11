@@ -342,7 +342,7 @@ class YoLinkInitPAC(object):
             now = int(time.time())
             
             if yoAccess.token != None:
-                if now < yoAccess.token['expirationTime']:
+                if now < yoAccess.token.get('expirationTime', 0):
                     yoAccess.time_tracking('global')
                     response = requests.post( yoAccess.tokenURL,
                         data={"grant_type": "refresh_token",
