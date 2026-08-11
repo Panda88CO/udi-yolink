@@ -359,10 +359,13 @@ class YoLinkInitPAC(object):
                 )
                 logging.debug('Refresh response: %s', _response_log_summary(response))
                 if response.ok:
-                    yoAccess.token =  response.json()
+                    token_data = response.json()
+                    if 'access_token' not in token_data:
+                        logging.error(f'Auth failed from YoLink API: {token_data}')
+                        return False
+                    yoAccess.token = token_data
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
-
-                    return(True)
+                    return True
                 else:
                     logging.error('Was not able to refresh token')
                     return(False)
@@ -375,12 +378,16 @@ class YoLinkInitPAC(object):
                 )
                 logging.debug('Refresh response: %s', _response_log_summary(response))
                 if response.ok:
-                    yoAccess.token =  response.json()
+                    token_data = response.json()
+                    if 'access_token' not in token_data:
+                        logging.error(f'Auth failed from YoLink API: {token_data}')
+                        return False
+                    yoAccess.token = token_data
                     yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
-                    return(True)
+                    return True
                 else:
                     logging.error('Was not able to refresh token')
-                    return(False)       
+                    return False
 
 
 
