@@ -62,6 +62,8 @@ class udiYoSwitch(udi_interface.Node):
         self.n_queue = [] 
         self.last_state = ''
         self._last_reported_state = None
+        self._last_processed_press_signature = None
+        self._last_status_packet = None
         self.timer_update = 5
         self.timer_expires = 0
         self.onDelay = 0
@@ -141,6 +143,8 @@ class udiYoSwitch(udi_interface.Node):
             self.adr_list.append(k_address)
             logging.debug('Waiting for node to complete{}'.format(self.adr_list))
             #self.wait_for_node_done()
+        if self.nbr_keys > 0:
+            self._capture_press_baseline(self.yoSwitch)
         self.start_done()
 
     def create_schedule_nodes(self):
@@ -315,27 +319,89 @@ class udiYoSwitch(udi_interface.Node):
                     self.my_setDriver('GV20', 2)
 
                 if self.nbr_keys > 0:
-                    #logging.debug('updateData - event data {}'.format(event_data))
-                    if message_type in ['event']: 
-                        key_mask = switch.get_data('keyMask', 'event')
-                        press_type = switch.get_data('type', 'event')
-                        logging.debug('key_mask {} press_type {}'.format(key_mask, press_type))
-                        if isinstance(key_mask, int):
-                            remote_key = self.mask2key(key_mask)
-                            if isinstance(press_type, str):
-                                if  remote_key in self.keys:
-                                    self.keys[remote_key].send_command(press_type)
-                                    # Send command updates ISY variables and reports to ISY as needed.
+                    press_info = self._get_press_info(switch)
+                    if press_info is not None:
+                        remote_key = press_info['remote_key']
 
+                        # Ignore stale Switch.Report payload snapshots that can carry old keyMask/type.
+                        if isinstance(message_action, str) and message_action.lower() == 'report':
+                            logging.debug('Switch (%s) ignoring keyMask/type from Report packet', self.address)
 
+                        # Only send command for non-report event messages.
+                        elif message_type == 'event' and press_info['signature'] != self._last_processed_press_signature:
+                            self.keys[remote_key].send_command(press_info['press_type'])
+                            self._last_processed_press_signature = press_info['signature']
 
-                
+    def _extract_press_event(self, packet):
+        if not isinstance(packet, dict):
+            return None
 
+        data = packet.get('data')
+        if not isinstance(data, dict):
+            return None
+
+        event_data = data.get('event')
+        if isinstance(event_data, dict):
+            return event_data, packet.get('time'), packet.get('msgid')
+
+        state_data = data.get('state')
+        if isinstance(state_data, dict):
+            event_data = state_data.get('event')
+            if isinstance(event_data, dict):
+                return event_data, packet.get('time'), packet.get('msgid')
+
+        return None
+
+    def _get_press_info(self, switch):
+        signature_time = switch.lastUpdate() if switch is not None else None
+        signature_msgid = None
+
+        extracted = self._extract_press_event(self._last_status_packet)
+        if extracted is not None:
+            event_data, signature_time, signature_msgid = extracted
+        else:
+            event_data = switch.get_data('event')
+            if not isinstance(event_data, dict):
+                event_data = switch.get_data('event', 'state')
+            if not isinstance(event_data, dict):
+                event_data = {}
+
+        key_mask = event_data.get('keyMask') if isinstance(event_data, dict) else None
+        press_type = event_data.get('type') if isinstance(event_data, dict) else None
+
+        if key_mask is None and switch is not None:
+            key_mask = switch.get_data('keyMask', 'event')
+        if press_type is None and switch is not None:
+            press_type = switch.get_data('type', 'event')
+
+        if not isinstance(key_mask, int) or key_mask <= 0 or not isinstance(press_type, str):
+            return None
+
+        remote_key = self.mask2key(key_mask)
+        if not isinstance(remote_key, int) or remote_key not in self.keys:
+            return None
+
+        press = self.max_remote_keys if press_type == 'LongPress' else 0
+        signature = (signature_time, signature_msgid, key_mask, press_type)
+        return {
+            'remote_key': remote_key,
+            'press_type': press_type,
+            'press': press,
+            'signature': signature,
+        }
+
+    def _capture_press_baseline(self, switch):
+        if switch is None:
+            return
+        press_info = self._get_press_info(switch)
+        if press_info is not None:
+            self._last_processed_press_signature = press_info['signature']
 
     def updateStatus(self, data):
         logging.info('updateStatus - Switch')
         if self.yoSwitch is not None:
             with self._update_lock:
+                self._last_status_packet = data
                 self.yoSwitch.updateStatus(data)
             self.updateData()
  
