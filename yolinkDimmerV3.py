@@ -65,14 +65,13 @@ class YoLinkDim(YoLinkMQTTDevice):
     '''
 
     def get_attributes(yolink):
-        logging.debug('get_attributes')
-        yolink.setDeviceAttributes(None)
-        return()
+        logging.debug(f'{yolink.type} ({yolink.name}) - get_attributes: attributes already populated via getState; skipping redundant API call')
+        return ()
 
     def set_attributes(yolink, params):
         logging.debug(yolink.type+' - set_attributes {}'.format(params))
-        if params is None:
-            return(yolink.setDeviceAttributes(None))
+        if not params:
+            return ()
         data = {'params': {}}
         if isinstance(params, dict):
             data['params'].update(params)

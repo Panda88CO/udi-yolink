@@ -10,12 +10,15 @@ import unittest
 from unittest.mock import MagicMock, patch, call
 
 # Ensure mock dependencies exist if running in an environment without them installed
+from datetime import timezone
 for mod in [
     'dateutil', 'dateutil.tz', 'dateutil.parser',
     'requests', 'paho', 'paho.mqtt', 'paho.mqtt.client'
 ]:
     if mod not in sys.modules:
         sys.modules[mod] = MagicMock()
+sys.modules['dateutil.tz'].tzlocal = lambda: timezone.utc
+sys.modules['dateutil.tz'].tzutc = lambda: timezone.utc
 
 if 'udi_interface' not in sys.modules:
     mock_udi = MagicMock()
@@ -305,5 +308,71 @@ class TestSwitchCommands(TestUdiYoSwitchBase):
         self.mock_switch.refreshDevice.assert_called_once()
 
 
+class TestEventDrivenStartup(TestUdiYoSwitchBase):
+    """Tests the event-driven node start sequence (Phase 1 optimization)."""
+
+    def test_online_event_set_by_update_status(self):
+        """updateStatus signals _online_event upon packet arrival."""
+        node, poly, mock_switch = self.create_switch_node(model_name='YS5708')
+        self.assertFalse(node._online_event.is_set())
+
+        packet = {
+            'event': 'Switch.Report',
+            'time': 1000,
+            'msgid': 'msg_test',
+            'data': {'state': 'closed'}
+        }
+        node.updateStatus(packet)
+        self.assertTrue(node._online_event.is_set())
+
+    @patch('udiYoSwitchV4.YoLinkSwitch')
+    @patch('udiYoSwitchV4.udiRemoteKey')
+    def test_start_unblocks_immediately_when_online_event_signals(self, mock_key_cls, mock_yoswitch_cls):
+        """start() unblocks without sleep delay when _online_event is signaled."""
+        node, poly, _ = self.create_switch_node(model_name='YS5708')
+        mock_switch_instance = MagicMock()
+        mock_yoswitch_cls.return_value = mock_switch_instance
+
+        def simulate_mqtt_response():
+            node.updateStatus({'event': 'Switch.Report', 'data': {'state': 'open'}})
+        mock_switch_instance.initNode.side_effect = simulate_mqtt_response
+
+        with patch.object(node, 'my_setDriver'):
+            node.start()
+
+        mock_switch_instance.initNode.assert_called_once()
+        self.assertTrue(node._online_event.is_set())
+        mock_switch_instance.get_attributes.assert_called_once()
+        self.assertTrue(node.system_ready)
+
+    @patch('udiYoSwitchV4.YoLinkSwitch')
+    @patch('udiYoSwitchV4.udiRemoteKey')
+    def test_start_handles_timeout_gracefully(self, mock_key_cls, mock_yoswitch_cls):
+        """start() proceeds cleanly and marks device offline if _online_event times out."""
+        node, poly, _ = self.create_switch_node(model_name='YS5708')
+        mock_switch_instance = MagicMock()
+        mock_yoswitch_cls.return_value = mock_switch_instance
+
+        with patch.object(node._online_event, 'wait', return_value=False) as mock_wait:
+            with patch.object(node, 'my_setDriver') as mock_set_driver:
+                node.start()
+            mock_wait.assert_called_once_with(timeout=4.0)
+            mock_set_driver.assert_any_call('GV30', 0)
+            mock_set_driver.assert_any_call('GV20', 2)
+
+        mock_switch_instance.get_attributes.assert_called_once()
+        self.assertTrue(node.system_ready)
+
+    def test_yolink_switch_get_attributes_does_not_publish(self):
+        """YoLinkSwitch.get_attributes must not burn an API call by publishing empty packets."""
+        from yolinkSwitchV3 import YoLinkSwitch
+        dev_info = {'modelName': 'YS5708', 'type': 'Switch', 'name': 'TestSwitch', 'deviceId': 'd123', 'token': 'tok123'}
+        mock_access = MagicMock()
+        switch = YoLinkSwitch(mock_access, dev_info, MagicMock())
+        switch.get_attributes()
+        mock_access.publish_data.assert_not_called()
+
+
 if __name__ == '__main__':
     unittest.main()
+

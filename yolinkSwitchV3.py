@@ -37,34 +37,31 @@ class YoLinkSwitch(YoLinkMQTTDevice):
         yolink.updateCallbackStatus(data, False)
 
     def get_attributes(yolink):
-        logging.debug('get_attributes')
-        yolink.setDeviceAttributes(None)
-        return()
+        logging.debug(f'{yolink.type} ({yolink.name}) - get_attributes: attributes already populated via getState; skipping redundant API call')
+        return ()
 
     def set_attributes(yolink, params):
         logging.debug(yolink.type+' - set_attributes {}'.format(params))
-        if params is None:
-            return(yolink.setDeviceAttributes(None))
+        if not params:
+            return ()
         data = {'params': {}}
         if isinstance(params, dict):
             data['params'].update(params)
         return(yolink.setDeviceAttributes(data))
-    '''
+    def refreshDevice(yolink):
+        logging.debug(f'{yolink.type} ({yolink.name}) - refreshDevice')
+        methodStr = yolink.type + '.getState'
+        data = {
+            'method': methodStr,
+            'targetDevice': yolink.deviceInfo['deviceId'],
+            'token': yolink.deviceInfo['token'],
+            'params': {}
+        }
+        yolink.yoAccess.publish_data(data)
+
     def initNode(yolink):
-        yolink.refreshState()
-        time.sleep(2)
-        if not yolink.online:
-            logging.error('Switch not online')
-        #    yolink.refreshSchedules()
-        #else:
-            
-        #yolink.refreshFWversion()
-        #print(' YoLinkSW - finished intializing')
-    
-    
-    def getDelays(yolink):
-        return super().getDelays()
-    '''
+        yolink.refreshDevice()
+
 
     def setState(yolink, state):
         logging.debug(yolink.type+' - setState + {}'.format(state))

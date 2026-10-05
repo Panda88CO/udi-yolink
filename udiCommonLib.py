@@ -258,9 +258,6 @@ def addNodes (self, deviceList) -> list:
                     temp = udiYoBatteryHub(self.poly, address, address, name, dev_access, dev)
                 else:
                     temp = udiYoHub(self.poly, address, address, name, dev_access, dev)
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)
             elif dev['type'] in ['SpeakerHub']:
@@ -316,9 +313,6 @@ def addNodes (self, deviceList) -> list:
                 #        self.Parameters[index] = index
                 #    self.yoAccess.TtsMessages[nbr] = self.Parameters[index]
 
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))                        
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)  
 
@@ -332,72 +326,48 @@ def addNodes (self, deviceList) -> list:
                 else:
                     logging.info('Adding switch device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                     temp = udiYoSwitch(self.poly, address, address, name,  dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)
 
             elif dev['type'] in ['Dimmer']:
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoDimmer(self.poly, address, address, name,  dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                    
 
             elif dev['type'] in ['THSensor']:      
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoTHsensor(self.poly, address, address, name, dev_access, dev)
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)
         
             elif dev['type'] in ['MultiOutlet']:
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoMultiOutlet(self.poly, address, address, name, dev_access, dev)
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                     
                         
             elif dev['type'] in ['DoorSensor']:                 
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoDoorSensor(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                      
                         
             elif dev['type'] in ['Manipulator']:              
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoManipulator(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                      
                         
             elif dev['type'] in ['MotionSensor']:              
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoMotionSensor(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                      
 
             elif dev['type'] in  ['VibrationSensor']:                    
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoVibrationSensor(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                     
                         
@@ -408,109 +378,72 @@ def addNodes (self, deviceList) -> list:
                 #else:
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoOutlet(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                      
         
             elif dev['type'] in ['GarageDoor']:                 
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoGarageDoor(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                      
         
             elif dev['type'] in ['Finger']:                   
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoGarageFinger(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                                                       
 
             elif dev['type'] in ['Lock' ]:        
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                     
                 temp = udiYoLock(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                        
 
             elif dev['type'] in ['LockV2']:        
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                     
                 temp = udiYoLockV2(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)    
 
             elif dev['type'] == 'InfraredRemoter':           
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoInfraredRemoter(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)      
                                 
             elif dev['type'] in ['LeakSensor']:                 
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoLeakSensor(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)     
 
             elif dev['type'] in ['WaterDepthSensor']:   #  YS7905-UC           
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoWaterDept(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)     
 
             elif dev['type'] in ['COSmokeSensor']:                
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoCOSmokeSensor(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)       
 
             elif dev['type'] in ['PowerFailureAlarm']:                 
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoPowerFailSenor(self.poly, address, address, name, dev_access, dev )
-
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                  
 
             elif dev['type'] in ['SmartRemoter']:                    
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoSmartRemoter(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)
 
             elif dev['type'] in ['Siren']:                  
                 logging.info('Adding device {} ({}) as {}'.format( dev['name'], dev['type'], str(name) ))                                        
                 temp = udiYoSiren(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)
 
@@ -525,9 +458,6 @@ def addNodes (self, deviceList) -> list:
                 else:
                     logging.warning('Currently unsupported Water Meter Controller model: {} - {} - trying default '.format(model, dev['name'] ))
                     temp = udiYoWaterMeterController(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)     
 
@@ -537,9 +467,6 @@ def addNodes (self, deviceList) -> list:
                     temp = udiYoWaterMeterMulti(self.poly, address, address, name, dev_access, dev )
                 else: 
                     temp = udiYoWaterMeterMulti(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 while not getattr(temp, 'sub_nodes_ready', True):
                     logging.debug( 'Waiting for sub-nodes {}-{} to be ready'.format(dev['type'] , dev['name']))
                     time.sleep(node_ready_poll)
@@ -550,9 +477,6 @@ def addNodes (self, deviceList) -> list:
                 logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))
 
                 temp = udiYoSprinkler2(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)   
 
@@ -560,9 +484,6 @@ def addNodes (self, deviceList) -> list:
                 logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))
 
                 temp = udiYoThermostat(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)                            
 
@@ -570,9 +491,6 @@ def addNodes (self, deviceList) -> list:
                 logging.info('Adding device {} {} ({}) as {} -'.format( dev['name'], model, dev['type'], str(name) ))
 
                 temp = udiYoSoilSensor(self.poly, address, address, name, dev_access, dev )
-                while not temp.node_ready:
-                    logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))
-                    time.sleep(node_ready_poll)
                 for adr in temp.adr_list:
                     self.assigned_addresses.append(adr)    
 

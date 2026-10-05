@@ -58,6 +58,7 @@ class udiYoSwitch(udi_interface.Node):
         self.configDone = False
         self.system_ready=False
         self._update_lock = threading.Lock()
+        self._online_event = threading.Event()
         self.timer_cleared = True
         self.n_queue = [] 
         self.last_state = ''
@@ -113,25 +114,20 @@ class udiYoSwitch(udi_interface.Node):
     def start(self):
         logging.info('start - udiYoSwitch')
         while not self.node_ready or not self.configDone:
-            time.sleep(0.5)
+            time.sleep(0.1)
         # Create schedule node before device online check
 
-        self.yoSwitch  = YoLinkSwitch(self.yoAccess, self.devInfo, self.updateStatus)
-        time.sleep(3)
+        self.yoSwitch = YoLinkSwitch(self.yoAccess, self.devInfo, self.updateStatus)
         self.yoSwitch.initNode()
-        time.sleep(1)
-        tries = 1
-        while not self.yoSwitch.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoSwitch.refreshDevice()
-            tries += 1
-        time.sleep(2)
+        # Wait up to 4.0 seconds for MQTT response to arrive via updateStatus()
+        responded = self._online_event.wait(timeout=4.0)
+        if not responded:
+            logging.info(f'Switch {self.name} did not respond within 4.0s startup timeout; marking as offline/pending')
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('GV20', 2)
+
         self.yoSwitch.get_attributes()
         # deferred: refreshSchedules() will be invoked after startup to avoid API bursts
-        time.sleep(1)
-        #self.my_setDriver('GV30', 1)
         self.yoSwitch.delayTimerCallback(self.updateDelayCountdown, self.timer_update)
         for key in range(0, self.nbr_keys):
             logging.debug(' {}'.format(key))
@@ -235,7 +231,7 @@ class udiYoSwitch(udi_interface.Node):
     def updateData(self):
         if self.node is not None:
             while not self.node_ready or not self.system_ready or not self.configDone:
-                time.sleep(0.5)
+                time.sleep(0.1)
             switch = self._get_switch('updateData')
             if switch is None:
                 return
@@ -403,6 +399,8 @@ class udiYoSwitch(udi_interface.Node):
             with self._update_lock:
                 self._last_status_packet = data
                 self.yoSwitch.updateStatus(data)
+            if not self._online_event.is_set():
+                self._online_event.set()
             self.updateData()
  
     def set_switch_on(self, command = None):
