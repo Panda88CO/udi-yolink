@@ -28,7 +28,8 @@ if 'udi_interface' not in sys.modules:
             self.primary = primary
             self.address = address
             self.name = name
-            self.drivers = []
+            self.drivers = [dict(d) for d in getattr(self.__class__, 'drivers', [])]
+            self.node = MagicMock()
         def setDriver(self, *args, **kwargs):
             pass
         def reportCmd(self, *args, **kwargs):
@@ -371,6 +372,100 @@ class TestEventDrivenStartup(TestUdiYoSwitchBase):
         switch = YoLinkSwitch(mock_access, dev_info, MagicMock())
         switch.get_attributes()
         mock_access.publish_data.assert_not_called()
+
+
+class TestTimeDriverValidation(TestUdiYoSwitchBase):
+    """Tests TIME driver updates: only valid telemetry updates TIME, error/offline/empty packets are rejected."""
+
+    def setUp(self):
+        self.node, self.poly, self.mock_switch = self.create_switch_node(model_name='YS5708')
+        self.mock_switch.get_message_type.return_value = ('event', 'Report')
+
+    def test_time_driver_default_is_zero(self):
+        """TIME driver must be initialized to 0 at node creation, not host boot time."""
+        time_driver = next((item for item in self.node.drivers if item.get('driver') == 'TIME'), None)
+        self.assertIsNotNone(time_driver)
+        self.assertEqual(time_driver['value'], 0)
+
+    def test_time_driver_not_updated_when_offline(self):
+        """When device is offline, TIME driver must NEVER be updated."""
+        self.mock_switch.check_system_online.return_value = False
+        self.mock_switch.get_report_time.return_value = 1782388800
+        with patch.object(self.node, 'my_setDriver') as mock_set_driver:
+            self.node.updateData()
+            time_calls = [c for c in mock_set_driver.call_args_list if c[0][0] == 'TIME']
+            self.assertEqual(len(time_calls), 0)
+
+    def test_time_driver_not_updated_on_error_code(self):
+        """When an error packet arrives (e.g. 020401 Busy), TIME must NOT be updated."""
+        self.mock_switch.check_system_online.return_value = False
+        self.mock_switch.data = {'code': '020401', 'desc': 'Service busy', 'time': 1782388800000}
+        self.mock_switch.get_report_time.return_value = None
+        with patch.object(self.node, 'my_setDriver') as mock_set_driver:
+            self.node.updateData()
+            time_calls = [c for c in mock_set_driver.call_args_list if c[0][0] == 'TIME']
+            self.assertEqual(len(time_calls), 0)
+
+    def test_time_driver_not_updated_on_empty_data(self):
+        """When emptyData is flagged, TIME must NOT be updated."""
+        self.mock_switch.check_system_online.return_value = True
+        self.mock_switch.data = {'code': '000000', 'emptyData': True}
+        self.mock_switch.get_report_time.return_value = None
+        with patch.object(self.node, 'my_setDriver') as mock_set_driver:
+            self.node.updateData()
+            time_calls = [c for c in mock_set_driver.call_args_list if c[0][0] == 'TIME']
+            self.assertEqual(len(time_calls), 0)
+
+    def test_time_driver_updated_only_on_valid_telemetry(self):
+        """When device is online and valid telemetry with reportAt arrives, TIME is updated."""
+        self.mock_switch.check_system_online.return_value = True
+        self.mock_switch.data = {'code': '000000', 'data': {'state': 'open', 'reportAt': '2026-06-25T12:00:00.000Z'}}
+        self.mock_switch.get_report_time.return_value = 1782388800
+        self.mock_switch.get_data.side_effect = lambda *args: 'open' if args[0] == 'state' else None
+        with patch.object(self.node, 'my_setDriver') as mock_set_driver:
+            self.node.updateData()
+            mock_set_driver.assert_any_call('TIME', 1782388800, 151)
+
+    def test_my_set_driver_central_guard_rejects_none_and_non_positive_time(self):
+        """my_setDriver central guard must reject None, 0, or negative TIME values."""
+        self.node.node.setDriver = MagicMock()
+        self.node.my_setDriver('TIME', None, 151)
+        self.node.node.setDriver.assert_not_called()
+        self.node.my_setDriver('TIME', 0, 151)
+        self.node.node.setDriver.assert_not_called()
+        self.node.my_setDriver('TIME', -100, 151)
+        self.node.node.setDriver.assert_not_called()
+
+        # Valid positive epoch updates successfully
+        self.node.my_setDriver('TIME', 1782388800, 151)
+        self.node.node.setDriver.assert_called_once_with('TIME', 1782388800, True, False, uom=151)
+
+    def test_yolink_mqtt_class_time_and_online_guards(self):
+        """Test yolink_mqtt_classV4 error code handling, check_system_online, and lastUpdate."""
+        from yolink_mqtt_classV4 import YoLinkMQTTDevice
+        dev = YoLinkMQTTDevice.__new__(YoLinkMQTTDevice)
+        dev.type = 'Switch'
+        dev.name = 'Test'
+        dev.dData = 'data'
+        dev.online = True
+        dev.messageTime = 'time'
+        dev.lastUpd = 'lastUpdTime'
+        dev.deviceInfo = {'name': 'Test', 'deviceId': 'd123'}
+        dev._lastOfflineLogSig = None
+        dev._lastOfflineLogTime = 0
+        dev.offlineLogThrottleSec = 300
+
+        # Error code 020401 (busy) -> check_system_online returns False
+        dev.data = {'code': '020401', 'desc': 'Service busy', 'time': 1782388800000}
+        self.assertFalse(dev.check_system_online())
+        self.assertEqual(dev.lastUpdate(), 0)
+        self.assertIsNone(dev.get_report_time('reportAt'))
+
+        # Empty data -> check_system_online returns False
+        dev.data = {'code': '000000', 'emptyData': True, 'time': 1782388800000}
+        self.assertFalse(dev.check_system_online())
+        self.assertEqual(dev.lastUpdate(), 0)
+        self.assertIsNone(dev.get_report_time('reportAt'))
 
 
 if __name__ == '__main__':

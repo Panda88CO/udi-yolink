@@ -305,6 +305,14 @@ class YoLinkMQTTDevice(object):
     def lastUpdate(yolink):
         logging.debug(f'{yolink.type} ({yolink.name}) - Checking last update')
         logging.debug(f'{yolink.type} ({yolink.name}) - Data: {yolink.data}')
+        if not getattr(yolink, 'online', True):
+            return 0
+        if isinstance(yolink.data, dict):
+            code = yolink.data.get('code')
+            if code is not None and code != '000000':
+                return 0
+            if yolink.data.get('emptyData'):
+                return 0
         if 'stateChangedAt' in yolink.data.get(yolink.dData, {}):
             logging.debug(f'{yolink.type} ({yolink.name}) - lastUpdate stateChangedAt {yolink.data.get(yolink.dData, {})["stateChangedAt"]}')
             return(yolink.unix_time_seconds(yolink.data.get(yolink.dData, {})['stateChangedAt']))
@@ -374,8 +382,8 @@ class YoLinkMQTTDevice(object):
         if 'code' in yolink.data:
             #logging.debug('code selected')
             if yolink.data['code'] == '000000':
-                    yolink.online = True
-            elif yolink.data['code'].find('00020') == 0: # Offline
+                yolink.online = not yolink.data.get('emptyData', False)
+            else:
                 yolink.online = False
         elif 'event' in yolink.data:
             #logging.debug('event selected')
@@ -757,13 +765,13 @@ class YoLinkMQTTDevice(object):
         if 'code' in dataPacket:
             logging.debug('code selected')
             if dataPacket['code'] == '000000':
-                    yolink.online = True
-            elif dataPacket['code'].find('00020') == 0: # Offline
+                yolink.online = not dataPacket.get('emptyData', False)
+            elif dataPacket['code'] == '010301': # need to add a wait
                 yolink.online = False
-            elif  dataPacket['code'] == '010301': # need to add a wait
-                yolink.online = True 
-                yolink.suspended= True
+                yolink.suspended = True
                 time.sleep(1)
+            else:
+                yolink.online = False
 
         elif 'event' in dataPacket:
             logging.debug('event selected')
@@ -1439,12 +1447,28 @@ class YoLinkMQTTDevice(object):
         return results[0] if results else None
     
     def _get_report_time(yolink):
+        if not getattr(yolink, 'online', True):
+            return None
+        if isinstance(yolink.data, dict):
+            code = yolink.data.get('code')
+            if code is not None and code != '000000':
+                return None
+            if yolink.data.get('emptyData'):
+                return None
         if 'report_time' in yolink.data:
             return(yolink.data['report_time'])
         else:
             return(None)
 
     def get_report_time(yolink,  target_str=None):
+        if not getattr(yolink, 'online', True):
+            return None
+        if isinstance(yolink.data, dict):
+            code = yolink.data.get('code')
+            if code is not None and code != '000000':
+                return None
+            if yolink.data.get('emptyData'):
+                return None
         time_str = yolink.get_data(target_str)
         logging.debug('Getting report time for target_str: {}'.format(target_str))
         if isinstance(time_str, str):
@@ -1468,7 +1492,7 @@ class YoLinkMQTTDevice(object):
         # If not found or not valid, fall back to lastUpdate logic
         try:
             last_update = yolink.lastUpdate()
-            if last_update:
+            if last_update and last_update > 0:
                 return yolink.unix_time_seconds(last_update)
         except Exception as e:
             logging.debug(f'get_report_time: lastUpdate fallback failed: {e}')

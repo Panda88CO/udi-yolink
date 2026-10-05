@@ -41,7 +41,7 @@ class udiYoSwitch(udi_interface.Node):
             {'driver': 'GV9', 'value': 99, 'uom': 25},
             {'driver': 'GV20', 'value': 99, 'uom': 25},                          
             {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},        
+            {'driver': 'TIME', 'value': 0, 'uom': 151},        
             ]
 
 
@@ -246,11 +246,14 @@ class udiYoSwitch(udi_interface.Node):
             else:            
                 
                 logging.debug('updateData - message type: {}'.format(message_type))
-                unix_time = switch.get_report_time('reportAt')
-                self.my_setDriver('TIME', unix_time, 151)
 
                 if switch.check_system_online():
-                    self.my_setDriver('GV30', 1)                    
+                    self.my_setDriver('GV30', 1)
+                    unix_time = switch.get_report_time('reportAt')
+                    data_code = switch.data.get('code') if isinstance(switch.data, dict) else None
+                    is_valid = data_code in [None, '000000'] and not (isinstance(switch.data, dict) and switch.data.get('emptyData', False))
+                    if is_valid and unix_time is not None and isinstance(unix_time, (int, float)) and unix_time > 0:
+                        self.my_setDriver('TIME', int(unix_time), 151)                    
                     state = switch.get_data('state')
                     if not isinstance(state, str) and isinstance(self.last_state, str):
                         # Battery devices sometimes publish partial state payloads; keep last valid state.

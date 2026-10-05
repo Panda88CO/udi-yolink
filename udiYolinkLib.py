@@ -195,6 +195,10 @@ def my_setDriver(self, key, value, UOM=None, force=None, type=None):
         logging.debug(f'my_setDriver : {key} {value} {UOM} {type}')
         try:
             if any(item.get('driver') == key for item in self.drivers):
+                if key == 'TIME':
+                    if value is None or not isinstance(value, (int, float)) or value <= 0:
+                        logging.debug(f'my_setDriver: ignoring invalid or non-positive TIME value: {value}')
+                        return
                 if force is None:
                     if type in ['method']: #methods are forced so force update of data even if not changed
                         force = True  
