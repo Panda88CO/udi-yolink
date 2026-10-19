@@ -62,8 +62,6 @@ class udiYoMotionSensor(udi_interface.Node):
         self.devInfo =  deviceInfo
 
         self.temp_unit = self.yoAccess.get_temp_unit()           
-        if self.temp_unit == 1:
-            self.id = 'yomotionsensF'
 
         self.yoMotionsSensor  = None
         self.node_ready = False

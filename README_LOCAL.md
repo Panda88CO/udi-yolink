@@ -36,12 +36,14 @@ MODE
     hybrid - operates in both local and cloud modes - This is the default if you have the YoLink local hub (YS1606).
     cloud - operates like the YoLink node (separate node) - only uses cloud access/control for devices.
 
-UAID/SecretKey
-    Credentials need to be added to configuration in the YoLink node server under PG3. In the YoLink app, go to Settings->Account->Advanced Settings->User Access Credentials and copy UAID and SecretKey (alternative path in the app is Profile->Advanced Settings->User Access Credentials).
-    It is possible to get credentials for each home that is defined, but the node server can only handle one of them currently.
-    
-    Enter both UAID and SecretKey under configuration in the node in PG#'s browser page (scroll down if you do not see the fields) and then restart. Sometimes it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find a pattern).
-    Sometimes a reboot of the ISY is required to make the node server show up correctly.
+UAID / SECRET_KEY (needed for cloud or hybrid mode)
+    Credentials need to be added to configuration in the YoLink node server under PG3:
+    1. In the YoLink app, ensure your target Home is selected at the top.
+    2. Tap the Menu icon (☰) or Settings -> Account -> Advanced Settings -> User Access Credentials.
+    3. Tap '+' to create credentials if none exist, or tap the existing entry.
+    4. Copy UAID and SecretKey.
+    5. In PG3/PG3x configuration, set UAID and SECRET_KEY (no extra spaces).
+    Note: YoLink credentials are scoped per home; each home requires its own credentials and separate node server instance.
 
 LOCAL_CLIENT_ID, LOCAL_CLIENT_SECRET (needed for local or hybrid mode)
     These can only be obtained from the YoLink local hub.

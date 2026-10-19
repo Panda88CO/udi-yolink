@@ -57,8 +57,6 @@ class udiYoVibrationSensor(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo =  deviceInfo
         self.temp_unit = self.yoAccess.get_temp_unit()
-        if self.temp_unit == 1:
-            self.id = 'yovibrasensF'
         self.yoVibrationSensor  = None
         self.node_ready = False
         self.configDone = False

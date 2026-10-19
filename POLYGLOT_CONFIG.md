@@ -27,13 +27,49 @@
     Coded in Python 3 - MIT license.
 
 ## Installation
-    Credentials need to be added to configuration. In the YoLink app, go to Settings->Account->Advanced Settings->User Access Credentials and copy UAID and SecretKey (alternative path in the app is Profile->Advanced Settings->User Access Credentials). It is also possible to set the temp unit (C/F/K).
 
-    Note: it is possible to create more than 1 home in the app - each home will have its own credentials. If more than one home is to be supported, a separate node server must be used for each home.
+### How to Obtain Credentials from the YoLink App
 
-    Enter both UAID and SecretKey under YoLink node (PG3) configuration in the browser (scroll down to see fields), then restart. Sometimes it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find a pattern). Note: if devices are offline when restarting, they will get removed (they will stay if offline during normal operation).
+To connect the node server to your YoLink account, you need your **UAID** and **SECRET_KEY** (User Access Credentials):
 
-    SpeakerHub requires the desired sentences to be input in config (up to 10 are supported). You will need to reboot the ISY after running the node server for this to take effect (there is no way to update these while ISY is running).
+1. **Open the YoLink Mobile App** (iOS or Android).
+2. **Verify Active Home**:
+   - Check the active Home name displayed at the top of the app.
+   - If you have multiple homes, tap the home name to switch to the home you want to control.
+   - *Note*: YoLink credentials are scoped per home. If you want to control devices in multiple homes, generate credentials for each and run a separate node server instance for each home.
+3. **Navigate to User Access Credentials**:
+   - Tap the **Menu icon** (`☰` in the top-left corner) or tap the **Profile / Settings** icon.
+   - Tap **Settings** -> **Account** (or tap your account avatar/email address).
+   - Tap **Advanced Settings**.
+   - Tap **User Access Credentials**.
+   *(Alternative path in some app versions: Profile tab -> Advanced Settings -> User Access Credentials)*.
+4. **Create / Retrieve Credentials**:
+   - If no credentials exist yet, tap the **`+` (Plus)** button in the top-right corner to create one.
+   - Enter a description name (such as `eisy`, `PG3`, or `ISY`).
+   - Tap the created credential entry to view details.
+5. **Copy the Values**:
+   - **UAID** (User Access ID / Client ID)
+   - **SecretKey** (Client Secret)
+   - Use the **Copy** icon next to each field to copy them without extra spaces.
+
+### Configuring the Node Server in Polyglot (PG3 / PG3x)
+
+In your browser, open the Polyglot (PG3/PG3x) dashboard:
+1. Open the **YoLink** node server details and navigate to the **Configuration** tab (scroll down to the *Custom Configuration Parameters* section).
+2. Configure the following parameters:
+   - **`UAID`**: Paste the copied UAID.
+   - **`SECRET_KEY`**: Paste the copied SecretKey.
+   - **`TEMP_UNIT`** *(optional)*: Temperature display unit:
+     - `F` for Fahrenheit (UOM 17)
+     - `C` for Celsius (UOM 4) — *default*
+   - **`WATER_UNIT`** *(optional)*: Water volume display unit:
+     - `G` or `0` for Gallons (UOM 69) — *default*
+     - `C` or `1` for CCF / Hundred Cubic Feet (UOM 6)
+     - `M` or `2` for M³ / Cubic Meters (UOM 8)
+     - `L` or `3` for Liters (UOM 35)
+   - **`NBR_TTS`** *(optional)*: Number of SpeakerHub Text-to-Speech message slots to allocate (1–10).
+3. Click **Save Changes** and **Restart** the node server.
+   - *Note*: On initial setup, it may occasionally take 1–2 restarts for all devices to synchronize completely. Sometimes a reboot of the ISY / Admin Console is needed for all node definitions to refresh.
 
 ## Notes 
     

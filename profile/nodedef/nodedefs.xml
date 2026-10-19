@@ -1171,15 +1171,23 @@
       <sts>
          <st id="ST" editor="waterrun" />
          <st id="GV0" editor="manstate" />
-         <st id="GV1" editor="flow" />
-         <st id="GV10" editor="flow" />     
-         <st id="GV2" editor="flow" /> 
+         <st id="GV1" editor="liter" />
+         <st id="GV10" editor="liter" />     
+         <st id="GV2" editor="liter" /> 
          <st id="GV3" editor="minutes" />  
          <st id="GV6" editor="alarm" /> 
          <st id="GV7" editor="alarm" /> 
          <st id="GV8" editor="alarm" /> 
-         <st id="GV9" editor="alarm" />    
+         <st id="GV9" editor="alarm" />         
          <st id="GV12" editor="alarm" /> 
+         <st id="GV22" editor="liter" /> 
+         <st id="GV23" editor="count" />  
+         <st id="GV24" editor="minutes" />
+         <st id="GV25" editor="enable" /> 
+         <st id="GV26" editor="enable" /> 
+         <st id="GV27" editor="enable" /> 
+         <st id="GV28" editor="enable" /> 
+         <st id="GV20" editor="suspendstate" />
       </sts>
       <cmds>
          <sends>
@@ -1190,9 +1198,9 @@
             <cmd id="VOPEN" /> 
             <cmd id="VCLOSE" /> 
             <cmd id="SETATTRIB">
-               <p id="LLIMIT" editor="leaklimit"  /> 
+               <p id="LLIMIT" editor="literSet"  /> 
                <p id="LOFF" editor="enableSet" />       
-               <p id="ORLIMIT" editor="leaklimit"  /> 
+               <p id="ORLIMIT" editor="literSet"  /> 
                <p id="OROFF" editor="enableSet"  />   
                <p id="ORTLIMIT" editor="minutesSet" /> 
                <p id="ORTOFF" editor="enableSet"/>   

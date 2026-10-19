@@ -30,24 +30,49 @@
     Coded in Python 3 - MIT license.
 
 ## Installation
-    Credentials need to be added to configuration in the YoLink node server under PG3. In the YoLink app, go to Settings->Account->Advanced Settings->User Access Credentials and copy UAID and SecretKey (alternative path in the app is Profile->Advanced Settings->User Access Credentials).
-    It is possible to get credentials for each home that is defined, but the node server can only handle one of them currently.
 
-    Enter both UAID and SecretKey under configuration in the node in PG#'s browser page (scroll down if you do not see the fields) and then restart. Sometimes it seems to require 2 restarts to fully get all devices synchronized (I have looked but cannot find a pattern).
-    Sometimes a reboot of the ISY is required to make the node server show up correctly.
+### How to Obtain Credentials from the YoLink App
 
-UAID/SecretKey
-    Credentials need to be added to configuration in the YoLink node server under PG3. In the YoLink app, go to Settings->Account->Advanced Settings->User Access Credentials and copy UAID and SecretKey (alternative path in the app is Profile->Advanced Settings->User Access Credentials).
-    It is possible to get credentials for each separate home defined in the YoLink app, but the node server can only handle one of them currently.
-    
-TEMP_UNIT
-    Select F or C
-     
-WATER_UNIT
-    Select Liter or Gallon
+To connect the node server to your YoLink account, you need your **UAID** and **SECRET_KEY** (User Access Credentials):
 
-NBR_TTS
-    Number of speakerhub Text to Speech messages to support (see below)
+1. **Open the YoLink Mobile App** (iOS or Android).
+2. **Verify Active Home**:
+   - Check the active Home name displayed at the top of the app.
+   - If you have multiple homes, tap the home name to switch to the home you want to control.
+   - *Note*: Credentials in YoLink are scoped per home. If you have devices in multiple homes, create separate credentials for each home and install a dedicated node server instance for each home.
+3. **Navigate to User Access Credentials**:
+   - Tap the **Menu icon** (`☰` in the top-left corner) or tap the **Profile / Settings** icon.
+   - Tap **Settings** -> **Account** (or tap your account avatar/email address).
+   - Tap **Advanced Settings**.
+   - Tap **User Access Credentials**.
+   *(Alternative path in some app versions: Profile tab -> Advanced Settings -> User Access Credentials)*.
+4. **Create / Retrieve Credentials**:
+   - If no credentials exist yet, tap the **`+` (Plus)** button in the top-right corner to create one.
+   - Enter a description name (such as `eisy`, `PG3`, or `ISY`).
+   - Tap the created credential entry to view details.
+5. **Copy the Values**:
+   - **UAID** (User Access ID / Client ID)
+   - **SecretKey** (Client Secret)
+   - Use the **Copy** icon next to each field to copy them to your clipboard without trailing spaces.
+
+### Configuring the Node Server in Polyglot (PG3 / PG3x)
+
+In your browser, open the Polyglot (PG3/PG3x) dashboard:
+1. Open the **YoLink** node server details and navigate to the **Configuration** tab (scroll down to the *Custom Configuration Parameters* section).
+2. Configure the following parameters:
+   - **`UAID`**: Paste the copied UAID.
+   - **`SECRET_KEY`**: Paste the copied SecretKey.
+   - **`TEMP_UNIT`** *(optional)*: Temperature display unit:
+     - `F` for Fahrenheit (UOM 17)
+     - `C` for Celsius (UOM 4) — *default*
+   - **`WATER_UNIT`** *(optional)*: Water volume display unit:
+     - `G` or `0` for Gallons (UOM 69) — *default*
+     - `C` or `1` for CCF / Hundred Cubic Feet (UOM 6)
+     - `M` or `2` for M³ / Cubic Meters (UOM 8)
+     - `L` or `3` for Liters (UOM 35)
+   - **`NBR_TTS`** *(optional)*: Number of SpeakerHub Text-to-Speech message slots to allocate (1–10).
+3. Click **Save Changes** and **Restart** the node server.
+   - *Note*: On initial setup, it may occasionally take 1–2 restarts for all devices to synchronize completely. Sometimes a restart of the IoX / Admin Console is needed for all node definitions to refresh.
     
 
 ## Notes 

@@ -57,8 +57,6 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         self.poly = polyglot
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()     # Curent multi unit does not report temp
-        if self.temp_unit == 1:
-            self.id = 'yowatermeterMultiF'    
         model = str(deviceInfo['modelName'][:6])  
         if model in ['YS5029','YS5009']:
             self.scheduleSupport = False
@@ -250,10 +248,10 @@ class udiYoWaterMeterMulti(udi_interface.Node):
                         self.my_setDriver('GV20', 6)
                         return
                     if self.ISYmeter_uom is None:
-                        self.meter_unit = ctrl.getMeterUnit()
-                        logging.debug(f'meter unit : { self.meter_unit}')
-                        #self.my_setDriver('GV4',  self.meter_unit, 25)          
-                        self.ISYmeter_uom= self.water_meter_unit2uom( self.meter_unit)            
+                        if self.meter_unit is None:
+                            self.meter_unit = ctrl.getMeterUnit()
+                        self.ISYwater_unit = self.yoAccess.get_water_unit()
+                        self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
                     water_state = ctrl.get_data('waterFlowing', 'state')
                     logging.debug(f'water flowing : {water_state}')
                     if isinstance(water_state, dict):
@@ -313,7 +311,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 class udiYoSubWaterMeter(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   w_unit2ISY, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, save_cmd_state, water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
 
-    id = 'yowatermeterSubL'
+    id = 'yowatermeterSub'
     '''
        drivers = [
             'GV0' = Manipulator State
@@ -358,13 +356,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.yoAccess = yoAccess
         self.devInfo = devInfo if devInfo is not None else {}
         self.temp_unit = self.yoAccess.get_temp_unit() 
-        self.water_unit = self.yoAccess.get_water_unit()    
-        if self.water_unit == 0:
-            self.id = 'yowatermeterSubG'    
-        elif self.water_unit == 3:
-            self.id = 'yowatermeterSubL'   
-        else:
-            logging.error('Only Liter and Gallon supported for now')
+        self.water_unit = self.yoAccess.get_water_unit()
         self.WM_index = WMindex
         
         self.yoWaterCtrl= wmAccess

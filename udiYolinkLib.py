@@ -55,26 +55,67 @@ def convert_temp_unit(self, tempStr):
 def calculate_water_volume(self, volume, volumeunit, targetunit):
     # Placeholder for actual calculation logic
     logging.debug('calculate_water_volume - volume: {}, volumeunit: {}, targetunit: {}'.format(volume, volumeunit, targetunit)) 
-    if volumeunit == 0 and targetunit == 1:  # Gallon to CCF
-        temp_volume = volume * 0.133681/100
-    elif volumeunit == 0 and targetunit == 2:  # Gallon to m3
-        temp_volume = volume * 0.00378541
-    elif volumeunit == 0 and targetunit == 3:  # Gallon to Liter
-        temp_volume = volume * 3.78541
-    elif volumeunit == 1 and targetunit == 0:  # CCF to Gallon
-        temp_volume = volume * 7.48052*100
-    elif volumeunit == 1 and targetunit == 2:  # CCF to m3
-        temp_volume = volume * 0.0283168*100
-    elif volumeunit == 1 and targetunit == 3:  # CCF to Liter   
-        temp_volume = volume * 28.3168*100
-    elif volumeunit == 2 and targetunit == 0:  # m3 to Gallon
-        temp_volume = volume * 264.172
-    elif volumeunit == 2 and targetunit == 1:  # m3 to CCF
-        temp_volume = volume * 35.3147/100
-    elif volumeunit == 2 and targetunit == 3:  # m3 to Liter
-        temp_volume = volume * 1000
+    if volume is None:
+        return 0
+    try:
+        vol = float(volume)
+    except (ValueError, TypeError):
+        return volume
+
+    def _to_unit_index(u):
+        if isinstance(u, int) and u in (0, 1, 2, 3):
+            return u
+        if isinstance(u, str):
+            s = u.strip().upper()
+            if s.startswith('G'):
+                return 0
+            if s.startswith('C'):
+                return 1
+            if s.startswith('M'):
+                return 2
+            if s.startswith('L'):
+                return 3
+            if s in ('0', '1', '2', '3'):
+                return int(s)
+        try:
+            val = int(u)
+            return val if val in (0, 1, 2, 3) else 0
+        except (ValueError, TypeError):
+            return 0
+
+    vu = _to_unit_index(volumeunit)
+    tu = _to_unit_index(targetunit)
+
+    if vu == tu:
+        return vol
+
+    # 0 = Gallon, 1 = CCF (100 ft^3), 2 = m^3, 3 = Liter
+    if vu == 0 and tu == 1:  # Gallon to CCF
+        temp_volume = vol * 0.133681/100
+    elif vu == 0 and tu == 2:  # Gallon to m3
+        temp_volume = vol * 0.00378541
+    elif vu == 0 and tu == 3:  # Gallon to Liter
+        temp_volume = vol * 3.78541
+    elif vu == 1 and tu == 0:  # CCF to Gallon
+        temp_volume = vol * 7.48052*100
+    elif vu == 1 and tu == 2:  # CCF to m3
+        temp_volume = vol * 0.0283168*100
+    elif vu == 1 and tu == 3:  # CCF to Liter   
+        temp_volume = vol * 28.3168*100
+    elif vu == 2 and tu == 0:  # m3 to Gallon
+        temp_volume = vol * 264.172
+    elif vu == 2 and tu == 1:  # m3 to CCF
+        temp_volume = vol * 35.3147/100
+    elif vu == 2 and tu == 3:  # m3 to Liter
+        temp_volume = vol * 1000.0
+    elif vu == 3 and tu == 0:  # Liter to Gallon
+        temp_volume = vol * 0.264172
+    elif vu == 3 and tu == 1:  # Liter to CCF
+        temp_volume = vol * 0.0353147/100
+    elif vu == 3 and tu == 2:  # Liter to m3
+        temp_volume = vol * 0.001
     else:
-        temp_volume = volume
+        temp_volume = vol
     return temp_volume
 
 
@@ -105,16 +146,23 @@ def apply_meter_correction(self, meter_value, correction_factor):
     return meter_value / float(correction_factor)
 
 def convert_water_unit(self, tempStr):
-    if tempStr.capitalize()[:1] == 'G': #Gallon
-        return(0)
-    elif tempStr.capitalize()[:1] == 'C': #CCF
-        return(1)
-    elif tempStr.capitalize()[:1] == 'M': #M^3
-        return(2)
-    elif tempStr.capitalize()[:1] == 'L': #Liter
-        return(3)    
+    if tempStr is None:
+        return 0
+    if isinstance(tempStr, int):
+        return tempStr if tempStr in (0, 1, 2, 3) else 0
+    s = str(tempStr).strip().upper()
+    if s.startswith('G'):  # Gallon
+        return 0
+    elif s.startswith('C'):  # CCF
+        return 1
+    elif s.startswith('M'):  # M^3
+        return 2
+    elif s.startswith('L'):  # Liter
+        return 3
+    elif s in ('0', '1', '2', '3'):
+        return int(s)
     else:
-        return(None)
+        return 0
 
 def save_cmd_state(self, cmd_state):
     logging.debug('save_cmd_state {} - {}'.format(cmd_state, self.address))
@@ -138,7 +186,7 @@ def save_cmd_struct(self, cmd_struct):
 def convert_timestr_to_epoch(self, timestr):
     logging.debug('convert_timestr_to_epoch - {}'.format(timestr))
     try:
-        dt =int(datetime.strptime(timestr, "%Y-%m-%dT%H:%M:%S.%fZ"))
+        dt = datetime.strptime(timestr, "%Y-%m-%dT%H:%M:%S.%fZ")
         epoch = int(dt.timestamp())
         logging.debug('epoch time {} for  {}'.format(epoch, timestr ))
 
@@ -230,6 +278,8 @@ def my_setDriver(self, key, value, UOM=None, force=None, type=None):
 
 def mask2key (self, mask):
     logging.debug('mask2key : {}'.format(mask))
+    if not isinstance(mask, (int, float)) or mask <= 0:
+        return 0
     return(int(round(math.log2(mask),0)))
     
 def daysToMask (yolink, dayList):
@@ -256,16 +306,20 @@ def w_unit2ISY(self, unit):
         return(None)
 
 def water_meter_unit2uom(self, meter_unit ):
-    water_uom = None
-    if meter_unit == 0:
-        water_uom  = 69 # gallon
-    if meter_unit == 1:
-        water_uom = 6 #ft^3
-    if meter_unit == 2:
-        water_uom = 8 #m^3
-    if meter_unit == 3:
-        water_uom = 35 # liter   
-    return(water_uom)
+    unit_map = {0: 69, 1: 6, 2: 8, 3: 35}
+    if isinstance(meter_unit, int) and meter_unit in unit_map:
+        return unit_map[meter_unit]
+    if isinstance(meter_unit, str):
+        s = meter_unit.strip().upper()
+        if s.startswith('G') or s == '0':
+            return 69  # Gallon
+        if s.startswith('C') or s == '1':
+            return 6   # CCF
+        if s.startswith('M') or s == '2':
+            return 8   # m^3
+        if s.startswith('L') or s == '3':
+            return 35  # Liter
+    return 69
 
 def bool2Nbr (self, data):
     if data is True:

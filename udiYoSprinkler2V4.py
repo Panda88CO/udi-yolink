@@ -82,8 +82,8 @@ class udiYoSprinkler2(udi_interface.Node):
         self.water_unit = self.yoAccess.get_water_unit()  
         model = str(deviceInfo['modelName'][:6])  
     
-        if self.water_unit not in [0,3]:
-            logging.error('Only Liter and Gallon supported for now')
+        if self.water_unit not in [0, 1, 2, 3]:
+            logging.error('Unsupported water unit: {}'.format(self.water_unit))
 
         self.devInfo =  deviceInfo
         self.yoSprinkler= None
@@ -99,7 +99,7 @@ class udiYoSprinkler2(udi_interface.Node):
         self.timer_expires = 0
         self.mode = ''
 
-        self.step_factor: int | float = 1
+        self.step_factor = 1
         self.ISYmeter_uom = None
         self.ISYwater_unit = None
         self.meter_unit = None
@@ -195,7 +195,7 @@ class udiYoSprinkler2(udi_interface.Node):
         #    self.my_setDriver('GV2', 0)
 
     
-    def unit2uom(self) -> int | None:
+    def unit2uom(self):
         isy_uom = None
         if self.water_unit == 0:
             isy_uom = 69 # gallon
@@ -233,9 +233,10 @@ class udiYoSprinkler2(udi_interface.Node):
                         self.my_setDriver('GV20', 6)
                         return
                     if self.ISYmeter_uom is None:
-                        logging.debug(f'meter unit : { self.meter_unit}')
-                        #self.my_setDriver('GV4',  self.meter_unit, 25)          
-                        self.ISYmeter_uom = self.water_meter_unit2uom( self.meter_unit)
+                        if self.meter_unit is None:
+                            self.meter_unit = sprinkler.get_data('meterUnit', 'attributes')
+                        self.ISYwater_unit = self.yoAccess.get_water_unit()
+                        self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
                     running = sprinkler.get_data('running', 'state')
                     if isinstance(running, bool):
                         logging.debug(f'water running : {running}')
@@ -262,9 +263,8 @@ class udiYoSprinkler2(udi_interface.Node):
                                 if isinstance(amount, (int,float)):
                                     if type in ['amount']:
                                         self.my_setDriver('GV7', 0, UOM=25)
-                                        if self.ISYwater_unit == 0: #gallon
-                                            amount = amount * 0.264172
-                                        amount = round(float(self.calculate_water_volume(amount/self.step_factor,  self.meter_unit,  self.ISYwater_unit)), 1)
+                                        meter_unit = self.meter_unit if self.meter_unit is not None else 3
+                                        amount = round(float(self.calculate_water_volume(amount/self.step_factor, meter_unit, self.ISYwater_unit)), 1)
                                         self.my_setDriver('GV8', amount, UOM =self.ISYmeter_uom)
                                     elif type in ['duration']:
                                         self.my_setDriver('GV7', 1, UOM=25)
@@ -282,10 +282,9 @@ class udiYoSprinkler2(udi_interface.Node):
                                 if isinstance(amount, (int,float)):
                                     if type in ['amount']:
                                         self.my_setDriver('GV7', 0, UOM=25)
-                                        if self.ISYwater_unit == 0: #gallon
-                                            amount = amount * 0.264172
-                                        #amount = round(float(self.calculate_water_volume(amount/self.step_factor,  self.meter_unit,  self.ISYwater_unit)), 1)
-                                        self.my_setDriver('GV8', round(amount,1), UOM =self.ISYmeter_uom)
+                                        meter_unit = self.meter_unit if self.meter_unit is not None else 3
+                                        amount = round(float(self.calculate_water_volume(amount/self.step_factor, meter_unit, self.ISYwater_unit)), 1)
+                                        self.my_setDriver('GV8', amount, UOM =self.ISYmeter_uom)
                                     elif type in ['duration']:
                                         self.my_setDriver('GV7', 1, UOM=25)
                                         self.my_setDriver('GV8', amount, type=message_type, UOM=44)

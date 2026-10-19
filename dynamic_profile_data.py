@@ -6279,17 +6279,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV1",
-        "editor": "flow",
+        "editor": "liter",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "flow",
+        "editor": "liter",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "flow",
+        "editor": "liter",
         "name": "Water Meter Recent Use"
       },
       {
@@ -6321,6 +6321,46 @@ DYNAMIC_NODEDEFS = [
         "id": "GV12",
         "editor": "alarm",
         "name": "Valve Error Alarm"
+      },
+      {
+        "id": "GV22",
+        "editor": "liter",
+        "name": "Overrun Amount 24H Limit"
+      },
+      {
+        "id": "GV23",
+        "editor": "count",
+        "name": "Overrun Duration Once Limit"
+      },
+      {
+        "id": "GV24",
+        "editor": "minutes",
+        "name": "Overrun Count 24H Limit"
+      },
+      {
+        "id": "GV25",
+        "editor": "enable",
+        "name": "Leak Auto Close"
+      },
+      {
+        "id": "GV26",
+        "editor": "enable",
+        "name": "Overrun Amount Auto Close"
+      },
+      {
+        "id": "GV27",
+        "editor": "enable",
+        "name": "Overrun Duration Auto Close"
+      },
+      {
+        "id": "GV28",
+        "editor": "enable",
+        "name": "Overrun Times Auto Close"
+      },
+      {
+        "id": "GV20",
+        "editor": "suspendstate",
+        "name": "Connection State"
       }
     ],
     "cmds": {
@@ -6349,7 +6389,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "leaklimit"
+              "editor": "literSet"
             },
             {
               "id": "LOFF",
@@ -6357,7 +6397,7 @@ DYNAMIC_NODEDEFS = [
             },
             {
               "id": "ORLIMIT",
-              "editor": "leaklimit"
+              "editor": "literSet"
             },
             {
               "id": "OROFF",

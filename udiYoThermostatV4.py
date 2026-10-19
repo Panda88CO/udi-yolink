@@ -69,11 +69,7 @@ class udiYoThermostat(udi_interface.Node):
         self.main_node_ready = False
         self.sub_nodes_ready = False
         
-        # Set node ID based on temperature unit
-        if self.temp_unit == 1:
-            self.id = 'yothermostatf'  # Fahrenheit variant
-        else:
-            self.id = 'yothermostat'   # Celsius variant (default)
+        self.id = 'yothermostat'
 
         # Subscribe to events
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -509,9 +505,6 @@ class udiYoThermostatProperties(udi_interface.Node):
         self.temp_unit = thermostat_node.temp_unit
         self.node_ready = False
         self.n_queue = []
-
-        if self.temp_unit == 1:
-            self.id = 'yothermpropf'
 
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.apply_profile_driver_names(self.id)

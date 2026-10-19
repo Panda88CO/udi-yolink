@@ -87,30 +87,22 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.ValveSupported = True
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.water_unit = self.yoAccess.get_water_unit()  
+        self.id = 'yowatermeterCtrl'
         model = str(deviceInfo['modelName'][:6])  
         if model in ['YS5007']:
-            if self.temp_unit == 1 and self.water_unit == 0:
-                self.id = 'yowatermeterCtrlF'
-            else:
-                self.id = 'yowatermeterCtrl'
             self.ValveSupported = False
             if self.commands.get('DON') is not None:
                 del self.commands['DON']
             if self.commands.get('DOF') is not None:
                 del self.commands['DOF']
-        else: #YS5018 or YS5008 YS5009
-            if self.temp_unit == 1 and self.water_unit == 0:
-                self.id = 'yowatermeterCtrlF'
-            else:   
-                self.id = 'yowatermeterCtrl'
 
         if model in ['YS5029','YS5009']:
             self.scheduleSupport = False
         else:
             self.scheduleSupport = True
 
-        if self.water_unit not in [0,3]:
-            logging.error('Only Liters and Gallons supported for now')
+        if self.water_unit not in [0, 1, 2, 3]:
+            logging.error('Unsupported water unit: {}'.format(self.water_unit))
 
         self.devInfo =  deviceInfo
         self.yoWaterCtrl= None
@@ -311,9 +303,10 @@ class udiYoWaterMeterController(udi_interface.Node):
                         self.my_setDriver('GV20', 6)
                         return
                     if self.ISYmeter_uom is None:
-                        logging.debug(f'meter unit : { self.meter_unit}')
-                        #self.my_setDriver('GV4',  self.meter_unit, 25)          
-                        self.ISYmeter_uom = self.water_meter_unit2uom( self.meter_unit)
+                        if self.meter_unit is None:
+                            self.meter_unit = water_ctrl.getMeterUnit()
+                        self.ISYwater_unit = self.yoAccess.get_water_unit()
+                        self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
                     if self.ValveSupported:
                         state = water_ctrl.get_data( 'valve', 'state')
                         logging.debug(f'valve state: {state}')                    
@@ -373,10 +366,15 @@ class udiYoWaterMeterController(udi_interface.Node):
                     else:
                         self.my_setDriver('BATLVL', bat_lvl, 25, type=message_type)
                         
-                    water_temp =  water_ctrl.get_data('waterTemperature', 'state')
+                    water_temp = water_ctrl.get_data('waterTemperature', 'state')
                     logging.debug(f'water temperature : {water_temp}')
-                    #NEEDS TO BE FIXED 
-                    self.my_setDriver('CLITEMP', water_temp,  4, type=message_type)  
+                    if isinstance(water_temp, (int, float)):
+                        if self.temp_unit == 1:
+                            self.my_setDriver('CLITEMP', round(water_temp * 9 / 5 + 32, 1), 17, type=message_type)
+                        else:
+                            self.my_setDriver('CLITEMP', round(water_temp, 1), 4, type=message_type)
+                    else:
+                        self.my_setDriver('CLITEMP', 99, 25, type=message_type)  
                     
                     #meter_unit = self.yoWaterCtrl.get_data('attributes', 'meterUnit')
                     #logging.debug(f'meter unit : {meter_unit}')
@@ -517,7 +515,7 @@ class udiYoWaterMeterController(udi_interface.Node):
         or_lim = None
         if 'LLIMIT.uom69' in query:
             leak_lim = float(query.get('LLIMIT.uom69'))
-            or_lim = float(self.calculate_water_volume(or_lim, 0, self.water_unit))
+            leak_lim = float(self.calculate_water_volume(leak_lim, 0, self.water_unit))
         elif 'LLIMIT.uom6' in query:
             leak_lim = float(query.get('LLIMIT.uom6'))
             leak_lim = float(self.calculate_water_volume(leak_lim, 1, self.water_unit))

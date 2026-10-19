@@ -86,8 +86,6 @@ class udiYoSoilSensor(udi_interface.Node):
         self.system_ready=False
         self._update_lock = threading.Lock()
         self.temp_unit = self.yoAccess.get_temp_unit()   
-        if self.temp_unit == 1:
-            self.id = 'yosoilsensorF'
 
 
         self.cmd_state = self.retrieve_cmd_state()

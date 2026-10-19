@@ -24,7 +24,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterOnly(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yowatermeterOnly'
     '''
@@ -75,16 +75,8 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.n_queue = []
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()
-        if self.temp_unit == 1:
-            self.id = 'yowatermeterOnlyF'
-
-        self.water_unit = self.yoAccess.get_water_unit()              
-        if self.water_unit == 0:
-            self.id = 'yowatermeterOnlyF'    
-        elif self.water_unit == 3:
-            self.id = 'yowatermeterOnly'   
-        else:
-            logging.error('Only Litere and Gallon supported for now')
+        self.water_unit = self.yoAccess.get_water_unit()
+        self.id = 'yowatermeterOnly'
 
         self.devInfo =  deviceInfo
         self.yoWaterCtrl= None
@@ -213,9 +205,10 @@ class udiYoWaterMeterOnly(udi_interface.Node):
                 if ctrl.check_system_online():
                     self.my_setDriver('GV30', 1)
                     if self.ISYmeter_uom is None:
-                        logging.debug(f'meter unit : { self.meter_unit}')
-                        #self.my_setDriver('GV4',  self.meter_unit, 25)          
-                        self.ISYmeter_uom = self.water_meter_unit2uom( self.meter_unit)
+                        if self.meter_unit is None:
+                            self.meter_unit = ctrl.getMeterUnit()
+                        self.ISYwater_unit = self.yoAccess.get_water_unit()
+                        self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
                         self.meter_correction_factor = self.get_meter_correction_factor(ctrl)
 
                     #meter  = self.yoWaterCtrl.getMeterReading()
@@ -253,7 +246,14 @@ class udiYoWaterMeterOnly(udi_interface.Node):
                         self.my_setDriver('BATLVL', 98, 25)
                     else:
                         self.my_setDriver('BATLVL', bat_lvl, 25)
-                    self.my_setDriver('CLITEMP', ctrl.getWaterTemperature())
+                    w_temp = ctrl.getWaterTemperature()
+                    if isinstance(w_temp, (int, float)):
+                        if self.temp_unit == 1:
+                            self.my_setDriver('CLITEMP', round(w_temp * 9 / 5 + 32, 1), 17)
+                        else:
+                            self.my_setDriver('CLITEMP', round(w_temp, 1), 4)
+                    else:
+                        self.my_setDriver('CLITEMP', 99, 25)
                     
                     alarms = ctrl.getAlarms()
                     if alarms:
@@ -392,12 +392,16 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         or_lim = None
         if 'LLIMIT.uom69' in query:
             leak_lim = float(query.get('LLIMIT.uom69'))
+            leak_lim = float(self.calculate_water_volume(leak_lim, 0, self.water_unit))
         elif 'LLIMIT.uom6' in query:
             leak_lim = float(query.get('LLIMIT.uom6'))
+            leak_lim = float(self.calculate_water_volume(leak_lim, 1, self.water_unit))
         elif 'LLIMIT.uom8' in query:
             leak_lim = float(query.get('LLIMIT.uom8'))
+            leak_lim = float(self.calculate_water_volume(leak_lim, 2, self.water_unit))
         elif 'LLIMIT.uom35' in query:
             leak_lim = float(query.get('LLIMIT.uom35'))
+            leak_lim = float(self.calculate_water_volume(leak_lim, 3, self.water_unit))
         if leak_lim:
             data['attributes'] ['leakLimit'] = leak_lim
 
@@ -406,12 +410,16 @@ class udiYoWaterMeterOnly(udi_interface.Node):
 
         if 'ORLIMIT.uom69' in query:
             or_lim = float(query.get('ORLIMIT.uom69'))
+            or_lim = float(self.calculate_water_volume(or_lim, 0, self.water_unit))
         elif 'ORLIMIT.uom6' in query:
             or_lim = float(query.get('ORLIMIT.uom6'))
+            or_lim = float(self.calculate_water_volume(or_lim, 1, self.water_unit))
         elif 'ORLIMIT.uom8' in query:
             or_lim = float(query.get('ORLIMIT.uom8'))
+            or_lim = float(self.calculate_water_volume(or_lim, 2, self.water_unit))
         elif 'ORLIMIT.uom35' in query:
             or_lim = float(query.get('ORLIMIT.uom35'))   
+            or_lim = float(self.calculate_water_volume(or_lim, 3, self.water_unit))
         if or_lim:
             data['attributes'] ['overrunAmount'] = or_lim     
         #if 'OROFF.uom25' in query:

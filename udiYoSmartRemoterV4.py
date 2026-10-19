@@ -345,8 +345,6 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.name = name
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()           
-        if self.temp_unit == 1:
-            self.id = 'yosmremoteF'
 
         
         self.devInfo =  deviceInfo   
