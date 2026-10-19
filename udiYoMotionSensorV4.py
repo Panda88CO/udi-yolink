@@ -23,7 +23,7 @@ from yolinkMotionSensorV3 import YoLinkMotionSensor
 
 
 class udiYoMotionSensor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yomotionsens'
     
@@ -39,14 +39,14 @@ class udiYoMotionSensor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 25},      
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Motion State (Legacy)'}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Sensor Battery Level'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Command Setting'},      
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Sensor Temperature'},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Motion State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},
             ]
     
 
@@ -84,6 +84,7 @@ class udiYoMotionSensor(udi_interface.Node):
         
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

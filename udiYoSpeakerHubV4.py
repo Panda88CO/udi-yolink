@@ -24,19 +24,19 @@ import time
 from yolinkSpeakerHubV3 import YoLinkSpeakerH
 
 class udiYoSpeakerHub(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  bool2ISY, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
     id = 'yospeakerh'
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV0', 'value': 7, 'uom': 56}, 
-            {'driver': 'GV1', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV3', 'value': 0, 'uom': 25}, 
-            {'driver': 'GV4', 'value': 0, 'uom': 56}, 
-            {'driver': 'GV5', 'value': 0, 'uom': 56},        
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25}, 
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Nodeserver Status'},
+            {'driver': 'GV0', 'value': 7, 'uom': 56, 'name': 'Speaker volume'}, 
+            {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Command Beep'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Mute'}, 
+            {'driver': 'GV3', 'value': 0, 'uom': 25, 'name': 'Tone Type'}, 
+            {'driver': 'GV4', 'value': 0, 'uom': 56, 'name': 'Message'}, 
+            {'driver': 'GV5', 'value': 0, 'uom': 56, 'name': 'Repeat'},        
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'}, 
+            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},
             ]
     '''
        drivers = [
@@ -75,6 +75,7 @@ class udiYoSpeakerHub(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
    
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

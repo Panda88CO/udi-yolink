@@ -24,7 +24,7 @@ import time
 from yolinkHubV3 import YoLinkHub
 
 class udiYoBatteryHub(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  wait_for_node_done, node_queue, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  wait_for_node_done, node_queue, checkNameSync, apply_profile_driver_names
     '''
        drivers = [
             'ST' =  Powered
@@ -37,11 +37,11 @@ class udiYoBatteryHub(udi_interface.Node):
     
     id = 'yohubbat'
     drivers = [
-            {'driver': 'ST', 'value': 99, 'uom': 25},
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},   
-            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
+            {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Supply Status'},
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Battery Status'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},   
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last device update'},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
 
@@ -69,6 +69,7 @@ class udiYoBatteryHub(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
                
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
@@ -188,14 +189,14 @@ class udiYoBatteryHub(udi_interface.Node):
 
 
 class udiYoHub(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, wait_for_node_done, node_queue, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, wait_for_node_done, node_queue, checkNameSync, apply_profile_driver_names
     id = 'yohub'
     drivers = [
             #{'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},   
-            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Status'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},   
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last device update'},
             #{'driver': 'ST', 'value': 0, 'uom': 25},
             ]
     '''
@@ -231,6 +232,7 @@ class udiYoHub(udi_interface.Node):
                
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

@@ -23,7 +23,7 @@ from yolinkInfraredRemoterV3 import YoLinkInfraredRemoter
 from udiYoSchedule import udiYoSchedule
 
 class udiYoInfraredCode(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync
+    from  udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync, apply_profile_driver_names
 
     '''
        drivers = [
@@ -35,10 +35,10 @@ class udiYoInfraredCode(udi_interface.Node):
     
     id = 'yoircode'
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},       
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                 
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'TX success'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},       
+            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},                 
             ] 
     def  __init__(self, polyglot, primary, address, name, code_indx, yoIRrem, yoAccess):
         logging.debug('udiIRcode'.format(code_indx))
@@ -52,6 +52,7 @@ class udiYoInfraredCode(udi_interface.Node):
         #self.poly.subscribe(polyglot.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
 
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
@@ -169,7 +170,7 @@ class udiYoInfraredCode(udi_interface.Node):
 
 
 class udiYoInfraredRemoter(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  update_schedule_data, node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  update_schedule_data, node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames, apply_profile_driver_names
 
 
     '''
@@ -181,13 +182,13 @@ class udiYoInfraredRemoter(udi_interface.Node):
     ''' 
     id = 'yoirremote'
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV0', 'value': 0, 'uom': 56},
-            {'driver': 'GV1', 'value': 0, 'uom': 25},
-            {'driver': 'GV2', 'value': 0, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},       
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},                 
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Last Command Status'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV0', 'value': 0, 'uom': 56, 'name': 'Number of Learned codes'},
+            {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Battery Level (legacy)'},
+            {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Last Command Status (legacy)'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},       
+            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},                 
             ]
 
 
@@ -221,6 +222,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
           
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
@@ -291,7 +293,6 @@ class udiYoInfraredRemoter(udi_interface.Node):
                 self.codes_used.append(code)
                 self.add_code_node(code)
         self.sub_nodes_ready = True
-        self.poly.updateProfile()
         logging.info('YoLink Infrared Remoter Node Ready')
         self.start_done()
 

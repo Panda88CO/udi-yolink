@@ -23,7 +23,7 @@ from yolinkGarageDoorToggleV2 import YoLinkGarageDoorCtrl
 
 
 class udiYoGarageDoor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  wait_for_node_done, node_queue, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  wait_for_node_done, node_queue, checkNameSync, apply_profile_driver_names
     id = 'yogarage'
     
     '''
@@ -34,9 +34,9 @@ class udiYoGarageDoor(udi_interface.Node):
     ''' 
         
     drivers = [ 
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Node Server Status'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},
             ]
 
 
@@ -60,6 +60,7 @@ class udiYoGarageDoor(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
         
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

@@ -25,7 +25,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoManipulator(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
     id = 'yomanipu'
     '''
        drivers = [
@@ -38,10 +38,10 @@ class udiYoManipulator(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Manipulator State (Legacy)'},
+            {'driver': 'GV1', 'value': 0, 'uom': 57, 'name': 'On Delay Remaining'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57, 'name': 'Off Delay Remaining'}, 
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'}, 
             #{'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             #{'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             #{'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
@@ -51,10 +51,10 @@ class udiYoManipulator(udi_interface.Node):
             #{'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
             #{'driver': 'GV22', 'value': 99, 'uom': 25}, #start Min              
             #{'driver': 'GV19', 'value': 0, 'uom': 25}, #days
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},              
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},            
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Manipulator State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},              
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},            
             ]
 
 
@@ -89,6 +89,7 @@ class udiYoManipulator(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

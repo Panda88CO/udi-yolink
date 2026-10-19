@@ -23,7 +23,7 @@ from yolinkSprinklerV2 import YoLinkSprinkler
 
 
 class udiYoSprinkler(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yosprinkler'
     
@@ -46,24 +46,24 @@ class udiYoSprinkler(udi_interface.Node):
         
     drivers = [
 
-            {'driver': 'CLITEMP', 'value': 0, 'uom': 4},
-            {'driver': 'GV1', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 2, 'uom': 25},           
-            {'driver': 'CLIHUM', 'value': 0, 'uom': 51},
-            {'driver': 'GV4', 'value': 2, 'uom': 25},
-            {'driver': 'GV5', 'value': 2, 'uom': 25},
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
-            {'driver': 'GV7', 'value': 2, 'uom': 25},
-            {'driver': 'GV8', 'value': 2, 'uom': 25},
-            {'driver': 'GV9', 'value': 99, 'uom': 25},
-            {'driver': 'GV10', 'value': 0, 'uom': 4},
-            {'driver': 'GV11', 'value': 0, 'uom': 4},
-            {'driver': 'GV12', 'value': 0, 'uom': 51},
-            {'driver': 'GV13', 'value': 0, 'uom': 51},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},            
-            {'driver': 'GV20', 'value': 99, 'uom': 25},            
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},    
+            {'driver': 'CLITEMP', 'value': 0, 'uom': 4, 'name': 'Sensor Temperature'},
+            {'driver': 'GV1', 'value': 2, 'uom': 25, 'name': 'Current No Water Alarm'}, 
+            {'driver': 'GV2', 'value': 2, 'uom': 25, 'name': 'GV2'},           
+            {'driver': 'CLIHUM', 'value': 0, 'uom': 51, 'name': 'Humidity'},
+            {'driver': 'GV4', 'value': 2, 'uom': 25, 'name': 'Energy'},
+            {'driver': 'GV5', 'value': 2, 'uom': 25, 'name': 'Latest Operation'},
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
+            {'driver': 'GV7', 'value': 2, 'uom': 25, 'name': 'Latest Water Method'},
+            {'driver': 'GV8', 'value': 2, 'uom': 25, 'name': 'Latest Water Amount target'},
+            {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Latest Water Alarm'},
+            {'driver': 'GV10', 'value': 0, 'uom': 4, 'name': 'Time for Latest operation Update'},
+            {'driver': 'GV11', 'value': 0, 'uom': 4, 'name': 'GV11'},
+            {'driver': 'GV12', 'value': 0, 'uom': 51, 'name': 'Time Delay'},
+            {'driver': 'GV13', 'value': 0, 'uom': 51, 'name': 'GV13'},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Current State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},            
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},            
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last Data Update'},    
             ]
 
 
@@ -115,6 +115,7 @@ class udiYoSprinkler(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
                      
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
 

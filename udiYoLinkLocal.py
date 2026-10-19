@@ -80,7 +80,7 @@ def _summarize_device_list(device_list):
     return {'count': len(devices), 'devices': devices}
 
 class YoLinkSetup (udi_interface.Node):
-    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit, convert_water_unit
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit, convert_water_unit, apply_profile_driver_names
     from udiCommonLib import systemPoll, addNodes, heartbeat, configDoneHandler, checkNodes, handleLevelChange, saveNodeNames
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  
@@ -129,6 +129,7 @@ class YoLinkSetup (udi_interface.Node):
         self.poly.subscribe(self.poly.POLL, self.systemPoll)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
+        self.poly.subscribe(self.poly.DISCOVER, self.discover)
         self.n_queue = []
         self.yoLocal = None
         self.yoAccess = None
@@ -138,8 +139,8 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('YoLinkSetup init')
         logging.debug('self.address : ' + str(self.address))
         logging.debug('self.name :' + str(self.name))   
-        self.poly.updateProfile()
         self.poly.ready()
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self)
         self.wait_for_node_done()
         self.node = self.poly.getNode(self.address)
@@ -667,15 +668,23 @@ class YoLinkSetup (udi_interface.Node):
 
 
 
+    def discover(self, *args, **kwargs):
+        logging.info("Discover requested - refreshing profile")
+        self._update_dynamic_profile()
+
+    def _update_dynamic_profile(self):
+        from udiDynamicProfile import update_dynamic_profile
+        update_dynamic_profile(self)
+
     id = 'setup'
     commands = {
           #'EPOCHTIME': updateEpochTime,
           }
 
     drivers = [
-         {'driver': 'ST', 'value':0, 'uom':25},
-         {'driver': 'GV1', 'value':0, 'uom':25},
-         {'driver': 'TIME', 'value':int(time.time()), 'uom':151},
+         {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Node Server'},
+         {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Status'},
+         {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'LastPoll Time'},
         ]
 
 

@@ -27,17 +27,17 @@ from yolinkDimmerV3 import YoLinkDim
 from udiYoSchedule import udiYoSchedule
 
 class udiYoDimmer(udi_interface.Node):
-    from  udiYolinkLib import  my_setDriver, start_done, configDoneHandler,  save_cmd_struct, retrieve_cmd_struct, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import  my_setDriver, start_done, configDoneHandler,  save_cmd_struct, retrieve_cmd_struct, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
     id = 'yodimmer'
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 51},
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV3', 'value': 0, 'uom': 51},
-            {'driver': 'GV4', 'value': 0, 'uom': 51},
-            {'driver': 'GV5', 'value': 0, 'uom': 51},
-            {'driver': 'GV9', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 51, 'name': 'Dim Setting'},
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Switch State'},
+            {'driver': 'GV1', 'value': 0, 'uom': 57, 'name': 'On Delay'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57, 'name': 'Off Delay'}, 
+            {'driver': 'GV3', 'value': 0, 'uom': 51, 'name': 'Light Level'},
+            {'driver': 'GV4', 'value': 0, 'uom': 51, 'name': 'Light Down Level'},
+            {'driver': 'GV5', 'value': 0, 'uom': 51, 'name': 'Light Up Level'},
+            {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'LED Status'},
             #{'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             #{'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
             #{'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
@@ -48,9 +48,9 @@ class udiYoDimmer(udi_interface.Node):
             #{'driver': 'GV22', 'value': 99, 'uom': 25}, #start sec             
             #{'driver': 'GV19', 'value': 0, 'uom': 25}, #days
                  
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},            
-            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},            
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last device update'},
             ]
     '''
        drivers = [
@@ -109,6 +109,7 @@ class udiYoDimmer(udi_interface.Node):
                
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

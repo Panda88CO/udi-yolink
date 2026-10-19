@@ -23,33 +23,33 @@ import time
 
 
 class udiYoLeakSensor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, state2ISY, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, state2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yoleaksens'
     
         
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25}, #basic leak
-            {'driver': 'GV0', 'value': 99, 'uom': 25}, # legacy basic leak 
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25}, #batlvl  GV1 - remember to notify
-            {'driver': 'GV2', 'value': 0, 'uom': 25}, #Command state
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25}, # dev temp
-            {'driver': 'GV3', 'value': int(time.time()), 'uom': 151}, #latest change 
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Water State'}, #basic leak
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Water State (Legacy)'}, # legacy basic leak 
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'}, #batlvl  GV1 - remember to notify
+            {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Command Setting'}, #Command state
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Sensor Temperature'}, # dev temp
+            {'driver': 'GV3', 'value': int(time.time()), 'uom': 151, 'name': 'Last State Change'}, #latest change 
 
-            {'driver': 'GV4', 'value': 0, 'uom': 25}, #Beeping
-            {'driver': 'GV5', 'value': 0, 'uom': 25}, #Operation Mode
-            {'driver': 'GV6', 'value': 0, 'uom': 25}, #Sensitivity
+            {'driver': 'GV4', 'value': 0, 'uom': 25, 'name': 'Sensor Sound'}, #Beeping
+            {'driver': 'GV5', 'value': 0, 'uom': 25, 'name': 'Operating Mode'}, #Operation Mode
+            {'driver': 'GV6', 'value': 0, 'uom': 25, 'name': 'Sensitivity'}, #Sensitivity
 
 
-            {'driver': 'GV7', 'value': 0, 'uom': 25}, #Sensor Move 
-            {'driver': 'GV8', 'value': 0, 'uom': 25}, #Sensor Freeze Alert
-            {'driver': 'GV9', 'value': 0, 'uom': 25}, #Sensor Detecto Error
-            {'driver': 'GV10', 'value': 0, 'uom': 25}, #Reminder Alert            
+            {'driver': 'GV7', 'value': 0, 'uom': 25, 'name': 'Sensor Move Alert'}, #Sensor Move 
+            {'driver': 'GV8', 'value': 0, 'uom': 25, 'name': 'Sensor Freeze Alert'}, #Sensor Freeze Alert
+            {'driver': 'GV9', 'value': 0, 'uom': 25, 'name': 'Sensor Error'}, #Sensor Detecto Error
+            {'driver': 'GV10', 'value': 0, 'uom': 25, 'name': 'Reminder'}, #Reminder Alert            
 
-            {'driver': 'GV20', 'value': 99, 'uom': 25},   
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},   
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
 
-             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
+             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last device update'},
 
             ]
 
@@ -83,6 +83,7 @@ class udiYoLeakSensor(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
              
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

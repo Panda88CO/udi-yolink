@@ -22,7 +22,7 @@ from yolinkWaterDeptV3 import YoLinkWaterDeptSensor
 
 
 class udiYoWaterDept(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  retrieve_cmd_state, bool2ISY, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  retrieve_cmd_state, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yowaterdept'
     
@@ -43,17 +43,17 @@ class udiYoWaterDept(udi_interface.Node):
         
     drivers = [
 
-            {'driver': 'GV0', 'value': 0, 'uom': 56},
-            {'driver': 'GV1', 'value': 0, 'uom': 56}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 56}, 
-            {'driver': 'GV3', 'value': 0, 'uom': 25},
-            {'driver': 'GV4', 'value': 0, 'uom': 25},
-            {'driver': 'GV5', 'value': 0, 'uom': 25},
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 56},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},            
-            {'driver': 'GV20', 'value': 0, 'uom': 25},            
-            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},
+            {'driver': 'GV0', 'value': 0, 'uom': 56, 'name': 'Water Level (Legacy)'},
+            {'driver': 'GV1', 'value': 0, 'uom': 56, 'name': 'Low water Level Alarm setting'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 56, 'name': 'High water Level Alarm setting'}, 
+            {'driver': 'GV3', 'value': 0, 'uom': 25, 'name': 'Low Water Level'},
+            {'driver': 'GV4', 'value': 0, 'uom': 25, 'name': 'High Water Level'},
+            {'driver': 'GV5', 'value': 0, 'uom': 25, 'name': 'Sensor Error'},
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
+            {'driver': 'ST', 'value': 0, 'uom': 56, 'name': 'Water Level (0-1000)'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},            
+            {'driver': 'GV20', 'value': 0, 'uom': 25, 'name': 'Connection State'},            
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last Data Update'},
 
             ]
 
@@ -90,6 +90,7 @@ class udiYoWaterDept(udi_interface.Node):
         #self.poly.subscribe(self.poly.STARTDONE, self.start_done)
                      
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
 

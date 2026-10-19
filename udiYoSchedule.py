@@ -41,7 +41,7 @@ class BaseScheduleNode(udi_interface.Node):
     - Manage schedule activation/deactivation
     """
     
-    from  udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     def _schedule_actions(self):
         return (
@@ -325,6 +325,7 @@ class BaseScheduleNode(udi_interface.Node):
         self.poly.subscribe(self.poly.STOP, self.stop)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
 
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status=None, rename=True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
@@ -615,16 +616,16 @@ class OnOffScheduleNode(BaseScheduleNode):
     id = 'yoScheduleSec'
     
     drivers = [
-        {'driver': 'GV13', 'value': 0, 'uom': 25},     # Schedule index
-        {'driver': 'GV14', 'value': 99, 'uom': 25},    # Active (enabled)
-        {'driver': 'GV23', 'value': 0, 'uom': 70},     # Total schedules
-        {'driver': 'GV15', 'value': 99, 'uom': 25},    # On hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25},    # On minute
-        {'driver': 'GV21', 'value': 99, 'uom': 25},    # On second
-        {'driver': 'GV17', 'value': 99, 'uom': 25},    # Off hour
-        {'driver': 'GV18', 'value': 99, 'uom': 25},    # Off minute
-        {'driver': 'GV22', 'value': 99, 'uom': 25},    # Off second
-        {'driver': 'GV19', 'value': 0, 'uom': 25},     # Weekday mask
+        {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},     # Schedule index
+        {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'},    # Active (enabled)
+        {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Total Schedules'},     # Total schedules
+        {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'},    # On hour
+        {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'},    # On minute
+        {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'},    # On second
+        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'},    # Off hour
+        {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'},    # Off minute
+        {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'},    # Off second
+        {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'},     # Weekday mask
     ]
 
     def _set_id_for_seconds_support(self):
@@ -711,17 +712,17 @@ class KeyScheduleNode(BaseScheduleNode):
     id = 'yoirSchedule'
     
     drivers = [
-        {'driver': 'GV12', 'value': 99, 'uom': 25},     # Infrared key/channel
-        {'driver': 'GV13', 'value': 0, 'uom': 25},      # Schedule index
-        {'driver': 'GV14', 'value': 99, 'uom': 25},     # Active (enabled)
-        {'driver': 'GV23', 'value': 0, 'uom': 70},      # Total schedules
-        {'driver': 'GV15', 'value': 99, 'uom': 25},     # On hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25},     # On minute
-        {'driver': 'GV21', 'value': 99, 'uom': 25},     # On second
-        {'driver': 'GV17', 'value': 99, 'uom': 25},     # Off hour
-        {'driver': 'GV18', 'value': 99, 'uom': 25},     # Off minute
-        {'driver': 'GV22', 'value': 99, 'uom': 25},     # Off second
-        {'driver': 'GV19', 'value': 0, 'uom': 25},      # Weekday mask
+        {'driver': 'GV12', 'value': 99, 'uom': 25, 'name': 'Selected code/port'},     # Infrared key/channel
+        {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},      # Schedule index
+        {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'},     # Active (enabled)
+        {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Total Schedules'},      # Total schedules
+        {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'},     # On hour
+        {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'},     # On minute
+        {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'},     # On second
+        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'},     # Off hour
+        {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'},     # Off minute
+        {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'},     # Off second
+        {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'},      # Weekday mask
     ]
 
     def _set_id_for_seconds_support(self):
@@ -827,17 +828,17 @@ class MultiOutletScheduleNode(BaseScheduleNode):
     id = 'yoMSchedule'
     
     drivers = [
-        {'driver': 'GV12', 'value': 99, 'uom': 25},     # Channel/outlet number
-        {'driver': 'GV13', 'value': 0, 'uom': 25},      # Schedule index
-        {'driver': 'GV14', 'value': 99, 'uom': 25},     # Active (enabled)
-        {'driver': 'GV23', 'value': 0, 'uom': 70},      # Total schedules
-        {'driver': 'GV15', 'value': 99, 'uom': 25},     # On hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25},     # On minute
-        {'driver': 'GV21', 'value': 99, 'uom': 25},     # On second
-        {'driver': 'GV17', 'value': 99, 'uom': 25},     # Off hour
-        {'driver': 'GV18', 'value': 99, 'uom': 25},     # Off minute
-        {'driver': 'GV22', 'value': 99, 'uom': 25},     # Off second
-        {'driver': 'GV19', 'value': 0, 'uom': 25},      # Weekday mask
+        {'driver': 'GV12', 'value': 99, 'uom': 25, 'name': 'Selected code/port'},     # Channel/outlet number
+        {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},      # Schedule index
+        {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'},     # Active (enabled)
+        {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Total Schedules'},      # Total schedules
+        {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'},     # On hour
+        {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'},     # On minute
+        {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'},     # On second
+        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'},     # Off hour
+        {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'},     # Off minute
+        {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'},     # Off second
+        {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'},      # Weekday mask
     ]
 
     def _set_id_for_seconds_support(self):
@@ -1132,17 +1133,17 @@ class WaterMeterScheduleNode(OnOffScheduleNode):
     id = 'yoWMSchedule'
 
     drivers = [
-        {'driver': 'GV12', 'value': 99, 'uom': 56},    # Leak limit (or repurposed for data)
-        {'driver': 'GV13', 'value': 0, 'uom': 25},     # Schedule index
-        {'driver': 'GV14', 'value': 99, 'uom': 25},    # Active (enabled)
-        {'driver': 'GV23', 'value': 0, 'uom': 70},     # Total schedules
-        {'driver': 'GV15', 'value': 99, 'uom': 25},    # On hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25},    # On minute
-        {'driver': 'GV21', 'value': 99, 'uom': 25},    # On second
-        {'driver': 'GV17', 'value': 99, 'uom': 25},    # Off hour
-        {'driver': 'GV18', 'value': 99, 'uom': 25},    # Off minute
-        {'driver': 'GV22', 'value': 99, 'uom': 25},    # Off second
-        {'driver': 'GV19', 'value': 0, 'uom': 25},     # Weekday mask
+        {'driver': 'GV12', 'value': 99, 'uom': 56, 'name': 'Leak Limit'},    # Leak limit (or repurposed for data)
+        {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},     # Schedule index
+        {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'},    # Active (enabled)
+        {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Total Schedules'},     # Total schedules
+        {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'},    # On hour
+        {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'},    # On minute
+        {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'},    # On second
+        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'},    # Off hour
+        {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'},    # Off minute
+        {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'},    # Off second
+        {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'},     # Weekday mask
     ]
 
     def __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo, schedule_type='valve'):

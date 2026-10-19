@@ -22,7 +22,7 @@ import re
 
 #assigned_addresses
 class udiYoSubOutlet(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync
+    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
     id = 'yosubout'
     '''
        drivers = [
@@ -33,12 +33,12 @@ class udiYoSubOutlet(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV4', 'value': 0, 'uom': 25},           
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Outlet State (Legacy)'},
+            {'driver': 'GV1', 'value': 0, 'uom': 57, 'name': 'On Delay Remaining'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57, 'name': 'Off Delay Remaining'}, 
+            {'driver': 'GV4', 'value': 0, 'uom': 25, 'name': 'Outlet'},           
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Outlet State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
             ]
 
     
@@ -65,6 +65,7 @@ class udiYoSubOutlet(udi_interface.Node):
         self.onDelay = 0
 
 
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = polyglot.getNode(self.address)        
@@ -268,7 +269,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
 
 class udiYoSubUSB(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync
+    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
     id = 'yosubusb'
     '''
        drivers = [
@@ -276,9 +277,9 @@ class udiYoSubUSB(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25},    
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'USB Power'},    
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'USB Power State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
             ]
 
     def  __init__(self, polyglot, primary, address, name, usbPort, yolink):
@@ -301,6 +302,7 @@ class udiYoSubUSB(udi_interface.Node):
        
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = polyglot.getNode(self.address)
@@ -436,7 +438,7 @@ class udiYoSubUSB(udi_interface.Node):
                 }
 
 class udiYoMultiOutlet(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
     id = 'yomultiout'
 
     '''
@@ -446,20 +448,20 @@ class udiYoMultiOutlet(udi_interface.Node):
     ''' 
     drivers = [
 
-            {'driver': 'GV12', 'value': 99, 'uom': 25}, #Output
-            {'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
-            {'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
-            {'driver': 'GV15', 'value': 99, 'uom': 25}, #start Hour
-            {'driver': 'GV16', 'value': 99, 'uom': 25}, #start Min  
-            {'driver': 'GV21', 'value': 99, 'uom': 25}, #start Min              
-            {'driver': 'GV17', 'value': 99, 'uom': 25}, #stop Hour                                              
-            {'driver': 'GV18', 'value': 99, 'uom': 25}, #stop Min
-            {'driver': 'GV22', 'value': 99, 'uom': 25}, #start Min              
-            {'driver': 'GV19', 'value': 0, 'uom': 25}, #days
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 0, 'uom': 25},
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},            
+            {'driver': 'GV12', 'value': 99, 'uom': 25, 'name': 'Port'}, #Output
+            {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'}, #Schedule index/no
+            {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'}, # Active
+            {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'}, #start Hour
+            {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'}, #start Min  
+            {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'}, #start Min              
+            {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'}, #stop Hour                                              
+            {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'}, #stop Min
+            {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'}, #start Min              
+            {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'}, #days
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Node Server Status'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 0, 'uom': 25, 'name': 'Connection State'},
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},            
             ]
     
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -507,6 +509,7 @@ class udiYoMultiOutlet(udi_interface.Node):
         polyglot.subscribe(polyglot.CONFIGDONE, self.configDoneHandler)
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

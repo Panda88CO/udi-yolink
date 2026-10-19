@@ -23,7 +23,7 @@ import time
 
 
 class udiYoCOSmokeSensor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2nbr, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2nbr, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yoCOSmokesens'
     
@@ -46,19 +46,19 @@ class udiYoCOSmokeSensor(udi_interface.Node):
 
     ''' 
         
-    drivers = [ {'driver': 'ALARM', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV3', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV4', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV5', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV7', 'value': 0,  'uom': 25}, 
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},   
-             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},]
+    drivers = [ {'driver': 'ALARM', 'value': 99, 'uom': 25, 'name': 'Alert Detected'}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Smoke Detection'}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'CO Detection'}, 
+            {'driver': 'GV2', 'value': 99, 'uom': 25, 'name': 'High Temp Detection'}, 
+            {'driver': 'GV3', 'value': 99, 'uom': 25, 'name': 'Battery Problem Detection'}, 
+            {'driver': 'GV4', 'value': 99, 'uom': 25, 'name': 'Sensor Battery Level'}, 
+            {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Self-check'}, 
+            {'driver': 'GV7', 'value': 0,  'uom': 25, 'name': 'Command Setting'}, 
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Sensor Temperature'},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Alarm'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},   
+             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last device update'},]
 
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -91,6 +91,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
              
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

@@ -24,7 +24,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoOutlet(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, checkNameSync, apply_profile_driver_names
     id = 'yooutlet'
     '''
        drivers = [
@@ -37,15 +37,15 @@ class udiYoOutlet(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Outlet State (Legacy)'},
+            {'driver': 'GV1', 'value': 0, 'uom': 57, 'name': 'On Delay Remaining'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57, 'name': 'Off Delay Remaining'}, 
             #{'driver': 'GV3', 'value': 0, 'uom': 73},
             #{'driver': 'GV4', 'value': 0, 'uom': 119},
-            {'driver': 'GV5', 'value': 99, 'uom': 25},
-            {'driver': 'GV6', 'value': 99, 'uom': 25},
-            {'driver': 'GV7', 'value': 99, 'uom': 25},
-            {'driver': 'GV8', 'value': 99, 'uom': 25},
+            {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Overload Alert'},
+            {'driver': 'GV6', 'value': 99, 'uom': 25, 'name': 'High Load Alert'},
+            {'driver': 'GV7', 'value': 99, 'uom': 25, 'name': 'Low Load Alert'},
+            {'driver': 'GV8', 'value': 99, 'uom': 25, 'name': 'High Temperature Alert'},
 
             #{'driver': 'GV13', 'value': 0, 'uom': 25}, #Schedule index/no
             #{'driver': 'GV14', 'value': 99, 'uom': 25}, # Active
@@ -57,10 +57,10 @@ class udiYoOutlet(udi_interface.Node):
             #{'driver': 'GV22', 'value': 99, 'uom': 25}, #stop Sec                        
             #{'driver': 'GV19', 'value': 0, 'uom': 25}, #days
 
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},            
-            {'driver': 'GV20', 'value': 99, 'uom': 25},              
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Outlet State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},            
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},              
+            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},
 
             ]
 
@@ -106,6 +106,7 @@ class udiYoOutlet(udi_interface.Node):
                
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

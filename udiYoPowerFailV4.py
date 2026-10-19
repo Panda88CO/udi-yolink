@@ -22,7 +22,7 @@ from yolinkPowerFailV3 import YoLinkPowerFailSensor
 
 
 class udiYoPowerFailSenor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2ISY, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yopwralarm'
     
@@ -40,16 +40,16 @@ class udiYoPowerFailSenor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'GV0', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV3', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV4', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV7', 'value': 0, 'uom': 25},      
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25}, 
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Unit State (Legacy)'}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Battery Level'}, 
+            {'driver': 'GV2', 'value': 99, 'uom': 25, 'name': 'Alert Pending'}, 
+            {'driver': 'GV3', 'value': 99, 'uom': 25, 'name': 'Power on Unit'}, 
+            {'driver': 'GV4', 'value': 99, 'uom': 25, 'name': 'Muted'}, 
+            {'driver': 'GV7', 'value': 0, 'uom': 25, 'name': 'Command Setting'},      
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Unit State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'}, 
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},
 
             ]
 
@@ -83,6 +83,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
         
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

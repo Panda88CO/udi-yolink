@@ -20,7 +20,7 @@ Custom = udi_interface.Custom
 
 
 class udiYoDoorSensor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yodoorsens'
     
@@ -33,14 +33,14 @@ class udiYoDoorSensor(udi_interface.Node):
 
     ''' 
         
-    drivers = [ {'driver': 'GV0', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV1', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 25},     
-            {'driver': 'GV3', 'value': int(time.time()), 'uom': 151},
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25}, 
-            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151}, ]
+    drivers = [ {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Door State (Legacy)'}, 
+            {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Sensor Battery Level'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Command Setting'},     
+            {'driver': 'GV3', 'value': int(time.time()), 'uom': 151, 'name': 'Last State Change'},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Door State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'}, 
+            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last device update'}, ]
 
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -69,6 +69,7 @@ class udiYoDoorSensor(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
 
 
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

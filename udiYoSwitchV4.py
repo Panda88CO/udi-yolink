@@ -25,23 +25,23 @@ from udiYoSmartRemoterV4 import udiRemoteKey
 from udiYoSchedule import udiYoSchedule
 
 class udiYoSwitch(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, state2ISY, bool2ISY, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, state2ISY, bool2ISY, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
     id = 'yoswitch'
 
     drivers = [
-            {'driver': 'ST', 'value': 99, 'uom': 25},        
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 57}, 
-            {'driver': 'GV2', 'value': 0, 'uom': 57}, 
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
-            {'driver': 'GV5', 'value': 99, 'uom': 25},
-            {'driver': 'GV6', 'value': 99, 'uom': 25},
-            {'driver': 'GV7', 'value': 99, 'uom': 25},
-            {'driver': 'GV8', 'value': 99, 'uom': 25},
-            {'driver': 'GV9', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},                          
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},        
+            {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Switch State'},        
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Switch State (Legacy)'},
+            {'driver': 'GV1', 'value': 0, 'uom': 57, 'name': 'On Delay (min)'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 57, 'name': 'Off Delay (min)'}, 
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
+            {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Overload Alert'},
+            {'driver': 'GV6', 'value': 99, 'uom': 25, 'name': 'High Load Alert'},
+            {'driver': 'GV7', 'value': 99, 'uom': 25, 'name': 'Low Load Alert'},
+            {'driver': 'GV8', 'value': 99, 'uom': 25, 'name': 'High Temperature Alert'},
+            {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Led State'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},                          
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},        
             ]
 
 
@@ -100,6 +100,7 @@ class udiYoSwitch(udi_interface.Node):
                
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

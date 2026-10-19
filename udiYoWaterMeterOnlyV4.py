@@ -24,7 +24,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterOnly(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yowatermeterOnly'
     '''
@@ -40,30 +40,30 @@ class udiYoWaterMeterOnly(udi_interface.Node):
             ]
     ''' 
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},  # Water flowing
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Water Running'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},  # Water flowing
             #{'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 69}, #water use total
-            {'driver': 'GV10', 'value': 99, 'uom': 25}, #water use daily             
-            {'driver': 'GV2', 'value': 0, 'uom': 69},  #wateruse recent
-            {'driver': 'GV3', 'value': 0, 'uom': 44},  #Wateruse duration
+            {'driver': 'GV1', 'value': 0, 'uom': 69, 'name': 'Water Meter Total'}, #water use total
+            {'driver': 'GV10', 'value': 99, 'uom': 25, 'name': 'Water Meter Day Use'}, #water use daily             
+            {'driver': 'GV2', 'value': 0, 'uom': 69, 'name': 'Water Meter Recent Use'},  #wateruse recent
+            {'driver': 'GV3', 'value': 0, 'uom': 44, 'name': 'Water Meter Recent Duration'},  #Wateruse duration
             #{'driver': 'GV4', 'value': 99, 'uom': 25}, #alarm
-            {'driver': 'GV5', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV6', 'value': 99, 'uom': 25}, 
-            {'driver': 'GV7', 'value': 99, 'uom': 25}, 
+            {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Leak Alarm'}, 
+            {'driver': 'GV6', 'value': 99, 'uom': 25, 'name': 'Amount Overrun Alarm'}, 
+            {'driver': 'GV7', 'value': 99, 'uom': 25, 'name': 'Duration Overrun Alarm'}, 
             #{'driver': 'GV8', 'value': 99, 'uom': 25},                                              
-            {'driver': 'GV9', 'value': 99, 'uom': 25}, 
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
-            {'driver': 'GV11', 'value': 99, 'uom' : 25}, # Unit
-            {'driver': 'GV12', 'value': 99, 'uom' : 6}, #  leak limit
-            {'driver': 'GV13', 'value': 99, 'uom' : 25}, # auto shutoffg
-            {'driver': 'GV14', 'value': 99, 'uom' : 6}, # Water flowing
+            {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Reminder Alarm'}, 
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Water Temperature'},
+            {'driver': 'GV11', 'value': 99, 'uom' : 25, 'name': 'Open Reminder Alarm'}, # Unit
+            {'driver': 'GV12', 'value': 99, 'uom' : 6, 'name': 'Valve Error Alarm'}, #  leak limit
+            {'driver': 'GV13', 'value': 99, 'uom' : 25, 'name': 'High Temp Alarm'}, # auto shutoffg
+            {'driver': 'GV14', 'value': 99, 'uom' : 6, 'name': 'Low Temp Alarm'}, # Water flowing
             #{'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
-            {'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
+            {'driver': 'GV16', 'value': 99, 'uom' : 44, 'name': 'Overrun time Limit'}, # Water flowing
             #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
-            {'driver': 'GV20', 'value': 0, 'uom': 25},
-            {'driver': 'TIME', 'value' :0, 'uom': 151},                
+            {'driver': 'GV20', 'value': 0, 'uom': 25, 'name': 'Connection State'},
+            {'driver': 'TIME', 'value' :0, 'uom': 151, 'name': 'Last device update'},                
             ]
 
 
@@ -109,6 +109,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

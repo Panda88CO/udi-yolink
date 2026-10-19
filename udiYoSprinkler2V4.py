@@ -26,7 +26,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoSprinkler2(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   water_meter_unit2uom, calculate_water_volume, state2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   water_meter_unit2uom, calculate_water_volume, state2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yosprinklerv2'
     '''
@@ -44,28 +44,28 @@ class udiYoSprinkler2(udi_interface.Node):
     drivers = [
             #{'driver': 'ST', 'value': 0, 'uom': 70}, # Water flow
            
-            {'driver': 'ST', 'value': 99, 'uom': 25}, #Water running 
-            {'driver': 'GV1', 'value': 99, 'uom': 25}, #no Water When running 
-            {'driver': 'GV10', 'value': 99, 'uom': 151}, #Time for lateest operatiowaterdelay type
+            {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Current State'}, #Water running 
+            {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Current No Water Alarm'}, #no Water When running 
+            {'driver': 'GV10', 'value': 99, 'uom': 151, 'name': 'Time for Latest operation Update'}, #Time for lateest operatiowaterdelay type
 
             #{'driver': 'GV2', 'value': 99, 'uom': 25}, #water mode attrib
             #{'driver': 'GV3', 'value': 99, 'uom': 25},  #Water Method attrib 
             #{'driver': 'GV4', 'value': 99, 'uom': 25},  #Amount attrib 
 
-            {'driver': 'GV5', 'value': 99, 'uom': 25},  #Latest operation
+            {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Latest Operation'},  #Latest operation
             #{'driver': 'GV6', 'value': 99, 'uom': 25},  # Latest Mode
-            {'driver': 'GV7', 'value': 99, 'uom': 25}, #Latest Method
-            {'driver': 'GV8', 'value': 99, 'uom': 25}, #Latest Volume                                             
-            {'driver': 'GV9', 'value': 99, 'uom': 25}, #Latest Alert
+            {'driver': 'GV7', 'value': 99, 'uom': 25, 'name': 'Latest Water Method'}, #Latest Method
+            {'driver': 'GV8', 'value': 99, 'uom': 25, 'name': 'Latest Water Amount target'}, #Latest Volume                                             
+            {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Latest Water Alarm'}, #Latest Alert
             #{'driver': 'GV10', 'value': 99, 'uom': 25}, #no Water When Last run 
 
             #{'driver': 'GV10', 'value': 99, 'uom': 70}, #waterdelay type values
-            {'driver': 'GV12', 'value': 99, 'uom' : 44}, # delay valuetype
+            {'driver': 'GV12', 'value': 99, 'uom' : 44, 'name': 'Time Delay'}, # delay valuetype
      
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
-            {'driver': 'TIME', 'value' :0, 'uom': 151},                
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
+            {'driver': 'TIME', 'value' :0, 'uom': 151, 'name': 'Last Data Update'},                
             ]
 
 
@@ -111,6 +111,7 @@ class udiYoSprinkler2(udi_interface.Node):
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
 
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

@@ -45,6 +45,7 @@ from udiYoWaterMeterControllerV4 import udiYoWaterMeterController
 from udiYoWaterMeterMultiControllerV4 import udiYoWaterMeterMulti 
 #from udiYoWaterMeterOnlyV3 import udiYoWaterMeterOnly 
 from udiYoHubV4 import udiYoHub, udiYoBatteryHub
+from udiDynamicProfile import update_dynamic_profile
 #import udiProfileHandler
 
 try:
@@ -309,7 +310,6 @@ def addNodes (self, deviceList) -> list:
 
                 if custom_data is not None and (tts_changed or profile_changed):
                     custom_data['tts_signature'] = tts_signature
-                self.poly.updateProfile()   
                 #for nbr in range(0,self.nbrTTS):
                 #    index = 'TTS'+str(nbr)
                 #    if index not in self.Parameters:
@@ -611,7 +611,7 @@ def addNodes (self, deviceList) -> list:
   
     time.sleep(1)
     # checking params for erassed nodes
-    self.poly.updateProfile()
+    update_dynamic_profile(self)
     self.yolink_nodes = self.poly.getNodes()
     self.my_setDriver('GV1', 1)
     self.pollStart = True

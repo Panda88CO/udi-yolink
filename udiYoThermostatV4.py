@@ -22,31 +22,31 @@ from yolinkThermostatV2 import YoLinkThermostat
 
 
 class udiYoThermostat(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yothermostat'
 
     drivers = [
-        {'driver': 'ST', 'value': 0, 'uom': 4},           # Current temperature (UoM 4=Celsius, 17=Fahrenheit)
-        {'driver': 'CLIHCS', 'value': 99, 'uom': 66},     # Running state (UoM 66: 0=Idle, 1=Heating, 2=Cooling)
-        {'driver': 'CLIHUM', 'value': 0, 'uom': 51},      # Current humidity (UoM 51=percent)
-        {'driver': 'CLISPH', 'value': 0, 'uom': 4},       # Heat setpoint (UoM 4=Celsius, 17=Fahrenheit)
-        {'driver': 'CLISPC', 'value': 0, 'uom': 4},       # Cool setpoint (UoM 4=Celsius, 17=Fahrenheit)
-        {'driver': 'CLIMD', 'value': 99, 'uom': 67},      # Thermostat mode (UoM 67: 0=Off, 1=Heat, 2=Cool, 3=Auto)
-        {'driver': 'CLIFS', 'value': 99, 'uom': 68},      # Fan setting (UoM 68: 0=Auto, 1=On)
-        {'driver': 'CLISMD', 'value': 99, 'uom': 25},     # Schedule mode (UoM 25: 0=run, 1=hold)
-        {'driver': 'GV0', 'value': 99, 'uom': 4},         # Sensor 1 temp (optional, UoM 4=C)
-        {'driver': 'GV1', 'value': 99, 'uom': 4},         # Sensor 2 temp (optional, UoM 4=C)
-        {'driver': 'GV2', 'value': 99, 'uom': 25},        # Aux heat running (UoM 25: 0=no, 1=yes)
-        {'driver': 'GV3', 'value': 99, 'uom': 25},        # Second stage running (UoM 25: 0=no, 1=yes)
-        {'driver': 'CLIEMD', 'value': 99, 'uom': 25},     # ECO mode (UoM 25: 0=off, 1=on)
-        {'driver': 'GV18', 'value': 99, 'uom': 4},        # ECO low temp offset (Celsius)
-        {'driver': 'GV19', 'value': 99, 'uom': 4},        # ECO high temp offset (Celsius)        
-        {'driver': 'GV5', 'value': 99, 'uom': 25},        # DR running (UoM 25: 0=no, 1=yes)
+        {'driver': 'ST', 'value': 0, 'uom': 4, 'name': 'Temperature'},           # Current temperature (UoM 4=Celsius, 17=Fahrenheit)
+        {'driver': 'CLIHCS', 'value': 99, 'uom': 66, 'name': 'Running State'},     # Running state (UoM 66: 0=Idle, 1=Heating, 2=Cooling)
+        {'driver': 'CLIHUM', 'value': 0, 'uom': 51, 'name': 'Humidity'},      # Current humidity (UoM 51=percent)
+        {'driver': 'CLISPH', 'value': 0, 'uom': 4, 'name': 'Heat Setpoint'},       # Heat setpoint (UoM 4=Celsius, 17=Fahrenheit)
+        {'driver': 'CLISPC', 'value': 0, 'uom': 4, 'name': 'Cool Setpoint'},       # Cool setpoint (UoM 4=Celsius, 17=Fahrenheit)
+        {'driver': 'CLIMD', 'value': 99, 'uom': 67, 'name': 'Mode'},      # Thermostat mode (UoM 67: 0=Off, 1=Heat, 2=Cool, 3=Auto)
+        {'driver': 'CLIFS', 'value': 99, 'uom': 68, 'name': 'Fan Setting'},      # Fan setting (UoM 68: 0=Auto, 1=On)
+        {'driver': 'CLISMD', 'value': 99, 'uom': 25, 'name': 'Schedule Mode'},     # Schedule mode (UoM 25: 0=run, 1=hold)
+        {'driver': 'GV0', 'value': 99, 'uom': 4, 'name': 'Sensor 1 Temp'},         # Sensor 1 temp (optional, UoM 4=C)
+        {'driver': 'GV1', 'value': 99, 'uom': 4, 'name': 'Sensor 2 Temp'},         # Sensor 2 temp (optional, UoM 4=C)
+        {'driver': 'GV2', 'value': 99, 'uom': 25, 'name': 'Aux Heat Running'},        # Aux heat running (UoM 25: 0=no, 1=yes)
+        {'driver': 'GV3', 'value': 99, 'uom': 25, 'name': 'Stage 2 Running'},        # Second stage running (UoM 25: 0=no, 1=yes)
+        {'driver': 'CLIEMD', 'value': 99, 'uom': 25, 'name': 'ECO Mode'},     # ECO mode (UoM 25: 0=off, 1=on)
+        {'driver': 'GV18', 'value': 99, 'uom': 4, 'name': 'ECO Low Temp'},        # ECO low temp offset (Celsius)
+        {'driver': 'GV19', 'value': 99, 'uom': 4, 'name': 'ECO High Temp'},        # ECO high temp offset (Celsius)        
+        {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Demand Response Running'},        # DR running (UoM 25: 0=no, 1=yes)
 
-        {'driver': 'GV20', 'value': 99, 'uom': 25},       # Suspended state (UoM 25: 0=not suspended, 1=suspended, 2=error)
-        {'driver': 'GV30', 'value': 99, 'uom': 25},       # Online status (UoM 25: 0=offline, 1=online)
-        {'driver': 'TIME', 'value': int(time.time()), 'uom': 151},  # Last update time (UoM 151=Unix Timestamp)
+        {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},       # Suspended state (UoM 25: 0=not suspended, 1=suspended, 2=error)
+        {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},       # Online status (UoM 25: 0=offline, 1=online)
+        {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last Update'},  # Last update time (UoM 151=Unix Timestamp)
     ]
 
     def __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):
@@ -82,6 +82,7 @@ class udiYoThermostat(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
 
         # Add node and wait
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status=None, rename=True)
         self.wait_for_node_done()
         self.main_node_ready = True
@@ -482,23 +483,23 @@ class udiYoThermostat(udi_interface.Node):
 
 
 class udiYoThermostatProperties(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yothermprop'
 
     drivers = [
-        {'driver': 'GV6', 'value': 99, 'uom': 44},        # minRuntime (minutes)
-        {'driver': 'GV7', 'value': 99, 'uom': 4},         # coolLimit (Celsius)
-        {'driver': 'GV8', 'value': 99, 'uom': 4},         # heatLimit (Celsius)
-        {'driver': 'GV9', 'value': 99, 'uom': 25},        # mute (0=no, 1=yes)
-        {'driver': 'GV10', 'value': 99, 'uom': 25},       # menuLock (0=no, 1=yes)
-        {'driver': 'GV11', 'value': 99, 'uom': 44},       # auxStandby (minutes)
-        {'driver': 'GV12', 'value': 99, 'uom': 20},       # auxMaxSpan (hours)
-        {'driver': 'GV13', 'value': 99, 'uom': 4},        # auxThreshold (Celsius)
-        {'driver': 'GV14', 'value': 99, 'uom': 44},       # stage2Standby (minutes)
-        {'driver': 'GV15', 'value': 99, 'uom': 20},       # stage2MaxSpan (hours)
-        {'driver': 'GV16', 'value': 99, 'uom': 4},        # stage2Threshold (Celsius)
-        {'driver': 'GV17', 'value': 99, 'uom': 25},       # master temp source (0=local, 1=sensor1, 2=sensor2)
+        {'driver': 'GV6', 'value': 99, 'uom': 44, 'name': 'Min Runtime'},        # minRuntime (minutes)
+        {'driver': 'GV7', 'value': 99, 'uom': 4, 'name': 'Cool Limit'},         # coolLimit (Celsius)
+        {'driver': 'GV8', 'value': 99, 'uom': 4, 'name': 'Heat Limit'},         # heatLimit (Celsius)
+        {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Mute'},        # mute (0=no, 1=yes)
+        {'driver': 'GV10', 'value': 99, 'uom': 25, 'name': 'Menu Lock'},       # menuLock (0=no, 1=yes)
+        {'driver': 'GV11', 'value': 99, 'uom': 44, 'name': 'Aux Standby'},       # auxStandby (minutes)
+        {'driver': 'GV12', 'value': 99, 'uom': 20, 'name': 'Aux Max Span'},       # auxMaxSpan (hours)
+        {'driver': 'GV13', 'value': 99, 'uom': 4, 'name': 'Aux Threshold'},        # auxThreshold (Celsius)
+        {'driver': 'GV14', 'value': 99, 'uom': 44, 'name': 'Stage2 Standby'},       # stage2Standby (minutes)
+        {'driver': 'GV15', 'value': 99, 'uom': 20, 'name': 'Stage2 Max Span'},       # stage2MaxSpan (hours)
+        {'driver': 'GV16', 'value': 99, 'uom': 4, 'name': 'Stage2 Threshold'},        # stage2Threshold (Celsius)
+        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Master Source'},       # master temp source (0=local, 1=sensor1, 2=sensor2)
     ]
 
     def __init__(self, polyglot, primary, address, name, thermostat_node):
@@ -513,6 +514,7 @@ class udiYoThermostatProperties(udi_interface.Node):
             self.id = 'yothermpropf'
 
         self.poly.subscribe(self.poly.ADDNODEDONE, self.node_queue)
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status=None, rename=True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

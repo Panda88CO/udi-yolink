@@ -23,7 +23,7 @@ from yolinkSoilSensorV2 import YoLinkSoilSensor
 
 
 class udiYoSoilSensor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yosoilsensor'
     
@@ -45,29 +45,29 @@ class udiYoSoilSensor(udi_interface.Node):
     ''' 
         
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 70},
-            {'driver': 'CLITEMP', 'value': 0, 'uom': 4},
-            {'driver': 'CLIHUM', 'value': 0, 'uom': 51},
-            {'driver': 'GV1', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV2', 'value': 2, 'uom': 25},           
-            {'driver': 'GV3', 'value': 2, 'uom': 25}, 
-            {'driver': 'GV4', 'value': 2, 'uom': 25},
-            {'driver': 'GV5', 'value': 2, 'uom': 25},
-            {'driver': 'GV6', 'value': 2, 'uom': 25},             
-            {'driver': 'GV7', 'value': 2, 'uom': 25},
-            {'driver': 'GV8', 'value': 2, 'uom': 25},            
-            {'driver': 'BATLVL', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 70, 'name': 'Soil Conductivity (mS/cm)'},
+            {'driver': 'CLITEMP', 'value': 0, 'uom': 4, 'name': 'Sensor Temperature'},
+            {'driver': 'CLIHUM', 'value': 0, 'uom': 51, 'name': 'Current Rel Humidity (%)'},
+            {'driver': 'GV1', 'value': 2, 'uom': 25, 'name': 'Low Conductivity Alarm'}, 
+            {'driver': 'GV2', 'value': 2, 'uom': 25, 'name': 'High Conductivity Alarm'},           
+            {'driver': 'GV3', 'value': 2, 'uom': 25, 'name': 'Low Temp Alarm'}, 
+            {'driver': 'GV4', 'value': 2, 'uom': 25, 'name': 'High Temp Alarm'},
+            {'driver': 'GV5', 'value': 2, 'uom': 25, 'name': 'Low Humidity Alarm'},
+            {'driver': 'GV6', 'value': 2, 'uom': 25, 'name': 'High Humidity Alarm'},             
+            {'driver': 'GV7', 'value': 2, 'uom': 25, 'name': 'Period Alarm'},
+            {'driver': 'GV8', 'value': 2, 'uom': 25, 'name': 'Alarm triggered'},            
+            {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
 
-            {'driver': 'GV9', 'value': 99, 'uom': 25},
-            {'driver': 'GV10', 'value': 0, 'uom': 4},
-            {'driver': 'GV11', 'value': 0, 'uom': 4},
-            {'driver': 'GV12', 'value': 0, 'uom': 51},
-            {'driver': 'GV13', 'value': 0, 'uom': 51},
-            {'driver': 'GV14', 'value': 0, 'uom': 70},
-            {'driver': 'GV15', 'value': 0, 'uom': 70},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},            
-            {'driver': 'GV20', 'value': 99, 'uom': 25},            
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},    
+            {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Command Setting'},
+            {'driver': 'GV10', 'value': 0, 'uom': 4, 'name': 'Low Temp Alarm Limit'},
+            {'driver': 'GV11', 'value': 0, 'uom': 4, 'name': 'High Temp Alarm Limit'},
+            {'driver': 'GV12', 'value': 0, 'uom': 51, 'name': 'Low Humidity Alarm Limit'},
+            {'driver': 'GV13', 'value': 0, 'uom': 51, 'name': 'High Humidity Alarm Limit'},
+            {'driver': 'GV14', 'value': 0, 'uom': 70, 'name': 'Low Conductivity Alarm Limit (mS/cm)'},
+            {'driver': 'GV15', 'value': 0, 'uom': 70, 'name': 'High Conductivity Alarm Limit (mS/cm)'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},            
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},            
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},    
             ]
 
 
@@ -108,6 +108,7 @@ class udiYoSoilSensor(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
                      
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
 

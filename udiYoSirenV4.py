@@ -22,7 +22,7 @@ from yolinkSirenV3 import YoLinkSiren
 
 
 class udiYoSiren(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
     id = 'yosiren'
     '''
@@ -34,16 +34,16 @@ class udiYoSiren(udi_interface.Node):
             ]
     '''  #Needs update 
     drivers = [
-            {'driver': 'ST', 'value': 0, 'uom': 25},
-            {'driver': 'GV0', 'value': 99, 'uom': 25},
-            {'driver': 'GV1', 'value': 0, 'uom': 58}, # seconds
-            {'driver': 'GV2', 'value': 99, 'uom': 25},
-            {'driver': 'GV3', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Siren State'},
+            {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Siren State (Legacy)'},
+            {'driver': 'GV1', 'value': 0, 'uom': 58, 'name': 'Siren Duration'}, # seconds
+            {'driver': 'GV2', 'value': 99, 'uom': 25, 'name': 'Supply State'},
+            {'driver': 'GV3', 'value': 99, 'uom': 25, 'name': 'Sound Level'},
 
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
 
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151},
+             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},
             ]
 
 
@@ -74,6 +74,7 @@ class udiYoSiren(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configDoneHandler)
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)

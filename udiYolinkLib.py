@@ -26,6 +26,8 @@ from datetime import datetime
 
 driver_lock = threading.Lock()
 
+from udiDynamicProfile import apply_profile_driver_names, get_profile_driver_names, update_dynamic_profile
+
 
 def start_done(self):
     logging.info(f'start_done called  - {self.devInfo["name"]}')

@@ -29,19 +29,19 @@ REMOTE_TYPE_SINGLE_PRESS = 0
 REMOTE_TYPE_DUAL_PRESS = 1
 
 class udiRemoteKey(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, save_cmd_struct, retrieve_cmd_struct, node_queue, wait_for_node_done, mask2key, set_node_custom, get_node_custom, checkNameSync
+    from  udiYolinkLib import my_setDriver, save_cmd_struct, retrieve_cmd_struct, node_queue, wait_for_node_done, mask2key, set_node_custom, get_node_custom, checkNameSync, apply_profile_driver_names
 
     id = 'smremotekey'
     drivers = [
-            {'driver': 'ST', 'value': 99, 'uom': 25}, # Command
-            {'driver': 'GV1', 'value': 0, 'uom': 25}, # Short Keypress setting
-            {'driver': 'GV2', 'value': 1, 'uom': 25}, # Long Keypress setting
-            {'driver': 'TIME', 'value': 0, 'uom': 151}, # Last successful key press (unix time)
+            {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Last Command'}, # Command
+            {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Short Press Command Type'}, # Short Keypress setting
+            {'driver': 'GV2', 'value': 1, 'uom': 25, 'name': 'Long Press Type'}, # Long Keypress setting
+            {'driver': 'TIME', 'value': 0, 'uom': 151, 'name': 'Last key press'}, # Last successful key press (unix time)
             ]
     single_press_drivers = [
-            {'driver': 'ST', 'value': 99, 'uom': 25}, # Command
-            {'driver': 'GV1', 'value': 0, 'uom': 25}, # Press setting
-            {'driver': 'TIME', 'value': 0, 'uom': 151}, # Last successful key press (unix time)
+            {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Last Command'}, # Command
+            {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Press Command'}, # Press setting
+            {'driver': 'TIME', 'value': 0, 'uom': 151, 'name': 'Last key press'}, # Last successful key press (unix time)
             ]
 
     def __init__(self, polyglot, primary, address, name, key, single_press_only=False, single_press_event_type='Press'):
@@ -96,6 +96,7 @@ class udiRemoteKey(udi_interface.Node):
         self.poly.subscribe(self.poly.CONFIGDONE, self.configHandler)
         # start processing events and create add our controller node
         
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
@@ -318,18 +319,18 @@ class udiRemoteKey(udi_interface.Node):
 
 
 class udiYoSmartRemoter(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames
+    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames, apply_profile_driver_names
 
     id = 'yosmremote'
 
 
         
     drivers = [
-            {'driver': 'ST', 'value': 99, 'uom': 25},
-            {'driver': 'GV3', 'value': 99, 'uom': 25},
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25},
-            {'driver': 'GV20', 'value': 99, 'uom': 25},
-            {'driver': 'GV30', 'value': 99, 'uom': 25},
+            {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Remote Type'},
+            {'driver': 'GV3', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Sensor Temperature'},
+            {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},
+            {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
             ]
 
 
@@ -381,6 +382,7 @@ class udiYoSmartRemoter(udi_interface.Node):
         
 
         # start processing events and create add our controller node
+        self.apply_profile_driver_names(self.id)
         self.poly.addNode(self, conn_status = None, rename = True)
         self.wait_for_node_done()
         self.node = self.poly.getNode(address)
