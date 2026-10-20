@@ -61,7 +61,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         editors = udiDynamicProfile.get_dynamic_profile_editors()
         self.assertGreaterEqual(len(editors), 100)
         # Check an editor with enum translations
-        connect_ed = next((e for e in editors if e.get('id') == 'connect'), None)
+        connect_ed = next((e for e in editors if e.get('id') == 'CONNECT'), None)
         self.assertIsNotNone(connect_ed)
         self.assertTrue(len(connect_ed.get('ranges', [])) > 0)
         self.assertIn('names', connect_ed['ranges'][0])
@@ -79,7 +79,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertEqual(len(nodedefs_all), 72)
 
         # Check setup nodeDef
-        setup_nd = next((nd for nd in nodedefs_unified if nd.get('id') == 'setup'), None)
+        setup_nd = next((nd for nd in nodedefs_unified if nd.get('id') == 'SETUP'), None)
         self.assertIsNotNone(setup_nd)
         self.assertEqual(setup_nd.get('name'), 'YoLink Setup')
         st_prop = next((p for p in setup_nd.get('properties', []) if p.get('id') == 'ST'), None)
@@ -87,7 +87,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertEqual(st_prop.get('name'), 'Node Server')
 
         # Check yowatermeterSub has full properties
-        sub_nd = next((nd for nd in nodedefs_unified if nd.get('id') == 'yowatermeterSub'), None)
+        sub_nd = next((nd for nd in nodedefs_unified if nd.get('id') == 'YOWATERMETERSUB'), None)
         self.assertIsNotNone(sub_nd)
         sub_prop_ids = {p['id'] for p in sub_nd.get('properties', [])}
         self.assertIn('GV22', sub_prop_ids)
@@ -99,47 +99,47 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         by_id = {e['id']: e for e in editors}
 
         # Temperature editors parameterized to Fahrenheit (UOM 17)
-        self.assertEqual(by_id['celsius']['ranges'][0]['uom'], '17')
-        self.assertEqual(by_id['celsius']['ranges'][0]['max'], '221')
-        self.assertEqual(by_id['farenheit']['ranges'][0]['uom'], '17')
-        self.assertEqual(by_id['celsiusSet']['ranges'][0]['uom'], '17')
-        self.assertEqual(by_id['celsiusSet']['ranges'][0]['min'], '40')
-        self.assertEqual(by_id['ecoSet']['ranges'][0]['uom'], '17')
-        self.assertEqual(by_id['ecoSet']['ranges'][0]['max'], '9')
+        self.assertEqual(by_id['CELSIUS']['ranges'][0]['uom'], '17')
+        self.assertEqual(by_id['CELSIUS']['ranges'][0]['max'], '221')
+        self.assertEqual(by_id['FARENHEIT']['ranges'][0]['uom'], '17')
+        self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['uom'], '17')
+        self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['min'], '40')
+        self.assertEqual(by_id['ECOSET']['ranges'][0]['uom'], '17')
+        self.assertEqual(by_id['ECOSET']['ranges'][0]['max'], '9')
 
         # Water editors parameterized to Gallons (UOM 69)
-        self.assertEqual(by_id['liter']['ranges'][0]['uom'], '69')
-        self.assertEqual(by_id['gallon']['ranges'][0]['uom'], '69')
-        self.assertEqual(by_id['literSet']['ranges'][0]['uom'], '69')
+        self.assertEqual(by_id['LITER']['ranges'][0]['uom'], '69')
+        self.assertEqual(by_id['GALLON']['ranges'][0]['uom'], '69')
+        self.assertEqual(by_id['LITERSET']['ranges'][0]['uom'], '69')
 
     def test_dynamic_editors_celsius_and_liters(self):
         editors = udiDynamicProfile.get_dynamic_profile_editors(temp_unit=0, water_unit=3)
         by_id = {e['id']: e for e in editors}
 
         # Temperature editors parameterized to Celsius (UOM 4)
-        self.assertEqual(by_id['celsius']['ranges'][0]['uom'], '4')
-        self.assertEqual(by_id['celsius']['ranges'][0]['max'], '105')
-        self.assertEqual(by_id['farenheit']['ranges'][0]['uom'], '4')
-        self.assertEqual(by_id['celsiusSet']['ranges'][0]['uom'], '4')
-        self.assertEqual(by_id['celsiusSet']['ranges'][0]['max'], '38')
-        self.assertEqual(by_id['ecoSet']['ranges'][0]['uom'], '4')
-        self.assertEqual(by_id['ecoSet']['ranges'][0]['max'], '5')
+        self.assertEqual(by_id['CELSIUS']['ranges'][0]['uom'], '4')
+        self.assertEqual(by_id['CELSIUS']['ranges'][0]['max'], '105')
+        self.assertEqual(by_id['FARENHEIT']['ranges'][0]['uom'], '4')
+        self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['uom'], '4')
+        self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['max'], '38')
+        self.assertEqual(by_id['ECOSET']['ranges'][0]['uom'], '4')
+        self.assertEqual(by_id['ECOSET']['ranges'][0]['max'], '5')
 
         # Water editors parameterized to Liters (UOM 35)
-        self.assertEqual(by_id['liter']['ranges'][0]['uom'], '35')
-        self.assertEqual(by_id['gallon']['ranges'][0]['uom'], '35')
-        self.assertEqual(by_id['literSet']['ranges'][0]['uom'], '35')
-        self.assertEqual(by_id['liter']['ranges'][0]['max'], '100000')
+        self.assertEqual(by_id['LITER']['ranges'][0]['uom'], '35')
+        self.assertEqual(by_id['GALLON']['ranges'][0]['uom'], '35')
+        self.assertEqual(by_id['LITERSET']['ranges'][0]['uom'], '35')
+        self.assertEqual(by_id['LITER']['ranges'][0]['max'], '100000')
 
     def test_dynamic_editors_ccf_and_m3(self):
         ed_ccf = {e['id']: e for e in udiDynamicProfile.get_dynamic_profile_editors(water_unit=1)}
-        self.assertEqual(ed_ccf['liter']['ranges'][0]['uom'], '6')
-        self.assertEqual(ed_ccf['gallon']['ranges'][0]['uom'], '6')
+        self.assertEqual(ed_ccf['LITER']['ranges'][0]['uom'], '6')
+        self.assertEqual(ed_ccf['GALLON']['ranges'][0]['uom'], '6')
 
         ed_m3 = {e['id']: e for e in udiDynamicProfile.get_dynamic_profile_editors(water_unit=2)}
-        self.assertEqual(ed_m3['liter']['ranges'][0]['uom'], '8')
-        self.assertEqual(ed_m3['gallon']['ranges'][0]['uom'], '8')
-        self.assertEqual(ed_m3['liter']['ranges'][0]['prec'], '2')
+        self.assertEqual(ed_m3['LITER']['ranges'][0]['uom'], '8')
+        self.assertEqual(ed_m3['GALLON']['ranges'][0]['uom'], '8')
+        self.assertEqual(ed_m3['LITER']['ranges'][0]['prec'], '2')
 
     def test_dynamic_profile_payload_resolves_controller_units(self):
         mock_controller = MagicMock()
@@ -148,8 +148,8 @@ class TestDynamicProfileGeneration(unittest.TestCase):
 
         payload = udiDynamicProfile.get_dynamic_profile_payload(controller=mock_controller)
         by_id = {e['id']: e for e in payload['editors']}
-        self.assertEqual(by_id['celsius']['ranges'][0]['uom'], '17')
-        self.assertEqual(by_id['liter']['ranges'][0]['uom'], '35')
+        self.assertEqual(by_id['CELSIUS']['ranges'][0]['uom'], '17')
+        self.assertEqual(by_id['LITER']['ranges'][0]['uom'], '35')
         self.assertEqual(len(payload['nodedefs']), 57)
 
     def test_normalize_units(self):
@@ -193,15 +193,15 @@ class TestDriverNameResolution(unittest.TestCase):
         names = udiDynamicProfile.get_profile_driver_names()
         self.assertGreaterEqual(len(names), 700)
         # Verify key nodes
-        self.assertEqual(names.get(('setup', 'ST')), 'Node Server')
-        self.assertEqual(names.get(('setup', 'GV1')), 'Status')
-        self.assertEqual(names.get(('setup', 'TIME')), 'LastPoll Time')
-        self.assertEqual(names.get(('yoswitch', 'ST')), 'Switch State')
-        self.assertEqual(names.get(('yodoorsens', 'ST')), 'Door State')
+        self.assertEqual(names.get(('SETUP', 'ST')), 'Node Server')
+        self.assertEqual(names.get(('SETUP', 'GV1')), 'Status')
+        self.assertEqual(names.get(('SETUP', 'TIME')), 'LastPoll Time')
+        self.assertEqual(names.get(('YOSWITCH', 'ST')), 'Switch State')
+        self.assertEqual(names.get(('YODOORSENS', 'ST')), 'Door State')
 
     def test_apply_profile_driver_names_basic(self):
         class DummyNode:
-            id = 'yodoorsens'
+            id = 'YODOORSENS'
             drivers = [
                 {'driver': 'ST', 'value': 0, 'uom': 25},
                 {'driver': 'GV1', 'value': 99, 'uom': 25},
@@ -217,7 +217,7 @@ class TestDriverNameResolution(unittest.TestCase):
 
     def test_apply_profile_driver_names_isolates_instances(self):
         class DummyClass:
-            id = 'yoswitch'
+            id = 'YOSWITCH'
             drivers = [
                 {'driver': 'ST', 'value': 99, 'uom': 25},
             ]
@@ -225,24 +225,24 @@ class TestDriverNameResolution(unittest.TestCase):
         inst1 = DummyClass()
         inst2 = DummyClass()
 
-        udiDynamicProfile.apply_profile_driver_names(inst1, 'yoswitch')
+        udiDynamicProfile.apply_profile_driver_names(inst1, 'YOSWITCH')
         self.assertIsNot(inst1.drivers, DummyClass.drivers)
         self.assertIsNot(inst2.drivers, inst1.drivers)
 
     def test_apply_profile_driver_names_variant_overrides(self):
         class DummyThermostat:
-            id = 'yothermostat'
+            id = 'YOTHERMOSTAT'
             drivers = [
                 {'driver': 'ST', 'value': 0, 'uom': 4},
                 {'driver': 'CLISPC', 'value': 22, 'uom': 4},
             ]
 
         c_node = DummyThermostat()
-        udiDynamicProfile.apply_profile_driver_names(c_node, 'yothermostat')
+        udiDynamicProfile.apply_profile_driver_names(c_node, 'YOTHERMOSTAT')
 
         f_node = DummyThermostat()
-        f_node.id = 'yothermostatf'
-        udiDynamicProfile.apply_profile_driver_names(f_node, 'yothermostatf')
+        f_node.id = 'YOTHERMOSTATF'
+        udiDynamicProfile.apply_profile_driver_names(f_node, 'YOTHERMOSTATF')
 
         self.assertEqual(c_node.drivers[0]['name'], 'Temperature')
         self.assertEqual(f_node.drivers[0]['name'], 'Temperature')
@@ -264,7 +264,7 @@ class TestDriverNameResolution(unittest.TestCase):
 
     def test_apply_profile_driver_names_dynamic_uom(self):
         class DummyTempNode:
-            id = 'yothsens'
+            id = 'YOTHSENS'
             temp_unit = 1  # Fahrenheit
             drivers = [
                 {'driver': 'CLITEMP', 'value': 0, 'uom': 4},
@@ -275,7 +275,7 @@ class TestDriverNameResolution(unittest.TestCase):
         self.assertEqual(f_node.drivers[0]['uom'], 17)
 
         class DummyWaterNode:
-            id = 'yowatermeterSub'
+            id = 'YOWATERMETERSUB'
             water_unit = 0  # Gallons
             drivers = [
                 {'driver': 'GV1', 'value': 0, 'uom': 35},
@@ -433,15 +433,15 @@ class TestWaterUnitConversions(unittest.TestCase):
         for unit_val, expected_uom in [(0, '69'), (1, '6'), (2, '8'), (3, '35')]:
             editors = udiDynamicProfile.get_dynamic_profile_editors(water_unit=unit_val)
             by_id = {e['id']: e for e in editors}
-            self.assertEqual(by_id['liter']['ranges'][0]['uom'], expected_uom)
-            self.assertEqual(by_id['gallon']['ranges'][0]['uom'], expected_uom)
-            self.assertEqual(by_id['literSet']['ranges'][0]['uom'], expected_uom)
-            self.assertEqual(by_id['gallonSet']['ranges'][0]['uom'], expected_uom)
+            self.assertEqual(by_id['LITER']['ranges'][0]['uom'], expected_uom)
+            self.assertEqual(by_id['GALLON']['ranges'][0]['uom'], expected_uom)
+            self.assertEqual(by_id['LITERSET']['ranges'][0]['uom'], expected_uom)
+            self.assertEqual(by_id['GALLONSET']['ranges'][0]['uom'], expected_uom)
 
     def test_apply_profile_driver_names_all_four_water_units(self):
         for unit_val, expected_uom in [(0, 69), (1, 6), (2, 8), (3, 35)]:
             mock_node = MagicMock()
-            mock_node.id = 'yowatermeterSub'
+            mock_node.id = 'YOWATERMETERSUB'
             mock_node.water_unit = unit_val
             mock_node.temp_unit = 0
             mock_node.drivers = [

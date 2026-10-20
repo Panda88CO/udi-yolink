@@ -42,21 +42,21 @@ DRIVER_FALLBACK_LABELS = {
 
 # Mapping of unit-specific variant nodeDef IDs to unified base nodeDef IDs
 VARIANT_TO_BASE_NODEDEF = {
-    'yoCOSmokesensF': 'yoCOSmokesens',
-    'yoleaksensF': 'yoleaksens',
-    'yomotionsensF': 'yomotionsens',
-    'yosmremoteF': 'yosmremote',
-    'yosoilsensorF': 'yosoilsensor',
-    'yothsensF': 'yothsens',
-    'yotsensF': 'yotsens',
-    'yothermpropf': 'yothermprop',
-    'yothermostatf': 'yothermostat',
-    'yovibrasensF': 'yovibrasens',
-    'yowatermeterCtrlF': 'yowatermeterCtrl',
-    'yowatermeterMultiF': 'yowatermeterMulti',
-    'yowatermeterOnlyF': 'yowatermeterOnly',
-    'yowatermeterSubL': 'yowatermeterSub',
-    'yowatermeterSubG': 'yowatermeterSub',
+    'YOCOSMOKESENSF': 'YOCOSMOKESENS',
+    'YOLEAKSENSF': 'YOLEAKSENS',
+    'YOMOTIONSENSF': 'YOMOTIONSENS',
+    'YOSMREMOTEF': 'YOSMREMOTE',
+    'YOSOILSENSORF': 'YOSOILSENSOR',
+    'YOTHSENSF': 'YOTHSENS',
+    'YOTSENSF': 'YOTSENS',
+    'YOTHERMPROPF': 'YOTHERMPROP',
+    'YOTHERMOSTATF': 'YOTHERMOSTAT',
+    'YOVIBRASENSF': 'YOVIBRASENS',
+    'YOWATERMETERCTRLF': 'YOWATERMETERCTRL',
+    'YOWATERMETERMULTIF': 'YOWATERMETERMULTI',
+    'YOWATERMETERONLYF': 'YOWATERMETERONLY',
+    'YOWATERMETERSUBL': 'YOWATERMETERSUB',
+    'YOWATERMETERSUBG': 'YOWATERMETERSUB',
 }
 
 
@@ -310,12 +310,12 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
         {'uom': temp_uom, 'min': '0', 'max': eco_max, 'prec': '1'}
     ]
 
-    unit_editors['celsius'] = temp_ranges
-    unit_editors['farenheit'] = temp_ranges
-    unit_editors['celsiusSet'] = temp_set_ranges
-    unit_editors['farenheitSet'] = temp_set_ranges
-    unit_editors['ecoSet'] = eco_set_ranges
-    unit_editors['ecoSetF'] = eco_set_ranges
+    unit_editors['CELSIUS'] = temp_ranges
+    unit_editors['FARENHEIT'] = temp_ranges
+    unit_editors['CELSIUSSET'] = temp_set_ranges
+    unit_editors['FARENHEITSET'] = temp_set_ranges
+    unit_editors['ECOSET'] = eco_set_ranges
+    unit_editors['ECOSETF'] = eco_set_ranges
 
     # Water volume editors: 0 = Gallon (69), 1 = CCF (6), 2 = m^3 (8), 3 = Liter (35)
     err_names = {
@@ -347,10 +347,10 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
         {'uom': w_uom, 'min': '0', 'max': w_max, 'prec': w_prec}
     ]
 
-    unit_editors['liter'] = water_ranges
-    unit_editors['gallon'] = water_ranges
-    unit_editors['literSet'] = water_set_ranges
-    unit_editors['gallonSet'] = water_set_ranges
+    unit_editors['LITER'] = water_ranges
+    unit_editors['GALLON'] = water_ranges
+    unit_editors['LITERSET'] = water_set_ranges
+    unit_editors['GALLONSET'] = water_set_ranges
 
     return unit_editors
 

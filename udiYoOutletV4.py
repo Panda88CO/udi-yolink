@@ -25,7 +25,7 @@ from udiYoSchedule import udiYoSchedule
 
 class udiYoOutlet(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, checkNameSync, apply_profile_driver_names
-    id = 'yooutlet'
+    id = 'YOOUTLET'
     '''
        drivers = [
             'GV0' = Outlet State
@@ -82,7 +82,7 @@ class udiYoOutlet(udi_interface.Node):
         self.powerSupported = False # assume 
         model = str(deviceInfo['modelName'][:6])        
         if model in ['YS6803','YS6602','YS5716', 'YS6614']:
-            self.id = 'yooutletPwr'
+            self.id = 'YOOUTLETPWR'
             self.powerSupported = True  
 
         # Use instance-level drivers so power models can expose GV3/GV4 without affecting non-power outlets.

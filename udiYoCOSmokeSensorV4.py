@@ -25,7 +25,7 @@ import time
 class udiYoCOSmokeSensor(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2nbr, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yoCOSmokesens'
+    id = 'YOCOSMOKESENS'
     
     '''
        drivers = [

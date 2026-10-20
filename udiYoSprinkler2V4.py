@@ -28,7 +28,7 @@ from udiYoSchedule import udiYoSchedule
 class udiYoSprinkler2(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   water_meter_unit2uom, calculate_water_volume, state2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yosprinklerv2'
+    id = 'YOSPRINKLERV2'
     '''
        drivers = [
             'GV0' = Manipulator State

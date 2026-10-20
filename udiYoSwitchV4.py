@@ -26,7 +26,7 @@ from udiYoSchedule import udiYoSchedule
 
 class udiYoSwitch(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, state2ISY, bool2ISY, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
-    id = 'yoswitch'
+    id = 'YOSWITCH'
 
     drivers = [
             {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Switch State'},        
@@ -79,9 +79,9 @@ class udiYoSwitch(udi_interface.Node):
         if model in ['YS5716']:
             self.meas_support = ['pwr']
             self.support_power = True
-            self.id = 'yoswitchPwr'
+            self.id = 'YOSWITCHPWR'
         elif model in ['YS5709']:
-            self.id = 'yoswitchBat'
+            self.id = 'YOSWITCHBAT'
             self.support_battery = True
         else:
             self.meas_support = []

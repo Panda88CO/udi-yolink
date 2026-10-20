@@ -25,7 +25,7 @@ from yolinkSpeakerHubV3 import YoLinkSpeakerH
 
 class udiYoSpeakerHub(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
-    id = 'yospeakerh'
+    id = 'YOSPEAKERH'
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Nodeserver Status'},
             {'driver': 'GV0', 'value': 7, 'uom': 56, 'name': 'Speaker volume'}, 

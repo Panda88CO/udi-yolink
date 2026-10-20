@@ -35,7 +35,7 @@ class udiYoBatteryHub(udi_interface.Node):
     ''' 
     
     
-    id = 'yohubbat'
+    id = 'YOHUBBAT'
     drivers = [
             {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Supply Status'},
             {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Battery Status'},
@@ -190,7 +190,7 @@ class udiYoBatteryHub(udi_interface.Node):
 
 class udiYoHub(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, wait_for_node_done, node_queue, checkNameSync, apply_profile_driver_names
-    id = 'yohub'
+    id = 'YOHUB'
     drivers = [
             #{'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Status'},

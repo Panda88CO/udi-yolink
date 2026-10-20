@@ -33,7 +33,7 @@ class udiYoInfraredCode(udi_interface.Node):
             ]
     ''' 
     
-    id = 'yoircode'
+    id = 'YOIRCODE'
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'TX success'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
@@ -180,7 +180,7 @@ class udiYoInfraredRemoter(udi_interface.Node):
             'GV2' = Command status
             ]
     ''' 
-    id = 'yoirremote'
+    id = 'YOIRREMOTE'
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Last Command Status'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},

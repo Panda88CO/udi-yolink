@@ -24,7 +24,7 @@ from yolinkSirenV3 import YoLinkSiren
 class udiYoSiren(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yosiren'
+    id = 'YOSIREN'
     '''
        drivers = [
             'GV0' = Siren State

@@ -28,7 +28,7 @@ from udiYoSchedule import udiYoSchedule
 
 class udiYoDimmer(udi_interface.Node):
     from  udiYolinkLib import  my_setDriver, start_done, configDoneHandler,  save_cmd_struct, retrieve_cmd_struct, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
-    id = 'yodimmer'
+    id = 'YODIMMER'
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 51, 'name': 'Dim Setting'},
             {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Switch State'},

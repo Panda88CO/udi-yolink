@@ -22,7 +22,7 @@ Custom = udi_interface.Custom
 class udiYoDoorSensor(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yodoorsens'
+    id = 'YODOORSENS'
     
     '''
        drivers = [

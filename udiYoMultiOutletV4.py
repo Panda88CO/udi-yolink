@@ -23,7 +23,7 @@ import re
 #assigned_addresses
 class udiYoSubOutlet(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
-    id = 'yosubout'
+    id = 'YOSUBOUT'
     '''
        drivers = [
             'GV0' = Outlet1 state
@@ -270,7 +270,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
 class udiYoSubUSB(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
-    id = 'yosubusb'
+    id = 'YOSUBUSB'
     '''
        drivers = [
             'GV0' = usb state
@@ -439,7 +439,7 @@ class udiYoSubUSB(udi_interface.Node):
 
 class udiYoMultiOutlet(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
-    id = 'yomultiout'
+    id = 'YOMULTIOUT'
 
     '''
        drivers = [

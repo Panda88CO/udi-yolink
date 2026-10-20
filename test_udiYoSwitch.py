@@ -81,7 +81,7 @@ class TestModelConfiguration(TestUdiYoSwitchBase):
 
     def test_dual_switch_ys5708_configuration(self):
         node, poly, _ = self.create_switch_node(model_name='YS5708')
-        self.assertEqual(node.id, 'yoswitch')
+        self.assertEqual(node.id, 'YOSWITCH')
         self.assertEqual(node.nbr_keys, 2)
         self.assertEqual(node.max_remote_keys, 8)
         self.assertFalse(node.support_power)
@@ -89,7 +89,7 @@ class TestModelConfiguration(TestUdiYoSwitchBase):
 
     def test_dual_switch_ys5709_battery_configuration(self):
         node, poly, _ = self.create_switch_node(model_name='YS5709')
-        self.assertEqual(node.id, 'yoswitchBat')
+        self.assertEqual(node.id, 'YOSWITCHBAT')
         self.assertEqual(node.nbr_keys, 2)
         self.assertEqual(node.max_remote_keys, 8)
         self.assertTrue(node.support_battery)
@@ -97,14 +97,14 @@ class TestModelConfiguration(TestUdiYoSwitchBase):
 
     def test_power_switch_ys5716_configuration(self):
         node, poly, _ = self.create_switch_node(model_name='YS5716')
-        self.assertEqual(node.id, 'yoswitchPwr')
+        self.assertEqual(node.id, 'YOSWITCHPWR')
         self.assertEqual(node.nbr_keys, 0)
         self.assertTrue(node.support_power)
         self.assertFalse(node.support_battery)
 
     def test_standard_switch_configuration(self):
         node, poly, _ = self.create_switch_node(model_name='YS5705')
-        self.assertEqual(node.id, 'yoswitch')
+        self.assertEqual(node.id, 'YOSWITCH')
         self.assertEqual(node.nbr_keys, 0)
         self.assertFalse(node.support_power)
         self.assertFalse(node.support_battery)

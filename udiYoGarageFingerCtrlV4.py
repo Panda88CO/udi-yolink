@@ -24,7 +24,7 @@ from yolinkGarageFingerToggleV2 import YoLinkGarageFingerCtrl
 
 class udiYoGarageFinger(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  wait_for_node_done, node_queue, checkNameSync, apply_profile_driver_names
-    id = 'yogarage'
+    id = 'YOGARAGE'
     
     '''
        drivers = [

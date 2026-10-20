@@ -5,7 +5,7 @@ Generated in code from profile directory.
 
 DYNAMIC_EDITORS = [
   {
-    "id": "status",
+    "id": "STATUS",
     "ranges": [
       {
         "uom": "25",
@@ -18,7 +18,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "connect",
+    "id": "CONNECT",
     "ranges": [
       {
         "uom": "25",
@@ -31,7 +31,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "swstate",
+    "id": "SWSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -45,7 +45,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "swctrl",
+    "id": "SWCTRL",
     "ranges": [
       {
         "uom": "25",
@@ -62,7 +62,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "watt",
+    "id": "WATT",
     "ranges": [
       {
         "uom": "73",
@@ -82,7 +82,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "energy",
+    "id": "ENERGY",
     "ranges": [
       {
         "uom": "119",
@@ -102,7 +102,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "waterlevel",
+    "id": "WATERLEVEL",
     "ranges": [
       {
         "uom": "56",
@@ -121,7 +121,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "delay",
+    "id": "DELAY",
     "ranges": [
       {
         "uom": "57",
@@ -132,7 +132,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "delaymin",
+    "id": "DELAYMIN",
     "ranges": [
       {
         "uom": "44",
@@ -143,7 +143,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "celsius",
+    "id": "CELSIUS",
     "ranges": [
       {
         "uom": "4",
@@ -162,7 +162,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "celsiusSet",
+    "id": "CELSIUSSET",
     "ranges": [
       {
         "uom": "4",
@@ -173,7 +173,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "farenheit",
+    "id": "FARENHEIT",
     "ranges": [
       {
         "uom": "17",
@@ -192,7 +192,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "farenheitSet",
+    "id": "FARENHEITSET",
     "ranges": [
       {
         "uom": "17",
@@ -203,7 +203,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "humidity",
+    "id": "HUMIDITY",
     "ranges": [
       {
         "uom": "51",
@@ -223,7 +223,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "batlevel",
+    "id": "BATLEVEL",
     "ranges": [
       {
         "uom": "25",
@@ -241,7 +241,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "doorstate",
+    "id": "DOORSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -255,7 +255,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "motionstate",
+    "id": "MOTIONSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -269,7 +269,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "waterstate",
+    "id": "WATERSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -283,7 +283,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "manstate",
+    "id": "MANSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -297,7 +297,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "manctrl",
+    "id": "MANCTRL",
     "ranges": [
       {
         "uom": "25",
@@ -311,7 +311,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "usbstate",
+    "id": "USBSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -325,7 +325,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "usbctrl",
+    "id": "USBCTRL",
     "ranges": [
       {
         "uom": "25",
@@ -339,7 +339,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "outletnbr",
+    "id": "OUTLETNBR",
     "ranges": [
       {
         "uom": "25",
@@ -359,7 +359,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "vibrastate",
+    "id": "VIBRASTATE",
     "ranges": [
       {
         "uom": "25",
@@ -373,7 +373,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "volume",
+    "id": "VOLUME",
     "ranges": [
       {
         "uom": "56",
@@ -384,7 +384,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "mute",
+    "id": "MUTE",
     "ranges": [
       {
         "uom": "25",
@@ -398,7 +398,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "muteSet",
+    "id": "MUTESET",
     "ranges": [
       {
         "uom": "25",
@@ -412,7 +412,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "repeat",
+    "id": "REPEAT",
     "ranges": [
       {
         "uom": "56",
@@ -423,7 +423,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "beepEn",
+    "id": "BEEPEN",
     "ranges": [
       {
         "uom": "25",
@@ -437,7 +437,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "beepEnSet",
+    "id": "BEEPENSET",
     "ranges": [
       {
         "uom": "25",
@@ -451,7 +451,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "tone",
+    "id": "TONE",
     "ranges": [
       {
         "uom": "25",
@@ -467,7 +467,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "toneSet",
+    "id": "TONESET",
     "ranges": [
       {
         "uom": "25",
@@ -483,7 +483,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "messages",
+    "id": "MESSAGES",
     "ranges": [
       {
         "uom": "25",
@@ -500,7 +500,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "lockstate",
+    "id": "LOCKSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -514,7 +514,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "lock",
+    "id": "LOCK",
     "ranges": [
       {
         "uom": "25",
@@ -528,7 +528,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "lockaction",
+    "id": "LOCKACTION",
     "ranges": [
       {
         "uom": "25",
@@ -545,7 +545,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "locksource",
+    "id": "LOCKSOURCE",
     "ranges": [
       {
         "uom": "25",
@@ -562,7 +562,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "doorbell",
+    "id": "DOORBELL",
     "ranges": [
       {
         "uom": "25",
@@ -576,7 +576,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "dimlvl",
+    "id": "DIMLVL",
     "ranges": [
       {
         "uom": "51",
@@ -587,7 +587,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "nbrcodes",
+    "id": "NBRCODES",
     "ranges": [
       {
         "uom": "56",
@@ -598,7 +598,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "cmdstatus",
+    "id": "CMDSTATUS",
     "ranges": [
       {
         "uom": "25",
@@ -613,7 +613,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "ircmdstatus",
+    "id": "IRCMDSTATUS",
     "ranges": [
       {
         "uom": "25",
@@ -628,7 +628,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "poweralert",
+    "id": "POWERALERT",
     "ranges": [
       {
         "uom": "25",
@@ -643,7 +643,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "powerstate",
+    "id": "POWERSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -659,7 +659,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "alertstate",
+    "id": "ALERTSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -673,7 +673,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "powered",
+    "id": "POWERED",
     "ranges": [
       {
         "uom": "25",
@@ -687,7 +687,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "remotetype",
+    "id": "REMOTETYPE",
     "ranges": [
       {
         "uom": "25",
@@ -701,7 +701,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "pfamute",
+    "id": "PFAMUTE",
     "ranges": [
       {
         "uom": "25",
@@ -715,7 +715,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "keyscenedef",
+    "id": "KEYSCENEDEF",
     "ranges": [
       {
         "uom": "25",
@@ -733,7 +733,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "keyscene",
+    "id": "KEYSCENE",
     "ranges": [
       {
         "uom": "25",
@@ -750,7 +750,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "sirenstate",
+    "id": "SIRENSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -765,7 +765,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "sirenduration",
+    "id": "SIRENDURATION",
     "ranges": [
       {
         "uom": "58",
@@ -776,7 +776,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "sirenbatlevel",
+    "id": "SIRENBATLEVEL",
     "ranges": [
       {
         "uom": "25",
@@ -794,7 +794,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "sirenctrl",
+    "id": "SIRENCTRL",
     "ranges": [
       {
         "uom": "25",
@@ -807,7 +807,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "soundlevel",
+    "id": "SOUNDLEVEL",
     "ranges": [
       {
         "uom": "25",
@@ -824,7 +824,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "cmdsetting",
+    "id": "CMDSETTING",
     "ranges": [
       {
         "uom": "25",
@@ -839,7 +839,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "suspendstate",
+    "id": "SUSPENDSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -858,7 +858,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "alarm",
+    "id": "ALARM",
     "ranges": [
       {
         "uom": "25",
@@ -873,7 +873,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "deviceAlert",
+    "id": "DEVICEALERT",
     "ranges": [
       {
         "uom": "25",
@@ -887,7 +887,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "SmokeAlert",
+    "id": "SMOKEALERT",
     "ranges": [
       {
         "uom": "25",
@@ -902,7 +902,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "COAlert",
+    "id": "COALERT",
     "ranges": [
       {
         "uom": "25",
@@ -917,7 +917,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "TempAlert",
+    "id": "TEMPALERT",
     "ranges": [
       {
         "uom": "25",
@@ -932,7 +932,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "BatteryAlert",
+    "id": "BATTERYALERT",
     "ranges": [
       {
         "uom": "25",
@@ -947,7 +947,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "SelfcheckState",
+    "id": "SELFCHECKSTATE",
     "ranges": [
       {
         "uom": "25",
@@ -961,7 +961,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "outport",
+    "id": "OUTPORT",
     "ranges": [
       {
         "uom": "25",
@@ -981,7 +981,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "schActive",
+    "id": "SCHACTIVE",
     "ranges": [
       {
         "uom": "25",
@@ -997,7 +997,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "schActiveI",
+    "id": "SCHACTIVEI",
     "ranges": [
       {
         "uom": "25",
@@ -1013,7 +1013,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "schIndex",
+    "id": "SCHINDEX",
     "ranges": [
       {
         "uom": "25",
@@ -1035,7 +1035,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "schCount",
+    "id": "SCHCOUNT",
     "ranges": [
       {
         "uom": "70",
@@ -1045,7 +1045,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "schIndexS",
+    "id": "SCHINDEXS",
     "ranges": [
       {
         "uom": "25",
@@ -1063,7 +1063,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "stHour",
+    "id": "STHOUR",
     "ranges": [
       {
         "uom": "19",
@@ -1081,7 +1081,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "stMin",
+    "id": "STMIN",
     "ranges": [
       {
         "uom": "44",
@@ -1099,7 +1099,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "stSec",
+    "id": "STSEC",
     "ranges": [
       {
         "uom": "57",
@@ -1117,7 +1117,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "stHourI",
+    "id": "STHOURI",
     "ranges": [
       {
         "uom": "19",
@@ -1135,7 +1135,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "stMinI",
+    "id": "STMINI",
     "ranges": [
       {
         "uom": "44",
@@ -1153,7 +1153,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "stSecI",
+    "id": "STSECI",
     "ranges": [
       {
         "uom": "57",
@@ -1171,7 +1171,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "binDays",
+    "id": "BINDAYS",
     "ranges": [
       {
         "uom": "25",
@@ -1310,7 +1310,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "unixtime",
+    "id": "UNIXTIME",
     "ranges": [
       {
         "uom": "151",
@@ -1329,7 +1329,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "ready",
+    "id": "READY",
     "ranges": [
       {
         "uom": "25",
@@ -1342,7 +1342,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "leaklimit",
+    "id": "LEAKLIMIT",
     "ranges": [
       {
         "uom": "69",
@@ -1371,7 +1371,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "liter",
+    "id": "LITER",
     "ranges": [
       {
         "uom": "35",
@@ -1390,7 +1390,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "literSet",
+    "id": "LITERSET",
     "ranges": [
       {
         "uom": "35",
@@ -1401,7 +1401,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "gallon",
+    "id": "GALLON",
     "ranges": [
       {
         "uom": "69",
@@ -1420,7 +1420,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "gallonSet",
+    "id": "GALLONSET",
     "ranges": [
       {
         "uom": "69",
@@ -1431,7 +1431,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "flow",
+    "id": "FLOW",
     "ranges": [
       {
         "uom": "69",
@@ -1468,7 +1468,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "enable",
+    "id": "ENABLE",
     "ranges": [
       {
         "uom": "25",
@@ -1482,7 +1482,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "enableSet",
+    "id": "ENABLESET",
     "ranges": [
       {
         "uom": "25",
@@ -1496,7 +1496,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "waterrun",
+    "id": "WATERRUN",
     "ranges": [
       {
         "uom": "25",
@@ -1510,7 +1510,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "minutes",
+    "id": "MINUTES",
     "ranges": [
       {
         "uom": "44",
@@ -1528,7 +1528,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "minutesSet",
+    "id": "MINUTESSET",
     "ranges": [
       {
         "uom": "44",
@@ -1538,7 +1538,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "count",
+    "id": "COUNT",
     "ranges": [
       {
         "uom": "70",
@@ -1556,7 +1556,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "conductivity",
+    "id": "CONDUCTIVITY",
     "ranges": [
       {
         "uom": "70",
@@ -1575,7 +1575,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "startstop",
+    "id": "STARTSTOP",
     "ranges": [
       {
         "uom": "25",
@@ -1588,7 +1588,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "sprinklermethod",
+    "id": "SPRINKLERMETHOD",
     "ranges": [
       {
         "uom": "25",
@@ -1601,7 +1601,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "wamount",
+    "id": "WAMOUNT",
     "ranges": [
       {
         "uom": "70",
@@ -1611,7 +1611,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "runningvalue",
+    "id": "RUNNINGVALUE",
     "ranges": [
       {
         "uom": "44",
@@ -1639,7 +1639,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "runningmode",
+    "id": "RUNNINGMODE",
     "ranges": [
       {
         "uom": "25",
@@ -1653,7 +1653,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "watermode",
+    "id": "WATERMODE",
     "ranges": [
       {
         "uom": "25",
@@ -1667,7 +1667,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "nowateralarm",
+    "id": "NOWATERALARM",
     "ranges": [
       {
         "uom": "25",
@@ -1681,7 +1681,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "beeping",
+    "id": "BEEPING",
     "ranges": [
       {
         "uom": "25",
@@ -1695,7 +1695,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "leakOpMode",
+    "id": "LEAKOPMODE",
     "ranges": [
       {
         "uom": "25",
@@ -1709,7 +1709,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "sensitivity",
+    "id": "SENSITIVITY",
     "ranges": [
       {
         "uom": "25",
@@ -1723,7 +1723,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "moveAlert",
+    "id": "MOVEALERT",
     "ranges": [
       {
         "uom": "25",
@@ -1737,7 +1737,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "freezeAlert",
+    "id": "FREEZEALERT",
     "ranges": [
       {
         "uom": "25",
@@ -1751,7 +1751,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "sensorError",
+    "id": "SENSORERROR",
     "ranges": [
       {
         "uom": "25",
@@ -1765,7 +1765,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "reminder",
+    "id": "REMINDER",
     "ranges": [
       {
         "uom": "25",
@@ -1791,7 +1791,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "LEDctrl",
+    "id": "LEDCTRL",
     "ranges": [
       {
         "uom": "25",
@@ -2004,7 +2004,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "ecoSet",
+    "id": "ECOSET",
     "ranges": [
       {
         "uom": "4",
@@ -2015,7 +2015,7 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "ecoSetF",
+    "id": "ECOSETF",
     "ranges": [
       {
         "uom": "17",
@@ -2029,23 +2029,23 @@ DYNAMIC_EDITORS = [
 
 DYNAMIC_NODEDEFS = [
   {
-    "id": "setup",
+    "id": "SETUP",
     "name": "YoLink Setup",
     "icon": "GenericCtrl",
     "properties": [
       {
         "id": "ST",
-        "editor": "connect",
+        "editor": "CONNECT",
         "name": "Node Server"
       },
       {
         "id": "GV1",
-        "editor": "ready",
+        "editor": "READY",
         "name": "Status"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "LastPoll Time"
       }
     ],
@@ -2068,58 +2068,58 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoScheduleSec",
+    "id": "YOSCHEDULESEC",
     "name": "Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -2136,7 +2136,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -2147,47 +2147,47 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "onS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV21"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "offS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV22"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -2198,12 +2198,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -2216,63 +2216,63 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoMScheduleSec",
+    "id": "YOMSCHEDULESEC",
     "name": "Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "nbrcodes",
+        "editor": "NBRCODES",
         "name": "Selected code/port"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -2289,7 +2289,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -2300,52 +2300,52 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ch",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV12"
             },
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "onS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV21"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "offS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV22"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -2356,12 +2356,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -2374,63 +2374,63 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoirScheduleSec",
+    "id": "YOIRSCHEDULESEC",
     "name": "Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "nbrcodes",
+        "editor": "NBRCODES",
         "name": "Selected code/port"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -2447,7 +2447,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -2458,52 +2458,52 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "key",
-              "editor": "nbrcodes",
+              "editor": "NBRCODES",
               "init": "GV12"
             },
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "onS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV21"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "offS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV22"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -2514,12 +2514,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -2532,63 +2532,63 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoMoutletSchSec",
-    "name": "yoMoutletSchSec",
+    "id": "YOMOUTLETSCHSEC",
+    "name": "YOMOUTLETSCHSEC",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "outport",
+        "editor": "OUTPORT",
         "name": "Selected code/port"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -2605,7 +2605,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -2616,52 +2616,52 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "key",
-              "editor": "outport",
+              "editor": "OUTPORT",
               "init": "GV12"
             },
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "onS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV21"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "offS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV22"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -2672,12 +2672,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -2690,53 +2690,53 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoirSchedule",
+    "id": "YOIRSCHEDULE",
     "name": "Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "nbrcodes",
+        "editor": "NBRCODES",
         "name": "Selected code/port"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -2753,7 +2753,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -2764,37 +2764,37 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -2805,12 +2805,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -2823,53 +2823,53 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoMSchedule",
+    "id": "YOMSCHEDULE",
     "name": "Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "outport",
+        "editor": "OUTPORT",
         "name": "Selected code/port"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -2886,7 +2886,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -2897,37 +2897,37 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -2938,12 +2938,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -2956,48 +2956,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoSchedule",
+    "id": "YOSCHEDULE",
     "name": "Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -3014,7 +3014,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -3025,37 +3025,37 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -3066,12 +3066,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -3084,58 +3084,58 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoSprinklerScheduleSec",
+    "id": "YOSPRINKLERSCHEDULESEC",
     "name": "Sprinkler Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -3152,7 +3152,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -3163,47 +3163,47 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "onS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV21"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "offS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV22"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -3214,12 +3214,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -3232,48 +3232,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoSprinklerSchedule",
+    "id": "YOSPRINKLERSCHEDULE",
     "name": "Sprinkler Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -3290,7 +3290,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -3301,37 +3301,37 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -3342,12 +3342,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -3360,63 +3360,63 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoWMVlScheduleSec",
+    "id": "YOWMVLSCHEDULESEC",
     "name": "Water Meter Valve Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Reserved"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -3433,7 +3433,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -3444,47 +3444,47 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "onS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV21"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "offS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV22"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -3495,12 +3495,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -3513,53 +3513,53 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoWMVlSchedule",
+    "id": "YOWMVLSCHEDULE",
     "name": "Water Meter Valve Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Reserved"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -3576,7 +3576,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -3587,37 +3587,37 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -3628,12 +3628,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -3646,63 +3646,63 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoWMLkScheduleSec",
+    "id": "YOWMLKSCHEDULESEC",
     "name": "Water Meter Leak Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "GV12"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "GV17"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -3719,7 +3719,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -3730,52 +3730,52 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
-              "id": "L_LIMIT",
-              "editor": "leaklimit",
+              "id": "LLIMIT",
+              "editor": "LEAKLIMIT",
               "init": "GV12"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "onS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV21"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "offS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV22"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -3786,12 +3786,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -3804,53 +3804,53 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoWMLkSchedule",
+    "id": "YOWMLKSCHEDULE",
     "name": "Water Meter Leak Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "GV12"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "GV17"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -3867,7 +3867,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -3878,42 +3878,42 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
-              "id": "L_LIMIT",
-              "editor": "leaklimit",
+              "id": "LLIMIT",
+              "editor": "LEAKLIMIT",
               "init": "GV12"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -3924,12 +3924,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -3942,63 +3942,63 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoWMScheduleSec",
+    "id": "YOWMSCHEDULESEC",
     "name": "Water Meter Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Leak Limit"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -4015,7 +4015,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -4026,52 +4026,52 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "LLIMIT",
-              "editor": "leaklimit",
+              "editor": "LEAKLIMIT",
               "init": "GV12"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "onS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV21"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "offS",
-              "editor": "stSecI",
+              "editor": "STSECI",
               "init": "GV22"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -4082,12 +4082,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -4100,53 +4100,53 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoWMSchedule",
+    "id": "YOWMSCHEDULE",
     "name": "Water Meter Schedules",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "GV12",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Leak Limit"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV23",
-        "editor": "schCount",
+        "editor": "SCHCOUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       }
     ],
@@ -4163,7 +4163,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             }
           ]
@@ -4174,42 +4174,42 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             },
             {
               "id": "LLIMIT",
-              "editor": "leaklimit",
+              "editor": "LEAKLIMIT",
               "init": "GV12"
             },
             {
               "id": "onH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV15"
             },
             {
               "id": "onM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV16"
             },
             {
               "id": "offH",
-              "editor": "stHourI",
+              "editor": "STHOURI",
               "init": "GV17"
             },
             {
               "id": "offM",
-              "editor": "stMinI",
+              "editor": "STMINI",
               "init": "GV18"
             },
             {
               "id": "bindays",
-              "editor": "binDays",
+              "editor": "BINDAYS",
               "init": "GV19"
             }
           ]
@@ -4220,12 +4220,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "schIndexS",
+              "editor": "SCHINDEXS",
               "init": "GV13"
             },
             {
               "id": "active",
-              "editor": "schActiveI",
+              "editor": "SCHACTIVEI",
               "init": "GV14"
             }
           ]
@@ -4238,58 +4238,58 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoswitchPwr",
-    "name": "yoswitchPwr",
+    "id": "YOSWITCHPWR",
+    "name": "YOSWITCHPWR",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Switch State"
       },
       {
         "id": "GV0",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Switch State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "On Delay (min)"
       },
       {
         "id": "GV2",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "Off Delay (min)"
       },
       {
         "id": "GV3",
-        "editor": "watt",
+        "editor": "WATT",
         "name": "Watt"
       },
       {
         "id": "GV4",
-        "editor": "energy",
+        "editor": "ENERGY",
         "name": "Energy"
       },
       {
         "id": "GV5",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Overload Alert"
       },
       {
         "id": "GV6",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "High Load Alert"
       },
       {
         "id": "GV7",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Low Load Alert"
       },
       {
         "id": "GV8",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "High Temperature Alert"
       },
       {
@@ -4299,17 +4299,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -4359,7 +4359,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "swctrl",
+              "editor": "SWCTRL",
               "init": "GV0"
             }
           ]
@@ -4370,7 +4370,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "LEDctrl",
+              "editor": "LEDCTRL",
               "init": "GV9"
             }
           ]
@@ -4381,12 +4381,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV1"
             },
             {
               "id": "offdelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV2"
             }
           ]
@@ -4399,48 +4399,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoswitch",
+    "id": "YOSWITCH",
     "name": "YoLink Switch",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Switch State"
       },
       {
         "id": "GV0",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Switch State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "On Delay (min)"
       },
       {
         "id": "GV2",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "Off Delay (min)"
       },
       {
         "id": "GV5",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Overload Alert"
       },
       {
         "id": "GV6",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "High Load Alert"
       },
       {
         "id": "GV7",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Low Load Alert"
       },
       {
         "id": "GV8",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "High Temperature Alert"
       },
       {
@@ -4450,17 +4450,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -4510,7 +4510,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "swctrl",
+              "editor": "SWCTRL",
               "init": "GV0"
             }
           ]
@@ -4521,12 +4521,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV1"
             },
             {
               "id": "offdelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV2"
             }
           ]
@@ -4537,7 +4537,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "LEDctrl",
+              "editor": "LEDCTRL",
               "init": "GV9"
             }
           ]
@@ -4550,33 +4550,33 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoswitchBat",
+    "id": "YOSWITCHBAT",
     "name": "YoLink Battery Switch",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Switch State"
       },
       {
         "id": "GV0",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Switch State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "On Delay (min)"
       },
       {
         "id": "GV2",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "Off Delay (min)"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
@@ -4586,17 +4586,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -4646,7 +4646,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "swctrl",
+              "editor": "SWCTRL",
               "init": "GV0"
             }
           ]
@@ -4657,12 +4657,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV1"
             },
             {
               "id": "offdelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV2"
             }
           ]
@@ -4673,7 +4673,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "LEDctrl",
+              "editor": "LEDCTRL",
               "init": "GV9"
             }
           ]
@@ -4686,43 +4686,43 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yodimmer",
+    "id": "YODIMMER",
     "name": "YoLink Dimmer",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "dimlvl",
+        "editor": "DIMLVL",
         "name": "Dim Setting"
       },
       {
         "id": "GV0",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Switch State"
       },
       {
         "id": "GV1",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "On Delay"
       },
       {
         "id": "GV2",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "Off Delay"
       },
       {
         "id": "GV3",
-        "editor": "dimlvl",
+        "editor": "DIMLVL",
         "name": "Light Level"
       },
       {
         "id": "GV4",
-        "editor": "dimlvl",
+        "editor": "DIMLVL",
         "name": "Light Down Level"
       },
       {
         "id": "GV5",
-        "editor": "dimlvl",
+        "editor": "DIMLVL",
         "name": "Light Up Level"
       },
       {
@@ -4732,62 +4732,62 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -4861,7 +4861,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "dimlvl",
+              "editor": "DIMLVL",
               "init": "GV3"
             }
           ]
@@ -4872,7 +4872,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "dimlvl",
+              "editor": "DIMLVL",
               "init": "GV4"
             }
           ]
@@ -4883,7 +4883,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "dimlvl",
+              "editor": "DIMLVL",
               "init": "GV5"
             }
           ]
@@ -4894,7 +4894,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "swctrl",
+              "editor": "SWCTRL",
               "init": "GV0"
             }
           ]
@@ -4905,12 +4905,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV1"
             },
             {
               "id": "offdelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV2"
             }
           ]
@@ -4921,7 +4921,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "LEDctrl",
+              "editor": "LEDCTRL",
               "init": "GV9"
             }
           ]
@@ -4934,63 +4934,63 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yooutlet",
+    "id": "YOOUTLET",
     "name": "YoLink Outlet",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Outlet State"
       },
       {
         "id": "GV0",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Outlet State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "On Delay Remaining"
       },
       {
         "id": "GV2",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "Off Delay Remaining"
       },
       {
         "id": "GV5",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Overload Alert"
       },
       {
         "id": "GV6",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "High Load Alert"
       },
       {
         "id": "GV7",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Low Load Alert"
       },
       {
         "id": "GV8",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "High Temperature Alert"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -5024,7 +5024,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "swctrl",
+              "editor": "SWCTRL",
               "init": "GV0"
             }
           ]
@@ -5035,12 +5035,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV1"
             },
             {
               "id": "offdelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV2"
             }
           ]
@@ -5053,73 +5053,73 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yooutletPwr",
+    "id": "YOOUTLETPWR",
     "name": "YoLink Outlet",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Outlet State"
       },
       {
         "id": "GV0",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Outlet State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "On Delay Remaining"
       },
       {
         "id": "GV2",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "Off Delay Remaining"
       },
       {
         "id": "GV3",
-        "editor": "watt",
+        "editor": "WATT",
         "name": "Watt"
       },
       {
         "id": "GV4",
-        "editor": "energy",
+        "editor": "ENERGY",
         "name": "Energy"
       },
       {
         "id": "GV5",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Overload Alert"
       },
       {
         "id": "GV6",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "High Load Alert"
       },
       {
         "id": "GV7",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Low Load Alert"
       },
       {
         "id": "GV8",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "High Temperature Alert"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -5153,7 +5153,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "swctrl",
+              "editor": "SWCTRL",
               "init": "GV0"
             }
           ]
@@ -5164,12 +5164,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV1"
             },
             {
               "id": "offdelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV2"
             }
           ]
@@ -5182,78 +5182,78 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yomultiout",
+    "id": "YOMULTIOUT",
     "name": "YoLink Outlet",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Node Server Status"
       },
       {
         "id": "GV12",
-        "editor": "outport",
+        "editor": "OUTPORT",
         "name": "Port"
       },
       {
         "id": "GV13",
-        "editor": "schIndex",
+        "editor": "SCHINDEX",
         "name": "Schedule Index"
       },
       {
         "id": "GV14",
-        "editor": "schActive",
+        "editor": "SCHACTIVE",
         "name": "Activated"
       },
       {
         "id": "GV15",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "On Hour"
       },
       {
         "id": "GV16",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "On Minute"
       },
       {
         "id": "GV21",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "On Sec"
       },
       {
         "id": "GV17",
-        "editor": "stHour",
+        "editor": "STHOUR",
         "name": "Off Hour"
       },
       {
         "id": "GV18",
-        "editor": "stMin",
+        "editor": "STMIN",
         "name": "Off Minute"
       },
       {
         "id": "GV22",
-        "editor": "stSec",
+        "editor": "STSEC",
         "name": "Off Sec"
       },
       {
         "id": "GV19",
-        "editor": "binDays",
+        "editor": "BINDAYS",
         "name": "Active Days"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -5272,38 +5272,38 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosubout",
+    "id": "YOSUBOUT",
     "name": "YoLink subOutlet",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Outlet State"
       },
       {
         "id": "GV0",
-        "editor": "swstate",
+        "editor": "SWSTATE",
         "name": "Outlet State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "On Delay Remaining"
       },
       {
         "id": "GV2",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "Off Delay Remaining"
       },
       {
         "id": "GV4",
-        "editor": "outletnbr",
+        "editor": "OUTLETNBR",
         "name": "Outlet"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       }
     ],
@@ -5337,7 +5337,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "swctrl",
+              "editor": "SWCTRL",
               "init": "GV0"
             }
           ]
@@ -5348,12 +5348,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV1"
             },
             {
               "id": "offdelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV2"
             }
           ]
@@ -5366,23 +5366,23 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosubusb",
+    "id": "YOSUBUSB",
     "name": "YoLink USB Ports",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "usbstate",
+        "editor": "USBSTATE",
         "name": "USB Power State"
       },
       {
         "id": "GV0",
-        "editor": "usbstate",
+        "editor": "USBSTATE",
         "name": "USB Power"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       }
     ],
@@ -5416,7 +5416,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "usbctrl",
+              "editor": "USBCTRL",
               "init": "GV0"
             }
           ]
@@ -5429,48 +5429,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yomanipu",
+    "id": "YOMANIPU",
     "name": "YoLink Manipulator",
     "icon": "GenericCtrl",
     "properties": [
       {
         "id": "ST",
-        "editor": "manstate",
+        "editor": "MANSTATE",
         "name": "Manipulator State"
       },
       {
         "id": "GV0",
-        "editor": "manstate",
+        "editor": "MANSTATE",
         "name": "Manipulator State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "On Delay Remaining"
       },
       {
         "id": "GV2",
-        "editor": "delay",
+        "editor": "DELAY",
         "name": "Off Delay Remaining"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -5504,7 +5504,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "manctrl",
+              "editor": "MANCTRL",
               "init": "GV0"
             }
           ]
@@ -5515,12 +5515,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV1"
             },
             {
               "id": "offdelay",
-              "editor": "delaymin",
+              "editor": "DELAYMIN",
               "init": "GV2"
             }
           ]
@@ -5533,143 +5533,143 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosprinkler",
-    "name": "yosprinkler",
+    "id": "YOSPRINKLER",
+    "name": "YOSPRINKLER",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Current State"
       },
       {
         "id": "GV0",
-        "editor": "manstate",
+        "editor": "MANSTATE",
         "name": "GV0"
       },
       {
         "id": "GV1",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Current No Water Alarm"
       },
       {
         "id": "GV10",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Time for Latest operation Update"
       },
       {
         "id": "GV2",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "High Temp Alarm"
       },
       {
         "id": "GV3",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "GV3"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Latest Operation"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "GV6"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Latest Water Method"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Latest Water Amount target"
       },
       {
         "id": "GV9",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Latest Water Alarm"
       },
       {
         "id": "GV11",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm Limit"
       },
       {
         "id": "GV12",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Time Delay"
       },
       {
         "id": "GV13",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Humidity Alarm Limit"
       },
       {
         "id": "GV14",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "GV14"
       },
       {
         "id": "GV22",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Off Sec"
       },
       {
         "id": "GV23",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Total Schedules"
       },
       {
         "id": "GV24",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "GV24"
       },
       {
         "id": "GV25",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "GV25"
       },
       {
         "id": "GV26",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "GV26"
       },
       {
         "id": "GV27",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "GV27"
       },
       {
         "id": "GV28",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "GV28"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last Data Update"
       }
     ],
@@ -5695,11 +5695,11 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "startstop",
-              "editor": "startstop"
+              "editor": "STARTSTOP"
             },
             {
               "id": "watermode",
-              "editor": "watermode"
+              "editor": "WATERMODE"
             }
           ]
         },
@@ -5709,27 +5709,27 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             }
           ]
         }
@@ -5741,143 +5741,143 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterCtrl",
+    "id": "YOWATERMETERCTRL",
     "name": "YoLink Water Meter Controller",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV0",
-        "editor": "manstate",
+        "editor": "MANSTATE",
         "name": "Valve State"
       },
       {
         "id": "GV1",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Recent Use"
       },
       {
         "id": "GV3",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Water Meter Recent Duration"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Water Temperature"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Leak Alarm"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Amount Overrun Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Duration Overrun Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Nbr Times Overrun 24H Alarm"
       },
       {
         "id": "GV9",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Reminder Alarm"
       },
       {
         "id": "GV11",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Open Reminder Alarm"
       },
       {
         "id": "GV12",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Valve Error Alarm"
       },
       {
         "id": "GV13",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "GV14",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV22",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Overrun Amount 24H Limit"
       },
       {
         "id": "GV23",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Overrun Duration Once Limit"
       },
       {
         "id": "GV24",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Overrun Count 24H Limit"
       },
       {
         "id": "GV25",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Leak Auto Close"
       },
       {
         "id": "GV26",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Amount Auto Close"
       },
       {
         "id": "GV27",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Duration Auto Close"
       },
       {
         "id": "GV28",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Times Auto Close"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -5911,27 +5911,27 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             }
           ]
         }
@@ -5943,143 +5943,143 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterCtrlF",
-    "name": "yowatermeterCtrlF",
+    "id": "YOWATERMETERCTRLF",
+    "name": "YOWATERMETERCTRLF",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV0",
-        "editor": "manstate",
+        "editor": "MANSTATE",
         "name": "Valve State"
       },
       {
         "id": "GV1",
-        "editor": "gallon",
+        "editor": "GALLON",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "gallon",
+        "editor": "GALLON",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "gallon",
+        "editor": "GALLON",
         "name": "Water Meter Recent Use"
       },
       {
         "id": "GV3",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Water Meter Recent Duration"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Water Temperature"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Leak Alarm"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Amount Overrun Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Duration Overrun Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Nbr Times Overrun 24H Alarm"
       },
       {
         "id": "GV9",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Reminder Alarm"
       },
       {
         "id": "GV11",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Open Reminder Alarm"
       },
       {
         "id": "GV12",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Valve Error Alarm"
       },
       {
         "id": "GV13",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "GV14",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV22",
-        "editor": "gallon",
+        "editor": "GALLON",
         "name": "Overrun Amount 24H Limit"
       },
       {
         "id": "GV23",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Overrun Duration Once Limit"
       },
       {
         "id": "GV24",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Overrun Count 24H Limit"
       },
       {
         "id": "GV25",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Leak Auto Close"
       },
       {
         "id": "GV26",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Amount Auto Close"
       },
       {
         "id": "GV27",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Duration Auto Close"
       },
       {
         "id": "GV28",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Times Auto Close"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -6113,27 +6113,27 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             }
           ]
         }
@@ -6145,38 +6145,38 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterMulti",
+    "id": "YOWATERMETERMULTI",
     "name": "YoLink Water Meter Multi Controller",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV1",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Water Meter Total"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Leak Alarm"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -6204,38 +6204,38 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterMultiF",
-    "name": "yowatermeterMultiF",
+    "id": "YOWATERMETERMULTIF",
+    "name": "YOWATERMETERMULTIF",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV1",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Water Meter Total"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Leak Alarm"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -6263,103 +6263,103 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterSub",
+    "id": "YOWATERMETERSUB",
     "name": "YoLink Water Meter Sub Controller",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV0",
-        "editor": "manstate",
+        "editor": "MANSTATE",
         "name": "Valve State"
       },
       {
         "id": "GV1",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Recent Use"
       },
       {
         "id": "GV3",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Water Meter Recent Duration"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Amount Overrun Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Duration Overrun Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Nbr Times Overrun 24H Alarm"
       },
       {
         "id": "GV9",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Reminder Alarm"
       },
       {
         "id": "GV12",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Valve Error Alarm"
       },
       {
         "id": "GV22",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Overrun Amount 24H Limit"
       },
       {
         "id": "GV23",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Overrun Duration Once Limit"
       },
       {
         "id": "GV24",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Overrun Count 24H Limit"
       },
       {
         "id": "GV25",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Leak Auto Close"
       },
       {
         "id": "GV26",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Amount Auto Close"
       },
       {
         "id": "GV27",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Duration Auto Close"
       },
       {
         "id": "GV28",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Times Auto Close"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       }
     ],
@@ -6389,27 +6389,27 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "literSet"
+              "editor": "LITERSET"
             },
             {
               "id": "LOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
-              "editor": "literSet"
+              "editor": "LITERSET"
             },
             {
               "id": "OROFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             }
           ]
         }
@@ -6421,103 +6421,103 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterSubL",
+    "id": "YOWATERMETERSUBL",
     "name": "YoLink Water Meter Sub Controller",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV0",
-        "editor": "manstate",
+        "editor": "MANSTATE",
         "name": "Valve State"
       },
       {
         "id": "GV1",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Water Meter Recent Use"
       },
       {
         "id": "GV3",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Water Meter Recent Duration"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Amount Overrun Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Duration Overrun Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Nbr Times Overrun 24H Alarm"
       },
       {
         "id": "GV9",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Reminder Alarm"
       },
       {
         "id": "GV12",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Valve Error Alarm"
       },
       {
         "id": "GV22",
-        "editor": "liter",
+        "editor": "LITER",
         "name": "Overrun Amount 24H Limit"
       },
       {
         "id": "GV23",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Overrun Duration Once Limit"
       },
       {
         "id": "GV24",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Overrun Count 24H Limit"
       },
       {
         "id": "GV25",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Leak Auto Close"
       },
       {
         "id": "GV26",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Amount Auto Close"
       },
       {
         "id": "GV27",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Duration Auto Close"
       },
       {
         "id": "GV28",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Times Auto Close"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       }
     ],
@@ -6547,27 +6547,27 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "literSet"
+              "editor": "LITERSET"
             },
             {
               "id": "LOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
-              "editor": "literSet"
+              "editor": "LITERSET"
             },
             {
               "id": "OROFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             }
           ]
         }
@@ -6579,103 +6579,103 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterSubG",
+    "id": "YOWATERMETERSUBG",
     "name": "YoLink Water Meter Sub Controller",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV0",
-        "editor": "manstate",
+        "editor": "MANSTATE",
         "name": "Valve State"
       },
       {
         "id": "GV1",
-        "editor": "gallon",
+        "editor": "GALLON",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "gallon",
+        "editor": "GALLON",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "gallon",
+        "editor": "GALLON",
         "name": "Water Meter Recent Use"
       },
       {
         "id": "GV3",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Water Meter Recent Duration"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Amount Overrun Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Duration Overrun Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Nbr Times Overrun 24H Alarm"
       },
       {
         "id": "GV9",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Reminder Alarm"
       },
       {
         "id": "GV12",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Valve Error Alarm"
       },
       {
         "id": "GV22",
-        "editor": "gallon",
+        "editor": "GALLON",
         "name": "Overrun Amount 24H Limit"
       },
       {
         "id": "GV23",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Overrun Duration Once Limit"
       },
       {
         "id": "GV24",
-        "editor": "count",
+        "editor": "COUNT",
         "name": "Overrun Count 24H Limit"
       },
       {
         "id": "GV25",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Leak Auto Close"
       },
       {
         "id": "GV26",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Amount Auto Close"
       },
       {
         "id": "GV27",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Duration Auto Close"
       },
       {
         "id": "GV28",
-        "editor": "enable",
+        "editor": "ENABLE",
         "name": "Overrun Times Auto Close"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       }
     ],
@@ -6705,27 +6705,27 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "gallonSet"
+              "editor": "GALLONSET"
             },
             {
               "id": "LOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
-              "editor": "gallonSet"
+              "editor": "GALLONSET"
             },
             {
               "id": "OROFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
-              "editor": "enableSet"
+              "editor": "ENABLESET"
             }
           ]
         }
@@ -6737,103 +6737,103 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterOnly",
+    "id": "YOWATERMETERONLY",
     "name": "YoLink Water Meter",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV1",
-        "editor": "flow",
+        "editor": "FLOW",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "flow",
+        "editor": "FLOW",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "flow",
+        "editor": "FLOW",
         "name": "Water Meter Recent Use"
       },
       {
         "id": "GV3",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Water Meter Recent Duration"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Water Temperature"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Leak Alarm"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Amount Overrun Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Duration Overrun Alarm"
       },
       {
         "id": "GV9",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Reminder Alarm"
       },
       {
         "id": "GV11",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Open Reminder Alarm"
       },
       {
         "id": "GV12",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Valve Error Alarm"
       },
       {
         "id": "GV13",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "GV14",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV16",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Overrun time Limit"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -6859,15 +6859,15 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "ORLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "ORTLIMIT",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             }
           ]
         }
@@ -6879,103 +6879,103 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowatermeterOnlyF",
+    "id": "YOWATERMETERONLYF",
     "name": "YoLink Water Meter",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Water Running"
       },
       {
         "id": "GV1",
-        "editor": "flow",
+        "editor": "FLOW",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "flow",
+        "editor": "FLOW",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "flow",
+        "editor": "FLOW",
         "name": "Water Meter Recent Use"
       },
       {
         "id": "GV3",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Water Meter Recent Duration"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Water Temperature"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Leak Alarm"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Amount Overrun Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Duration Overrun Alarm"
       },
       {
         "id": "GV9",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Reminder Alarm"
       },
       {
         "id": "GV11",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Open Reminder Alarm"
       },
       {
         "id": "GV12",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Valve Error Alarm"
       },
       {
         "id": "GV13",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "GV14",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV16",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Overrun time Limit"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -7001,15 +7001,15 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "ORLIMIT",
-              "editor": "leaklimit"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "ORTLIMIT",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             }
           ]
         }
@@ -7021,68 +7021,68 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosprinklerv2",
+    "id": "YOSPRINKLERV2",
     "name": "YoLink Smart Sprinkler V2",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Current State"
       },
       {
         "id": "GV1",
-        "editor": "nowateralarm",
+        "editor": "NOWATERALARM",
         "name": "Current No Water Alarm"
       },
       {
         "id": "GV10",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Time for Latest operation Update"
       },
       {
         "id": "GV5",
-        "editor": "waterrun",
+        "editor": "WATERRUN",
         "name": "Latest Operation"
       },
       {
         "id": "GV7",
-        "editor": "runningmode",
+        "editor": "RUNNINGMODE",
         "name": "Latest Water Method"
       },
       {
         "id": "GV8",
-        "editor": "runningvalue",
+        "editor": "RUNNINGVALUE",
         "name": "Latest Water Amount target"
       },
       {
         "id": "GV9",
-        "editor": "nowateralarm",
+        "editor": "NOWATERALARM",
         "name": "Latest Water Alarm"
       },
       {
         "id": "GV12",
-        "editor": "minutes",
+        "editor": "MINUTES",
         "name": "Time Delay"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last Data Update"
       }
     ],
@@ -7108,11 +7108,11 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "startstop",
-              "editor": "startstop"
+              "editor": "STARTSTOP"
             },
             {
               "id": "watermode",
-              "editor": "watermode"
+              "editor": "WATERMODE"
             }
           ]
         },
@@ -7122,11 +7122,11 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "wmethod",
-              "editor": "sprinklermethod"
+              "editor": "SPRINKLERMETHOD"
             },
             {
               "id": "wamount",
-              "editor": "wamount"
+              "editor": "WAMOUNT"
             }
           ]
         },
@@ -7136,7 +7136,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "minutesSet"
+              "editor": "MINUTESSET"
             }
           ]
         }
@@ -7148,118 +7148,118 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yothsens",
+    "id": "YOTHSENS",
     "name": "YoLink THsensor",
     "icon": "TempSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature (legacy)"
       },
       {
         "id": "GV1",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV2",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "CLIHUM",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Current Rel Humidity (%)"
       },
       {
         "id": "GV4",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Humidity Alarm"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Humidity Alarm"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Battery Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Alarm triggered"
       },
       {
         "id": "GV9",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "GV10",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Low Temp Alarm Limit"
       },
       {
         "id": "GV11",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "High Temp Alarm Limit"
       },
       {
         "id": "GV12",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity Alarm Limit"
       },
       {
         "id": "GV13",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity Alarm Limit"
       },
       {
         "id": "GV14",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Low Temp 24H"
       },
       {
         "id": "GV15",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "High Temp 24H"
       },
       {
         "id": "GV16",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity  24H"
       },
       {
         "id": "GV17",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity 24H"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -7281,7 +7281,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -7298,118 +7298,118 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosoilsensor",
+    "id": "YOSOILSENSOR",
     "name": "YoLink Soil Sensor",
     "icon": "Weather",
     "properties": [
       {
         "id": "ST",
-        "editor": "conductivity",
+        "editor": "CONDUCTIVITY",
         "name": "Soil Conductivity (mS/cm)"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "CLIHUM",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Current Rel Humidity (%)"
       },
       {
         "id": "GV1",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Conductivity Alarm"
       },
       {
         "id": "GV2",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Conductivity Alarm"
       },
       {
         "id": "GV3",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV4",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Humidity Alarm"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Humidity Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Period Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Alarm triggered"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV9",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "GV10",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Low Temp Alarm Limit"
       },
       {
         "id": "GV11",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "High Temp Alarm Limit"
       },
       {
         "id": "GV12",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity Alarm Limit"
       },
       {
         "id": "GV13",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity Alarm Limit"
       },
       {
         "id": "GV14",
-        "editor": "conductivity",
+        "editor": "CONDUCTIVITY",
         "name": "Low Conductivity Alarm Limit (mS/cm)"
       },
       {
         "id": "GV15",
-        "editor": "conductivity",
+        "editor": "CONDUCTIVITY",
         "name": "High Conductivity Alarm Limit (mS/cm)"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -7431,7 +7431,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -7448,118 +7448,118 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosoilsensorF",
+    "id": "YOSOILSENSORF",
     "name": "YoLink Soil Sensor",
     "icon": "Weather",
     "properties": [
       {
         "id": "ST",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Soil Conductivity (mS/cm)"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV1",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Conductivity Alarm"
       },
       {
         "id": "GV2",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Conductivity Alarm"
       },
       {
         "id": "GV3",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "CLIHUM",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Current Rel Humidity (%)"
       },
       {
         "id": "GV4",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Humidity Alarm"
       },
       {
         "id": "GV6",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Humidity Alarm"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Period Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Alarm triggered"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV9",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "GV10",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Low Temp Alarm Limit"
       },
       {
         "id": "GV11",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "High Temp Alarm Limit"
       },
       {
         "id": "GV12",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity Alarm Limit"
       },
       {
         "id": "GV13",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity Alarm Limit"
       },
       {
         "id": "GV14",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Low Conductivity Alarm Limit (mS/cm)"
       },
       {
         "id": "GV15",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "High Conductivity Alarm Limit (mS/cm)"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -7581,7 +7581,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -7598,118 +7598,118 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yothsensF",
+    "id": "YOTHSENSF",
     "name": "YoLink THsensor",
     "icon": "TempSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature (legacy)"
       },
       {
         "id": "GV1",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV2",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "CLIHUM",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Current Rel Humidity (%)"
       },
       {
         "id": "GV4",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Humidity Alarm"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Humidity Alarm"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Battery Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Alarm triggered"
       },
       {
         "id": "GV9",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "GV10",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Low Temp Alarm Limit"
       },
       {
         "id": "GV11",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "High Temp Alarm Limit"
       },
       {
         "id": "GV12",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity Alarm Limit"
       },
       {
         "id": "GV13",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity Alarm Limit"
       },
       {
         "id": "GV14",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Low Temp 24H"
       },
       {
         "id": "GV15",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "High Temp 24H"
       },
       {
         "id": "GV16",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity  24H"
       },
       {
         "id": "GV17",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity 24H"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -7731,7 +7731,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -7748,118 +7748,118 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yotsens",
+    "id": "YOTSENS",
     "name": "YoLink T Sensor",
     "icon": "TempSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature (legacy)"
       },
       {
         "id": "GV1",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV2",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "CLIHUM",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Current Rel Humidity (%)"
       },
       {
         "id": "GV4",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Humidity Alarm"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Humidity Alarm"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Battery Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Alarm triggered"
       },
       {
         "id": "GV9",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "GV10",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Low Temp Alarm Limit"
       },
       {
         "id": "GV11",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "High Temp Alarm Limit"
       },
       {
         "id": "GV12",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity Alarm Limit"
       },
       {
         "id": "GV13",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity Alarm Limit"
       },
       {
         "id": "GV14",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Low Temp 24H"
       },
       {
         "id": "GV15",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "High Temp 24H"
       },
       {
         "id": "GV16",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity 24H"
       },
       {
         "id": "GV17",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity 24H"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -7881,7 +7881,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -7898,118 +7898,118 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yotsensF",
+    "id": "YOTSENSF",
     "name": "YoLink T Sensor",
     "icon": "TempSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature (legacy)"
       },
       {
         "id": "GV1",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Temp Alarm"
       },
       {
         "id": "GV2",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Temp Alarm"
       },
       {
         "id": "CLIHUM",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Current Rel Humidity (%)"
       },
       {
         "id": "GV4",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Humidity Alarm"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Humidity Alarm"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV7",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Battery Alarm"
       },
       {
         "id": "GV8",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Alarm triggered"
       },
       {
         "id": "GV9",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "GV10",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Low Temp Alarm Limit"
       },
       {
         "id": "GV11",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "High Temp Alarm Limit"
       },
       {
         "id": "GV12",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity Alarm Limit"
       },
       {
         "id": "GV13",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity Alarm Limit"
       },
       {
         "id": "GV14",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Low Temp 24H"
       },
       {
         "id": "GV15",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "High Temp 24H"
       },
       {
         "id": "GV16",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "Low Humidity 24H"
       },
       {
         "id": "GV17",
-        "editor": "humidity",
+        "editor": "HUMIDITY",
         "name": "High Humidity 24H"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8031,7 +8031,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -8048,48 +8048,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yodoorsens",
+    "id": "YODOORSENS",
     "name": "YoLink Door Sensor",
     "icon": "DoorLock",
     "properties": [
       {
         "id": "ST",
-        "editor": "doorstate",
+        "editor": "DOORSTATE",
         "name": "Door State"
       },
       {
         "id": "GV0",
-        "editor": "doorstate",
+        "editor": "DOORSTATE",
         "name": "Door State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Sensor Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "GV3",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last State Change"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8111,7 +8111,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -8128,23 +8128,23 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yogarage",
+    "id": "YOGARAGE",
     "name": "YoLink Garage Controller",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Node Server Status"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       }
     ],
@@ -8171,48 +8171,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yomotionsens",
+    "id": "YOMOTIONSENS",
     "name": "YoLink Motion Sensor",
     "icon": "MotionSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "motionstate",
+        "editor": "MOTIONSTATE",
         "name": "Motion State"
       },
       {
         "id": "GV0",
-        "editor": "motionstate",
+        "editor": "MOTIONSTATE",
         "name": "Motion State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Sensor Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8234,7 +8234,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -8251,48 +8251,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yomotionsensF",
+    "id": "YOMOTIONSENSF",
     "name": "YoLink Motion Sensor",
     "icon": "MotionSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "motionstate",
+        "editor": "MOTIONSTATE",
         "name": "Motion State"
       },
       {
         "id": "GV0",
-        "editor": "motionstate",
+        "editor": "MOTIONSTATE",
         "name": "Motion State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Sensor Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8314,7 +8314,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -8331,88 +8331,88 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoleaksensF",
+    "id": "YOLEAKSENSF",
     "name": "YoLink Water Sensor",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterstate",
+        "editor": "WATERSTATE",
         "name": "Water State"
       },
       {
         "id": "GV0",
-        "editor": "waterstate",
+        "editor": "WATERSTATE",
         "name": "Water State (Legacy)"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV3",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last State Change"
       },
       {
         "id": "GV4",
-        "editor": "beeping",
+        "editor": "BEEPING",
         "name": "Sensor Sound"
       },
       {
         "id": "GV5",
-        "editor": "leakOpMode",
+        "editor": "LEAKOPMODE",
         "name": "Operating Mode"
       },
       {
         "id": "GV6",
-        "editor": "sensitivity",
+        "editor": "SENSITIVITY",
         "name": "Sensitivity"
       },
       {
         "id": "GV7",
-        "editor": "moveAlert",
+        "editor": "MOVEALERT",
         "name": "Sensor Move Alert"
       },
       {
         "id": "GV8",
-        "editor": "freezeAlert",
+        "editor": "FREEZEALERT",
         "name": "Sensor Freeze Alert"
       },
       {
         "id": "GV9",
-        "editor": "sensorError",
+        "editor": "SENSORERROR",
         "name": "Sensor Error"
       },
       {
         "id": "GV10",
-        "editor": "reminder",
+        "editor": "REMINDER",
         "name": "Reminder"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8434,7 +8434,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -8445,7 +8445,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "beeping",
+              "editor": "BEEPING",
               "init": "GV4"
             }
           ]
@@ -8462,88 +8462,88 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoleaksens",
+    "id": "YOLEAKSENS",
     "name": "YoLink Water Sensor",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterstate",
+        "editor": "WATERSTATE",
         "name": "Water State"
       },
       {
         "id": "GV0",
-        "editor": "waterstate",
+        "editor": "WATERSTATE",
         "name": "Water State (Legacy)"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV3",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last State Change"
       },
       {
         "id": "GV4",
-        "editor": "beeping",
+        "editor": "BEEPING",
         "name": "Sensor Sound"
       },
       {
         "id": "GV5",
-        "editor": "leakOpMode",
+        "editor": "LEAKOPMODE",
         "name": "Operating Mode"
       },
       {
         "id": "GV6",
-        "editor": "sensitivity",
+        "editor": "SENSITIVITY",
         "name": "Sensitivity"
       },
       {
         "id": "GV7",
-        "editor": "moveAlert",
+        "editor": "MOVEALERT",
         "name": "Sensor Move Alert"
       },
       {
         "id": "GV8",
-        "editor": "freezeAlert",
+        "editor": "FREEZEALERT",
         "name": "Sensor Freeze Alert"
       },
       {
         "id": "GV9",
-        "editor": "sensorError",
+        "editor": "SENSORERROR",
         "name": "Sensor Error"
       },
       {
         "id": "GV10",
-        "editor": "reminder",
+        "editor": "REMINDER",
         "name": "Reminder"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8565,7 +8565,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -8576,7 +8576,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "beeping",
+              "editor": "BEEPING",
               "init": "GV4"
             }
           ]
@@ -8593,73 +8593,73 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoCOSmokesens",
+    "id": "YOCOSMOKESENS",
     "name": "YoLink COSmokeSensor",
     "icon": "SmokeSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "deviceAlert",
+        "editor": "DEVICEALERT",
         "name": "Alarm"
       },
       {
         "id": "ALARM",
-        "editor": "deviceAlert",
+        "editor": "DEVICEALERT",
         "name": "Alert Detected"
       },
       {
         "id": "GV0",
-        "editor": "SmokeAlert",
+        "editor": "SMOKEALERT",
         "name": "Smoke Detection"
       },
       {
         "id": "GV1",
-        "editor": "COAlert",
+        "editor": "COALERT",
         "name": "CO Detection"
       },
       {
         "id": "GV2",
-        "editor": "TempAlert",
+        "editor": "TEMPALERT",
         "name": "High Temp Detection"
       },
       {
         "id": "GV3",
-        "editor": "BatteryAlert",
+        "editor": "BATTERYALERT",
         "name": "Battery Problem Detection"
       },
       {
         "id": "GV4",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Sensor Battery Level"
       },
       {
         "id": "GV5",
-        "editor": "SelfcheckState",
+        "editor": "SELFCHECKSTATE",
         "name": "Self-check"
       },
       {
         "id": "GV7",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8681,7 +8681,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV7"
             }
           ]
@@ -8698,73 +8698,73 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoCOSmokesensF",
+    "id": "YOCOSMOKESENSF",
     "name": "YoLink COSmokeSensor",
     "icon": "SmokeSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "deviceAlert",
+        "editor": "DEVICEALERT",
         "name": "Alarm"
       },
       {
         "id": "ALARM",
-        "editor": "deviceAlert",
+        "editor": "DEVICEALERT",
         "name": "Alert Detected"
       },
       {
         "id": "GV0",
-        "editor": "SmokeAlert",
+        "editor": "SMOKEALERT",
         "name": "Smoke Detection"
       },
       {
         "id": "GV1",
-        "editor": "COAlert",
+        "editor": "COALERT",
         "name": "CO Detection"
       },
       {
         "id": "GV2",
-        "editor": "TempAlert",
+        "editor": "TEMPALERT",
         "name": "High Temp Detection"
       },
       {
         "id": "GV3",
-        "editor": "BatteryAlert",
+        "editor": "BATTERYALERT",
         "name": "Battery Problem Detection"
       },
       {
         "id": "GV4",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Sensor Battery Level"
       },
       {
         "id": "GV5",
-        "editor": "SelfcheckState",
+        "editor": "SELFCHECKSTATE",
         "name": "Self-check"
       },
       {
         "id": "GV7",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8786,7 +8786,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV7"
             }
           ]
@@ -8803,48 +8803,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yovibrasens",
+    "id": "YOVIBRASENS",
     "name": "YoLink Vibration Sensor",
     "icon": "MotionSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "vibrastate",
+        "editor": "VIBRASTATE",
         "name": "Vibration State"
       },
       {
         "id": "GV0",
-        "editor": "vibrastate",
+        "editor": "VIBRASTATE",
         "name": "Vibration State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Sensor Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8866,7 +8866,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -8883,48 +8883,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yovibrasensF",
+    "id": "YOVIBRASENSF",
     "name": "YoLink Vibration Sensor",
     "icon": "MotionSensor",
     "properties": [
       {
         "id": "ST",
-        "editor": "vibrastate",
+        "editor": "VIBRASTATE",
         "name": "Vibration State"
       },
       {
         "id": "GV0",
-        "editor": "vibrastate",
+        "editor": "VIBRASTATE",
         "name": "Vibration State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Sensor Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "cmdsetting",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -8946,7 +8946,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV2"
             }
           ]
@@ -8963,33 +8963,33 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yohubbat",
+    "id": "YOHUBBAT",
     "name": "YoLink Hub w Battery",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Supply Status"
       },
       {
         "id": "GV0",
-        "editor": "powerstate",
+        "editor": "POWERSTATE",
         "name": "Battery Status"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9008,28 +9008,28 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yohub",
+    "id": "YOHUB",
     "name": "YoLink Hub",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Status"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9048,58 +9048,58 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yospeakerh",
+    "id": "YOSPEAKERH",
     "name": "YoLink Speaker Hub",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Nodeserver Status"
       },
       {
         "id": "GV0",
-        "editor": "volume",
+        "editor": "VOLUME",
         "name": "Speaker volume"
       },
       {
         "id": "GV1",
-        "editor": "beepEn",
+        "editor": "BEEPEN",
         "name": "Command Beep"
       },
       {
         "id": "GV2",
-        "editor": "mute",
+        "editor": "MUTE",
         "name": "Mute"
       },
       {
         "id": "GV3",
-        "editor": "tone",
+        "editor": "TONE",
         "name": "Tone Type"
       },
       {
         "id": "GV4",
-        "editor": "messages",
+        "editor": "MESSAGES",
         "name": "Message"
       },
       {
         "id": "GV5",
-        "editor": "repeat",
+        "editor": "REPEAT",
         "name": "Repeat"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9116,22 +9116,22 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "message",
-              "editor": "messages",
+              "editor": "MESSAGES",
               "init": "GV4"
             },
             {
               "id": "volume",
-              "editor": "volume",
+              "editor": "VOLUME",
               "init": "GV0"
             },
             {
               "id": "tone",
-              "editor": "toneSet",
+              "editor": "TONESET",
               "init": "GV3"
             },
             {
               "id": "repeat",
-              "editor": "repeat",
+              "editor": "REPEAT",
               "init": "GV5"
             }
           ]
@@ -9142,7 +9142,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "beepEnSet",
+              "editor": "BEEPENSET",
               "init": "GV1"
             }
           ]
@@ -9153,7 +9153,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "muteSet",
+              "editor": "MUTESET",
               "init": "GV2"
             }
           ]
@@ -9166,58 +9166,58 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yolockv2",
-    "name": "yolockv2",
+    "id": "YOLOCKV2",
+    "name": "YOLOCKV2",
     "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
-        "editor": "lockstate",
+        "editor": "LOCKSTATE",
         "name": "Lock State"
       },
       {
         "id": "GV0",
-        "editor": "lockstate",
+        "editor": "LOCKSTATE",
         "name": "Lock State (legacy)"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "doorbell",
+        "editor": "DOORBELL",
         "name": "Doorbell Active"
       },
       {
         "id": "GV3",
-        "editor": "doorstate",
+        "editor": "DOORSTATE",
         "name": "Door State"
       },
       {
         "id": "GV4",
-        "editor": "lockaction",
+        "editor": "LOCKACTION",
         "name": "Lock Action"
       },
       {
         "id": "GV5",
-        "editor": "locksource",
+        "editor": "LOCKSOURCE",
         "name": "Source"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9247,7 +9247,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "lock",
+              "editor": "LOCK",
               "init": "GV0"
             }
           ]
@@ -9264,43 +9264,43 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yolock",
+    "id": "YOLOCK",
     "name": "YoLink Smart Lock",
     "icon": "DoorLock",
     "properties": [
       {
         "id": "ST",
-        "editor": "lockstate",
+        "editor": "LOCKSTATE",
         "name": "Lock State"
       },
       {
         "id": "GV0",
-        "editor": "lockstate",
+        "editor": "LOCKSTATE",
         "name": "Lock State (legacy)"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV3",
-        "editor": "doorstate",
+        "editor": "DOORSTATE",
         "name": "Door State"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9330,7 +9330,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "lock",
+              "editor": "LOCK",
               "init": "GV0"
             }
           ]
@@ -9347,43 +9347,43 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoirremote",
+    "id": "YOIRREMOTE",
     "name": "YoLink Ir Remoter",
     "icon": "Output",
     "properties": [
       {
         "id": "ST",
-        "editor": "ircmdstatus",
+        "editor": "IRCMDSTATUS",
         "name": "Last Command Status"
       },
       {
         "id": "GV0",
-        "editor": "nbrcodes",
+        "editor": "NBRCODES",
         "name": "Number of Learned codes"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level (legacy)"
       },
       {
         "id": "GV2",
-        "editor": "ircmdstatus",
+        "editor": "IRCMDSTATUS",
         "name": "Last Command Status (legacy)"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9406,28 +9406,28 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yoircode",
+    "id": "YOIRCODE",
     "name": "YoLink Ir Code",
     "icon": "Output",
     "properties": [
       {
         "id": "ST",
-        "editor": "ircmdstatus",
+        "editor": "IRCMDSTATUS",
         "name": "TX success"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9451,58 +9451,58 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yopwralarm",
+    "id": "YOPWRALARM",
     "name": "YoLink Power Failure Alarm",
     "icon": "Input",
     "properties": [
       {
         "id": "ST",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Unit State"
       },
       {
         "id": "GV0",
-        "editor": "poweralert",
+        "editor": "POWERALERT",
         "name": "Unit State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV2",
-        "editor": "alertstate",
+        "editor": "ALERTSTATE",
         "name": "Alert Pending"
       },
       {
         "id": "GV3",
-        "editor": "powered",
+        "editor": "POWERED",
         "name": "Power on Unit"
       },
       {
         "id": "GV4",
-        "editor": "pfamute",
+        "editor": "PFAMUTE",
         "name": "Muted"
       },
       {
         "id": "GV7",
-        "editor": "cmdstatus",
+        "editor": "CMDSTATUS",
         "name": "Command Setting"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9524,7 +9524,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "cmdsetting",
+              "editor": "CMDSETTING",
               "init": "GV7"
             }
           ]
@@ -9541,63 +9541,63 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yowaterdept",
+    "id": "YOWATERDEPT",
     "name": "YoLink Water Level Sensor",
     "icon": "Irrigation",
     "properties": [
       {
         "id": "ST",
-        "editor": "waterlevel",
+        "editor": "WATERLEVEL",
         "name": "Water Level (0-1000)"
       },
       {
         "id": "GV0",
-        "editor": "waterlevel",
+        "editor": "WATERLEVEL",
         "name": "Water Level (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "waterlevel",
+        "editor": "WATERLEVEL",
         "name": "Low water Level Alarm setting"
       },
       {
         "id": "GV2",
-        "editor": "waterlevel",
+        "editor": "WATERLEVEL",
         "name": "High water Level Alarm setting"
       },
       {
         "id": "GV3",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Low Water Level"
       },
       {
         "id": "GV4",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "High Water Level"
       },
       {
         "id": "GV5",
-        "editor": "alarm",
+        "editor": "ALARM",
         "name": "Sensor Error"
       },
       {
         "id": "BATLVL",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last Data Update"
       }
     ],
@@ -9619,12 +9619,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "waterLowAlarm",
-              "editor": "waterlevel",
+              "editor": "WATERLEVEL",
               "init": "GV1"
             },
             {
               "id": "waterHighAlarm",
-              "editor": "waterlevel",
+              "editor": "WATERLEVEL",
               "init": "GV2"
             }
           ]
@@ -9641,48 +9641,48 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosiren",
+    "id": "YOSIREN",
     "name": "YoLink Siren",
     "icon": "Output",
     "properties": [
       {
         "id": "ST",
-        "editor": "sirenstate",
+        "editor": "SIRENSTATE",
         "name": "Siren State"
       },
       {
         "id": "GV0",
-        "editor": "sirenstate",
+        "editor": "SIRENSTATE",
         "name": "Siren State (Legacy)"
       },
       {
         "id": "GV1",
-        "editor": "sirenduration",
+        "editor": "SIRENDURATION",
         "name": "Siren Duration"
       },
       {
         "id": "GV2",
-        "editor": "sirenbatlevel",
+        "editor": "SIRENBATLEVEL",
         "name": "Supply State"
       },
       {
         "id": "GV3",
-        "editor": "soundlevel",
+        "editor": "SOUNDLEVEL",
         "name": "Sound Level"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last device update"
       }
     ],
@@ -9704,7 +9704,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "sirenctrl",
+              "editor": "SIRENCTRL",
               "init": "GV0"
             }
           ]
@@ -9721,33 +9721,33 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosmremote",
+    "id": "YOSMREMOTE",
     "name": "YoLink Smart Remoter",
     "icon": "Output",
     "properties": [
       {
         "id": "ST",
-        "editor": "remotetype",
+        "editor": "REMOTETYPE",
         "name": "Remote Type"
       },
       {
         "id": "GV3",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "CLITEMP",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       }
     ],
@@ -9766,33 +9766,33 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yosmremoteF",
+    "id": "YOSMREMOTEF",
     "name": "YoLink Smart Remoter",
     "icon": "Output",
     "properties": [
       {
         "id": "ST",
-        "editor": "remotetype",
+        "editor": "REMOTETYPE",
         "name": "Remote Type"
       },
       {
         "id": "GV3",
-        "editor": "batlevel",
+        "editor": "BATLEVEL",
         "name": "Battery Level"
       },
       {
         "id": "CLITEMP",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor Temperature"
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       }
     ],
@@ -9811,28 +9811,28 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "smremotekey",
+    "id": "SMREMOTEKEY",
     "name": "YoLink Smart Remoter",
     "icon": "Output",
     "properties": [
       {
         "id": "ST",
-        "editor": "keyscenedef",
+        "editor": "KEYSCENEDEF",
         "name": "Last Command"
       },
       {
         "id": "GV1",
-        "editor": "keyscenedef",
+        "editor": "KEYSCENEDEF",
         "name": "Short Press Command Type"
       },
       {
         "id": "GV2",
-        "editor": "keyscenedef",
+        "editor": "KEYSCENEDEF",
         "name": "Long Press Type"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last key press"
       }
     ],
@@ -9862,7 +9862,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "keyscene",
+              "editor": "KEYSCENE",
               "init": "GV1"
             }
           ]
@@ -9873,7 +9873,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "keyscene",
+              "editor": "KEYSCENE",
               "init": "GV2"
             }
           ]
@@ -9886,28 +9886,28 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "smremotekeydual",
+    "id": "SMREMOTEKEYDUAL",
     "name": "YoLink Smart Remoter",
     "icon": "Output",
     "properties": [
       {
         "id": "ST",
-        "editor": "keyscenedef",
+        "editor": "KEYSCENEDEF",
         "name": "Last Command"
       },
       {
         "id": "GV1",
-        "editor": "keyscenedef",
+        "editor": "KEYSCENEDEF",
         "name": "Short Press Command Type"
       },
       {
         "id": "GV2",
-        "editor": "keyscenedef",
+        "editor": "KEYSCENEDEF",
         "name": "Long Press Command Type"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last key press"
       }
     ],
@@ -9937,7 +9937,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "keyscene"
+              "editor": "KEYSCENE"
             }
           ]
         },
@@ -9947,7 +9947,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "keyscene"
+              "editor": "KEYSCENE"
             }
           ]
         }
@@ -9959,23 +9959,23 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "smremotekeysingle",
+    "id": "SMREMOTEKEYSINGLE",
     "name": "YoLink Smart Remoter",
     "icon": "Output",
     "properties": [
       {
         "id": "ST",
-        "editor": "keyscenedef",
+        "editor": "KEYSCENEDEF",
         "name": "Last Command"
       },
       {
         "id": "GV1",
-        "editor": "keyscenedef",
+        "editor": "KEYSCENEDEF",
         "name": "Press Command"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last key press"
       }
     ],
@@ -10005,7 +10005,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "keyscene",
+              "editor": "KEYSCENE",
               "init": "GV1"
             }
           ]
@@ -10018,13 +10018,13 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yothermostat",
+    "id": "YOTHERMOSTAT",
     "name": "YoLink Thermostat (C)",
     "icon": "Thermostat",
     "properties": [
       {
         "id": "ST",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Temperature"
       },
       {
@@ -10039,12 +10039,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "CLISPH",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Heat Setpoint"
       },
       {
         "id": "CLISPC",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Cool Setpoint"
       },
       {
@@ -10059,17 +10059,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "CLISMD",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Schedule Mode"
       },
       {
         "id": "GV0",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor 1 Temp"
       },
       {
         "id": "GV1",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Sensor 2 Temp"
       },
       {
@@ -10089,12 +10089,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV18",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "ECO Low Temp"
       },
       {
         "id": "GV19",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "ECO High Temp"
       },
       {
@@ -10104,17 +10104,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last Update"
       }
     ],
@@ -10131,7 +10131,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "celsiusSet",
+              "editor": "CELSIUSSET",
               "init": "CLISPH"
             }
           ]
@@ -10142,7 +10142,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "celsiusSet",
+              "editor": "CELSIUSSET",
               "init": "CLISPC"
             }
           ]
@@ -10190,12 +10190,12 @@ DYNAMIC_NODEDEFS = [
             },
             {
               "id": "ecoLowth",
-              "editor": "ecoSet",
+              "editor": "ECOSET",
               "init": "GV18"
             },
             {
               "id": "ecoHighth",
-              "editor": "ecoSet",
+              "editor": "ECOSET",
               "init": "GV19"
             }
           ]
@@ -10208,13 +10208,13 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yothermostatf",
+    "id": "YOTHERMOSTATF",
     "name": "YoLink Thermostat (F)",
     "icon": "Thermostat",
     "properties": [
       {
         "id": "ST",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Temperature"
       },
       {
@@ -10229,12 +10229,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "CLISPH",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Heat Setpoint"
       },
       {
         "id": "CLISPC",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Cool Setpoint"
       },
       {
@@ -10254,12 +10254,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV0",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor 1 Temp"
       },
       {
         "id": "GV1",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Sensor 2 Temp"
       },
       {
@@ -10279,12 +10279,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV18",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "ECO Low Temp"
       },
       {
         "id": "GV19",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "ECO High Temp"
       },
       {
@@ -10294,17 +10294,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV20",
-        "editor": "suspendstate",
+        "editor": "SUSPENDSTATE",
         "name": "Connection State"
       },
       {
         "id": "GV30",
-        "editor": "status",
+        "editor": "STATUS",
         "name": "Online State"
       },
       {
         "id": "TIME",
-        "editor": "unixtime",
+        "editor": "UNIXTIME",
         "name": "Last Update"
       }
     ],
@@ -10321,7 +10321,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "farenheitSet",
+              "editor": "FARENHEITSET",
               "init": "CLISPH"
             }
           ]
@@ -10332,7 +10332,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "farenheitSet",
+              "editor": "FARENHEITSET",
               "init": "CLISPC"
             }
           ]
@@ -10380,12 +10380,12 @@ DYNAMIC_NODEDEFS = [
             },
             {
               "id": "ecoLowth",
-              "editor": "ecoSetF",
+              "editor": "ECOSETF",
               "init": "GV18"
             },
             {
               "id": "ecoHighth",
-              "editor": "ecoSetF",
+              "editor": "ECOSETF",
               "init": "GV19"
             }
           ]
@@ -10398,7 +10398,7 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yothermprop",
+    "id": "YOTHERMPROP",
     "name": "Thermostat Properties (C)",
     "icon": "Thermostat",
     "properties": [
@@ -10409,12 +10409,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV7",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Cool Limit"
       },
       {
         "id": "GV8",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Heat Limit"
       },
       {
@@ -10439,7 +10439,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV13",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Aux Threshold"
       },
       {
@@ -10454,7 +10454,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV16",
-        "editor": "celsius",
+        "editor": "CELSIUS",
         "name": "Stage2 Threshold"
       },
       {
@@ -10487,7 +10487,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "celsiusSet",
+              "editor": "CELSIUSSET",
               "init": "GV7"
             }
           ]
@@ -10498,7 +10498,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "celsiusSet",
+              "editor": "CELSIUSSET",
               "init": "GV8"
             }
           ]
@@ -10544,7 +10544,7 @@ DYNAMIC_NODEDEFS = [
     }
   },
   {
-    "id": "yothermpropf",
+    "id": "YOTHERMPROPF",
     "name": "Thermostat Properties (F)",
     "icon": "Thermostat",
     "properties": [
@@ -10555,12 +10555,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV7",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Cool Limit"
       },
       {
         "id": "GV8",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Heat Limit"
       },
       {
@@ -10585,7 +10585,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV13",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Aux Threshold"
       },
       {
@@ -10600,7 +10600,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV16",
-        "editor": "farenheit",
+        "editor": "FARENHEIT",
         "name": "Stage2 Threshold"
       },
       {
@@ -10633,7 +10633,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "farenheitSet",
+              "editor": "FARENHEITSET",
               "init": "GV7"
             }
           ]
@@ -10644,7 +10644,7 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "",
-              "editor": "farenheitSet",
+              "editor": "FARENHEITSET",
               "init": "GV8"
             }
           ]

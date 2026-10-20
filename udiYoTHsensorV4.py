@@ -25,7 +25,7 @@ from yolinkTHsensorV2 import YoLinkTHSensor
 class udiYoTHsensor(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yothsens'
+    id = 'YOTHSENS'
     
     '''
        drivers = [
@@ -92,10 +92,10 @@ class udiYoTHsensor(udi_interface.Node):
         model = str(self.devInfo['modelName'][:6])
         if model in ['YS8017', 'YS8014', 'YS8004', 'YS8008']:
             self.meas_support = ['temp']
-            self.id = 'yotsens'
+            self.id = 'YOTSENS'
         else:
             self.meas_support = ['temp', 'hum']
-            self.id = 'yothsens'
+            self.id = 'YOTHSENS'
 
         self.alarm_state = False
         self.sensordata_24_hours = {}

@@ -26,7 +26,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 class udiYoWaterMeterOnly(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yowatermeterOnly'
+    id = 'YOWATERMETERONLY'
     '''
        drivers = [
             'GV0' = Manipulator State
@@ -76,7 +76,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.water_unit = self.yoAccess.get_water_unit()
-        self.id = 'yowatermeterOnly'
+        self.id = 'YOWATERMETERONLY'
 
         self.devInfo =  deviceInfo
         self.yoWaterCtrl= None

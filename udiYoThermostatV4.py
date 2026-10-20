@@ -24,7 +24,7 @@ from yolinkThermostatV2 import YoLinkThermostat
 class udiYoThermostat(udi_interface.Node):
     from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yothermostat'
+    id = 'YOTHERMOSTAT'
 
     drivers = [
         {'driver': 'ST', 'value': 0, 'uom': 4, 'name': 'Temperature'},           # Current temperature (UoM 4=Celsius, 17=Fahrenheit)
@@ -69,7 +69,7 @@ class udiYoThermostat(udi_interface.Node):
         self.main_node_ready = False
         self.sub_nodes_ready = False
         
-        self.id = 'yothermostat'
+        self.id = 'YOTHERMOSTAT'
 
         # Subscribe to events
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -481,7 +481,7 @@ class udiYoThermostat(udi_interface.Node):
 class udiYoThermostatProperties(udi_interface.Node):
     from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yothermprop'
+    id = 'YOTHERMPROP'
 
     drivers = [
         {'driver': 'GV6', 'value': 99, 'uom': 44, 'name': 'Min Runtime'},        # minRuntime (minutes)

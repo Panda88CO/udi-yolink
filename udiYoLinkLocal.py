@@ -676,7 +676,7 @@ class YoLinkSetup (udi_interface.Node):
         from udiDynamicProfile import update_dynamic_profile
         update_dynamic_profile(self)
 
-    id = 'setup'
+    id = 'SETUP'
     commands = {
           #'EPOCHTIME': updateEpochTime,
           }

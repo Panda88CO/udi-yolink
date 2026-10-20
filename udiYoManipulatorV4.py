@@ -26,7 +26,7 @@ from udiYoSchedule import udiYoSchedule
 
 class udiYoManipulator(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
-    id = 'yomanipu'
+    id = 'YOMANIPU'
     '''
        drivers = [
             'GV0' = Manipulator State

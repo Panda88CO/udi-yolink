@@ -31,7 +31,7 @@ REMOTE_TYPE_DUAL_PRESS = 1
 class udiRemoteKey(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, save_cmd_struct, retrieve_cmd_struct, node_queue, wait_for_node_done, mask2key, set_node_custom, get_node_custom, checkNameSync, apply_profile_driver_names
 
-    id = 'smremotekey'
+    id = 'SMREMOTEKEY'
     drivers = [
             {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Last Command'}, # Command
             {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Short Press Command Type'}, # Short Keypress setting
@@ -58,7 +58,7 @@ class udiRemoteKey(udi_interface.Node):
         self.SHORT_CMD = self.address+'_S_CMD'
         self.name = name
         self.primary = primary
-        self.id = 'smremotekeysingle' if self.single_press_only else 'smremotekeydual'
+        self.id = 'SMREMOTEKEYSINGLE' if self.single_press_only else 'SMREMOTEKEYDUAL'
         if self.single_press_only:
             self.drivers = [dict(d) for d in type(self).single_press_drivers]
         else:
@@ -321,7 +321,7 @@ class udiRemoteKey(udi_interface.Node):
 class udiYoSmartRemoter(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames, apply_profile_driver_names
 
-    id = 'yosmremote'
+    id = 'YOSMREMOTE'
 
 
         

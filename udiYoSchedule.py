@@ -613,7 +613,7 @@ class OnOffScheduleNode(BaseScheduleNode):
     Handles schedules with on/off state transitions at specified times.
     """
     
-    id = 'yoScheduleSec'
+    id = 'YOSCHEDULESEC'
     
     drivers = [
         {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},     # Schedule index
@@ -631,8 +631,8 @@ class OnOffScheduleNode(BaseScheduleNode):
     def _set_id_for_seconds_support(self):
         """Set node ID based on seconds support."""
         if self.support_seconds:
-            return 'yoScheduleSec'
-        return 'yoSchedule'
+            return 'YOSCHEDULESEC'
+        return 'YOSCHEDULE'
     
     def prep_schedule(self, query):
         """Prepare schedule parameters from UI query."""
@@ -709,7 +709,7 @@ class KeyScheduleNode(BaseScheduleNode):
     Adds a 'key' parameter to on/off time schedules.
     """
     
-    id = 'yoirSchedule'
+    id = 'YOIRSCHEDULE'
     
     drivers = [
         {'driver': 'GV12', 'value': 99, 'uom': 25, 'name': 'Selected code/port'},     # Infrared key/channel
@@ -727,8 +727,8 @@ class KeyScheduleNode(BaseScheduleNode):
 
     def _set_id_for_seconds_support(self):
         if self.support_seconds:
-            return 'yoirScheduleSec'
-        return 'yoirSchedule'
+            return 'YOIRSCHEDULESEC'
+        return 'YOIRSCHEDULE'
 
     def prep_schedule(self, query):
         """Prepare infrared schedule parameters from UI query."""
@@ -825,7 +825,7 @@ class MultiOutletScheduleNode(BaseScheduleNode):
     to on/off time schedules to select which outlet is controlled.
     """
     
-    id = 'yoMSchedule'
+    id = 'YOMSCHEDULE'
     
     drivers = [
         {'driver': 'GV12', 'value': 99, 'uom': 25, 'name': 'Selected code/port'},     # Channel/outlet number
@@ -843,8 +843,8 @@ class MultiOutletScheduleNode(BaseScheduleNode):
 
     def _set_id_for_seconds_support(self):
         if self.support_seconds:
-            return 'yoMScheduleSec'
-        return 'yoMSchedule'
+            return 'YOMSCHEDULESEC'
+        return 'YOMSCHEDULE'
 
     def prep_schedule(self, query):
         """Prepare multi-outlet schedule parameters from UI query."""
@@ -947,12 +947,12 @@ class SprinklerScheduleNode(OnOffScheduleNode):
     This class maps those fields to/from the existing schedule UI drivers.
     """
 
-    id = 'yoSprinklerSchedule'
+    id = 'YOSPRINKLERSCHEDULE'
 
     def _set_id_for_seconds_support(self):
         if self.support_seconds:
-            return 'yoSprinklerScheduleSec'
-        return 'yoSprinklerSchedule'
+            return 'YOSPRINKLERSCHEDULESEC'
+        return 'YOSPRINKLERSCHEDULE'
 
     def _get_schedule_type_name(self):
         return 'Sprinkler'
@@ -1130,7 +1130,7 @@ class WaterMeterScheduleNode(OnOffScheduleNode):
     schedule_type: 'valve' for valve control schedules, 'leak' for leak detection schedules
     """
 
-    id = 'yoWMSchedule'
+    id = 'YOWMSCHEDULE'
 
     drivers = [
         {'driver': 'GV12', 'value': 99, 'uom': 56, 'name': 'Leak Limit'},    # Leak limit (or repurposed for data)
@@ -1164,13 +1164,13 @@ class WaterMeterScheduleNode(OnOffScheduleNode):
         if self.schedule_type == 'leak':
             # Leak schedule nodes
             if self.support_seconds:
-                return 'yoWMLkScheduleSec'
-            return 'yoWMLkSchedule'
+                return 'YOWMLKSCHEDULESEC'
+            return 'YOWMLKSCHEDULE'
         else:
             # Valve schedule nodes (default)
             if self.support_seconds:
-                return 'yoWMVlScheduleSec'
-            return 'yoWMVlSchedule'
+                return 'YOWMVLSCHEDULESEC'
+            return 'YOWMVLSCHEDULE'
 
     def _get_schedule_type_name(self):
         return 'WaterMeter'

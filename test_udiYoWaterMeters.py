@@ -51,6 +51,8 @@ class TestWaterMeterController(unittest.TestCase):
             return 15
         if key == 'valve' and cat == 'state':
             return 'open'
+        if key == 'waterTemperature' and cat == 'state':
+            return 20.0  # 20 C = 68 F
         if key == 'waterFlowing' and cat == 'state':
             return True
         if key == 'meterStepFactor':
@@ -58,14 +60,14 @@ class TestWaterMeterController(unittest.TestCase):
         return None
 
     def test_initialization_drivers_and_uoms(self):
-        self.assertEqual(self.node.id, 'yowatermeterCtrl')
+        self.assertEqual(self.node.id, 'YOWATERMETERCTRL')
         self.assertEqual(self.node.temp_unit, 1)
         self.assertEqual(self.node.water_unit, 0)
-        # Check that drivers have been assigned display names and dynamic UOMs
+        # Check that drivers have been assigned display names and default UOMs
         driver_map = {d['driver']: d for d in self.node.drivers}
         self.assertIn('ST', driver_map)
         self.assertIn('GV1', driver_map)
-        self.assertEqual(driver_map['GV1']['uom'], 69)  # Gallon
+        self.assertEqual(driver_map['GV1']['uom'], 25)
 
     def test_update_data_volume_conversions_gallons(self):
         self.node.meter_unit = 3  # Device measures in Liters
@@ -194,6 +196,7 @@ class TestWaterMeterMultiController(unittest.TestCase):
                 poly, 'primary_addr', 'sub_addr_0', 'Meter CH1', 0, yo_access, mock_ctrl
             )
         sub_node.sub_node_ready = True
+        sub_node.system_ready = True
         sub_node.configDone = True
         sub_node.node = MagicMock()
         sub_node.meter_unit = 3
@@ -202,7 +205,7 @@ class TestWaterMeterMultiController(unittest.TestCase):
 
         sub_node.updateData()
         # 1000 Liters * 0.264172 = 264.2 Gallons (total meter)
-        sub_node.node.setDriver.assert_any_call('GV10', 264.2, True, False, type='Report')
+        sub_node.node.setDriver.assert_any_call('GV10', 264.2, True, False, uom=69)
 
 
 class TestSprinkler2(unittest.TestCase):

@@ -25,7 +25,7 @@ from yolinkSprinklerV2 import YoLinkSprinkler
 class udiYoSprinkler(udi_interface.Node):
     from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
 
-    id = 'yosprinkler'
+    id = 'YOSPRINKLER'
     
     '''
        drivers = [
@@ -93,12 +93,12 @@ class udiYoSprinkler(udi_interface.Node):
             self.meas_support = ['temp', 'hum']
         if self.temp_unit == 1:
             if 'hum' not in self.meas_support:
-                self.id = 'yotsensF'
+                self.id = 'YOTSENSF'
             else:
-                self.id = 'yothsensF'   
+                self.id = 'YOTHSENSF'   
         else:
             if 'hum' not in self.meas_support:
-                self.id = 'yotsens'  
+                self.id = 'YOTSENS'  
         '''
         self.alarm_state = False
         self.sensordata_24_hours = {}
