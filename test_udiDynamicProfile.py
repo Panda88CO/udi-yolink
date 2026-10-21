@@ -48,14 +48,16 @@ class TestDynamicProfileGeneration(unittest.TestCase):
 
     def test_dynamic_profile_payload_structure(self):
         payload = udiDynamicProfile.get_dynamic_profile_payload()
-        self.assertIn('delete', payload)
+        self.assertNotIn('delete', payload)
         self.assertIn('editors', payload)
         self.assertIn('nodedefs', payload)
         self.assertIn('linkdefs', payload)
 
-        self.assertEqual(payload['delete']['editors'], ['*'])
-        self.assertEqual(payload['delete']['nodedefs'], ['*'])
-        self.assertEqual(payload['delete']['linkdefs'], ['*'])
+        # Optional delete section can be provided if explicitly requested
+        custom_delete = {'editors': ['OLD_EDITOR']}
+        del_payload = udiDynamicProfile.get_dynamic_profile_payload(delete=custom_delete)
+        self.assertIn('delete', del_payload)
+        self.assertEqual(del_payload['delete'], custom_delete)
 
     def test_dynamic_editors_content(self):
         editors = udiDynamicProfile.get_dynamic_profile_editors()
@@ -93,6 +95,15 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertIn('GV22', sub_prop_ids)
         self.assertIn('GV28', sub_prop_ids)
         self.assertIn('GV20', sub_prop_ids)
+
+    def test_dynamic_nodedefs_parameters_have_valid_ids(self):
+        """All command parameters in dynamic nodedefs must have a non-empty string ID."""
+        for nd in udiDynamicProfile.get_dynamic_profile_nodedefs(include_variants=True):
+            for cmd in nd.get('cmds', {}).get('accepts', []):
+                for p in cmd.get('parameters', []):
+                    self.assertIn('id', p)
+                    self.assertIsInstance(p['id'], str)
+                    self.assertTrue(len(p['id']) > 0, f"Parameter ID is empty in {nd['id']}.{cmd['id']}: {p}")
 
     def test_dynamic_editors_fahrenheit_and_gallons(self):
         editors = udiDynamicProfile.get_dynamic_profile_editors(temp_unit=1, water_unit=0)
@@ -336,6 +347,8 @@ class TestDeferredProfileLoading(unittest.TestCase):
         self.assertIsInstance(args[0], dict)
         self.assertIn('nodedefs', args[0])
         self.assertEqual(args[1], {"waitResponse": True})
+        # Static profile upload should NOT be called when dynamic JSON update succeeds
+        controller.poly.updateProfile.assert_not_called()
 
     def test_update_dynamic_profile_fallback_on_json_error(self):
         controller = MagicMock()

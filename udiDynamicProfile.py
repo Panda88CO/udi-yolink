@@ -201,7 +201,26 @@ def _get_raw_profile_nodedefs():
         return _raw_nodedefs_cache
 
     if DYNAMIC_NODEDEFS is not None:
-        _raw_nodedefs_cache = DYNAMIC_NODEDEFS
+        # Ensure all command parameters have non-empty IDs
+        sanitized = []
+        for nd in DYNAMIC_NODEDEFS:
+            nd_copy = dict(nd)
+            if 'cmds' in nd_copy and 'accepts' in nd_copy['cmds']:
+                new_accepts = []
+                for cmd in nd_copy['cmds']['accepts']:
+                    cmd_copy = dict(cmd)
+                    if 'parameters' in cmd_copy:
+                        new_params = []
+                        for param in cmd_copy['parameters']:
+                            p_copy = dict(param)
+                            if not p_copy.get('id'):
+                                p_copy['id'] = cmd_copy.get('id', 'CMD')
+                            new_params.append(p_copy)
+                        cmd_copy['parameters'] = new_params
+                    new_accepts.append(cmd_copy)
+                nd_copy['cmds'] = dict(nd_copy['cmds'], accepts=new_accepts)
+            sanitized.append(nd_copy)
+        _raw_nodedefs_cache = sanitized
         return _raw_nodedefs_cache
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -246,6 +265,8 @@ def _get_raw_profile_nodedefs():
                         params = []
                         for p in cmd.findall('.//p'):
                             pid = p.get('id', '')
+                            if not pid:
+                                pid = cid
                             ped = p.get('editor', '')
                             pinit = p.get('init', '')
                             p_dict = {'id': pid, 'editor': ped}
@@ -405,7 +426,7 @@ def get_dynamic_profile_nodedefs(include_variants=False):
     ]
 
 
-def get_dynamic_profile_payload(controller=None, temp_unit=None, water_unit=None, include_variants=False):
+def get_dynamic_profile_payload(controller=None, temp_unit=None, water_unit=None, include_variants=False, delete=None):
     """Return the complete dynamic profile JSON payload matching IoX/PG3 updateJsonProfile schema."""
     if temp_unit is None and controller is not None:
         temp_unit = getattr(controller, 'temp_unit', None)
@@ -422,16 +443,14 @@ def get_dynamic_profile_payload(controller=None, temp_unit=None, water_unit=None
             except Exception:
                 water_unit = None
 
-    return {
-        'delete': {
-            'editors': ['*'],
-            'nodedefs': ['*'],
-            'linkdefs': ['*'],
-        },
+    payload = {
         'editors': get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit),
         'nodedefs': get_dynamic_profile_nodedefs(include_variants=include_variants),
         'linkdefs': [],
     }
+    if delete is not None:
+        payload['delete'] = delete
+    return payload
 
 
 def get_profile_driver_names():
@@ -575,15 +594,14 @@ def update_dynamic_profile(controller, include_variants=False):
         except Exception as e:
             logging.warning(f"updateJsonProfile failed: {e}; falling back to updateProfile")
 
-    # Only update static profile if the directory exists
-    if os.path.isdir(profile_dir):
+    # Only update static profile if dynamic JSON update did not succeed and static profile directory exists
+    if not json_ok and os.path.isdir(profile_dir):
         try:
             if hasattr(controller.poly, "updateProfile"):
                 controller.poly.updateProfile()
-                logging.info("Static profile updated successfully via updateProfile")
+                logging.info("Static profile updated successfully via updateProfile fallback")
         except Exception as e:
-            if not json_ok:
-                logging.error(f"updateProfile failed: {e}")
+            logging.error(f"updateProfile fallback failed: {e}")
 
     if hasattr(controller, 'remove_notice'):
         controller.remove_notice("profile")
