@@ -2031,7 +2031,7 @@ DYNAMIC_NODEDEFS = [
   {
     "id": "SETUP",
     "name": "YoLink Setup",
-    "icon": "GenericCtrl",
+    "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
@@ -2133,7 +2133,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -2286,7 +2286,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -2444,7 +2444,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -2602,7 +2602,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -2750,7 +2750,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -2883,7 +2883,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -3011,7 +3011,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -3149,7 +3149,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -3287,7 +3287,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -3430,7 +3430,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -3573,7 +3573,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -3716,7 +3716,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -3864,7 +3864,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -4012,7 +4012,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -4160,7 +4160,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "",
+              "id": "SCHINDEXS",
               "name": "Lookup Schedule",
               "editor": "SCHINDEXS"
             }
@@ -4352,7 +4352,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "",
+              "id": "SWCTRL",
               "name": "Switch control",
               "editor": "SWCTRL"
             }
@@ -4363,7 +4363,7 @@ DYNAMIC_NODEDEFS = [
           "name": "LED control",
           "parameters": [
             {
-              "id": "",
+              "id": "LEDCTRL",
               "name": "LED control",
               "editor": "LEDCTRL"
             }
@@ -4499,7 +4499,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "",
+              "id": "SWCTRL",
               "name": "Switch control",
               "editor": "SWCTRL"
             }
@@ -4526,7 +4526,7 @@ DYNAMIC_NODEDEFS = [
           "name": "LED control",
           "parameters": [
             {
-              "id": "",
+              "id": "LEDCTRL",
               "name": "LED control",
               "editor": "LEDCTRL"
             }
@@ -4631,7 +4631,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "",
+              "id": "SWCTRL",
               "name": "Switch control",
               "editor": "SWCTRL"
             }
@@ -4658,7 +4658,7 @@ DYNAMIC_NODEDEFS = [
           "name": "LED control",
           "parameters": [
             {
-              "id": "",
+              "id": "LEDCTRL",
               "name": "LED control",
               "editor": "LEDCTRL"
             }
@@ -4839,7 +4839,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Light Level (%)",
           "parameters": [
             {
-              "id": "",
+              "id": "DIMLVL",
               "name": "Light Level (%)",
               "editor": "DIMLVL"
             }
@@ -4850,7 +4850,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Light Down Level (%)",
           "parameters": [
             {
-              "id": "",
+              "id": "DIMLVL",
               "name": "Light Down Level (%)",
               "editor": "DIMLVL"
             }
@@ -4861,7 +4861,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Light Up Level (%)",
           "parameters": [
             {
-              "id": "",
+              "id": "DIMLVL",
               "name": "Light Up Level (%)",
               "editor": "DIMLVL"
             }
@@ -4872,7 +4872,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "",
+              "id": "SWCTRL",
               "name": "Switch control",
               "editor": "SWCTRL"
             }
@@ -4899,7 +4899,7 @@ DYNAMIC_NODEDEFS = [
           "name": "LED control",
           "parameters": [
             {
-              "id": "",
+              "id": "LEDCTRL",
               "name": "LED control",
               "editor": "LEDCTRL"
             }
@@ -5000,7 +5000,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "",
+              "id": "SWCTRL",
               "name": "Switch control",
               "editor": "SWCTRL"
             }
@@ -5127,7 +5127,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "",
+              "id": "SWCTRL",
               "name": "Switch control",
               "editor": "SWCTRL"
             }
@@ -5309,7 +5309,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "",
+              "id": "SWCTRL",
               "name": "Switch control",
               "editor": "SWCTRL"
             }
@@ -5386,7 +5386,7 @@ DYNAMIC_NODEDEFS = [
           "name": "USB Power",
           "parameters": [
             {
-              "id": "",
+              "id": "USBCTRL",
               "name": "USB Power",
               "editor": "USBCTRL"
             }
@@ -5402,7 +5402,7 @@ DYNAMIC_NODEDEFS = [
   {
     "id": "YOMANIPU",
     "name": "YoLink Manipulator",
-    "icon": "GenericCtrl",
+    "icon": "GenericCtl",
     "properties": [
       {
         "id": "ST",
@@ -5472,7 +5472,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "",
+              "id": "MANCTRL",
               "name": "Switch control",
               "editor": "MANCTRL"
             }
@@ -7130,7 +7130,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set water delay",
           "parameters": [
             {
-              "id": "",
+              "id": "MINUTESSET",
               "name": "Set water delay",
               "editor": "MINUTESSET"
             }
@@ -7274,7 +7274,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command (Alert) Action",
               "editor": "CMDSETTING"
             }
@@ -7422,7 +7422,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command (Alert) Action",
               "editor": "CMDSETTING"
             }
@@ -7570,7 +7570,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command (Alert) Action",
               "editor": "CMDSETTING"
             }
@@ -7718,7 +7718,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command (Alert) Action",
               "editor": "CMDSETTING"
             }
@@ -7866,7 +7866,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command (Alert) Action",
               "editor": "CMDSETTING"
             }
@@ -8014,7 +8014,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command (Alert) Action",
               "editor": "CMDSETTING"
             }
@@ -8092,7 +8092,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -8213,7 +8213,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -8291,7 +8291,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -8409,7 +8409,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -8420,7 +8420,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Beep Alert",
           "parameters": [
             {
-              "id": "",
+              "id": "BEEPING",
               "name": "Set Beep Alert",
               "editor": "BEEPING"
             }
@@ -8538,7 +8538,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -8549,7 +8549,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Beep Alert",
           "parameters": [
             {
-              "id": "",
+              "id": "BEEPING",
               "name": "Set Beep Alert",
               "editor": "BEEPING"
             }
@@ -8652,7 +8652,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -8755,7 +8755,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -8833,7 +8833,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -8911,7 +8911,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -9107,7 +9107,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Beep",
           "parameters": [
             {
-              "id": "",
+              "id": "BEEPENSET",
               "name": "Beep",
               "editor": "BEEPENSET"
             }
@@ -9118,7 +9118,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Mute",
           "parameters": [
             {
-              "id": "",
+              "id": "MUTESET",
               "name": "Mute",
               "editor": "MUTESET"
             }
@@ -9210,7 +9210,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Lock",
           "parameters": [
             {
-              "id": "",
+              "id": "LOCK",
               "name": "Set Lock",
               "editor": "LOCK"
             }
@@ -9291,7 +9291,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Lock",
           "parameters": [
             {
-              "id": "",
+              "id": "LOCK",
               "name": "Set Lock",
               "editor": "LOCK"
             }
@@ -9482,7 +9482,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "",
+              "id": "CMDSETTING",
               "name": "Select Command Action",
               "editor": "CMDSETTING"
             }
@@ -9658,7 +9658,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Control",
           "parameters": [
             {
-              "id": "",
+              "id": "SIRENCTRL",
               "name": "Set Control",
               "editor": "SIRENCTRL"
             }
@@ -9812,7 +9812,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Short Press Command Type",
           "parameters": [
             {
-              "id": "",
+              "id": "KEYSCENE",
               "name": "Short Press Command Type",
               "editor": "KEYSCENE"
             }
@@ -9823,7 +9823,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Long Press Command Type",
           "parameters": [
             {
-              "id": "",
+              "id": "KEYSCENE",
               "name": "Long Press Command Type",
               "editor": "KEYSCENE"
             }
@@ -9883,7 +9883,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Short Press Command",
           "parameters": [
             {
-              "id": "",
+              "id": "KEYSCENE",
               "name": "Short Press Command",
               "editor": "KEYSCENE"
             }
@@ -9894,7 +9894,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Long Press Command",
           "parameters": [
             {
-              "id": "",
+              "id": "KEYSCENE",
               "name": "Long Press Command",
               "editor": "KEYSCENE"
             }
@@ -9949,7 +9949,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Press Command",
           "parameters": [
             {
-              "id": "",
+              "id": "KEYSCENE",
               "name": "Press Command",
               "editor": "KEYSCENE"
             }
@@ -10075,7 +10075,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Heat Setpoint",
           "parameters": [
             {
-              "id": "",
+              "id": "CELSIUSSET",
               "name": "Set Heat Setpoint",
               "editor": "CELSIUSSET"
             }
@@ -10086,7 +10086,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Cool Setpoint",
           "parameters": [
             {
-              "id": "",
+              "id": "CELSIUSSET",
               "name": "Set Cool Setpoint",
               "editor": "CELSIUSSET"
             }
@@ -10097,7 +10097,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Mode",
           "parameters": [
             {
-              "id": "",
+              "id": "ITSTATMODE",
               "name": "Set Mode",
               "editor": "ITSTATMODE"
             }
@@ -10108,7 +10108,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Fan",
           "parameters": [
             {
-              "id": "",
+              "id": "ITSTATFAN",
               "name": "Set Fan",
               "editor": "ITSTATFAN"
             }
@@ -10119,7 +10119,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Schedule Mode",
           "parameters": [
             {
-              "id": "",
+              "id": "ICLISMDDEG",
               "name": "Set Schedule Mode",
               "editor": "ICLISMDDEG"
             }
@@ -10266,7 +10266,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Heat Setpoint",
           "parameters": [
             {
-              "id": "",
+              "id": "FARENHEITSET",
               "name": "Set Heat Setpoint",
               "editor": "FARENHEITSET"
             }
@@ -10277,7 +10277,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Cool Setpoint",
           "parameters": [
             {
-              "id": "",
+              "id": "FARENHEITSET",
               "name": "Set Cool Setpoint",
               "editor": "FARENHEITSET"
             }
@@ -10288,7 +10288,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Mode",
           "parameters": [
             {
-              "id": "",
+              "id": "ITSTATMODE",
               "name": "Set Mode",
               "editor": "ITSTATMODE"
             }
@@ -10299,7 +10299,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Fan",
           "parameters": [
             {
-              "id": "",
+              "id": "ITSTATFAN",
               "name": "Set Fan",
               "editor": "ITSTATFAN"
             }
@@ -10310,7 +10310,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Schedule Mode",
           "parameters": [
             {
-              "id": "",
+              "id": "ICLISMDDEG",
               "name": "Set Schedule Mode",
               "editor": "ICLISMDDEG"
             }
@@ -10422,7 +10422,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Min Runtime",
           "parameters": [
             {
-              "id": "",
+              "id": "IMINRUNTIME",
               "name": "Set Min Runtime",
               "editor": "IMINRUNTIME"
             }
@@ -10433,7 +10433,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Cool Limit",
           "parameters": [
             {
-              "id": "",
+              "id": "CELSIUSSET",
               "name": "Set Cool Limit",
               "editor": "CELSIUSSET"
             }
@@ -10444,7 +10444,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Heat Limit",
           "parameters": [
             {
-              "id": "",
+              "id": "CELSIUSSET",
               "name": "Set Heat Limit",
               "editor": "CELSIUSSET"
             }
@@ -10455,7 +10455,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Mute",
           "parameters": [
             {
-              "id": "",
+              "id": "IMUTE",
               "name": "Set Mute",
               "editor": "IMUTE"
             }
@@ -10466,7 +10466,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Menu Lock",
           "parameters": [
             {
-              "id": "",
+              "id": "IMENULOCK",
               "name": "Set Menu Lock",
               "editor": "IMENULOCK"
             }
@@ -10477,7 +10477,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Master Source",
           "parameters": [
             {
-              "id": "",
+              "id": "IMASTERSRC",
               "name": "Set Master Source",
               "editor": "IMASTERSRC"
             }
@@ -10568,7 +10568,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Min Runtime",
           "parameters": [
             {
-              "id": "",
+              "id": "IMINRUNTIME",
               "name": "Set Min Runtime",
               "editor": "IMINRUNTIME"
             }
@@ -10579,7 +10579,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Cool Limit",
           "parameters": [
             {
-              "id": "",
+              "id": "FARENHEITSET",
               "name": "Set Cool Limit",
               "editor": "FARENHEITSET"
             }
@@ -10590,7 +10590,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Heat Limit",
           "parameters": [
             {
-              "id": "",
+              "id": "FARENHEITSET",
               "name": "Set Heat Limit",
               "editor": "FARENHEITSET"
             }
@@ -10601,7 +10601,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Mute",
           "parameters": [
             {
-              "id": "",
+              "id": "IMUTE",
               "name": "Set Mute",
               "editor": "IMUTE"
             }
@@ -10612,7 +10612,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Menu Lock",
           "parameters": [
             {
-              "id": "",
+              "id": "IMENULOCK",
               "name": "Set Menu Lock",
               "editor": "IMENULOCK"
             }
@@ -10623,7 +10623,7 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Master Source",
           "parameters": [
             {
-              "id": "",
+              "id": "IMASTERSRC",
               "name": "Set Master Source",
               "editor": "IMASTERSRC"
             }

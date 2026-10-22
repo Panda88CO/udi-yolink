@@ -82,4 +82,4 @@ profile/OLD/udiLib.py
 profile/OLD/udiYoSwitchV2Org.py
 *.zip
 udiCommonLib-AMDMini1.py
-udiCommonLib-AMDMini1.py
+profile_payload_*.json

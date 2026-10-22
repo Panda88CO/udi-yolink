@@ -9,6 +9,7 @@ from unittest.mock import MagicMock, patch
 import ast
 import glob
 import os
+import json
 
 # Ensure mock dependencies exist if running in an environment without them installed
 for mod in [
@@ -97,12 +98,14 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertIn('GV20', sub_prop_ids)
 
     def test_dynamic_nodedefs_parameters_have_valid_ids(self):
-        """All command parameters in dynamic nodedefs must have string ID, editor, and name."""
+        """All command parameters in dynamic nodedefs must have non-empty alphanumeric string ID, editor, and name."""
         for nd in udiDynamicProfile.get_dynamic_profile_nodedefs(include_variants=True):
             for cmd in nd.get('cmds', {}).get('accepts', []):
                 for p in cmd.get('parameters', []):
                     self.assertIn('id', p)
                     self.assertIsInstance(p['id'], str)
+                    self.assertTrue(len(p['id']) > 0, f"Parameter ID empty in node {nd['id']} cmd {cmd['id']}")
+                    self.assertTrue(p['id'].isalnum(), f"Parameter ID '{p['id']}' not alphanumeric in node {nd['id']} cmd {cmd['id']}")
                     self.assertIn('editor', p)
                     self.assertIn('name', p)
                     self.assertNotIn('init', p)
@@ -389,6 +392,94 @@ class TestDeferredProfileLoading(unittest.TestCase):
         udiDynamicProfile.update_dynamic_profile(controller)
 
         controller.poly.updateProfile.assert_called_once()
+
+    def test_get_active_nodedef_ids_extraction(self):
+        """Test extraction of active nodeDef IDs from mock controller with live nodes."""
+        controller = MagicMock()
+        node_setup = MagicMock()
+        node_setup.id = 'SETUP'
+        node_th = MagicMock()
+        node_th.id = 'YOTHSENS'
+        node_sw = MagicMock()
+        node_sw.id = 'YOSWITCH'
+        controller.poly.getNodes.return_value = {
+            'setup': node_setup,
+            'th1': node_th,
+            'sw1': node_sw,
+        }
+        controller.yolink_nodes = None
+        controller.nodes_in_db = None
+        controller.deviceList = None
+
+        active_ids = udiDynamicProfile.get_active_nodedef_ids(controller)
+        self.assertIsNotNone(active_ids)
+        self.assertIn('SETUP', active_ids)
+        self.assertIn('YOTHSENS', active_ids)
+        self.assertIn('YOTHSENSF', active_ids)  # Expanded variant
+        self.assertIn('YOSWITCH', active_ids)
+        self.assertIn('YOSWITCHPWR', active_ids)  # Family expansion
+        self.assertIn('YOSCHEDULE', active_ids)   # Schedule expansion for switch
+
+    def test_active_only_payload_reduces_size(self):
+        """Active-only dynamic profile payload must be well below 60KB and retain required editors."""
+        controller = MagicMock()
+        node_setup = MagicMock()
+        node_setup.id = 'SETUP'
+        node_th = MagicMock()
+        node_th.id = 'YOTHSENS'
+        node_outlet = MagicMock()
+        node_outlet.id = 'YOOUTLETPWR'
+        controller.poly.getNodes.return_value = {
+            'setup': node_setup,
+            'th1': node_th,
+            'out1': node_outlet,
+        }
+        controller.yolink_nodes = None
+        controller.nodes_in_db = None
+        controller.deviceList = None
+        controller.temp_unit = 1
+        controller.water_unit = 0
+
+        # Full payload
+        full_payload = udiDynamicProfile.get_dynamic_profile_payload(controller=controller, active_only=False)
+        full_bytes = len(json.dumps(full_payload).encode('utf-8'))
+        self.assertGreater(full_bytes, 60000)
+
+        # Active-only pruned payload
+        pruned_payload = udiDynamicProfile.get_dynamic_profile_payload(controller=controller, active_only=True)
+        pruned_bytes = len(json.dumps(pruned_payload).encode('utf-8'))
+        self.assertLess(pruned_bytes, 60000)
+        self.assertLess(pruned_bytes, full_bytes)
+
+        # NodeDefs in pruned payload must include active nodes
+        pruned_nids = {nd['id'] for nd in pruned_payload['nodedefs']}
+        self.assertIn('SETUP', pruned_nids)
+        self.assertIn('YOTHSENS', pruned_nids)
+        self.assertIn('YOOUTLETPWR', pruned_nids)
+
+        # All editors used by pruned nodeDefs must be present in pruned editors
+        pruned_eids = {ed['id'] for ed in pruned_payload['editors']}
+        for nd in pruned_payload['nodedefs']:
+            for prop in nd.get('properties', []):
+                if prop.get('editor'):
+                    self.assertIn(prop['editor'], pruned_eids)
+
+    def test_update_dynamic_profile_writes_debug_dump_files(self):
+        """update_dynamic_profile must write debug json file and log size metrics."""
+        controller = MagicMock()
+        controller.poly = MagicMock()
+        controller.poly.updateJsonProfile = MagicMock()
+        controller.poly.updateProfile = MagicMock()
+
+        udiDynamicProfile.update_dynamic_profile(controller)
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        debug_path = os.path.join(base_dir, 'profile_payload_debug.json')
+        self.assertTrue(os.path.exists(debug_path))
+        with open(debug_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        self.assertIn('editors', data)
+        self.assertIn('nodedefs', data)
 
 
 class TestWaterUnitConversions(unittest.TestCase):

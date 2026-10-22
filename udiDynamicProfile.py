@@ -266,6 +266,8 @@ def _get_raw_profile_nodedefs():
                             pid = p.get('id', '')
                             ped = p.get('editor', '')
                             pname = cmdp_names.get(pid) or cname
+                            if not pid:
+                                pid = ped or cid or 'CMD'
                             params.append({'id': pid, 'name': pname, 'editor': ped})
                         if params:
                             cmd_dict['parameters'] = params
@@ -370,58 +372,225 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
     return unit_editors
 
 
-def get_dynamic_profile_editors(temp_unit=None, water_unit=None):
-    """Generate dynamic JSON editors structure parameterized by temp_unit and water_unit."""
+def get_active_nodedef_ids(controller=None):
+    """
+    Extract the set of active nodeDef IDs for nodes instantiated or managed by controller.
+    Always includes 'SETUP'. Expands with known variant IDs and family members.
+    Returns None if controller is None or has no identifiable active nodes beyond 'SETUP'.
+    """
+    if controller is None:
+        return None
+
+    active_ids = {'SETUP'}
+
+    # 1. Inspect live nodes in polyglot
+    poly = getattr(controller, 'poly', None)
+    if poly is not None:
+        get_nodes = getattr(poly, 'getNodes', None)
+        if callable(get_nodes):
+            try:
+                nodes = get_nodes()
+                if isinstance(nodes, dict):
+                    nodes_iterable = nodes.values()
+                elif isinstance(nodes, (list, tuple)):
+                    nodes_iterable = nodes
+                else:
+                    nodes_iterable = []
+                for node in nodes_iterable:
+                    nid = getattr(node, 'id', None)
+                    if nid:
+                        active_ids.add(str(nid).upper())
+            except Exception as e:
+                logging.debug(f"Could not inspect poly.getNodes(): {e}")
+
+    # 2. Inspect controller.yolink_nodes if present
+    yolink_nodes = getattr(controller, 'yolink_nodes', None)
+    if isinstance(yolink_nodes, dict):
+        for node in yolink_nodes.values():
+            nid = getattr(node, 'id', None)
+            if nid:
+                active_ids.add(str(nid).upper())
+
+    # 3. Inspect controller.nodes_in_db if present
+    nodes_in_db = getattr(controller, 'nodes_in_db', None)
+    if isinstance(nodes_in_db, (list, tuple)):
+        for entry in nodes_in_db:
+            if isinstance(entry, dict) and 'nodeDefId' in entry:
+                active_ids.add(str(entry['nodeDefId']).upper())
+
+    # 4. Inspect controller.deviceList if present
+    device_list = getattr(controller, 'deviceList', None)
+    if isinstance(device_list, (list, tuple)):
+        type_to_nodedef = {
+            'THSensor': ['YOTHSENS', 'YOTHSENSF'],
+            'MotionSensor': ['YOMOTIONSENS', 'YOMOTIONSENSF'],
+            'LeakSensor': ['YOLEAKSENS', 'YOLEAKSENSF'],
+            'COSmokeSensor': ['YOCOSMOKESENS', 'YOCOSMOKESENSF'],
+            'VibrationSensor': ['YOVIBRASENS', 'YOVIBRASENSF'],
+            'DoorSensor': ['YODOORSENS'],
+            'Switch': ['YOSWITCH', 'YOSWITCHPWR', 'YOSWITCHBAT'],
+            'Outlet': ['YOOUTLET', 'YOOUTLETPWR'],
+            'MultiOutlet': ['YOMULTIOUT', 'YOSUBOUT', 'YOSUBUSB'],
+            'Dimmer': ['YODIMMER'],
+            'SmartRemoter': ['YOSMREMOTE', 'SMREMOTEKEY', 'SMREMOTEKEYDUAL', 'SMREMOTEKEYSINGLE'],
+            'InfraredRemoter': ['YOIRREMOTE', 'YOIRCODE'],
+            'Hub': ['YOHUB', 'YOHUBBAT'],
+            'SpeakerHub': ['YOSPEAKERH'],
+            'Lock': ['YOLOCK', 'YOLOCKV2'],
+            'Manipulator': ['YOMANIPU'],
+            'GarageDoor': ['YOGARAGE'],
+            'GarageFinger': ['YOGARAGE'],
+            'PowerFailureAlarm': ['YOPWRALARM'],
+            'Siren': ['YOSIREN'],
+            'Sprinkler': ['YOSPRINKLER'],
+            'Sprinkler2': ['YOSPRINKLERV2'],
+            'Thermostat': ['YOTHERMOSTAT', 'YOTHERMPROP', 'YOTHERMOSTATF', 'YOTHERMPROPF'],
+            'SoilThcSensor': ['YOSOILSENSOR', 'YOSOILSENSORF'],
+            'WaterMeterController': ['YOWATERMETERCTRL', 'YOWATERMETERCTRLF'],
+            'WaterMeterMultiController': ['YOWATERMETERMULTI', 'YOWATERMETERMULTIF', 'YOWATERMETERSUB', 'YOWATERMETERSUBG', 'YOWATERMETERSUBL'],
+            'WaterMeterOnly': ['YOWATERMETERONLY', 'YOWATERMETERONLYF'],
+            'WaterDept': ['YOWATERDEPT'],
+        }
+        for dev in device_list:
+            if isinstance(dev, dict):
+                dtype = dev.get('type')
+                if dtype in type_to_nodedef:
+                    active_ids.update(type_to_nodedef[dtype])
+
+    # If only 'SETUP' is found, we don't have enough information to prune safely
+    if len(active_ids) <= 1:
+        return None
+
+    expanded_ids = set(active_ids)
+    for aid in list(active_ids):
+        # Base <-> variant bidirectional mapping
+        for var_id, base_id in VARIANT_TO_BASE_NODEDEF.items():
+            if base_id == aid:
+                expanded_ids.add(var_id)
+            elif var_id == aid:
+                expanded_ids.add(base_id)
+        if aid.startswith('YOSWITCH'):
+            expanded_ids.update(['YOSWITCH', 'YOSWITCHPWR', 'YOSWITCHBAT'])
+        if aid.startswith('YOOUTLET'):
+            expanded_ids.update(['YOOUTLET', 'YOOUTLETPWR'])
+        if aid.startswith('SMREMOTE'):
+            expanded_ids.update(['SMREMOTEKEY', 'SMREMOTEKEYDUAL', 'SMREMOTEKEYSINGLE', 'YOSMREMOTE'])
+        if 'SCHEDULE' in aid or aid in ('YOSWITCH', 'YOOUTLET', 'YODIMMER', 'YOMULTIOUT'):
+            expanded_ids.update(['YOSCHEDULE', 'YOSCHEDULESEC'])
+        if 'WATERMETER' in aid:
+            expanded_ids.update(['YOWMSCHEDULE', 'YOWMSCHEDULESEC'])
+        if 'SPRINKLER' in aid:
+            expanded_ids.update(['YOSPRINKLERSCHEDULE', 'YOSPRINKLERSCHEDULESEC'])
+
+    return expanded_ids
+
+
+def get_dynamic_profile_editors(temp_unit=None, water_unit=None, active_nodedefs=None):
+    """Generate dynamic JSON editors structure parameterized by temp_unit and water_unit.
+    If active_nodedefs is provided, filters editors to only those referenced by active nodeDefs.
+    """
     temp_norm = normalize_temp_unit(temp_unit)
     water_norm = normalize_water_unit(water_unit)
     cache_key = (temp_norm, water_norm)
 
     global _dynamic_editors_cache
     if _dynamic_editors_cache is not None and cache_key in _dynamic_editors_cache:
-        return _dynamic_editors_cache[cache_key]
+        base_result = _dynamic_editors_cache[cache_key]
+    else:
+        base_editors = _get_raw_profile_editors()
+        unit_map = _build_dynamic_unit_editors(temp_norm, water_norm)
 
-    base_editors = _get_raw_profile_editors()
-    unit_map = _build_dynamic_unit_editors(temp_norm, water_norm)
+        result_editors = []
+        seen = set()
+        for ed in base_editors:
+            eid = ed.get('id')
+            if eid in unit_map:
+                result_editors.append({'id': eid, 'ranges': unit_map[eid]})
+                seen.add(eid)
+            else:
+                result_editors.append(dict(ed))
+                seen.add(eid)
 
-    result_editors = []
-    seen = set()
-    for ed in base_editors:
-        eid = ed.get('id')
-        if eid in unit_map:
-            result_editors.append({'id': eid, 'ranges': unit_map[eid]})
-            seen.add(eid)
-        else:
-            result_editors.append(dict(ed))
-            seen.add(eid)
+        for eid, ranges in unit_map.items():
+            if eid not in seen:
+                result_editors.append({'id': eid, 'ranges': ranges})
 
-    for eid, ranges in unit_map.items():
-        if eid not in seen:
-            result_editors.append({'id': eid, 'ranges': ranges})
+        if _dynamic_editors_cache is None:
+            _dynamic_editors_cache = {}
+        _dynamic_editors_cache[cache_key] = result_editors
+        base_result = result_editors
 
-    if _dynamic_editors_cache is None:
-        _dynamic_editors_cache = {}
-    _dynamic_editors_cache[cache_key] = result_editors
-    return result_editors
+    if active_nodedefs is None:
+        return [dict(e) for e in base_result]
+
+    # Collect editor IDs referenced in active_nodedefs
+    used_editor_ids = set()
+    for nd in active_nodedefs:
+        for prop in nd.get('properties', []):
+            ed_id = prop.get('editor')
+            if ed_id:
+                used_editor_ids.add(ed_id)
+        for cmd in nd.get('cmds', {}).get('accepts', []):
+            for param in cmd.get('parameters', []):
+                ed_id = param.get('editor')
+                if ed_id:
+                    used_editor_ids.add(ed_id)
+
+    return [dict(e) for e in base_result if e.get('id') in used_editor_ids]
 
 
-def get_dynamic_profile_nodedefs(include_variants=False):
+def get_dynamic_profile_nodedefs(include_variants=False, active_ids=None):
     """
     Generate dynamic JSON nodedefs structure.
+    If active_ids is provided, only matching nodeDefs are returned.
     If include_variants is False (default), duplicate ...F and ...G/L nodeDefs are omitted,
     reducing the total nodeDef count.
     """
     raw_nodedefs = _get_raw_profile_nodedefs()
+
+    sanitized = []
+    for nd in raw_nodedefs:
+        nd_copy = dict(nd)
+        cmds = dict(nd_copy.get('cmds', {}))
+        accepts = []
+        for cmd in cmds.get('accepts', []):
+            cmd_copy = dict(cmd)
+            params = []
+            for p in cmd_copy.get('parameters', []):
+                p_copy = dict(p)
+                if not p_copy.get('id'):
+                    p_copy['id'] = p_copy.get('editor') or cmd_copy.get('id') or 'CMD'
+                params.append(p_copy)
+            if params:
+                cmd_copy['parameters'] = params
+            accepts.append(cmd_copy)
+        cmds['accepts'] = accepts
+        nd_copy['cmds'] = cmds
+        sanitized.append(nd_copy)
+
+    if active_ids is not None:
+        return [dict(nd) for nd in sanitized if nd.get('id') in active_ids]
+
     if include_variants:
-        return [dict(nd) for nd in raw_nodedefs]
+        return [dict(nd) for nd in sanitized]
 
     return [
-        dict(nd) for nd in raw_nodedefs
+        dict(nd) for nd in sanitized
         if nd.get('id') not in VARIANT_TO_BASE_NODEDEF
     ]
 
 
-def get_dynamic_profile_payload(controller=None, temp_unit=None, water_unit=None, include_variants=False, delete=None):
-    """Return the complete dynamic profile JSON payload matching IoX/PG3 updateJsonProfile schema."""
+def get_dynamic_profile_payload(
+    controller=None,
+    temp_unit=None,
+    water_unit=None,
+    include_variants=False,
+    delete=None,
+    active_only=False,
+):
+    """Return the complete dynamic profile JSON payload matching IoX/PG3 updateJsonProfile schema.
+    If active_only is True, filters nodeDefs and editors to only active nodes when controller is available.
+    """
     if temp_unit is None and controller is not None:
         temp_unit = getattr(controller, 'temp_unit', None)
         if temp_unit is None and hasattr(controller, 'yoAccess') and hasattr(controller.yoAccess, 'get_temp_unit'):
@@ -437,9 +606,20 @@ def get_dynamic_profile_payload(controller=None, temp_unit=None, water_unit=None
             except Exception:
                 water_unit = None
 
+    active_ids = None
+    if active_only and controller is not None:
+        active_ids = get_active_nodedef_ids(controller)
+
+    if active_ids is not None:
+        nodedefs = get_dynamic_profile_nodedefs(include_variants=True, active_ids=active_ids)
+        editors = get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit, active_nodedefs=nodedefs)
+    else:
+        nodedefs = get_dynamic_profile_nodedefs(include_variants=include_variants)
+        editors = get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit)
+
     payload = {
-        'editors': get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit),
-        'nodedefs': get_dynamic_profile_nodedefs(include_variants=include_variants),
+        'editors': editors,
+        'nodedefs': nodedefs,
         'linkdefs': [],
     }
     if delete is not None:
@@ -568,42 +748,128 @@ def update_dynamic_profile(controller, include_variants=False):
     """
     Push dynamic JSON profile to IoX/PG3 via updateJsonProfile once nodes are done initializing.
     Falls back to static updateProfile if updateJsonProfile is unavailable or fails.
+    Provides detailed debug metrics (size, editor count, nodedef count) and writes
+    payload debug dumps to disk.
+    If the full payload exceeds safe MQTT/PG3 packet limits (60KB), automatically sends
+    or retries with an active-node pruned profile (~20-25KB).
     """
     base_dir = os.path.dirname(os.path.abspath(__file__))
     profile_dir = os.path.join(base_dir, 'profile')
 
-    if os.path.isdir(profile_dir):
-        logging.info("Updating profile (dynamic & static)...")
-    else:
-        logging.info("Updating profile (dynamic)...")
+    updater = getattr(controller.poly, "updateJsonProfile", None) if controller and hasattr(controller, 'poly') else None
+    if not callable(updater):
+        logging.info("updateJsonProfile is not available; falling back to static updateProfile")
+        if os.path.isdir(profile_dir) and hasattr(controller.poly, "updateProfile"):
+            try:
+                controller.poly.updateProfile()
+                logging.info("Static profile updated successfully via updateProfile fallback")
+            except Exception as e:
+                logging.error(f"updateProfile fallback failed: {e}")
+        return
 
-    json_ok = False
-    updater = getattr(controller.poly, "updateJsonProfile", None)
-    if callable(updater):
+    # 1. Generate full dynamic JSON profile payload
+    payload = get_dynamic_profile_payload(controller=controller, include_variants=include_variants)
+    payload_json = json.dumps(payload)
+    payload_bytes = len(payload_json.encode('utf-8'))
+
+    logging.info(
+        f"Dynamic JSON profile payload generated: {payload_bytes} bytes "
+        f"({len(payload.get('nodedefs', []))} nodedefs, "
+        f"{len(payload.get('editors', []))} editors, "
+        f"{len(payload.get('linkdefs', []))} linkdefs)"
+    )
+
+    # Save full payload dump for debugging
+    debug_file = os.path.join(base_dir, 'profile_payload_debug.json')
+    try:
+        with open(debug_file, 'w', encoding='utf-8') as f:
+            f.write(payload_json)
+        logging.debug(f"Saved full dynamic profile payload debug dump to {debug_file}")
+    except Exception as err:
+        logging.debug(f"Could not write {debug_file}: {err}")
+
+    # 2. Check payload size vs MQTT/PG3 threshold (~60KB)
+    MAX_SAFE_PROFILE_BYTES = 60000
+    active_ids = get_active_nodedef_ids(controller)
+    pruned_payload = None
+
+    if active_ids is not None:
+        pruned_payload = get_dynamic_profile_payload(controller=controller, active_only=True)
+        pruned_json = json.dumps(pruned_payload)
+        pruned_bytes = len(pruned_json.encode('utf-8'))
+        logging.info(
+            f"Active-node pruned profile generated: {pruned_bytes} bytes "
+            f"({len(pruned_payload.get('nodedefs', []))} nodedefs, "
+            f"{len(pruned_payload.get('editors', []))} editors)"
+        )
+        pruned_debug_file = os.path.join(base_dir, 'profile_payload_pruned_debug.json')
         try:
-            payload = get_dynamic_profile_payload(controller=controller, include_variants=include_variants)
-            updater(payload, {"waitResponse": True})
+            with open(pruned_debug_file, 'w', encoding='utf-8') as f:
+                json.dump(pruned_payload, f, indent=2)
+            logging.debug(f"Saved active-node profile debug dump to {pruned_debug_file}")
+        except Exception:
+            pass
+
+    # Select target payload: if full payload > 60KB and pruned is available, send pruned payload
+    if payload_bytes > MAX_SAFE_PROFILE_BYTES and pruned_payload is not None:
+        logging.info(
+            f"Full dynamic profile ({payload_bytes} bytes) exceeds safe size threshold ({MAX_SAFE_PROFILE_BYTES} bytes); "
+            f"sending active-node profile ({len(pruned_json.encode('utf-8'))} bytes) to PG3"
+        )
+        target_payload = pruned_payload
+    else:
+        target_payload = payload
+
+    target_bytes = len(json.dumps(target_payload).encode('utf-8'))
+    json_ok = False
+
+    try:
+        logging.info(f"Sending dynamic JSON profile to PG3 via updateJsonProfile ({target_bytes} bytes)...")
+        updater(target_payload, {"waitResponse": True})
+        logging.info("Dynamic JSON profile updated successfully via updateJsonProfile")
+        json_ok = True
+    except TypeError:
+        try:
+            updater(target_payload)
             logging.info("Dynamic JSON profile updated successfully via updateJsonProfile")
+            json_ok = True
+        except Exception as e:
+            logging.warning(f"updateJsonProfile failed: {e}; size was {target_bytes} bytes")
+    except Exception as e:
+        logging.warning(f"updateJsonProfile failed: {e}; size was {target_bytes} bytes")
+
+    # If first attempt failed and we haven't tried the pruned payload yet, retry with pruned payload
+    if not json_ok and target_payload is not pruned_payload and pruned_payload is not None:
+        retry_bytes = len(json.dumps(pruned_payload).encode('utf-8'))
+        logging.info(f"Retrying updateJsonProfile with active-node pruned payload ({retry_bytes} bytes)...")
+        try:
+            updater(pruned_payload, {"waitResponse": True})
+            logging.info("Dynamic JSON profile updated successfully with active-node pruned profile")
             json_ok = True
         except TypeError:
             try:
-                updater(payload)
-                logging.info("Dynamic JSON profile updated successfully via updateJsonProfile")
+                updater(pruned_payload)
+                logging.info("Dynamic JSON profile updated successfully with active-node pruned profile")
                 json_ok = True
             except Exception as e:
-                logging.warning(f"updateJsonProfile failed: {e}; falling back to updateProfile")
+                logging.warning(f"updateJsonProfile (pruned retry) failed: {e}; size was {retry_bytes} bytes")
         except Exception as e:
-            logging.warning(f"updateJsonProfile failed: {e}; falling back to updateProfile")
+            logging.warning(f"updateJsonProfile (pruned retry) failed: {e}; size was {retry_bytes} bytes")
 
-    # Only update static profile if dynamic JSON update did not succeed and static profile directory exists
-    if not json_ok and os.path.isdir(profile_dir):
-        try:
-            if hasattr(controller.poly, "updateProfile"):
+    # Fallback to static profile if dynamic update failed
+    if not json_ok:
+        logging.warning(
+            f"Dynamic JSON profile was rejected by PG3 (payload size: {target_bytes} bytes); "
+            f"falling back to static updateProfile"
+        )
+        if os.path.isdir(profile_dir) and hasattr(controller.poly, "updateProfile"):
+            try:
                 controller.poly.updateProfile()
                 logging.info("Static profile updated successfully via updateProfile fallback")
-        except Exception as e:
-            logging.error(f"updateProfile fallback failed: {e}")
+            except Exception as e:
+                logging.error(f"updateProfile fallback failed: {e}")
 
+    # Clear profile notice
     if hasattr(controller, 'remove_notice'):
         controller.remove_notice("profile")
     elif hasattr(controller.poly, 'Notices') and 'profile' in controller.poly.Notices:

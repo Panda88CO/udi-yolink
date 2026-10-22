@@ -1,6 +1,6 @@
 
 ND-SETUP-NAME=YoLink Setup
-ND-SETUP-ICON=GenericCtrl
+ND-SETUP-ICON=GenericCtl
 ST-nlssetup-GV1-NAME=Status
 ST-nlssetup-ST-NAME=Node Server
 ST-nlssetup-TIME-NAME=LastPoll Time
@@ -216,7 +216,7 @@ CMD-nlssubusb-DOF-NAME=Disabled
 CMD-nlssubusb-UPDATE-NAME=Update Status
 
 ND-YOMANIPU-NAME=YoLink Manipulator
-ND-YOMANIPU-ICON=GenericCtrl
+ND-YOMANIPU-ICON=GenericCtl
 ST-nlsmanipu-ST-NAME=Manipulator State
 ST-nlsmanipu-GV0-NAME=Manipulator State (Legacy)
 ST-nlsmanipu-GV1-NAME=On Delay Remaining
