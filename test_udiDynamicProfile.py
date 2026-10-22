@@ -97,13 +97,43 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertIn('GV20', sub_prop_ids)
 
     def test_dynamic_nodedefs_parameters_have_valid_ids(self):
-        """All command parameters in dynamic nodedefs must have a non-empty string ID."""
+        """All command parameters in dynamic nodedefs must have string ID, editor, and name."""
         for nd in udiDynamicProfile.get_dynamic_profile_nodedefs(include_variants=True):
             for cmd in nd.get('cmds', {}).get('accepts', []):
                 for p in cmd.get('parameters', []):
                     self.assertIn('id', p)
                     self.assertIsInstance(p['id'], str)
-                    self.assertTrue(len(p['id']) > 0, f"Parameter ID is empty in {nd['id']}.{cmd['id']}: {p}")
+                    self.assertIn('editor', p)
+                    self.assertIn('name', p)
+                    self.assertNotIn('init', p)
+
+    def test_dynamic_editors_numeric_ranges(self):
+        """All range min, max, prec values must be numbers (int/float), never strings."""
+        for ed in udiDynamicProfile.get_dynamic_profile_editors():
+            for r in ed.get('ranges', []):
+                for k in ['min', 'max']:
+                    if k in r:
+                        self.assertIsInstance(r[k], (int, float), f"{ed['id']} {k} must be numeric, got {type(r[k])}")
+                if 'prec' in r:
+                    self.assertIsInstance(r['prec'], int, f"{ed['id']} prec must be int, got {type(r['prec'])}")
+
+    def test_sends_commands_have_no_name_attribute(self):
+        """Commands under 'sends' must not contain 'name' attribute in dynamic profile."""
+        for nd in udiDynamicProfile.get_dynamic_profile_nodedefs(include_variants=True):
+            for cmd in nd.get('cmds', {}).get('sends', []):
+                self.assertNotIn('name', cmd, f"Nodedef '{nd['id']}' send command '{cmd['id']}' has 'name'")
+
+    def test_server_json_manifest_valid(self):
+        """server.json must be a valid manifest with profile_version."""
+        import json
+        manifest_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'server.json')
+        self.assertTrue(os.path.exists(manifest_path), "server.json must exist")
+        with open(manifest_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        self.assertIn('name', data)
+        self.assertIn('profile_version', data)
+        self.assertTrue(len(data['profile_version']) > 0)
+        self.assertIn('executable', data)
 
     def test_dynamic_editors_fahrenheit_and_gallons(self):
         editors = udiDynamicProfile.get_dynamic_profile_editors(temp_unit=1, water_unit=0)
@@ -111,12 +141,12 @@ class TestDynamicProfileGeneration(unittest.TestCase):
 
         # Temperature editors parameterized to Fahrenheit (UOM 17)
         self.assertEqual(by_id['CELSIUS']['ranges'][0]['uom'], '17')
-        self.assertEqual(by_id['CELSIUS']['ranges'][0]['max'], '221')
+        self.assertEqual(by_id['CELSIUS']['ranges'][0]['max'], 221)
         self.assertEqual(by_id['FARENHEIT']['ranges'][0]['uom'], '17')
         self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['uom'], '17')
-        self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['min'], '40')
+        self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['min'], 40)
         self.assertEqual(by_id['ECOSET']['ranges'][0]['uom'], '17')
-        self.assertEqual(by_id['ECOSET']['ranges'][0]['max'], '9')
+        self.assertEqual(by_id['ECOSET']['ranges'][0]['max'], 9)
 
         # Water editors parameterized to Gallons (UOM 69)
         self.assertEqual(by_id['LITER']['ranges'][0]['uom'], '69')
@@ -129,18 +159,18 @@ class TestDynamicProfileGeneration(unittest.TestCase):
 
         # Temperature editors parameterized to Celsius (UOM 4)
         self.assertEqual(by_id['CELSIUS']['ranges'][0]['uom'], '4')
-        self.assertEqual(by_id['CELSIUS']['ranges'][0]['max'], '105')
+        self.assertEqual(by_id['CELSIUS']['ranges'][0]['max'], 105)
         self.assertEqual(by_id['FARENHEIT']['ranges'][0]['uom'], '4')
         self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['uom'], '4')
-        self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['max'], '38')
+        self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['max'], 38)
         self.assertEqual(by_id['ECOSET']['ranges'][0]['uom'], '4')
-        self.assertEqual(by_id['ECOSET']['ranges'][0]['max'], '5')
+        self.assertEqual(by_id['ECOSET']['ranges'][0]['max'], 5)
 
         # Water editors parameterized to Liters (UOM 35)
         self.assertEqual(by_id['LITER']['ranges'][0]['uom'], '35')
         self.assertEqual(by_id['GALLON']['ranges'][0]['uom'], '35')
         self.assertEqual(by_id['LITERSET']['ranges'][0]['uom'], '35')
-        self.assertEqual(by_id['LITER']['ranges'][0]['max'], '100000')
+        self.assertEqual(by_id['LITER']['ranges'][0]['max'], 100000)
 
     def test_dynamic_editors_ccf_and_m3(self):
         ed_ccf = {e['id']: e for e in udiDynamicProfile.get_dynamic_profile_editors(water_unit=1)}
@@ -150,7 +180,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         ed_m3 = {e['id']: e for e in udiDynamicProfile.get_dynamic_profile_editors(water_unit=2)}
         self.assertEqual(ed_m3['LITER']['ranges'][0]['uom'], '8')
         self.assertEqual(ed_m3['GALLON']['ranges'][0]['uom'], '8')
-        self.assertEqual(ed_m3['LITER']['ranges'][0]['prec'], '2')
+        self.assertEqual(ed_m3['LITER']['ranges'][0]['prec'], 2)
 
     def test_dynamic_profile_payload_resolves_controller_units(self):
         mock_controller = MagicMock()

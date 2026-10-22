@@ -110,11 +110,12 @@ def _parse_nls_file(nls_path):
     node_names = {}
     node_icons = {}
     cmd_names = {}
+    cmdp_names = {}
     st_names = {}
     nls_map = {}
 
     if not os.path.exists(nls_path):
-        return node_names, node_icons, cmd_names, st_names, nls_map
+        return node_names, node_icons, cmd_names, cmdp_names, st_names, nls_map
 
     with open(nls_path, 'r', encoding='utf-8', errors='ignore') as f:
         for line in f:
@@ -140,11 +141,26 @@ def _parse_nls_file(nls_path):
             if m_cmd:
                 cmd_names[(m_cmd.group(1), m_cmd.group(2))] = v
                 continue
+            m_cmdp = re.match(r'^CMDP-([\w\-]+)-NAME$', k)
+            if m_cmdp:
+                cmdp_names[m_cmdp.group(1)] = v
+                continue
             m_enum = re.match(r'^([\w\-]+)-([\w\-]+)$', k)
             if m_enum:
                 nls_map.setdefault(m_enum.group(1), {})[m_enum.group(2)] = v
 
-    return node_names, node_icons, cmd_names, st_names, nls_map
+    return node_names, node_icons, cmd_names, cmdp_names, st_names, nls_map
+
+
+def _to_num(val):
+    """Convert string range limit to int or float for PG3 JSON schema."""
+    if val is None:
+        return None
+    try:
+        f = float(val)
+        return int(f) if f.is_integer() else f
+    except (ValueError, TypeError):
+        return val
 
 
 def _get_raw_profile_editors():
@@ -164,7 +180,7 @@ def _get_raw_profile_editors():
     editors = []
     if os.path.exists(xml_path) and os.path.exists(nls_path):
         try:
-            _, _, _, _, nls_map = _parse_nls_file(nls_path)
+            _, _, _, _, _, nls_map = _parse_nls_file(nls_path)
             tree = ET.parse(xml_path)
             for ed in tree.getroot().findall('.//editor'):
                 eid = ed.get('id')
@@ -174,11 +190,14 @@ def _get_raw_profile_editors():
                 for r in ed.findall('.//range'):
                     r_dict = {'uom': r.get('uom', '25')}
                     if r.get('min') is not None:
-                        r_dict['min'] = r.get('min')
+                        r_dict['min'] = _to_num(r.get('min'))
                     if r.get('max') is not None:
-                        r_dict['max'] = r.get('max')
+                        r_dict['max'] = _to_num(r.get('max'))
                     if r.get('prec') is not None:
-                        r_dict['prec'] = r.get('prec')
+                        try:
+                            r_dict['prec'] = int(r.get('prec'))
+                        except (ValueError, TypeError):
+                            r_dict['prec'] = 0
                     subset = r.get('subset')
                     if subset:
                         r_dict['subset'] = subset
@@ -201,26 +220,7 @@ def _get_raw_profile_nodedefs():
         return _raw_nodedefs_cache
 
     if DYNAMIC_NODEDEFS is not None:
-        # Ensure all command parameters have non-empty IDs
-        sanitized = []
-        for nd in DYNAMIC_NODEDEFS:
-            nd_copy = dict(nd)
-            if 'cmds' in nd_copy and 'accepts' in nd_copy['cmds']:
-                new_accepts = []
-                for cmd in nd_copy['cmds']['accepts']:
-                    cmd_copy = dict(cmd)
-                    if 'parameters' in cmd_copy:
-                        new_params = []
-                        for param in cmd_copy['parameters']:
-                            p_copy = dict(param)
-                            if not p_copy.get('id'):
-                                p_copy['id'] = cmd_copy.get('id', 'CMD')
-                            new_params.append(p_copy)
-                        cmd_copy['parameters'] = new_params
-                    new_accepts.append(cmd_copy)
-                nd_copy['cmds'] = dict(nd_copy['cmds'], accepts=new_accepts)
-            sanitized.append(nd_copy)
-        _raw_nodedefs_cache = sanitized
+        _raw_nodedefs_cache = DYNAMIC_NODEDEFS
         return _raw_nodedefs_cache
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -230,7 +230,7 @@ def _get_raw_profile_nodedefs():
     nodedefs = []
     if os.path.exists(xml_path) and os.path.exists(nls_path):
         try:
-            node_names, node_icons, cmd_names, st_names, _ = _parse_nls_file(nls_path)
+            node_names, node_icons, cmd_names, cmdp_names, st_names, _ = _parse_nls_file(nls_path)
             tree = ET.parse(xml_path)
             for nd in tree.getroot().findall('.//nodeDef'):
                 nid = nd.get('id')
@@ -252,8 +252,7 @@ def _get_raw_profile_nodedefs():
                 if sends_elem is not None:
                     for cmd in sends_elem.findall('.//cmd'):
                         cid = cmd.get('id')
-                        cname = cmd_names.get((nls, cid), cid)
-                        sends.append({'id': cid, 'name': cname})
+                        sends.append({'id': cid})
 
                 accepts = []
                 accepts_elem = nd.find('.//accepts')
@@ -265,14 +264,9 @@ def _get_raw_profile_nodedefs():
                         params = []
                         for p in cmd.findall('.//p'):
                             pid = p.get('id', '')
-                            if not pid:
-                                pid = cid
                             ped = p.get('editor', '')
-                            pinit = p.get('init', '')
-                            p_dict = {'id': pid, 'editor': ped}
-                            if pinit:
-                                p_dict['init'] = pinit
-                            params.append(p_dict)
+                            pname = cmdp_names.get(pid) or cname
+                            params.append({'id': pid, 'name': pname, 'editor': ped})
                         if params:
                             cmd_dict['parameters'] = params
                         accepts.append(cmd_dict)
@@ -305,30 +299,30 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
     }
     if temp_norm == 1:
         temp_uom = '17'
-        temp_min = '-40'
-        temp_max = '221'
-        temp_prec = '1'
-        set_min = '40'
-        set_max = '100'
-        eco_max = '9'
+        temp_min = -40
+        temp_max = 221
+        temp_prec = 1
+        set_min = 40
+        set_max = 100
+        eco_max = 9
     else:
         temp_uom = '4'
-        temp_min = '-40'
-        temp_max = '105'
-        temp_prec = '1'
-        set_min = '5'
-        set_max = '38'
-        eco_max = '5'
+        temp_min = -40
+        temp_max = 105
+        temp_prec = 1
+        set_min = 5
+        set_max = 38
+        eco_max = 5
 
     temp_ranges = [
         {'uom': temp_uom, 'min': temp_min, 'max': temp_max, 'prec': temp_prec},
         {'uom': '25', 'subset': '98,99', 'names': dict(wl_names)}
     ]
     temp_set_ranges = [
-        {'uom': temp_uom, 'min': set_min, 'max': set_max, 'prec': '0'}
+        {'uom': temp_uom, 'min': set_min, 'max': set_max, 'prec': 0}
     ]
     eco_set_ranges = [
-        {'uom': temp_uom, 'min': '0', 'max': eco_max, 'prec': '1'}
+        {'uom': temp_uom, 'min': 0, 'max': eco_max, 'prec': 1}
     ]
 
     unit_editors['CELSIUS'] = temp_ranges
@@ -345,27 +339,27 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
     }
     if water_norm == 3:  # Liter
         w_uom = '35'
-        w_max = '100000'
-        w_prec = '1'
+        w_max = 100000
+        w_prec = 1
     elif water_norm == 1:  # CCF
         w_uom = '6'
-        w_max = '10000'
-        w_prec = '1'
+        w_max = 10000
+        w_prec = 1
     elif water_norm == 2:  # m3
         w_uom = '8'
-        w_max = '10000'
-        w_prec = '2'
+        w_max = 10000
+        w_prec = 2
     else:  # Gallon (0)
         w_uom = '69'
-        w_max = '10000'
-        w_prec = '1'
+        w_max = 10000
+        w_prec = 1
 
     water_ranges = [
-        {'uom': w_uom, 'min': '0', 'max': w_max, 'prec': w_prec},
+        {'uom': w_uom, 'min': 0, 'max': w_max, 'prec': w_prec},
         {'uom': '25', 'subset': '0,99', 'names': dict(err_names)}
     ]
     water_set_ranges = [
-        {'uom': w_uom, 'min': '0', 'max': w_max, 'prec': w_prec}
+        {'uom': w_uom, 'min': 0, 'max': w_max, 'prec': w_prec}
     ]
 
     unit_editors['LITER'] = water_ranges
@@ -591,6 +585,13 @@ def update_dynamic_profile(controller, include_variants=False):
             updater(payload, {"waitResponse": True})
             logging.info("Dynamic JSON profile updated successfully via updateJsonProfile")
             json_ok = True
+        except TypeError:
+            try:
+                updater(payload)
+                logging.info("Dynamic JSON profile updated successfully via updateJsonProfile")
+                json_ok = True
+            except Exception as e:
+                logging.warning(f"updateJsonProfile failed: {e}; falling back to updateProfile")
         except Exception as e:
             logging.warning(f"updateJsonProfile failed: {e}; falling back to updateProfile")
 

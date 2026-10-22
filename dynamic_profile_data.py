@@ -66,9 +66,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "73",
-        "min": "-1",
-        "max": "2000",
-        "prec": "2"
+        "min": -1,
+        "max": 2000,
+        "prec": 2
       },
       {
         "uom": "25",
@@ -86,9 +86,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "119",
-        "min": "-1",
-        "max": "2000",
-        "prec": "2"
+        "min": -1,
+        "max": 2000,
+        "prec": 2
       },
       {
         "uom": "25",
@@ -106,9 +106,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "56",
-        "min": "0",
-        "max": "1000",
-        "prec": "0"
+        "min": 0,
+        "max": 1000,
+        "prec": 0
       },
       {
         "uom": "25",
@@ -125,9 +125,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "57",
-        "min": "0",
-        "max": "86400",
-        "prec": "0"
+        "min": 0,
+        "max": 86400,
+        "prec": 0
       }
     ]
   },
@@ -136,9 +136,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "44",
-        "min": "0",
-        "max": "1440",
-        "prec": "0"
+        "min": 0,
+        "max": 1440,
+        "prec": 0
       }
     ]
   },
@@ -147,9 +147,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "4",
-        "min": "-40",
-        "max": "105",
-        "prec": "1"
+        "min": -40,
+        "max": 105,
+        "prec": 1
       },
       {
         "uom": "25",
@@ -166,9 +166,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "4",
-        "min": "5",
-        "max": "38",
-        "prec": "0"
+        "min": 5,
+        "max": 38,
+        "prec": 0
       }
     ]
   },
@@ -177,9 +177,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "17",
-        "min": "-40",
-        "max": "221",
-        "prec": "1"
+        "min": -40,
+        "max": 221,
+        "prec": 1
       },
       {
         "uom": "25",
@@ -196,9 +196,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "17",
-        "min": "40",
-        "max": "100",
-        "prec": "0"
+        "min": 40,
+        "max": 100,
+        "prec": 0
       }
     ]
   },
@@ -207,9 +207,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "51",
-        "min": "0",
-        "max": "100",
-        "prec": "1"
+        "min": 0,
+        "max": 100,
+        "prec": 1
       },
       {
         "uom": "25",
@@ -377,9 +377,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "56",
-        "min": "0",
-        "max": "16",
-        "prec": "0"
+        "min": 0,
+        "max": 16,
+        "prec": 0
       }
     ]
   },
@@ -416,9 +416,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "56",
-        "min": "0",
-        "max": "10",
-        "prec": "0"
+        "min": 0,
+        "max": 10,
+        "prec": 0
       }
     ]
   },
@@ -580,9 +580,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "51",
-        "min": "0",
-        "max": "100",
-        "prec": "0"
+        "min": 0,
+        "max": 100,
+        "prec": 0
       }
     ]
   },
@@ -591,9 +591,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "56",
-        "min": "0",
-        "max": "64",
-        "prec": "0"
+        "min": 0,
+        "max": 64,
+        "prec": 0
       }
     ]
   },
@@ -769,9 +769,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "58",
-        "min": "0",
-        "max": "3600",
-        "prec": "0"
+        "min": 0,
+        "max": 3600,
+        "prec": 0
       }
     ]
   },
@@ -1039,8 +1039,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "70",
-        "min": "0",
-        "max": "20"
+        "min": 0,
+        "max": 20
       }
     ]
   },
@@ -1067,8 +1067,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "19",
-        "min": "0",
-        "max": "24"
+        "min": 0,
+        "max": 24
       },
       {
         "uom": "25",
@@ -1085,8 +1085,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "44",
-        "min": "0",
-        "max": "59"
+        "min": 0,
+        "max": 59
       },
       {
         "uom": "25",
@@ -1103,8 +1103,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "57",
-        "min": "0",
-        "max": "59"
+        "min": 0,
+        "max": 59
       },
       {
         "uom": "25",
@@ -1121,8 +1121,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "19",
-        "min": "0",
-        "max": "24"
+        "min": 0,
+        "max": 24
       },
       {
         "uom": "25",
@@ -1139,8 +1139,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "44",
-        "min": "0",
-        "max": "59"
+        "min": 0,
+        "max": 59
       },
       {
         "uom": "25",
@@ -1157,8 +1157,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "57",
-        "min": "0",
-        "max": "59"
+        "min": 0,
+        "max": 59
       },
       {
         "uom": "25",
@@ -1314,9 +1314,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "151",
-        "min": "1737400000",
-        "max": "9999999999",
-        "prec": "0"
+        "min": 1737400000,
+        "max": 9999999999,
+        "prec": 0
       },
       {
         "uom": "25",
@@ -1346,27 +1346,27 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "69",
-        "min": "0",
-        "max": "100",
-        "prec": "0"
+        "min": 0,
+        "max": 100,
+        "prec": 0
       },
       {
         "uom": "6",
-        "min": "0",
-        "max": "100",
-        "prec": "0"
+        "min": 0,
+        "max": 100,
+        "prec": 0
       },
       {
         "uom": "8",
-        "min": "0",
-        "max": "10",
-        "prec": "1"
+        "min": 0,
+        "max": 10,
+        "prec": 1
       },
       {
         "uom": "35",
-        "min": "0",
-        "max": "400",
-        "prec": "0"
+        "min": 0,
+        "max": 400,
+        "prec": 0
       }
     ]
   },
@@ -1375,9 +1375,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "35",
-        "min": "0",
-        "max": "100000",
-        "prec": "1"
+        "min": 0,
+        "max": 100000,
+        "prec": 1
       },
       {
         "uom": "25",
@@ -1394,9 +1394,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "35",
-        "min": "0",
-        "max": "100000",
-        "prec": "1"
+        "min": 0,
+        "max": 100000,
+        "prec": 1
       }
     ]
   },
@@ -1405,9 +1405,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "69",
-        "min": "0",
-        "max": "10000",
-        "prec": "1"
+        "min": 0,
+        "max": 10000,
+        "prec": 1
       },
       {
         "uom": "25",
@@ -1424,9 +1424,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "69",
-        "min": "0",
-        "max": "10000",
-        "prec": "1"
+        "min": 0,
+        "max": 10000,
+        "prec": 1
       }
     ]
   },
@@ -1435,27 +1435,27 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "69",
-        "min": "0",
-        "max": "10000",
-        "prec": "1"
+        "min": 0,
+        "max": 10000,
+        "prec": 1
       },
       {
         "uom": "6",
-        "min": "0",
-        "max": "10000",
-        "prec": "1"
+        "min": 0,
+        "max": 10000,
+        "prec": 1
       },
       {
         "uom": "8",
-        "min": "0",
-        "max": "10000",
-        "prec": "2"
+        "min": 0,
+        "max": 10000,
+        "prec": 2
       },
       {
         "uom": "35",
-        "min": "0",
-        "max": "100000",
-        "prec": "1"
+        "min": 0,
+        "max": 100000,
+        "prec": 1
       },
       {
         "uom": "25",
@@ -1514,8 +1514,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "44",
-        "min": "0",
-        "max": "1440"
+        "min": 0,
+        "max": 1440
       },
       {
         "uom": "25",
@@ -1532,8 +1532,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "44",
-        "min": "0",
-        "max": "1440"
+        "min": 0,
+        "max": 1440
       }
     ]
   },
@@ -1542,8 +1542,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "70",
-        "min": "0",
-        "max": "1440"
+        "min": 0,
+        "max": 1440
       },
       {
         "uom": "25",
@@ -1560,9 +1560,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "70",
-        "min": "0",
-        "max": "20",
-        "prec": "1"
+        "min": 0,
+        "max": 20,
+        "prec": 1
       },
       {
         "uom": "25",
@@ -1605,8 +1605,8 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "70",
-        "min": "0",
-        "max": "1440"
+        "min": 0,
+        "max": 1440
       }
     ]
   },
@@ -1615,18 +1615,18 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "44",
-        "min": "0",
-        "max": "1440"
+        "min": 0,
+        "max": 1440
       },
       {
         "uom": "35",
-        "min": "0",
-        "max": "2000"
+        "min": 0,
+        "max": 2000
       },
       {
         "uom": "69",
-        "min": "0",
-        "max": "600"
+        "min": 0,
+        "max": 600
       },
       {
         "uom": "25",
@@ -1868,9 +1868,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "51",
-        "min": "0",
-        "max": "100",
-        "prec": "1"
+        "min": 0,
+        "max": 100,
+        "prec": 1
       },
       {
         "uom": "25",
@@ -1943,9 +1943,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "44",
-        "min": "0",
-        "max": "120",
-        "prec": "0"
+        "min": 0,
+        "max": 120,
+        "prec": 0
       }
     ]
   },
@@ -1982,9 +1982,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "20",
-        "min": "0",
-        "max": "24",
-        "prec": "0"
+        "min": 0,
+        "max": 24,
+        "prec": 0
       }
     ]
   },
@@ -2008,9 +2008,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "4",
-        "min": "0",
-        "max": "5",
-        "prec": "1"
+        "min": 0,
+        "max": 5,
+        "prec": 1
       }
     ]
   },
@@ -2019,9 +2019,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "17",
-        "min": "0",
-        "max": "9",
-        "prec": "1"
+        "min": 0,
+        "max": 9,
+        "prec": 1
       }
     ]
   }
@@ -2052,12 +2052,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Heart Beat On"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Heart Beat Off"
+          "id": "DOF"
         }
       ],
       "accepts": []
@@ -2135,9 +2133,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -2147,48 +2145,48 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "onS",
-              "editor": "STSECI",
-              "init": "GV21"
+              "name": "On Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "offS",
-              "editor": "STSECI",
-              "init": "GV22"
+              "name": "Off Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -2198,13 +2196,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -2288,9 +2286,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -2300,53 +2298,53 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ch",
-              "editor": "SCHINDEXS",
-              "init": "GV12"
+              "name": "Output port(0-3)",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "onS",
-              "editor": "STSECI",
-              "init": "GV21"
+              "name": "On Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "offS",
-              "editor": "STSECI",
-              "init": "GV22"
+              "name": "Off Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -2356,13 +2354,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -2446,9 +2444,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -2458,53 +2456,53 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "key",
-              "editor": "NBRCODES",
-              "init": "GV12"
+              "name": "Ir code Number (1-64)",
+              "editor": "NBRCODES"
             },
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "onS",
-              "editor": "STSECI",
-              "init": "GV21"
+              "name": "On Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "offS",
-              "editor": "STSECI",
-              "init": "GV22"
+              "name": "Off Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -2514,13 +2512,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -2604,9 +2602,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -2616,53 +2614,53 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "key",
-              "editor": "OUTPORT",
-              "init": "GV12"
+              "name": "Ir code Number (1-64)",
+              "editor": "OUTPORT"
             },
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "onS",
-              "editor": "STSECI",
-              "init": "GV21"
+              "name": "On Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "offS",
-              "editor": "STSECI",
-              "init": "GV22"
+              "name": "Off Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -2672,13 +2670,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -2752,9 +2750,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -2764,38 +2762,38 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -2805,13 +2803,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -2885,9 +2883,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -2897,38 +2895,38 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -2938,13 +2936,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -3013,9 +3011,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -3025,38 +3023,38 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -3066,13 +3064,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -3151,9 +3149,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -3163,48 +3161,48 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "onS",
-              "editor": "STSECI",
-              "init": "GV21"
+              "name": "On Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "offS",
-              "editor": "STSECI",
-              "init": "GV22"
+              "name": "Off Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -3214,13 +3212,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -3289,9 +3287,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -3301,38 +3299,38 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -3342,13 +3340,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -3432,9 +3430,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -3444,48 +3442,48 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "onS",
-              "editor": "STSECI",
-              "init": "GV21"
+              "name": "On Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "offS",
-              "editor": "STSECI",
-              "init": "GV22"
+              "name": "Off Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -3495,13 +3493,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -3575,9 +3573,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -3587,38 +3585,38 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -3628,13 +3626,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -3718,9 +3716,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -3730,53 +3728,53 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "DEFINESCH",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "LLIMIT",
-              "editor": "LEAKLIMIT",
-              "init": "GV12"
+              "name": "Leak Limit",
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "onS",
-              "editor": "STSECI",
-              "init": "GV21"
+              "name": "On Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "offS",
-              "editor": "STSECI",
-              "init": "GV22"
+              "name": "Off Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -3786,13 +3784,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -3866,9 +3864,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -3878,43 +3876,43 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "DEFINESCH",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "LLIMIT",
-              "editor": "LEAKLIMIT",
-              "init": "GV12"
+              "name": "Leak Limit",
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -3924,13 +3922,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -4014,9 +4012,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -4026,53 +4024,53 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "LLIMIT",
-              "editor": "LEAKLIMIT",
-              "init": "GV12"
+              "name": "Leak Limit",
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "onS",
-              "editor": "STSECI",
-              "init": "GV21"
+              "name": "On Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "offS",
-              "editor": "STSECI",
-              "init": "GV22"
+              "name": "Off Seconds",
+              "editor": "STSECI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -4082,13 +4080,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -4162,9 +4160,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Lookup Schedule",
           "parameters": [
             {
-              "id": "LOOKUPSCH",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "id": "",
+              "name": "Lookup Schedule",
+              "editor": "SCHINDEXS"
             }
           ]
         },
@@ -4174,43 +4172,43 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Define Schedule",
+              "editor": "SCHACTIVEI"
             },
             {
               "id": "LLIMIT",
-              "editor": "LEAKLIMIT",
-              "init": "GV12"
+              "name": "Leak Limit",
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "onH",
-              "editor": "STHOURI",
-              "init": "GV15"
+              "name": "On Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "onM",
-              "editor": "STMINI",
-              "init": "GV16"
+              "name": "On Min",
+              "editor": "STMINI"
             },
             {
               "id": "offH",
-              "editor": "STHOURI",
-              "init": "GV17"
+              "name": "Off Hour",
+              "editor": "STHOURI"
             },
             {
               "id": "offM",
-              "editor": "STMINI",
-              "init": "GV18"
+              "name": "Off Min",
+              "editor": "STMINI"
             },
             {
               "id": "bindays",
-              "editor": "BINDAYS",
-              "init": "GV19"
+              "name": "Active Days (Su|Mo|Tu|We|Th|Fr|Sa)",
+              "editor": "BINDAYS"
             }
           ]
         },
@@ -4220,13 +4218,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "index",
-              "editor": "SCHINDEXS",
-              "init": "GV13"
+              "name": "Schedule Index",
+              "editor": "SCHINDEXS"
             },
             {
               "id": "active",
-              "editor": "SCHACTIVEI",
-              "init": "GV14"
+              "name": "Set Schedule",
+              "editor": "SCHACTIVEI"
             }
           ]
         }
@@ -4316,20 +4314,16 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Switch On"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Switch Off"
+          "id": "DOF"
         },
         {
-          "id": "DFON",
-          "name": "Switch Fast On"
+          "id": "DFON"
         },
         {
-          "id": "DFOF",
-          "name": "Switch Fast Off"
+          "id": "DFOF"
         }
       ],
       "accepts": [
@@ -4358,9 +4352,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "SWCTRL",
-              "editor": "SWCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Switch control",
+              "editor": "SWCTRL"
             }
           ]
         },
@@ -4369,9 +4363,9 @@ DYNAMIC_NODEDEFS = [
           "name": "LED control",
           "parameters": [
             {
-              "id": "SETATTRIB",
-              "editor": "LEDCTRL",
-              "init": "GV9"
+              "id": "",
+              "name": "LED control",
+              "editor": "LEDCTRL"
             }
           ]
         },
@@ -4381,13 +4375,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "DELAYMIN",
-              "init": "GV1"
+              "name": "On delay (0 if no delay)",
+              "editor": "DELAYMIN"
             },
             {
               "id": "offdelay",
-              "editor": "DELAYMIN",
-              "init": "GV2"
+              "name": "Off delay (0 if no delay)",
+              "editor": "DELAYMIN"
             }
           ]
         }
@@ -4467,20 +4461,16 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Switch On"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Switch Off"
+          "id": "DOF"
         },
         {
-          "id": "DFON",
-          "name": "Switch Fast On"
+          "id": "DFON"
         },
         {
-          "id": "DFOF",
-          "name": "Switch Fast Off"
+          "id": "DFOF"
         }
       ],
       "accepts": [
@@ -4509,9 +4499,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "SWCTRL",
-              "editor": "SWCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Switch control",
+              "editor": "SWCTRL"
             }
           ]
         },
@@ -4521,13 +4511,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "DELAYMIN",
-              "init": "GV1"
+              "name": "On delay (0 if no delay)",
+              "editor": "DELAYMIN"
             },
             {
               "id": "offdelay",
-              "editor": "DELAYMIN",
-              "init": "GV2"
+              "name": "Off delay (0 if no delay)",
+              "editor": "DELAYMIN"
             }
           ]
         },
@@ -4536,9 +4526,9 @@ DYNAMIC_NODEDEFS = [
           "name": "LED control",
           "parameters": [
             {
-              "id": "SETATTRIB",
-              "editor": "LEDCTRL",
-              "init": "GV9"
+              "id": "",
+              "name": "LED control",
+              "editor": "LEDCTRL"
             }
           ]
         }
@@ -4603,20 +4593,16 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Switch On"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Switch Off"
+          "id": "DOF"
         },
         {
-          "id": "DFON",
-          "name": "Switch Fast On"
+          "id": "DFON"
         },
         {
-          "id": "DFOF",
-          "name": "Switch Fast Off"
+          "id": "DFOF"
         }
       ],
       "accepts": [
@@ -4645,9 +4631,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "SWCTRL",
-              "editor": "SWCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Switch control",
+              "editor": "SWCTRL"
             }
           ]
         },
@@ -4657,13 +4643,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "DELAYMIN",
-              "init": "GV1"
+              "name": "On delay (0 if no delay)",
+              "editor": "DELAYMIN"
             },
             {
               "id": "offdelay",
-              "editor": "DELAYMIN",
-              "init": "GV2"
+              "name": "Off delay (0 if no delay)",
+              "editor": "DELAYMIN"
             }
           ]
         },
@@ -4672,9 +4658,9 @@ DYNAMIC_NODEDEFS = [
           "name": "LED control",
           "parameters": [
             {
-              "id": "SETATTRIB",
-              "editor": "LEDCTRL",
-              "init": "GV9"
+              "id": "",
+              "name": "LED control",
+              "editor": "LEDCTRL"
             }
           ]
         }
@@ -4794,32 +4780,25 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         },
         {
-          "id": "DFON",
-          "name": "DFON"
+          "id": "DFON"
         },
         {
-          "id": "DFOF",
-          "name": "DFOF"
+          "id": "DFOF"
         },
         {
-          "id": "FDUP",
-          "name": "FDUP"
+          "id": "FDUP"
         },
         {
-          "id": "FDDOWN",
-          "name": "FDDOWN"
+          "id": "FDDOWN"
         },
         {
-          "id": "FDSTOP",
-          "name": "FDSTOP"
+          "id": "FDSTOP"
         }
       ],
       "accepts": [
@@ -4860,9 +4839,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Light Level (%)",
           "parameters": [
             {
-              "id": "DIMLVL",
-              "editor": "DIMLVL",
-              "init": "GV3"
+              "id": "",
+              "name": "Light Level (%)",
+              "editor": "DIMLVL"
             }
           ]
         },
@@ -4871,9 +4850,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Light Down Level (%)",
           "parameters": [
             {
-              "id": "DIMDOWN",
-              "editor": "DIMLVL",
-              "init": "GV4"
+              "id": "",
+              "name": "Light Down Level (%)",
+              "editor": "DIMLVL"
             }
           ]
         },
@@ -4882,9 +4861,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Light Up Level (%)",
           "parameters": [
             {
-              "id": "DIMUP",
-              "editor": "DIMLVL",
-              "init": "GV5"
+              "id": "",
+              "name": "Light Up Level (%)",
+              "editor": "DIMLVL"
             }
           ]
         },
@@ -4893,9 +4872,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "SWCTRL",
-              "editor": "SWCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Switch control",
+              "editor": "SWCTRL"
             }
           ]
         },
@@ -4905,13 +4884,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "DELAYMIN",
-              "init": "GV1"
+              "name": "On delay (0 if no delay)",
+              "editor": "DELAYMIN"
             },
             {
               "id": "offdelay",
-              "editor": "DELAYMIN",
-              "init": "GV2"
+              "name": "Off delay (0 if no delay)",
+              "editor": "DELAYMIN"
             }
           ]
         },
@@ -4920,9 +4899,9 @@ DYNAMIC_NODEDEFS = [
           "name": "LED control",
           "parameters": [
             {
-              "id": "SETATTRIB",
-              "editor": "LEDCTRL",
-              "init": "GV9"
+              "id": "",
+              "name": "LED control",
+              "editor": "LEDCTRL"
             }
           ]
         }
@@ -4997,12 +4976,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Switch On"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Switch Off"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -5023,9 +5000,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "SWCTRL",
-              "editor": "SWCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Switch control",
+              "editor": "SWCTRL"
             }
           ]
         },
@@ -5035,13 +5012,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "DELAYMIN",
-              "init": "GV1"
+              "name": "On delay (0 if no delay)",
+              "editor": "DELAYMIN"
             },
             {
               "id": "offdelay",
-              "editor": "DELAYMIN",
-              "init": "GV2"
+              "name": "Off delay (0 if no delay)",
+              "editor": "DELAYMIN"
             }
           ]
         }
@@ -5126,12 +5103,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Switch On"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Switch Off"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -5152,9 +5127,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "SWCTRL",
-              "editor": "SWCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Switch control",
+              "editor": "SWCTRL"
             }
           ]
         },
@@ -5164,13 +5139,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "DELAYMIN",
-              "init": "GV1"
+              "name": "On delay (0 if no delay)",
+              "editor": "DELAYMIN"
             },
             {
               "id": "offdelay",
-              "editor": "DELAYMIN",
-              "init": "GV2"
+              "name": "Off delay (0 if no delay)",
+              "editor": "DELAYMIN"
             }
           ]
         }
@@ -5310,12 +5285,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Switch On"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Switch Off"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -5336,9 +5309,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "SWCTRL",
-              "editor": "SWCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Switch control",
+              "editor": "SWCTRL"
             }
           ]
         },
@@ -5348,13 +5321,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "DELAYMIN",
-              "init": "GV1"
+              "name": "On delay (0 if no delay)",
+              "editor": "DELAYMIN"
             },
             {
               "id": "offdelay",
-              "editor": "DELAYMIN",
-              "init": "GV2"
+              "name": "Off delay (0 if no delay)",
+              "editor": "DELAYMIN"
             }
           ]
         }
@@ -5389,12 +5362,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Enabled"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Disabled"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -5415,9 +5386,9 @@ DYNAMIC_NODEDEFS = [
           "name": "USB Power",
           "parameters": [
             {
-              "id": "USBCTRL",
-              "editor": "USBCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "USB Power",
+              "editor": "USBCTRL"
             }
           ]
         }
@@ -5477,12 +5448,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -5503,9 +5472,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Switch control",
           "parameters": [
             {
-              "id": "MANCTRL",
-              "editor": "MANCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Switch control",
+              "editor": "MANCTRL"
             }
           ]
         },
@@ -5515,13 +5484,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ondelay",
-              "editor": "DELAYMIN",
-              "init": "GV1"
+              "name": "On delay (0 if no delay)",
+              "editor": "DELAYMIN"
             },
             {
               "id": "offdelay",
-              "editor": "DELAYMIN",
-              "init": "GV2"
+              "name": "Off delay (0 if no delay)",
+              "editor": "DELAYMIN"
             }
           ]
         }
@@ -5676,12 +5645,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -5695,10 +5662,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "startstop",
+              "name": "Start/Stop Watering",
               "editor": "STARTSTOP"
             },
             {
               "id": "watermode",
+              "name": "Water Mode",
               "editor": "WATERMODE"
             }
           ]
@@ -5709,26 +5678,32 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
+              "name": "Leak Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
+              "name": "Leak Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
+              "name": "Overrun Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
+              "name": "Overrun Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
+              "name": "Overrun Time Limit",
               "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
+              "name": "Overrun Time Auto Off",
               "editor": "ENABLESET"
             }
           ]
@@ -5884,12 +5859,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -5911,26 +5884,32 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
+              "name": "Leak Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
+              "name": "Leak Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
+              "name": "Overrun Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
+              "name": "Overrun Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
+              "name": "Overrun Time Limit",
               "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
+              "name": "Overrun Time Auto Off",
               "editor": "ENABLESET"
             }
           ]
@@ -6086,12 +6065,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -6113,26 +6090,32 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
+              "name": "Leak Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
+              "name": "Leak Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
+              "name": "Overrun Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
+              "name": "Overrun Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
+              "name": "Overrun Time Limit",
               "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
+              "name": "Overrun Time Auto Off",
               "editor": "ENABLESET"
             }
           ]
@@ -6183,12 +6166,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -6242,12 +6223,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -6366,12 +6345,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -6389,26 +6366,32 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
+              "name": "Leak Limit",
               "editor": "LITERSET"
             },
             {
               "id": "LOFF",
+              "name": "Leak Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
+              "name": "Overrun Limit",
               "editor": "LITERSET"
             },
             {
               "id": "OROFF",
+              "name": "Overrun Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
+              "name": "Overrun Time Limit",
               "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
+              "name": "Overrun Time Auto Off",
               "editor": "ENABLESET"
             }
           ]
@@ -6524,12 +6507,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -6547,26 +6528,32 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
+              "name": "Leak Limit",
               "editor": "LITERSET"
             },
             {
               "id": "LOFF",
+              "name": "Leak Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
+              "name": "Overrun Limit",
               "editor": "LITERSET"
             },
             {
               "id": "OROFF",
+              "name": "Overrun Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
+              "name": "Overrun Time Limit",
               "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
+              "name": "Overrun Time Auto Off",
               "editor": "ENABLESET"
             }
           ]
@@ -6682,12 +6669,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -6705,26 +6690,32 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
+              "name": "Leak Limit",
               "editor": "GALLONSET"
             },
             {
               "id": "LOFF",
+              "name": "Leak Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORLIMIT",
+              "name": "Overrun Limit",
               "editor": "GALLONSET"
             },
             {
               "id": "OROFF",
+              "name": "Overrun Auto Off",
               "editor": "ENABLESET"
             },
             {
               "id": "ORTLIMIT",
+              "name": "Overrun Time Limit",
               "editor": "MINUTESSET"
             },
             {
               "id": "ORTOFF",
+              "name": "Overrun Time Auto Off",
               "editor": "ENABLESET"
             }
           ]
@@ -6840,12 +6831,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -6859,14 +6848,17 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
+              "name": "Leak Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "ORLIMIT",
+              "name": "Overrun Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "ORTLIMIT",
+              "name": "Overrun Time Limit",
               "editor": "MINUTESSET"
             }
           ]
@@ -6982,12 +6974,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -7001,14 +6991,17 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "LLIMIT",
+              "name": "Leak Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "ORLIMIT",
+              "name": "Overrun Limit",
               "editor": "LEAKLIMIT"
             },
             {
               "id": "ORTLIMIT",
+              "name": "Overrun Time Limit",
               "editor": "MINUTESSET"
             }
           ]
@@ -7089,12 +7082,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -7108,10 +7099,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "startstop",
+              "name": "Start/Stop Watering",
               "editor": "STARTSTOP"
             },
             {
               "id": "watermode",
+              "name": "Water Mode",
               "editor": "WATERMODE"
             }
           ]
@@ -7122,10 +7115,12 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "wmethod",
+              "name": "Watering Measure Method",
               "editor": "SPRINKLERMETHOD"
             },
             {
               "id": "wamount",
+              "name": "Set Amount",
               "editor": "WAMOUNT"
             }
           ]
@@ -7135,7 +7130,8 @@ DYNAMIC_NODEDEFS = [
           "name": "Set water delay",
           "parameters": [
             {
-              "id": "WDELAY",
+              "id": "",
+              "name": "Set water delay",
               "editor": "MINUTESSET"
             }
           ]
@@ -7266,12 +7262,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -7280,9 +7274,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command (Alert) Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -7416,12 +7410,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -7430,9 +7422,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command (Alert) Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -7566,12 +7558,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -7580,9 +7570,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command (Alert) Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -7716,12 +7706,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -7730,9 +7718,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command (Alert) Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -7866,12 +7854,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -7880,9 +7866,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command (Alert) Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8016,12 +8002,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8030,9 +8014,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command (Alert) Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command (Alert) Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8096,12 +8080,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Open"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Closed"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8110,9 +8092,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8219,12 +8201,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Motion"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "No Motion"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8233,9 +8213,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8299,12 +8279,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Motion"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "No Motion"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8313,9 +8291,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8419,12 +8397,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Water Alert Detected"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Normal"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8433,9 +8409,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8444,9 +8420,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Beep Alert",
           "parameters": [
             {
-              "id": "SETBEEP",
-              "editor": "BEEPING",
-              "init": "GV4"
+              "id": "",
+              "name": "Set Beep Alert",
+              "editor": "BEEPING"
             }
           ]
         },
@@ -8550,12 +8526,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Water Alert Detected"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Normal"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8564,9 +8538,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8575,9 +8549,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Beep Alert",
           "parameters": [
             {
-              "id": "SETBEEP",
-              "editor": "BEEPING",
-              "init": "GV4"
+              "id": "",
+              "name": "Set Beep Alert",
+              "editor": "BEEPING"
             }
           ]
         },
@@ -8666,12 +8640,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Alert Detected"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Normal"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8680,9 +8652,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV7"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8771,12 +8743,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Alert Detected"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Normal"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8785,9 +8755,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV7"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8851,12 +8821,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Vibration Detected"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Normal"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8865,9 +8833,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -8931,12 +8899,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "Vibration Detected"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "Normal"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -8945,9 +8911,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV2"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -9116,23 +9082,23 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "message",
-              "editor": "MESSAGES",
-              "init": "GV4"
+              "name": "Select Message",
+              "editor": "MESSAGES"
             },
             {
               "id": "volume",
-              "editor": "VOLUME",
-              "init": "GV0"
+              "name": "Volume",
+              "editor": "VOLUME"
             },
             {
               "id": "tone",
-              "editor": "TONESET",
-              "init": "GV3"
+              "name": "Tone",
+              "editor": "TONESET"
             },
             {
               "id": "repeat",
-              "editor": "REPEAT",
-              "init": "GV5"
+              "name": "Repeat",
+              "editor": "REPEAT"
             }
           ]
         },
@@ -9141,9 +9107,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Beep",
           "parameters": [
             {
-              "id": "BEEP",
-              "editor": "BEEPENSET",
-              "init": "GV1"
+              "id": "",
+              "name": "Beep",
+              "editor": "BEEPENSET"
             }
           ]
         },
@@ -9152,9 +9118,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Mute",
           "parameters": [
             {
-              "id": "MUTE",
-              "editor": "MUTESET",
-              "init": "GV2"
+              "id": "",
+              "name": "Mute",
+              "editor": "MUTESET"
             }
           ]
         }
@@ -9224,12 +9190,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -9246,9 +9210,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Lock",
           "parameters": [
             {
-              "id": "LOCKCTRL",
-              "editor": "LOCK",
-              "init": "GV0"
+              "id": "",
+              "name": "Set Lock",
+              "editor": "LOCK"
             }
           ]
         },
@@ -9307,12 +9271,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -9329,9 +9291,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Lock",
           "parameters": [
             {
-              "id": "LOCKCTRL",
-              "editor": "LOCK",
-              "init": "GV0"
+              "id": "",
+              "name": "Set Lock",
+              "editor": "LOCK"
             }
           ]
         },
@@ -9434,8 +9396,7 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         }
       ],
       "accepts": [
@@ -9509,12 +9470,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -9523,9 +9482,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Select Command Action",
           "parameters": [
             {
-              "id": "SETCMD",
-              "editor": "CMDSETTING",
-              "init": "GV7"
+              "id": "",
+              "name": "Select Command Action",
+              "editor": "CMDSETTING"
             }
           ]
         },
@@ -9604,12 +9563,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -9619,13 +9576,13 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "waterLowAlarm",
-              "editor": "WATERLEVEL",
-              "init": "GV1"
+              "name": "Low Water Alarm (0-1000)",
+              "editor": "WATERLEVEL"
             },
             {
               "id": "waterHighAlarm",
-              "editor": "WATERLEVEL",
-              "init": "GV2"
+              "name": "High Water Alarm (0-1000)",
+              "editor": "WATERLEVEL"
             }
           ]
         },
@@ -9689,12 +9646,10 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         }
       ],
       "accepts": [
@@ -9703,9 +9658,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Control",
           "parameters": [
             {
-              "id": "SIRENCTRL",
-              "editor": "SIRENCTRL",
-              "init": "GV0"
+              "id": "",
+              "name": "Set Control",
+              "editor": "SIRENCTRL"
             }
           ]
         },
@@ -9839,20 +9794,16 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         },
         {
-          "id": "DFON",
-          "name": "DFON"
+          "id": "DFON"
         },
         {
-          "id": "DFOF",
-          "name": "DFOF"
+          "id": "DFOF"
         }
       ],
       "accepts": [
@@ -9861,9 +9812,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Short Press Command Type",
           "parameters": [
             {
-              "id": "KEYPRESS",
-              "editor": "KEYSCENE",
-              "init": "GV1"
+              "id": "",
+              "name": "Short Press Command Type",
+              "editor": "KEYSCENE"
             }
           ]
         },
@@ -9872,9 +9823,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Long Press Command Type",
           "parameters": [
             {
-              "id": "KEYLPRESS",
-              "editor": "KEYSCENE",
-              "init": "GV2"
+              "id": "",
+              "name": "Long Press Command Type",
+              "editor": "KEYSCENE"
             }
           ]
         }
@@ -9914,20 +9865,16 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         },
         {
-          "id": "DFON",
-          "name": "DFON"
+          "id": "DFON"
         },
         {
-          "id": "DFOF",
-          "name": "DFOF"
+          "id": "DFOF"
         }
       ],
       "accepts": [
@@ -9936,7 +9883,8 @@ DYNAMIC_NODEDEFS = [
           "name": "Short Press Command",
           "parameters": [
             {
-              "id": "KEYPRESS",
+              "id": "",
+              "name": "Short Press Command",
               "editor": "KEYSCENE"
             }
           ]
@@ -9946,7 +9894,8 @@ DYNAMIC_NODEDEFS = [
           "name": "Long Press Command",
           "parameters": [
             {
-              "id": "KEYLPRESS",
+              "id": "",
+              "name": "Long Press Command",
               "editor": "KEYSCENE"
             }
           ]
@@ -9982,20 +9931,16 @@ DYNAMIC_NODEDEFS = [
     "cmds": {
       "sends": [
         {
-          "id": "DON",
-          "name": "DON"
+          "id": "DON"
         },
         {
-          "id": "DOF",
-          "name": "DOF"
+          "id": "DOF"
         },
         {
-          "id": "DFON",
-          "name": "DFON"
+          "id": "DFON"
         },
         {
-          "id": "DFOF",
-          "name": "DFOF"
+          "id": "DFOF"
         }
       ],
       "accepts": [
@@ -10004,9 +9949,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Press Command",
           "parameters": [
             {
-              "id": "PRESSCMD",
-              "editor": "KEYSCENE",
-              "init": "GV1"
+              "id": "",
+              "name": "Press Command",
+              "editor": "KEYSCENE"
             }
           ]
         }
@@ -10130,9 +10075,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Heat Setpoint",
           "parameters": [
             {
-              "id": "SETHEATTEMP",
-              "editor": "CELSIUSSET",
-              "init": "CLISPH"
+              "id": "",
+              "name": "Set Heat Setpoint",
+              "editor": "CELSIUSSET"
             }
           ]
         },
@@ -10141,9 +10086,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Cool Setpoint",
           "parameters": [
             {
-              "id": "SETCOOLTEMP",
-              "editor": "CELSIUSSET",
-              "init": "CLISPC"
+              "id": "",
+              "name": "Set Cool Setpoint",
+              "editor": "CELSIUSSET"
             }
           ]
         },
@@ -10152,9 +10097,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Mode",
           "parameters": [
             {
-              "id": "SETMODE",
-              "editor": "ITSTATMODE",
-              "init": "CLIMD"
+              "id": "",
+              "name": "Set Mode",
+              "editor": "ITSTATMODE"
             }
           ]
         },
@@ -10163,9 +10108,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Fan",
           "parameters": [
             {
-              "id": "SETFAN",
-              "editor": "ITSTATFAN",
-              "init": "CLIFS"
+              "id": "",
+              "name": "Set Fan",
+              "editor": "ITSTATFAN"
             }
           ]
         },
@@ -10174,7 +10119,8 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Schedule Mode",
           "parameters": [
             {
-              "id": "SETSCHE",
+              "id": "",
+              "name": "Set Schedule Mode",
               "editor": "ICLISMDDEG"
             }
           ]
@@ -10185,18 +10131,18 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ecomodeth",
-              "editor": "IECOMODE",
-              "init": "CLIEMD"
+              "name": "ECO Mode (Off/On)",
+              "editor": "IECOMODE"
             },
             {
               "id": "ecoLowth",
-              "editor": "ECOSET",
-              "init": "GV18"
+              "name": "ECO Low",
+              "editor": "ECOSET"
             },
             {
               "id": "ecoHighth",
-              "editor": "ECOSET",
-              "init": "GV19"
+              "name": "ECO High",
+              "editor": "ECOSET"
             }
           ]
         }
@@ -10320,9 +10266,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Heat Setpoint",
           "parameters": [
             {
-              "id": "SETHEATTEMP",
-              "editor": "FARENHEITSET",
-              "init": "CLISPH"
+              "id": "",
+              "name": "Set Heat Setpoint",
+              "editor": "FARENHEITSET"
             }
           ]
         },
@@ -10331,9 +10277,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Cool Setpoint",
           "parameters": [
             {
-              "id": "SETCOOLTEMP",
-              "editor": "FARENHEITSET",
-              "init": "CLISPC"
+              "id": "",
+              "name": "Set Cool Setpoint",
+              "editor": "FARENHEITSET"
             }
           ]
         },
@@ -10342,9 +10288,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Mode",
           "parameters": [
             {
-              "id": "SETMODE",
-              "editor": "ITSTATMODE",
-              "init": "CLIMD"
+              "id": "",
+              "name": "Set Mode",
+              "editor": "ITSTATMODE"
             }
           ]
         },
@@ -10353,9 +10299,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Fan",
           "parameters": [
             {
-              "id": "SETFAN",
-              "editor": "ITSTATFAN",
-              "init": "CLIFS"
+              "id": "",
+              "name": "Set Fan",
+              "editor": "ITSTATFAN"
             }
           ]
         },
@@ -10364,7 +10310,8 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Schedule Mode",
           "parameters": [
             {
-              "id": "SETSCHE",
+              "id": "",
+              "name": "Set Schedule Mode",
               "editor": "ICLISMDDEG"
             }
           ]
@@ -10375,18 +10322,18 @@ DYNAMIC_NODEDEFS = [
           "parameters": [
             {
               "id": "ecomodeth",
-              "editor": "IECOMODE",
-              "init": "CLIEMD"
+              "name": "ECO Mode (Off/On)",
+              "editor": "IECOMODE"
             },
             {
               "id": "ecoLowth",
-              "editor": "ECOSETF",
-              "init": "GV18"
+              "name": "ECO Low",
+              "editor": "ECOSETF"
             },
             {
               "id": "ecoHighth",
-              "editor": "ECOSETF",
-              "init": "GV19"
+              "name": "ECO High",
+              "editor": "ECOSETF"
             }
           ]
         }
@@ -10475,9 +10422,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Min Runtime",
           "parameters": [
             {
-              "id": "SETMINRUNTIME",
-              "editor": "IMINRUNTIME",
-              "init": "GV6"
+              "id": "",
+              "name": "Set Min Runtime",
+              "editor": "IMINRUNTIME"
             }
           ]
         },
@@ -10486,9 +10433,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Cool Limit",
           "parameters": [
             {
-              "id": "SETCOOLLIMIT",
-              "editor": "CELSIUSSET",
-              "init": "GV7"
+              "id": "",
+              "name": "Set Cool Limit",
+              "editor": "CELSIUSSET"
             }
           ]
         },
@@ -10497,9 +10444,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Heat Limit",
           "parameters": [
             {
-              "id": "SETHEATLIMIT",
-              "editor": "CELSIUSSET",
-              "init": "GV8"
+              "id": "",
+              "name": "Set Heat Limit",
+              "editor": "CELSIUSSET"
             }
           ]
         },
@@ -10508,9 +10455,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Mute",
           "parameters": [
             {
-              "id": "SETMUTE",
-              "editor": "IMUTE",
-              "init": "GV9"
+              "id": "",
+              "name": "Set Mute",
+              "editor": "IMUTE"
             }
           ]
         },
@@ -10519,9 +10466,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Menu Lock",
           "parameters": [
             {
-              "id": "SETMENULOCK",
-              "editor": "IMENULOCK",
-              "init": "GV10"
+              "id": "",
+              "name": "Set Menu Lock",
+              "editor": "IMENULOCK"
             }
           ]
         },
@@ -10530,9 +10477,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Master Source",
           "parameters": [
             {
-              "id": "SETMASTER",
-              "editor": "IMASTERSRC",
-              "init": "GV17"
+              "id": "",
+              "name": "Set Master Source",
+              "editor": "IMASTERSRC"
             }
           ]
         }
@@ -10621,9 +10568,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Min Runtime",
           "parameters": [
             {
-              "id": "SETMINRUNTIME",
-              "editor": "IMINRUNTIME",
-              "init": "GV6"
+              "id": "",
+              "name": "Set Min Runtime",
+              "editor": "IMINRUNTIME"
             }
           ]
         },
@@ -10632,9 +10579,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Cool Limit",
           "parameters": [
             {
-              "id": "SETCOOLLIMIT",
-              "editor": "FARENHEITSET",
-              "init": "GV7"
+              "id": "",
+              "name": "Set Cool Limit",
+              "editor": "FARENHEITSET"
             }
           ]
         },
@@ -10643,9 +10590,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Heat Limit",
           "parameters": [
             {
-              "id": "SETHEATLIMIT",
-              "editor": "FARENHEITSET",
-              "init": "GV8"
+              "id": "",
+              "name": "Set Heat Limit",
+              "editor": "FARENHEITSET"
             }
           ]
         },
@@ -10654,9 +10601,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Mute",
           "parameters": [
             {
-              "id": "SETMUTE",
-              "editor": "IMUTE",
-              "init": "GV9"
+              "id": "",
+              "name": "Set Mute",
+              "editor": "IMUTE"
             }
           ]
         },
@@ -10665,9 +10612,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Menu Lock",
           "parameters": [
             {
-              "id": "SETMENULOCK",
-              "editor": "IMENULOCK",
-              "init": "GV10"
+              "id": "",
+              "name": "Set Menu Lock",
+              "editor": "IMENULOCK"
             }
           ]
         },
@@ -10676,9 +10623,9 @@ DYNAMIC_NODEDEFS = [
           "name": "Set Master Source",
           "parameters": [
             {
-              "id": "SETMASTER",
-              "editor": "IMASTERSRC",
-              "init": "GV17"
+              "id": "",
+              "name": "Set Master Source",
+              "editor": "IMASTERSRC"
             }
           ]
         }

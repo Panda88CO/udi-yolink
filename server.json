@@ -1,3 +1,29 @@
 {
+  "credits": [
+    {
+      "title": "A NodeServer to allow integration of YoLink devices",
+      "author": "Panda88CO",
+      "version": "1.8.64",
+      "date": "2026-10-21",
+      "source": "https://github.com/Panda88CO/udi-yolink",
+      "license": "https://github.com/Panda88CO/udi-yolink/blob/main/LICENSE"
+    }
+  ],
+  "name": "YoLink",
+  "docs": "README.md",
+  "type": "python3",
+  "executable": "udi-YoLink.py",
+  "install": "install.sh",
+  "shortPoll": 60,
+  "longPoll": 3600,
+  "profile_version": "1.8.64",
+  "version": "1.8.64",
+  "restart": true,
+  "language": "python3",
+  "description": "Nodeserver to allow integration of YoLink devices",
+  "notice": "Uses Yolink OpenAPI",
+  "customParams": {
+    "UAID": "",
+    "SECRET_KEY": ""
+  }
 }
-
