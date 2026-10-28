@@ -74,4 +74,4 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 - **Schedules**: YoLink schedules are supported for on/off devices, multi-outlets, IR remotes, sprinklers, and water meters.
 - **Countdown Delays**: Remaining delay countdowns shown in ISY are estimated and tracked on the node server.
 - **SpeakerHub Messages**: Specify the number of messages desired in `NBR_TTS`, and add message text in `TTS<n>`. Restart the node server; an IoX / Admin Console restart is required for UI labels to refresh.
-- **Dynamic Profile Updates**: Dynamic JSON profiles are automatically registered upon startup. If payload debugging is needed, `profile_payload_debug.json` and `profile_payload_pruned_debug.json` are written to the node server directory.
+- **Dynamic Profile Updates**: Device profiles and custom unit labels are automatically registered upon startup.

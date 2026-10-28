@@ -10,7 +10,7 @@
     'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
     'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
     'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-    'WaterDepthSensor', 'WaterMeterMultiController', 'SprinklerV2', 'Thermostat',
+    'WaterDepthSensor', 'WaterMeterMultiController', 'WaterMeterOnly', 'Sprinkler', 'SprinklerV2', 'Thermostat',
     'SoilThcSensor'
 
     
@@ -66,6 +66,12 @@ TEMP_UNIT
 WATER_UNIT
     Select Gallon, CCF, M³, or Liter (or G, C, M, L / 0, 1, 2, 3). Default is Gallon.
 
+CALLS_PER_MIN
+    Overall YoLink API rate limit (calls per minute across all devices, default 60).
+
+DEV_CALLS_PER_MIN
+    Per-device YoLink API rate limit (calls per minute per device, default 5).
+
 NBR_TTS
     Number of SpeakerHub Text-to-Speech messages to support (see below).
 
@@ -76,12 +82,8 @@ NBR_TTS
 
     <SpeakerHub> supports up to 10 Text-to-Speech messages. You specify the number of messages desired, and then add the text of the message in TTS<n>. Restart the node server. After this, a restart of the ISY/PoI is needed to transfer the messages to the UI. The ISY/PoI only reads the file containing the messages during startup.
 
-    In configuration, TEMP_UNIT can be used to set the temperature unit to C or F (default is F).
-
     YoLink schedules are supported for On/Off devices, keys/buttons, multi-outlet devices, sprinkler controllers, and water meters.
     
-    The latest version of the node reports the latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions.
-
-    YoLink and YoLink local use the same device code.
+    The node reports the latest report time for each device.
     
     

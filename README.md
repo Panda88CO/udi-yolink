@@ -74,28 +74,12 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 3. Click **Save Changes** and **Restart** the node server.
    - *Note*: On initial setup, allow 1–2 minutes for all devices to discover and synchronize completely.
 
-## Dynamic Profiles & Debugging
+## Dynamic Profiles
 
 The node server uses modern **Dynamic JSON Profiles** to push editor and node definitions directly to IoX at runtime:
 - **Unit Customization**: Driver names and UOMs dynamically adjust to your `TEMP_UNIT` and `WATER_UNIT` preferences automatically.
-- **Payload Safety**: Large installations with dozens of devices automatically prune the profile payload to active device types, keeping MQTT messages under 60 KB.
-- **Debug Dumps**: The node server automatically writes payload debug files for inspection:
-  - `profile_payload_debug.json`: Full dynamic profile structure.
-  - `profile_payload_pruned_debug.json`: Active-node pruned structure.
+- **Payload Safety**: Large installations with dozens of devices automatically prune the profile payload to active device types, keeping messages compact.
 - **Fallback**: If dynamic profile updates are unavailable on older PG3/IoX versions, the node server automatically falls back to static profile installation (`updateProfile`).
-
-## Testing & Verification
-
-The codebase includes an automated test harness and setup file validator:
-
-- **Run all unit tests (73 tests)**:
-  ```bash
-  python3 run_tests.py
-  ```
-- **Validate setup files (NodeDefs, Editors, NLS translations)**:
-  ```bash
-  python3 CheckSetupFiles.py
-  ```
 
 ## Notes & Tips
 
