@@ -11,6 +11,8 @@ The `udiYoSchedule.py` file has been refactored to use a class hierarchy approac
 ```
 BaseScheduleNode (abstract base)
 ├── OnOffScheduleNode (Switch, Outlet, Dimmer, Manipulator)
+│   ├── SprinklerScheduleNode (Sprinkler, SprinklerV2)
+│   └── WaterMeterScheduleNode (WaterMeterController, WaterMeterMultiController)
 ├── KeyScheduleNode (InfraredRemoter)
 └── MultiOutletScheduleNode (MultiOutlet)
 ```
@@ -52,6 +54,46 @@ For devices that trigger on/off state changes at scheduled times.
 - Time value "25:00" means "not set"
 - Supports optional seconds field based on device capability
 
+#### SprinklerScheduleNode
+Inherits from `OnOffScheduleNode` for Sprinkler and SprinklerV2 watering schedules.
+
+**Supported Devices:**
+- Sprinkler
+- SprinklerV2
+
+**Schedule Parameters:**
+- `index` - Schedule index (0-9)
+- `valid` - Schedule enabled/disabled
+- `time` - Start time (HH:MM)
+- `days` - Repeat type and weekly bitmask (`{'type': 'weekly', 'value': mask}`)
+- `startDate` / `endDate` - Seasonal date constraints (defaults to `1-1` and `12-31`)
+- `waterDelay` - Duration / rain delay settings (`{'type': 'duration', 'value': 0}`)
+
+**Special Handling:**
+- Maps SprinklerV2 structure (`time`, `days`, `valid`) to generic schedule display drivers
+- Preserves repeat type and water delay settings across UI edits
+- Node ID: `YOSPRINKLERSCHEDULE` or `YOSPRINKLERSCHEDULESEC` when seconds are supported
+
+#### WaterMeterScheduleNode
+Inherits from `OnOffScheduleNode` for WaterMeterController and WaterMeterMultiController valve and leak schedules.
+
+**Supported Devices:**
+- WaterMeterController
+- WaterMeterMultiController
+
+**Schedule Parameters:**
+- `index` - Schedule number (0-9)
+- `isValid` - Schedule enabled/disabled
+- `on` / `off` - Valve or leak schedule window times (HH:MM or HH:MM:SS)
+- `week` - Weekday bitmask
+- `leakLimit` - Leak volume threshold limit (for leak schedules)
+
+**Special Handling:**
+- Configurable via `schedule_type`: `'valve'` (valve control schedules) or `'leak'` (leak detection schedules)
+- Uses device-specific API methods (`getValveSchedules`/`setValveSchedules` or `getLeakSchedules`/`setLeakSchedules`)
+- GV12 driver displays the configured leak limit value
+- Node ID: `YOWMSCHEDULE`
+
 #### KeyScheduleNode
 For infrared remote devices that transmit IR codes on schedule.
 
@@ -89,7 +131,7 @@ For multi-outlet devices with per-channel scheduling.
 The `udiYoSchedule()` function acts as a factory that instantiates the correct schedule node class based on device type:
 
 ```python
-def udiYoSchedule(polyglot, primary, address, name, yoAccess, deviceInfo):
+def udiYoSchedule(polyglot, primary, address, name, yoAccess, deviceInfo, schedule_type='valve'):
     """Factory function maintaining backward compatibility"""
     dev_type = deviceInfo.get('type', '')
     
@@ -97,7 +139,11 @@ def udiYoSchedule(polyglot, primary, address, name, yoAccess, deviceInfo):
         return KeyScheduleNode(...)
     elif dev_type in ['MultiOutlet']:
         return MultiOutletScheduleNode(...)
-    else:  # Default to OnOff
+    elif dev_type in ['SprinklerV2', 'Sprinkler']:
+        return SprinklerScheduleNode(...)
+    elif dev_type in ['WaterMeterController', 'WaterMeterMultiController']:
+        return WaterMeterScheduleNode(..., schedule_type=schedule_type)
+    else:  # Default to OnOff for Switch, Outlet, Dimmer, Manipulator, etc.
         return OnOffScheduleNode(...)
 ```
 

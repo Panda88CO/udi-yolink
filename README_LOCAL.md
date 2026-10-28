@@ -61,10 +61,11 @@ LOCAL_IP (needed for local or hybrid mode)
     Copy the IP address to LOCAL_IP.
 
 TEMP_UNIT
-    Select F or C
+    Select F or C (default is F)
 
 WATER_UNIT
-    Select Liter or Gallon     
+    Select Gallon, CCF, M³, or Liter (or G, C, M, L / 0, 1, 2, 3). Default is Gallon.
+
 NBR_TTS
     Number of SpeakerHub Text-to-Speech messages to support (see below).
 
@@ -75,12 +76,9 @@ NBR_TTS
 
     <SpeakerHub> supports up to 10 Text-to-Speech messages. You specify the number of messages desired, and then add the text of the message in TTS<n>. Restart the node server. After this, a restart of the ISY/PoI is needed to transfer the messages to the UI. The ISY/PoI only reads the file containing the messages during startup.
 
-    In configuration, TEMP_UNIT can be used to set the temperature unit to C, F, or K.
+    In configuration, TEMP_UNIT can be used to set the temperature unit to C or F (default is F).
 
-    YoLink schedules are now supported.
-    
-    Remaining delay time shown in ISY is estimated - countdown is running on the node server, not the device.
-    Schedules are not supported (you can use ISY for the same purpose, and the YoLink app can be used to set schedules).
+    YoLink schedules are supported for On/Off devices, keys/buttons, multi-outlet devices, sprinkler controllers, and water meters.
     
     The latest version of the node reports the latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions.
 

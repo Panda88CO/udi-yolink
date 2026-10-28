@@ -1,32 +1,29 @@
 # udi-yolink
-    Support for YoLink devices.
-    
-## Yolink Node server
-    Current list of devices supported is as follows:
+Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x).
 
-    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-    'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-    'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
-    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-    'WaterDepthSensor', 'WaterMeterMultiController', 'SprinklerV2', 'Thermostat',
-    'SoilThcSensor'
+## Supported YoLink Devices
 
+The node server supports monitoring and controlling the following YoLink device types:
 
-    Code uses MQTT communications.
-    ###SHORT POLL sends a heartbeat to the ISY - default is 60 seconds.
-    ###LONG POLL checks the online state of the devices (if a device goes offline, it will not be detected until this is called - for battery-operated devices it may take even longer, as data appears to be cached in the cloud - battery devices are not queried as part of the LONG POLL).
-    A device will be redetected once it is back online.
-    Default is 3600 (1 hour).  
+- **Switches & Outlets**: `Switch`, `Dimmer`, `Outlet`, `MultiOutlet`
+- **Sensors**: `THSensor` (Temperature & Humidity), `DoorSensor`, `MotionSensor`, `LeakSensor`, `VibrationSensor`, `SoilThcSensor`, `COSmokeSensor`, `PowerFailureAlarm`, `WaterDepthSensor`
+- **Water Management & Valves**: `WaterMeterController`, `WaterMeterMultiController`, `WaterMeterOnly`, `Sprinkler`, `SprinklerV2`, `Manipulator` (Valve Controller)
+- **Security & Access**: `Lock`, `LockV2`, `GarageDoor`, `Finger`, `Siren`, `SmartRemoter`, `InfraredRemoter`
+- **Hubs**: `Hub`, `BatteryHub`, `SpeakerHub`
+- **Schedules**: Built-in schedule support for on/off devices, multi-outlets, IR remotes, sprinklers, and water meters.
 
-    Note: if set too often, it will affect battery consumption (especially the Manipulator). If set to more than 2 hours, the token will expire (but a new one should be obtained).
+## Communication & Polling
 
+- **Short Poll (default: 60s)**: Sends a heartbeat to the ISY and verifies whether pending command replies have updated device state.
+- **Long Poll (default: 3600s / 1 hour)**: Queries device online/offline states. Battery-operated devices rely on heartbeats. Setting long poll higher than 2 hours is not recommended to ensure tokens stay refreshed.
 
-## Code
-    Code uses V2 of the YoLink API - PAC/UAC authentication - the node only supports 1 home at a time. More homes can have separate PAC/UAC generated in the YoLink app.
+## Code & Architecture
 
-    Coded in Python 3 - MIT license.
+- Uses V2 of the YoLink OpenAPI with PAC/UAC (User Access Credentials) authentication. Each node server instance supports 1 home.
+- Uses dynamic JSON profile generation (`updateJsonProfile`) with automatic active-node payload pruning (<60 KB) and fallback to static profile updates.
+- Coded in Python 3 with standard MIT license.
 
-## Installation
+## Installation & Configuration
 
 ### How to Obtain Credentials from the YoLink App
 
@@ -57,23 +54,24 @@ To connect the node server to your YoLink account, you need your **UAID** and **
 In your browser, open the Polyglot (PG3/PG3x) dashboard:
 1. Open the **YoLink** node server details and navigate to the **Configuration** tab (scroll down to the *Custom Configuration Parameters* section).
 2. Configure the following parameters:
-   - **`UAID`**: Paste the copied UAID.
-   - **`SECRET_KEY`**: Paste the copied SecretKey.
-   - **`TEMP_UNIT`** *(optional)*: Temperature display unit:
-     - `F` for Fahrenheit (UOM 17)
-     - `C` for Celsius (UOM 4) — *default*
-   - **`WATER_UNIT`** *(optional)*: Water volume display unit:
-     - `G` or `0` for Gallons (UOM 69) — *default*
-     - `C` or `1` for CCF / Hundred Cubic Feet (UOM 6)
-     - `M` or `2` for M³ / Cubic Meters (UOM 8)
-     - `L` or `3` for Liters (UOM 35)
-   - **`NBR_TTS`** *(optional)*: Number of SpeakerHub Text-to-Speech message slots to allocate (1–10).
-3. Click **Save Changes** and **Restart** the node server.
-   - *Note*: On initial setup, it may occasionally take 1–2 restarts for all devices to synchronize completely. Sometimes a reboot of the ISY / Admin Console is needed for all node definitions to refresh.
 
-## Notes 
-    
-    Remaining delay time shown in ISY is estimated - countdown is running on the node server, not the device.
-    Schedules are not supported (you can use ISY for the same purpose, and the YoLink app can be used to set schedules).
-    The latest version of the node reports the latest report time for each device - the AC home automation will get a time.now() option so seconds between the two can be used in conditions.
-    
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| **`UAID`** | **Yes** | — | User Access ID obtained from the YoLink app. |
+| **`SECRET_KEY`** | **Yes** | — | Secret Key obtained from the YoLink app. |
+| **`TEMP_UNIT`** | Optional | `C` | Temperature display unit: `F` for Fahrenheit (UOM 17) or `C` for Celsius (UOM 4). |
+| **`WATER_UNIT`** | Optional | `G` | Water volume unit: `G` or `0` for Gallons (UOM 69), `C` or `1` for CCF (UOM 6), `M` or `2` for M³ (UOM 8), `L` or `3` for Liters (UOM 35). |
+| **`CALLS_PER_MIN`** | Optional | `60` | Overall YoLink API rate limit (calls per minute across all devices). |
+| **`DEV_CALLS_PER_MIN`** | Optional | `5` | Per-device YoLink API rate limit (calls per minute per device). |
+| **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). |
+
+3. Click **Save Changes** and **Restart** the node server.
+   - *Note*: On initial setup, allow 1–2 minutes for all devices to synchronize completely.
+
+## Notes
+
+- **Single Home per Instance**: Each node server instance connects to one YoLink home. If you have multiple homes, create credentials for each home and run separate node server instances.
+- **Schedules**: YoLink schedules are supported for on/off devices, multi-outlets, IR remotes, sprinklers, and water meters.
+- **Countdown Delays**: Remaining delay countdowns shown in ISY are estimated and tracked on the node server.
+- **SpeakerHub Messages**: Specify the number of messages desired in `NBR_TTS`, and add message text in `TTS<n>`. Restart the node server; an IoX / Admin Console restart is required for UI labels to refresh.
+- **Dynamic Profile Updates**: Dynamic JSON profiles are automatically registered upon startup. If payload debugging is needed, `profile_payload_debug.json` and `profile_payload_pruned_debug.json` are written to the node server directory.
