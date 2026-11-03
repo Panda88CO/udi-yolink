@@ -71,6 +71,8 @@ class udiYoCOSmokeSensor(udi_interface.Node):
         self.devInfo =  deviceInfo
 
         self.temp_unit = self.yoAccess.get_temp_unit()
+        if (self.temp_unit == 1) or (isinstance(self.temp_unit, str) and (self.temp_unit.strip().upper().startswith('F') or self.temp_unit.strip() == '1')):
+            self.id = 'YOCOSMOKESENSF'
         
         self.yoCOSmokeSensor  = None
         self.node_ready = False

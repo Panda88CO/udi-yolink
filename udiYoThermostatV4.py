@@ -69,7 +69,8 @@ class udiYoThermostat(udi_interface.Node):
         self.main_node_ready = False
         self.sub_nodes_ready = False
         
-        self.id = 'YOTHERMOSTAT'
+        is_fahrenheit = (self.temp_unit == 1) or (isinstance(self.temp_unit, str) and (self.temp_unit.strip().upper().startswith('F') or self.temp_unit.strip() == '1'))
+        self.id = 'YOTHERMOSTATF' if is_fahrenheit else 'YOTHERMOSTAT'
 
         # Subscribe to events
         polyglot.subscribe(polyglot.START, self.start, self.address)
@@ -503,6 +504,8 @@ class udiYoThermostatProperties(udi_interface.Node):
         self.poly = polyglot
         self.parent_node = thermostat_node
         self.temp_unit = thermostat_node.temp_unit
+        is_fahrenheit = (self.temp_unit == 1) or (isinstance(self.temp_unit, str) and (self.temp_unit.strip().upper().startswith('F') or self.temp_unit.strip() == '1'))
+        self.id = 'YOTHERMPROPF' if is_fahrenheit else 'YOTHERMPROP'
         self.node_ready = False
         self.n_queue = []
 

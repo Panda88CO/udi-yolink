@@ -64,7 +64,7 @@ class udiYoTHsensor(udi_interface.Node):
             {'driver': 'GV15', 'value': 0, 'uom': 4, 'name': 'High Temp 24H'},
             {'driver': 'GV16', 'value': 0, 'uom': 51, 'name': 'Low Humidity  24H'},
             {'driver': 'GV17', 'value': 0, 'uom': 51, 'name': 'High Humidity 24H'},
-            {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Sensor Temperature'},
+            {'driver': 'ST', 'value': 0, 'uom': 4, 'name': 'Sensor Temperature'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},            
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},            
              {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},    
@@ -89,13 +89,14 @@ class udiYoTHsensor(udi_interface.Node):
 
 
         self.cmd_state = self.retrieve_cmd_state()
+        is_fahrenheit = (self.temp_unit == 1) or (isinstance(self.temp_unit, str) and (self.temp_unit.strip().upper().startswith('F') or self.temp_unit.strip() == '1'))
         model = str(self.devInfo['modelName'][:6])
         if model in ['YS8017', 'YS8014', 'YS8004', 'YS8008']:
             self.meas_support = ['temp']
-            self.id = 'YOTSENS'
+            self.id = 'YOTSENSF' if is_fahrenheit else 'YOTSENS'
         else:
             self.meas_support = ['temp', 'hum']
-            self.id = 'YOTHSENS'
+            self.id = 'YOTHSENSF' if is_fahrenheit else 'YOTHSENS'
 
         self.alarm_state = False
         self.sensordata_24_hours = {}
