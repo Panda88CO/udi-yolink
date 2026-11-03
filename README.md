@@ -1,4 +1,4 @@
-# udi-yolink (v1.8.65)
+# udi-yolink (v1.8.66)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x) and IoX / eisy / Polisy.
 
 Suggested installation is on PG3x from version 1.1.x going forward. PG3x is updated to Python 3.11+. It still runs under PG3, but PG3x is strongly recommended.
