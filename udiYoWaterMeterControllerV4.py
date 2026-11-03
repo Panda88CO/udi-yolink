@@ -48,7 +48,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             {'driver': 'GV2', 'value': 99, 'uom': 25, 'name': 'Water Meter Recent Use'},  #wateruse recent
             {'driver': 'GV3', 'value': 99, 'uom': 44, 'name': 'Water Meter Recent Duration'},  #Wateruse duration
             {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Water Temperature'},            
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Water Temperature'},            
             #{'driver': 'GV4', 'value': 99, 'uom': 25}, #Measure Unit
             {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Leak Alarm'}, #alarm
             {'driver': 'GV6', 'value': 99, 'uom': 25, 'name': 'Amount Overrun Alarm'}, 
@@ -87,7 +87,8 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.ValveSupported = True
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.water_unit = self.yoAccess.get_water_unit()  
-        self.id = 'YOWATERMETERCTRL'
+        is_fahrenheit = (self.temp_unit == 1) or (isinstance(self.temp_unit, str) and (self.temp_unit.strip().upper().startswith('F') or self.temp_unit.strip() == '1'))
+        self.id = 'YOWATERMETERCTRLF' if is_fahrenheit else 'YOWATERMETERCTRL'
         model = str(deviceInfo['modelName'][:6])  
         if model in ['YS5007']:
             self.ValveSupported = False

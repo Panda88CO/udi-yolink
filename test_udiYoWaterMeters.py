@@ -60,7 +60,7 @@ class TestWaterMeterController(unittest.TestCase):
         return None
 
     def test_initialization_drivers_and_uoms(self):
-        self.assertEqual(self.node.id, 'YOWATERMETERCTRL')
+        self.assertEqual(self.node.id, 'YOWATERMETERCTRLF')
         self.assertEqual(self.node.temp_unit, 1)
         self.assertEqual(self.node.water_unit, 0)
         # Check that drivers have been assigned display names and default UOMs

@@ -33,7 +33,7 @@ class udiYoLeakSensor(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Water State (Legacy)'}, # legacy basic leak 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'}, #batlvl  GV1 - remember to notify
             {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Command Setting'}, #Command state
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Sensor Temperature'}, # dev temp
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Sensor Temperature'}, # dev temp
             {'driver': 'GV3', 'value': int(time.time()), 'uom': 151, 'name': 'Last State Change'}, #latest change 
 
             {'driver': 'GV4', 'value': 0, 'uom': 25, 'name': 'Sensor Sound'}, #Beeping

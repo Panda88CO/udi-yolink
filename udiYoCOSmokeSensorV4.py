@@ -54,7 +54,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
             {'driver': 'GV4', 'value': 99, 'uom': 25, 'name': 'Sensor Battery Level'}, 
             {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Self-check'}, 
             {'driver': 'GV7', 'value': 0,  'uom': 25, 'name': 'Command Setting'}, 
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Sensor Temperature'},
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Sensor Temperature'},
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Alarm'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},   

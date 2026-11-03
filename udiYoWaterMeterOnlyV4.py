@@ -54,7 +54,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
             #{'driver': 'GV8', 'value': 99, 'uom': 25},                                              
             {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Reminder Alarm'}, 
             {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Water Temperature'},
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Water Temperature'},
             {'driver': 'GV11', 'value': 99, 'uom' : 25, 'name': 'Open Reminder Alarm'}, # Unit
             {'driver': 'GV12', 'value': 99, 'uom' : 6, 'name': 'Valve Error Alarm'}, #  leak limit
             {'driver': 'GV13', 'value': 99, 'uom' : 25, 'name': 'High Temp Alarm'}, # auto shutoffg
@@ -76,7 +76,8 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.yoAccess = yoAccess
         self.temp_unit = self.yoAccess.get_temp_unit()
         self.water_unit = self.yoAccess.get_water_unit()
-        self.id = 'YOWATERMETERONLY'
+        is_fahrenheit = (self.temp_unit == 1) or (isinstance(self.temp_unit, str) and (self.temp_unit.strip().upper().startswith('F') or self.temp_unit.strip() == '1'))
+        self.id = 'YOWATERMETERONLYF' if is_fahrenheit else 'YOWATERMETERONLY'
 
         self.devInfo =  deviceInfo
         self.yoWaterCtrl= None

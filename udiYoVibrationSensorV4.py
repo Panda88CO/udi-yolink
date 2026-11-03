@@ -39,7 +39,7 @@ class udiYoVibrationSensor(udi_interface.Node):
             {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Vibration State (Legacy)'}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Sensor Battery Level'},
             {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Command Setting'},            
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Sensor Temperature'},
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Sensor Temperature'},
             {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Vibration State'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},    
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},

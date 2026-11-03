@@ -328,7 +328,7 @@ class udiYoSmartRemoter(udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Remote Type'},
             {'driver': 'GV3', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
-            {'driver': 'CLITEMP', 'value': 99, 'uom': 25, 'name': 'Sensor Temperature'},
+            {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Sensor Temperature'},
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
             ]

@@ -1486,7 +1486,7 @@
 <nodeDef id="YOSOILSENSORF" nls="nlssoilsensor">
       <editors />
       <sts>
-         <st id="ST" editor="FARENHEIT" />
+         <st id="ST" editor="CONDUCTIVITY" />
          <st id="CLITEMP" editor="FARENHEIT" />
          <st id="GV1" editor="ALARM" />
          <st id="GV2" editor="ALARM" />
@@ -1503,8 +1503,8 @@
          <st id="GV11" editor="FARENHEIT" />
          <st id="GV12" editor="HUMIDITY" />
          <st id="GV13" editor="HUMIDITY" />
-         <st id="GV14" editor="FARENHEIT" />
-         <st id="GV15" editor="FARENHEIT" />
+         <st id="GV14" editor="CONDUCTIVITY" />
+         <st id="GV15" editor="CONDUCTIVITY" />
          <st id="GV20" editor="SUSPENDSTATE" />
          <st id="GV30" editor="STATUS" />
          <st id="TIME" editor="UNIXTIME" />                              
