@@ -976,9 +976,9 @@
       <sts>
          <st id="ST" editor="WATERRUN" />
          <st id="GV0" editor="MANSTATE" />
-         <st id="GV1" editor="LITER" />
-         <st id="GV10" editor="LITER" />     
-         <st id="GV2" editor="LITER" /> 
+         <st id="GV1" editor="FLOW" />
+         <st id="GV10" editor="FLOW" />     
+         <st id="GV2" editor="FLOW" /> 
          <st id="GV3" editor="MINUTES" />  
          <st id="BATLVL" editor="BATLEVEL" />
          <st id="CLITEMP" editor="CELSIUS" />
@@ -991,7 +991,7 @@
          <st id="GV12" editor="ALARM" /> 
          <st id="GV13" editor="ALARM" /> 
          <st id="GV14" editor="ALARM" /> 
-         <st id="GV22" editor="LITER" /> 
+         <st id="GV22" editor="FLOW" /> 
          <st id="GV23" editor="COUNT" />  
          <st id="GV24" editor="MINUTES" />
          <st id="GV25" editor="ENABLE" /> 
@@ -1029,9 +1029,9 @@
       <sts>
          <st id="ST" editor="WATERRUN" />
          <st id="GV0" editor="MANSTATE" />
-         <st id="GV1" editor="LITER" />
-         <st id="GV10" editor="LITER" />     
-         <st id="GV2" editor="LITER" /> 
+         <st id="GV1" editor="FLOW" />
+         <st id="GV10" editor="FLOW" />     
+         <st id="GV2" editor="FLOW" /> 
          <st id="GV3" editor="MINUTES" />  
          <st id="BATLVL" editor="BATLEVEL" />
          <st id="CLITEMP" editor="CELSIUS" />
@@ -1044,7 +1044,7 @@
          <st id="GV12" editor="ALARM" /> 
          <st id="GV13" editor="ALARM" /> 
          <st id="GV14" editor="ALARM" /> 
-         <st id="GV22" editor="LITER" /> 
+         <st id="GV22" editor="FLOW" /> 
          <st id="GV23" editor="COUNT" />  
          <st id="GV24" editor="MINUTES" />
          <st id="GV25" editor="ENABLE" /> 
@@ -1080,9 +1080,9 @@
       <sts>
          <st id="ST" editor="WATERRUN" />
          <st id="GV0" editor="MANSTATE" />
-         <st id="GV1" editor="GALLON" />
-         <st id="GV10" editor="GALLON" />     
-         <st id="GV2" editor="GALLON" /> 
+         <st id="GV1" editor="FLOW" />
+         <st id="GV10" editor="FLOW" />     
+         <st id="GV2" editor="FLOW" /> 
          <st id="GV3" editor="MINUTES" />  
          <st id="BATLVL" editor="BATLEVEL" />
          <st id="CLITEMP" editor="FARENHEIT" />
@@ -1095,7 +1095,7 @@
          <st id="GV12" editor="ALARM" /> 
          <st id="GV13" editor="ALARM" /> 
          <st id="GV14" editor="ALARM" /> 
-         <st id="GV22" editor="GALLON" /> 
+         <st id="GV22" editor="FLOW" /> 
          <st id="GV23" editor="COUNT" />  
          <st id="GV24" editor="MINUTES" />
          <st id="GV25" editor="ENABLE" /> 
@@ -1171,16 +1171,16 @@
       <sts>
          <st id="ST" editor="WATERRUN" />
          <st id="GV0" editor="MANSTATE" />
-         <st id="GV1" editor="LITER" />
-         <st id="GV10" editor="LITER" />     
-         <st id="GV2" editor="LITER" /> 
+         <st id="GV1" editor="FLOW" />
+         <st id="GV10" editor="FLOW" />     
+         <st id="GV2" editor="FLOW" /> 
          <st id="GV3" editor="MINUTES" />  
          <st id="GV6" editor="ALARM" /> 
          <st id="GV7" editor="ALARM" /> 
          <st id="GV8" editor="ALARM" /> 
          <st id="GV9" editor="ALARM" />         
          <st id="GV12" editor="ALARM" /> 
-         <st id="GV22" editor="LITER" /> 
+         <st id="GV22" editor="FLOW" /> 
          <st id="GV23" editor="COUNT" />  
          <st id="GV24" editor="MINUTES" />
          <st id="GV25" editor="ENABLE" /> 
@@ -1198,9 +1198,9 @@
             <cmd id="VOPEN" /> 
             <cmd id="VCLOSE" /> 
             <cmd id="SETATTRIB">
-               <p id="LLIMIT" editor="LITERSET"  /> 
+               <p id="LLIMIT" editor="LEAKLIMIT"  /> 
                <p id="LOFF" editor="ENABLESET" />       
-               <p id="ORLIMIT" editor="LITERSET"  /> 
+               <p id="ORLIMIT" editor="LEAKLIMIT"  /> 
                <p id="OROFF" editor="ENABLESET"  />   
                <p id="ORTLIMIT" editor="MINUTESSET" /> 
                <p id="ORTOFF" editor="ENABLESET"/>   
@@ -1213,16 +1213,16 @@
       <sts>
          <st id="ST" editor="WATERRUN" />
          <st id="GV0" editor="MANSTATE" />
-         <st id="GV1" editor="LITER" />
-         <st id="GV10" editor="LITER" />     
-         <st id="GV2" editor="LITER" /> 
+         <st id="GV1" editor="FLOW" />
+         <st id="GV10" editor="FLOW" />     
+         <st id="GV2" editor="FLOW" /> 
          <st id="GV3" editor="MINUTES" />  
          <st id="GV6" editor="ALARM" /> 
          <st id="GV7" editor="ALARM" /> 
          <st id="GV8" editor="ALARM" /> 
          <st id="GV9" editor="ALARM" />         
          <st id="GV12" editor="ALARM" /> 
-         <st id="GV22" editor="LITER" /> 
+         <st id="GV22" editor="FLOW" /> 
          <st id="GV23" editor="COUNT" />  
          <st id="GV24" editor="MINUTES" />
          <st id="GV25" editor="ENABLE" /> 
@@ -1240,9 +1240,9 @@
             <cmd id="VOPEN" /> 
             <cmd id="VCLOSE" /> 
             <cmd id="SETATTRIB">
-               <p id="LLIMIT" editor="LITERSET"  /> 
+               <p id="LLIMIT" editor="LEAKLIMIT"  /> 
                <p id="LOFF" editor="ENABLESET" />       
-               <p id="ORLIMIT" editor="LITERSET"  /> 
+               <p id="ORLIMIT" editor="LEAKLIMIT"  /> 
                <p id="OROFF" editor="ENABLESET"  />   
                <p id="ORTLIMIT" editor="MINUTESSET" /> 
                <p id="ORTOFF" editor="ENABLESET"/>   
@@ -1255,16 +1255,16 @@
       <sts>
          <st id="ST" editor="WATERRUN" />
          <st id="GV0" editor="MANSTATE" />
-         <st id="GV1" editor="GALLON" />
-         <st id="GV10" editor="GALLON" />     
-         <st id="GV2" editor="GALLON" /> 
+         <st id="GV1" editor="FLOW" />
+         <st id="GV10" editor="FLOW" />     
+         <st id="GV2" editor="FLOW" /> 
          <st id="GV3" editor="MINUTES" />  
          <st id="GV6" editor="ALARM" /> 
          <st id="GV7" editor="ALARM" /> 
          <st id="GV8" editor="ALARM" /> 
          <st id="GV9" editor="ALARM" />         
          <st id="GV12" editor="ALARM" /> 
-         <st id="GV22" editor="GALLON" /> 
+         <st id="GV22" editor="FLOW" /> 
          <st id="GV23" editor="COUNT" />          
          <st id="GV24" editor="MINUTES" />  
          <st id="GV25" editor="ENABLE" /> 
@@ -1282,9 +1282,9 @@
             <cmd id="VOPEN" /> 
             <cmd id="VCLOSE" /> 
             <cmd id="SETATTRIB">
-               <p id="LLIMIT" editor="GALLONSET"  /> 
+               <p id="LLIMIT" editor="LEAKLIMIT"  /> 
                <p id="LOFF" editor="ENABLESET" />       
-               <p id="ORLIMIT" editor="GALLONSET"  /> 
+               <p id="ORLIMIT" editor="LEAKLIMIT"  /> 
                <p id="OROFF" editor="ENABLESET"  />   
                <p id="ORTLIMIT" editor="MINUTESSET" /> 
                <p id="ORTOFF" editor="ENABLESET"/>   

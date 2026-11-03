@@ -1371,138 +1371,6 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "LITER",
-    "ranges": [
-      {
-        "uom": "35",
-        "min": 0,
-        "max": 100000,
-        "prec": 1
-      },
-      {
-        "uom": "69",
-        "min": 0,
-        "max": 10000,
-        "prec": 1
-      },
-      {
-        "uom": "6",
-        "min": 0,
-        "max": 10000,
-        "prec": 1
-      },
-      {
-        "uom": "8",
-        "min": 0,
-        "max": 10000,
-        "prec": 2
-      },
-      {
-        "uom": "25",
-        "subset": "0,99",
-        "names": {
-          "0": "Unknown",
-          "99": "Unknown/Not reported"
-        }
-      }
-    ]
-  },
-  {
-    "id": "LITERSET",
-    "ranges": [
-      {
-        "uom": "35",
-        "min": 0,
-        "max": 100000,
-        "prec": 1
-      },
-      {
-        "uom": "69",
-        "min": 0,
-        "max": 10000,
-        "prec": 1
-      },
-      {
-        "uom": "6",
-        "min": 0,
-        "max": 10000,
-        "prec": 1
-      },
-      {
-        "uom": "8",
-        "min": 0,
-        "max": 10000,
-        "prec": 2
-      }
-    ]
-  },
-  {
-    "id": "GALLON",
-    "ranges": [
-      {
-        "uom": "69",
-        "min": 0,
-        "max": 10000,
-        "prec": 1
-      },
-      {
-        "uom": "35",
-        "min": 0,
-        "max": 100000,
-        "prec": 1
-      },
-      {
-        "uom": "6",
-        "min": 0,
-        "max": 10000,
-        "prec": 1
-      },
-      {
-        "uom": "8",
-        "min": 0,
-        "max": 10000,
-        "prec": 2
-      },
-      {
-        "uom": "25",
-        "subset": "0,99",
-        "names": {
-          "0": "Unknown",
-          "99": "Unknown/Not reported"
-        }
-      }
-    ]
-  },
-  {
-    "id": "GALLONSET",
-    "ranges": [
-      {
-        "uom": "69",
-        "min": 0,
-        "max": 10000,
-        "prec": 1
-      },
-      {
-        "uom": "35",
-        "min": 0,
-        "max": 100000,
-        "prec": 1
-      },
-      {
-        "uom": "6",
-        "min": 0,
-        "max": 10000,
-        "prec": 1
-      },
-      {
-        "uom": "8",
-        "min": 0,
-        "max": 10000,
-        "prec": 2
-      }
-    ]
-  },
-  {
     "id": "FLOW",
     "ranges": [
       {
@@ -5590,17 +5458,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV1",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Current No Water Alarm"
       },
       {
         "id": "GV10",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Time for Latest operation Update"
       },
       {
         "id": "GV2",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "High Temp Alarm"
       },
       {
@@ -5665,7 +5533,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV22",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Off Sec"
       },
       {
@@ -5804,17 +5672,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV1",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Recent Use"
       },
       {
@@ -5879,7 +5747,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV22",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Overrun Amount 24H Limit"
       },
       {
@@ -6010,17 +5878,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV1",
-        "editor": "GALLON",
+        "editor": "FLOW",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "GALLON",
+        "editor": "FLOW",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "GALLON",
+        "editor": "FLOW",
         "name": "Water Meter Recent Use"
       },
       {
@@ -6085,7 +5953,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV22",
-        "editor": "GALLON",
+        "editor": "FLOW",
         "name": "Overrun Amount 24H Limit"
       },
       {
@@ -6330,17 +6198,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV1",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Recent Use"
       },
       {
@@ -6375,7 +6243,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV22",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Overrun Amount 24H Limit"
       },
       {
@@ -6439,7 +6307,7 @@ DYNAMIC_NODEDEFS = [
             {
               "id": "LLIMIT",
               "name": "Leak Limit",
-              "editor": "LITERSET"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
@@ -6449,7 +6317,7 @@ DYNAMIC_NODEDEFS = [
             {
               "id": "ORLIMIT",
               "name": "Overrun Limit",
-              "editor": "LITERSET"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
@@ -6492,17 +6360,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV1",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Water Meter Recent Use"
       },
       {
@@ -6537,7 +6405,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV22",
-        "editor": "LITER",
+        "editor": "FLOW",
         "name": "Overrun Amount 24H Limit"
       },
       {
@@ -6601,7 +6469,7 @@ DYNAMIC_NODEDEFS = [
             {
               "id": "LLIMIT",
               "name": "Leak Limit",
-              "editor": "LITERSET"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
@@ -6611,7 +6479,7 @@ DYNAMIC_NODEDEFS = [
             {
               "id": "ORLIMIT",
               "name": "Overrun Limit",
-              "editor": "LITERSET"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
@@ -6654,17 +6522,17 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV1",
-        "editor": "GALLON",
+        "editor": "FLOW",
         "name": "Water Meter Total"
       },
       {
         "id": "GV10",
-        "editor": "GALLON",
+        "editor": "FLOW",
         "name": "Water Meter Day Use"
       },
       {
         "id": "GV2",
-        "editor": "GALLON",
+        "editor": "FLOW",
         "name": "Water Meter Recent Use"
       },
       {
@@ -6699,7 +6567,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV22",
-        "editor": "GALLON",
+        "editor": "FLOW",
         "name": "Overrun Amount 24H Limit"
       },
       {
@@ -6763,7 +6631,7 @@ DYNAMIC_NODEDEFS = [
             {
               "id": "LLIMIT",
               "name": "Leak Limit",
-              "editor": "GALLONSET"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "LOFF",
@@ -6773,7 +6641,7 @@ DYNAMIC_NODEDEFS = [
             {
               "id": "ORLIMIT",
               "name": "Overrun Limit",
-              "editor": "GALLONSET"
+              "editor": "LEAKLIMIT"
             },
             {
               "id": "OROFF",
