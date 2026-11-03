@@ -44,7 +44,7 @@ class udiYoWaterMeterOnly(udi_interface.Node):
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},  # Water flowing
             #{'driver': 'GV0', 'value': 99, 'uom': 25},
             {'driver': 'GV1', 'value': 0, 'uom': 69, 'name': 'Water Meter Total'}, #water use total
-            {'driver': 'GV10', 'value': 99, 'uom': 25, 'name': 'Water Meter Day Use'}, #water use daily             
+            {'driver': 'GV10', 'value': 99, 'uom': 69, 'name': 'Water Meter Day Use'}, #water use daily             
             {'driver': 'GV2', 'value': 0, 'uom': 69, 'name': 'Water Meter Recent Use'},  #wateruse recent
             {'driver': 'GV3', 'value': 0, 'uom': 44, 'name': 'Water Meter Recent Duration'},  #Wateruse duration
             #{'driver': 'GV4', 'value': 99, 'uom': 25}, #alarm

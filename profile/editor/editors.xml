@@ -258,17 +258,29 @@
   </editor>
   <editor id="LITER">
     <range uom="35" min="0" max="100000" prec="1" />
+    <range uom="69" min="0" max="10000" prec="1" />
+    <range uom="6" min="0" max="10000" prec="1" />
+    <range uom="8" min="0" max="10000" prec="2" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
   <editor id="LITERSET">
     <range uom="35" min="0" max="100000" prec="1" />
+    <range uom="69" min="0" max="10000" prec="1" />
+    <range uom="6" min="0" max="10000" prec="1" />
+    <range uom="8" min="0" max="10000" prec="2" />
   </editor>  
   <editor id="GALLON">
     <range uom="69" min="0" max="10000" prec="1" />
+    <range uom="35" min="0" max="100000" prec="1" />
+    <range uom="6" min="0" max="10000" prec="1" />
+    <range uom="8" min="0" max="10000" prec="2" />
     <range uom="25" subset="0,99" nls="error" />
   </editor>
     <editor id="GALLONSET">
     <range uom="69" min="0" max="10000" prec="1" />
+    <range uom="35" min="0" max="100000" prec="1" />
+    <range uom="6" min="0" max="10000" prec="1" />
+    <range uom="8" min="0" max="10000" prec="2" />
   </editor>
   <editor id="FLOW">
     <range uom="69" min="0" max="10000" prec="1" />

@@ -1265,8 +1265,8 @@
          <st id="GV9" editor="ALARM" />         
          <st id="GV12" editor="ALARM" /> 
          <st id="GV22" editor="GALLON" /> 
-         <st id="GV23" editor="MINUTES" />          
-         <st id="GV24" editor="COUNT" />  
+         <st id="GV23" editor="COUNT" />          
+         <st id="GV24" editor="MINUTES" />  
          <st id="GV25" editor="ENABLE" /> 
          <st id="GV26" editor="ENABLE" /> 
          <st id="GV27" editor="ENABLE" /> 

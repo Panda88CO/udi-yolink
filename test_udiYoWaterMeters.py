@@ -67,7 +67,10 @@ class TestWaterMeterController(unittest.TestCase):
         driver_map = {d['driver']: d for d in self.node.drivers}
         self.assertIn('ST', driver_map)
         self.assertIn('GV1', driver_map)
-        self.assertEqual(driver_map['GV1']['uom'], 25)
+        self.assertEqual(driver_map['GV1']['uom'], 69)
+        self.assertEqual(driver_map['GV10']['uom'], 69)
+        self.assertEqual(driver_map['GV2']['uom'], 69)
+        self.assertEqual(driver_map['GV22']['uom'], 69)
 
     def test_update_data_volume_conversions_gallons(self):
         self.node.meter_unit = 3  # Device measures in Liters
@@ -203,9 +206,18 @@ class TestWaterMeterMultiController(unittest.TestCase):
         sub_node.ISYwater_unit = 0
         sub_node.ISYmeter_uom = 69
 
+        self.assertEqual(sub_node.id, 'YOWATERMETERSUBG')
         sub_node.updateData()
         # 1000 Liters * 0.264172 = 264.2 Gallons (total meter)
         sub_node.node.setDriver.assert_any_call('GV10', 264.2, True, False, uom=69)
+
+        # Test submeter initialized with liters (water_unit=3)
+        yo_access_liter = test_helper.MockYoAccess(water_unit=3)
+        with patch.object(udiYoSubWaterMeter, 'wait_for_node_done', return_value=None):
+            sub_node_liter = udiYoSubWaterMeter(
+                poly, 'primary_addr', 'sub_addr_1', 'Meter CH2', 1, yo_access_liter, mock_ctrl
+            )
+        self.assertEqual(sub_node_liter.id, 'YOWATERMETERSUB')
 
 
 class TestSprinkler2(unittest.TestCase):

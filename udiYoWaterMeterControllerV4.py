@@ -43,9 +43,9 @@ class udiYoWaterMeterController(udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Water Running'}, # Water flowing
             {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Valve State'},
-            {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Water Meter Total'}, #water use total
-            {'driver': 'GV10', 'value': 99, 'uom': 25, 'name': 'Water Meter Day Use'}, #water use daily             
-            {'driver': 'GV2', 'value': 99, 'uom': 25, 'name': 'Water Meter Recent Use'},  #wateruse recent
+            {'driver': 'GV1', 'value': 99, 'uom': 69, 'name': 'Water Meter Total'}, #water use total
+            {'driver': 'GV10', 'value': 99, 'uom': 69, 'name': 'Water Meter Day Use'}, #water use daily             
+            {'driver': 'GV2', 'value': 99, 'uom': 69, 'name': 'Water Meter Recent Use'},  #wateruse recent
             {'driver': 'GV3', 'value': 99, 'uom': 44, 'name': 'Water Meter Recent Duration'},  #Wateruse duration
             {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
             {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Water Temperature'},            
@@ -63,7 +63,7 @@ class udiYoWaterMeterController(udi_interface.Node):
             #{'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             #{'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
             #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
-            {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Overrun Amount 24H Limit'}, #LeakLimit
+            {'driver': 'GV22', 'value': 99, 'uom': 69, 'name': 'Overrun Amount 24H Limit'}, #LeakLimit
             {'driver': 'GV23', 'value': 99, 'uom': 25, 'name': 'Overrun Duration Once Limit'}, #Overrtun limit
             {'driver': 'GV24', 'value': 99, 'uom': 25, 'name': 'Overrun Count 24H Limit'}, #Overrun Time
     

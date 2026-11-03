@@ -321,10 +321,10 @@ class udiYoSubWaterMeter(udi_interface.Node):
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Water Running'}, # Water flowing
             {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Valve State'},#Valve state
-            {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Water Meter Total'}, #water use total
-            {'driver': 'GV10', 'value':99, 'uom': 25, 'name': 'Water Meter Day Use'}, #water use daily             
-            {'driver': 'GV2', 'value': 99, 'uom': 25, 'name': 'Water Meter Recent Use'},  #wateruse recent
-            {'driver': 'GV3', 'value': 99, 'uom': 25, 'name': 'Water Meter Recent Duration'},  #Wateruse duration
+            {'driver': 'GV1', 'value': 99, 'uom': 69, 'name': 'Water Meter Total'}, #water use total
+            {'driver': 'GV10', 'value':99, 'uom': 69, 'name': 'Water Meter Day Use'}, #water use daily             
+            {'driver': 'GV2', 'value': 99, 'uom': 69, 'name': 'Water Meter Recent Use'},  #wateruse recent
+            {'driver': 'GV3', 'value': 99, 'uom': 44, 'name': 'Water Meter Recent Duration'},  #Wateruse duration
 
             {'driver': 'GV6', 'value': 99, 'uom': 25, 'name': 'Amount Overrun Alarm'}, #alarm
             {'driver': 'GV7', 'value': 99, 'uom': 25, 'name': 'Duration Overrun Alarm'}, 
@@ -334,7 +334,7 @@ class udiYoSubWaterMeter(udi_interface.Node):
             {'driver': 'GV12', 'value': 99, 'uom' : 25, 'name': 'Valve Error Alarm'}, #  alarm
             #{'driver': 'GV13', 'value': 99, 'uom' : 25}, # alarm
             #{'driver': 'GV14', 'value': 99, 'uom' : 25}, # Water flowing
-            {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Overrun Amount 24H Limit'}, #LeakLimit
+            {'driver': 'GV22', 'value': 99, 'uom': 69, 'name': 'Overrun Amount 24H Limit'}, #LeakLimit
             {'driver': 'GV23', 'value': 99, 'uom': 25, 'name': 'Overrun Duration Once Limit'}, #Overrtun limit
             {'driver': 'GV24', 'value': 99, 'uom': 25, 'name': 'Overrun Count 24H Limit'}, #Overrun Time
     
@@ -357,6 +357,8 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.devInfo = devInfo if devInfo is not None else {}
         self.temp_unit = self.yoAccess.get_temp_unit() 
         self.water_unit = self.yoAccess.get_water_unit()
+        is_gallons = (self.water_unit == 0) or (isinstance(self.water_unit, str) and (self.water_unit.strip().upper().startswith('G') or self.water_unit.strip() == '0'))
+        self.id = 'YOWATERMETERSUBG' if is_gallons else 'YOWATERMETERSUB'
         self.WM_index = WMindex
         
         self.yoWaterCtrl= wmAccess

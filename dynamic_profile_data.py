@@ -1380,6 +1380,24 @@ DYNAMIC_EDITORS = [
         "prec": 1
       },
       {
+        "uom": "69",
+        "min": 0,
+        "max": 10000,
+        "prec": 1
+      },
+      {
+        "uom": "6",
+        "min": 0,
+        "max": 10000,
+        "prec": 1
+      },
+      {
+        "uom": "8",
+        "min": 0,
+        "max": 10000,
+        "prec": 2
+      },
+      {
         "uom": "25",
         "subset": "0,99",
         "names": {
@@ -1397,6 +1415,24 @@ DYNAMIC_EDITORS = [
         "min": 0,
         "max": 100000,
         "prec": 1
+      },
+      {
+        "uom": "69",
+        "min": 0,
+        "max": 10000,
+        "prec": 1
+      },
+      {
+        "uom": "6",
+        "min": 0,
+        "max": 10000,
+        "prec": 1
+      },
+      {
+        "uom": "8",
+        "min": 0,
+        "max": 10000,
+        "prec": 2
       }
     ]
   },
@@ -1408,6 +1444,24 @@ DYNAMIC_EDITORS = [
         "min": 0,
         "max": 10000,
         "prec": 1
+      },
+      {
+        "uom": "35",
+        "min": 0,
+        "max": 100000,
+        "prec": 1
+      },
+      {
+        "uom": "6",
+        "min": 0,
+        "max": 10000,
+        "prec": 1
+      },
+      {
+        "uom": "8",
+        "min": 0,
+        "max": 10000,
+        "prec": 2
       },
       {
         "uom": "25",
@@ -1427,6 +1481,24 @@ DYNAMIC_EDITORS = [
         "min": 0,
         "max": 10000,
         "prec": 1
+      },
+      {
+        "uom": "35",
+        "min": 0,
+        "max": 100000,
+        "prec": 1
+      },
+      {
+        "uom": "6",
+        "min": 0,
+        "max": 10000,
+        "prec": 1
+      },
+      {
+        "uom": "8",
+        "min": 0,
+        "max": 10000,
+        "prec": 2
       }
     ]
   },
@@ -6632,12 +6704,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV23",
-        "editor": "MINUTES",
+        "editor": "COUNT",
         "name": "Overrun Duration Once Limit"
       },
       {
         "id": "GV24",
-        "editor": "COUNT",
+        "editor": "MINUTES",
         "name": "Overrun Count 24H Limit"
       },
       {
@@ -7446,7 +7518,7 @@ DYNAMIC_NODEDEFS = [
     "properties": [
       {
         "id": "ST",
-        "editor": "FARENHEIT",
+        "editor": "CONDUCTIVITY",
         "name": "Soil Conductivity (mS/cm)"
       },
       {
@@ -7531,12 +7603,12 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV14",
-        "editor": "FARENHEIT",
+        "editor": "CONDUCTIVITY",
         "name": "Low Conductivity Alarm Limit (mS/cm)"
       },
       {
         "id": "GV15",
-        "editor": "FARENHEIT",
+        "editor": "CONDUCTIVITY",
         "name": "High Conductivity Alarm Limit (mS/cm)"
       },
       {
