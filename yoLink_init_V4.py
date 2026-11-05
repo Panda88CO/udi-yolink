@@ -2,7 +2,10 @@
 import requests
 import time
 import json
-import psutil
+try:
+    import psutil
+except ImportError:
+    psutil = None
 import sys
 import math
 
@@ -266,6 +269,8 @@ class YoLinkInitPAC(object):
     #@measure_time
     def check_connection(yoAccess, port):
         logging.debug(f'{yoAccess.access_mode} check_connection: port {port}')
+        if psutil is None:
+            return True
         connectons = psutil.net_connections()
         #logging.debug('connections: {}'.format(connectons))
         for netid in connectons:
@@ -1099,7 +1104,8 @@ class YoLinkInitPAC(object):
             t_now = int(time.time_ns()/1e6)
             #logging.debug('time_track_going in: {}, {}, {}'.format(t_now, dev_id, yoAccess.time_tracking_dict))
             max_dev_id = 5 # commands per dev_time_limit to same dev (add margin)
-            max_dev_all = 99 # commands per call_time_limit to same dev (add margin)
+            num_devs = len(yoAccess.mqttList) if hasattr(yoAccess, 'mqttList') and yoAccess.mqttList else len(getattr(yoAccess, 'deviceList', []))
+            max_dev_all = max(500, num_devs * 10) # scale overall limit to device count (min 500)
             dev_time_limit = 60000 # 1 min =  60 sec = 60000 ms
             call_time_limit = 300000 # 5min = 300 sec = 300000 ms
             dev_to_dev_limit = 200 # min 200ms between calls to same dev
@@ -1148,7 +1154,7 @@ class YoLinkInitPAC(object):
             if total_dev_calls <= max_dev_all:
                 t_all_delay = 0
             else:
-                t_all_delay = call_time_limit - (t_now - t_oldest )
+                t_all_delay = min(5000, call_time_limit - (t_now - t_oldest))
             
             if (t_now - t_previous_dev) <= dev_to_dev_limit:
                 #time.sleep((dev_to_dev_limit + 10 -(t_now - t_previous_dev))/1000) # calls to same device must be min dev_to_dev_limit (200ms) apart
@@ -1159,7 +1165,7 @@ class YoLinkInitPAC(object):
             if total_dev_id_calls <= max_dev_id:
                 t_dev_delay = 0
             else:
-                t_dev_delay = dev_time_limit  - (t_now- t_oldest_dev)
+                t_dev_delay = min(5000, dev_time_limit - (t_now - t_oldest_dev))
             #logging.debug('total_calls = {}, total_dev_calls = {}'.format(total_dev_calls, total_dev_id_calls))
             t_delay = max(t_all_delay,t_dev_delay, t_dev_2_dev, 0 )
             if t_delay > 0:

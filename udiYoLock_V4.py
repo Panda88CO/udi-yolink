@@ -24,7 +24,7 @@ from yolinkLockV3 import YoLinkLock
 
 
 class udiYoLockV2(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOLOCKV2'
     '''
@@ -99,13 +99,19 @@ class udiYoLockV2(udi_interface.Node):
         self.yoLock.initNode()
         time.sleep(1)
         tries = 1
-        while not self.yoLock.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoLock.refreshDevice()
+        while not self.yoLock.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
-        self.my_setDriver('GV30', 1)
+        if self.yoLock.check_system_online():
+            self.clear_offline_notice()
+            self.my_setDriver('GV30', 1)
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         self.start_done()
 
     def stop (self):
@@ -315,7 +321,7 @@ class udiYoLockV2(udi_interface.Node):
 
 
 class udiYoLock(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOLOCK'
     '''
@@ -388,11 +394,19 @@ class udiYoLock(udi_interface.Node):
         time.sleep(2)
         self.yoLock.initNode()
         tries = 1
-        while not self.yoLock.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(2 * tries, 60))
+        while not self.yoLock.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
-        self.my_setDriver('GV30', 1)
+        if self.yoLock.check_system_online():
+            self.clear_offline_notice()
+            self.my_setDriver('GV30', 1)
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         self.system_ready=True
 
     def stop (self):

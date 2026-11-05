@@ -29,6 +29,64 @@ driver_lock = threading.Lock()
 from udiDynamicProfile import apply_profile_driver_names, get_profile_driver_names, update_dynamic_profile
 
 
+def set_offline_notice(self):
+    poly = getattr(self, 'poly', None)
+    if poly is not None and hasattr(poly, 'Notices'):
+        addr = getattr(self, 'address', 'unknown')
+        name = getattr(self, 'name', None)
+        if not name and hasattr(self, 'node') and getattr(self.node, 'name', None):
+            name = self.node.name
+        if not name and hasattr(self, 'devInfo') and isinstance(self.devInfo, dict):
+            name = self.devInfo.get('name')
+        if not name:
+            name = addr
+        try:
+            poly.Notices[f'offline_{addr}'] = f'Device {name} is offline'
+            logging.debug(f'Set offline notice for {name} ({addr})')
+        except Exception as e:
+            logging.debug(f'Failed to set offline notice for {name}: {e}')
+
+def clear_offline_notice(self):
+    poly = getattr(self, 'poly', None)
+    if poly is not None and hasattr(poly, 'Notices'):
+        addr = getattr(self, 'address', 'unknown')
+        key = f'offline_{addr}'
+        try:
+            if hasattr(poly.Notices, 'delete'):
+                poly.Notices.delete(key)
+                logging.debug(f'Cleared offline notice for {addr}')
+            elif hasattr(poly.Notices, '__contains__') and key in poly.Notices:
+                del poly.Notices[key]
+                logging.debug(f'Cleared offline notice for {addr}')
+        except Exception as e:
+            logging.debug(f'Failed to clear offline notice for {addr}: {e}')
+
+def wait_for_device_online(self, device=None, max_tries=5, sleep_sec=2):
+    """Wait up to max_tries for device.check_system_online() to be True.
+    If online, clears offline notice and returns True.
+    If still offline after max_tries, sets offline notice and driver states (GV30=0, ST=0, GV20=2)
+    and returns False so callers can safely proceed without hanging."""
+    dev = device if device is not None else getattr(self, 'yoDevice', None)
+    tries = 1
+    while tries <= max_tries:
+        try:
+            if dev is not None and hasattr(dev, 'check_system_online') and dev.check_system_online():
+                clear_offline_notice(self)
+                return True
+        except Exception as e:
+            logging.debug(f'check_system_online exception: {e}')
+        if tries < max_tries:
+            logging.info(f'Waiting for device {getattr(self, "name", getattr(self, "address", "unknown"))} to come online... ({tries}/{max_tries})')
+            time.sleep(sleep_sec)
+        tries += 1
+    logging.warning(f'Device {getattr(self, "name", getattr(self, "address", "unknown"))} is offline after {max_tries} checks')
+    set_offline_notice(self)
+    if hasattr(self, 'my_setDriver'):
+        self.my_setDriver('GV30', 0)
+        self.my_setDriver('ST', 0)
+        self.my_setDriver('GV20', 2)
+    return False
+
 def start_done(self):
     logging.info(f'start_done called  - {self.devInfo["name"]}')
     self.system_ready = True
@@ -262,6 +320,14 @@ def my_setDriver(self, key, value, UOM=None, force=None, type=None):
                                 value = value + 3
                         except Exception as e:
                             logging.error('Local connection - yolink class not ready - continue : {}'.format(e))
+                    if key == 'GV30':
+                        try:
+                            if value == 1:
+                                clear_offline_notice(self)
+                            elif value == 0 and getattr(self, 'system_ready', False):
+                                set_offline_notice(self)
+                        except Exception as e:
+                            logging.debug(f'offline notice update failed in my_setDriver: {e}')
                     if getattr(self, 'node', None) is not None:
                         if isinstance(UOM, int):
                             self.node.setDriver(key, value, True, force, uom=UOM)

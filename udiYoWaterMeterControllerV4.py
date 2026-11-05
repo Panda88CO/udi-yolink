@@ -25,7 +25,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoWaterMeterController(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, state2ISY, bool2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, state2ISY, bool2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOWATERMETERCTRL'
     '''
@@ -166,20 +166,23 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.yoWaterCtrl.initDevice()
         time.sleep(1)
         tries = 1
-        while not self.yoWaterCtrl.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            self.poly.Notices['offline'] = f'Waiting for device {self.name} to come online...'
-            time.sleep(min(60, tries*2))  # Exponential backoff, max 5 minutes
-            #if tries % 10 == 0:
-                #self.yoWaterCtrl.refreshDevice()    
+        while not self.yoWaterCtrl.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, tries*2))
             tries += 1
-        self.poly.Notices.delete('offline')
-        self.meter_unit = self.yoWaterCtrl.getMeterUnit()
-        self.ISYwater_unit = self.yoAccess.get_water_unit()
-        self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
-        self.meter_correction_factor = self.get_meter_correction_factor(self.yoWaterCtrl)
-        logging.debug(f'meter unit : {self.meter_unit} ISY unit: {self.ISYwater_unit} uom: {self.ISYmeter_uom}')
-        
+        if self.yoWaterCtrl.check_system_online():
+            self.clear_offline_notice()
+            self.meter_unit = self.yoWaterCtrl.getMeterUnit()
+            self.ISYwater_unit = self.yoAccess.get_water_unit()
+            self.ISYmeter_uom = self.water_meter_unit2uom(self.ISYwater_unit)
+            self.meter_correction_factor = self.get_meter_correction_factor(self.yoWaterCtrl)
+            logging.debug(f'meter unit : {self.meter_unit} ISY unit: {self.ISYwater_unit} uom: {self.ISYmeter_uom}')
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         self.start_done()
 
     def create_schedule_nodes(self):

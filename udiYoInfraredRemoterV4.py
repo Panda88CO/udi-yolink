@@ -23,7 +23,7 @@ from yolinkInfraredRemoterV3 import YoLinkInfraredRemoter
 from udiYoSchedule import udiYoSchedule
 
 class udiYoInfraredCode(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     '''
        drivers = [
@@ -170,7 +170,7 @@ class udiYoInfraredCode(udi_interface.Node):
 
 
 class udiYoInfraredRemoter(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  update_schedule_data, node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  update_schedule_data, node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
 
     '''
@@ -276,14 +276,19 @@ class udiYoInfraredRemoter(udi_interface.Node):
         self.yoIRrem.initNode()
         time.sleep(1)
         tries = 1
-        while not self.yoIRrem.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online.. Must be online to get learned codes')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoIRrem.refreshDevice()    
+        while not self.yoIRrem.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online.. Must be online to get learned codes ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
-        #self.my_setDriver('ST', 1)
-        self.my_setDriver('GV30', 1)
+        if self.yoIRrem.check_system_online():
+            self.clear_offline_notice()
+            self.my_setDriver('GV30', 1)
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         code_dict_temp = self.yoIRrem.get_code_dict()
         logging.debug(f'Code dict temp: {code_dict_temp}')
         time.sleep(2)

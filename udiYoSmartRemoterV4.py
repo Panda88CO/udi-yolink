@@ -29,7 +29,7 @@ REMOTE_TYPE_SINGLE_PRESS = 0
 REMOTE_TYPE_DUAL_PRESS = 1
 
 class udiRemoteKey(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, save_cmd_struct, retrieve_cmd_struct, node_queue, wait_for_node_done, mask2key, set_node_custom, get_node_custom, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, save_cmd_struct, retrieve_cmd_struct, node_queue, wait_for_node_done, mask2key, set_node_custom, get_node_custom, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'SMREMOTEKEY'
     drivers = [
@@ -319,7 +319,7 @@ class udiRemoteKey(udi_interface.Node):
 
 
 class udiYoSmartRemoter(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, set_node_custom, get_node_custom, checkNameSync as sharedCheckNameSync, saveCurrentNodeNames, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOSMREMOTE'
 
@@ -439,14 +439,19 @@ class udiYoSmartRemoter(udi_interface.Node):
         self.yoSmartRemote.initNode()
         time.sleep(1)
         tries = 1
-        while not self.yoSmartRemote.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoSmartRemote.refreshDevice()
+        while not self.yoSmartRemote.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
         time.sleep(2)
-        #self.my_setDriver('GV30', 1, UOM=25, force=True)
+        if self.yoSmartRemote.check_system_online():
+            self.clear_offline_notice()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         self._capture_press_baseline(self.yoSmartRemote)
         self.sub_nodes_ready = True
         self.start_done()

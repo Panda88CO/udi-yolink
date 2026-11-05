@@ -23,7 +23,7 @@ from yolinkTHsensorV2 import YoLinkTHSensor
 
 
 class udiYoTHsensor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOTHSENS'
     
@@ -137,14 +137,19 @@ class udiYoTHsensor(udi_interface.Node):
         self.yoTHsensor.initNode()
         time.sleep(1)
         tries = 1
-        while not self.yoTHsensor.check_system_online():
-            logging.info('Waiting for TH sensor to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoTHsensor.refreshDevice() 
-
+        while not self.yoTHsensor.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for TH sensor to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
-        self.temp_unit = self.yoAccess.get_temp_unit()
+        if self.yoTHsensor.check_system_online():
+            self.clear_offline_notice()
+            self.temp_unit = self.yoAccess.get_temp_unit()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         self.start_done()
         #self.my_setDriver('GV30', 1)
 

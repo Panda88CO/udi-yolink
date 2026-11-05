@@ -23,7 +23,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoWaterMeterMulti(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, save_cmd_state, water_meter_unit2uom, calculate_water_volume, retrieve_cmd_state, state2ISY, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, save_cmd_state, water_meter_unit2uom, calculate_water_volume, retrieve_cmd_state, state2ISY, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOWATERMETERMULTI'
     '''
@@ -122,14 +122,18 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             self.yoWaterCtrl.initDevice()
             time.sleep(1)
             tries = 1
-            while not self.yoWaterCtrl.check_system_online():
-                
-                logging.info(f'Waiting for device {self.name} to come online... Attempt {tries}')
-                self.poly.Notices['offline'] = f'Waiting for device {self.name} to come online...'  
-                time.sleep(min(60, tries*2))
-                #if tries % 10 == 0:
-                    #self.yoWaterCtrl.refreshDevice()    
+            while not self.yoWaterCtrl.check_system_online() and tries <= 5:
+                logging.info(f'Waiting for device {self.name} to come online... Attempt {tries}/5')
+                time.sleep(min(10, tries*2))
                 tries += 1
+            if self.yoWaterCtrl.check_system_online():
+                self.clear_offline_notice()
+            else:
+                logging.warning(f'Device {self.name} is offline at start')
+                self.set_offline_notice()
+                self.my_setDriver('GV30', 0)
+                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV20', 2)
             self.meter_count = self.yoWaterCtrl.getMeterCount()
             logging.debug(f'Meter count: {self.meter_count}')
             self.meter_unit =  self.yoWaterCtrl.getMeterUnit()
@@ -138,8 +142,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
             logging.debug(f'meter unit : { self.meter_unit} ISY unit: { self.ISYwater_unit} uom: {self.ISYmeter_uom}')
             if self.meter_count is None:
                 self.meter_count = 2 # default value if device is online but meter count not retrieved - should be updated when data is retrieved
-                self.poly.Notices['offline'] = 'Number of meters not retrieved (device likely offline) -  defaulting to 2.  If wrong make sure device is online and restart'
-            self.poly.Notices.delete('offline')
+                self.set_offline_notice()
             self.my_setDriver('GV1', self.yoWaterCtrl.water_meter_count)
             logging.debug(f'Setting water meter count driver to: {self.yoWaterCtrl.water_meter_count}')
             if isinstance(self.meter_count, int) and self.meter_count > 1:
@@ -160,10 +163,17 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         time.sleep(4)
 
         tries = 1
-        while not self.yoWaterCtrl.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(300, tries * 5))
+        while not self.yoWaterCtrl.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, tries * 2))
             tries += 1
+        if self.yoWaterCtrl.check_system_online():
+            self.clear_offline_notice()
+        else:
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         time.sleep(2)
             
         self.start_done()
@@ -309,7 +319,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
 
 class udiYoSubWaterMeter(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   w_unit2ISY, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, save_cmd_state, water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,   w_unit2ISY, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, save_cmd_state, water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOWATERMETERSUB'
     '''

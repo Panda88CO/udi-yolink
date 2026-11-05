@@ -24,7 +24,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoOutlet(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, bool2ISY, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
     id = 'YOOUTLET'
     '''
        drivers = [
@@ -130,14 +130,19 @@ class udiYoOutlet(udi_interface.Node):
         self.yoOutlet.delayTimerCallback(self.updateDelayCountdown, self.timer_update)
         # deferred: refreshSchedules() will be invoked after startup to avoid API bursts
         tries = 1
-        while not self.yoOutlet.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2*tries))
-            #if tries % 10 == 0:
-                #self.yoOutlet.refreshDevice()
-
+        while not self.yoOutlet.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
         time.sleep(2)
+        if self.yoOutlet.check_system_online():
+            self.clear_offline_notice()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         self.start_done()
 
     def create_schedule_nodes(self):

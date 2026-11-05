@@ -20,7 +20,7 @@ Custom = udi_interface.Custom
 
 
 class udiYoDoorSensor(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YODOORSENS'
     
@@ -94,19 +94,18 @@ class udiYoDoorSensor(udi_interface.Node):
         self.yoDoorSensor.initNode()
         time.sleep(1)
         tries = 1
-        while not self.yoDoorSensor.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoDoorSensor.refreshDevice()   
+        while not self.yoDoorSensor.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
-
-        #self.my_setDriver('ST', 1)
-        #if not self.yoDoorSensor.online:
-        #    logging.warning('Device {} not on-line at start'.format(self.devInfo['name']))
-
-        #else:
-        #    self.my_setDriver('ST', 1)
+        if self.yoDoorSensor.check_system_online():
+            self.clear_offline_notice()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         self.start_done()
 
     def stop (self):

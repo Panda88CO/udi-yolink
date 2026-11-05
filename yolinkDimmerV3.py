@@ -66,11 +66,17 @@ class YoLinkDim(YoLinkMQTTDevice):
 
     def get_attributes(yolink):
         logging.debug('get_attributes')
+        if not yolink.check_system_online():
+            logging.debug('get_attributes skipped: device is offline')
+            return
         yolink.setDeviceAttributes(None)
         return()
 
     def set_attributes(yolink, params):
         logging.debug(yolink.type+' - set_attributes {}'.format(params))
+        if not yolink.check_system_online():
+            logging.debug('set_attributes skipped: device is offline')
+            return None
         if params is None:
             return(yolink.setDeviceAttributes(None))
         data = {'params': {}}

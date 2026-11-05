@@ -485,8 +485,8 @@ def get_active_nodedef_ids(controller=None):
     return expanded_ids
 
 
-def get_dynamic_profile_editors(temp_unit=None, water_unit=None, active_nodedefs=None):
-    """Generate dynamic JSON editors structure parameterized by temp_unit and water_unit.
+def get_dynamic_profile_editors(temp_unit=None, water_unit=None, active_nodedefs=None, tts_messages=None):
+    """Generate dynamic JSON editors structure parameterized by temp_unit, water_unit, and optional tts_messages.
     If active_nodedefs is provided, filters editors to only those referenced by active nodeDefs.
     """
     temp_norm = normalize_temp_unit(temp_unit)
@@ -521,22 +521,39 @@ def get_dynamic_profile_editors(temp_unit=None, water_unit=None, active_nodedefs
         base_result = result_editors
 
     if active_nodedefs is None:
-        return [dict(e) for e in base_result]
-
-    # Collect editor IDs referenced in active_nodedefs
-    used_editor_ids = set()
-    for nd in active_nodedefs:
-        for prop in nd.get('properties', []):
-            ed_id = prop.get('editor')
-            if ed_id:
-                used_editor_ids.add(ed_id)
-        for cmd in nd.get('cmds', {}).get('accepts', []):
-            for param in cmd.get('parameters', []):
-                ed_id = param.get('editor')
+        editors_out = [dict(e) for e in base_result]
+    else:
+        # Collect editor IDs referenced in active_nodedefs
+        used_editor_ids = set()
+        for nd in active_nodedefs:
+            for prop in nd.get('properties', []):
+                ed_id = prop.get('editor')
                 if ed_id:
                     used_editor_ids.add(ed_id)
+            for cmd in nd.get('cmds', {}).get('accepts', []):
+                for param in cmd.get('parameters', []):
+                    ed_id = param.get('editor')
+                    if ed_id:
+                        used_editor_ids.add(ed_id)
 
-    return [dict(e) for e in base_result if e.get('id') in used_editor_ids]
+        editors_out = [dict(e) for e in base_result if e.get('id') in used_editor_ids]
+
+    if tts_messages and isinstance(tts_messages, dict):
+        valid_keys = []
+        for k in tts_messages:
+            try:
+                valid_keys.append(int(k))
+            except (ValueError, TypeError):
+                pass
+        valid_keys.sort()
+        if valid_keys:
+            subset = f"{valid_keys[0]}-{valid_keys[-1]}" if len(valid_keys) > 1 else str(valid_keys[0])
+            names = {str(k): str(tts_messages[k]) for k in valid_keys}
+            for ed in editors_out:
+                if ed.get('id') == 'MESSAGES':
+                    ed['ranges'] = [{'uom': '25', 'subset': subset, 'names': names}]
+
+    return editors_out
 
 
 def get_dynamic_profile_nodedefs(include_variants=False, active_ids=None):
@@ -606,16 +623,22 @@ def get_dynamic_profile_payload(
             except Exception:
                 water_unit = None
 
+    tts_messages = None
+    if controller is not None:
+        yo_access = getattr(controller, 'yoAccess', None)
+        if yo_access is not None:
+            tts_messages = getattr(yo_access, 'TtsMessages', None)
+
     active_ids = None
     if active_only and controller is not None:
         active_ids = get_active_nodedef_ids(controller)
 
     if active_ids is not None:
         nodedefs = get_dynamic_profile_nodedefs(include_variants=True, active_ids=active_ids)
-        editors = get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit, active_nodedefs=nodedefs)
+        editors = get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit, active_nodedefs=nodedefs, tts_messages=tts_messages)
     else:
         nodedefs = get_dynamic_profile_nodedefs(include_variants=include_variants)
-        editors = get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit)
+        editors = get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit, tts_messages=tts_messages)
 
     payload = {
         'editors': editors,
@@ -814,7 +837,7 @@ def update_dynamic_profile(controller, include_variants=False):
     if payload_bytes > MAX_SAFE_PROFILE_BYTES and pruned_payload is not None:
         logging.info(
             f"Full dynamic profile ({payload_bytes} bytes) exceeds safe size threshold ({MAX_SAFE_PROFILE_BYTES} bytes); "
-            f"sending active-node profile ({len(pruned_json.encode('utf-8'))} bytes) to PG3"
+            f"using active-node profile ({len(pruned_json.encode('utf-8'))} bytes)"
         )
         target_payload = pruned_payload
     else:

@@ -22,7 +22,7 @@ import re
 
 #assigned_addresses
 class udiYoSubOutlet(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
     id = 'YOSUBOUT'
     '''
        drivers = [
@@ -269,7 +269,7 @@ class udiYoSubOutlet(udi_interface.Node):
 
 
 class udiYoSubUSB(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
     id = 'YOSUBUSB'
     '''
        drivers = [
@@ -438,7 +438,7 @@ class udiYoSubUSB(udi_interface.Node):
                 }
 
 class udiYoMultiOutlet(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
     id = 'YOMULTIOUT'
 
     '''
@@ -542,12 +542,18 @@ class udiYoMultiOutlet(udi_interface.Node):
         self.yoMultiOutlet.refreshDevice()
 
         tries = 1
-        while not self.yoMultiOutlet.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoMultiOutlet.refreshDevice()
+        while not self.yoMultiOutlet.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
+        if self.yoMultiOutlet.check_system_online():
+            self.clear_offline_notice()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
  
         if self.yoMultiOutlet.nbrOutlets == 0:
             logging.debug(' No config yet {} {}'.format(self.yoMultiOutlet.nbrOutlets, self.yoMultiOutlet.check_system_online()))
@@ -606,10 +612,17 @@ class udiYoMultiOutlet(udi_interface.Node):
             time.sleep(2)
             # deferred: refreshSchedules() will be invoked after startup to avoid API bursts
             tries = 1
-            while not self.yoMultiOutlet.check_system_online():
-                logging.info(f'Waiting for device {self.name} to come online...')
-                time.sleep(min(2 * tries, 60))
+            while not self.yoMultiOutlet.check_system_online() and tries <= 5:
+                logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+                time.sleep(min(10, 2 * tries))
                 tries += 1
+            if self.yoMultiOutlet.check_system_online():
+                self.clear_offline_notice()
+            else:
+                self.set_offline_notice()
+                self.my_setDriver('GV30', 0)
+                self.my_setDriver('ST', 0)
+                self.my_setDriver('GV20', 2)
             time.sleep(3)
             #self.yoMultiOutlet.refreshMultiOutlet()
             logging.debug('Finished  MultiOutlet start')

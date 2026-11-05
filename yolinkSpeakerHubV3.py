@@ -36,13 +36,18 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
 
     ''' Assume no event support needed if using MQTT'''
     def updateStatus(yolink, data):
-        print('SpeakerHub update data {}'.format(data))
+        logging.debug(f'SpeakerHub update data {data}')
         yolink.updateCallbackStatus(data, False)
-        if data['code'] == '000000':
-                if  '.getState' in data['method'] :
-                    yolink.volume = data['data']['options']['volume']
-                    yolink.mute = data['data']['options']['mute']
-                    yolink.beepEnabled = data['data']['options']['enableBeep']
+        if data.get('code') == '000000':
+            method = data.get('method', '')
+            if '.getState' in method:
+                options = data.get('data', {}).get('options', {})
+                if 'volume' in options:
+                    yolink.volume = options['volume']
+                if 'mute' in options:
+                    yolink.mute = options['mute']
+                if 'enableBeep' in options:
+                    yolink.beepEnabled = options['enableBeep']
              
  
 
@@ -118,27 +123,27 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
             yolink.TtsMessageNbr = messageNbr
 
 
-    def playAudio(yolink, message, tone, volume, repeat ):
-        logging.debug(yolink.type+' - playAudio')
+    def playAudio(yolink, message, tone, volume, repeat):
+        logging.debug(yolink.type + ' - playAudio')
         maxAttempts = 3
         attempt = 0
-        #missing try
-        #message = yolink.yoAccess.TtsMessages[message_nbr]
         data = {}
-        data['method'] = yolink.type+'.playAudio'
-        data["targetDevice"] =  yolink.deviceInfo['deviceId']
-        data["token"]= yolink.deviceInfo['token']
+        data['method'] = yolink.type + '.playAudio'
+        data["targetDevice"] = yolink.deviceInfo['deviceId']
+        data["token"] = yolink.deviceInfo['token']
         data['params'] = {}
-        data['params']['tone'] = tone
+        if tone and str(tone).lower() != 'none':
+            data['params']['tone'] = tone
         data['params']['volume'] = volume
         data['params']['repeat'] = repeat
-        if len(message ) > 200:
-            message = message[0:200]
-        data['params']['message'] = message
+        msg_str = str(message)
+        if len(msg_str) > 200:
+            msg_str = msg_str[0:200]
+        data['params']['message'] = msg_str
         logging.debug(f'playAudio: {data}')
-        while  not yolink.yoAccess.publish_data( data) and attempt <= maxAttempts:
-               time.sleep(4)
-               attempt = attempt + 1
+        while not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
+            time.sleep(4)
+            attempt = attempt + 1
 
 
     '''
@@ -167,20 +172,21 @@ class YoLinkSpeakerH(YoLinkMQTTDevice):
     '''
 
     def setOptions(yolink):
-        logging.debug(yolink.type+' - setOptions')
+        logging.debug(yolink.type + ' - setOptions')
         maxAttempts = 3
-        attempt = 1
-        #missing try
+        attempt = 0
         data = {}
-        data['method'] = yolink.type+'.setOption'
-        data["targetDevice"] =  yolink.deviceInfo['deviceId']
-        data["token"]= yolink.deviceInfo['token']
+        data['method'] = yolink.type + '.setOption'
+        data["targetDevice"] = yolink.deviceInfo['deviceId']
+        data["token"] = yolink.deviceInfo['token']
         data['params'] = {}
         data['params']['volume'] = yolink.volume
         data['params']['enableBeep'] = yolink.beepEnabled
         data['params']['mute'] = yolink.mute
-        print('dataStr: {}'.format(data))
-        yolink.yoAccess.publish_data( data)
+        logging.debug(f'setOptions: {data}')
+        while not yolink.yoAccess.publish_data(data) and attempt <= maxAttempts:
+            time.sleep(1)
+            attempt = attempt + 1
 
 
 

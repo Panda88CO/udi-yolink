@@ -3,7 +3,7 @@
 Yolink Control Main Node  program 
 MIT License
 """
-version = '1.8.67'
+version = '1.8.69'
 import sys
 import re
 import time
@@ -154,10 +154,9 @@ def udiTssProfileUpdate(messages):
 
         if removedLines != newLines:
             foundChanges = True
-
-        nfile = open('./profile/nls/en_us.txt', 'w')
-        nfile.writelines(nls)
-        nfile.close()
+            nfile = open('./profile/nls/en_us.txt', 'w')
+            nfile.writelines(nls)
+            nfile.close()
     else:
         logging.error('./profile/nls/en_us.txt NOT FOUND ')
     return(foundChanges)
@@ -283,7 +282,10 @@ def addNodes (self, deviceList) -> list:
                     if index not in self.Parameters:
                         self.Parameters[index] = 'Message '+str(n)
                     self.yoAccess.TtsMessages[n] = self.Parameters[index]
-                    logging.info ('Adding {} to Parameters'.format(dev_access.TtsMessages[n] ))
+                if dev_access is not self.yoAccess:
+                    dev_access.TtsMessages = self.yoAccess.TtsMessages
+                for n in range(0, self.nbrTTS):
+                    logging.info('Adding {} to Parameters'.format(dev_access.TtsMessages[n]))
                 #self.yoAccess.writeTtsFile()
                 logging.info('TTS messages : {}'.format(dev_access.TtsMessages))
                 logging.info('Updating profile files ')
@@ -308,7 +310,11 @@ def addNodes (self, deviceList) -> list:
                 if tts_changed:
                     self.poly.Notices['tts'] = 'Speaker hub messages updated - Polisy/eISY need to be restarted to take effect'
                 else:
-                    self.poly.Notices.delete('tts')
+                    try:
+                        if hasattr(self.poly, 'Notices') and 'tts' in self.poly.Notices:
+                            self.poly.Notices.delete('tts')
+                    except Exception:
+                        pass
 
                 if custom_data is not None and (tts_changed or profile_changed):
                     custom_data['tts_signature'] = tts_signature

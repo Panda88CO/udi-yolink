@@ -24,7 +24,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterOnly(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOWATERMETERONLY'
     '''
@@ -125,13 +125,20 @@ class udiYoWaterMeterOnly(udi_interface.Node):
         self.yoWaterCtrl.initDevice()
         time.sleep(1)
         tries = 1
-        while not self.yoWaterCtrl.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(2 * tries, 60))
-            #if tries % 10 == 0:
-                #self.yoWaterCtrl.refreshDevice()
+        while not self.yoWaterCtrl.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
-        self.meter_unit = self.yoWaterCtrl.getMeterUnit()
+        if self.yoWaterCtrl.check_system_online():
+            self.clear_offline_notice()
+            self.meter_unit = self.yoWaterCtrl.getMeterUnit()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
+            self.meter_unit = self.yoWaterCtrl.getMeterUnit()
         #self.my_setDriver('GV30', 1)
         #self.yoWaterCtrl.delayTimerCallback (self.updateDelayCountdown, self.timer_update)
 

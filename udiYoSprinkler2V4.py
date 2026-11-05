@@ -26,7 +26,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoSprinkler2(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   water_meter_unit2uom, calculate_water_volume, state2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,   water_meter_unit2uom, calculate_water_volume, state2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOSPRINKLERV2'
     '''
@@ -135,12 +135,18 @@ class udiYoSprinkler2(udi_interface.Node):
         self.yoSprinkler.initNode()
         time.sleep(1)
         tries = 1
-        while not self.yoSprinkler.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-            #    self.yoSprinkler.refreshDevice()
+        while not self.yoSprinkler.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
+        if self.yoSprinkler.check_system_online():
+            self.clear_offline_notice()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
 
 
         self.meter_unit = self.yoSprinkler.get_data('meterUnit', 'attributes')

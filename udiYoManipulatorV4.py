@@ -25,7 +25,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoManipulator(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,   prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,   prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
     id = 'YOMANIPU'
     '''
        drivers = [
@@ -112,13 +112,18 @@ class udiYoManipulator(udi_interface.Node):
         self.yoManipulator.initNode()
         time.sleep(1)
         tries = 1
-        while not self.yoManipulator.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoManipulator.refreshDevice()  
+        while not self.yoManipulator.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
-        #self.my_setDriver('GV30', 1)
+        if self.yoManipulator.check_system_online():
+            self.clear_offline_notice()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         time.sleep(2)
         self.yoManipulator.delayTimerCallback(self.updateDelayCountdown, self.timer_update)
         self.start_done()

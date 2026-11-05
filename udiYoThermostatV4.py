@@ -22,7 +22,7 @@ from yolinkThermostatV2 import YoLinkThermostat
 
 
 class udiYoThermostat(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOTHERMOSTAT'
 
@@ -104,12 +104,18 @@ class udiYoThermostat(udi_interface.Node):
         self.yoThermostat.initDevice()
         time.sleep(1)
         tries = 1
-        while not self.yoThermostat.check_system_online():
-            logging.info('Waiting for thermostat to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoThermostat.refreshDevice()
+        while not self.yoThermostat.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for thermostat to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
+        if self.yoThermostat.check_system_online():
+            self.clear_offline_notice()
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
 
         # Create child node that owns thermostat properties and related controls.
         prop_address = self.poly.getValidAddress(f'{self.address[4:14]}_TPR'[:14])
@@ -480,7 +486,7 @@ class udiYoThermostat(udi_interface.Node):
 
 
 class udiYoThermostatProperties(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
 
     id = 'YOTHERMPROP'
 

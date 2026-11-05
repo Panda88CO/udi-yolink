@@ -25,7 +25,7 @@ from udiYoSmartRemoterV4 import udiRemoteKey
 from udiYoSchedule import udiYoSchedule
 
 class udiYoSwitch(udi_interface.Node):
-    from  udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, state2ISY, bool2ISY, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, state2ISY, bool2ISY, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
     id = 'YOSWITCH'
 
     drivers = [
@@ -122,18 +122,22 @@ class udiYoSwitch(udi_interface.Node):
         self.yoSwitch.initNode()
         time.sleep(1)
         tries = 1
-        while not self.yoSwitch.check_system_online():
-            logging.info(f'Waiting for device {self.name} to come online...')
-            time.sleep(min(60, 2 * tries))
-            #if tries % 10 == 0:
-                #self.yoSwitch.refreshDevice()
+        while not self.yoSwitch.check_system_online() and tries <= 5:
+            logging.info(f'Waiting for device {self.name} to come online... ({tries}/5)')
+            time.sleep(min(10, 2 * tries))
             tries += 1
         time.sleep(2)
-        self.yoSwitch.get_attributes()
-        # deferred: refreshSchedules() will be invoked after startup to avoid API bursts
+        if self.yoSwitch.check_system_online():
+            self.clear_offline_notice()
+            self.yoSwitch.get_attributes()
+            self.yoSwitch.delayTimerCallback(self.updateDelayCountdown, self.timer_update)
+        else:
+            logging.warning(f'Device {self.name} is offline at start')
+            self.set_offline_notice()
+            self.my_setDriver('GV30', 0)
+            self.my_setDriver('ST', 0)
+            self.my_setDriver('GV20', 2)
         time.sleep(1)
-        #self.my_setDriver('GV30', 1)
-        self.yoSwitch.delayTimerCallback(self.updateDelayCountdown, self.timer_update)
         for key in range(0, self.nbr_keys):
             logging.debug(' {}'.format(key))
             k_address = self.address[4:14] + 'key' + str(key)

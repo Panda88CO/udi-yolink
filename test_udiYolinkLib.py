@@ -301,5 +301,112 @@ class TestUdiTssProfileUpdate(unittest.TestCase):
         self.assertFalse(changed)
 
 
+
+
+class TestOfflineNoticesAndResilience(unittest.TestCase):
+    """Tests for offline notice management, bounded online checks, and rate-limiting."""
+
+    def test_set_and_clear_offline_notice(self):
+        node = MagicMock()
+        node.address = 'd88b4c01000001'
+        node.name = 'Test Sensor'
+        poly = MagicMock()
+        notices_dict = {}
+
+        def mock_setitem(key, val):
+            notices_dict[key] = val
+
+        def mock_delete(key):
+            notices_dict.pop(key, None)
+
+        poly.Notices.__setitem__ = MagicMock(side_effect=mock_setitem)
+        poly.Notices.delete = MagicMock(side_effect=mock_delete)
+        poly.Notices.__contains__ = MagicMock(side_effect=lambda k: k in notices_dict)
+        node.poly = poly
+
+        # Call set_offline_notice
+        udiYolinkLib.set_offline_notice(node)
+        poly.Notices.__setitem__.assert_called_with('offline_d88b4c01000001', 'Device Test Sensor is offline')
+        self.assertEqual(notices_dict.get('offline_d88b4c01000001'), 'Device Test Sensor is offline')
+
+        # Call clear_offline_notice
+        udiYolinkLib.clear_offline_notice(node)
+        poly.Notices.delete.assert_called_with('offline_d88b4c01000001')
+        self.assertNotIn('offline_d88b4c01000001', notices_dict)
+
+    def test_my_setDriver_triggers_offline_notices_on_gv30(self):
+        node = MagicMock()
+        node.address = 'd88b4c01000002'
+        node.name = 'Switch 1'
+        node.drivers = [{'driver': 'GV30', 'value': 0, 'uom': 25}]
+        node.node = MagicMock()
+        node.system_ready = True
+        poly = MagicMock()
+        notices_dict = {}
+        poly.Notices.__setitem__ = MagicMock(side_effect=lambda k, v: notices_dict.update({k: v}))
+        poly.Notices.delete = MagicMock(side_effect=lambda k: notices_dict.pop(k, None))
+        poly.Notices.__contains__ = MagicMock(side_effect=lambda k: k in notices_dict)
+        node.poly = poly
+
+        # When GV30 is set to 0 on a system_ready node, offline notice is set
+        udiYolinkLib.my_setDriver(node, 'GV30', 0)
+        self.assertEqual(notices_dict.get('offline_d88b4c01000002'), 'Device Switch 1 is offline')
+
+        # When GV30 transitions to 1, offline notice is cleared
+        udiYolinkLib.my_setDriver(node, 'GV30', 1)
+        self.assertNotIn('offline_d88b4c01000002', notices_dict)
+
+    def test_wait_for_device_online_bounds_and_sets_offline(self):
+        node = MagicMock()
+        node.address = 'd88b4c01000003'
+        node.name = 'Offline TH'
+        node.drivers = [{'driver': 'GV30', 'value': 0, 'uom': 25}, {'driver': 'ST', 'value': 0, 'uom': 25}]
+        node.node = MagicMock()
+        node.my_setDriver = MagicMock()
+        mock_dev = MagicMock()
+        mock_dev.check_system_online.return_value = False
+        poly = MagicMock()
+        poly.Notices = MagicMock()
+        node.poly = poly
+
+        # Call wait_for_device_online with 2 tries and 0 sleep to verify fast bounding
+        is_online = udiYolinkLib.wait_for_device_online(node, mock_dev, max_tries=2, sleep_sec=0)
+        self.assertFalse(is_online)
+        self.assertEqual(mock_dev.check_system_online.call_count, 2)
+        poly.Notices.__setitem__.assert_called_with('offline_d88b4c01000003', 'Device Offline TH is offline')
+        node.my_setDriver.assert_any_call('GV30', 0)
+        node.my_setDriver.assert_any_call('ST', 0)
+
+    def test_switch_and_dimmer_get_attributes_offline_protection(self):
+        from yolinkSwitchV3 import YoLinkSwitch
+        from yolinkDimmerV3 import YoLinkDim
+
+        # Test Switch
+        mock_switch = MagicMock()
+        mock_switch.check_system_online.return_value = False
+        YoLinkSwitch.get_attributes(mock_switch)
+        mock_switch.setDeviceAttributes.assert_not_called()
+
+        # Test Dimmer
+        mock_dimmer = MagicMock()
+        mock_dimmer.check_system_online.return_value = False
+        YoLinkDim.get_attributes(mock_dimmer)
+        mock_dimmer.setDeviceAttributes.assert_not_called()
+
+    def test_time_tracking_scales_and_caps_delay(self):
+        import yoLink_init_V4
+        import threading
+        yoAccess = MagicMock()
+        yoAccess.TimeTableLock = threading.Lock()
+        yoAccess.time_tracking_dict = {}
+        # Simulate 100 devices in mqttList
+        yoAccess.mqttList = {f'dev_{i}': {} for i in range(100)}
+
+        # Call time_tracking
+        delay = yoLink_init_V4.YoLinkInitPAC.time_tracking(yoAccess, 'dev_1')
+        self.assertIsInstance(delay, (int, float))
+        # Ensure delay is capped at <= 5.0 seconds
+        self.assertLessEqual(delay, 5.0)
+
 if __name__ == '__main__':
     unittest.main()

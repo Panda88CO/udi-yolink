@@ -487,15 +487,9 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "25",
-        "subset": "0,1,2,3,4,5",
-        "names": {
-          "0": "Mes1",
-          "1": "Mess2",
-          "2": "Messa3",
-          "3": "Messag4",
-          "4": "Message 5",
-          "5": "mes77"
-        }
+        "min": 0,
+        "max": 77,
+        "prec": 0
       }
     ]
   },
