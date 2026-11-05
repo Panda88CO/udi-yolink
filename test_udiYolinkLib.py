@@ -408,5 +408,116 @@ class TestOfflineNoticesAndResilience(unittest.TestCase):
         # Ensure delay is capped at <= 5.0 seconds
         self.assertLessEqual(delay, 5.0)
 
+
+
+class TestMqttResilienceAndTokenManagement(unittest.TestCase):
+    def test_update_mqtt_subscription_subscribes_without_unsubscribe(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.homeID = 'home123'
+        yoAccess.mqtt_str = 'yl-home/'
+        yoAccess.QoS = 1
+        yoAccess.client = MagicMock()
+        yoAccess.mqttList = {
+            'dev1': {
+                'request': 'yl-home/home123/dev1/request',
+                'response': 'yl-home/home123/dev1/response',
+                'report': 'yl-home/home123/dev1/report',
+            }
+        }
+
+        yoLink_init_V4.YoLinkInitPAC.update_mqtt_subscription(yoAccess, 'dev1')
+
+        yoAccess.client.unsubscribe.assert_not_called()
+        self.assertEqual(yoAccess.client.subscribe.call_count, 2)
+        yoAccess.client.subscribe.assert_any_call('yl-home/home123/dev1/response', 1)
+        yoAccess.client.subscribe.assert_any_call('yl-home/home123/dev1/report', 1)
+
+    def test_resubscribe_devices_subscribes_all_without_unsubscribe(self):
+        import yoLink_init_V4
+        import threading
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.connectedToBroker = True
+        yoAccess.STOP = threading.Event()
+        yoAccess.QoS = 1
+        yoAccess.client = MagicMock()
+        yoAccess.mqttList = {
+            f'dev_{i}': {
+                'response': f'yl-home/h1/dev_{i}/response',
+                'report': f'yl-home/h1/dev_{i}/report',
+            } for i in range(12)
+        }
+
+        yoLink_init_V4.YoLinkInitPAC._resubscribe_devices(yoAccess)
+
+        yoAccess.client.unsubscribe.assert_not_called()
+        # 12 devices * 2 topics each = 24 calls
+        self.assertEqual(yoAccess.client.subscribe.call_count, 24)
+
+    def test_on_connect_success_spawns_resubscribe(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.online = False
+        yoAccess.connectedToBroker = False
+        yoAccess.mqttURL = 'api.yosmart.com'
+        yoAccess.mqttList = {'dev1': {}}
+
+        with patch('yoLink_init_V4.Thread') as mock_thread_cls:
+            mock_thread_instance = MagicMock()
+            mock_thread_cls.return_value = mock_thread_instance
+
+            yoLink_init_V4.YoLinkInitPAC.on_connect(yoAccess, None, None, None, 0)
+
+            self.assertTrue(yoAccess.online)
+            self.assertTrue(yoAccess.connectedToBroker)
+            mock_thread_cls.assert_called_once_with(target=yoAccess._resubscribe_devices, daemon=True)
+            mock_thread_instance.start.assert_called_once()
+
+    def test_on_connect_auth_error_triggers_reconnect_even_if_not_connected(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.connectedToBroker = False
+        yoAccess.online = True
+        yoAccess._reconnecting = False
+
+        with patch('yoLink_init_V4.Thread') as mock_thread_cls:
+            mock_thread_instance = MagicMock()
+            mock_thread_cls.return_value = mock_thread_instance
+
+            # rc == 2 (Authentication error / Bad Client ID)
+            yoLink_init_V4.YoLinkInitPAC.on_connect(yoAccess, None, None, None, 2)
+
+            self.assertFalse(yoAccess.online)
+            self.assertFalse(yoAccess.connectedToBroker)
+            self.assertTrue(yoAccess._reconnecting)
+            mock_thread_cls.assert_called_once_with(target=yoAccess._async_auth_reconnect, daemon=True)
+            mock_thread_instance.start.assert_called_once()
+
+    def test_on_disconnect_unintentional_triggers_async_reconnect(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.disconnect = False
+        yoAccess.connectedToBroker = True
+        yoAccess.online = True
+        yoAccess._reconnecting = False
+
+        with patch('yoLink_init_V4.Thread') as mock_thread_cls:
+            mock_thread_instance = MagicMock()
+            mock_thread_cls.return_value = mock_thread_instance
+
+            yoLink_init_V4.YoLinkInitPAC.on_disconnect(yoAccess, None, None, rc=7)
+
+            self.assertFalse(yoAccess.online)
+            self.assertFalse(yoAccess.connectedToBroker)
+            self.assertTrue(yoAccess.disconnect_occured)
+            self.assertTrue(yoAccess._reconnecting)
+            mock_thread_cls.assert_called_once_with(target=yoAccess._async_reconnect, daemon=True)
+            mock_thread_instance.start.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()
