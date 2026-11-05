@@ -34,10 +34,10 @@ def main():
     print("=" * 70)
 
     if result.wasSuccessful():
-        print("✅ ALL TESTS PASSED SUCCESSFULLY!")
+        print("[SUCCESS] ALL TESTS PASSED SUCCESSFULLY!")
         return 0
     else:
-        print("❌ TESTS FAILED!")
+        print("[FAILURE] TESTS FAILED!")
         return 1
 
 if __name__ == '__main__':

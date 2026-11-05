@@ -9,6 +9,8 @@ import unittest
 from unittest.mock import MagicMock, patch
 import os
 import time
+import tempfile
+import xml.etree.ElementTree as ET
 
 import test_helper
 import udiYolinkLib
@@ -232,6 +234,71 @@ class TestMySetDriver(unittest.TestCase):
         udiYolinkLib.my_setDriver(self.node, 'GV20', 1)
         # In local mode, value 1 + 3 = 4
         self.mock_node_obj.setDriver.assert_called_with('GV20', 4, True, False)
+
+
+class TestUdiTssProfileUpdate(unittest.TestCase):
+    """Tests for udiTssProfileUpdate handling of MESSAGES editor in editors.xml and en_us.txt."""
+
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.orig_cwd = os.getcwd()
+        os.chdir(self.temp_dir.name)
+
+        os.makedirs('profile/editor', exist_ok=True)
+        os.makedirs('profile/nls', exist_ok=True)
+
+        editors_xml_content = (
+            '<editors>\n'
+            '  <editor id="STATUS">\n'
+            '    <range uom="25" subset="0,1" nls="status" />\n'
+            '  </editor>\n'
+            '  <editor id="MESSAGES">\n'
+            '    <range uom="25" subset="0,1,2,3,4,5" nls="sphtts" />\n'
+            '  </editor>\n'
+            '</editors>\n'
+        )
+        with open('profile/editor/editors.xml', 'w') as f:
+            f.write(editors_xml_content)
+
+        en_us_content = (
+            'status-0 = Off\n'
+            'status-1 = On\n'
+            'sphtts-0 = Mes1\n'
+            'sphtts-1 = Mess2\n'
+        )
+        with open('profile/nls/en_us.txt', 'w') as f:
+            f.write(en_us_content)
+
+    def tearDown(self):
+        os.chdir(self.orig_cwd)
+        self.temp_dir.cleanup()
+
+    def test_udiTssProfileUpdate_matches_uppercase_messages(self):
+        import udiCommonLib
+        messages = {0: 'Check sump 1 power', 1: 'Check sump 2 power'}
+        changed = udiCommonLib.udiTssProfileUpdate(messages)
+        self.assertTrue(changed)
+
+        # Verify editors.xml subset updated
+        tree = ET.parse('profile/editor/editors.xml')
+        root = tree.getroot()
+        msg_editor = [e for e in root if e.attrib.get('id', '').upper() == 'MESSAGES'][0]
+        self.assertEqual(msg_editor[0].attrib['subset'], '0-1')
+
+        # Verify en_us.txt updated
+        with open('profile/nls/en_us.txt', 'r') as f:
+            lines = f.read()
+        self.assertIn('sphtts-0 = Check sump 1 power', lines)
+        self.assertIn('sphtts-1 = Check sump 2 power', lines)
+        self.assertNotIn('sphtts-0 = Mes1', lines)
+
+    def test_udiTssProfileUpdate_no_change_returns_false(self):
+        import udiCommonLib
+        messages = {0: 'Check sump 1 power', 1: 'Check sump 2 power'}
+        udiCommonLib.udiTssProfileUpdate(messages)
+        # Calling again with identical messages
+        changed = udiCommonLib.udiTssProfileUpdate(messages)
+        self.assertFalse(changed)
 
 
 if __name__ == '__main__':

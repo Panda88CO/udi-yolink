@@ -3,7 +3,7 @@
 Yolink Control Main Node  program 
 MIT License
 """
-version = '1.8.66'
+version = '1.8.67'
 import sys
 import re
 import time
@@ -107,16 +107,18 @@ def udiTssProfileUpdate(messages):
         found = False
 
         while not found and indx < len(editorRoot):
-            if editorRoot[indx].attrib['id'] == 'messages':
+            if editorRoot[indx].attrib.get('id', '').upper() == 'MESSAGES':
                 found = True
-                if editorRoot[indx][0].attrib['subset'] != "0-"+str(len(messages)-1):
-                    editorRoot[indx][0].attrib['subset'] = "0-"+str(len(messages)-1)
+                new_subset = f"0-{len(messages)-1}" if len(messages) > 1 else "0"
+                if editorRoot[indx][0].attrib.get('subset') != new_subset:
+                    editorRoot[indx][0].attrib['subset'] = new_subset
                     foundChanges = True
                 NLSstr = editorRoot[indx][0].attrib['nls']
             else:
                 indx = indx + 1
 
-        Tree.write('./profile/editor/editors.xml')
+        if foundChanges:
+            Tree.write('./profile/editor/editors.xml')
     else:
         logging.error('./profile/editor/editors.xml NOT FOUND ')
 
