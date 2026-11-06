@@ -147,10 +147,14 @@ def udiTssProfileUpdate(messages):
                 nls.pop(line)
 
         newLines = {}
-        for line in range(0,len(messages)):
-            msg = str(messages[line]).strip()
-            newLines[line] = msg
-            nls.append('{}-{} = {}\n'.format(NLSstr, line, msg))
+        if messages and len(messages) > 0:
+            for line in range(0, len(messages)):
+                msg = str(messages[line]).strip()
+                newLines[line] = msg
+                nls.append('{}-{} = {}\n'.format(NLSstr, line, msg))
+        else:
+            newLines[0] = 'Message 0'
+            nls.append('{}-0 = Message 0\n'.format(NLSstr))
 
         if removedLines != newLines:
             foundChanges = True
@@ -168,6 +172,161 @@ def convert_temp_unit(self, tempStr):
         return(2)
     else:
         return(0)
+
+
+def sync_tts_parameters(self, nbr_tts=None):
+    """
+    Ensure the exact number of TTS parameter input lines (TTS0, TTS1, ...) exist
+    in self.Parameters matching NBR_TTS.
+    - If NBR_TTS = 1 -> exactly 1 line (TTS0) exists.
+    - If NBR_TTS = 2 -> exactly 2 lines (TTS0, TTS1) exist.
+    - When NBR_TTS increases, new TTS<n> lines are created with default 'Message <n>'.
+    - When NBR_TTS decreases, extra TTS<n> lines beyond NBR_TTS are removed.
+    - Preserves existing custom message text entered by the user.
+    - Synchronizes self.yoAccess.TtsMessages and self.yoLocal.TtsMessages.
+    - Updates profile definitions and dynamic profile if message definitions change.
+    """
+    prefix = getattr(self, 'TTSstr', 'TTS')
+
+    # 1. Resolve target nbr_tts
+    if nbr_tts is None:
+        val = None
+        if hasattr(self, 'Parameters') and self.Parameters is not None and 'NBR_TTS' in self.Parameters:
+            val = self.Parameters['NBR_TTS']
+        elif hasattr(self, 'nbrTTS'):
+            raw = getattr(self, 'nbrTTS')
+            if isinstance(raw, (int, str)):
+                val = raw
+
+        if val is not None:
+            try:
+                nbr_tts = int(str(val).strip())
+            except (ValueError, TypeError):
+                nbr_tts = 0
+        else:
+            nbr_tts = 0
+
+    try:
+        nbr_tts = int(nbr_tts)
+    except (ValueError, TypeError):
+        nbr_tts = 0
+
+    if nbr_tts < 0:
+        nbr_tts = 0
+    nbr_tts = min(nbr_tts, 20)
+    self.nbrTTS = nbr_tts
+
+    if not hasattr(self, 'Parameters') or self.Parameters is None:
+        return
+
+    # 2. Synchronize TTS<n> in self.Parameters
+    pattern = re.compile(rf'^{prefix}(\d+)$', re.IGNORECASE)
+
+    # Check existing keys and normalize case
+    existing_keys = {}
+    for k in list(self.Parameters.keys()):
+        m = pattern.match(k)
+        if m:
+            idx = int(m.group(1))
+            existing_keys[idx] = k
+
+    # Remove extra keys where index >= nbr_tts
+    for idx, k in list(existing_keys.items()):
+        if idx >= nbr_tts:
+            try:
+                if hasattr(self.Parameters, 'delete'):
+                    self.Parameters.delete(k)
+                else:
+                    del self.Parameters[k]
+                logging.info(f'Removed excess TTS parameter: {k}')
+                existing_keys.pop(idx, None)
+            except Exception as e:
+                logging.debug(f'Failed removing excess TTS parameter {k}: {e}')
+
+    # Add missing keys for 0 <= idx < nbr_tts
+    for n in range(0, nbr_tts):
+        expected_key = f'{prefix}{n}'
+        if n in existing_keys:
+            actual_key = existing_keys[n]
+            val = self.Parameters[actual_key]
+            if actual_key != expected_key:
+                try:
+                    if hasattr(self.Parameters, 'delete'):
+                        self.Parameters.delete(actual_key)
+                    else:
+                        del self.Parameters[actual_key]
+                except Exception:
+                    pass
+                self.Parameters[expected_key] = val
+            elif val is None or str(val).strip() == '':
+                self.Parameters[expected_key] = f'Message {n}'
+        else:
+            self.Parameters[expected_key] = f'Message {n}'
+            logging.info(f'Created TTS parameter input line: {expected_key}')
+
+    # 3. Synchronize TtsMessages dictionary on access coordinator
+    tts_messages = {}
+    for n in range(0, nbr_tts):
+        key = f'{prefix}{n}'
+        val = self.Parameters.get(key, f'Message {n}')
+        tts_messages[n] = str(val).strip() if val is not None else f'Message {n}'
+
+    yo_access = getattr(self, 'yoAccess', None)
+    if yo_access is not None:
+        yo_access.TtsMessages = tts_messages
+    yo_local = getattr(self, 'yoLocal', None)
+    if yo_local is not None:
+        yo_local.TtsMessages = tts_messages
+
+    # 4. If messages or count changed, update profile files & dynamic profile
+    if nbr_tts > 0 or existing_keys:
+        tts_signature = f'{nbr_tts}:' + '|'.join(
+            f'{idx}:{tts_messages.get(idx, "")}' for idx in sorted(tts_messages.keys())
+        )
+        custom_data = None
+        prev_tts_signature = None
+        if hasattr(self, 'poly') and self.poly is not None:
+            try:
+                custom_data = Custom(self.poly, 'customdata')
+                prev_tts_signature = custom_data.get('tts_signature')
+            except Exception as e:
+                logging.debug(f'Unable to access customdata for tts signature tracking: {e}')
+        if prev_tts_signature is None:
+            prev_tts_signature = getattr(self, '_prev_tts_signature', None)
+
+        tts_changed = (prev_tts_signature is not None and prev_tts_signature != tts_signature)
+        profile_changed = False
+        try:
+            profile_changed = udiTssProfileUpdate(tts_messages)
+        except Exception as e:
+            logging.debug(f'udiTssProfileUpdate failed: {e}')
+
+        if custom_data is not None and (tts_changed or profile_changed):
+            try:
+                custom_data['tts_signature'] = tts_signature
+            except Exception:
+                pass
+        self._prev_tts_signature = tts_signature
+
+        poly = getattr(self, 'poly', None)
+        if poly is not None and hasattr(poly, 'Notices'):
+            if tts_changed:
+                try:
+                    poly.Notices['tts'] = 'Speaker hub messages updated - Polisy/eISY need to be restarted to take effect'
+                except Exception:
+                    pass
+            else:
+                try:
+                    if 'tts' in poly.Notices:
+                        poly.Notices.delete('tts')
+                except Exception:
+                    pass
+
+        if (tts_changed or profile_changed) and (getattr(self, 'configDone', False) or getattr(self, 'pollStart', False)):
+            try:
+                update_dynamic_profile(self)
+            except Exception as e:
+                logging.debug(f'Dynamic profile update on TTS change skipped: {e}')
 
 def configDoneHandler(self):
     # We use this to discover devices, or ask to authenticate if user has not already done so
@@ -271,58 +430,15 @@ def addNodes (self, deviceList) -> list:
                 self.msgList=[]
                 logging.debug('Checking NBR_TTS')
                 if 'NBR_TTS' in self.Parameters:
-                    self.nbrTTS = int(self.Parameters['NBR_TTS'])
+                    try:
+                        self.nbrTTS = int(self.Parameters['NBR_TTS'])
+                    except (ValueError, TypeError):
+                        self.nbrTTS = 1
                     logging.debug('NBR_TTS found: {}'.format(self.nbrTTS))
                 else:
                     self.nbrTTS = 1
                     self.Parameters['NBR_TTS'] = self.nbrTTS 
-                self.yoAccess.TtsMessages = {}
-                for n in range(0,self.nbrTTS):
-                    index = self.TTSstr+str(n)
-                    if index not in self.Parameters:
-                        self.Parameters[index] = 'Message '+str(n)
-                    self.yoAccess.TtsMessages[n] = self.Parameters[index]
-                if dev_access is not self.yoAccess:
-                    dev_access.TtsMessages = self.yoAccess.TtsMessages
-                for n in range(0, self.nbrTTS):
-                    logging.info('Adding {} to Parameters'.format(dev_access.TtsMessages[n]))
-                #self.yoAccess.writeTtsFile()
-                logging.info('TTS messages : {}'.format(dev_access.TtsMessages))
-                logging.info('Updating profile files ')
-                tts_signature = '|'.join(
-                    [str(dev_access.TtsMessages[idx]).strip() for idx in sorted(dev_access.TtsMessages.keys())]
-                )
-                tts_signature = f'{self.nbrTTS}:{tts_signature}'
-
-                try:
-                    custom_data = Custom(self.poly, 'customdata')
-                    prev_tts_signature = custom_data.get('tts_signature')
-                except Exception as e:
-                    logging.debug(f'Unable to access customdata for tts signature tracking: {e}')
-                    custom_data = None
-                    prev_tts_signature = None
-
-                profile_changed = udiTssProfileUpdate(dev_access.TtsMessages)
-                tts_changed = (
-                    prev_tts_signature is not None and prev_tts_signature != tts_signature
-                )
-
-                if tts_changed:
-                    self.poly.Notices['tts'] = 'Speaker hub messages updated - Polisy/eISY need to be restarted to take effect'
-                else:
-                    try:
-                        if hasattr(self.poly, 'Notices') and 'tts' in self.poly.Notices:
-                            self.poly.Notices.delete('tts')
-                    except Exception:
-                        pass
-
-                if custom_data is not None and (tts_changed or profile_changed):
-                    custom_data['tts_signature'] = tts_signature
-                #for nbr in range(0,self.nbrTTS):
-                #    index = 'TTS'+str(nbr)
-                #    if index not in self.Parameters:
-                #        self.Parameters[index] = index
-                #    self.yoAccess.TtsMessages[nbr] = self.Parameters[index]
+                sync_tts_parameters(self)
 
                 while not temp.node_ready:
                     logging.debug( 'Waiting for node {}-{} to be ready'.format(dev['type'] , dev['name']))                        

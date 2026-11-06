@@ -81,7 +81,7 @@ def _summarize_device_list(device_list):
 
 class YoLinkSetup (udi_interface.Node):
     from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, updateEpochTime, convert_temp_unit, convert_water_unit, apply_profile_driver_names
-    from udiCommonLib import systemPoll, addNodes, heartbeat, configDoneHandler, checkNodes, handleLevelChange, saveNodeNames
+    from udiCommonLib import systemPoll, addNodes, heartbeat, configDoneHandler, checkNodes, handleLevelChange, saveNodeNames, sync_tts_parameters
     def  __init__(self, polyglot, primary, address, name):
         super().__init__( polyglot, primary, address, name)  
         
@@ -290,7 +290,14 @@ class YoLinkSetup (udi_interface.Node):
             self.nbr_API_calls = self.Parameters['CALLS_PER_MIN']
             self.nbr_dev_API_calls = self.Parameters['DEV_CALLS_PER_MIN']
         if self.yoAccess:
-            self.yoAccess.set_api_limits(self.nbr_API_calls, self.nbr_dev_API_calls)          
+            self.yoAccess.set_api_limits(self.nbr_API_calls, self.nbr_dev_API_calls)
+
+        if 'NBR_TTS' in self.Parameters:
+            try:
+                self.nbrTTS = int(self.Parameters['NBR_TTS'])
+            except (ValueError, TypeError):
+                self.nbrTTS = 0
+            self.sync_tts_parameters()          
         
         # NEED TO DETERMINE IF LOCAL HUB EXISTS AND THEN GET LIST FROM THAT AS WELL 
         
@@ -596,7 +603,11 @@ class YoLinkSetup (udi_interface.Node):
                 self.secretKey = ''
 
             if 'NBR_TTS' in userParam:
-                self.nbrTTS = int(userParam['NBR_TTS'])
+                try:
+                    self.nbrTTS = int(userParam['NBR_TTS'])
+                except (ValueError, TypeError):
+                    self.nbrTTS = 0
+            self.sync_tts_parameters()
 
             if 'NODE_READY_POLL_SEC' in userParam:
                 try:

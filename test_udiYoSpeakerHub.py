@@ -316,5 +316,109 @@ class TestDynamicProfileTtsIntegration(unittest.TestCase):
         self.assertEqual(r['names'], {'0': 'Front Gate Opened'})
 
 
+class TestSpeakerHubTtsParameters(unittest.TestCase):
+    """Test dynamic synchronization of TTS parameter input lines matching NBR_TTS."""
+
+    class MockCustomParams(dict):
+        def delete(self, key):
+            if key in self:
+                del self[key]
+
+    def setUp(self):
+        self.patch_update = patch('udiCommonLib.udiTssProfileUpdate', return_value=False)
+        self.patch_dyn = patch('udiCommonLib.update_dynamic_profile', return_value=None)
+        self.mock_update = self.patch_update.start()
+        self.mock_dyn = self.patch_dyn.start()
+        self.addCleanup(self.patch_update.stop)
+        self.addCleanup(self.patch_dyn.stop)
+
+        self.controller = MagicMock()
+        self.controller.poly = MagicMock()
+        self.controller.poly.Notices = {}
+        self.controller.yoAccess = MagicMock()
+        self.controller.yoAccess.TtsMessages = {}
+        self.controller.yoLocal = MagicMock()
+        self.controller.yoLocal.TtsMessages = {}
+        self.controller.TTSstr = 'TTS'
+        self.controller.Parameters = self.MockCustomParams()
+
+    def test_sync_tts_parameters_creates_single_input_line_when_nbr_tts_is_one(self):
+        """When NBR_TTS = 1, exactly 1 input line (TTS0) should be created."""
+        from udiCommonLib import sync_tts_parameters
+
+        self.controller.Parameters['NBR_TTS'] = '1'
+        sync_tts_parameters(self.controller)
+
+        self.assertEqual(self.controller.nbrTTS, 1)
+        self.assertIn('TTS0', self.controller.Parameters)
+        self.assertEqual(self.controller.Parameters['TTS0'], 'Message 0')
+        self.assertEqual(self.controller.yoAccess.TtsMessages, {0: 'Message 0'})
+        self.assertEqual(self.controller.yoLocal.TtsMessages, {0: 'Message 0'})
+
+    def test_sync_tts_parameters_creates_multiple_input_lines(self):
+        """When NBR_TTS = 2, exactly 2 input lines (TTS0, TTS1) should be created."""
+        from udiCommonLib import sync_tts_parameters
+
+        self.controller.Parameters['NBR_TTS'] = '2'
+        sync_tts_parameters(self.controller)
+
+        self.assertEqual(self.controller.nbrTTS, 2)
+        self.assertEqual(self.controller.Parameters['TTS0'], 'Message 0')
+        self.assertEqual(self.controller.Parameters['TTS1'], 'Message 1')
+        self.assertNotIn('TTS2', self.controller.Parameters)
+        self.assertEqual(self.controller.yoAccess.TtsMessages, {0: 'Message 0', 1: 'Message 1'})
+
+    def test_sync_tts_parameters_preserves_custom_messages(self):
+        """Existing custom message text must be preserved when new lines are added."""
+        from udiCommonLib import sync_tts_parameters
+
+        self.controller.Parameters['NBR_TTS'] = '2'
+        self.controller.Parameters['TTS0'] = 'Front door opened'
+        sync_tts_parameters(self.controller)
+
+        self.assertEqual(self.controller.Parameters['TTS0'], 'Front door opened')
+        self.assertEqual(self.controller.Parameters['TTS1'], 'Message 1')
+        self.assertEqual(self.controller.yoAccess.TtsMessages, {0: 'Front door opened', 1: 'Message 1'})
+
+    def test_sync_tts_parameters_removes_excess_lines_when_nbr_tts_decreases(self):
+        """When NBR_TTS is reduced from 3 to 1, extra lines TTS1 and TTS2 must be deleted."""
+        from udiCommonLib import sync_tts_parameters
+
+        self.controller.Parameters['NBR_TTS'] = '1'
+        self.controller.Parameters['TTS0'] = 'Keep this'
+        self.controller.Parameters['TTS1'] = 'Remove this'
+        self.controller.Parameters['TTS2'] = 'Remove this too'
+        sync_tts_parameters(self.controller)
+
+        self.assertEqual(self.controller.nbrTTS, 1)
+        self.assertEqual(self.controller.Parameters['TTS0'], 'Keep this')
+        self.assertNotIn('TTS1', self.controller.Parameters)
+        self.assertNotIn('TTS2', self.controller.Parameters)
+        self.assertEqual(self.controller.yoAccess.TtsMessages, {0: 'Keep this'})
+
+    def test_sync_tts_parameters_zero_removes_all_tts(self):
+        """When NBR_TTS is 0, all TTS parameter lines should be removed."""
+        from udiCommonLib import sync_tts_parameters
+
+        self.controller.Parameters['NBR_TTS'] = '0'
+        self.controller.Parameters['TTS0'] = 'Old message'
+        sync_tts_parameters(self.controller)
+
+        self.assertEqual(self.controller.nbrTTS, 0)
+        self.assertNotIn('TTS0', self.controller.Parameters)
+        self.assertEqual(self.controller.yoAccess.TtsMessages, {})
+
+    def test_sync_tts_parameters_normalizes_case(self):
+        """Keys like 'tts0' should be normalized to 'TTS0' and preserve user content."""
+        from udiCommonLib import sync_tts_parameters
+
+        self.controller.Parameters['NBR_TTS'] = '1'
+        self.controller.Parameters['tts0'] = 'Custom case'
+        sync_tts_parameters(self.controller)
+
+        self.assertEqual(self.controller.Parameters['TTS0'], 'Custom case')
+        self.assertNotIn('tts0', self.controller.Parameters)
+
+
 if __name__ == '__main__':
     unittest.main()
