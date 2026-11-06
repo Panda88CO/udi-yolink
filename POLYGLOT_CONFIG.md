@@ -1,4 +1,4 @@
-# udi-yolink
+# udi-yolink (v1.8.71)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x).
 
 ## Supported YoLink Devices
@@ -63,7 +63,7 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 | **`WATER_UNIT`** | Optional | `G` | Water volume unit: `G` or `0` for Gallons (UOM 69), `C` or `1` for CCF (UOM 6), `M` or `2` for M³ (UOM 8), `L` or `3` for Liters (UOM 35). |
 | **`CALLS_PER_MIN`** | Optional | `60` | Overall YoLink API rate limit (calls per minute across all devices). |
 | **`DEV_CALLS_PER_MIN`** | Optional | `5` | Per-device YoLink API rate limit (calls per minute per device). |
-| **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). |
+| **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). Saving this automatically generates the matching `TTS0`–`TTS<n-1>` input parameter fields. |
 
 3. Click **Save Changes** and **Restart** the node server.
    - *Note*: On initial setup, allow 1–2 minutes for all devices to synchronize completely.
@@ -73,5 +73,5 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 - **Single Home per Instance**: Each node server instance connects to one YoLink home. If you have multiple homes, create credentials for each home and run separate node server instances.
 - **Schedules**: YoLink schedules are supported for on/off devices, multi-outlets, IR remotes, sprinklers, and water meters.
 - **Countdown Delays**: Remaining delay countdowns shown in ISY are estimated and tracked on the node server.
-- **SpeakerHub Messages**: Specify the number of messages desired in `NBR_TTS`, and add message text in `TTS<n>`. Restart the node server; an IoX / Admin Console restart is required for UI labels to refresh.
+- **SpeakerHub Messages**: When using a SpeakerHub, set `NBR_TTS` to the desired number of messages (1–10) and click **Save Changes**. The node server automatically creates the corresponding `TTS0`, `TTS1`, ... input lines in Custom Configuration Parameters for you to enter your message texts. Once saved, restart the IoX / Admin Console (or re-login) to refresh the dropdown command labels.
 - **Dynamic Profile Updates**: Device profiles and custom unit labels are automatically registered upon startup.

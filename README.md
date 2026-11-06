@@ -69,7 +69,7 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 | **`WATER_UNIT`** | Optional | `G` | Water volume unit: `G` or `0` for Gallons (UOM 69), `C` or `1` for CCF (UOM 6), `M` or `2` for M³ (UOM 8), `L` or `3` for Liters (UOM 35). |
 | **`CALLS_PER_MIN`** | Optional | `60` | Overall YoLink API rate limit (calls per minute across all devices). |
 | **`DEV_CALLS_PER_MIN`** | Optional | `5` | Per-device YoLink API rate limit (calls per minute per device). |
-| **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). |
+| **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). Saving this automatically generates the matching `TTS0`–`TTS<n-1>` input parameter fields. |
 
 3. Click **Save Changes** and **Restart** the node server.
    - *Note*: On initial setup, allow 1–2 minutes for all devices to discover and synchronize completely.
@@ -84,7 +84,7 @@ The node server uses modern **Dynamic JSON Profiles** to push editor and node de
 ## Notes & Tips
 
 - **Single Home per Instance**: Each node server instance connects to one YoLink home. If you have multiple homes, create credentials for each home and run separate node server slot instances.
-- **SpeakerHub Messages**: If using a SpeakerHub, set `NBR_TTS` to the desired number of messages (up to 10), then configure the message text in `TTS<n>` parameters. Restart the node server; an IoX / Admin Console restart is required to refresh message labels.
+- **SpeakerHub Messages**: When using a SpeakerHub, set `NBR_TTS` to the desired number of messages (1–10) and save changes. The node server automatically generates the corresponding `TTS0`, `TTS1`, ... input lines in Custom Configuration Parameters for you to enter your message texts. Once your message texts are saved, restart the IoX / Admin Console (or re-login) to refresh the dropdown command labels.
 - **Countdown Delays**: Remaining delay countdowns shown in the ISY are calculated in real time by the node server.
 - **Schedules**: YoLink on-device schedules are fully supported for switches, outlets, dimmers, manipulators, sprinklers, and water meters.
 - **Heartbeat & Event Deduplication**: State changes include ghost-trigger protection and alert event deduplication to ensure reliable automation trigger execution.

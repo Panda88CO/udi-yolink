@@ -1,89 +1,93 @@
-# udi-yolink
-    Support for YoLink devices.
-    Suggested installation is on PG3x from version 1.1.x going forward. PG3x is updated to Python 3.11. It still works under PG3, but we cannot guarantee how long that will remain possible.
-    
-## Yolink Node server
-    Enables YoLink (https://shop.yosmart.com/) devices to be controlled using the ISY.
-    Current list of devices supported is as follows:
-    
-    'Switch', 'THSensor', 'MultiOutlet', 'DoorSensor','Manipulator', 
-    'MotionSensor', 'Outlet', 'GarageDoor', 'LeakSensor', 'Hub', 
-    'SpeakerHub', 'VibrationSensor', 'Finger', 'Lock' , 'LockV2', 'Dimmer', 'InfraredRemoter',
-    'PowerFailureAlarm', 'SmartRemoter', 'COSmokeSensor', 'Siren', 'WaterMeterController',
-    'WaterDepthSensor', 'WaterMeterMultiController', 'WaterMeterOnly', 'Sprinkler', 'SprinklerV2', 'Thermostat',
-    'SoilThcSensor'
+# udi-yolink (Local / Hybrid) (v1.8.71)
+Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x) and IoX / eisy / Polisy with Local Hub (YS1606) and Cloud support.
 
-    
-    Code uses MQTT communications.
-    ###SHORT POLL sends a heartbeat to the ISY - default is 60 seconds - It also checks whether data has been updated since the last update. This can happen when a command has a very slow reply from the cloud. The server uses separate threads for sending commands and receiving results.
-    
-    ###LONG POLL checks the online state of the devices (if a device goes offline, it will not be detected until this is called - for battery-operated devices it may take even longer, as data appears to be cached in the cloud - battery devices are not queried as part of the LONG POLL).
-    A device will be redetected once it is back online.
-    Default is 3600 (1 hour).  
+Suggested installation is on PG3x from version 1.1.x going forward. PG3x is updated to Python 3.11+. It still runs under PG3, but PG3x is strongly recommended.
 
-    Note: if set too often, it will affect battery consumption (especially the Manipulator). If set to more than 2 hours, the token will expire (but a new one should be obtained).
+## Supported YoLink Devices
 
+Enables YoLink ([shop.yosmart.com](https://shop.yosmart.com/)) devices to be monitored and controlled using the ISY / IoX.
+The following device types are supported:
 
-## Code
-    Code uses V2 of the YoLink API - PAC/UAC authentication - currently this API only supports a single home (even if the app supports more).
+- **Switches & Outlets**: `Switch`, `Dimmer`, `Outlet`, `MultiOutlet`
+- **Sensors**: `THSensor` (Temperature & Humidity), `DoorSensor`, `MotionSensor`, `LeakSensor`, `VibrationSensor`, `SoilThcSensor`, `COSmokeSensor`, `PowerFailureAlarm`, `WaterDepthSensor`
+- **Water Management & Valves**: `WaterMeterController`, `WaterMeterMultiController`, `WaterMeterOnly`, `Sprinkler`, `SprinklerV2`, `Manipulator` (Valve Controller)
+- **Security & Access**: `Lock`, `LockV2`, `GarageDoor`, `Finger`, `Siren`, `SmartRemoter`, `InfraredRemoter`
+- **Climate**: `Thermostat`
+- **Hubs**: `Hub`, `BatteryHub`, `SpeakerHub`
+- **Schedules**: Built-in schedule support for on/off devices, multi-outlets, IR remotes, sprinklers, and water meters.
 
-    Coded in Python 3 - MIT license.
+## Operating Modes
 
-## Installation
-MODE
-    Mode sets the operation of the node server.
-    local - uses local-only operation - This allows all local devices to be controlled (even without internet access once installed). Note: some devices do not work in local-only mode (e.g., SpeakerHub).
-    hybrid - operates in both local and cloud modes - This is the default if you have the YoLink local hub (YS1606).
-    cloud - operates like the YoLink node (separate node) - only uses cloud access/control for devices.
+The node server supports three operating modes configured via the `MODE` custom parameter:
 
-UAID / SECRET_KEY (needed for cloud or hybrid mode)
-    Credentials need to be added to configuration in the YoLink node server under PG3:
-    1. In the YoLink app, ensure your target Home is selected at the top.
-    2. Tap the Menu icon (☰) or Settings -> Account -> Advanced Settings -> User Access Credentials.
-    3. Tap '+' to create credentials if none exist, or tap the existing entry.
-    4. Copy UAID and SecretKey.
-    5. In PG3/PG3x configuration, set UAID and SECRET_KEY (no extra spaces).
-    Note: YoLink credentials are scoped per home; each home requires its own credentials and separate node server instance.
+- **`hybrid` (Default)**: Operates in both local and cloud modes. Local communication is used for supported devices via the YoLink Local Hub (YS1606), with automatic cloud fallback and support for cloud-only devices (such as SpeakerHub).
+- **`local`**: Operates in local-only mode. All communication is routed directly through the YoLink Local Hub on your local network (works without internet access once installed). *Note*: Devices requiring cloud services (e.g. SpeakerHub TTS) will not function in local-only mode.
+- **`cloud`**: Operates purely via the YoLink Cloud OpenAPI and MQTT broker (similar to the standard YoLink node server).
 
-LOCAL_CLIENT_ID, LOCAL_CLIENT_SECRET (needed for local or hybrid mode)
-    These can only be obtained from the YoLink local hub.
-    In the YoLink app - select the local hub - select Local Network, then select Integrations.
-    Copy `client_id` to LOCAL_CLIENT_ID and copy `client_secret` to LOCAL_CLIENT_SECRET.
+## Communication & Polling
 
-SUBNET_ID (needed for local or hybrid mode)
-    This can only be obtained from the YoLink local hub.
-    In the YoLink app - select the local hub - select Local Network, then select General.
-    Copy Net ID to SUBNET_ID.
+- **Short Poll (default: 60 seconds)**: Sends a heartbeat to the ISY and verifies whether pending command replies have updated device state. The server uses asynchronous background workers for non-blocking command dispatching.
+- **Long Poll (default: 3600 seconds / 1 hour)**: Verifies the online/offline status of all devices. Battery-operated devices report status via heartbeats; if set too frequently, it will increase device battery consumption. If set to more than 2 hours, the access token will expire (though automatic token refresh is handled).
 
-LOCAL_IP (needed for local or hybrid mode)
-    IP address of the local hub.
-    This can only be obtained from the YoLink local hub - select `|` (upper right corner).
-    Copy the IP address to LOCAL_IP.
+## Code & Architecture
 
-TEMP_UNIT
-    Select F or C (default is F)
+- Uses V2 of the YoLink OpenAPI with PAC/UAC (User Access Credentials) authentication and direct local MQTT/HTTP communication with the YS1606 Local Hub.
+- Implements modern **Phase 1 Dynamic JSON Profiles** (`updateJsonProfile`) for IoX 6.0.6+ and PG3x 3.4.5+, with automatic fallback to static profile uploads.
+- Includes automatic active-node payload pruning to ensure MQTT profile payloads stay within network and broker limits (<60 KB).
+- Coded in Python 3 with standard MIT license.
 
-WATER_UNIT
-    Select Gallon, CCF, M³, or Liter (or G, C, M, L / 0, 1, 2, 3). Default is Gallon.
+## Installation & Configuration
 
-CALLS_PER_MIN
-    Overall YoLink API rate limit (calls per minute across all devices, default 60).
+### 1. How to Obtain Cloud Credentials (for `cloud` or `hybrid` mode)
 
-DEV_CALLS_PER_MIN
-    Per-device YoLink API rate limit (calls per minute per device, default 5).
+To connect the node server to your YoLink cloud account, you need your **UAID** and **SECRET_KEY**:
+1. **Open the YoLink Mobile App** (iOS or Android).
+2. **Verify Active Home**: Ensure your target Home is selected at the top. YoLink credentials are scoped per home.
+3. **Navigate to User Access Credentials**: Tap **Menu (☰)** or **Settings** -> **Account** -> **Advanced Settings** -> **User Access Credentials**.
+4. **Create / Retrieve Credentials**: Tap **`+`** to create credentials (e.g. name it `eisy` or `PG3`), or tap an existing credential.
+5. **Copy Values**: Copy **UAID** and **SecretKey** (without trailing spaces).
 
-NBR_TTS
-    Number of SpeakerHub Text-to-Speech messages to support (see below).
+### 2. How to Obtain Local Hub Credentials (for `local` or `hybrid` mode)
 
-## Notes 
-    One node server can only handle 1 home - you can get separate credentials for each home in the app by selecting the home and getting credentials - multiple credentials can exist at the same time, but the node server can only handle one.
+From the YoLink Mobile App with your YoLink Local Hub (YS1606):
+1. **Local Client ID & Local Client Secret**: Select your Local Hub -> tap **Local Network** -> select **Integrations**. Copy `client_id` to `LOCAL_CLIENT_ID` and `client_secret` to `LOCAL_CLIENT_SECRET`.
+2. **Subnet ID**: Select your Local Hub -> tap **Local Network** -> select **General**. Copy **Net ID** to `SUBNET_ID`.
+3. **Local IP**: Select your Local Hub -> tap the **`|`** details menu (top-right corner). Copy the IP address to `LOCAL_IP`.
 
-    Remaining delay time shown in ISY is estimated - countdown is running on the node server, not the device.
+### 3. Configuring the Node Server in Polyglot (PG3 / PG3x)
 
-    <SpeakerHub> supports up to 10 Text-to-Speech messages. You specify the number of messages desired, and then add the text of the message in TTS<n>. Restart the node server. After this, a restart of the ISY/PoI is needed to transfer the messages to the UI. The ISY/PoI only reads the file containing the messages during startup.
+In your browser, open the Polyglot (PG3/PG3x) dashboard:
+1. Open the **YolinkLocal** node server details and navigate to the **Configuration** tab (scroll down to *Custom Configuration Parameters*).
+2. Configure the parameters:
 
-    YoLink schedules are supported for On/Off devices, keys/buttons, multi-outlet devices, sprinkler controllers, and water meters.
-    
-    The node reports the latest report time for each device.
-    
-    
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| **`MODE`** | Optional | `hybrid` | Operating mode: `hybrid`, `local`, or `cloud`. |
+| **`UAID`** | For cloud/hybrid | — | User Access ID obtained from YoLink app. |
+| **`SECRET_KEY`** | For cloud/hybrid | — | Secret Key obtained from YoLink app. |
+| **`LOCAL_CLIENT_ID`** | For local/hybrid | — | Local Client ID from Local Hub Integrations. |
+| **`LOCAL_CLIENT_SECRET`** | For local/hybrid | — | Local Client Secret from Local Hub Integrations. |
+| **`SUBNET_ID`** | For local/hybrid | — | Subnet / Net ID from Local Hub General settings. |
+| **`LOCAL_IP`** | For local/hybrid | — | Local IP address of the YoLink Local Hub. |
+| **`TEMP_UNIT`** | Optional | `C` | Temperature display unit: `F` for Fahrenheit (UOM 17) or `C` for Celsius (UOM 4). |
+| **`WATER_UNIT`** | Optional | `G` | Water volume unit: `G` or `0` for Gallons (UOM 69), `C` or `1` for CCF (UOM 6), `M` or `2` for M³ (UOM 8), `L` or `3` for Liters (UOM 35). |
+| **`CALLS_PER_MIN`** | Optional | `60` | Overall YoLink API rate limit (calls per minute across all devices). |
+| **`DEV_CALLS_PER_MIN`** | Optional | `5` | Per-device YoLink API rate limit (calls per minute per device). |
+| **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). Saving this automatically generates the matching `TTS0`–`TTS<n-1>` input parameter fields. |
+
+3. Click **Save Changes** and **Restart** the node server.
+
+## Dynamic Profiles
+
+The node server uses modern **Dynamic JSON Profiles** to push editor and node definitions directly to IoX at runtime:
+- **Unit Customization**: Driver names and UOMs dynamically adjust to your `TEMP_UNIT` and `WATER_UNIT` preferences automatically.
+- **Payload Safety**: Large installations automatically prune the profile payload to active device types, keeping messages compact.
+- **Fallback**: If dynamic profile updates are unavailable on older PG3/IoX versions, the node server automatically falls back to static profile installation (`updateProfile`).
+
+## Notes & Tips
+
+- **Single Home per Instance**: Each node server instance connects to one YoLink home. If you have multiple homes, create credentials for each home and run separate node server slot instances.
+- **SpeakerHub Messages**: When using a SpeakerHub, set `NBR_TTS` to the desired number of messages (1–10) and save changes. The node server automatically generates the corresponding `TTS0`, `TTS1`, ... input lines in Custom Configuration Parameters for you to enter your message texts. Once saved, restart the IoX / Admin Console (or re-login) to refresh the dropdown command labels.
+- **Countdown Delays**: Remaining delay countdowns shown in the ISY are calculated in real time by the node server.
+- **Schedules**: YoLink on-device schedules are fully supported for switches, outlets, dimmers, manipulators, sprinklers, and water meters.
+- **Device Status & Reports**: The node server reports the latest report time and battery/connection health for each device.
