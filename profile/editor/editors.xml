@@ -54,6 +54,9 @@
   <editor id="DOORSTATE">
     <range uom="25" subset="0,1,99" nls="doorstate" />
   </editor>
+  <editor id="GARAGESTATE">
+    <range uom="25" subset="0,1,2,3,4,5,99" nls="garagestate" />
+  </editor>
   <editor id="MOTIONSTATE">
     <range uom="25" subset="0,1,99" nls="motionstate" />
   </editor>

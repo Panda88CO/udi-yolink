@@ -255,6 +255,24 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
+    "id": "GARAGESTATE",
+    "ranges": [
+      {
+        "uom": "25",
+        "subset": "0,1,2,3,4,5,99",
+        "names": {
+          "0": "Closed",
+          "1": "Open",
+          "2": "Opening",
+          "3": "Closing",
+          "4": "Half-Open",
+          "5": "Half-Closed",
+          "99": "Unknown"
+        }
+      }
+    ]
+  },
+  {
     "id": "MOTIONSTATE",
     "ranges": [
       {
@@ -8046,12 +8064,62 @@ DYNAMIC_NODEDEFS = [
   {
     "id": "YOGARAGE",
     "name": "YoLink Garage Controller",
+    "icon": "DoorLock",
+    "properties": [
+      {
+        "id": "ST",
+        "editor": "GARAGESTATE",
+        "name": "Door State"
+      },
+      {
+        "id": "GV20",
+        "editor": "SUSPENDSTATE",
+        "name": "Connection State"
+      },
+      {
+        "id": "GV30",
+        "editor": "STATUS",
+        "name": "Online State"
+      }
+    ],
+    "cmds": {
+      "sends": [
+        {
+          "id": "DON"
+        },
+        {
+          "id": "DOF"
+        }
+      ],
+      "accepts": [
+        {
+          "id": "DON",
+          "name": "Open"
+        },
+        {
+          "id": "DOF",
+          "name": "Close"
+        },
+        {
+          "id": "TOGGLE",
+          "name": "Toggle Door"
+        }
+      ]
+    },
+    "links": {
+      "ctl": [],
+      "rsp": []
+    }
+  },
+  {
+    "id": "YOFINGER",
+    "name": "YoLink Finger",
     "icon": "Switch",
     "properties": [
       {
         "id": "ST",
         "editor": "STATUS",
-        "name": "Node Server Status"
+        "name": "State"
       },
       {
         "id": "GV20",
@@ -8068,16 +8136,8 @@ DYNAMIC_NODEDEFS = [
       "sends": [],
       "accepts": [
         {
-          "id": "DON",
-          "name": "DON"
-        },
-        {
-          "id": "DOF",
-          "name": "DOF"
-        },
-        {
           "id": "TOGGLE",
-          "name": "Toggle Door"
+          "name": "Toggle / Press"
         }
       ]
     },

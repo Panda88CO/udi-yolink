@@ -1,4 +1,4 @@
-# udi-yolink (v1.8.71)
+# udi-yolink (v1.8.73)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x) and IoX / eisy / Polisy.
 
 Suggested installation is on PG3x from version 1.1.x going forward. PG3x is updated to Python 3.11+. It still runs under PG3, but PG3x is strongly recommended.
@@ -70,6 +70,8 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 | **`CALLS_PER_MIN`** | Optional | `60` | Overall YoLink API rate limit (calls per minute across all devices). |
 | **`DEV_CALLS_PER_MIN`** | Optional | `5` | Per-device YoLink API rate limit (calls per minute per device). |
 | **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). Saving this automatically generates the matching `TTS0`–`TTS<n-1>` input parameter fields. |
+| **`GARAGE_TRAVEL_TIME`** | Optional | `15` | Garage door travel time in seconds for open/close motion tracking. Can also be set per-door via `GARAGE_TRAVEL_TIME_<address>`. |
+| **`GARAGE_SENSOR`** | Optional | Auto | Paired DoorSensor address, deviceId, or name. Automatically discovered via YoLink kit pairing (`parentDeviceId`), name matching, or single sensor fallback. |
 
 3. Click **Save Changes** and **Restart** the node server.
    - *Note*: On initial setup, allow 1–2 minutes for all devices to discover and synchronize completely.
@@ -85,6 +87,11 @@ The node server uses modern **Dynamic JSON Profiles** to push editor and node de
 
 - **Single Home per Instance**: Each node server instance connects to one YoLink home. If you have multiple homes, create credentials for each home and run separate node server slot instances.
 - **SpeakerHub Messages**: When using a SpeakerHub, set `NBR_TTS` to the desired number of messages (1–10) and save changes. The node server automatically generates the corresponding `TTS0`, `TTS1`, ... input lines in Custom Configuration Parameters for you to enter your message texts. Once your message texts are saved, restart the IoX / Admin Console (or re-login) to refresh the dropdown command labels.
+- **Garage Door Controller & Finger**: Full smart state tracking is supported with paired YoLink door sensors (`Closed`, `Open`, `Opening`, `Closing`, `Half-Open`, `Half-Closed`, `Unknown`).
+  - **Open (`DON`)**: Opens the door; ignored if already open or opening; executes a 3-pulse sequence if half-open.
+  - **Close (`DOF`)**: Closes the door; ignored if already closed or closing; executes a 3-pulse sequence if half-closed.
+  - **Toggle (`TOGGLE`)**: Always sends 1 toggle pulse unconditionally (supports stopping the door midway).
+  - External door openings/closings (e.g. wall switch or car remote) are detected in real time by the paired sensor, automatically updating door state and travel timers.
 - **Countdown Delays**: Remaining delay countdowns shown in the ISY are calculated in real time by the node server.
 - **Schedules**: YoLink on-device schedules are fully supported for switches, outlets, dimmers, manipulators, sprinklers, and water meters.
 - **Heartbeat & Event Deduplication**: State changes include ghost-trigger protection and alert event deduplication to ensure reliable automation trigger execution.

@@ -3,7 +3,7 @@
 Yolink Control Main Node  program 
 MIT License
 """
-version = '1.8.71'
+version = '1.8.73'
 import sys
 import re
 import time
@@ -924,7 +924,7 @@ def handleLevelChange(self, level):
     '''
     def handleParams (self, userParam ):
         logging.debug('handleParams')
-        supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT' ]
+        supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT', 'GARAGE_TRAVEL_TIME', 'GARAGE_SENSOR' ]
         self.Parameters.load(userParam)
 
        

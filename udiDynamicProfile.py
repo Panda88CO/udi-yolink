@@ -439,7 +439,8 @@ def get_active_nodedef_ids(controller=None):
             'Lock': ['YOLOCK', 'YOLOCKV2'],
             'Manipulator': ['YOMANIPU'],
             'GarageDoor': ['YOGARAGE'],
-            'GarageFinger': ['YOGARAGE'],
+            'Finger': ['YOFINGER', 'YOGARAGE'],
+            'GarageFinger': ['YOFINGER', 'YOGARAGE'],
             'PowerFailureAlarm': ['YOPWRALARM'],
             'Siren': ['YOSIREN'],
             'Sprinkler': ['YOSPRINKLER'],
@@ -597,6 +598,37 @@ def get_dynamic_profile_nodedefs(include_variants=False, active_ids=None):
     ]
 
 
+def check_any_garage_sensor_paired(controller):
+    """Check if any garage door controller in the controller has a paired door sensor."""
+    if controller is None:
+        return True
+
+    poly = getattr(controller, 'poly', None)
+    if poly is not None and hasattr(poly, 'getNodes') and callable(poly.getNodes):
+        try:
+            nodes = poly.getNodes() or {}
+            for node in nodes.values():
+                if getattr(node, 'paired_sensor', None) is not None:
+                    return True
+        except Exception:
+            pass
+
+    yolink_nodes = getattr(controller, 'yolink_nodes', None)
+    if isinstance(yolink_nodes, dict):
+        for node in yolink_nodes.values():
+            if getattr(node, 'paired_sensor', None) is not None:
+                return True
+
+    device_list = getattr(controller, 'deviceList', None)
+    if isinstance(device_list, (list, tuple)):
+        has_sensor = any(isinstance(d, dict) and d.get('type') == 'DoorSensor' for d in device_list)
+        has_garage = any(isinstance(d, dict) and d.get('type') in ('GarageDoor', 'Finger') for d in device_list)
+        if has_sensor and has_garage:
+            return True
+
+    return False
+
+
 def get_dynamic_profile_payload(
     controller=None,
     temp_unit=None,
@@ -639,6 +671,31 @@ def get_dynamic_profile_payload(
     else:
         nodedefs = get_dynamic_profile_nodedefs(include_variants=include_variants)
         editors = get_dynamic_profile_editors(temp_unit=temp_unit, water_unit=water_unit, tts_messages=tts_messages)
+
+    # If no garage door / finger is paired with a door sensor, prune DON/DOF from YOGARAGE
+    has_garage_sensor = check_any_garage_sensor_paired(controller)
+    if not has_garage_sensor:
+        new_nodedefs = []
+        for nd in nodedefs:
+            if nd.get('id') == 'YOGARAGE':
+                nd_copy = dict(nd)
+                cmds = dict(nd.get('cmds', {}))
+                cmds['accepts'] = [dict(c) for c in cmds.get('accepts', []) if c.get('id') == 'TOGGLE']
+                cmds['sends'] = []
+                nd_copy['cmds'] = cmds
+                new_props = []
+                for prop in nd.get('properties', []):
+                    p_copy = dict(prop)
+                    if p_copy.get('id') == 'ST':
+                        p_copy['editor'] = 'STATUS'
+                        p_copy['name'] = 'Node Server Status'
+                    new_props.append(p_copy)
+                nd_copy['properties'] = new_props
+                nd_copy['icon'] = 'Switch'
+                new_nodedefs.append(nd_copy)
+            else:
+                new_nodedefs.append(nd)
+        nodedefs = new_nodedefs
 
     payload = {
         'editors': editors,

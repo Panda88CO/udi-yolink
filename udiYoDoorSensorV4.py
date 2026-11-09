@@ -55,6 +55,8 @@ class udiYoDoorSensor(udi_interface.Node):
         self.configDone = False
         self.system_ready = False
         self._update_lock = threading.Lock()
+        self._state_callbacks = []
+        self._state_callbacks_lock = threading.Lock()
         self.last_state = 99
         self.cmd_state =  self.retrieve_cmd_state()
         logging.debug('udiYoDoorSensor INIT - {}'.format(deviceInfo['name']))
@@ -124,6 +126,14 @@ class udiYoDoorSensor(udi_interface.Node):
             logging.warning('udiYoDoorSensor.%s called before device initialization', caller)
         return sensor
 
+    def register_state_callback(self, callback):
+        if not hasattr(self, '_state_callbacks'):
+            self._state_callbacks = []
+            self._state_callbacks_lock = threading.Lock()
+        with self._state_callbacks_lock:
+            if callback not in self._state_callbacks:
+                self._state_callbacks.append(callback)
+
     def doorState(self):
         sensor = self._get_sensor('doorState')
         if sensor is None:
@@ -181,12 +191,20 @@ class udiYoDoorSensor(udi_interface.Node):
                     self.my_setDriver('GV0', 99 )
                     self.my_setDriver('ST', 99 )
                 self.last_state = doorstate
+                if hasattr(self, '_state_callbacks') and hasattr(self, '_state_callbacks_lock'):
+                    with self._state_callbacks_lock:
+                        callbacks = list(self._state_callbacks)
+                    for cb in callbacks:
+                        try:
+                            cb(doorstate)
+                        except Exception as e:
+                            logging.error('Error in door state callback: {}'.format(e))
                 self.my_setDriver('GV1', sensor.getBattery())
                 self.my_setDriver('GV2', self.cmd_state)
                 #self.my_setDriver('ST', 1)
                 state_change = sensor.get_data('stateChangedAt', 'state')
                 logging.debug('state_change : {}'.format(state_change))
-                if state_change is not None:
+                if isinstance(state_change, (int, float)):
                     self.my_setDriver('GV3', int(state_change/1000), type=message_type)
                 else:
                     self.my_setDriver('GV3', 99, 25, type=message_type)

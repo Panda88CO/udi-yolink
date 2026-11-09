@@ -1,4 +1,4 @@
-# udi-yolink (v1.8.71)
+# udi-yolink (v1.8.73)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x).
 
 ## Supported YoLink Devices
@@ -64,6 +64,8 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 | **`CALLS_PER_MIN`** | Optional | `60` | Overall YoLink API rate limit (calls per minute across all devices). |
 | **`DEV_CALLS_PER_MIN`** | Optional | `5` | Per-device YoLink API rate limit (calls per minute per device). |
 | **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). Saving this automatically generates the matching `TTS0`–`TTS<n-1>` input parameter fields. |
+| **`GARAGE_TRAVEL_TIME`** | Optional | `15` | Garage door travel time in seconds for open/close motion tracking. Can also be set per-door via `GARAGE_TRAVEL_TIME_<address>`. |
+| **`GARAGE_SENSOR`** | Optional | Auto | Paired DoorSensor address, deviceId, or name. Automatically discovered via YoLink kit pairing (`parentDeviceId`), name matching, or single sensor fallback. |
 
 3. Click **Save Changes** and **Restart** the node server.
    - *Note*: On initial setup, allow 1–2 minutes for all devices to synchronize completely.
@@ -74,4 +76,9 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 - **Schedules**: YoLink schedules are supported for on/off devices, multi-outlets, IR remotes, sprinklers, and water meters.
 - **Countdown Delays**: Remaining delay countdowns shown in ISY are estimated and tracked on the node server.
 - **SpeakerHub Messages**: When using a SpeakerHub, set `NBR_TTS` to the desired number of messages (1–10) and click **Save Changes**. The node server automatically creates the corresponding `TTS0`, `TTS1`, ... input lines in Custom Configuration Parameters for you to enter your message texts. Once saved, restart the IoX / Admin Console (or re-login) to refresh the dropdown command labels.
+- **Garage Door Controller & Finger**: Full smart state tracking is supported with paired YoLink door sensors (`Closed`, `Open`, `Opening`, `Closing`, `Half-Open`, `Half-Closed`, `Unknown`).
+  - **Open (`DON`)**: Opens the door; ignored if already open or opening; executes a 3-pulse sequence if half-open.
+  - **Close (`DOF`)**: Closes the door; ignored if already closed or closing; executes a 3-pulse sequence if half-closed.
+  - **Toggle (`TOGGLE`)**: Always sends 1 toggle pulse unconditionally (supports stopping the door midway).
+  - External door openings/closings (e.g. wall switch or car remote) are detected in real time by the paired sensor, automatically updating door state and travel timers.
 - **Dynamic Profile Updates**: Device profiles and custom unit labels are automatically registered upon startup.

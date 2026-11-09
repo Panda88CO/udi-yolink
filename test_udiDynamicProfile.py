@@ -71,7 +71,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
 
     def test_dynamic_nodedefs_content(self):
         nodedefs_unified = udiDynamicProfile.get_dynamic_profile_nodedefs(include_variants=False)
-        self.assertEqual(len(nodedefs_unified), 57)
+        self.assertEqual(len(nodedefs_unified), 58)
         # All variant IDs should be excluded
         unified_ids = {nd['id'] for nd in nodedefs_unified}
         for var_id in udiDynamicProfile.VARIANT_TO_BASE_NODEDEF:
@@ -79,7 +79,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
 
         # Full profile with variants retained
         nodedefs_all = udiDynamicProfile.get_dynamic_profile_nodedefs(include_variants=True)
-        self.assertEqual(len(nodedefs_all), 72)
+        self.assertEqual(len(nodedefs_all), 73)
 
         # Check setup nodeDef
         setup_nd = next((nd for nd in nodedefs_unified if nd.get('id') == 'SETUP'), None)
@@ -194,7 +194,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         by_id = {e['id']: e for e in payload['editors']}
         self.assertEqual(by_id['CELSIUS']['ranges'][0]['uom'], '17')
         self.assertEqual(by_id['LITER']['ranges'][0]['uom'], '35')
-        self.assertEqual(len(payload['nodedefs']), 57)
+        self.assertEqual(len(payload['nodedefs']), 58)
 
     def test_normalize_units(self):
         # Temp unit normalizer

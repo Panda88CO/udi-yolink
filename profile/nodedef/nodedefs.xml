@@ -1667,16 +1667,32 @@
    <nodeDef id="YOGARAGE" nls="nlsgarage">
       <editors />
       <sts>
-         <st id="ST"  editor="STATUS" />
+         <st id="ST" editor="GARAGESTATE" />
          <st id="GV20" editor="SUSPENDSTATE" />    
-         <st id="GV30"  editor="STATUS" />     
+         <st id="GV30" editor="STATUS" />     
       </sts>
       <cmds>
          <sends>
+            <cmd id="DON" />
+            <cmd id="DOF" />
          </sends>
          <accepts>
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
+            <cmd id="TOGGLE" />  
+         </accepts>
+      </cmds>
+   </nodeDef> 
+   <nodeDef id="YOFINGER" nls="nlsfinger">
+      <editors />
+      <sts>
+         <st id="ST" editor="STATUS" />
+         <st id="GV20" editor="SUSPENDSTATE" />    
+         <st id="GV30" editor="STATUS" />     
+      </sts>
+      <cmds>
+         <sends />
+         <accepts>
             <cmd id="TOGGLE" />  
          </accepts>
       </cmds>

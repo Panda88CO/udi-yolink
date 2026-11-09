@@ -99,7 +99,7 @@ class YoLinkSetup (udi_interface.Node):
         self.TTSstr = 'TTS'
         self.nbr_API_calls = 19
         self.nbr_dev_API_calls = 5
-        self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT', 'NODE_READY_POLL_SEC' ]
+        self.supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT', 'NODE_READY_POLL_SEC', 'GARAGE_TRAVEL_TIME', 'GARAGE_SENSOR' ]
         self.node_ready_poll_seconds = 0.2
         self.yolinkURL = 'https://api.yosmart.com/openApi'
         self.yolinkV2URL = 'https://api.yosmart.com/open/yolink/v2/api' 
@@ -549,7 +549,7 @@ class YoLinkSetup (udi_interface.Node):
 
     def handleParams (self, userParam ):
         logging.debug('handleParams')
-        supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT', 'NODE_READY_POLL_SEC' ]
+        supportParams = ['YOLINKV2_URL', 'TOKEN_URL','MQTT_URL', 'MQTT_PORT', 'UAID', 'SECRET_KEY', 'NBR_TTS', 'TEMP_UNIT', 'NODE_READY_POLL_SEC', 'GARAGE_TRAVEL_TIME', 'GARAGE_SENSOR' ]
         self.Parameters.load(userParam)
 
        
@@ -618,6 +618,15 @@ class YoLinkSetup (udi_interface.Node):
               
                 #self.yoAccess.writeTtsFile()    
                 
+            if 'GARAGE_TRAVEL_TIME' in userParam:
+                try:
+                    self.garage_travel_time = float(userParam['GARAGE_TRAVEL_TIME'])
+                except (ValueError, TypeError):
+                    self.garage_travel_time = 15.0
+
+            if 'GARAGE_SENSOR' in userParam:
+                self.garage_sensor = str(userParam['GARAGE_SENSOR']).strip()
+
             if 'DEBUG_EN' in userParam:
                 self.debug = True
 
