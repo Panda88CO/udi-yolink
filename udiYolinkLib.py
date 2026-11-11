@@ -381,10 +381,37 @@ def node_queue(self, data):
     logging.debug('node_queue - {}'.format(data))
     self.n_queue.append(address)
 
-def wait_for_node_done(self):
+def wait_for_node_done(self, timeout=5.0):
+    if not hasattr(self, 'n_queue') or not isinstance(self.n_queue, list):
+        self.n_queue = []
+    start_time = time.time()
+    retried = False
     while len(self.n_queue) == 0:
+        if timeout is not None and (time.time() - start_time) > timeout:
+            addr = getattr(self, 'address', 'unknown')
+            if not retried and hasattr(self, 'poly') and hasattr(self.poly, 'addNode'):
+                logging.warning(
+                    'wait_for_node_done: timeout waiting for ADDNODEDONE for %s after %ss - retrying addNode once...',
+                    addr, timeout
+                )
+                try:
+                    self.poly.addNode(self)
+                except Exception as e:
+                    logging.error('wait_for_node_done: error retrying addNode for %s: %s', addr, e)
+                retried = True
+                start_time = time.time()
+                continue
+            logging.warning(
+                'wait_for_node_done: timeout waiting for ADDNODEDONE for %s after retry - proceeding without PG3 confirmation',
+                addr
+            )
+            return False
         time.sleep(0.1)
-    self.n_queue.pop()
+    try:
+        self.n_queue.pop()
+    except IndexError:
+        pass
+    return True
 
 def my_setDriver(self, key, value, UOM=None, force=None, type=None):
     with driver_lock:

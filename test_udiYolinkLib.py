@@ -519,5 +519,48 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
             mock_thread_cls.assert_called_once_with(target=yoAccess._async_reconnect, daemon=True)
             mock_thread_instance.start.assert_called_once()
 
+
+class TestWaitForNodeDone(unittest.TestCase):
+    """Test wait_for_node_done timeout, retry, and non-blocking recovery."""
+
+    def test_wait_for_node_done_success(self):
+        import udiYolinkLib
+        node = MagicMock()
+        node.address = 'test_addr'
+        node.n_queue = ['test_addr']
+
+        res = udiYolinkLib.wait_for_node_done(node, timeout=0.1)
+        self.assertTrue(res)
+        self.assertEqual(node.n_queue, [])
+
+    def test_wait_for_node_done_timeout_retries_and_returns_false(self):
+        import udiYolinkLib
+        node = MagicMock()
+        node.address = 'test_addr'
+        node.n_queue = []
+        node.poly = MagicMock()
+
+        res = udiYolinkLib.wait_for_node_done(node, timeout=0.05)
+        self.assertFalse(res)
+        node.poly.addNode.assert_called_once_with(node)
+
+    def test_wait_for_node_done_retry_succeeds(self):
+        import udiYolinkLib
+        node = MagicMock()
+        node.address = 'test_addr'
+        node.n_queue = []
+        node.poly = MagicMock()
+
+        def simulate_add_node(n):
+            n.n_queue.append('test_addr')
+
+        node.poly.addNode.side_effect = simulate_add_node
+
+        res = udiYolinkLib.wait_for_node_done(node, timeout=0.05)
+        self.assertTrue(res)
+        self.assertEqual(node.n_queue, [])
+        node.poly.addNode.assert_called_once_with(node)
+
+
 if __name__ == '__main__':
     unittest.main()

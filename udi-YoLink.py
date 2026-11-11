@@ -100,7 +100,7 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('self.address : ' + str(self.address))
         logging.debug('self.name :' + str(self.name))   
         self.poly.ready()
-       
+        time.sleep(0.5)
         self.apply_profile_driver_names(self.id)
         self.poly.addNode(self)
         self.wait_for_node_done()
@@ -346,13 +346,12 @@ class YoLinkSetup (udi_interface.Node):
                     pending.append({'addr': addr, 'dev_id': dev_id, 'source': source})
                     continue
 
-                # space calls using yoAccess time tracking
+                # space calls using yoAccess time tracking with minimum spacing to prevent rate limiting
                 try:
                     delay = self.yoAccess.time_tracking(dev_id) if self.yoAccess is not None else 0
                 except Exception:
                     delay = 0
-                if delay and delay > 0:
-                    time.sleep(delay)
+                time.sleep(max(delay or 0, 1.2))
 
                 try:
                     refreshed = source.refreshSchedules()
@@ -400,8 +399,7 @@ class YoLinkSetup (udi_interface.Node):
                     delay = self.yoAccess.time_tracking(dev_id) if self.yoAccess is not None else 0
                 except Exception:
                     delay = 0
-                if delay and delay > 0:
-                    time.sleep(delay)
+                time.sleep(max(delay or 0, 1.2))
 
                 try:
                     refreshed = source.refreshSchedules()

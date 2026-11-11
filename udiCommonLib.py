@@ -3,7 +3,7 @@
 Yolink Control Main Node  program 
 MIT License
 """
-version = '1.8.74'
+version = '1.8.75'
 import sys
 import re
 import time
@@ -376,10 +376,13 @@ def addNodes (self, deviceList) -> list:
         try:
             deviceList = sorted(
                 deviceList,
-                key=lambda dev: 0 if str(dev.get('deviceId', ''))[-14:] in existing_addresses else 1,
+                key=lambda dev: (
+                    0 if dev.get('type') in ('Hub', 'SpeakerHub') else 1,
+                    0 if str(dev.get('deviceId', ''))[-14:] in existing_addresses else 1,
+                ),
             )
             logging.debug(
-                'addNodes prioritized %s known DB addresses for early creation',
+                'addNodes prioritized %s known DB addresses for early creation (Hub/SpeakerHub first)',
                 len(existing_addresses),
             )
         except Exception as e:

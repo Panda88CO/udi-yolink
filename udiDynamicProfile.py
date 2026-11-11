@@ -890,6 +890,22 @@ def update_dynamic_profile(controller, include_variants=False):
         except Exception:
             pass
 
+    # If active-node profile was generated and still exceeds safe size, fall back directly to static updateProfile
+    if pruned_payload is not None and pruned_bytes > MAX_SAFE_PROFILE_BYTES:
+        logging.warning(
+            f"Active-node pruned profile ({pruned_bytes} bytes) exceeds safe PG3 threshold ({MAX_SAFE_PROFILE_BYTES} bytes); "
+            "skipping updateJsonProfile and falling back directly to static updateProfile to avoid MQTT packet rejection"
+        )
+        if hasattr(controller, 'poly') and hasattr(controller.poly, 'updateProfile'):
+            try:
+                controller.poly.updateProfile()
+                logging.info("Static profile updated successfully via updateProfile fallback")
+                return True
+            except Exception as e:
+                logging.error(f"updateProfile fallback failed: {e}")
+                return False
+        return False
+
     # Select target payload: if full payload > 60KB and pruned is available, send pruned payload
     if payload_bytes > MAX_SAFE_PROFILE_BYTES and pruned_payload is not None:
         logging.info(

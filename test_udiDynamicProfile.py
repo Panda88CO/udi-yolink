@@ -393,6 +393,22 @@ class TestDeferredProfileLoading(unittest.TestCase):
 
         controller.poly.updateProfile.assert_called_once()
 
+    def test_update_dynamic_profile_fallback_when_pruned_exceeds_safe_limit(self):
+        """When active-node pruned profile exceeds MAX_SAFE_PROFILE_BYTES, fall back directly to updateProfile."""
+        controller = MagicMock()
+        controller.poly = MagicMock()
+        controller.poly.updateJsonProfile = MagicMock()
+        controller.poly.updateProfile = MagicMock()
+
+        with patch.object(udiDynamicProfile, 'get_active_nodedef_ids', return_value={'SETUP', 'YOTHSENS'}), \
+             patch.object(udiDynamicProfile, 'get_dynamic_profile_payload') as mock_payload:
+            # Return a payload that serializes to > 60KB
+            mock_payload.return_value = {'nodedefs': [{'id': 'BIG'}], 'editors': [{'id': 'ED', 'desc': 'x' * 65000}]}
+            udiDynamicProfile.update_dynamic_profile(controller)
+
+        controller.poly.updateJsonProfile.assert_not_called()
+        controller.poly.updateProfile.assert_called_once()
+
     def test_get_active_nodedef_ids_extraction(self):
         """Test extraction of active nodeDef IDs from mock controller with live nodes."""
         controller = MagicMock()
