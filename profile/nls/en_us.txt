@@ -970,11 +970,6 @@ ircmdstatus-1=Success
 ircmdstatus-2=Fail
 ircmdstatus-99=Unknown
 
-cmdstatus-0=Fail
-cmdstatus-1=Success
-cmdstatus-2=TX Key Wrong
-cmdstatus-99=Unknown
-
 lockstate-0=Unlocked
 lockstate-1=Locked
 lockstate-99=Unknown

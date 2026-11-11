@@ -310,15 +310,16 @@ class udiYoTHsensor(udi_interface.Node):
                 alarm_det = alarm_det or bat_alarm
 
                 if alarm_det != self.alarm_state:
-                    if alarm_det and self.cmd_state in [0,1]:
-                        self.node.reportCmd('DON')
-                    if not alarm_det and self.cmd_state in [0,2]:  
-                        self.node.reportCmd('DOF')
-                    self.alarm_state = alarm_det                
+                    if alarm_det:
+                        if int(self.cmd_state) in [0, 1]:
+                            self.node.reportCmd('DON')
+                    else:
+                        if int(self.cmd_state) in [0, 2]:
+                            self.node.reportCmd('DOF')
+                    self.alarm_state = alarm_det
 
-
-                    self.my_setDriver('GV8', sensor.bool2Nbr(self.alarm_state))
-                    self.my_setDriver('GV9', self.cmd_state)
+                self.my_setDriver('GV8', sensor.bool2Nbr(self.alarm_state))
+                self.my_setDriver('GV9', int(self.cmd_state))
 
                 self.my_setDriver('GV30', 1)
 

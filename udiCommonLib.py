@@ -3,7 +3,7 @@
 Yolink Control Main Node  program 
 MIT License
 """
-version = '1.8.73'
+version = '1.8.74'
 import sys
 import re
 import time
@@ -287,8 +287,10 @@ def sync_tts_parameters(self, nbr_tts=None):
         prev_tts_signature = None
         if hasattr(self, 'poly') and self.poly is not None:
             try:
-                custom_data = Custom(self.poly, 'customdata')
-                prev_tts_signature = custom_data.get('tts_signature')
+                from udiYolinkLib import get_shared_customdata
+                custom_data = get_shared_customdata(self.poly)
+                if custom_data is not None:
+                    prev_tts_signature = custom_data.get('tts_signature')
             except Exception as e:
                 logging.debug(f'Unable to access customdata for tts signature tracking: {e}')
         if prev_tts_signature is None:
@@ -764,10 +766,10 @@ def heartbeat(self):
     if self.yoAccess.online:
         self.my_setDriver('ST', 1)
         if self.hb == 0:
-            self.reportCmd('DON',2)
+            self.reportCmd('DON')
             self.hb = 1
         else:
-            self.reportCmd('DOF',2)
+            self.reportCmd('DOF')
             self.hb = 0
     else:
         self.my_setDriver('ST', 0)
@@ -807,7 +809,11 @@ def saveNodeNames(self):
             logging.debug('saveNodeNames: skipped before node cache is ready')
             return
 
-        cd = Custom(self.poly, 'customdata')
+        from udiYolinkLib import get_shared_customdata
+        cd = get_shared_customdata(self.poly)
+        if cd is None:
+            logging.debug('saveNodeNames: customdata store unavailable')
+            return
         nodes = self.poly.getNodes()
         for addr, node in nodes.items():
             if addr == 'setup':

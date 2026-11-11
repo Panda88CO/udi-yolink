@@ -237,6 +237,7 @@ class udiYoSoilSensor(udi_interface.Node):
                 tempLimMax = sensor.get_data('max', 'tempLimit')    
                 lowTempAlarm = sensor.get_data('lowTemp', 'alarm')
                 highTempAlarm = sensor.get_data('highTemp', 'alarm')     
+                alarm_det = alarm_det or lowTempAlarm or highTempAlarm     
                 if isinstance(tempC, (int, float)):
                     if self.temp_unit == 0:
                         self.my_setDriver('CLITEMP', round(tempC,1),  4, type=message_type)
@@ -294,12 +295,15 @@ class udiYoSoilSensor(udi_interface.Node):
 
 
                 if alarm_det != self.alarm_state:
-                    if alarm_det and self.cmd_state in [0,1]:
-                        self.node.reportCmd('DON')
-                    if not alarm_det and self.cmd_state in [0,2]:  
-                        self.node.reportCmd('DOF')
-                    self.alarm_state = alarm_det                               
-                    self.my_setDriver('GV9', self.cmd_state)
+                    if alarm_det:
+                        if int(self.cmd_state) in [0, 1]:
+                            self.node.reportCmd('DON')
+                    else:
+                        if int(self.cmd_state) in [0, 2]:
+                            self.node.reportCmd('DOF')
+                    self.alarm_state = alarm_det
+
+                self.my_setDriver('GV9', int(self.cmd_state))
 
                 self.my_setDriver('GV30', 1)
 
@@ -314,7 +318,7 @@ class udiYoSoilSensor(udi_interface.Node):
 
 
     def updateStatus(self, data):
-        logging.debug('udiYoSprinkler - updateStatus')
+        logging.debug('udiYoSoilSensor - updateStatus')
         if self.yoSoilSensor is not None:
             with self._update_lock:
                 self.yoSoilSensor.updateStatus(data)
@@ -322,13 +326,13 @@ class udiYoSoilSensor(udi_interface.Node):
 
     def set_cmd(self, command):
         ctrl = int(command.get('value'))   
-        logging.info('udiYoSprinkler  set_cmd - {}'.format(ctrl))
+        logging.info('udiYoSoilSensor  set_cmd - {}'.format(ctrl))
         self.cmd_state = ctrl
         self.my_setDriver('GV9', self.cmd_state)
         self.save_cmd_state(self.cmd_state)
 
     def update(self, command = None):
-        logging.info('THsensor Update')
+        logging.info('SoilSensor Update')
         sensor = self._get_sensor('update')
         if sensor is None:
             return

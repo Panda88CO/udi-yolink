@@ -136,6 +136,8 @@ class YoLinkSetup (udi_interface.Node):
         
         self.Parameters = Custom(self.poly, 'customparams')
         self.Notices = Custom(self.poly, 'notices')
+        self.customData = Custom(self.poly, 'customdata')
+        self.poly.customData = self.customData
         logging.debug('YoLinkSetup init')
         logging.debug('self.address : ' + str(self.address))
         logging.debug('self.name :' + str(self.name))   

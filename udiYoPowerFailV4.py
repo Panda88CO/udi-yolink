@@ -168,9 +168,9 @@ class udiYoPowerFailSenor(udi_interface.Node):
                     self.my_setDriver('GV0', state_val, type=message_type)
                     self.my_setDriver('ST', state_val, type=message_type)
                     if state_val != self.last_state:
-                        if state_val == 1 and self.cmd_state in [0, 1]:
+                        if state_val == 1 and int(self.cmd_state) in [0, 1]:
                             self.node.reportCmd('DON')
-                        elif state_val == 0 and self.cmd_state in [0, 2]:
+                        elif state_val == 0 and int(self.cmd_state) in [0, 2]:
                             self.node.reportCmd('DOF')
                     self.last_state = state_val
                 else:
@@ -180,13 +180,22 @@ class udiYoPowerFailSenor(udi_interface.Node):
                 self.my_setDriver('GV1', sensor.get_data('battery', 'state'))
                 alert = sensor.get_data('alertType', 'state')
                 logging.debug('AlertState GV2 : {}'.format(alert))
-                self.my_setDriver('GV2', alert, type=message_type)
+                if alert in ['normal', None]:
+                    alert_val = 0
+                elif alert in ['alert', 'remind']:
+                    alert_val = 1
+                elif isinstance(alert, (int, float)) and alert in [0, 1, 99]:
+                    alert_val = int(alert)
+                else:
+                    alert_val = 99
+                self.my_setDriver('GV2', alert_val, type=message_type)
                 powered = sensor.get_data('powerSupply', 'state')
                 logging.debug('Powered  GV3 : {}'.format(powered))
                 self.my_setDriver('GV3', self.bool2ISY(powered), type=message_type)
                 muted = sensor.get_data('mute', 'state')
                 logging.debug('Muted GV4 : {}'.format(muted))
                 self.my_setDriver('GV4', self.bool2ISY(muted), type=message_type)
+                self.my_setDriver('GV7', int(self.cmd_state))
                 self.my_setDriver('GV30', 1)
                 if sensor.suspended:
                     self.my_setDriver('GV20', 1)

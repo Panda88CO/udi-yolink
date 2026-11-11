@@ -129,9 +129,6 @@
   <editor id="NBRCODES">
     <range uom="56" min="0" max="64" prec="0" />
   </editor>
-  <editor id="CMDSTATUS">
-    <range uom="25" subset="0,1,2,99" nls="cmdstatus" />
-  </editor>
   <editor id="IRCMDSTATUS">
     <range uom="25" subset="0,1,2,99" nls="ircmdstatus" />
   </editor>

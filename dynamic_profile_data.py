@@ -610,21 +610,6 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
-    "id": "CMDSTATUS",
-    "ranges": [
-      {
-        "uom": "25",
-        "subset": "0,1,2,99",
-        "names": {
-          "0": "Fail",
-          "1": "Success",
-          "2": "TX Key Wrong",
-          "99": "Unknown"
-        }
-      }
-    ]
-  },
-  {
     "id": "IRCMDSTATUS",
     "ranges": [
       {
@@ -9442,7 +9427,7 @@ DYNAMIC_NODEDEFS = [
       },
       {
         "id": "GV7",
-        "editor": "CMDSTATUS",
+        "editor": "CMDSETTING",
         "name": "Command Setting"
       },
       {

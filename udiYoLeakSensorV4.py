@@ -169,39 +169,45 @@ class udiYoLeakSensor(udi_interface.Node):
             self.my_setDriver('TIME', unix_time, 151)
 
             if sensor.check_system_online():
-                waterState =   sensor.get_data('state', 'state')
+                waterState = sensor.get_data('state', 'state')
 
-                #logging.debug( 'Leak Sensor 0,1,8: {}  {} {}'.format(waterState,self.yoLeakSensor.getBattery(),self.yoLeakSensor.bool2Nbr(self.yoLeakSensor.online)  ))
-                if waterState in ['alert' , 'wet']:
+                if waterState in ['alert', 'wet']:
+                    state_val = 1
                     self.my_setDriver('GV0', 1, type=message_type)
                     self.my_setDriver('ST', 1, type=message_type)
-                    if waterState != self.last_state:
-                        if self.cmd_state in [0,1]:
+                    if self.last_state != 1:
+                        if int(self.cmd_state) in [0, 1]:
                             self.node.reportCmd('DON')
+                        self.last_state = 1
                 elif waterState in ['normal', 'dry']:
+                    state_val = 0
                     self.my_setDriver('GV0', 0, type=message_type)
-                    self.my_setDriver('ST', 0, type=message_type)                    
-                    if waterState != self.last_state:
-                        if self.cmd_state in [0,2]:
+                    self.my_setDriver('ST', 0, type=message_type)
+                    if self.last_state != 0:
+                        if self.last_state != 99 and int(self.cmd_state) in [0, 2]:
                             self.node.reportCmd('DOF')
+                        self.last_state = 0
                 else:
                     self.my_setDriver('GV0', 99, type=message_type)
-                    self.my_setDriver('ST', 99, type=message_type)   
-                self.last_state = waterState
-    
+                    self.my_setDriver('ST', 99, type=message_type)
+                    self.last_state = 99
+
                 batlvl = sensor.get_data('battery', 'state')
                 if isinstance(batlvl, (int, float)):
                     self.my_setDriver('BATLVL', batlvl, type=message_type)
                 else:
                     self.my_setDriver('BATLVL', 99, type=message_type)
 
-                self.my_setDriver('GV2', self.cmd_state, type=message_type)
+                self.my_setDriver('GV2', int(self.cmd_state), type=message_type)
                 #self.my_setDriver('ST', 1)
 
                 state_change = sensor.get_data('stateChangedAt', 'state')
                 logging.debug('state_change : {}'.format(state_change))
-                if state_change is not None:
-                    self.my_setDriver('GV3', int(state_change/1000), type=message_type)
+                if isinstance(state_change, (int, float)):
+                    self.my_setDriver('GV3', int(state_change / 1000) if state_change > 1e11 else int(state_change), type=message_type)
+                elif isinstance(state_change, str) and state_change.strip().isdigit():
+                    sc_val = float(state_change)
+                    self.my_setDriver('GV3', int(sc_val / 1000) if sc_val > 1e11 else int(sc_val), type=message_type)
                 else:
                     self.my_setDriver('GV3', 99, UOM=25, type=message_type)
 

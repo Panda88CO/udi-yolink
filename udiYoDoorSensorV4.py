@@ -140,12 +140,23 @@ class udiYoDoorSensor(udi_interface.Node):
             return None
         state = sensor.get_data('state','state')
 
-        if isinstance(state, str) and state.lower() == 'closed':
-            return(0)
-        elif isinstance(state, str) and state.lower() == 'open':
-            return(1)
+        if isinstance(state, str):
+            state_lower = state.lower()
+            if state_lower in ['closed', 'close', '0']:
+                return 0
+            elif state_lower in ['open', '1']:
+                return 1
+            return None
+        elif isinstance(state, bool):
+            return 1 if state else 0
+        elif isinstance(state, (int, float)):
+            if state == 0:
+                return 0
+            elif state == 1:
+                return 1
+            return None
         else:
-            return(None)
+            return None
     
     def checkOnline(self):
         # only gets the casched status (battery operated device)
@@ -178,19 +189,23 @@ class udiYoDoorSensor(udi_interface.Node):
             if sensor.check_system_online():
                 doorstate = self.doorState()
                 if doorstate == 1:
-                    self.my_setDriver('GV0', 1 )
-                    self.my_setDriver('ST', 1 )
-                    if doorstate != self.last_state and self.cmd_state in [0,1]:
-                        self.node.reportCmd('DON')
+                    self.my_setDriver('GV0', 1, type=message_type)
+                    self.my_setDriver('ST', 1, type=message_type)
+                    if doorstate != self.last_state:
+                        if int(self.cmd_state) in [0, 1]:
+                            self.node.reportCmd('DON')
+                        self.last_state = doorstate
                 elif doorstate == 0:
-                    self.my_setDriver('GV0', 0 )
-                    self.my_setDriver('ST', 0 )
-                    if doorstate != self.last_state and self.cmd_state in [0,2]:
-                        self.node.reportCmd('DOF')
+                    self.my_setDriver('GV0', 0, type=message_type)
+                    self.my_setDriver('ST', 0, type=message_type)
+                    if doorstate != self.last_state:
+                        if int(self.cmd_state) in [0, 2]:
+                            self.node.reportCmd('DOF')
+                        self.last_state = doorstate
                 else:
-                    self.my_setDriver('GV0', 99 )
-                    self.my_setDriver('ST', 99 )
-                self.last_state = doorstate
+                    self.my_setDriver('GV0', 99, type=message_type)
+                    self.my_setDriver('ST', 99, type=message_type)
+                    self.last_state = doorstate
                 if hasattr(self, '_state_callbacks') and hasattr(self, '_state_callbacks_lock'):
                     with self._state_callbacks_lock:
                         callbacks = list(self._state_callbacks)
@@ -200,12 +215,15 @@ class udiYoDoorSensor(udi_interface.Node):
                         except Exception as e:
                             logging.error('Error in door state callback: {}'.format(e))
                 self.my_setDriver('GV1', sensor.getBattery())
-                self.my_setDriver('GV2', self.cmd_state)
+                self.my_setDriver('GV2', int(self.cmd_state))
                 #self.my_setDriver('ST', 1)
                 state_change = sensor.get_data('stateChangedAt', 'state')
                 logging.debug('state_change : {}'.format(state_change))
                 if isinstance(state_change, (int, float)):
-                    self.my_setDriver('GV3', int(state_change/1000), type=message_type)
+                    self.my_setDriver('GV3', int(state_change / 1000) if state_change > 1e11 else int(state_change), type=message_type)
+                elif isinstance(state_change, str) and state_change.strip().isdigit():
+                    sc = float(state_change)
+                    self.my_setDriver('GV3', int(sc / 1000) if sc > 1e11 else int(sc), type=message_type)
                 else:
                     self.my_setDriver('GV3', 99, 25, type=message_type)
 

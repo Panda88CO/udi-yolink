@@ -199,10 +199,10 @@ class udiYoCOSmokeSensor(udi_interface.Node):
                 self.my_setDriver('ST', self.bool2nbr(alert), type=message_type)
                 if alert != self.last_alert:
                     if alert:
-                        if self.cmd_state in [0,1]:
+                        if int(self.cmd_state) in [0, 1]:
                             self.node.reportCmd('DON')
                     else:
-                        if self.cmd_state in [0,2]:
+                        if int(self.cmd_state) in [0, 2]:
                             self.node.reportCmd('DOF')
                     self.last_alert = alert
                 self.my_setDriver('GV5', self.bool2nbr(sensor.get_data('inspect', 'metadata')))
@@ -218,7 +218,7 @@ class udiYoCOSmokeSensor(udi_interface.Node):
                         self.my_setDriver('CLITEMP', round(devTemp+273.15,0), 26)
                 else:
                     self.my_setDriver('CLITEMP', 99, 25)
-                self.my_setDriver('GV7', self.cmd_state)
+                self.my_setDriver('GV7', int(self.cmd_state))
                 if sensor.suspended:
                     self.my_setDriver('GV20', 1)
                 else:

@@ -1438,7 +1438,7 @@
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
-               <p id="" editor="CMDSETTING" init="GV2" /> 
+               <p id="" editor="CMDSETTING" init="GV9" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
          </accepts>
@@ -1477,7 +1477,7 @@
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
-               <p id="" editor="CMDSETTING" init="GV2" /> 
+               <p id="" editor="CMDSETTING" init="GV9" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
          </accepts>
@@ -1516,7 +1516,7 @@
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
-               <p id="" editor="CMDSETTING" init="GV2" /> 
+               <p id="" editor="CMDSETTING" init="GV9" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
          </accepts>
@@ -1555,7 +1555,7 @@
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
-               <p id="" editor="CMDSETTING" init="GV2" /> 
+               <p id="" editor="CMDSETTING" init="GV9" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
          </accepts>
@@ -1594,7 +1594,7 @@
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
-               <p id="" editor="CMDSETTING" init="GV2" /> 
+               <p id="" editor="CMDSETTING" init="GV9" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
          </accepts>
@@ -1633,7 +1633,7 @@
          </sends>
          <accepts>
             <cmd id="SETCMD" > 
-               <p id="" editor="CMDSETTING" init="GV2" /> 
+               <p id="" editor="CMDSETTING" init="GV9" /> 
             </cmd >          
             <cmd id="UPDATE" /> 
          </accepts>
@@ -2097,7 +2097,7 @@
          <st id="GV2" editor="ALERTSTATE" />
          <st id="GV3" editor="POWERED" />
          <st id="GV4" editor="PFAMUTE" />
-         <st id="GV7" editor="CMDSTATUS" />
+         <st id="GV7" editor="CMDSETTING" />
          <st id="GV20" editor="SUSPENDSTATE" />   
          <st id="GV30"  editor="STATUS" />     
          <st id="TIME" editor="UNIXTIME" />                     

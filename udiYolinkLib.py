@@ -224,6 +224,10 @@ def convert_water_unit(self, tempStr):
 
 def save_cmd_state(self, cmd_state):
     logging.debug('save_cmd_state {} - {}'.format(cmd_state, self.address))
+    try:
+        cmd_state = int(cmd_state)
+    except (ValueError, TypeError):
+        cmd_state = 0
     temp = {}
     temp['cmd_state'] = cmd_state
     try:
@@ -231,6 +235,10 @@ def save_cmd_state(self, cmd_state):
             json.dump(temp, file)
     except IOError as e:
         logging.error('An error occurred saving command state: {}'.format(e))
+    try:
+        set_node_custom(self, 'cmd_state', cmd_state)
+    except Exception as e:
+        logging.debug(f'Failed persisting cmd_state to customdata: {e}')
 
 
 def save_cmd_struct(self, cmd_struct):
@@ -258,15 +266,95 @@ def convert_timestr_to_epoch(self, timestr):
 
 def retrieve_cmd_state(self):
     logging.debug('retrieve_cmd_state - {}'.format(self.address))
+    # 1. Try local JSON file
     try:
         with open(str(self.address)+'.json', 'r') as file:
             temp = json.load(file)
-            self.cmd_state = temp['cmd_state']
-    except FileNotFoundError:
-        self.cmd_state = 0
-        self.save_cmd_state(self.cmd_state)
-    logging.debug('retrieve_cmd_state - state = {}'.format(self.cmd_state))
-    return(self.cmd_state)
+            if isinstance(temp, dict) and 'cmd_state' in temp:
+                self.cmd_state = int(temp['cmd_state'])
+                logging.debug('retrieve_cmd_state from file - state = {}'.format(self.cmd_state))
+                return self.cmd_state
+    except (FileNotFoundError, ValueError, KeyError, json.JSONDecodeError):
+        pass
+    except Exception as e:
+        logging.debug(f'retrieve_cmd_state file read error: {e}')
+
+    # 2. Try Polyglot customdata
+    try:
+        custom_val = get_node_custom(self, 'cmd_state')
+        if custom_val is not None:
+            self.cmd_state = int(custom_val)
+            logging.debug('retrieve_cmd_state from customdata - state = {}'.format(self.cmd_state))
+            try:
+                with open(str(self.address)+'.json', 'w') as file:
+                    json.dump({'cmd_state': self.cmd_state}, file)
+            except Exception:
+                pass
+            return self.cmd_state
+    except Exception as e:
+        logging.debug(f'retrieve_cmd_state customdata error: {e}')
+
+    # 3. Try PG3 database drivers
+    try:
+        poly = getattr(self, 'poly', None)
+        if poly is not None:
+            cmd_drivers = []
+            node_drivers = getattr(self, 'drivers', [])
+            if isinstance(node_drivers, list):
+                for d in node_drivers:
+                    if isinstance(d, dict) and d.get('name') == 'Command Setting':
+                        drv_id = d.get('driver')
+                        if drv_id and drv_id not in cmd_drivers:
+                            cmd_drivers.append(drv_id)
+            for fallback in ['GV2', 'GV7', 'GV9']:
+                if fallback not in cmd_drivers:
+                    cmd_drivers.append(fallback)
+
+            db_val = None
+            if hasattr(poly, 'db_getNodeDriver'):
+                for drv in cmd_drivers:
+                    try:
+                        d = poly.db_getNodeDriver(self.address, drv)
+                        if isinstance(d, dict):
+                            val = d.get('value')
+                            if val is not None and str(val).strip() != '':
+                                db_val = int(val)
+                                break
+                        elif d is not None and str(d).strip() != '':
+                            db_val = int(d)
+                            break
+                    except Exception:
+                        pass
+
+            if db_val is None and hasattr(poly, 'db_getNodeDrivers'):
+                try:
+                    drivers = poly.db_getNodeDrivers(self.address)
+                    if isinstance(drivers, list):
+                        for drv in cmd_drivers:
+                            for d in drivers:
+                                if isinstance(d, dict) and d.get('driver') == drv:
+                                    val = d.get('value')
+                                    if val is not None and str(val).strip() != '':
+                                        db_val = int(val)
+                                        break
+                            if db_val is not None:
+                                break
+                except Exception:
+                    pass
+
+            if db_val is not None:
+                self.cmd_state = db_val
+                logging.debug('retrieve_cmd_state from PG3 DB - state = {}'.format(self.cmd_state))
+                save_cmd_state(self, self.cmd_state)
+                return self.cmd_state
+    except Exception as e:
+        logging.debug(f'retrieve_cmd_state DB lookup error: {e}')
+
+    # 4. Default to 0 if no prior setting found anywhere
+    self.cmd_state = 0
+    save_cmd_state(self, self.cmd_state)
+    logging.debug('retrieve_cmd_state - default state = {}'.format(self.cmd_state))
+    return self.cmd_state
 
 
 def retrieve_cmd_struct(self):
@@ -434,16 +522,40 @@ def isy_value(self, value):
         return(value)
 
 
+def get_shared_customdata(poly):
+    """Retrieve shared Custom('customdata') instance from polyglot or poly.customData."""
+    if poly is None:
+        return None
+    cd = getattr(poly, 'customData', None)
+    if cd is not None:
+        return cd
+    cd = getattr(poly, 'Data', None)
+    if cd is not None:
+        return cd
+    try:
+        cd = Custom(poly, 'customdata')
+        try:
+            poly.customData = cd
+        except Exception:
+            pass
+        return cd
+    except Exception as e:
+        logging.debug(f'get_shared_customdata failed: {e}')
+        return None
+
+
 def set_node_custom(self, key, value):
     """Persist small node-level custom data using Polyglot customdata store,
     with fallback to a per-node JSON file when running without Polyglot."""
     try:
-        if hasattr(self, 'poly'):
+        poly = getattr(self, 'poly', None)
+        if poly is not None:
             try:
-                cd = Custom(self.poly, 'customdata')
-                cd[f"{self.address}_{key}"] = value
-                logging.debug(f'set_node_custom customdata: {self.address}_{key}={value}')
-                return
+                cd = get_shared_customdata(poly)
+                if cd is not None:
+                    cd[f"{self.address}_{key}"] = value
+                    logging.debug(f'set_node_custom customdata: {self.address}_{key}={value}')
+                    return
             except Exception as e:
                 logging.debug(f'set_node_custom customdata failed: {e}')
         # fallback to file per-address (e.g. when running without Polyglot)
@@ -467,13 +579,15 @@ def set_node_custom(self, key, value):
 def get_node_custom(self, key):
     """Retrieve node-level custom data. Returns None if not found."""
     try:
-        if hasattr(self, 'poly'):
+        poly = getattr(self, 'poly', None)
+        if poly is not None:
             try:
-                cd = Custom(self.poly, 'customdata')
-                val = cd.get(f"{self.address}_{key}")
-                if val is not None:
-                    logging.debug(f'get_node_custom customdata: {self.address}_{key}={val}')
-                    return val
+                cd = get_shared_customdata(poly)
+                if cd is not None:
+                    val = cd.get(f"{self.address}_{key}")
+                    if val is not None:
+                        logging.debug(f'get_node_custom customdata: {self.address}_{key}={val}')
+                        return val
             except Exception as e:
                 logging.debug(f'get_node_custom customdata failed: {e}')
         fname = f"{self.address}_custom.json"

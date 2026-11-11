@@ -88,6 +88,8 @@ class YoLinkSetup (udi_interface.Node):
 
         self.Parameters = Custom(self.poly, 'customparams')
         self.Notices = Custom(self.poly, 'notices')
+        self.customData = Custom(self.poly, 'customdata')
+        self.poly.customData = self.customData
 
         self.n_queue = []
         self.yoLocal = None
