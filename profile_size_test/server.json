@@ -1,0 +1,24 @@
+{
+  "credits": [
+    {
+      "title": "Universal Devices Dynamic JSON Profile Size Limit Diagnostic Tool",
+      "author": "Panda88CO",
+      "version": "1.0.0",
+      "date": "2026-11-12",
+      "source": "https://github.com/Panda88CO/udi-yolink",
+      "license": "https://github.com/Panda88CO/udi-yolink/blob/main/LICENSE"
+    }
+  ],
+  "name": "ProfileSizeTest",
+  "docs": "README.md",
+  "type": "python3",
+  "executable": "profile_size_test.py",
+  "install": "install.sh",
+  "shortPoll": 60,
+  "longPoll": 3600,
+  "version": "1.0.0",
+  "restart": false,
+  "language": "python3",
+  "description": "Diagnostic tool to reproduce and pinpoint dynamic JSON profile size limit bug in PG3/IoX",
+  "notice": "Standalone Diagnostic Tool"
+}
