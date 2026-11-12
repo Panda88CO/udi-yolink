@@ -1,4 +1,4 @@
-# udi-yolink (v1.8.78)
+# udi-yolink (v1.8.79)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x) and IoX / eisy / Polisy.
 
 Suggested installation is on PG3x from version 1.1.x going forward. PG3x is updated to Python 3.11+. It still runs under PG3, but PG3x is strongly recommended.
@@ -70,7 +70,7 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 | **`CALLS_PER_MIN`** | Optional | `60` | Overall YoLink API rate limit (calls per minute across all devices). |
 | **`DEV_CALLS_PER_MIN`** | Optional | `5` | Per-device YoLink API rate limit (calls per minute per device). |
 | **`NBR_TTS`** | Optional | `0` | Number of SpeakerHub Text-to-Speech message slots to allocate (1–10). Saving this automatically generates the matching `TTS0`–`TTS<n-1>` input parameter fields. |
-| **`GARAGE_TRAVEL_TIME`** | Optional | `15` | Garage door travel time in seconds for open/close motion tracking. Can also be set per-door via `GARAGE_TRAVEL_TIME_<address>`. |
+| **`GARAGE_TRAVEL_TIME`** | Optional | `15` | Garage door travel time in seconds (1–60) for open/close motion tracking. Can be set directly on the garage node in IoX via **Set Travel Time** (`SET_TIME`), or via configuration parameter `GARAGE_TRAVEL_TIME_<address>` / `GARAGE_TRAVEL_TIME`. |
 | **`GARAGE_SENSOR`** | Optional | Auto | Paired DoorSensor address, deviceId, or name. Automatically discovered via YoLink kit pairing (`parentDeviceId`), name matching, or single sensor fallback. |
 
 3. Click **Save Changes** and **Restart** the node server.
@@ -91,6 +91,7 @@ The node server uses modern **Dynamic JSON Profiles** to push editor and node de
   - **Open (`DON`)**: Opens the door; ignored if already open or opening; executes a 3-pulse sequence if half-open.
   - **Close (`DOF`)**: Closes the door; ignored if already closed or closing; executes a 3-pulse sequence if half-closed.
   - **Toggle (`TOGGLE`)**: Always sends 1 toggle pulse unconditionally (supports stopping the door midway).
+  - **Travel Time (`GV1` / `SET_TIME`)**: Configurable directly from the IoX Admin Console (1–60 seconds, UOM 57) via the **Set Travel Time** command or driver. Persisted locally across restarts in `<address>.json` and Polyglot `customData`, with fallback to custom parameter `GARAGE_TRAVEL_TIME_<address>` or `GARAGE_TRAVEL_TIME` (default: 15s).
   - External door openings/closings (e.g. wall switch or car remote) are detected in real time by the paired sensor, automatically updating door state and travel timers.
 - **Countdown Delays**: Remaining delay countdowns shown in the ISY are calculated in real time by the node server.
 - **Schedules**: YoLink on-device schedules are fully supported for switches, outlets, dimmers, manipulators, sprinklers, and water meters.

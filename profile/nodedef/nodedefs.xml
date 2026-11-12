@@ -1668,6 +1668,7 @@
       <editors />
       <sts>
          <st id="ST" editor="GARAGESTATE" />
+         <st id="GV1" editor="TRAVELTIME" />
          <st id="GV20" editor="SUSPENDSTATE" />    
          <st id="GV30" editor="STATUS" />     
       </sts>
@@ -1680,6 +1681,9 @@
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
             <cmd id="TOGGLE" />  
+            <cmd id="SET_TIME">
+               <p id="" editor="TRAVELTIME" init="GV1" />
+            </cmd>
          </accepts>
       </cmds>
    </nodeDef> 
@@ -1687,6 +1691,7 @@
       <editors />
       <sts>
          <st id="ST" editor="STATUS" />
+         <st id="GV1" editor="TRAVELTIME" />
          <st id="GV20" editor="SUSPENDSTATE" />    
          <st id="GV30" editor="STATUS" />     
       </sts>
@@ -1694,6 +1699,9 @@
          <sends />
          <accepts>
             <cmd id="TOGGLE" />  
+            <cmd id="SET_TIME">
+               <p id="" editor="TRAVELTIME" init="GV1" />
+            </cmd>
          </accepts>
       </cmds>
    </nodeDef> 

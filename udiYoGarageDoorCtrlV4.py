@@ -6,6 +6,7 @@ Polyglot TEST v3 node server
 MIT License
 """
 import importlib
+import json
 import threading
 import time
 
@@ -29,12 +30,18 @@ STATE_UNKNOWN = 99
 
 
 class udiYoGarageDoor(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, wait_for_node_done, node_queue, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import (
+        my_setDriver, start_done, configDoneHandler, wait_for_node_done,
+        node_queue, checkNameSync, apply_profile_driver_names,
+        set_offline_notice, clear_offline_notice, wait_for_device_online,
+        set_node_custom, get_node_custom
+    )
     id = 'YOGARAGE'
     
     '''
        drivers = [
             'ST' = Door State (0: Closed, 1: Open, 2: Opening, 3: Closing, 4: Half-Open, 5: Half-Closed, 99: Unknown)
+            'GV1' = Travel Time (1-60 sec)
             'GV30' = Online State
             'GV20' = Connection State
             ]
@@ -42,6 +49,7 @@ class udiYoGarageDoor(udi_interface.Node):
         
     drivers = [ 
             {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Door State'},
+            {'driver': 'GV1', 'value': 15, 'uom': 57, 'name': 'Travel Time'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},
             ]
@@ -61,6 +69,7 @@ class udiYoGarageDoor(udi_interface.Node):
 
         self.state = STATE_UNKNOWN
         self._state_lock = threading.Lock()
+        self._travel_time_val = None
         self._travel_timer = None
         self._travel_timer_lock = threading.Lock()
         self._pulse_lock = threading.Lock()
@@ -108,19 +117,109 @@ class udiYoGarageDoor(udi_interface.Node):
             pass
         return default
 
-    @property
-    def travel_time(self):
+    def retrieve_travel_time(self):
+        """Retrieve travel time in seconds (1-60).
+        Priority:
+        1. Local <address>.json file ('travel_time')
+        2. Polyglot customData ('travel_time')
+        3. Custom config parameters (GARAGE_TRAVEL_TIME_<address> or GARAGE_TRAVEL_TIME)
+        4. Default: 15.0 seconds
+        """
+        # 1. Local file
+        fname = f"{self.address}.json"
+        try:
+            with open(fname, 'r') as f:
+                data = json.load(f)
+                if isinstance(data, dict) and 'travel_time' in data:
+                    val = int(round(float(data['travel_time'])))
+                    if 1 <= val <= 60:
+                        return float(val)
+        except Exception:
+            pass
+
+        # 2. Polyglot customData
+        try:
+            val = self.get_node_custom('travel_time')
+            if val is not None and isinstance(val, (int, float, str)):
+                val = int(round(float(val)))
+                if 1 <= val <= 60:
+                    return float(val)
+        except Exception:
+            pass
+
+        # 3. Custom parameters
         custom_time = self._get_param(f'GARAGE_TRAVEL_TIME_{self.address}')
         if not custom_time:
             custom_time = self._get_param('GARAGE_TRAVEL_TIME')
-        if custom_time:
+        if custom_time is not None and isinstance(custom_time, (int, float, str)):
             try:
-                val = float(custom_time)
-                if val > 0:
-                    return val
+                val = int(round(float(custom_time)))
+                if 1 <= val <= 60:
+                    return float(val)
             except (ValueError, TypeError):
                 pass
+
+        # 4. Default
         return 15.0
+
+    def save_travel_time(self, seconds):
+        """Persist travel time to local file and customData, clamped to 1-60."""
+        try:
+            val = int(round(float(seconds)))
+            val = max(1, min(60, val))
+        except (ValueError, TypeError):
+            val = 15
+        self._travel_time_val = float(val)
+
+        # 1. Local file
+        fname = f"{self.address}.json"
+        try:
+            data = {}
+            try:
+                with open(fname, 'r') as f:
+                    data = json.load(f)
+                    if not isinstance(data, dict):
+                        data = {}
+            except Exception:
+                data = {}
+            data['travel_time'] = val
+            with open(fname, 'w') as f:
+                json.dump(data, f)
+        except Exception as e:
+            logging.error(f'{self.name} - Failed to save travel_time to {fname}: {e}')
+
+        # 2. Polyglot customData
+        try:
+            self.set_node_custom('travel_time', val)
+        except Exception as e:
+            logging.debug(f'{self.name} - Failed to save travel_time to customData: {e}')
+
+    def set_travel_time(self, command):
+        """Handle SET_TIME / SETTIME command from IoX."""
+        if command is None:
+            return
+        val = command.get('value')
+        if val is None:
+            query = command.get('query')
+            if isinstance(query, dict):
+                val = query.get('TRAVELTIME') or query.get('value') or next(iter(query.values()), None)
+        if val is None:
+            return
+        try:
+            val = int(round(float(val)))
+        except (ValueError, TypeError):
+            return
+        val = max(1, min(60, val))
+        logging.info(f'{self.name} - Setting garage travel time: {val} seconds')
+        self._travel_time_val = float(val)
+        self.save_travel_time(val)
+        self.my_setDriver('GV1', val, 57)
+
+    @property
+    def travel_time(self):
+        if self._travel_time_val is None:
+            self._travel_time_val = self.retrieve_travel_time()
+        return self._travel_time_val
 
     def find_paired_sensor(self):
         """Locates and binds the paired DoorSensor node."""
@@ -336,6 +435,7 @@ class udiYoGarageDoor(udi_interface.Node):
         while not self.node_ready or not self.configDone:
             time.sleep(0.5)
         self.my_setDriver('ST', self.state)
+        self.my_setDriver('GV1', self.travel_time, 57)
         self.my_setDriver('GV30', 0)
         self.yoDoorControl = YoLinkGarageDoorCtrl(self.yoAccess, self.devInfo, self.updateStatus)
         time.sleep(2)
@@ -507,4 +607,6 @@ class udiYoGarageDoor(udi_interface.Node):
         'DON': openDoor,
         'DOF': closeDoor,
         'TOGGLE': toggleDoor,
+        'SET_TIME': set_travel_time,
+        'SETTIME': set_travel_time,
     }

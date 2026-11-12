@@ -324,19 +324,23 @@ CMD-nlssoilsensor-UPDATE-NAME=Update Status
 ND-YOGARAGE-NAME=YoLink Garage Controller
 ND-YOGARAGE-ICON=DoorLock
 ST-nlsgarage-ST-NAME=Door State
+ST-nlsgarage-GV1-NAME=Travel Time
 ST-nlsgarage-GV20-NAME=Connection State
 ST-nlsgarage-GV30-NAME=Online State
 
 CMD-nlsgarage-DON-NAME=Open
 CMD-nlsgarage-DOF-NAME=Close
 CMD-nlsgarage-TOGGLE-NAME=Toggle Door
+CMD-nlsgarage-SET_TIME-NAME=Set Travel Time
 
 ND-YOFINGER-NAME=YoLink Finger
 ND-YOFINGER-ICON=Switch
 ST-nlsfinger-ST-NAME=State
+ST-nlsfinger-GV1-NAME=Travel Time
 ST-nlsfinger-GV20-NAME=Connection State
 ST-nlsfinger-GV30-NAME=Online State
 CMD-nlsfinger-TOGGLE-NAME=Toggle / Press
+CMD-nlsfinger-SET_TIME-NAME=Set Travel Time
 
 
 

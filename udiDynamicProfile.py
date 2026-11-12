@@ -680,7 +680,7 @@ def get_dynamic_profile_payload(
             if nd.get('id') == 'YOGARAGE':
                 nd_copy = dict(nd)
                 cmds = dict(nd.get('cmds', {}))
-                cmds['accepts'] = [dict(c) for c in cmds.get('accepts', []) if c.get('id') == 'TOGGLE']
+                cmds['accepts'] = [dict(c) for c in cmds.get('accepts', []) if c.get('id') in ('TOGGLE', 'SET_TIME')]
                 cmds['sends'] = []
                 nd_copy['cmds'] = cmds
                 new_props = []

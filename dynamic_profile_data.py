@@ -143,6 +143,17 @@ DYNAMIC_EDITORS = [
     ]
   },
   {
+    "id": "TRAVELTIME",
+    "ranges": [
+      {
+        "uom": "57",
+        "min": 1,
+        "max": 60,
+        "prec": 0
+      }
+    ]
+  },
+  {
     "id": "CELSIUS",
     "ranges": [
       {
@@ -8057,6 +8068,11 @@ DYNAMIC_NODEDEFS = [
         "name": "Door State"
       },
       {
+        "id": "GV1",
+        "editor": "TRAVELTIME",
+        "name": "Travel Time"
+      },
+      {
         "id": "GV20",
         "editor": "SUSPENDSTATE",
         "name": "Connection State"
@@ -8088,6 +8104,17 @@ DYNAMIC_NODEDEFS = [
         {
           "id": "TOGGLE",
           "name": "Toggle Door"
+        },
+        {
+          "id": "SET_TIME",
+          "name": "Set Travel Time",
+          "parameters": [
+            {
+              "id": "TRAVELTIME",
+              "name": "Set Travel Time",
+              "editor": "TRAVELTIME"
+            }
+          ]
         }
       ]
     },
@@ -8107,6 +8134,11 @@ DYNAMIC_NODEDEFS = [
         "name": "State"
       },
       {
+        "id": "GV1",
+        "editor": "TRAVELTIME",
+        "name": "Travel Time"
+      },
+      {
         "id": "GV20",
         "editor": "SUSPENDSTATE",
         "name": "Connection State"
@@ -8123,6 +8155,17 @@ DYNAMIC_NODEDEFS = [
         {
           "id": "TOGGLE",
           "name": "Toggle / Press"
+        },
+        {
+          "id": "SET_TIME",
+          "name": "Set Travel Time",
+          "parameters": [
+            {
+              "id": "TRAVELTIME",
+              "name": "Set Travel Time",
+              "editor": "TRAVELTIME"
+            }
+          ]
         }
       ]
     },

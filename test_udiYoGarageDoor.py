@@ -69,6 +69,11 @@ class TestGarageDoorDriverIntegrity(unittest.TestCase):
         self.assertEqual(drivers_by_id['ST']['uom'], 25)
         self.assertEqual(drivers_by_id['ST']['value'], 99)
 
+        self.assertIn('GV1', drivers_by_id)
+        self.assertEqual(drivers_by_id['GV1']['name'], 'Travel Time')
+        self.assertEqual(drivers_by_id['GV1']['uom'], 57)
+        self.assertEqual(drivers_by_id['GV1']['value'], 15)
+
         self.assertIn('GV30', drivers_by_id)
         self.assertEqual(drivers_by_id['GV30']['name'], 'Online State')
         self.assertIn('GV20', drivers_by_id)
@@ -80,15 +85,30 @@ class TestGarageDoorDriverIntegrity(unittest.TestCase):
         self.assertEqual(drivers_by_id['ST']['name'], 'State')
         self.assertEqual(drivers_by_id['ST']['uom'], 25)
         self.assertEqual(drivers_by_id['ST']['value'], 0)
+
+        self.assertIn('GV1', drivers_by_id)
+        self.assertEqual(drivers_by_id['GV1']['name'], 'Travel Time')
+        self.assertEqual(drivers_by_id['GV1']['uom'], 57)
+        self.assertEqual(drivers_by_id['GV1']['value'], 15)
+
         self.assertEqual(udiYoGarageFinger.id, 'YOFINGER')
 
     def test_garage_commands_mapping(self):
         self.assertIn('DON', udiYoGarageDoor.commands)
         self.assertIn('DOF', udiYoGarageDoor.commands)
         self.assertIn('TOGGLE', udiYoGarageDoor.commands)
+        self.assertIn('SET_TIME', udiYoGarageDoor.commands)
+        self.assertIn('SETTIME', udiYoGarageDoor.commands)
         self.assertEqual(udiYoGarageDoor.commands['DON'], udiYoGarageDoor.openDoor)
         self.assertEqual(udiYoGarageDoor.commands['DOF'], udiYoGarageDoor.closeDoor)
         self.assertEqual(udiYoGarageDoor.commands['TOGGLE'], udiYoGarageDoor.toggleDoor)
+        self.assertEqual(udiYoGarageDoor.commands['SET_TIME'], udiYoGarageDoor.set_travel_time)
+
+        self.assertIn('DON', udiYoGarageFinger.commands)
+        self.assertIn('DOF', udiYoGarageFinger.commands)
+        self.assertIn('TOGGLE', udiYoGarageFinger.commands)
+        self.assertIn('SET_TIME', udiYoGarageFinger.commands)
+        self.assertIn('SETTIME', udiYoGarageFinger.commands)
 
 
 class TestGarageDoorBase(unittest.TestCase):
@@ -465,11 +485,15 @@ class TestGarageDynamicProfileIntegration(TestGarageDoorBase):
         self.assertIsNotNone(garage_nd)
 
         accepted_cmd_ids = [c['id'] for c in garage_nd['cmds']['accepts']]
-        self.assertEqual(accepted_cmd_ids, ['TOGGLE'])
+        self.assertEqual(accepted_cmd_ids, ['TOGGLE', 'SET_TIME'])
         self.assertEqual(garage_nd['cmds']['sends'], [])
 
         st_prop = next((p for p in garage_nd['properties'] if p.get('id') == 'ST'), None)
         self.assertEqual(st_prop['editor'], 'STATUS')
+
+        gv1_prop = next((p for p in garage_nd['properties'] if p.get('id') == 'GV1'), None)
+        self.assertIsNotNone(gv1_prop)
+        self.assertEqual(gv1_prop['editor'], 'TRAVELTIME')
 
     def test_dynamic_profile_retains_open_close_when_sensor_paired(self):
         import udiDynamicProfile
@@ -491,9 +515,14 @@ class TestGarageDynamicProfileIntegration(TestGarageDoorBase):
         self.assertIn('DON', accepted_cmd_ids)
         self.assertIn('DOF', accepted_cmd_ids)
         self.assertIn('TOGGLE', accepted_cmd_ids)
+        self.assertIn('SET_TIME', accepted_cmd_ids)
 
         st_prop = next((p for p in garage_nd['properties'] if p.get('id') == 'ST'), None)
         self.assertEqual(st_prop['editor'], 'GARAGESTATE')
+
+        gv1_prop = next((p for p in garage_nd['properties'] if p.get('id') == 'GV1'), None)
+        self.assertIsNotNone(gv1_prop)
+        self.assertEqual(gv1_prop['editor'], 'TRAVELTIME')
 
     def test_yofinger_nodedef_is_toggle_only(self):
         import udiDynamicProfile
@@ -503,8 +532,75 @@ class TestGarageDynamicProfileIntegration(TestGarageDoorBase):
         self.assertIsNotNone(finger_nd)
 
         accepted_cmd_ids = [c['id'] for c in finger_nd['cmds']['accepts']]
-        self.assertEqual(accepted_cmd_ids, ['TOGGLE'])
+        self.assertEqual(accepted_cmd_ids, ['TOGGLE', 'SET_TIME'])
         self.assertEqual(finger_nd['cmds']['sends'], [])
+
+
+class TestGarageTravelTime(TestGarageDoorBase):
+    """Test travel time retrieval, persistence, clamping, and command execution."""
+
+    def test_travel_time_default(self):
+        door = self.create_garage_door()
+        with patch.object(door, '_get_param', return_value=None), \
+             patch('builtins.open', side_effect=FileNotFoundError), \
+             patch.object(door, 'get_node_custom', return_value=None):
+            door._travel_time_val = None
+            self.assertEqual(door.travel_time, 15.0)
+
+    def test_travel_time_from_custom_params(self):
+        door = self.create_garage_door()
+        with patch.object(door, '_get_param', side_effect=lambda k: '22' if 'GARAGE_TRAVEL_TIME' in k else None), \
+             patch('builtins.open', side_effect=FileNotFoundError), \
+             patch.object(door, 'get_node_custom', return_value=None):
+            door._travel_time_val = None
+            self.assertEqual(door.travel_time, 22.0)
+
+    def test_travel_time_from_file(self):
+        door = self.create_garage_door()
+        import json
+        mock_file = unittest.mock.mock_open(read_data=json.dumps({'travel_time': 35}))
+        with patch('builtins.open', mock_file), \
+             patch.object(door, 'get_node_custom', return_value=None):
+            self.assertEqual(door.retrieve_travel_time(), 35.0)
+
+    def test_travel_time_from_custom_data(self):
+        door = self.create_garage_door()
+        with patch('builtins.open', side_effect=FileNotFoundError), \
+             patch.object(door, 'get_node_custom', return_value=42):
+            self.assertEqual(door.retrieve_travel_time(), 42.0)
+
+    def test_set_travel_time_command(self):
+        door = self.create_garage_door()
+        with patch.object(door, 'save_travel_time') as mock_save:
+            door.set_travel_time({'value': 28})
+            mock_save.assert_called_once_with(28)
+            door.my_setDriver.assert_called_once_with('GV1', 28, 57)
+            self.assertEqual(door._travel_time_val, 28)
+
+    def test_set_travel_time_clamping(self):
+        door = self.create_garage_door()
+        with patch.object(door, 'save_travel_time') as mock_save:
+            # Below min: clamp to 1
+            door.set_travel_time({'value': 0})
+            mock_save.assert_called_with(1)
+
+            # Above max: clamp to 60
+            door.set_travel_time({'value': 120})
+            mock_save.assert_called_with(60)
+
+    def test_set_travel_time_query_format(self):
+        door = self.create_garage_door()
+        with patch.object(door, 'save_travel_time') as mock_save:
+            door.set_travel_time({'query': {'TRAVELTIME': '45'}})
+            mock_save.assert_called_once_with(45)
+
+    def test_finger_travel_time_handling(self):
+        finger = self.create_garage_finger()
+        with patch.object(finger, 'save_travel_time') as mock_save:
+            finger.set_travel_time({'value': 30})
+            mock_save.assert_called_once_with(30)
+            finger.my_setDriver.assert_called_once_with('GV1', 30, 57)
+            self.assertEqual(finger.travel_time, 30.0)
 
 
 if __name__ == '__main__':
