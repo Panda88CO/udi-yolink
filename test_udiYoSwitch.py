@@ -305,5 +305,48 @@ class TestSwitchCommands(TestUdiYoSwitchBase):
         self.mock_switch.refreshDevice.assert_called_once()
 
 
+class TestSwitchStart(TestUdiYoSwitchBase):
+    """Tests start() lifecycle and model-based LED attribute handling."""
+
+    @patch('time.sleep', return_value=None)
+    @patch('udiYoSwitchV4.YoLinkSwitch')
+    def test_start_calls_get_attributes_for_standard_switch(self, mock_yolink_switch_cls, mock_sleep):
+        mock_ys = MagicMock()
+        mock_ys.check_system_online.return_value = True
+        mock_yolink_switch_cls.return_value = mock_ys
+
+        node, poly, _ = self.create_switch_node(model_name='YS5705')
+        node.start()
+
+        mock_ys.get_attributes.assert_called_once()
+        self.assertEqual(node.model, 'YS5705')
+
+    @patch('time.sleep', return_value=None)
+    @patch('udiYoSwitchV4.YoLinkSwitch')
+    def test_start_skips_get_attributes_for_relay_ys5706(self, mock_yolink_switch_cls, mock_sleep):
+        mock_ys = MagicMock()
+        mock_ys.check_system_online.return_value = True
+        mock_yolink_switch_cls.return_value = mock_ys
+
+        node, poly, _ = self.create_switch_node(model_name='YS5706')
+        node.start()
+
+        mock_ys.get_attributes.assert_not_called()
+        self.assertEqual(node.model, 'YS5706')
+
+    @patch('time.sleep', return_value=None)
+    @patch('udiYoSwitchV4.YoLinkSwitch')
+    def test_start_skips_get_attributes_for_relay_ys5716(self, mock_yolink_switch_cls, mock_sleep):
+        mock_ys = MagicMock()
+        mock_ys.check_system_online.return_value = True
+        mock_yolink_switch_cls.return_value = mock_ys
+
+        node, poly, _ = self.create_switch_node(model_name='YS5716')
+        node.start()
+
+        mock_ys.get_attributes.assert_not_called()
+        self.assertEqual(node.model, 'YS5716')
+
+
 if __name__ == '__main__':
     unittest.main()

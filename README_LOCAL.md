@@ -1,4 +1,4 @@
-# udi-yolink (Local / Hybrid) (v1.8.77)
+# udi-yolink (Local / Hybrid) (v1.8.78)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x) and IoX / eisy / Polisy with Local Hub (YS1606) and Cloud support.
 
 Suggested installation is on PG3x from version 1.1.x going forward. PG3x is updated to Python 3.11+. It still runs under PG3, but PG3x is strongly recommended.

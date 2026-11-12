@@ -75,17 +75,17 @@ class udiYoSwitch(udi_interface.Node):
         self.support_battery = False
         self.nbr_keys = 0
         self.max_remote_keys = 0
-        model = str(self.devInfo['modelName'][:6])
-        if model in ['YS5716']:
+        self.model = str(self.devInfo.get('modelName', ''))[:6]
+        if self.model in ['YS5716']:
             self.meas_support = ['pwr']
             self.support_power = True
             self.id = 'YOSWITCHPWR'
-        elif model in ['YS5709']:
+        elif self.model in ['YS5709']:
             self.id = 'YOSWITCHBAT'
             self.support_battery = True
         else:
             self.meas_support = []
-        if  model in ['YS5708', 'YS5709']:
+        if self.model in ['YS5708', 'YS5709']:
             self.max_remote_keys = 8
             self.nbr_keys = 2
 
@@ -129,7 +129,7 @@ class udiYoSwitch(udi_interface.Node):
         time.sleep(2)
         if self.yoSwitch.check_system_online():
             self.clear_offline_notice()
-            if model not in ['YS5706', 'YS5716']:
+            if self.model not in ['YS5706', 'YS5716']:
                 self.yoSwitch.get_attributes()
             self.yoSwitch.delayTimerCallback(self.updateDelayCountdown, self.timer_update)
         else:

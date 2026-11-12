@@ -12,7 +12,7 @@ Key files to read first
 - `udiDynamicProfile.py` - dynamic JSON profile generator (`updateJsonProfile`), payload pruning (<60KB MQTT safety threshold), and debug dumps.
 - `dynamic_profile_data.py` - base profile metadata, node definitions, editors, and NLS mappings used by dynamic profile generation.
 - `udiYo*.py` - per-device node implementations (many files, one per supported device).
-- `run_tests.py` - test suite runner (`python3 -m unittest discover` or `python3 run_tests.py`, 157 tests).
+- `run_tests.py` - test suite runner (`python3 -m unittest discover` or `python3 run_tests.py`, 160 tests).
 - `CheckSetupFiles.py` - verification script ensuring profile files and nodedefs stay aligned.
 - `requirements.txt` - external dependencies used for local development.
 
