@@ -8,6 +8,9 @@ meter step factor corrections, and driver updates.
 import unittest
 from unittest.mock import MagicMock, patch
 import os
+import sys
+import threading
+import queue
 import time
 import tempfile
 import xml.etree.ElementTree as ET
@@ -518,6 +521,149 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
             self.assertTrue(yoAccess._reconnecting)
             mock_thread_cls.assert_called_once_with(target=yoAccess._async_reconnect, daemon=True)
             mock_thread_instance.start.assert_called_once()
+
+
+class TestPublishDataAndBrokerResilience(unittest.TestCase):
+    """Test publish_data bounded wait, transfer_data lock safety, and start() single execution."""
+
+    def test_publish_data_disconnected_times_out(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.connectedToBroker = False
+        yoAccess.STOP = threading.Event()
+        yoAccess.publishQueue = queue.Queue()
+
+        time_values = [0.0, 16.0]
+        with patch('time.time', side_effect=lambda: time_values.pop(0) if time_values else 20.0), \
+             patch('time.sleep', return_value=None):
+            result = yoLink_init_V4.YoLinkInitPAC.publish_data(yoAccess, {'method': 'test', 'targetDevice': 'dev1'})
+
+        self.assertFalse(result)
+        self.assertTrue(yoAccess.publishQueue.empty())
+
+    def test_publish_data_stop_event_aborts(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.connectedToBroker = False
+        yoAccess.STOP = threading.Event()
+        yoAccess.STOP.set()
+        yoAccess.publishQueue = queue.Queue()
+
+        result = yoLink_init_V4.YoLinkInitPAC.publish_data(yoAccess, {'method': 'test', 'targetDevice': 'dev1'})
+        self.assertFalse(result)
+        self.assertTrue(yoAccess.publishQueue.empty())
+
+    def test_publish_data_connected_enqueues_and_spawns_thread(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.connectedToBroker = True
+        yoAccess.STOP = threading.Event()
+        yoAccess.publishQueue = queue.Queue()
+
+        with patch('yoLink_init_V4.Thread') as mock_thread_cls:
+            mock_thread_instance = MagicMock()
+            mock_thread_cls.return_value = mock_thread_instance
+            result = yoLink_init_V4.YoLinkInitPAC.publish_data(yoAccess, {'method': 'test', 'targetDevice': 'dev1'})
+
+        self.assertTrue(result)
+        self.assertEqual(yoAccess.publishQueue.qsize(), 1)
+        mock_thread_cls.assert_called_once_with(target=yoAccess.transfer_data, daemon=True)
+        mock_thread_instance.start.assert_called_once()
+
+    def test_transfer_data_empty_queue_releases_lock(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.publishQueue = queue.Queue()
+        yoAccess.processing_access = threading.Lock()
+
+        res = yoLink_init_V4.YoLinkInitPAC.transfer_data(yoAccess)
+        self.assertFalse(res)
+        self.assertFalse(yoAccess.processing_access.locked())
+
+    def test_transfer_data_device_not_in_mqtt_list_releases_lock(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.publishQueue = queue.Queue()
+        yoAccess.processing_access = threading.Lock()
+        yoAccess.mqttList = {}
+        yoAccess.publishQueue.put({'method': 'test', 'targetDevice': 'unknown_dev'})
+
+        res = yoLink_init_V4.YoLinkInitPAC.transfer_data(yoAccess)
+        self.assertFalse(res)
+        self.assertFalse(yoAccess.processing_access.locked())
+
+    def test_transfer_data_response_timeout_initiates_retry(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.publishQueue = queue.Queue()
+        yoAccess.finishQueue = MagicMock()
+        yoAccess.finishQueue.get.side_effect = queue.Empty('timed out')
+        yoAccess.processing_access = threading.Lock()
+        yoAccess.lastPublishTime_ns = 0
+        yoAccess.time_tracking = MagicMock(return_value=0)
+        yoAccess.QoS = 0
+        yoAccess.client = MagicMock()
+        pub_result = MagicMock()
+        pub_result.rc = 0
+        yoAccess.client.publish.return_value = pub_result
+        yoAccess.mqttList = {'dev1': {'request': 'topic/req'}}
+        yoAccess.lastDataPacket = {}
+        yoAccess._enqueue_retry = MagicMock()
+
+        data = {'method': 'test', 'targetDevice': 'dev1'}
+        yoAccess.publishQueue.put(data)
+
+        with patch('time.sleep', return_value=None):
+            res = yoLink_init_V4.YoLinkInitPAC.transfer_data(yoAccess)
+
+        self.assertFalse(res)
+        self.assertFalse(yoAccess.processing_access.locked())
+        yoAccess._enqueue_retry.assert_called_once()
+        retried_data = yoAccess._enqueue_retry.call_args[0][0]
+        self.assertEqual(retried_data['targetDevice'], 'dev1')
+        self.assertEqual(retried_data['retry'], 0)
+
+    def test_start_reentrancy_guard_prevents_duplicate_initialization(self):
+        """udi-YoLink and udiYoLinkLocal start() must execute only once."""
+        import importlib
+        sys.modules.pop('udi-YoLink', None)
+        yolink_mod = importlib.import_module('udi-YoLink')
+
+        ctrl = MagicMock()
+        ctrl._started = False
+        ctrl._start_lock = threading.Lock()
+        ctrl.nodeDefineDone = True
+        ctrl.configDone = True
+        ctrl.handleParamsDone = True
+        ctrl.uaid = 'test_uaid'
+        ctrl.secretKey = 'test_secret'
+        ctrl.Parameters = {}
+        ctrl.updateEpochTime = MagicMock()
+        ctrl.my_setDriver = MagicMock()
+        ctrl.convert_temp_unit = MagicMock(return_value=0)
+        ctrl.convert_water_unit = MagicMock(return_value=0)
+        ctrl.sync_tts_parameters = MagicMock()
+
+        with patch('udi-YoLink.YoLinkInitPAC') as mock_pac_cls:
+            mock_pac = MagicMock()
+            mock_pac.getDeviceList.return_value = []
+            mock_pac_cls.return_value = mock_pac
+
+            # First start call
+            yolink_mod.YoLinkSetup.start(ctrl)
+            self.assertTrue(ctrl._started)
+            mock_pac_cls.assert_called_once()
+
+            # Second duplicate start call
+            yolink_mod.YoLinkSetup.start(ctrl)
+            # Must NOT instantiate YoLinkInitPAC a second time
+            mock_pac_cls.assert_called_once()
 
 
 class TestWaitForNodeDone(unittest.TestCase):

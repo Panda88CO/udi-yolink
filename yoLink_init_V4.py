@@ -204,7 +204,7 @@ class YoLinkInitPAC(object):
                 yoAccess.token is not None,
             )
             if 'cloud' in yoAccess.access_mode:
-                while not yoAccess.refresh_token():
+                while not yoAccess.refresh_token() and not yoAccess.STOP.is_set():
                     time.sleep(35) # Wait 35 sec and try again - 35 sec ensures less than 10 attemps in 5min - API restriction
                     logging.log(OFFLINE, 'Trying to obtain new token - network or YoLink connection may be down')
                 logging.info('Retrieving YoLink API info')
@@ -241,7 +241,7 @@ class YoLinkInitPAC(object):
             yoAccess.client.on_publish = yoAccess.on_publish
             #logging.debug('finish subscribing ')
 
-            while not yoAccess.connect_to_broker():
+            while not yoAccess.connect_to_broker() and not yoAccess.STOP.is_set():
                 time.sleep(2)
             yoAccess.stop_queues = False    
             yoAccess.start_retry_queue()
@@ -1149,25 +1149,40 @@ class YoLinkInitPAC(object):
             json.dumps(_redact_log_value(data), indent=4, separators=(",", ": ")),
         )
         sleeping = False
-        while not yoAccess.connectedToBroker:
-            logging.debug('Connection to Broker not established - waiting')
+        wait_start = time.time()
+        timeout = 15.0  # max seconds to wait for broker connection
+        logged_wait = False
+        while not yoAccess.connectedToBroker and not yoAccess.STOP.is_set():
+            if (time.time() - wait_start) > timeout:
+                target = data.get('targetDevice') if isinstance(data, dict) else 'unknown'
+                method = data.get('method') if isinstance(data, dict) else 'command'
+                logging.warning(
+                    '%s publish_data: Broker not connected after %.1fs - cannot publish %s to %s',
+                    yoAccess.access_mode,
+                    timeout,
+                    method,
+                    target,
+                )
+                return False
+            if not logged_wait:
+                logging.debug('%s Connection to Broker not established - waiting (up to %.0fs)', yoAccess.access_mode, timeout)
+                logged_wait = True
             time.sleep(1)       
             sleeping = True
+
+        if yoAccess.STOP.is_set():
+            logging.debug('%s publish_data: Stop requested - discarding publish', yoAccess.access_mode)
+            return False
+
         if sleeping:
             time.sleep(2) # give some time to settle after connection established
 
         yoAccess.publishQueue.put(data, timeout = 5)
         
-        publishThread = Thread(target = yoAccess.transfer_data )
+        publishThread = Thread(target = yoAccess.transfer_data, daemon=True)
         publishThread.start()
         logging.debug(f'{yoAccess.access_mode} publishThread - starting')
-        #while not yoAccess.publishQueue.empty():
-        #    time.sleep(0.1)
-        #    yoAccess.publishQueue.put(data, timeout = 5)
-        #    publishThread = Thread(target = yoAccess.transfer_data )
-        #    publishThread.start()
-        #logging.debug('publishThread - starting')
-        return(True)
+        return True
 
     #@measure_time
     def set_api_limits(yoAccess, api_calls, api_dev_calls):
@@ -1266,7 +1281,7 @@ class YoLinkInitPAC(object):
 
     def start_retry_queue(yoAccess, ):
         logging.debug('Starting Retry Queue checking')
-        retryThread = Thread(target = yoAccess.check_retry_queue )
+        retryThread = Thread(target = yoAccess.check_retry_queue, daemon=True)
         retryThread.start()
 
     def _retry_key(yoAccess, data):
@@ -1301,9 +1316,12 @@ class YoLinkInitPAC(object):
 
     def check_retry_queue(yoAccess):
         '''check_retry_queue'''
-        while not yoAccess.stop_queues:
+        while not yoAccess.stop_queues and not yoAccess.STOP.is_set():
             temp_list = []
-            try:    
+            try:
+                if not yoAccess.connectedToBroker:
+                    time.sleep(5)
+                    continue
                 if not yoAccess.retryQueue.empty():
                     #logging.debug(f'{yoAccess.access_mode} - Checking retry - queue size {yoAccess.retryQueue.qsize()}  ')                
                     while not yoAccess.retryQueue.empty():
@@ -1351,7 +1369,8 @@ class YoLinkInitPAC(object):
                                 retry_attempt,
                             )
                             logging.debug(f'{yoAccess.access_mode} ADDING RETRY TO PUBLISH QUEUE {retry_data}')
-                            yoAccess.publish_data(retry_data) # place selected_data in publishQueue
+                            if not yoAccess.publish_data(retry_data): # place selected_data in publishQueue
+                                yoAccess._enqueue_retry(retry_data)
                             time.sleep(2) # give some time to process the publish before waiting for response
                     logging.debug(f'{yoAccess.access_mode} temp_retry_list {list (yoAccess.retryQueue.queue)}')
 
@@ -1410,77 +1429,95 @@ class YoLinkInitPAC(object):
     def transfer_data(yoAccess):
         '''transfer_data'''
         yoAccess.lastTransferTime = int(time.time())
-        
+        have_lock = False
+        data = None
+        message_id = None
+        deviceId = None
+        method = None
         try:
             yoAccess.processing_access.acquire()
-            #while yoAccess.publishQueue.qsize() != 0:
-            data = yoAccess.publishQueue.get(timeout = 10)
-            logging.debug( 'transfer_data - data from publishQueue: {} - size {}'.format(data, yoAccess.publishQueue.qsize()))
-            deviceId = data['targetDevice']
-            method = data['method']
-            #logging.debug('mqttList : {}'.format(yoAccess.mqttList))
-            if deviceId in yoAccess.mqttList:
-                logging.debug( 'Starting publish_data:')
-                ### check if publish list is full
+            have_lock = True
+            try:
+                data = yoAccess.publishQueue.get(timeout=2)
+            except Exception:
+                return False
 
-                # enforce minimum 210ms between any two consecutive publishes before rate-limit check
-                min_gap_ns = 210_000_000  # 210 ms in nanoseconds
-                since_last_ns = time.time_ns() - yoAccess.lastPublishTime_ns
-                if since_last_ns < min_gap_ns:
-                    time.sleep((min_gap_ns - since_last_ns) / 1e9)
-
-                #all_delay, dev_delay =  yoAccess.time_tracking(timeNow_ms, deviceId)
-                delay_s =  yoAccess.time_tracking(deviceId)
-                #logging.debug( 'Needed delay: {} - {}'.format(delay, timeNow_s))
-                if delay_s > 0: # some delay needed
-                    logging.info('Delaying call by {}sec due to too many calls'.format(delay_s))
-                    time.sleep(delay_s)
-                    # As this is multi threaded we can just sleep  - if another call is ready and can go though is will so in a differnt thread
-                yoAccess.lastPublishTime_ns = time.time_ns()
-                data['time'] = str(int(time.time_ns()/1e6))  # update time to actual packet time (to include delays)
-                message_id = data['time'] 
-                dataStr = str(json.dumps(data))
-                #yoAccess.tmpData[deviceId] = dataStr
-                yoAccess.lastDataPacket[deviceId] = data
-
-                logging.debug( 'publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], json.dumps(data, indent=4, separators=(",", ": "))))
-                result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, yoAccess.QoS)
-                # Do not clear retry entries yet: wait for a confirmed successful response.
-                # Cleaning here can race with check_retry_queue and remove the only pending retry
-                # for a command that never receives a response.
-                
-            else:
+            logging.debug('transfer_data - data from publishQueue: {} - size {}'.format(data, yoAccess.publishQueue.qsize()))
+            deviceId = data.get('targetDevice')
+            method = data.get('method')
+            if not deviceId or deviceId not in yoAccess.mqttList:
                 logging.error('device {} not in mqtt list'.format(deviceId))
-                return (False)
-            
+                return False
+
+            logging.debug('Starting publish_data:')
+
+            # enforce minimum 210ms between any two consecutive publishes before rate-limit check
+            min_gap_ns = 210_000_000  # 210 ms in nanoseconds
+            since_last_ns = time.time_ns() - yoAccess.lastPublishTime_ns
+            if since_last_ns < min_gap_ns:
+                time.sleep((min_gap_ns - since_last_ns) / 1e9)
+
+            delay_s = yoAccess.time_tracking(deviceId)
+            if delay_s > 0:
+                logging.info('Delaying call by {}sec due to too many calls'.format(delay_s))
+                time.sleep(delay_s)
+
+            yoAccess.lastPublishTime_ns = time.time_ns()
+            data['time'] = str(int(time.time_ns() / 1e6))
+            message_id = data['time']
+            dataStr = str(json.dumps(data))
+            yoAccess.lastDataPacket[deviceId] = data
+
+            logging.debug('publish_data: {} - {}'.format(yoAccess.mqttList[deviceId]['request'], json.dumps(data, indent=4, separators=(",", ": "))))
+            result = yoAccess.client.publish(yoAccess.mqttList[deviceId]['request'], dataStr, yoAccess.QoS)
+
             if result.rc != 0:
                 logging.error('Error {} during publishing {}'.format(result.rc, data))
-                #errorCount = errorCount + 1
-                if result.rc == 3: #off line
+                if result.rc in (3, 4):
                     logging.debug('rc = {}'.format(result.rc))
                     yoAccess.online = False
-                if result.rc == 4 : #off line
-                    logging.debug('rc = {}'.format(result.rc))
-                    yoAccess.online = False
-                    yoAccess.client.reconnect() # is this the right strategy 
+                    if result.rc == 4:
+                        yoAccess.client.reconnect()
             else:
                 yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True
-            time.sleep(0.1) # give some time to process the publish before waiting for response
-            logging.debug(f'waiting for response to be received - message_id {message_id} - finishQueue GET size  {yoAccess.finishQueue.qsize()} {list(yoAccess.finishQueue.queue)}' )
-            message= yoAccess.finishQueue.get(timeout = 10)
-            logging.debug(f'finishQueue GET {message} size {yoAccess.finishQueue.qsize()}')
-            completed_message_id = message['msgid']
-            msg_code = message['code']
-            logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} finishQueue size {yoAccess.finishQueue.qsize()}')
-            logging.debug(f'retry queue {list (yoAccess.retryQueue.queue) }')
-            while message_id != completed_message_id :
-                message = yoAccess.finishQueue.get(timeout = 10)
-                completed_message_id = message['msgid']
-                msg_code = message['code']
-                logging.debug(f'while loop {message} {completed_message_id} {msg_code} size {completed_message_id} finishQueue size {yoAccess.finishQueue.qsize()}')
+
+            time.sleep(0.1)
+            logging.debug(f'waiting for response to be received - message_id {message_id} - finishQueue GET size {yoAccess.finishQueue.qsize()} {list(yoAccess.finishQueue.queue)}')
+
+            try:
+                message = yoAccess.finishQueue.get(timeout=10)
+                logging.debug(f'finishQueue GET {message} size {yoAccess.finishQueue.qsize()}')
+                completed_message_id = message.get('msgid')
+                msg_code = message.get('code')
                 logging.debug(f'transfer_data - response received message_id {message_id} completed_message_id {completed_message_id} finishQueue size {yoAccess.finishQueue.qsize()}')
-            yoAccess.processing_access.release()
+                while message_id != completed_message_id:
+                    message = yoAccess.finishQueue.get(timeout=10)
+                    completed_message_id = message.get('msgid')
+                    msg_code = message.get('code')
+                    logging.debug(f'while loop {message} {completed_message_id} {msg_code} size {completed_message_id} finishQueue size {yoAccess.finishQueue.qsize()}')
+            except Exception as e:
+                logging.warning(
+                    '%s transfer_data: Timed out waiting for response to message %s (%s for %s) - %s',
+                    yoAccess.access_mode,
+                    message_id,
+                    method,
+                    deviceId,
+                    e,
+                )
+                if data:
+                    if 'retry' in data:
+                        data['retry'] = data['retry'] + 1
+                    else:
+                        data['retry'] = 0
+                    data['last_retry_time'] = int(data.get('time', time.time() * 1000))
+                    yoAccess._enqueue_retry(data)
+                return False
+
+            if have_lock:
+                yoAccess.processing_access.release()
+                have_lock = False
+
             if msg_code in ['000201', '020104']: # device off line or busy 
                 log_level = OFFLINE if msg_code == '000201' else BUSY
                 logging.log(log_level, 'Error code {} received for message {} - initiating retry'.format(msg_code, data))
@@ -1491,54 +1528,27 @@ class YoLinkInitPAC(object):
                     data['retry'] = 0 # starting retry
                     data['last_retry_time'] = int(data['time'])
                 yoAccess._enqueue_retry(data)
-            elif msg_code in ['000000'] :
+            elif msg_code in ['000000']:
                 if data is None: 
-                    logging.log(BUSY, 'No data received - device not ready - initiating retry'.format( data))
-                    data['retry'] = 0 # starting retry
-                    data['last_retry_time'] = int(data['time'])
+                    logging.log(BUSY, 'No data received - device not ready - initiating retry'.format(data))
+                    data = {'retry': 0, 'last_retry_time': int(time.time() * 1000)}
                     yoAccess._enqueue_retry(data)
                 elif 'retry' in data and len(data) == 1:
                     data['retry']= data['retry']+1
-                    data['last_retry_time'] = int(data['time'])
+                    data['last_retry_time'] = int(data.get('time', time.time() * 1000))
                     yoAccess._enqueue_retry(data)
                 else:
                     yoAccess._clean_retry_queue(deviceId, method) # remove pending retries for this call 
-                '''
-                if not yoAccess.publishQueue.empty():
-                    logging.debug('publishQueue not empty - checking if newer entries exists')
-                    publish_list = list (yoAccess.publishQueue.queue) # put retry at front of queue
-                    for Q_data in publish_list:
-                        if Q_data['targetDevice'] == data['targetDevice']:
-                            logging.debug('Newer command found for device {} - cancelling retry of {}'.format(data['targetDevice'], data))
-                            return(True) # newer command exists - do not retry                
-                if 'retry' in data:
-                    data['retry'] = data['retry'] + 1
-                else:  
-                    data['retry'] = 1
-
-
-                if data['retry'] <= yoAccess.MAX_RETRY: # stop after MAX_RETRY attempts
-                    logging.debug('Retrying command - retry {}'.format(data['retry']))
-                    logging.debug('Issuing Retry command: {}'.format(data))
-                    time.sleep(5*data['retry'])
-                    logging.debug('publishQueue before retry: {}'.format(list(yoAccess.publishQueue.queue)))
-                    if not yoAccess.publishQueue.empty():
-                        logging.debug('publishQueue not empty - checking if newer entries exists')
-                        publish_list = list (yoAccess.publishQueue.queue) # put retry at front of queue
-                        for Q_data in publish_list:
-                            if Q_data['targetDevice'] == data['targetDevice']:
-                                logging.debug('Newer command found for device {} - cancelling retry of {}'.format(data['targetDevice'], data))
-                                return(True) # newer command exists - do not retry
-
-                    data['time'] = str(int(time.time_ns()/1e6)) #update time to actual packet time
-                    yoAccess.publish_data(data) # retry
-                else:
-                    logging.error('Max retries reached - giving up on command {}'.format(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
-                '''
+            return True
         except Exception as e:
-            logging.warning('Exception No new data to publish - {}'.format(e))
-            yoAccess.processing_access.release()
-            pass # go wait again unless stop is called
+            logging.warning('Exception in transfer_data - {}'.format(e))
+            return False
+        finally:
+            if have_lock:
+                try:
+                    yoAccess.processing_access.release()
+                except Exception:
+                    pass
 
     #@measure_time
     def save_packet_info(yoAccess):

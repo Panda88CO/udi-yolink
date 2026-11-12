@@ -7,6 +7,7 @@ MIT License
 import sys
 import time
 #from apscheduler.schedulers.background import BackgroundScheduler
+from threading import Thread, Lock
 from yoLink_init_V4 import YoLinkInitPAC
 
 try:
@@ -133,6 +134,8 @@ class YoLinkSetup (udi_interface.Node):
         self.n_queue = []
         self.yoLocal = None
         self.yoAccess = None
+        self._started = False
+        self._start_lock = Lock()
         
         self.Parameters = Custom(self.poly, 'customparams')
         self.Notices = Custom(self.poly, 'notices')
@@ -212,6 +215,12 @@ class YoLinkSetup (udi_interface.Node):
             logging.info('Removed legacy node-name custom params for %s', removed)
 
     def start (self):
+        with self._start_lock:
+            if self._started:
+                logging.warning('udiYoLinkLocal:start: start() already executed or in progress, ignoring duplicate START event')
+                return
+            self._started = True
+
         logging.info('Executing start - udi-YoLink')
         
         #logging.setLevel(30)

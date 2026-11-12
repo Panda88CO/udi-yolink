@@ -1,4 +1,4 @@
-# udi-yolink (v1.8.74)
+# udi-yolink (v1.8.76)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x).
 
 ## Supported YoLink Devices

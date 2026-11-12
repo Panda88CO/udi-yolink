@@ -10,7 +10,7 @@ import time
 
 
 from yoLink_init_V4 import YoLinkInitPAC
-from threading import Thread
+from threading import Thread, Lock
 
 try:
     import udi_interface
@@ -94,6 +94,8 @@ class YoLinkSetup (udi_interface.Node):
         self.n_queue = []
         self.yoLocal = None
         self.yoAccess = None 
+        self._started = False
+        self._start_lock = Lock()
         logging.info(f'Version {version}')
 
         logging.debug('YoLinkSetup init')
@@ -150,6 +152,12 @@ class YoLinkSetup (udi_interface.Node):
     
 
     def start (self):
+        with self._start_lock:
+            if self._started:
+                logging.warning('udi-YoLink:start: start() already executed or in progress, ignoring duplicate START event')
+                return
+            self._started = True
+
         logging.info('Executing start - udi-YoLink')
         logging.info ('Access using PAC/UAC')
         #logging.setLevel(30)
