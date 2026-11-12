@@ -619,7 +619,7 @@ class TestPublishDataAndBrokerResilience(unittest.TestCase):
         data = {'method': 'test', 'targetDevice': 'dev1'}
         yoAccess.publishQueue.put(data)
 
-        with patch('time.sleep', return_value=None):
+        with patch('time.time_ns', return_value=12345000000), patch('time.sleep', return_value=None):
             res = yoLink_init_V4.YoLinkInitPAC.transfer_data(yoAccess)
 
         self.assertFalse(res)
@@ -628,6 +628,54 @@ class TestPublishDataAndBrokerResilience(unittest.TestCase):
         retried_data = yoAccess._enqueue_retry.call_args[0][0]
         self.assertEqual(retried_data['targetDevice'], 'dev1')
         self.assertEqual(retried_data['retry'], 0)
+
+    def test_transfer_data_rate_limit_010301_initiates_retry_with_code(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['cloud']
+        yoAccess.publishQueue = queue.Queue()
+        yoAccess.finishQueue = MagicMock()
+        yoAccess.finishQueue.get.return_value = {'msgid': '12345', 'code': '010301'}
+        yoAccess.processing_access = threading.Lock()
+        yoAccess.lastPublishTime_ns = 0
+        yoAccess.time_tracking = MagicMock(return_value=0)
+        yoAccess.QoS = 0
+        yoAccess.client = MagicMock()
+        pub_result = MagicMock()
+        pub_result.rc = 0
+        yoAccess.client.publish.return_value = pub_result
+        yoAccess.mqttList = {'dev1': {'request': 'topic/req'}}
+        yoAccess.lastDataPacket = {}
+        yoAccess._enqueue_retry = MagicMock()
+
+        data = {'method': 'test', 'targetDevice': 'dev1', 'time': '12345'}
+        yoAccess.publishQueue.put(data)
+
+        with patch('time.time_ns', return_value=12345000000), patch('time.sleep', return_value=None):
+            res = yoLink_init_V4.YoLinkInitPAC.transfer_data(yoAccess)
+
+        self.assertTrue(res)
+        self.assertFalse(yoAccess.processing_access.locked())
+        yoAccess._enqueue_retry.assert_called_once()
+        retried_data = yoAccess._enqueue_retry.call_args[0][0]
+        self.assertEqual(retried_data['targetDevice'], 'dev1')
+        self.assertEqual(retried_data['last_code'], '010301')
+
+    def test_switch_get_attributes_skips_relay_models(self):
+        from yolinkSwitchV3 import YoLinkSwitch
+        switch = MagicMock()
+        switch.check_system_online.return_value = True
+        switch.setDeviceAttributes = MagicMock()
+
+        # Model YS5706 (relay)
+        switch.deviceInfo = {'modelName': 'YS5706-UC'}
+        YoLinkSwitch.get_attributes(switch)
+        switch.setDeviceAttributes.assert_not_called()
+
+        # Model YS5708 (in-wall switch with LED)
+        switch.deviceInfo = {'modelName': 'YS5708-UC'}
+        YoLinkSwitch.get_attributes(switch)
+        switch.setDeviceAttributes.assert_called_once_with(None)
 
     def test_start_reentrancy_guard_prevents_duplicate_initialization(self):
         """udi-YoLink and udiYoLinkLocal start() must execute only once."""

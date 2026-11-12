@@ -41,6 +41,10 @@ class YoLinkSwitch(YoLinkMQTTDevice):
         if not yolink.check_system_online():
             logging.debug('get_attributes skipped: device is offline')
             return
+        model = str(yolink.deviceInfo.get('modelName', ''))[:6]
+        if model in ['YS5706', 'YS5716']:
+            logging.debug('get_attributes skipped: %s does not support LED attributes', model)
+            return
         yolink.setDeviceAttributes(None)
         return()
 

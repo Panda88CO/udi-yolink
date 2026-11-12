@@ -102,7 +102,7 @@ def _summarize_device_list(device_list):
 
 class YoLinkInitPAC(object):
     def __init__(yoAccess, ID, secret, tokenURL='https://api.yosmart.com/open/yolink/token' , apiURL='https://api.yosmart.com/open/yolink/v2/api', mqttURL= 'api.yosmart.com', mqttPort = 8003, home_id = None):
-        yoAccess.RETRY_STEP = 5
+        yoAccess.RETRY_STEP = 15
         yoAccess.homeID  = home_id
         yoAccess.disconnect_occured = False 
         yoAccess.tokenLock = Lock()
@@ -765,11 +765,12 @@ class YoLinkInitPAC(object):
                 logging.debug('processing response: ')
                 if 'code' in payload and payload['code'] == '000000':
                     yoAccess.send_to_callback(deviceId, payload)
-                elif 'code' in payload and payload['code'] in ['000201', '020104' ]:
+                elif 'code' in payload and payload['code'] in ['000201', '020104', '020401', '010301']:
                     log_level = OFFLINE if payload['code'] == '000201' else BUSY
-                    logging.log(log_level, 'Error code {} received for message {} - initiating retry'.format(payload['code'], payload.get('msgid', 'N/A')))
+                    desc = payload.get('desc', payload['code'])
+                    logging.log(log_level, f'{yoAccess.access_mode} Response code {payload["code"]} ({desc}) for message {payload.get("msgid", "N/A")} - initiating retry')
                 else:
-                    logging.error('Non-000000 code {} '.format(payload['desc']))
+                    logging.error('Non-000000 code {} '.format(payload.get('desc', payload.get('code'))))
                     yoAccess.send_to_callback(deviceId, payload)
                 if yoAccess.debug:
                     fileData= {}
@@ -871,8 +872,13 @@ class YoLinkInitPAC(object):
                     logging.debug('processing response:')
                     if 'code' in payload and payload['code'] == '000000':
                         tempCallback(payload)
+                    elif 'code' in payload and payload['code'] in ['000201', '020104', '020401', '010301']:
+                        log_level = OFFLINE if payload['code'] == '000201' else BUSY
+                        desc = payload.get('desc', payload['code'])
+                        logging.log(log_level, f'{yoAccess.access_mode} Response code {payload["code"]} ({desc})')
+                        tempCallback(payload)
                     else:
-                        logging.error('Non-000000 code {}'.format(payload['desc']))
+                        logging.error('Non-000000 code {}'.format(payload.get('desc', payload.get('code'))))
                         tempCallback(payload)
                     if yoAccess.debug:
                         fileData= {}
@@ -1335,12 +1341,23 @@ class YoLinkInitPAC(object):
                     pending_data_list = []
                     for retry_data in temp_list:
                         #selected_data = None ###
-                        if 'retry' in retry_data:
-                            retry_fact = min(retry_data['retry'], 12) # max 12 retries (2^12 > 1 hour)
-                        else:
-                            retry_fact = 0
-                            retry_data['retry'] = retry_fact
-                        delay = min(yoAccess.RETRY_STEP + 2**retry_fact, 3600) #double delay every iteration until 1 hour (3600 sec)
+                        retry_count = retry_data.get('retry', 0)
+                        max_retry = getattr(yoAccess, 'MAX_RETRY', 5)
+                        if retry_count >= max_retry:
+                            logging.info(
+                                '%s Max retries (%s) reached for %s on %s - abandoning command',
+                                yoAccess.access_mode,
+                                max_retry,
+                                retry_data.get('method'),
+                                retry_data.get('targetDevice'),
+                            )
+                            continue
+
+                        retry_fact = min(retry_count, 12)
+                        base_step = max(getattr(yoAccess, 'RETRY_STEP', 15), 15)
+                        delay = min(base_step * (2 ** retry_fact), 3600)
+                        if retry_data.get('last_code') == '010301':
+                            delay = max(delay, 60)
                         #logging.debug(f'{yoAccess.access_mode} delay {delay}')
                         #logging.debug(f"{yoAccess.access_mode} retry if negative { int(retry_data['last_retry_time']/1000+delay) - time_now}")
                         logging.debug('{} - target device - {} - delay {}'.format( yoAccess.access_mode, retry_data['targetDevice'], delay ))
@@ -1362,11 +1379,12 @@ class YoLinkInitPAC(object):
                             seen_keys.add(key)
                             retry_attempt = retry_data.get('retry', 0) + 1
                             logging.info(
-                                '%s retrying %s for %s (attempt %s)',
+                                '%s retrying %s for %s (attempt %s/%s)',
                                 yoAccess.access_mode,
                                 retry_data.get('method'),
                                 retry_data.get('targetDevice'),
                                 retry_attempt,
+                                max_retry,
                             )
                             logging.debug(f'{yoAccess.access_mode} ADDING RETRY TO PUBLISH QUEUE {retry_data}')
                             if not yoAccess.publish_data(retry_data): # place selected_data in publishQueue
@@ -1518,15 +1536,16 @@ class YoLinkInitPAC(object):
                 yoAccess.processing_access.release()
                 have_lock = False
 
-            if msg_code in ['000201', '020104']: # device off line or busy 
+            if msg_code in ['000201', '020104', '020401', '010301']: # device off line, busy, or rate limited
                 log_level = OFFLINE if msg_code == '000201' else BUSY
-                logging.log(log_level, 'Error code {} received for message {} - initiating retry'.format(msg_code, data))
+                desc = 'Rate limit reached' if msg_code == '010301' else ('Device offline' if msg_code == '000201' else 'Device busy')
+                logging.log(log_level, f'{yoAccess.access_mode} Response code {msg_code} ({desc}) for message {message_id} - initiating retry')
                 if 'retry' in data:
                     data['retry']= data['retry']+1
-                    data['last_retry_time'] = int(data['time'])
                 else:
                     data['retry'] = 0 # starting retry
-                    data['last_retry_time'] = int(data['time'])
+                data['last_retry_time'] = int(data.get('time', time.time() * 1000))
+                data['last_code'] = msg_code
                 yoAccess._enqueue_retry(data)
             elif msg_code in ['000000']:
                 if data is None: 

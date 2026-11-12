@@ -129,7 +129,8 @@ class udiYoSwitch(udi_interface.Node):
         time.sleep(2)
         if self.yoSwitch.check_system_online():
             self.clear_offline_notice()
-            self.yoSwitch.get_attributes()
+            if model not in ['YS5706', 'YS5716']:
+                self.yoSwitch.get_attributes()
             self.yoSwitch.delayTimerCallback(self.updateDelayCountdown, self.timer_update)
         else:
             logging.warning(f'Device {self.name} is offline at start')

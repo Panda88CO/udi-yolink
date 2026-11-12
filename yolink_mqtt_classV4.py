@@ -219,7 +219,7 @@ class YoLinkMQTTDevice(object):
         msg = f'{yolink.type} ({yolink.name}) - deviceError : {data}'
         if code == '000201':
             logging.log(OFFLINE, msg)
-        elif code == '020401':
+        elif code in ['020401', '020104', '010301']:
             logging.log(BUSY, msg)
         else:
             logging.error(msg)
@@ -827,7 +827,7 @@ class YoLinkMQTTDevice(object):
                     desc = data.get('desc', str(data)) if isinstance(data, dict) else str(data)
                     if code == '000201':
                         logging.log(OFFLINE, yolink.type + ': ' + desc)
-                    elif code == '020401':
+                    elif code in ['020401', '020104', '010301']:
                         logging.log(BUSY, yolink.type + ': ' + desc)
                     else:
                         logging.error(yolink.type + ': ' + desc)

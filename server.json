@@ -3,7 +3,7 @@
     {
       "title": "A NodeServer to allow integration of YoLink devices",
       "author": "Panda88CO",
-      "version": "1.8.76",
+      "version": "1.8.77",
       "date": "2026-11-11",
       "source": "https://github.com/Panda88CO/udi-yolink",
       "license": "https://github.com/Panda88CO/udi-yolink/blob/main/LICENSE"
@@ -16,8 +16,8 @@
   "install": "install.sh",
   "shortPoll": 60,
   "longPoll": 3600,
-  "profile_version": "1.8.76",
-  "version": "1.8.76",
+  "profile_version": "1.8.77",
+  "version": "1.8.77",
   "restart": true,
   "language": "python3",
   "description": "Nodeserver to allow integration of YoLink devices",
