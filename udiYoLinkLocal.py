@@ -141,6 +141,11 @@ class YoLinkSetup (udi_interface.Node):
         logging.debug('YoLinkSetup init')
         logging.debug('self.address : ' + str(self.address))
         logging.debug('self.name :' + str(self.name))   
+
+        wait_start = time.time()
+        while getattr(self.poly, 'isConnected', None) is False and (time.time() - wait_start) < 5.0:
+            time.sleep(0.1)
+
         self.poly.ready()
         time.sleep(0.5)
         self.apply_profile_driver_names(self.id)
