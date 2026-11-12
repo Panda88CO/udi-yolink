@@ -12,7 +12,7 @@ Key files to read first
 - `udiDynamicProfile.py` - dynamic JSON profile generator (`updateJsonProfile`), payload pruning (<60KB MQTT safety threshold), and debug dumps.
 - `dynamic_profile_data.py` - base profile metadata, node definitions, editors, and NLS mappings used by dynamic profile generation.
 - `udiYo*.py` - per-device node implementations (many files, one per supported device).
-- `run_tests.py` - test suite runner (`python3 run_tests.py`, 73 tests).
+- `run_tests.py` - test suite runner (`python3 -m unittest discover` or `python3 run_tests.py`, 157 tests).
 - `CheckSetupFiles.py` - verification script ensuring profile files and nodedefs stay aligned.
 - `requirements.txt` - external dependencies used for local development.
 
@@ -20,6 +20,7 @@ Big-picture architecture (short)
 - One central access object: YoLinkInitPAC (in `yoLink_init_V4.py`) manages tokens, an MQTT client and several queues (publishQueue, retryQueue, messageQueue).
 - Device-specific wrappers (instances of classes from `yolink_mqtt_classV4.py` and `udiYo*.py`) subscribe via yoAccess to device MQTT topics and expose Polyglot nodes/drivers.
 - The main Polyglot node server (`udi-YoLink.py`) creates device nodes by iterating the list returned from YoLink API and choosing the appropriate `udiYo*` class by `type` and sometimes by `modelName`.
+- Thread synchronization: `_start_lock` and `_start_executed` prevent duplicate concurrent executions of `start()` when Polyglot emits multiple startup events across worker threads.
 - Dynamic JSON profile: on startup, `udiDynamicProfile.py` compiles an active profile containing only installed device nodes, pruning uninstalled definitions to stay under 60KB for safe MQTT delivery via `updateJsonProfile`.
 
 Important dataflows and message formats
@@ -32,10 +33,14 @@ Important dataflows and message formats
 API / rate-limit conventions
 - YoLinkInitPAC enforces a local rate-tracking structure: `MAX_MESSAGES`, `MAX_TIME` and `time_tracking_dict` to avoid overrunning the YoLink cloud.
 - The node server exposes configurable parameters (via Polyglot Custom params) that affect limits: `CALLS_PER_MIN`, `DEV_CALLS_PER_MIN`.
+- Transient rate limiting (YoLink cloud error code `010301`: *Access denied due to limits reached*) triggers an automatic 60-second per-device cooldown with exponential backoff (`RETRY_STEP = 15s`) and `BUSY` classification to prevent log spam and allow sliding rate windows to reset.
+- The retry queue enforces `MAX_RETRY` to cleanly abandon unreachable offline endpoints.
 
 Project-specific conventions and gotchas
 - Node address naming: nodes use the last 14 characters of `deviceId` as the address (see `udi-YoLink.py` addNodes logic).
-- Persistent command state: per-node small JSON files (named `<address>.json`) are used to store command state/structs (see `udiYolinkLib.py` save/retrieve helpers).
+- Persistent command state: per-node small JSON files (named `<address>.json`) store command state (`cmd_state`: 0=ON/OFF, 1=ON Only, 2=OFF Only) across node server restarts and profile reloads.
+- Sensor command logic: when set to "ON Only" (1), returning to normal resets `last_state` to 0 without emitting `DOF`, ensuring subsequent alerts reliably trigger ISY/IoX automation programs.
+- Relay vs Switch LED attributes: relays (`YS5706`, `YS5716`) do not support LED backlight attributes; calls to `Switch.setDeviceAttributes` are bypassed for relays to prevent connection timeout errors.
 - Temperature units: `TEMP_UNIT` maps to integers (0=C, 1=F) or strings (`C`, `F`). Default is `F` (1). Conversions are handled in `udiYolinkLib.py` and `udi-YoLink.py`.
 - Water volume units: `WATER_UNIT` supports 4 units: Gallons (`G` / `0`), CCF (`C` / `1`), M³ (`M` / `2`), Liters (`L` / `3`). Default is Gallons (`0`). Used by WaterMeter, WaterDepth, and Sprinkler devices.
 - Dynamic profiles: when dynamic profile generation is active, JSON profile payloads are dumped to `profile_payload_debug.json` and `profile_payload_pruned_debug.json` in the working directory for troubleshooting.

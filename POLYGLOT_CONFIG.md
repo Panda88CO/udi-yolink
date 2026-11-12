@@ -75,6 +75,16 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 - **Single Home per Instance**: Each node server instance connects to one YoLink home. If you have multiple homes, create credentials for each home and run separate node server instances.
 - **Schedules**: YoLink schedules are supported for on/off devices, multi-outlets, IR remotes, sprinklers, and water meters.
 - **Countdown Delays**: Remaining delay countdowns shown in ISY are estimated and tracked on the node server.
+- **Sensor Command Settings & Program Automation**:
+  - Sensor nodes (`DoorSensor`, `MotionSensor`, `LeakSensor`, `VibrationSensor`, `COSmokeSensor`, `SoilSensor`, `THSensor`, `PowerFailSensor`) provide a configurable **Command Setting** dropdown (`ON/OFF`, `On Only`, `Off Only`).
+  - When set to `On Only`, an alert emits `DON`. When the sensor clears/returns to normal, the internal state resets without sending `DOF`, allowing consecutive alert events (e.g., repeated motion or repeated door openings) to reliably trigger ISY/IoX automation programs.
+  - Selected command settings are persisted locally in `<address>.json` and preserved across node server restarts and profile reloads.
+- **API Rate Limiting & Transient Limit Cooldown**:
+  - The node server paces requests using sliding-window rate tracking according to `CALLS_PER_MIN` and `DEV_CALLS_PER_MIN`.
+  - If YoLink Cloud limits are reached (error code `010301`: *Access denied due to limits reached*), the affected device enters an automatic 60-second cooldown with exponential backoff (`RETRY_STEP = 15s`). Commands are classified as `BUSY` rather than errors, preventing log spam and allowing the rate-limit window to reset cleanly.
+  - The retry queue enforces `MAX_RETRY` limits to cleanly abandon commands for permanently offline devices without swamping API limits.
+- **Relay vs Switch Compatibility**:
+  - Relay modules (`YS5706`, `YS5716`) are automatically distinguished from smart wall switches (`YS5705`, `YS5708`, `YS5709`). Unsupported backlight LED attribute queries (`setDeviceAttributes`) are skipped on relays to prevent connection timeout errors.
 - **SpeakerHub Messages**: When using a SpeakerHub, set `NBR_TTS` to the desired number of messages (1–10) and click **Save Changes**. The node server automatically creates the corresponding `TTS0`, `TTS1`, ... input lines in Custom Configuration Parameters for you to enter your message texts. Once saved, restart the IoX / Admin Console (or re-login) to refresh the dropdown command labels.
 - **Garage Door Controller & Finger**: Full smart state tracking is supported with paired YoLink door sensors (`Closed`, `Open`, `Opening`, `Closing`, `Half-Open`, `Half-Closed`, `Unknown`).
   - **Open (`DON`)**: Opens the door; ignored if already open or opening; executes a 3-pulse sequence if half-open.

@@ -94,4 +94,14 @@ The node server uses modern **Dynamic JSON Profiles** to push editor and node de
   - External door openings/closings (e.g. wall switch or car remote) are detected in real time by the paired sensor, automatically updating door state and travel timers.
 - **Countdown Delays**: Remaining delay countdowns shown in the ISY are calculated in real time by the node server.
 - **Schedules**: YoLink on-device schedules are fully supported for switches, outlets, dimmers, manipulators, sprinklers, and water meters.
+- **Sensor Command Settings & Program Automation**:
+  - Sensor nodes (`DoorSensor`, `MotionSensor`, `LeakSensor`, `VibrationSensor`, `COSmokeSensor`, `SoilSensor`, `THSensor`, `PowerFailSensor`) provide a configurable **Command Setting** dropdown (`ON/OFF`, `On Only`, `Off Only`).
+  - When set to `On Only`, an alert emits `DON`. When the sensor clears/returns to normal, the internal state resets without sending `DOF`, allowing consecutive alert events (e.g., repeated motion or repeated door openings) to reliably trigger ISY/IoX automation programs.
+  - Selected command settings are persisted locally in `<address>.json` and preserved across node server restarts and profile reloads.
+- **API Rate Limiting & Transient Limit Cooldown**:
+  - The node server paces requests using sliding-window rate tracking according to `CALLS_PER_MIN` and `DEV_CALLS_PER_MIN`.
+  - If YoLink Cloud limits are reached (error code `010301`: *Access denied due to limits reached*), the affected device enters an automatic 60-second cooldown with exponential backoff (`RETRY_STEP = 15s`). Commands are classified as `BUSY` rather than errors, preventing log spam and allowing the rate-limit window to reset cleanly.
+  - The retry queue enforces `MAX_RETRY` limits to cleanly abandon commands for permanently offline devices without swamping API limits.
+- **Relay vs Switch Compatibility**:
+  - Relay modules (`YS5706`, `YS5716`) are automatically distinguished from smart wall switches (`YS5705`, `YS5708`, `YS5709`). Unsupported backlight LED attribute queries (`setDeviceAttributes`) are skipped on relays to prevent connection timeout errors.
 - **Heartbeat & Event Deduplication**: State changes include ghost-trigger protection and alert event deduplication to ensure reliable automation trigger execution.
