@@ -4,12 +4,10 @@ Dynamic JSON Profile Size Limit Diagnostic Tool
 ------------------------------------------------
 A standalone diagnostic tool for Universal Devices Polyglot (PG3/PG3x) and IoX
 to demonstrate, reproduce, and pinpoint the dynamic JSON profile payload size bug
-in polyglot.updateJsonProfile().
+in polyglot.updateJsonProfile() against live PG3x hardware and MQTT broker.
 
-Bug Summary:
-  - Small profile payloads (e.g. ~10-15 KB) are accepted and processed successfully.
-  - Large profile payloads (e.g. > ~64 KB, full profiles ~90-100 KB) fail with
-    MQTT packet rejection, broker buffer drops, or RuntimeError.
+This tool runs strictly on PG3x hardware (eisy or Polisy). It connects directly
+to the PG3x MQTT broker using udi_interface. There is NO mock or simulation mode.
 """
 
 import sys
@@ -19,12 +17,10 @@ import time
 import argparse
 from typing import Dict, Any, Tuple, Optional, List
 
-# Try importing udi_interface for live PG3 execution
 try:
     import udi_interface
-    HAS_UDI = True
 except ImportError:
-    HAS_UDI = False
+    udi_interface = None
 
 
 class ProfileGenerator:
@@ -69,7 +65,6 @@ class ProfileGenerator:
         """Create a uniquely identified valid nodeDef dictionary."""
         node_id = f"NODE_{index:03d}"
         props = []
-        # Add 5 drivers per nodeDef
         for p_idx in range(5):
             ed = editor_ids[(index * 5 + p_idx) % len(editor_ids)] if editor_ids else "STATUS"
             props.append({
@@ -77,7 +72,7 @@ class ProfileGenerator:
                 "editor": ed,
                 "name": f"Driver {p_idx} for Node {index}"
             })
-        
+
         accepts = [
             {
                 "id": f"CMD_{c_idx}",
@@ -111,8 +106,7 @@ class ProfileGenerator:
         Generate a strictly valid IoX/PG3 dynamic profile payload scaled to approximately target_kb KB.
         """
         target_bytes = target_kb * 1024
-        
-        # Start with base controller setup definition
+
         editors = [
             {"id": "STATUS", "ranges": [{"uom": "25", "subset": "0,1", "names": {"0": "Not Connected", "1": "Connected"}}]},
             {"id": "READY", "ranges": [{"uom": "25", "subset": "0,1", "names": {"0": "Initializing", "1": "Ready"}}]},
@@ -133,10 +127,9 @@ class ProfileGenerator:
             }
         ]
 
-        # Iteratively expand editors and nodeDefs until target size is reached
         ed_count = 0
         nd_count = 1
-        
+
         while True:
             payload = {
                 "editors": editors,
@@ -147,16 +140,13 @@ class ProfileGenerator:
             if current_bytes >= target_bytes:
                 break
 
-            # Add an editor
             editors.append(cls.make_editor(ed_count))
             ed_count += 1
 
-            # Check size after editor
             payload["editors"] = editors
             if len(json.dumps(payload).encode('utf-8')) >= target_bytes:
                 break
 
-            # Add a nodeDef referencing available editors
             editor_ids = [e["id"] for e in editors]
             nodedefs.append(cls.make_nodedef(nd_count, editor_ids))
             nd_count += 1
@@ -180,76 +170,70 @@ class ProfileGenerator:
 
 
 class ProfileRunner:
-    """Manages profile loading via live udi_interface or mock simulation."""
+    """Manages profile loading via live udi_interface connected to PG3x MQTT."""
 
-    def __init__(self, mock: bool = False, broker_limit_kb: int = 64):
-        self.mock = mock or not HAS_UDI
-        self.broker_limit_bytes = broker_limit_kb * 1024
+    def __init__(self):
+        if udi_interface is None:
+            raise RuntimeError(
+                "udi_interface module is not installed.\n"
+                "This tool requires PG3x hardware (eisy or Polisy) with udi_interface installed.\n"
+                "It cannot run on macOS or non-PG3 environments."
+            )
         self.polyglot = None
         self._init_runner()
 
     def _init_runner(self):
-        if self.mock:
-            return
-        
-        try:
-            # Initialize live Polyglot interface
-            self.polyglot = udi_interface.Interface([])
-            
-            # Minimal node required by PG3 runtime
-            class TestControlNode(udi_interface.Node):
-                id = 'TESTCTRL'
-                drivers = [{'driver': 'ST', 'value': 1, 'uom': 25, 'name': 'Controller'}]
-                commands = {}
-            
-            self.polyglot.start('1.0.0')
-            TestControlNode(self.polyglot, 'testctrl', 'testctrl', 'Test Controller')
-            self.polyglot.ready()
-            time.sleep(1.0)
-        except Exception as e:
-            print(f"[WARN] Failed to initialize live udi_interface ({e}). Falling back to simulation mode.")
-            self.mock = True
-            self.polyglot = None
+        if 'PG3INIT' not in os.environ:
+            raise RuntimeError(
+                "PG3INIT environment variable is not set.\n"
+                "udi_interface requires PG3INIT to authenticate and connect to the local PG3x MQTT broker.\n\n"
+                "To run this test on your eisy/Polisy:\n"
+                "  Option 1 (Recommended): Install and run this as a Custom Node Server via the PG3x Web Dashboard.\n"
+                "                         PG3x will supply PG3INIT and establish the live TLS MQTT connection.\n"
+                "  Option 2 (SSH CLI): Export PG3INIT from an existing active node server slot before running:\n"
+                "                     export PG3INIT=$(tr '\\0' '\\n' < /proc/$(pgrep -f 'udi-YoLink|polyglot' | head -n 1)/environ | grep '^PG3INIT=' | cut -d= -f2-)\n"
+                "                     python3 profile_size_test.py"
+            )
 
-    def update_profile(self, payload: Dict[str, Any], timeout: float = 10.0) -> Tuple[bool, str, float]:
+        # Initialize live Polyglot interface
+        self.polyglot = udi_interface.Interface([])
+
+        # Minimal node required by PG3 runtime
+        class TestControlNode(udi_interface.Node):
+            id = 'TESTCTRL'
+            drivers = [{'driver': 'ST', 'value': 1, 'uom': 25, 'name': 'Controller'}]
+            commands = {}
+
+        self.polyglot.start('1.0.0')
+        TestControlNode(self.polyglot, 'testctrl', 'testctrl', 'Test Controller')
+        self.polyglot.ready()
+        time.sleep(1.0)
+
+    def update_profile(self, payload: Dict[str, Any]) -> Tuple[bool, str, float]:
         """
-        Attempt to send dynamic JSON profile.
+        Attempt to send dynamic JSON profile over the live Polyglot MQTT broker.
         Returns: (success: bool, detail_message: str, elapsed_seconds: float)
         """
         payload_json = json.dumps(payload)
         payload_bytes = len(payload_json.encode('utf-8'))
         start_time = time.time()
 
-        if self.mock:
-            # Simulate real PG3 / MQTT broker buffer limits
-            time.sleep(0.05)
+        updater = getattr(self.polyglot, "updateJsonProfile", None)
+        if not callable(updater):
             elapsed = time.time() - start_time
-            if payload_bytes > self.broker_limit_bytes:
-                err_msg = (
-                    f"RuntimeError: Update profile request failed: payload size ({payload_bytes} bytes) "
-                    f"exceeds broker maximum packet threshold ({self.broker_limit_bytes} bytes / {self.broker_limit_bytes // 1024} KB)"
-                )
-                return False, err_msg, elapsed
-            return True, f"Success (Simulated acceptance of {payload_bytes} bytes)", elapsed
+            return False, "polyglot.updateJsonProfile method is not available on this interface", elapsed
 
-        # Live Polyglot mode
         try:
-            updater = getattr(self.polyglot, "updateJsonProfile", None)
-            if not callable(updater):
-                elapsed = time.time() - start_time
-                return False, "polyglot.updateJsonProfile method is not available on this interface", elapsed
-
-            # Call with waitResponse
             try:
                 updater(payload, {"waitResponse": True})
             except TypeError:
                 updater(payload)
 
             elapsed = time.time() - start_time
-            return True, f"Success ({payload_bytes} bytes accepted by Polyglot)", elapsed
+            return True, f"Success ({payload_bytes:,} bytes accepted by Polyglot MQTT)", elapsed
         except Exception as e:
             elapsed = time.time() - start_time
-            return False, f"Error: {e}", elapsed
+            return False, f"MQTT/Polyglot Rejection: {e}", elapsed
 
     def shutdown(self):
         if self.polyglot and hasattr(self.polyglot, 'stop'):
@@ -259,13 +243,13 @@ class ProfileRunner:
                 pass
 
 
-def format_report(results: List[Dict[str, Any]], runner_mode: str) -> str:
+def format_report(results: List[Dict[str, Any]]) -> str:
     """Format diagnostic test results into a clean, presentation-ready ASCII report."""
     lines = []
     lines.append("=" * 80)
     lines.append("        UNIVERSAL DEVICES DYNAMIC JSON PROFILE SIZE REPRODUCTION REPORT")
     lines.append("=" * 80)
-    lines.append(f"Execution Mode : {runner_mode}")
+    lines.append("Execution Mode : Live PG3x Hardware (udi_interface / TLS MQTT)")
     lines.append(f"Timestamp      : {time.strftime('%Y-%m-%d %H:%M:%S')}")
     lines.append("-" * 80)
     lines.append(f"{'Test Description':<25} | {'Size':<12} | {'Nodes/Eds':<12} | {'Time':<8} | {'Status':<10}")
@@ -284,8 +268,7 @@ def format_report(results: List[Dict[str, Any]], runner_mode: str) -> str:
             lines.append(f"  └── Detail: {r['detail']}")
 
     lines.append("-" * 80)
-    
-    # Analysis & conclusion
+
     passed_tests = [r for r in results if r['success']]
     failed_tests = [r for r in results if not r['success']]
 
@@ -307,6 +290,13 @@ def format_report(results: List[Dict[str, Any]], runner_mode: str) -> str:
 
 
 def main():
+    if udi_interface is None:
+        print("\n" + "=" * 80, file=sys.stderr)
+        print("FATAL ERROR: udi_interface is not installed.", file=sys.stderr)
+        print("This tool requires PG3x hardware (eisy or Polisy) and cannot run on macOS.", file=sys.stderr)
+        print("=" * 80 + "\n", file=sys.stderr)
+        return 1
+
     parser = argparse.ArgumentParser(
         description="Diagnostic tool to reproduce dynamic JSON profile payload size limit in Polyglot / IoX."
     )
@@ -363,23 +353,20 @@ def main():
         help="Directory to write dumped payloads to (default: current directory)"
     )
     parser.add_argument(
-        "--mock",
+        "--daemon",
         action="store_true",
-        help="Force simulation mode for local verification without PG3"
-    )
-    parser.add_argument(
-        "--broker-limit-kb",
-        type=int,
-        default=64,
-        help="Simulated broker buffer limit in KB for mock mode (default: 64)"
+        help="Keep node server alive after test execution (calls polyglot.runForever)"
     )
 
     args = parser.parse_args()
 
-    runner = ProfileRunner(mock=args.mock, broker_limit_kb=args.broker_limit_kb)
-    runner_mode = "Simulation / Mock" if runner.mock else "Live Polyglot (udi_interface)"
+    try:
+        runner = ProfileRunner()
+    except Exception as e:
+        print(f"\n[FATAL ERROR] {e}\n", file=sys.stderr)
+        return 1
 
-    print(f"\nStarting Dynamic Profile Size Limit Diagnostic Tool [{runner_mode}]...\n")
+    print("\nStarting Dynamic Profile Size Limit Diagnostic Tool [Live PG3x Hardware (udi_interface)]...\n")
 
     results = []
 
@@ -477,18 +464,26 @@ def main():
                 print(f"\n[INFO] Dumped payloads to:\n  - {small_file} ({small_bytes:,} bytes)\n  - {large_file} ({large_bytes:,} bytes)")
 
     finally:
-        runner.shutdown()
+        if not args.daemon:
+            runner.shutdown()
 
     # Print Report
-    report = format_report(results, runner_mode)
+    report = format_report(results)
     print("\n" + report + "\n")
+
+    if args.daemon and runner.polyglot and hasattr(runner.polyglot, 'runForever'):
+        print("[INFO] --daemon specified. Entering runForever() loop...")
+        try:
+            runner.polyglot.runForever()
+        except (KeyboardInterrupt, SystemExit):
+            runner.shutdown()
 
     # If standard test: exit 0 if small passed and large failed (bug successfully reproduced!)
     if not args.sweep and not args.file and len(results) == 2:
         small_pass = results[0]['success']
         large_fail = not results[1]['success']
         if small_pass and large_fail:
-            print("[SUCCESS] Bug reproduction complete: Small payload PASSED and Large payload FAILED as expected.\n")
+            print("[SUCCESS] Bug reproduction complete: Small payload PASSED and Large payload FAILED as expected on PG3x.\n")
             return 0
         elif not small_pass:
             print("[WARN] Small payload failed. Check Polyglot connectivity or schema validation.\n")
@@ -502,4 +497,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-

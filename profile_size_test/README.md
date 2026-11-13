@@ -1,6 +1,8 @@
 # Dynamic JSON Profile Size Limit Diagnostic Tool
 
-This standalone project demonstrates and reproduces the payload size limitation bug in **Universal Devices Polyglot (PG3 / PG3x)** and **IoX** when calling `polyglot.updateJsonProfile()`.
+A standalone diagnostic tool for **Universal Devices Polyglot (PG3 / PG3x)** and **IoX** to demonstrate, reproduce, and pinpoint the dynamic JSON profile payload size bug in `polyglot.updateJsonProfile()`.
+
+> **Note**: This tool runs **strictly on PG3x hardware** (eisy or Polisy) using authentic `udi_interface` connected to the local Polyglot MQTT broker. There is **no mock or simulation mode**.
 
 ---
 
@@ -14,54 +16,75 @@ This issue commonly affects node servers with comprehensive profiles (such as Yo
 
 ---
 
-## Features
+## How It Connects to Polyglot & MQTT
 
-- **Completely Standalone**: Zero external dependencies needed for CLI simulation mode.
-- **Dual Execution Modes**:
-  - **Live Mode**: Directly tests against a running Polyglot v3 daemon using `udi_interface`.
-  - **Simulation Mode (`--mock`)**: Allows testing and verifying behavior locally on macOS / Linux without Polyglot.
-- **Comparative Two-Tier Test**: Runs a small payload (~15 KB, expected to pass) and a large payload (~90 KB, expected to fail).
-- **Threshold Sweep (`--sweep`)**: Automatically sweeps payload sizes in increments to find the exact byte cutoff where failures begin.
-- **External File Testing (`--file`)**: Can test any arbitrary dynamic profile JSON file.
-- **Payload Dumping (`--dump`)**: Exports generated small and large JSON payloads for inspection and sharing with Universal Devices developers.
+In Polyglot v3 (PG3x), node servers communicate with PG3 and IoX over a local TLS MQTT broker (`localhost:8883`).
+
+When PG3 starts a node server, it provides an environment variable named **`PG3INIT`** (a base64-encoded JSON payload containing `uuid`, `profileNum`, `token`, `mqttHost`, `mqttPort`, and `isPG3x`). 
+
+When `udi_interface.Interface([])` is instantiated, it parses `PG3INIT` to authenticate and establish the TLS MQTT session. Without `PG3INIT`, the interface cannot connect to the broker.
 
 ---
 
-## Usage
+## How to Run on PG3x Hardware (eisy / Polisy)
 
-### 1. Direct Command-Line Execution (CLI)
+### Method 1: Install as a Custom Node Server in PG3x (Recommended)
 
-Run on your **eisy / Polisy** (or any machine):
+This is the most authentic and direct way to test:
+1. In the **PG3x Web Dashboard**, navigate to **Node Server Store** -> **Add Custom Node Server** (or install from local directory `/var/polyglot/nodes/ProfileSizeTest` or GitHub URL).
+2. PG3x will assign a slot, launch `profile_size_test.py` with authentic `PG3INIT`, and connect to the live Mosquitto MQTT broker over TLS.
+3. The tool runs the comparative test suite against IoX, displays the real broker response, and writes the complete ASCII report directly into the **PG3 Node Server Log**.
+
+### Method 2: Command-Line via SSH (Passing `PG3INIT`)
+
+If you want to run the tool interactively from an SSH terminal on your eisy:
+
+1. SSH into your eisy:
+   ```bash
+   ssh admin@eisy.local
+   ```
+2. Navigate to the tool directory:
+   ```bash
+   cd /var/polyglot/nodes/ProfileSizeTest
+   ```
+3. Export `PG3INIT` from an active node server process (such as YoLink or any running slot):
+   ```bash
+   export PG3INIT=$(tr '\0' '\n' < /proc/$(pgrep -f "udi_interface|polyglot" | head -n 1)/environ | grep '^PG3INIT=' | cut -d= -f2-)
+   ```
+4. Run the diagnostic tool:
+   ```bash
+   # Standard comparative test (Small 15 KB vs Large 90 KB)
+   python3 profile_size_test.py
+   ```
+
+---
+
+## CLI Options
+
+| Flag | Default | Description |
+|---|---|---|
+| `--small-kb` | `15` | Target size in KB for small (passing) payload |
+| `--large-kb` | `90` | Target size in KB for large (failing) payload |
+| `--sweep` | `False` | Run incremental size sweep to find exact failure byte cutoff |
+| `--sweep-start` | `20` | Sweep start size in KB |
+| `--sweep-end` | `100` | Sweep end size in KB |
+| `--sweep-step` | `10` | Sweep step size in KB |
+| `--file <path>` | `None` | Test a specific profile JSON file directly |
+| `--dump` | `False` | Dump generated test payloads to disk for inspection |
+| `--daemon` | `False` | Keep node server running after test (`polyglot.runForever()`) |
+
+### Example CLI Commands
 
 ```bash
-# Standard comparative test (Small 15 KB vs Large 90 KB)
-python3 profile_size_test.py
-
-# Sweep mode: pinpoint exact threshold from 30 KB to 100 KB in 10 KB steps
+# Pinpoint the exact failure boundary from 30 KB to 100 KB in 10 KB steps
 python3 profile_size_test.py --sweep --sweep-start 30 --sweep-end 100 --sweep-step 10
 
-# Test a specific profile JSON dump file
-python3 profile_size_test.py --file my_profile.json
+# Test an exported production profile JSON file
+python3 profile_size_test.py --file my_yolink_profile.json
 
-# Dump generated test payloads to disk
+# Dump the generated payloads to disk
 python3 profile_size_test.py --dump
 ```
-
-### 2. Simulation / Offline Mode
-
-Test locally on macOS or Linux without a live PG3 daemon:
-
-```bash
-python3 profile_size_test.py --mock
-python3 profile_size_test.py --mock --sweep
-```
-
-### 3. Running as a Standalone NodeServer in PG3
-
-To install this diagnostic tool as its own independent plugin in PG3:
-1. In Polyglot PG3 dashboard, add a custom node server slot.
-2. Point it to this repository / directory.
-3. Start the node server; it will run the diagnostic suite and log results to the PG3 debug log.
 
 ---
 
@@ -71,14 +94,14 @@ To install this diagnostic tool as its own independent plugin in PG3:
 ================================================================================
         UNIVERSAL DEVICES DYNAMIC JSON PROFILE SIZE REPRODUCTION REPORT
 ================================================================================
-Execution Mode : Simulation / Mock
-Timestamp      : 2026-11-12 09:03:08
+Execution Mode : Live PG3x Hardware (udi_interface / TLS MQTT)
+Timestamp      : 2026-11-13 10:15:30
 --------------------------------------------------------------------------------
 Test Description          | Size         | Nodes/Eds    | Time     | Status    
 --------------------------------------------------------------------------------
-Test 1: Small Payload     | 15.1 KB      | 16nd/19ed    | 0.06   s | PASS      
-Test 2: Large Payload     | 90.8 KB      | 94nd/96ed    | 0.06   s | FAIL (ERROR)
-  └── Detail: RuntimeError: Update profile request failed: payload size (93007 bytes) exceeds broker maximum packet threshold (65536 bytes / 64 KB)
+Test 1: Small Payload     | 15.1 KB      | 16nd/19ed    | 0.32s    | PASS      
+Test 2: Large Payload     | 90.8 KB      | 94nd/96ed    | 0.08s    | FAIL (ERROR)
+  └── Detail: MQTT/Polyglot Rejection: RuntimeError: Update profile request failed
 --------------------------------------------------------------------------------
 DIAGNOSTIC CONCLUSION:
   [✓] Smallest failure size : 93,007 bytes (90.8 KB)
@@ -90,9 +113,8 @@ DIAGNOSTIC CONCLUSION:
 
 ---
 
-## Running Unit Tests
+## Running Automated Tests
 
 ```bash
 python3 test_profile_size.py
 ```
-
