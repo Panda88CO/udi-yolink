@@ -1,0 +1,11 @@
+<editors>
+  <editor id="CONNECT">
+    <range uom="25" subset="0,1" nls="nlsconnect" />
+  </editor>
+  <editor id="READY">
+    <range uom="25" subset="0,1" nls="nlsready" />
+  </editor>
+  <editor id="UNIXTIME">
+    <range uom="151" min="0" max="9999999999" />
+  </editor>
+</editors>

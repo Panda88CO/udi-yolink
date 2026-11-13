@@ -1,0 +1,21 @@
+<nodeDefs>
+  <nodeDef id="SETUP" nls="nlssetup">
+    <editors />
+    <sts>
+      <st id="ST" editor="CONNECT" />
+      <st id="GV1" editor="READY" />
+      <st id="TIME" editor="UNIXTIME" />
+    </sts>
+    <cmds>
+      <sends>
+        <cmd id="DON" />
+        <cmd id="DOF" />
+      </sends>
+      <accepts>
+        <cmd id="DON" />
+        <cmd id="DOF" />
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
+</nodeDefs>

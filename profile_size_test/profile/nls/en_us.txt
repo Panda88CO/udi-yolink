@@ -1,0 +1,12 @@
+ND-SETUP-NAME = Profile Test Controller
+ND-SETUP-ICON = GenericCtl
+ST-SETUP-ST-NAME = Node Server Status
+ST-SETUP-GV1-NAME = Diagnostic Status
+ST-SETUP-TIME-NAME = Last Update Time
+CMD-SETUP-DON-NAME = Run Sweep
+CMD-SETUP-DOF-NAME = Run Two-Tier Test
+CMD-SETUP-QUERY-NAME = Query
+nlsconnect-0 = Disconnected
+nlsconnect-1 = Connected
+nlsready-0 = Initializing
+nlsready-1 = Ready
