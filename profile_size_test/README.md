@@ -31,9 +31,25 @@ When `udi_interface.Interface([])` is instantiated, it parses `PG3INIT` to authe
 ### Method 1: Install as a Custom Node Server in PG3x (Recommended)
 
 This is the most authentic and direct way to test:
-1. In the **PG3x Web Dashboard**, navigate to **Node Server Store** -> **Add Custom Node Server** (or install from local directory `/var/polyglot/nodes/ProfileSizeTest` or GitHub URL).
+1. In the **PG3x Web Dashboard**, navigate to **Node Server Store** -> **Add Custom Node Server** (or install from local directory `/var/polyglot/nodes/ProfileSizeTest` or GitHub URL on branch `profile-size-test`).
 2. PG3x will assign a slot, launch `profile_size_test.py` with authentic `PG3INIT`, and connect to the live Mosquitto MQTT broker over TLS.
-3. The tool runs the comparative test suite against IoX, displays the real broker response, and writes the complete ASCII report directly into the **PG3 Node Server Log**.
+3. On startup, it automatically executes the sweep using the default parameters and writes the complete ASCII report directly into the **PG3 Node Server Log** (`Log` -> `Real Time Log` or `Download Log`).
+4. **Configuring Sweep Parameters in PG3x:**
+   - In the PG3x Web Dashboard, navigate to **Node Servers** -> **ProfileSizeTest** -> **Configuration**.
+   - Under **Custom Configuration Parameters**, adjust any parameter:
+     - `mode`: `sweep` (or `test` for small vs large)
+     - `sweep_start`: `20` (starting KB)
+     - `sweep_end`: `100` (ending KB)
+     - `sweep_step`: `10` (increment KB)
+     - `small_kb`: `15`
+     - `large_kb`: `90`
+   - Click **Save Changes** — the node server automatically receives the update, executes the new sweep immediately, and logs the report.
+5. **IoX Node & Drivers:**
+   The controller node in IoX reports:
+   - `ST`: Status (1 = Ready)
+   - `GV1`: Result Status (1 = All Passed, 2 = Bug Confirmed, 3 = All Failed)
+   - `GV2`: Smallest Failure Size (KB)
+   - `GV3`: Largest Passing Size (KB)
 
 ### Method 2: Command-Line via SSH (Passing `PG3INIT`)
 

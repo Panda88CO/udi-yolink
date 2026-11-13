@@ -8,6 +8,12 @@ in polyglot.updateJsonProfile() against live PG3x hardware and MQTT broker.
 
 This tool runs strictly on PG3x hardware (eisy or Polisy). It connects directly
 to the PG3x MQTT broker using udi_interface. There is NO mock or simulation mode.
+
+When installed via PG3:
+- Configurable via the PG3 Web Dashboard under Configuration -> Custom Configuration Parameters
+  (mode, sweep_start, sweep_end, sweep_step, small_kb, large_kb).
+- Full reproduction report logged directly in PG3 Node Server Log.
+- Reports status to IoX via drivers: ST, GV1 (Result), GV2 (Min Fail KB), GV3 (Max Pass KB).
 """
 
 import sys
@@ -15,12 +21,25 @@ import os
 import json
 import time
 import argparse
+import logging
 from typing import Dict, Any, Tuple, Optional, List
 
 try:
     import udi_interface
 except ImportError:
     udi_interface = None
+
+
+def log_msg(msg: str):
+    """Log to stdout and PG3 LOGGER."""
+    print(msg)
+    if udi_interface and hasattr(udi_interface, 'LOGGER'):
+        try:
+            udi_interface.LOGGER.info(msg)
+        except Exception:
+            pass
+    else:
+        logging.info(msg)
 
 
 class ProfileGenerator:
@@ -169,6 +188,41 @@ class ProfileGenerator:
         return data
 
 
+class TestControlNode(udi_interface.Node if udi_interface else object):
+    """Controller node representing the diagnostic tool in IoX / PG3."""
+    id = 'TESTCTRL'
+    drivers = [
+        {'driver': 'ST', 'value': 1, 'uom': 25, 'name': 'Controller Status'},
+        {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Test Result'},
+        {'driver': 'GV2', 'value': 0, 'uom': 56, 'name': 'Min Fail Size (KB)'},
+        {'driver': 'GV3', 'value': 0, 'uom': 56, 'name': 'Max Pass Size (KB)'},
+    ]
+    commands = {
+        'QUERY': 'query',
+        'RUN_TEST': 'cmd_run_test',
+        'RUN_SWEEP': 'cmd_run_sweep',
+    }
+
+    def __init__(self, polyglot, primary, address, name, runner=None):
+        if udi_interface:
+            super().__init__(polyglot, primary, address, name)
+        self.runner = runner
+
+    def query(self):
+        if hasattr(self, 'reportDrivers'):
+            self.reportDrivers()
+
+    def cmd_run_test(self, command=None):
+        log_msg("[COMMAND] Received RUN_TEST command from IoX.")
+        if self.runner:
+            self.runner.run_two_tier()
+
+    def cmd_run_sweep(self, command=None):
+        log_msg("[COMMAND] Received RUN_SWEEP command from IoX.")
+        if self.runner:
+            self.runner.run_sweep()
+
+
 class ProfileRunner:
     """Manages profile loading via live udi_interface connected to PG3x MQTT."""
 
@@ -180,6 +234,16 @@ class ProfileRunner:
                 "It cannot run on macOS or non-PG3 environments."
             )
         self.polyglot = None
+        self.ctrl_node = None
+        self.params = {
+            'mode': 'sweep',
+            'sweep_start': 20,
+            'sweep_end': 100,
+            'sweep_step': 10,
+            'small_kb': 15,
+            'large_kb': 90
+        }
+        self.last_results = []
         self._init_runner()
 
     def _init_runner(self):
@@ -198,16 +262,178 @@ class ProfileRunner:
         # Initialize live Polyglot interface
         self.polyglot = udi_interface.Interface([])
 
-        # Minimal node required by PG3 runtime
-        class TestControlNode(udi_interface.Node):
-            id = 'TESTCTRL'
-            drivers = [{'driver': 'ST', 'value': 1, 'uom': 25, 'name': 'Controller'}]
-            commands = {}
+        # Subscribe to PG3 configuration and lifecycle events
+        self.polyglot.subscribe(self.polyglot.CUSTOMPARAMS, self.parameter_handler)
+        self.polyglot.subscribe(self.polyglot.STOP, self.stop_handler)
 
         self.polyglot.start('1.0.0')
-        TestControlNode(self.polyglot, 'testctrl', 'testctrl', 'Test Controller')
+        self.ctrl_node = TestControlNode(self.polyglot, 'testctrl', 'testctrl', 'Profile Test Controller', runner=self)
+        if hasattr(self.polyglot, 'addNode'):
+            self.polyglot.addNode(self.ctrl_node)
         self.polyglot.ready()
         time.sleep(1.0)
+
+    def stop_handler(self):
+        log_msg("[PG3] Received stop signal.")
+        self.shutdown()
+
+    def parameter_handler(self, user_data: Dict[str, Any]):
+        """Called whenever PG3 pushes Custom Configuration Parameters from the dashboard."""
+        if not user_data:
+            return
+
+        log_msg(f"\n[PG3 Configuration] Received custom parameters: {user_data}")
+        try:
+            if 'mode' in user_data and str(user_data['mode']).strip():
+                self.params['mode'] = str(user_data['mode']).strip().lower()
+            if 'sweep_start' in user_data and str(user_data['sweep_start']).strip():
+                self.params['sweep_start'] = int(user_data['sweep_start'])
+            if 'sweep_end' in user_data and str(user_data['sweep_end']).strip():
+                self.params['sweep_end'] = int(user_data['sweep_end'])
+            if 'sweep_step' in user_data and str(user_data['sweep_step']).strip():
+                self.params['sweep_step'] = int(user_data['sweep_step'])
+            if 'small_kb' in user_data and str(user_data['small_kb']).strip():
+                self.params['small_kb'] = int(user_data['small_kb'])
+            if 'large_kb' in user_data and str(user_data['large_kb']).strip():
+                self.params['large_kb'] = int(user_data['large_kb'])
+        except Exception as e:
+            log_msg(f"[WARN] Error parsing custom parameters: {e}")
+
+        # Automatically execute configured test/sweep upon receiving parameters
+        self.execute_tests()
+
+    def execute_tests(self):
+        """Run tests according to current configuration."""
+        mode = self.params.get('mode', 'sweep')
+        if mode == 'sweep':
+            self.run_sweep(
+                start_kb=self.params.get('sweep_start', 20),
+                end_kb=self.params.get('sweep_end', 100),
+                step_kb=self.params.get('sweep_step', 10)
+            )
+        else:
+            self.run_two_tier(
+                small_kb=self.params.get('small_kb', 15),
+                large_kb=self.params.get('large_kb', 90)
+            )
+
+    def run_sweep(self, start_kb: int = None, end_kb: int = None, step_kb: int = None) -> List[Dict[str, Any]]:
+        start_kb = start_kb if start_kb is not None else self.params.get('sweep_start', 20)
+        end_kb = end_kb if end_kb is not None else self.params.get('sweep_end', 100)
+        step_kb = step_kb if step_kb is not None else self.params.get('sweep_step', 10)
+
+        log_msg(f"\n[SWEEP] Starting size sweep from {start_kb} KB to {end_kb} KB (step: {step_kb} KB)...")
+        results = []
+        for size_kb in range(start_kb, end_kb + 1, step_kb):
+            payload = ProfileGenerator.generate_payload(size_kb)
+            p_bytes = len(json.dumps(payload).encode('utf-8'))
+            nd_cnt = len(payload.get('nodedefs', []))
+            ed_cnt = len(payload.get('editors', []))
+            log_msg(f"  -> Testing payload ~{size_kb} KB ({p_bytes:,} bytes, {nd_cnt} nodeDefs, {ed_cnt} editors)...")
+            success, msg, elapsed = self.update_profile(payload)
+            results.append({
+                "name": f"Sweep: {size_kb} KB",
+                "bytes": p_bytes,
+                "size_kb": p_bytes / 1024,
+                "size_str": f"{p_bytes/1024:.1f} KB",
+                "counts": f"{nd_cnt}nd/{ed_cnt}ed",
+                "elapsed": elapsed,
+                "success": success,
+                "detail": msg
+            })
+
+        self.last_results = results
+        report = format_report(results)
+        log_msg("\n" + report + "\n")
+        self._update_node_drivers(results)
+        return results
+
+    def run_two_tier(self, small_kb: int = None, large_kb: int = None, dump: bool = False, dump_dir: str = ".") -> List[Dict[str, Any]]:
+        small_kb = small_kb if small_kb is not None else self.params.get('small_kb', 15)
+        large_kb = large_kb if large_kb is not None else self.params.get('large_kb', 90)
+
+        log_msg(f"\n[TWO-TIER TEST] Running small ({small_kb} KB) vs large ({large_kb} KB) profile test...")
+        results = []
+
+        # 1. Small payload
+        small_payload = ProfileGenerator.generate_payload(small_kb)
+        small_bytes = len(json.dumps(small_payload).encode('utf-8'))
+        small_nd = len(small_payload.get('nodedefs', []))
+        small_ed = len(small_payload.get('editors', []))
+        log_msg(f"   Executing updateJsonProfile for Small Payload ({small_bytes:,} bytes)...")
+        small_ok, small_msg, small_el = self.update_profile(small_payload)
+        results.append({
+            "name": "Test 1: Small Payload",
+            "bytes": small_bytes,
+            "size_kb": small_bytes / 1024,
+            "size_str": f"{small_bytes/1024:.1f} KB",
+            "counts": f"{small_nd}nd/{small_ed}ed",
+            "elapsed": small_el,
+            "success": small_ok,
+            "detail": small_msg
+        })
+
+        # 2. Large payload
+        large_payload = ProfileGenerator.generate_payload(large_kb)
+        large_bytes = len(json.dumps(large_payload).encode('utf-8'))
+        large_nd = len(large_payload.get('nodedefs', []))
+        large_ed = len(large_payload.get('editors', []))
+        log_msg(f"   Executing updateJsonProfile for Large Payload ({large_bytes:,} bytes)...")
+        large_ok, large_msg, large_el = self.update_profile(large_payload)
+        results.append({
+            "name": "Test 2: Large Payload",
+            "bytes": large_bytes,
+            "size_kb": large_bytes / 1024,
+            "size_str": f"{large_bytes/1024:.1f} KB",
+            "counts": f"{large_nd}nd/{large_ed}ed",
+            "elapsed": large_el,
+            "success": large_ok,
+            "detail": large_msg
+        })
+
+        if dump:
+            os.makedirs(dump_dir, exist_ok=True)
+            small_file = os.path.join(dump_dir, "profile_test_small.json")
+            large_file = os.path.join(dump_dir, "profile_test_large.json")
+            with open(small_file, 'w', encoding='utf-8') as f:
+                json.dump(small_payload, f, indent=2)
+            with open(large_file, 'w', encoding='utf-8') as f:
+                json.dump(large_payload, f, indent=2)
+            log_msg(f"[INFO] Dumped payloads to:\n  - {small_file} ({small_bytes:,} bytes)\n  - {large_file} ({large_bytes:,} bytes)")
+
+        self.last_results = results
+        report = format_report(results)
+        log_msg("\n" + report + "\n")
+        self._update_node_drivers(results)
+        return results
+
+    def _update_node_drivers(self, results: List[Dict[str, Any]]):
+        if not self.ctrl_node:
+            return
+        try:
+            passed = [r for r in results if r['success']]
+            failed = [r for r in results if not r['success']]
+
+            # GV1: 1 = All Pass, 2 = Bug Confirmed (both pass & fail), 3 = All Fail
+            if passed and failed:
+                res_val = 2
+            elif passed and not failed:
+                res_val = 1
+            else:
+                res_val = 3
+
+            min_fail_kb = round(min(failed, key=lambda x: x['bytes'])['size_kb'], 1) if failed else 0
+            max_pass_kb = round(max(passed, key=lambda x: x['bytes'])['size_kb'], 1) if passed else 0
+
+            if hasattr(self.ctrl_node, 'setDriver'):
+                self.ctrl_node.setDriver('ST', 1)
+                self.ctrl_node.setDriver('GV1', res_val)
+                self.ctrl_node.setDriver('GV2', min_fail_kb)
+                self.ctrl_node.setDriver('GV3', max_pass_kb)
+            if hasattr(self.ctrl_node, 'reportDrivers'):
+                self.ctrl_node.reportDrivers()
+        except Exception as e:
+            log_msg(f"[WARN] Failed to update node drivers: {e}")
 
     def update_profile(self, payload: Dict[str, Any]) -> Tuple[bool, str, float]:
         """
@@ -366,43 +592,20 @@ def main():
         print(f"\n[FATAL ERROR] {e}\n", file=sys.stderr)
         return 1
 
-    print("\nStarting Dynamic Profile Size Limit Diagnostic Tool [Live PG3x Hardware (udi_interface)]...\n")
+    # Check if run with explicit CLI parameters (e.g. from SSH interactive terminal)
+    cli_mode_explicit = args.sweep or args.file or args.dump or ('--small-kb' in sys.argv) or ('--large-kb' in sys.argv)
 
-    results = []
-
-    try:
-        # Case 1: Custom file specified
-        if args.file:
-            print(f"Loading external profile from: {args.file}")
-            payload = ProfileGenerator.load_payload_from_file(args.file)
-            p_bytes = len(json.dumps(payload).encode('utf-8'))
-            nd_cnt = len(payload.get('nodedefs', []))
-            ed_cnt = len(payload.get('editors', []))
-            print(f"Testing external payload: {p_bytes:,} bytes ({p_bytes/1024:.2f} KB)...")
-            success, msg, elapsed = runner.update_profile(payload)
-            results.append({
-                "name": f"File: {os.path.basename(args.file)}",
-                "bytes": p_bytes,
-                "size_kb": p_bytes / 1024,
-                "size_str": f"{p_bytes/1024:.1f} KB",
-                "counts": f"{nd_cnt}nd/{ed_cnt}ed",
-                "elapsed": elapsed,
-                "success": success,
-                "detail": msg
-            })
-
-        # Case 2: Sweep mode
-        elif args.sweep:
-            print(f"Running size sweep from {args.sweep_start} KB to {args.sweep_end} KB (step: {args.sweep_step} KB)...")
-            for size_kb in range(args.sweep_start, args.sweep_end + 1, args.sweep_step):
-                payload = ProfileGenerator.generate_payload(size_kb)
+    if cli_mode_explicit:
+        log_msg("\nExecuting Dynamic Profile Size Limit Diagnostic Tool via CLI...\n")
+        try:
+            if args.file:
+                payload = ProfileGenerator.load_payload_from_file(args.file)
                 p_bytes = len(json.dumps(payload).encode('utf-8'))
                 nd_cnt = len(payload.get('nodedefs', []))
                 ed_cnt = len(payload.get('editors', []))
-                print(f"  -> Testing payload ~{size_kb} KB ({p_bytes:,} bytes, {nd_cnt} nodeDefs, {ed_cnt} editors)...")
                 success, msg, elapsed = runner.update_profile(payload)
-                results.append({
-                    "name": f"Sweep: {size_kb} KB",
+                report = format_report([{
+                    "name": f"File: {os.path.basename(args.file)}",
                     "bytes": p_bytes,
                     "size_kb": p_bytes / 1024,
                     "size_str": f"{p_bytes/1024:.1f} KB",
@@ -410,87 +613,27 @@ def main():
                     "elapsed": elapsed,
                     "success": success,
                     "detail": msg
-                })
+                }])
+                log_msg("\n" + report + "\n")
+            elif args.sweep:
+                runner.run_sweep(args.sweep_start, args.sweep_end, args.sweep_step)
+            else:
+                runner.run_two_tier(args.small_kb, args.large_kb, dump=args.dump, dump_dir=args.dump_dir)
+        finally:
+            if not args.daemon:
+                runner.shutdown()
+                return 0
 
-        # Case 3: Standard Comparative Two-Tier Test (Small vs Large)
-        else:
-            # 1. Small payload (expected to pass)
-            print(f"1. Generating Small Payload (~{args.small_kb} KB)...")
-            small_payload = ProfileGenerator.generate_payload(args.small_kb)
-            small_bytes = len(json.dumps(small_payload).encode('utf-8'))
-            small_nd = len(small_payload.get('nodedefs', []))
-            small_ed = len(small_payload.get('editors', []))
-            print(f"   Executing updateJsonProfile for Small Payload ({small_bytes:,} bytes)...")
-            small_ok, small_msg, small_el = runner.update_profile(small_payload)
-            results.append({
-                "name": "Test 1: Small Payload",
-                "bytes": small_bytes,
-                "size_kb": small_bytes / 1024,
-                "size_str": f"{small_bytes/1024:.1f} KB",
-                "counts": f"{small_nd}nd/{small_ed}ed",
-                "elapsed": small_el,
-                "success": small_ok,
-                "detail": small_msg
-            })
-
-            # 2. Large payload (expected to fail)
-            print(f"2. Generating Large Payload (~{args.large_kb} KB)...")
-            large_payload = ProfileGenerator.generate_payload(args.large_kb)
-            large_bytes = len(json.dumps(large_payload).encode('utf-8'))
-            large_nd = len(large_payload.get('nodedefs', []))
-            large_ed = len(large_payload.get('editors', []))
-            print(f"   Executing updateJsonProfile for Large Payload ({large_bytes:,} bytes)...")
-            large_ok, large_msg, large_el = runner.update_profile(large_payload)
-            results.append({
-                "name": "Test 2: Large Payload",
-                "bytes": large_bytes,
-                "size_kb": large_bytes / 1024,
-                "size_str": f"{large_bytes/1024:.1f} KB",
-                "counts": f"{large_nd}nd/{large_ed}ed",
-                "elapsed": large_el,
-                "success": large_ok,
-                "detail": large_msg
-            })
-
-            # Dump payloads if requested
-            if args.dump:
-                os.makedirs(args.dump_dir, exist_ok=True)
-                small_file = os.path.join(args.dump_dir, "profile_test_small.json")
-                large_file = os.path.join(args.dump_dir, "profile_test_large.json")
-                with open(small_file, 'w', encoding='utf-8') as f:
-                    json.dump(small_payload, f, indent=2)
-                with open(large_file, 'w', encoding='utf-8') as f:
-                    json.dump(large_payload, f, indent=2)
-                print(f"\n[INFO] Dumped payloads to:\n  - {small_file} ({small_bytes:,} bytes)\n  - {large_file} ({large_bytes:,} bytes)")
-
-    finally:
-        if not args.daemon:
-            runner.shutdown()
-
-    # Print Report
-    report = format_report(results)
-    print("\n" + report + "\n")
-
-    if args.daemon and runner.polyglot and hasattr(runner.polyglot, 'runForever'):
-        print("[INFO] --daemon specified. Entering runForever() loop...")
-        try:
-            runner.polyglot.runForever()
-        except (KeyboardInterrupt, SystemExit):
-            runner.shutdown()
-
-    # If standard test: exit 0 if small passed and large failed (bug successfully reproduced!)
-    if not args.sweep and not args.file and len(results) == 2:
-        small_pass = results[0]['success']
-        large_fail = not results[1]['success']
-        if small_pass and large_fail:
-            print("[SUCCESS] Bug reproduction complete: Small payload PASSED and Large payload FAILED as expected on PG3x.\n")
-            return 0
-        elif not small_pass:
-            print("[WARN] Small payload failed. Check Polyglot connectivity or schema validation.\n")
-            return 1
-        else:
-            print("[INFO] Large payload did not fail. Payload size may be below current broker threshold.\n")
-            return 0
+    # Default PG3 Node Server Mode (managed by PG3 daemon)
+    log_msg("[PG3] ProfileSizeTest Node Server started. Waiting for PG3 events / customParams...")
+    try:
+        # Run tests with default configuration initially
+        runner.execute_tests()
+        
+        # Enter PG3 event loop
+        runner.polyglot.runForever()
+    except (KeyboardInterrupt, SystemExit):
+        runner.shutdown()
 
     return 0
 

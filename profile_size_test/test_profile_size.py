@@ -157,6 +157,59 @@ class TestProfileRunnerLiveHardware(unittest.TestCase):
                     self.assertIn("MQTT 413: Payload Too Large", msg)
 
 
+    def test_parameter_handler_updates_params_and_runs(self):
+        mock_iface_inst = MagicMock()
+        mock_udi = MagicMock()
+        mock_udi.Interface.return_value = mock_iface_inst
+        mock_udi.Node = MockNode
+
+        with patch.dict(os.environ, {'PG3INIT': 'fake_base64_init'}):
+            with patch.object(pst_mod, 'udi_interface', mock_udi):
+                with patch('time.sleep', return_value=None):
+                    runner = ProfileRunner()
+                    with patch.object(runner, 'run_sweep') as mock_sweep:
+                        runner.parameter_handler({
+                            'mode': 'sweep',
+                            'sweep_start': '30',
+                            'sweep_end': '80',
+                            'sweep_step': '5'
+                        })
+                        self.assertEqual(runner.params['sweep_start'], 30)
+                        self.assertEqual(runner.params['sweep_end'], 80)
+                        self.assertEqual(runner.params['sweep_step'], 5)
+                        mock_sweep.assert_called_once_with(start_kb=30, end_kb=80, step_kb=5)
+
+    def test_run_sweep_updates_node_drivers(self):
+        mock_iface_inst = MagicMock()
+        mock_udi = MagicMock()
+        mock_udi.Interface.return_value = mock_iface_inst
+        mock_udi.Node = MockNode
+
+        with patch.dict(os.environ, {'PG3INIT': 'fake_base64_init'}):
+            with patch.object(pst_mod, 'udi_interface', mock_udi):
+                with patch('time.sleep', return_value=None):
+                    runner = ProfileRunner()
+                    runner.ctrl_node = MagicMock()
+                    
+                    # Mock update_profile so that <=30 KB passes and >30 KB fails
+                    def fake_update(payload):
+                        kb = len(json.dumps(payload).encode('utf-8')) / 1024
+                        if kb <= 30:
+                            return True, "Success", 0.01
+                        else:
+                            return False, "Rejection", 0.01
+
+                    with patch.object(runner, 'update_profile', side_effect=fake_update):
+                        results = runner.run_sweep(start_kb=20, end_kb=40, step_kb=10)
+                        self.assertEqual(len(results), 3)
+                        self.assertTrue(results[0]['success']) # 20 KB
+                        self.assertFalse(results[2]['success']) # 40 KB
+                        
+                        runner.ctrl_node.setDriver.assert_any_call('ST', 1)
+                        runner.ctrl_node.setDriver.assert_any_call('GV1', 2) # Bug confirmed (mix of pass & fail)
+                        runner.ctrl_node.reportDrivers.assert_called()
+
+
 class TestReportFormatting(unittest.TestCase):
     """Test ASCII diagnostic report formatter."""
 
