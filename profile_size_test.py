@@ -117,7 +117,7 @@ class ProfileGenerator:
             "properties": props,
             "cmds": {
                 "accepts": accepts,
-                "sends": [{"id": "DON"}, {"id": "DOF"}]
+                "sends": [{"id": "DON", "name": "DON"}, {"id": "DOF", "name": "DOF"}]
             },
             "links": {"ctl": [], "rsp": []}
         }
@@ -144,7 +144,7 @@ class ProfileGenerator:
                     {"id": "GV1", "editor": "READY", "name": "Profile Status"},
                     {"id": "TIME", "editor": "TIME", "name": "Last Update"}
                 ],
-                "cmds": {"accepts": [], "sends": [{"id": "DON"}, {"id": "DOF"}]},
+                "cmds": {"accepts": [], "sends": [{"id": "DON", "name": "DON"}, {"id": "DOF", "name": "DOF"}]},
                 "links": {"ctl": [], "rsp": []}
             }
         ]
@@ -468,11 +468,17 @@ class ProfileRunner:
 
         try:
             try:
-                updater(payload, {"waitResponse": True})
+                res = updater(payload, {"waitResponse": True})
             except TypeError:
-                updater(payload)
+                res = updater(payload)
 
             elapsed = time.time() - start_time
+            if res is False:
+                return False, "updateJsonProfile returned False", elapsed
+            if isinstance(res, dict) and (res.get('error') or res.get('success') is False):
+                err_msg = res.get('message', 'Update profile rejected by Polyglot')
+                return False, f"Polyglot Rejection: {err_msg}", elapsed
+
             return True, f"Success ({payload_bytes:,} bytes accepted by Polyglot MQTT)", elapsed
         except Exception as e:
             elapsed = time.time() - start_time
