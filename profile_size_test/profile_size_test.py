@@ -13,7 +13,8 @@ When installed via PG3:
 - Configurable via the PG3 Web Dashboard under Configuration -> Custom Configuration Parameters
   (mode, sweep_start, sweep_end, sweep_step, small_kb, large_kb).
 - Full reproduction report logged directly in PG3 Node Server Log.
-- Reports status to IoX via drivers: ST, GV1 (Result), GV2 (Min Fail KB), GV3 (Max Pass KB).
+- Reports status to IoX via SETUP node: ST (Status), GV1 (Ready/Result), TIME (Last Update).
+- IoX Commands: DON = Run Sweep, DOF = Run Two-Tier Test.
 """
 
 import sys
@@ -22,6 +23,7 @@ import json
 import time
 import argparse
 import logging
+import threading
 from typing import Dict, Any, Tuple, Optional, List
 
 VERSION = "1.0.0"
@@ -47,7 +49,6 @@ def log_msg(msg: str):
 class ProfileGenerator:
     """Generates valid, realistic IoX/PG3 dynamic profile JSON structures."""
 
-    # Standard editor templates following IoX UOM conventions
     SAMPLE_EDITORS = [
         {"id": "STATUS", "ranges": [{"uom": "25", "subset": "0,1", "names": {"0": "Not Connected", "1": "Connected"}}]},
         {"id": "SWSTATE", "ranges": [{"uom": "25", "subset": "0,1,99", "names": {"0": "Off", "1": "On", "99": "Unknown"}}]},
@@ -191,18 +192,20 @@ class ProfileGenerator:
 
 
 class TestControlNode(udi_interface.Node if udi_interface else object):
-    """Controller node representing the diagnostic tool in IoX / PG3."""
-    id = 'TESTCTRL'
+    """
+    Controller node representing the diagnostic tool in IoX / PG3.
+    Uses nodeDef id='SETUP' matching profile/nodedef/nodedefs.xml so IoX recognizes it.
+    """
+    id = 'SETUP'
     drivers = [
         {'driver': 'ST', 'value': 1, 'uom': 25, 'name': 'Controller Status'},
-        {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Test Result'},
-        {'driver': 'GV2', 'value': 0, 'uom': 56, 'name': 'Min Fail Size (KB)'},
-        {'driver': 'GV3', 'value': 0, 'uom': 56, 'name': 'Max Pass Size (KB)'},
+        {'driver': 'GV1', 'value': 1, 'uom': 25, 'name': 'Ready Status'},
+        {'driver': 'TIME', 'value': 0, 'uom': 151, 'name': 'Last Update'},
     ]
     commands = {
         'QUERY': 'query',
-        'RUN_TEST': 'cmd_run_test',
-        'RUN_SWEEP': 'cmd_run_sweep',
+        'DON': 'cmd_don',
+        'DOF': 'cmd_dof',
     }
 
     def __init__(self, polyglot, primary, address, name, runner=None):
@@ -214,15 +217,15 @@ class TestControlNode(udi_interface.Node if udi_interface else object):
         if hasattr(self, 'reportDrivers'):
             self.reportDrivers()
 
-    def cmd_run_test(self, command=None):
-        log_msg("[COMMAND] Received RUN_TEST command from IoX.")
+    def cmd_don(self, command=None):
+        log_msg("[COMMAND] Received DON from IoX: Triggering Dynamic Profile Sweep.")
         if self.runner:
-            self.runner.run_two_tier()
+            self.runner.start_test_thread(mode='sweep')
 
-    def cmd_run_sweep(self, command=None):
-        log_msg("[COMMAND] Received RUN_SWEEP command from IoX.")
+    def cmd_dof(self, command=None):
+        log_msg("[COMMAND] Received DOF from IoX: Triggering Two-Tier Test.")
         if self.runner:
-            self.runner.run_sweep()
+            self.runner.start_test_thread(mode='test')
 
 
 class ProfileRunner:
@@ -246,6 +249,7 @@ class ProfileRunner:
             'large_kb': 90
         }
         self.last_results = []
+        self._test_lock = threading.Lock()
         self._init_runner()
 
     def _init_runner(self):
@@ -269,11 +273,22 @@ class ProfileRunner:
         self.polyglot.subscribe(self.polyglot.STOP, self.stop_handler)
 
         self.polyglot.start(VERSION)
-        self.ctrl_node = TestControlNode(self.polyglot, 'testctrl', 'testctrl', 'Profile Test Controller', runner=self)
+
+        # Register setup node using standard SETUP nodedef
+        self.ctrl_node = TestControlNode(self.polyglot, 'setup', 'setup', 'Profile Size Test Controller', runner=self)
         if hasattr(self.polyglot, 'addNode'):
             self.polyglot.addNode(self.ctrl_node)
+            time.sleep(0.5)
+
+        if hasattr(self.ctrl_node, 'setDriver'):
+            self.ctrl_node.setDriver('ST', 1)
+            self.ctrl_node.setDriver('GV1', 1)
+            self.ctrl_node.setDriver('TIME', int(time.time()))
+            if hasattr(self.ctrl_node, 'reportDrivers'):
+                self.ctrl_node.reportDrivers()
+
         self.polyglot.ready()
-        time.sleep(1.0)
+        time.sleep(0.5)
 
     def stop_handler(self):
         log_msg("[PG3] Received stop signal.")
@@ -301,23 +316,37 @@ class ProfileRunner:
         except Exception as e:
             log_msg(f"[WARN] Error parsing custom parameters: {e}")
 
-        # Automatically execute configured test/sweep upon receiving parameters
-        self.execute_tests()
+        # Trigger test thread with updated parameters
+        self.start_test_thread()
+
+    def start_test_thread(self, mode: Optional[str] = None):
+        """Run tests in a background thread so the PG3 main loop stays responsive."""
+        if mode:
+            self.params['mode'] = mode
+        t = threading.Thread(target=self.execute_tests, daemon=True)
+        t.start()
 
     def execute_tests(self):
         """Run tests according to current configuration."""
-        mode = self.params.get('mode', 'sweep')
-        if mode == 'sweep':
-            self.run_sweep(
-                start_kb=self.params.get('sweep_start', 20),
-                end_kb=self.params.get('sweep_end', 100),
-                step_kb=self.params.get('sweep_step', 10)
-            )
-        else:
-            self.run_two_tier(
-                small_kb=self.params.get('small_kb', 15),
-                large_kb=self.params.get('large_kb', 90)
-            )
+        if not self._test_lock.acquire(blocking=False):
+            log_msg("[INFO] A diagnostic test run is already in progress. Skipping concurrent request.")
+            return
+
+        try:
+            mode = self.params.get('mode', 'sweep')
+            if mode == 'sweep':
+                self.run_sweep(
+                    start_kb=self.params.get('sweep_start', 20),
+                    end_kb=self.params.get('sweep_end', 100),
+                    step_kb=self.params.get('sweep_step', 10)
+                )
+            else:
+                self.run_two_tier(
+                    small_kb=self.params.get('small_kb', 15),
+                    large_kb=self.params.get('large_kb', 90)
+                )
+        finally:
+            self._test_lock.release()
 
     def run_sweep(self, start_kb: int = None, end_kb: int = None, step_kb: int = None) -> List[Dict[str, Any]]:
         start_kb = start_kb if start_kb is not None else self.params.get('sweep_start', 20)
@@ -413,25 +442,11 @@ class ProfileRunner:
         if not self.ctrl_node:
             return
         try:
-            passed = [r for r in results if r['success']]
-            failed = [r for r in results if not r['success']]
-
-            # GV1: 1 = All Pass, 2 = Bug Confirmed (both pass & fail), 3 = All Fail
-            if passed and failed:
-                res_val = 2
-            elif passed and not failed:
-                res_val = 1
-            else:
-                res_val = 3
-
-            min_fail_kb = round(min(failed, key=lambda x: x['bytes'])['size_kb'], 1) if failed else 0
-            max_pass_kb = round(max(passed, key=lambda x: x['bytes'])['size_kb'], 1) if passed else 0
-
+            now_epoch = int(time.time())
             if hasattr(self.ctrl_node, 'setDriver'):
                 self.ctrl_node.setDriver('ST', 1)
-                self.ctrl_node.setDriver('GV1', res_val)
-                self.ctrl_node.setDriver('GV2', min_fail_kb)
-                self.ctrl_node.setDriver('GV3', max_pass_kb)
+                self.ctrl_node.setDriver('GV1', 1)
+                self.ctrl_node.setDriver('TIME', now_epoch)
             if hasattr(self.ctrl_node, 'reportDrivers'):
                 self.ctrl_node.reportDrivers()
         except Exception as e:
@@ -628,12 +643,12 @@ def main():
                 return 0
 
     # Default PG3 Node Server Mode (managed by PG3 daemon)
-    log_msg("[PG3] ProfileSizeTest Node Server started. Waiting for PG3 events / customParams...")
+    log_msg(f"[PG3] ProfileSizeTest Node Server v{VERSION} started. Ready for PG3 events / customParams.")
     try:
-        # Run tests with default configuration initially
-        runner.execute_tests()
-        
-        # Enter PG3 event loop
+        # Launch test sweep in background thread
+        runner.start_test_thread()
+
+        # Enter PG3 event loop immediately so PG3 transitions out of 'Starting' state
         runner.polyglot.runForever()
     except (KeyboardInterrupt, SystemExit):
         runner.shutdown()

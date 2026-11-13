@@ -206,7 +206,7 @@ class TestProfileRunnerLiveHardware(unittest.TestCase):
                         self.assertFalse(results[2]['success']) # 40 KB
                         
                         runner.ctrl_node.setDriver.assert_any_call('ST', 1)
-                        runner.ctrl_node.setDriver.assert_any_call('GV1', 2) # Bug confirmed (mix of pass & fail)
+                        runner.ctrl_node.setDriver.assert_any_call('GV1', 1)
                         runner.ctrl_node.reportDrivers.assert_called()
 
 
