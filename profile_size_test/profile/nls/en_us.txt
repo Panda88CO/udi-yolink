@@ -10,3 +10,4 @@ nlsconnect-0 = Disconnected
 nlsconnect-1 = Connected
 nlsready-0 = Initializing
 nlsready-1 = Ready
+

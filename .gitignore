@@ -60,10 +60,14 @@ yolink T3.py
 yolink Test V2.py
 yolink Test V2C.py
 loginInfo_Ex.json
-OldStuff/version.txt
+OldStuff/# version.txt
+!profile/version.txt
+!profile_size_test/profile/version.txt
 loginInfoOld.json
 loginInfo_Ex.json
-version.txt
+# version.txt
+!profile/version.txt
+!profile_size_test/profile/version.txt
 yolink Test V3.py
 logs/debug.log.2022-05-10
 logs/debug.log.2022-05-10
