@@ -24,6 +24,8 @@ import argparse
 import logging
 from typing import Dict, Any, Tuple, Optional, List
 
+VERSION = "1.0.0"
+
 try:
     import udi_interface
 except ImportError:
@@ -266,7 +268,7 @@ class ProfileRunner:
         self.polyglot.subscribe(self.polyglot.CUSTOMPARAMS, self.parameter_handler)
         self.polyglot.subscribe(self.polyglot.STOP, self.stop_handler)
 
-        self.polyglot.start('1.0.0')
+        self.polyglot.start(VERSION)
         self.ctrl_node = TestControlNode(self.polyglot, 'testctrl', 'testctrl', 'Profile Test Controller', runner=self)
         if hasattr(self.polyglot, 'addNode'):
             self.polyglot.addNode(self.ctrl_node)
@@ -476,6 +478,7 @@ def format_report(results: List[Dict[str, Any]]) -> str:
     lines.append("        UNIVERSAL DEVICES DYNAMIC JSON PROFILE SIZE REPRODUCTION REPORT")
     lines.append("=" * 80)
     lines.append("Execution Mode : Live PG3x Hardware (udi_interface / TLS MQTT)")
+    lines.append(f"Version        : v{VERSION}")
     lines.append(f"Timestamp      : {time.strftime('%Y-%m-%d %H:%M:%S')}")
     lines.append("-" * 80)
     lines.append(f"{'Test Description':<25} | {'Size':<12} | {'Nodes/Eds':<12} | {'Time':<8} | {'Status':<10}")
