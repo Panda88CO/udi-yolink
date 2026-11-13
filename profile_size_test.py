@@ -26,7 +26,7 @@ import logging
 import threading
 from typing import Dict, Any, Tuple, Optional, List
 
-VERSION = "1.0.0"
+VERSION = "1.0.3"
 
 try:
     import udi_interface
