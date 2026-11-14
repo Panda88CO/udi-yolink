@@ -849,7 +849,7 @@ def update_dynamic_profile(controller, include_variants=False):
 
     # 1. Generate full dynamic JSON profile payload
     payload = get_dynamic_profile_payload(controller=controller, include_variants=include_variants)
-    payload_json = json.dumps(payload)
+    payload_json = json.dumps(payload, separators=(',', ':'))
     payload_bytes = len(payload_json.encode('utf-8'))
 
     logging.info(
@@ -875,7 +875,7 @@ def update_dynamic_profile(controller, include_variants=False):
 
     if active_ids is not None:
         pruned_payload = get_dynamic_profile_payload(controller=controller, active_only=True)
-        pruned_json = json.dumps(pruned_payload)
+        pruned_json = json.dumps(pruned_payload, separators=(',', ':'))
         pruned_bytes = len(pruned_json.encode('utf-8'))
         logging.info(
             f"Active-node pruned profile generated: {pruned_bytes} bytes "
@@ -916,7 +916,7 @@ def update_dynamic_profile(controller, include_variants=False):
     else:
         target_payload = payload
 
-    target_bytes = len(json.dumps(target_payload).encode('utf-8'))
+    target_bytes = len(json.dumps(target_payload, separators=(',', ':')).encode('utf-8'))
     json_ok = False
 
     try:
@@ -936,7 +936,7 @@ def update_dynamic_profile(controller, include_variants=False):
 
     # If first attempt failed and we haven't tried the pruned payload yet, retry with pruned payload
     if not json_ok and target_payload is not pruned_payload and pruned_payload is not None:
-        retry_bytes = len(json.dumps(pruned_payload).encode('utf-8'))
+        retry_bytes = len(json.dumps(pruned_payload, separators=(',', ':')).encode('utf-8'))
         logging.info(f"Retrying updateJsonProfile with active-node pruned payload ({retry_bytes} bytes)...")
         try:
             updater(pruned_payload, {"waitResponse": True})

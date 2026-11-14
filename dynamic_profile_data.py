@@ -1,7 +1,5 @@
-"""
-Pre-generated dynamic profile structures for IoX/PG3.
-Generated in code from profile directory.
-"""
+#!/usr/bin/env python3
+"""Precompiled dynamic profile data extracted from profile/ XML definitions."""
 
 DYNAMIC_EDITORS = [
   {
@@ -115,7 +113,9 @@ DYNAMIC_EDITORS = [
         "subset": "0,97,99",
         "names": {
           "99": "Unknown",
-          "98": "Updating (may take up to 1 hour)"
+          "98": "Updating (may take up to 1 hour)",
+          "0": "Normal",
+          "97": "Alert"
         }
       }
     ]
@@ -167,7 +167,9 @@ DYNAMIC_EDITORS = [
         "subset": "98,99",
         "names": {
           "99": "Unknown",
-          "98": "Updating (may take up to 1 hour)"
+          "98": "Updating (may take up to 1 hour)",
+          "0": "Normal",
+          "97": "Alert"
         }
       }
     ]
@@ -197,7 +199,9 @@ DYNAMIC_EDITORS = [
         "subset": "98,99",
         "names": {
           "99": "Unknown",
-          "98": "Updating (may take up to 1 hour)"
+          "98": "Updating (may take up to 1 hour)",
+          "0": "Normal",
+          "97": "Alert"
         }
       }
     ]
@@ -490,7 +494,8 @@ DYNAMIC_EDITORS = [
           "1": "Emergency",
           "2": "Alert",
           "3": "Warning",
-          "4": "Tip"
+          "4": "Tip",
+          "99": "Unknown"
         }
       }
     ]
@@ -506,7 +511,8 @@ DYNAMIC_EDITORS = [
           "1": "Emergency",
           "2": "Alert",
           "3": "Warning",
-          "4": "Tip"
+          "4": "Tip",
+          "99": "Unknown"
         }
       }
     ]
@@ -516,9 +522,15 @@ DYNAMIC_EDITORS = [
     "ranges": [
       {
         "uom": "25",
-        "min": 0,
-        "max": 77,
-        "prec": 0
+        "subset": "0,1,2,3,4,5",
+        "names": {
+          "0": "Mes1",
+          "1": "Mess2",
+          "2": "Messa3",
+          "3": "Messag4",
+          "4": "Message 5",
+          "5": "mes77"
+        }
       }
     ]
   },
@@ -1037,7 +1049,8 @@ DYNAMIC_EDITORS = [
           "7": "Schedule 7",
           "8": "Schedule 8",
           "9": "Schedule 9",
-          "99": "No Schedules"
+          "99": "No Schedules",
+          "98": "Disabled"
         }
       }
     ]
@@ -1083,7 +1096,8 @@ DYNAMIC_EDITORS = [
         "subset": "98,99",
         "names": {
           "98": "Not used",
-          "99": "Unknown"
+          "99": "Unknown",
+          "0": "Normal"
         }
       }
     ]
@@ -1101,7 +1115,8 @@ DYNAMIC_EDITORS = [
         "subset": "98,99",
         "names": {
           "98": "Not used",
-          "99": "Unknown"
+          "99": "Unknown",
+          "0": "Normal"
         }
       }
     ]
@@ -1119,7 +1134,8 @@ DYNAMIC_EDITORS = [
         "subset": "0,99",
         "names": {
           "98": "Not used",
-          "99": "Unknown"
+          "99": "Unknown",
+          "0": "Normal"
         }
       }
     ]
@@ -1137,7 +1153,8 @@ DYNAMIC_EDITORS = [
         "subset": "98",
         "names": {
           "98": "Not used",
-          "99": "Unknown"
+          "99": "Unknown",
+          "0": "Normal"
         }
       }
     ]
@@ -1155,7 +1172,8 @@ DYNAMIC_EDITORS = [
         "subset": "98",
         "names": {
           "98": "Not used",
-          "99": "Unknown"
+          "99": "Unknown",
+          "0": "Normal"
         }
       }
     ]
@@ -1173,7 +1191,8 @@ DYNAMIC_EDITORS = [
         "subset": "0",
         "names": {
           "98": "Not used",
-          "99": "Unknown"
+          "99": "Unknown",
+          "0": "Normal"
         }
       }
     ]
@@ -1331,7 +1350,8 @@ DYNAMIC_EDITORS = [
         "subset": "0,99",
         "names": {
           "0": "Unknown",
-          "99": "Unknown/Not reported"
+          "99": "Unknown/Not reported",
+          "98": "Updating (may take up to 1 hour)"
         }
       }
     ]
@@ -1410,7 +1430,8 @@ DYNAMIC_EDITORS = [
         "subset": "0,99",
         "names": {
           "0": "Unknown",
-          "99": "Unknown/Not reported"
+          "99": "Unknown/Not reported",
+          "98": "Updating (may take up to 1 hour)"
         }
       }
     ]
@@ -1470,7 +1491,8 @@ DYNAMIC_EDITORS = [
         "subset": "0,99",
         "names": {
           "0": "Unknown",
-          "99": "Unknown/Not reported"
+          "99": "Unknown/Not reported",
+          "98": "Updating (may take up to 1 hour)"
         }
       }
     ]
@@ -1498,7 +1520,8 @@ DYNAMIC_EDITORS = [
         "subset": "0,99",
         "names": {
           "0": "Unknown",
-          "99": "Unknown/Not reported"
+          "99": "Unknown/Not reported",
+          "98": "Updating (may take up to 1 hour)"
         }
       }
     ]
@@ -1517,7 +1540,8 @@ DYNAMIC_EDITORS = [
         "subset": "0,99",
         "names": {
           "0": "Unknown",
-          "99": "Unknown/Not reported"
+          "99": "Unknown/Not reported",
+          "98": "Updating (may take up to 1 hour)"
         }
       }
     ]
@@ -1581,7 +1605,8 @@ DYNAMIC_EDITORS = [
         "subset": "0,99",
         "names": {
           "0": "Unknown",
-          "99": "Unknown/Not reported"
+          "99": "Unknown/Not reported",
+          "98": "Updating (may take up to 1 hour)"
         }
       }
     ]
@@ -1719,7 +1744,9 @@ DYNAMIC_EDITORS = [
         "uom": "25",
         "subset": "0,1,99",
         "names": {
-          "0": "Normal"
+          "0": "Normal",
+          "1": "Active Reminder",
+          "99": "Unknown"
         }
       }
     ]
@@ -1825,7 +1852,8 @@ DYNAMIC_EDITORS = [
         "subset": "98,99",
         "names": {
           "0": "Unknown",
-          "99": "Unknown/Not reported"
+          "99": "Unknown/Not reported",
+          "98": "Updating (may take up to 1 hour)"
         }
       }
     ]

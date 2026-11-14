@@ -698,7 +698,7 @@ class TestPublishDataAndBrokerResilience(unittest.TestCase):
         ctrl.convert_water_unit = MagicMock(return_value=0)
         ctrl.sync_tts_parameters = MagicMock()
 
-        with patch('udi-YoLink.YoLinkInitPAC') as mock_pac_cls:
+        with patch.object(yolink_mod, 'YoLinkInitPAC') as mock_pac_cls:
             mock_pac = MagicMock()
             mock_pac.getDeviceList.return_value = []
             mock_pac_cls.return_value = mock_pac

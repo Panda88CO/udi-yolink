@@ -10,6 +10,7 @@ import ast
 import glob
 import os
 import json
+import xml.etree.ElementTree as ET
 
 # Ensure mock dependencies exist if running in an environment without them installed
 for mod in [
@@ -602,6 +603,105 @@ class TestWaterUnitConversions(unittest.TestCase):
             udiDynamicProfile.apply_profile_driver_names(mock_node)
             for d in mock_node.drivers:
                 self.assertEqual(d['uom'], expected_uom)
+
+
+class TestProfileSchemaAndValidation(unittest.TestCase):
+    """Test schema validity and integrity of static and dynamic profile definitions."""
+
+    def test_nodedefs_xml_no_cmd_editor_attribute(self):
+        """IoX schema violation: <cmd> in accepts/sends must not have an 'editor' attribute."""
+        xml_path = os.path.join(os.path.dirname(__file__), 'profile', 'nodedef', 'nodedefs.xml')
+        self.assertTrue(os.path.exists(xml_path), f"File not found: {xml_path}")
+        tree = ET.parse(xml_path)
+        violations = []
+        for nd in tree.findall('.//nodeDef'):
+            nid = nd.get('id')
+            for cmd in nd.findall('.//cmds/accepts/cmd') + nd.findall('.//cmds/sends/cmd'):
+                if 'editor' in cmd.attrib:
+                    violations.append((nid, cmd.get('id'), cmd.attrib))
+        self.assertEqual(violations, [], f"Illegal editor attribute found on <cmd> elements: {violations}")
+
+    def test_dynamic_nodedefs_no_cmd_editor_attribute(self):
+        """Dynamic JSON profile commands must not contain an 'editor' attribute."""
+        dynamic_nodedefs = udiDynamicProfile.get_dynamic_profile_nodedefs(include_variants=True)
+        violations = []
+        for nd in dynamic_nodedefs:
+            nid = nd.get('id')
+            for cmd in nd.get('cmds', {}).get('accepts', []) + nd.get('cmds', {}).get('sends', []):
+                if 'editor' in cmd:
+                    violations.append((nid, cmd.get('id'), cmd))
+        self.assertEqual(violations, [], f"Illegal editor key found in dynamic nodeDef cmds: {violations}")
+
+    def test_onoff_devices_nodedef_structure(self):
+        """On/off devices (switches, outlets, manipulators) must have valid ST drivers and commands."""
+        dynamic_nodedefs = {nd['id']: nd for nd in udiDynamicProfile.get_dynamic_profile_nodedefs(include_variants=True)}
+        expected_editors = {
+            'YOSWITCH': ('ST', 'SWSTATE', ['DON', 'DOF']),
+            'YOOUTLET': ('ST', 'SWSTATE', ['DON', 'DOF']),
+            'YOOUTLETPWR': ('ST', 'SWSTATE', ['DON', 'DOF']),
+            'YOSUBOUT': ('ST', 'SWSTATE', ['DON', 'DOF']),
+            'YOSUBUSB': ('ST', 'USBSTATE', ['DON', 'DOF']),
+            'YOMANIPU': ('ST', 'MANSTATE', ['MOPEN', 'MCLOSE']),
+        }
+        for node_id, (st_prop, expected_editor, expected_cmds) in expected_editors.items():
+            self.assertIn(node_id, dynamic_nodedefs, f"Missing nodeDef {node_id}")
+            nd = dynamic_nodedefs[node_id]
+            props = {p.get('id'): p.get('editor') for p in nd.get('properties', [])}
+            self.assertIn(st_prop, props, f"NodeDef {node_id} missing property {st_prop}")
+            self.assertEqual(props[st_prop], expected_editor, f"NodeDef {node_id} property {st_prop} editor mismatch")
+            accept_cmds = [c.get('id') for c in nd.get('cmds', {}).get('accepts', [])]
+            for cmd in expected_cmds:
+                self.assertIn(cmd, accept_cmds, f"NodeDef {node_id} missing command {cmd}")
+
+    def test_all_editor_nls_keys_exist_in_en_us(self):
+        """Every editor subset entry in editors.xml must have a corresponding NLS key in en_us.txt."""
+        base_dir = os.path.dirname(__file__)
+        nls_path = os.path.join(base_dir, 'profile', 'nls', 'en_us.txt')
+        ed_path = os.path.join(base_dir, 'profile', 'editor', 'editors.xml')
+
+        nls_keys = set()
+        with open(nls_path, 'r', encoding='utf-8', errors='ignore') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    nls_keys.add(line.split('=', 1)[0].strip())
+
+        tree = ET.parse(ed_path)
+        missing_keys = []
+        for ed in tree.findall('.//editor'):
+            for r in ed.findall('range'):
+                nls = r.get('nls')
+                subset = r.get('subset')
+                if nls and subset:
+                    for part in subset.split(','):
+                        part = part.strip()
+                        if '-' in part and not part.startswith('-'):
+                            start, end = part.split('-', 1)
+                            for i in range(int(start), int(end) + 1):
+                                k = f"{nls}-{i}"
+                                if k not in nls_keys:
+                                    missing_keys.append(k)
+                        else:
+                            k = f"{nls}-{part}"
+                            if k not in nls_keys:
+                                missing_keys.append(k)
+        self.assertEqual(missing_keys, [], f"Missing NLS keys in en_us.txt: {missing_keys}")
+
+    def test_dynamic_profile_compact_size(self):
+        """Dynamic profile pruned payload with typical devices should stay comfortably under 60KB."""
+        class MockController:
+            temp_unit = 1
+            water_unit = 0
+            deviceList = [
+                {'type': 'THSensor'}, {'type': 'Switch'}, {'type': 'Outlet'},
+                {'type': 'MultiOutlet'}, {'type': 'SpeakerHub'}, {'type': 'LeakSensor'},
+                {'type': 'MotionSensor'}, {'type': 'DoorSensor'}, {'type': 'Manipulator'}
+            ]
+        c = MockController()
+        pruned = udiDynamicProfile.get_dynamic_profile_payload(controller=c, active_only=True)
+        compact_json = json.dumps(pruned, separators=(',', ':'))
+        byte_len = len(compact_json.encode('utf-8'))
+        self.assertLess(byte_len, 60000, f"Pruned dynamic profile size {byte_len} exceeds 60KB limit")
 
 
 if __name__ == '__main__':

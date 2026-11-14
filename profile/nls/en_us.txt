@@ -768,7 +768,8 @@ sensorError-1=Sensor Error Detected
 sensorError-99=Unknown
 
 reminder-0=Normal
-remained-1=Active Reminder
+reminder-1=Active Reminder
+reminder-99=Unknown
 remained-99=Unknown
 
 
@@ -1388,3 +1389,11 @@ mastersrc-0=Local
 mastersrc-1=Sensor 1
 mastersrc-2=Sensor 2
 mastersrc-99=Unknown
+
+# Missing editor NLS entries
+schindexM-98=Disabled
+notdefined-0=Normal
+wlstate-0=Normal
+wlstate-97=Alert
+sphtones-99=Unknown
+error-98=Updating (may take up to 1 hour)

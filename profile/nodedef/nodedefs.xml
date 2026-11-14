@@ -815,8 +815,8 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" editor="SWSTATE" /> 
-            <cmd id="DOF" editor="SWSTATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
             <cmd id="SWCTRL" > 
                <p id="" editor="SWCTRL" init="GV0" /> 
             </cmd >
@@ -846,8 +846,8 @@
       </sts>
       <cmds>
          <sends>
-            <cmd id="DON" editor="SWSTATE"  />               
-            <cmd id="DOF" editor="SWSTATE"  />   
+            <cmd id="DON" />               
+            <cmd id="DOF" />   
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
@@ -906,8 +906,8 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" editor="SWSTATE" /> 
-            <cmd id="DOF" editor="SWSTATE" /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
             <cmd id="SWCTRL" > 
                <p id="" editor="SWCTRL" init="GV0" /> 
             </cmd >
@@ -932,8 +932,8 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="DON" editor="USBSTATE"  /> 
-            <cmd id="DOF" editor="USBSTATE"  /> 
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
             <cmd id="USBCTRL" > 
                <p id="" editor="USBCTRL" init="GV0" /> 
             </cmd >
