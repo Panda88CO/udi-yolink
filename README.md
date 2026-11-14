@@ -1,4 +1,4 @@
-# udi-yolink (v1.8.79)
+# udi-yolink (v1.8.80)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x) and IoX / eisy / Polisy.
 
 Suggested installation is on PG3x from version 1.1.x going forward. PG3x is updated to Python 3.11+. It still runs under PG3, but PG3x is strongly recommended.
@@ -80,12 +80,15 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 
 The node server uses modern **Dynamic JSON Profiles** to push editor and node definitions directly to IoX at runtime:
 - **Unit Customization**: Driver names and UOMs dynamically adjust to your `TEMP_UNIT` and `WATER_UNIT` preferences automatically.
-- **Payload Safety**: Large installations with dozens of devices automatically prune the profile payload to active device types, keeping messages compact.
-- **Fallback**: If dynamic profile updates are unavailable on older PG3/IoX versions, the node server automatically falls back to static profile installation (`updateProfile`).
+- **Payload Safety & Compact Serialization**: Dynamic profile payloads use compact serialization and prune definitions to active device types on large installations, ensuring payloads stay well below the 60KB MQTT threshold.
+- **Fallback**: If dynamic profile updates exceed safe thresholds or are unavailable on older PG3/IoX versions, the node server automatically falls back to static profile installation (`updateProfile`).
+- **Profile Schema Integrity**: XML and dynamic node definitions strictly adhere to Universal Devices IoX schemas (commands contain clean parameter definitions without illegal editor attributes), preventing "Internal Server Error" issues and ensuring on/off devices display cleanly formatted states (`Off`/`On`).
 
 ## Notes & Tips
 
 - **Single Home per Instance**: Each node server instance connects to one YoLink home. If you have multiple homes, create credentials for each home and run separate node server slot instances.
+- **Device Offline Notices & Recovery**: If a device reports offline or busy (`000201`), the node server sets driver states accordingly (`ST=0`, `GV20=2`, `GV30=0`) and posts a per-device notice on the Polyglot dashboard (`Device <name> is offline`), automatically clearing it as soon as the device reconnects and responds.
+- **Automatic Retry Engine**: Requests encountering busy or rate-limited responses are automatically queued and retried with backoff, ensuring reliable command execution without manual intervention.
 - **SpeakerHub Messages**: When using a SpeakerHub, set `NBR_TTS` to the desired number of messages (1–10) and save changes. The node server automatically generates the corresponding `TTS0`, `TTS1`, ... input lines in Custom Configuration Parameters for you to enter your message texts. Once your message texts are saved, restart the IoX / Admin Console (or re-login) to refresh the dropdown command labels.
 - **Garage Door Controller & Finger**: Full smart state tracking is supported with paired YoLink door sensors (`Closed`, `Open`, `Opening`, `Closing`, `Half-Open`, `Half-Closed`, `Unknown`).
   - **Open (`DON`)**: Opens the door; ignored if already open or opening; executes a 3-pulse sequence if half-open.

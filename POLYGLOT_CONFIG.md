@@ -1,4 +1,4 @@
-# udi-yolink (v1.8.79)
+# udi-yolink (v1.8.80)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x).
 
 ## Supported YoLink Devices
@@ -91,4 +91,5 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
   - **Close (`DOF`)**: Closes the door; ignored if already closed or closing; executes a 3-pulse sequence if half-closed.
   - **Toggle (`TOGGLE`)**: Always sends 1 toggle pulse unconditionally (supports stopping the door midway).
   - External door openings/closings (e.g. wall switch or car remote) are detected in real time by the paired sensor, automatically updating door state and travel timers.
-- **Dynamic Profile Updates**: Device profiles and custom unit labels are automatically registered upon startup.
+- **Dynamic Profile Updates & Schema Integrity**: Device profiles and custom unit labels are automatically registered upon startup. Profiles adhere strictly to IoX XML and dynamic JSON schemas, ensuring valid command handling and clean status formatting. Large installations benefit from compact payload serialization and automated static fallback.
+- **Offline Notices & Retry Queue**: Devices reporting offline or busy are highlighted with dashboard notices and automatically retried by the background queue.
