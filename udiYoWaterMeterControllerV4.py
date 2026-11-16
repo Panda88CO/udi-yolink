@@ -25,7 +25,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoWaterMeterController(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, state2ISY, bool2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, state2ISY, bool2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOWATERMETERCTRL'
     '''
@@ -64,8 +64,8 @@ class udiYoWaterMeterController(udi_interface.Node):
             #{'driver': 'GV16', 'value': 99, 'uom' : 44}, # Water flowing
             #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV22', 'value': 99, 'uom': 69, 'name': 'Overrun Amount 24H Limit'}, #LeakLimit
-            {'driver': 'GV23', 'value': 99, 'uom': 25, 'name': 'Overrun Duration Once Limit'}, #Overrtun limit
-            {'driver': 'GV24', 'value': 99, 'uom': 25, 'name': 'Overrun Count 24H Limit'}, #Overrun Time
+            {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Overrun Duration Once Limit'}, #Overrtun limit
+            {'driver': 'GV24', 'value': 0, 'uom': 44, 'name': 'Overrun Count 24H Limit'}, #Overrun Time
     
             {'driver': 'GV25', 'value': 99, 'uom': 25, 'name': 'Leak Auto Close'}, #Leak AC
             {'driver': 'GV26', 'value': 99, 'uom': 25, 'name': 'Overrun Amount Auto Close'}, #LEakAC
@@ -376,9 +376,7 @@ class udiYoWaterMeterController(udi_interface.Node):
                         if self.temp_unit == 1:
                             self.my_setDriver('CLITEMP', round(water_temp * 9 / 5 + 32, 1), 17, type=message_type)
                         else:
-                            self.my_setDriver('CLITEMP', round(water_temp, 1), 4, type=message_type)
-                    else:
-                        self.my_setDriver('CLITEMP', 99, 25, type=message_type)  
+                            self.my_setDriver('CLITEMP', round(water_temp, 1), 4, type=message_type)  
                     
                     #meter_unit = self.yoWaterCtrl.get_data('attributes', 'meterUnit')
                     #logging.debug(f'meter unit : {meter_unit}')

@@ -23,7 +23,7 @@ import time
 
 
 class udiYoCOSmokeSensor(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2nbr, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2nbr, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOCOSMOKESENS'
     
@@ -216,8 +216,6 @@ class udiYoCOSmokeSensor(udi_interface.Node):
                         self.my_setDriver('CLITEMP', round(devTemp*9/5+32,0), 17)
                     elif self.temp_unit == 2:
                         self.my_setDriver('CLITEMP', round(devTemp+273.15,0), 26)
-                else:
-                    self.my_setDriver('CLITEMP', 99, 25)
                 self.my_setDriver('GV7', int(self.cmd_state))
                 if sensor.suspended:
                     self.my_setDriver('GV20', 1)
@@ -260,15 +258,9 @@ class udiYoCOSmokeSensor(udi_interface.Node):
             return
         sensor.refreshDevice()
        
-    def noop(self, command = None):
-        pass
-
     commands = {
                 'SETCMD': set_cmd,
                 'UPDATE': update,
-                #'QUERY' : update, 
-                #'DON'   : noop,
-                #'DOF'   : noop
                 }
 
 

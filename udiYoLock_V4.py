@@ -24,7 +24,7 @@ from yolinkLockV3 import YoLinkLock
 
 
 class udiYoLockV2(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOLOCKV2'
     '''
@@ -316,12 +316,11 @@ class udiYoLockV2(udi_interface.Node):
                 'LOCK'   : set_lock,
                 'UNLOCK' : set_unlock,
                 'LOCKCTRL' : lockControl, 
-
                 }
 
 
 class udiYoLock(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, save_cmd_state, retrieve_cmd_state, bool2ISY, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOLOCK'
     '''
@@ -575,7 +574,6 @@ class udiYoLock(udi_interface.Node):
                 'LOCK'   : set_lock,
                 'UNLOCK' : set_unlock,
                 'LOCKCTRL' : lockControl,
-
                 }
 
 

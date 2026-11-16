@@ -20,7 +20,7 @@ Custom = udi_interface.Custom
 
 
 class udiYoDoorSensor(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YODOORSENS'
     
@@ -224,8 +224,6 @@ class udiYoDoorSensor(udi_interface.Node):
                 elif isinstance(state_change, str) and state_change.strip().isdigit():
                     sc = float(state_change)
                     self.my_setDriver('GV3', int(sc / 1000) if sc > 1e11 else int(sc), type=message_type)
-                else:
-                    self.my_setDriver('GV3', 99, 25, type=message_type)
 
 
                 self.my_setDriver('GV30', 1)
@@ -266,9 +264,6 @@ class udiYoDoorSensor(udi_interface.Node):
             return
         sensor.refreshDevice()
        
-    def noop(self, command = None):
-        pass
-
     commands = {
                 'SETCMD': set_cmd,
                 'UPDATE': update,

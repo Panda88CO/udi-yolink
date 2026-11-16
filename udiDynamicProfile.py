@@ -291,14 +291,11 @@ def _get_raw_profile_nodedefs():
 def _build_dynamic_unit_editors(temp_norm, water_norm):
     """
     Build parameterized editor definitions for temperature and water units.
+    Each editor has a single clean UOM matching the user's selected units.
     """
     unit_editors = {}
 
     # Temperature editors: 0 = Celsius (uom 4), 1 = Fahrenheit (uom 17)
-    wl_names = {
-        '98': 'Updating (may take up to 1 hour)',
-        '99': 'Unknown'
-    }
     if temp_norm == 1:
         temp_uom = '17'
         temp_min = -40
@@ -317,8 +314,7 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
         eco_max = 5
 
     temp_ranges = [
-        {'uom': temp_uom, 'min': temp_min, 'max': temp_max, 'prec': temp_prec},
-        {'uom': '25', 'subset': '98,99', 'names': dict(wl_names)}
+        {'uom': temp_uom, 'min': temp_min, 'max': temp_max, 'prec': temp_prec}
     ]
     temp_set_ranges = [
         {'uom': temp_uom, 'min': set_min, 'max': set_max, 'prec': 0}
@@ -335,39 +331,59 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
     unit_editors['ECOSETF'] = eco_set_ranges
 
     # Water volume editors: 0 = Gallon (69), 1 = CCF (6), 2 = m^3 (8), 3 = Liter (35)
-    err_names = {
-        '0': 'Unknown',
-        '99': 'Unknown/Not reported'
-    }
     if water_norm == 3:  # Liter
         w_uom = '35'
         w_max = 100000
         w_prec = 1
+        leak_max = 400
+        leak_prec = 0
+        run_max = 2000
     elif water_norm == 1:  # CCF
         w_uom = '6'
         w_max = 10000
         w_prec = 1
+        leak_max = 100
+        leak_prec = 0
+        run_max = 600
     elif water_norm == 2:  # m3
         w_uom = '8'
         w_max = 10000
         w_prec = 2
+        leak_max = 10
+        leak_prec = 1
+        run_max = 60
     else:  # Gallon (0)
         w_uom = '69'
         w_max = 10000
         w_prec = 1
+        leak_max = 100
+        leak_prec = 0
+        run_max = 600
 
     water_ranges = [
-        {'uom': w_uom, 'min': 0, 'max': w_max, 'prec': w_prec},
-        {'uom': '25', 'subset': '0,99', 'names': dict(err_names)}
+        {'uom': w_uom, 'min': 0, 'max': w_max, 'prec': w_prec}
     ]
     water_set_ranges = [
         {'uom': w_uom, 'min': 0, 'max': w_max, 'prec': w_prec}
+    ]
+    leak_ranges = [
+        {'uom': w_uom, 'min': 0, 'max': leak_max, 'prec': leak_prec}
+    ]
+    flow_ranges = [
+        {'uom': w_uom, 'min': 0, 'max': w_max, 'prec': w_prec}
+    ]
+    run_ranges = [
+        {'uom': '44', 'min': 0, 'max': 1440, 'prec': 0},
+        {'uom': w_uom, 'min': 0, 'max': run_max, 'prec': 0}
     ]
 
     unit_editors['LITER'] = water_ranges
     unit_editors['GALLON'] = water_ranges
     unit_editors['LITERSET'] = water_set_ranges
     unit_editors['GALLONSET'] = water_set_ranges
+    unit_editors['LEAKLIMIT'] = leak_ranges
+    unit_editors['FLOW'] = flow_ranges
+    unit_editors['RUNNINGVALUE'] = run_ranges
 
     return unit_editors
 

@@ -23,7 +23,7 @@ import time
 
 
 class udiYoLeakSensor(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, state2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, state2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOLEAKSENS'
     
@@ -208,8 +208,6 @@ class udiYoLeakSensor(udi_interface.Node):
                 elif isinstance(state_change, str) and state_change.strip().isdigit():
                     sc_val = float(state_change)
                     self.my_setDriver('GV3', int(sc_val / 1000) if sc_val > 1e11 else int(sc_val), type=message_type)
-                else:
-                    self.my_setDriver('GV3', 99, UOM=25, type=message_type)
 
                 devTemp =  sensor.get_data('devTemperature', 'state')
                 if isinstance(devTemp, (int, float)):
@@ -217,8 +215,6 @@ class udiYoLeakSensor(udi_interface.Node):
                         self.my_setDriver('CLITEMP', round(devTemp,0), 4, type=message_type)
                     elif self.temp_unit == 1:
                         self.my_setDriver('CLITEMP', round(devTemp*9/5+32,0), 17, type=message_type)
-                else:
-                    self.my_setDriver('CLITEMP', 99, 25)
                 beeping = sensor.get_data('beep')    
                 self.my_setDriver('GV4', self.state2ISY(beeping), type=message_type)
                 opmode= sensor.get_data('sensorMode', 'state')
@@ -284,15 +280,10 @@ class udiYoLeakSensor(udi_interface.Node):
             return
         sensor.refreshDevice()
        
-    def noop(self, command = None):
-        pass
-
     commands = {
                 'SETCMD': set_cmd,    
                 'SETBEEP': set_beep_alert,    
                 'UPDATE': update,
-                #'DON'   : noop,
-                #'DOF'   : noop
                 }
 
 

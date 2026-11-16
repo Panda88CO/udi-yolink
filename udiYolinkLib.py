@@ -452,9 +452,7 @@ def my_setDriver(self, key, value, UOM=None, force=None, type=None):
                 logging.debug(f'Passed driver {key} does not exist in {self.drivers}')
 
         except ValueError: #A non number was passed 
-            logging.error('Non numeric value passed to my_setDriver - setting 99 ')
-            if getattr(self, 'node', None) is not None:
-                self.node.setDriver(key, 99, True, True, 25)
+            logging.error(f'Non numeric value {value} passed to my_setDriver for {key} - leaving last known value intact')
         
 
 def mask2key (self, mask):
@@ -902,4 +900,31 @@ def send_temp_to_isy (self, temperature, stateVar):
             self.my_setDriver(stateVar, round((temperature*9/5+32),1), 4)
         else:
             self.my_setDriver(stateVar, round(temperature,1),  17)
+
+
+def runCmd(self, command):
+    """
+    Route commands received from IoX/Polyglot.
+    Executes command if defined in self.commands.
+    Silently absorbs scene commands (DON, DOF, DFON, DFOF) on sensors/nodes
+    that do not define them, preventing 'command DOF not defined' errors while
+    keeping them hidden as executable GUI commands.
+    """
+    if not isinstance(command, dict):
+        return
+    cmd = command.get('cmd')
+    if not cmd:
+        return
+    commands = getattr(self, 'commands', {})
+    if cmd in commands:
+        handler = commands[cmd]
+        try:
+            handler(self, command)
+        except TypeError:
+            handler(command)
+    elif cmd in ('DON', 'DOF', 'DFON', 'DFOF'):
+        logging.debug(f'node {getattr(self, "address", "unknown")} absorbed scene command {cmd}')
+    else:
+        logging.error(f'node {getattr(self, "address", "unknown")} command {cmd} not defined')
+
 

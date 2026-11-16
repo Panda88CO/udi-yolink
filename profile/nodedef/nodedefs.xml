@@ -2292,7 +2292,7 @@
          <st id="CLISPC" editor="CELSIUS" />
          <st id="CLIMD" editor="ITSTATMODE" />
          <st id="CLIFS" editor="ITSTATFAN" />
-         <st id="CLISMD" editor="CELSIUS" />
+         <st id="CLISMD" editor="ICLISMDDEG" />
          <st id="GV0" editor="CELSIUS" />
          <st id="GV1" editor="CELSIUS" />
          <st id="GV2" editor="IAUXHEAT" />

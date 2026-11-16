@@ -657,6 +657,63 @@ class TestThermalAndSmokeSensorFixes(unittest.TestCase):
         self.assertFalse(node.last_alert)
 
 
+class TestNodeCommandsIntegrity(unittest.TestCase):
+    """Verify that node classes handle DON and DOF scene broadcasts cleanly via runCmd without exposing them in commands."""
+
+    def test_sensor_nodes_commands_do_not_expose_don_dof(self):
+        """Sensors should not expose DON/DOF in commands, keeping GUI commands clean."""
+        from udiYoMotionSensorV4 import udiYoMotionSensor
+        from udiYoDoorSensorV4 import udiYoDoorSensor
+        from udiYoLeakSensorV4 import udiYoLeakSensor
+        from udiYoPowerFailV4 import udiYoPowerFailSenor
+        from udiYoCOSmokeSensorV4 import udiYoCOSmokeSensor
+        from udiYoSoilSensorV4 import udiYoSoilSensor
+        from udiYoTHsensorV4 import udiYoTHsensor
+        from udiYoVibrationSensorV4 import udiYoVibrationSensor
+        from udiYoSmartRemoterV4 import udiYoSmartRemoter, udiRemoteKey
+        from udiYoWaterDeptV4 import udiYoWaterDept
+        from udiYoWaterMeterOnlyV4 import udiYoWaterMeterOnly
+        from udiYoMultiOutletV4 import udiYoMultiOutlet
+
+        sensor_classes = [
+            udiYoMotionSensor,
+            udiYoDoorSensor,
+            udiYoLeakSensor,
+            udiYoPowerFailSenor,
+            udiYoCOSmokeSensor,
+            udiYoSoilSensor,
+            udiYoTHsensor,
+            udiYoVibrationSensor,
+            udiYoSmartRemoter,
+            udiRemoteKey,
+            udiYoWaterDept,
+            udiYoWaterMeterOnly,
+            udiYoMultiOutlet,
+        ]
+
+        for cls in sensor_classes:
+            self.assertNotIn('DON', cls.commands, f'{cls.__name__} should not expose DON in commands')
+            self.assertNotIn('DOF', cls.commands, f'{cls.__name__} should not expose DOF in commands')
+
+    def test_run_cmd_absorbs_scene_commands_on_sensor_nodes(self):
+        """runCmd absorbs DON/DOF/DFON/DFOF scene broadcasts without exception or error."""
+        with patch.object(udiYoMotionSensor, 'retrieve_cmd_state', return_value=0), \
+             patch.object(udiYoMotionSensor, 'save_cmd_state', return_value=None):
+            node, poly, yo_access = create_test_node(
+                udiYoMotionSensor, dev_type='MotionSensor', name='Motion Sensor'
+            )
+
+        # Calling runCmd with scene commands should execute cleanly
+        for cmd in ('DON', 'DOF', 'DFON', 'DFOF'):
+            node.runCmd({'cmd': cmd, 'address': node.address})
+
+        # Calling real command executes handler
+        mock_handler = MagicMock()
+        with patch.dict(node.commands, {'UPDATE': mock_handler}):
+            node.runCmd({'cmd': 'UPDATE', 'address': node.address})
+            mock_handler.assert_called_once()
+
+
 class TestHeartbeatFix(unittest.TestCase):
     """Test heartbeat() calls reportCmd('DON') and reportCmd('DOF') without extra parameters."""
 
@@ -677,6 +734,132 @@ class TestHeartbeatFix(unittest.TestCase):
         udiCommonLib.heartbeat(mock_setup)
         mock_setup.reportCmd.assert_called_once_with('DOF')
         self.assertEqual(mock_setup.hb, 0)
+
+
+class TestSingleUomEditorsAndDriverIntegrity(unittest.TestCase):
+    """Test that measurement editors are single-UOM without UOM 25 and drivers do not clobber with 99/25."""
+
+    def test_xml_measurement_editors_have_single_uom_no_uom25(self):
+        """Measurement editors in editors.xml must not include secondary UOM 25 ranges."""
+        import xml.etree.ElementTree as ET
+        tree = ET.parse('profile/editor/editors.xml')
+        measurement_editor_ids = [
+            'WATT', 'ENERGY', 'WATERLEVEL', 'CELSIUS', 'FARENHEIT', 'HUMIDITY',
+            'STHOUR', 'STMIN', 'STSEC', 'STHOURI', 'STMINI', 'STSECI',
+            'UNIXTIME', 'MINUTES', 'COUNT', 'CONDUCTIVITY', 'LEAKLIMIT', 'FLOW', 'IHUMIDITY'
+        ]
+        for ed in tree.getroot().findall('editor'):
+            eid = ed.get('id')
+            if eid in measurement_editor_ids:
+                ranges = ed.findall('range')
+                self.assertEqual(len(ranges), 1, f"Editor {eid} must have exactly 1 range, got {len(ranges)}")
+                self.assertNotEqual(ranges[0].get('uom'), '25', f"Measurement editor {eid} must not have UOM 25")
+
+    def test_sensor_nodes_do_not_clobber_temp_with_uom25(self):
+        """When temperature is None / missing, sensors do not setDriver with 99/25."""
+        with patch.object(udiYoMotionSensor, 'retrieve_cmd_state', return_value=0), \
+             patch.object(udiYoMotionSensor, 'save_cmd_state', return_value=None):
+            node, poly, yo_access = create_test_node(
+                udiYoMotionSensor, dev_type='MotionSensor', name='Motion Sensor'
+            )
+        mock_sensor = MagicMock()
+        mock_sensor.check_system_online.return_value = True
+        mock_sensor.get_message_type.return_value = ['event']
+        mock_sensor.get_report_time.return_value = 1600000000
+        mock_sensor.suspended = False
+        mock_sensor.get_data.side_effect = lambda key, *args: None if key == 'devTemperature' else 1
+        node.yoMotion = mock_sensor
+
+        node.node.setDriver = MagicMock()
+        node.updateData()
+
+        # setDriver should not be called with CLITEMP = 99 and uom=25
+        for call_args in node.node.setDriver.call_args_list:
+            driver_name = call_args[0][0]
+            val = call_args[0][1]
+            self.assertFalse(driver_name == 'CLITEMP' and val == 99, "CLITEMP should not be set to 99 on None temp")
+
+    def test_all_node_driver_definitions_match_editor_uoms(self):
+        """All active node driver default UOMs must match allowed editor UOMs without invalid UOM 25."""
+        import xml.etree.ElementTree as ET
+        import glob
+        import re
+
+        tree_nd = ET.parse('profile/nodedef/nodedefs.xml')
+        tree_ed = ET.parse('profile/editor/editors.xml')
+
+        editor_uoms = {}
+        for ed in tree_ed.getroot().findall('editor'):
+            eid = ed.get('id')
+            ranges = ed.findall('range')
+            editor_uoms[eid] = {r.get('uom') for r in ranges}
+
+        dynamic_defaults = {
+            'CELSIUS': {'4', '17'},
+            'FARENHEIT': {'4', '17'},
+            'CELSIUSSET': {'4', '17'},
+            'FARENHEITSET': {'4', '17'},
+            'ECOSET': {'4', '17'},
+            'ECOSETF': {'4', '17'},
+            'LITER': {'69', '35', '6', '8'},
+            'GALLON': {'69', '35', '6', '8'},
+            'LITERSET': {'69', '35', '6', '8'},
+            'GALLONSET': {'69', '35', '6', '8'},
+            'LEAKLIMIT': {'69', '35', '6', '8'},
+            'FLOW': {'69', '35', '6', '8'},
+            'RUNNINGVALUE': {'44', '69', '35', '6', '8'},
+        }
+        for k, v in dynamic_defaults.items():
+            if k not in editor_uoms:
+                editor_uoms[k] = set(v)
+            else:
+                editor_uoms[k].update(v)
+
+        nodedef_drivers = {}
+        for nd in tree_nd.findall('.//nodeDef'):
+            nid = nd.get('id')
+            nodedef_drivers[nid] = {}
+            for st in nd.findall('.//st'):
+                nodedef_drivers[nid][st.get('id')] = st.get('editor')
+
+        mismatches = []
+        for pyfile in glob.glob('*.py'):
+            if pyfile.startswith('test_'):
+                continue
+            with open(pyfile, 'r', encoding='utf-8', errors='ignore') as f:
+                lines = f.readlines()
+
+            current_id = None
+            for line in lines:
+                stripped = line.strip()
+                if stripped.startswith('#'):
+                    continue
+                m_id = re.search(r"id\s*=\s*['\"]([^'\"]+)['\"]", stripped)
+                if m_id and not stripped.startswith('#'):
+                    current_id = m_id.group(1)
+
+                m_drv = re.search(r"\{\s*['\"]driver['\"]\s*:\s*['\"]([^'\"]+)['\"]\s*,\s*['\"]value['\"]\s*:\s*([^,]+),\s*['\"]uom['\"]\s*:\s*([^,}]+)", stripped)
+                if m_drv and not stripped.startswith('#'):
+                    did = m_drv.group(1).strip()
+                    val = m_drv.group(2).strip()
+                    uom = m_drv.group(3).strip()
+
+                    matched_ed = None
+                    if current_id and current_id in nodedef_drivers and did in nodedef_drivers[current_id]:
+                        matched_ed = nodedef_drivers[current_id][did]
+                    else:
+                        candidate_eds = {nodedef_drivers[n][did] for n in nodedef_drivers if did in nodedef_drivers[n]}
+                        if len(candidate_eds) == 1:
+                            matched_ed = list(candidate_eds)[0]
+
+                    if matched_ed:
+                        allowed = editor_uoms.get(matched_ed, set())
+                        if uom.isdigit() and uom not in allowed:
+                            mismatches.append(f"{pyfile}: driver {did} default_uom={uom} not in allowed {allowed} for editor {matched_ed}")
+                        elif uom == '25' and '25' not in allowed:
+                            mismatches.append(f"{pyfile}: driver {did} default_uom=25 not supported by editor {matched_ed}")
+
+        self.assertEqual(len(mismatches), 0, f"Driver UOM mismatches found:\n" + "\n".join(mismatches))
 
 
 if __name__ == '__main__':

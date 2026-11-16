@@ -438,7 +438,7 @@ class udiYoSubUSB(udi_interface.Node):
                 }
 
 class udiYoMultiOutlet(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
     id = 'YOMULTIOUT'
 
     '''
@@ -451,12 +451,12 @@ class udiYoMultiOutlet(udi_interface.Node):
             {'driver': 'GV12', 'value': 99, 'uom': 25, 'name': 'Port'}, #Output
             {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'}, #Schedule index/no
             {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'}, # Active
-            {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'}, #start Hour
-            {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'}, #start Min  
-            {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'}, #start Min              
-            {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'}, #stop Hour                                              
-            {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'}, #stop Min
-            {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'}, #start Min              
+            {'driver': 'GV15', 'value': 0, 'uom': 19, 'name': 'On Hour'}, #start Hour
+            {'driver': 'GV16', 'value': 0, 'uom': 44, 'name': 'On Minute'}, #start Min  
+            {'driver': 'GV21', 'value': 0, 'uom': 57, 'name': 'On Sec'}, #start Sec              
+            {'driver': 'GV17', 'value': 0, 'uom': 19, 'name': 'Off Hour'}, #stop Hour                                              
+            {'driver': 'GV18', 'value': 0, 'uom': 44, 'name': 'Off Minute'}, #stop Min
+            {'driver': 'GV22', 'value': 0, 'uom': 57, 'name': 'Off Sec'}, #stop Sec              
             {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'}, #days
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Node Server Status'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},

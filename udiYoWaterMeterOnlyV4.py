@@ -24,7 +24,7 @@ from yolinkWaterMeterControllerV3 import YoLinkWaterMeter
 
 
 class udiYoWaterMeterOnly(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, water_meter_unit2uom, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, bool2ISY, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOWATERMETERONLY'
     '''
@@ -56,9 +56,9 @@ class udiYoWaterMeterOnly(udi_interface.Node):
             {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
             {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Water Temperature'},
             {'driver': 'GV11', 'value': 99, 'uom' : 25, 'name': 'Open Reminder Alarm'}, # Unit
-            {'driver': 'GV12', 'value': 99, 'uom' : 6, 'name': 'Valve Error Alarm'}, #  leak limit
+            {'driver': 'GV12', 'value': 99, 'uom' : 25, 'name': 'Valve Error Alarm'}, #  leak limit
             {'driver': 'GV13', 'value': 99, 'uom' : 25, 'name': 'High Temp Alarm'}, # auto shutoffg
-            {'driver': 'GV14', 'value': 99, 'uom' : 6, 'name': 'Low Temp Alarm'}, # Water flowing
+            {'driver': 'GV14', 'value': 99, 'uom' : 25, 'name': 'Low Temp Alarm'}, # Water flowing
             #{'driver': 'GV15', 'value': 99, 'uom' : 25}, # auto shutoffg
             {'driver': 'GV16', 'value': 99, 'uom' : 44, 'name': 'Overrun time Limit'}, # Water flowing
             #{'driver': 'GV17', 'value': 99, 'uom' : 25}, # auto shutoffg
@@ -260,8 +260,6 @@ class udiYoWaterMeterOnly(udi_interface.Node):
                             self.my_setDriver('CLITEMP', round(w_temp * 9 / 5 + 32, 1), 17)
                         else:
                             self.my_setDriver('CLITEMP', round(w_temp, 1), 4)
-                    else:
-                        self.my_setDriver('CLITEMP', 99, 25)
                     
                     alarms = ctrl.getAlarms()
                     if alarms:
@@ -465,8 +463,6 @@ class udiYoWaterMeterOnly(udi_interface.Node):
 
     commands = {
                 'UPDATE': update,
-                #'DON'   : set_open,
-                #'DOF'   : set_close,
                 'SETATTRIB' : set_attributes,
                 #'VALVECTRL': waterCtrlControl, 
                 #'DELAY_CTRL' : program_delays,

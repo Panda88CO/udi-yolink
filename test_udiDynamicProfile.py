@@ -143,48 +143,68 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         editors = udiDynamicProfile.get_dynamic_profile_editors(temp_unit=1, water_unit=0)
         by_id = {e['id']: e for e in editors}
 
-        # Temperature editors parameterized to Fahrenheit (UOM 17)
+        # Temperature editors parameterized to Fahrenheit (UOM 17), single UOM (no UOM 25)
         self.assertEqual(by_id['CELSIUS']['ranges'][0]['uom'], '17')
         self.assertEqual(by_id['CELSIUS']['ranges'][0]['max'], 221)
+        self.assertEqual(len(by_id['CELSIUS']['ranges']), 1)
         self.assertEqual(by_id['FARENHEIT']['ranges'][0]['uom'], '17')
+        self.assertEqual(len(by_id['FARENHEIT']['ranges']), 1)
         self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['uom'], '17')
         self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['min'], 40)
         self.assertEqual(by_id['ECOSET']['ranges'][0]['uom'], '17')
         self.assertEqual(by_id['ECOSET']['ranges'][0]['max'], 9)
 
-        # Water editors parameterized to Gallons (UOM 69)
+        # Water editors parameterized to Gallons (UOM 69), single UOM (no UOM 25)
         self.assertEqual(by_id['LITER']['ranges'][0]['uom'], '69')
+        self.assertEqual(len(by_id['LITER']['ranges']), 1)
         self.assertEqual(by_id['GALLON']['ranges'][0]['uom'], '69')
+        self.assertEqual(len(by_id['GALLON']['ranges']), 1)
         self.assertEqual(by_id['LITERSET']['ranges'][0]['uom'], '69')
+        self.assertEqual(by_id['LEAKLIMIT']['ranges'][0]['uom'], '69')
+        self.assertEqual(len(by_id['LEAKLIMIT']['ranges']), 1)
+        self.assertEqual(by_id['FLOW']['ranges'][0]['uom'], '69')
+        self.assertEqual(len(by_id['FLOW']['ranges']), 1)
 
     def test_dynamic_editors_celsius_and_liters(self):
         editors = udiDynamicProfile.get_dynamic_profile_editors(temp_unit=0, water_unit=3)
         by_id = {e['id']: e for e in editors}
 
-        # Temperature editors parameterized to Celsius (UOM 4)
+        # Temperature editors parameterized to Celsius (UOM 4), single UOM
         self.assertEqual(by_id['CELSIUS']['ranges'][0]['uom'], '4')
         self.assertEqual(by_id['CELSIUS']['ranges'][0]['max'], 105)
+        self.assertEqual(len(by_id['CELSIUS']['ranges']), 1)
         self.assertEqual(by_id['FARENHEIT']['ranges'][0]['uom'], '4')
+        self.assertEqual(len(by_id['FARENHEIT']['ranges']), 1)
         self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['uom'], '4')
         self.assertEqual(by_id['CELSIUSSET']['ranges'][0]['max'], 38)
         self.assertEqual(by_id['ECOSET']['ranges'][0]['uom'], '4')
         self.assertEqual(by_id['ECOSET']['ranges'][0]['max'], 5)
 
-        # Water editors parameterized to Liters (UOM 35)
+        # Water editors parameterized to Liters (UOM 35), single UOM
         self.assertEqual(by_id['LITER']['ranges'][0]['uom'], '35')
+        self.assertEqual(len(by_id['LITER']['ranges']), 1)
         self.assertEqual(by_id['GALLON']['ranges'][0]['uom'], '35')
+        self.assertEqual(len(by_id['GALLON']['ranges']), 1)
         self.assertEqual(by_id['LITERSET']['ranges'][0]['uom'], '35')
         self.assertEqual(by_id['LITER']['ranges'][0]['max'], 100000)
+        self.assertEqual(by_id['LEAKLIMIT']['ranges'][0]['uom'], '35')
+        self.assertEqual(len(by_id['LEAKLIMIT']['ranges']), 1)
+        self.assertEqual(by_id['FLOW']['ranges'][0]['uom'], '35')
+        self.assertEqual(len(by_id['FLOW']['ranges']), 1)
 
     def test_dynamic_editors_ccf_and_m3(self):
         ed_ccf = {e['id']: e for e in udiDynamicProfile.get_dynamic_profile_editors(water_unit=1)}
         self.assertEqual(ed_ccf['LITER']['ranges'][0]['uom'], '6')
         self.assertEqual(ed_ccf['GALLON']['ranges'][0]['uom'], '6')
+        self.assertEqual(ed_ccf['LEAKLIMIT']['ranges'][0]['uom'], '6')
+        self.assertEqual(ed_ccf['FLOW']['ranges'][0]['uom'], '6')
 
         ed_m3 = {e['id']: e for e in udiDynamicProfile.get_dynamic_profile_editors(water_unit=2)}
         self.assertEqual(ed_m3['LITER']['ranges'][0]['uom'], '8')
         self.assertEqual(ed_m3['GALLON']['ranges'][0]['uom'], '8')
         self.assertEqual(ed_m3['LITER']['ranges'][0]['prec'], 2)
+        self.assertEqual(ed_m3['LEAKLIMIT']['ranges'][0]['uom'], '8')
+        self.assertEqual(ed_m3['FLOW']['ranges'][0]['uom'], '8')
 
     def test_dynamic_profile_payload_resolves_controller_units(self):
         mock_controller = MagicMock()

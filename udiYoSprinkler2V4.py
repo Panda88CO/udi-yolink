@@ -26,7 +26,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoSprinkler2(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,   water_meter_unit2uom, calculate_water_volume, state2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,   water_meter_unit2uom, calculate_water_volume, state2ISY, update_schedule_data, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOSPRINKLERV2'
     '''
@@ -55,7 +55,7 @@ class udiYoSprinkler2(udi_interface.Node):
             {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Latest Operation'},  #Latest operation
             #{'driver': 'GV6', 'value': 99, 'uom': 25},  # Latest Mode
             {'driver': 'GV7', 'value': 99, 'uom': 25, 'name': 'Latest Water Method'}, #Latest Method
-            {'driver': 'GV8', 'value': 99, 'uom': 25, 'name': 'Latest Water Amount target'}, #Latest Volume                                             
+            {'driver': 'GV8', 'value': 0, 'uom': 44, 'name': 'Latest Water Amount target'}, #Latest Volume / Duration
             {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Latest Water Alarm'}, #Latest Alert
             #{'driver': 'GV10', 'value': 99, 'uom': 25}, #no Water When Last run 
 
@@ -450,7 +450,6 @@ class udiYoSprinkler2(udi_interface.Node):
                 #'WATERMODE' : set_watermode,
                 'WATTRIB' : set_attributes,
                 'WDELAY' : set_delay,
-
                 }
 
 

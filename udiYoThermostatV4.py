@@ -22,7 +22,7 @@ from yolinkThermostatV2 import YoLinkThermostat
 
 
 class udiYoThermostat(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOTHERMOSTAT'
 
@@ -486,7 +486,7 @@ class udiYoThermostat(udi_interface.Node):
 
 
 class udiYoThermostatProperties(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOTHERMPROP'
 

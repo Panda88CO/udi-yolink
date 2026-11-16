@@ -23,7 +23,7 @@ from udiYoSchedule import udiYoSchedule
 
 
 class udiYoWaterMeterMulti(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, save_cmd_state, water_meter_unit2uom, calculate_water_volume, retrieve_cmd_state, state2ISY, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler, w_unit2ISY, save_cmd_state, water_meter_unit2uom, calculate_water_volume, retrieve_cmd_state, state2ISY, bool2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOWATERMETERMULTI'
     '''
@@ -40,7 +40,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
     ''' 
     drivers = [
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Water Running'}, # On line
-            {'driver': 'GV1', 'value': 0, 'uom': 25, 'name': 'Water Meter Total'}, # Meter count
+            {'driver': 'GV1', 'value': 0, 'uom': 70, 'name': 'Water Meter Total'}, # Meter count
             {'driver': 'GV5', 'value': 99, 'uom': 25, 'name': 'Leak Alarm'}, #Leak
             {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'},
             #{'driver': 'GV4', 'value': 99, 'uom' : 25}, # Unit
@@ -319,7 +319,7 @@ class udiYoWaterMeterMulti(udi_interface.Node):
 
 
 class udiYoSubWaterMeter(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,   w_unit2ISY, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, save_cmd_state, water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,   w_unit2ISY, calculate_water_volume, get_meter_correction_factor, apply_meter_correction, save_cmd_state, water_meter_unit2uom, retrieve_cmd_state, bool2ISY, state2ISY, state2Nbr, prep_schedule, activate_schedule, update_schedule_data, node_queue, wait_for_node_done, mask2key, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOWATERMETERSUB'
     '''
@@ -345,8 +345,8 @@ class udiYoSubWaterMeter(udi_interface.Node):
             #{'driver': 'GV13', 'value': 99, 'uom' : 25}, # alarm
             #{'driver': 'GV14', 'value': 99, 'uom' : 25}, # Water flowing
             {'driver': 'GV22', 'value': 99, 'uom': 69, 'name': 'Overrun Amount 24H Limit'}, #LeakLimit
-            {'driver': 'GV23', 'value': 99, 'uom': 25, 'name': 'Overrun Duration Once Limit'}, #Overrtun limit
-            {'driver': 'GV24', 'value': 99, 'uom': 25, 'name': 'Overrun Count 24H Limit'}, #Overrun Time
+            {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Overrun Duration Once Limit'}, #Overrtun limit
+            {'driver': 'GV24', 'value': 0, 'uom': 44, 'name': 'Overrun Count 24H Limit'}, #Overrun Time
     
             {'driver': 'GV25', 'value': 99, 'uom': 25, 'name': 'Leak Auto Close'}, #Leak AC
             {'driver': 'GV26', 'value': 99, 'uom': 25, 'name': 'Overrun Amount Auto Close'}, #LEakAC

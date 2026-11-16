@@ -23,7 +23,7 @@ from yolinkSprinklerV2 import YoLinkSprinkler
 
 
 class udiYoSprinkler(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOSPRINKLER'
     
@@ -47,8 +47,8 @@ class udiYoSprinkler(udi_interface.Node):
     drivers = [
 
             {'driver': 'CLITEMP', 'value': 0, 'uom': 4, 'name': 'Sensor Temperature'},
-            {'driver': 'GV1', 'value': 2, 'uom': 25, 'name': 'Current No Water Alarm'}, 
-            {'driver': 'GV2', 'value': 2, 'uom': 25, 'name': 'GV2'},           
+            {'driver': 'GV1', 'value': 0, 'uom': 69, 'name': 'Water Meter Total'}, 
+            {'driver': 'GV2', 'value': 0, 'uom': 69, 'name': 'Water Meter Recent Use'},           
             {'driver': 'CLIHUM', 'value': 0, 'uom': 51, 'name': 'Humidity'},
             {'driver': 'GV4', 'value': 2, 'uom': 25, 'name': 'Energy'},
             {'driver': 'GV5', 'value': 2, 'uom': 25, 'name': 'Latest Operation'},
@@ -56,10 +56,10 @@ class udiYoSprinkler(udi_interface.Node):
             {'driver': 'GV7', 'value': 2, 'uom': 25, 'name': 'Latest Water Method'},
             {'driver': 'GV8', 'value': 2, 'uom': 25, 'name': 'Latest Water Amount target'},
             {'driver': 'GV9', 'value': 99, 'uom': 25, 'name': 'Latest Water Alarm'},
-            {'driver': 'GV10', 'value': 0, 'uom': 4, 'name': 'Time for Latest operation Update'},
-            {'driver': 'GV11', 'value': 0, 'uom': 4, 'name': 'GV11'},
-            {'driver': 'GV12', 'value': 0, 'uom': 51, 'name': 'Time Delay'},
-            {'driver': 'GV13', 'value': 0, 'uom': 51, 'name': 'GV13'},
+            {'driver': 'GV10', 'value': 0, 'uom': 69, 'name': 'Water Meter Day Use'},
+            {'driver': 'GV11', 'value': 0, 'uom': 25, 'name': 'GV11'},
+            {'driver': 'GV12', 'value': 0, 'uom': 25, 'name': 'Time Delay'},
+            {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'GV13'},
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Current State'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},            
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},            
@@ -278,15 +278,6 @@ class udiYoSprinkler(udi_interface.Node):
                             self.my_setDriver('GV14', round(tempMeasMin*9/5+32,1),  17, type=message_type)
                         if isinstance(tempMeasMax, (int, float)):   
                             self.my_setDriver('GV15', round(tempMeasMax*9/5+32,1),  17, type=message_type)      
-                else:
-                    self.my_setDriver('CLITEMP', 99,  25)
-                    self.my_setDriver('ST', 99,  25)
-                    self.my_setDriver('GV10', 99, 25)
-                    self.my_setDriver('GV11', 99, 25)
-                    self.my_setDriver('GV14', 99, 25)
-                    self.my_setDriver('GV15', 99, 25)
-   
-                
             
                 self.my_setDriver('GV1', sprinkler.bool2Nbr(lowTempAlarm), type=message_type)
                 self.my_setDriver('GV2', sprinkler.bool2Nbr(highTempAlarm), type=message_type)
@@ -303,14 +294,6 @@ class udiYoSprinkler(udi_interface.Node):
                     self.my_setDriver('GV5', sprinkler.bool2Nbr(highHumAlarm), type=message_type)
                     if alarm_det or lowHumAlarm or highHumAlarm:
                         alarm_det = True
-                else:
-                    self.my_setDriver('CLIHUM', 98, 25)
-                    self.my_setDriver('GV12', 98, 25)
-                    self.my_setDriver('GV13', 98, 25)
-                    self.my_setDriver('GV16', 98, 25)
-                    self.my_setDriver('GV17', 98, 25)   
-                    self.my_setDriver('GV4', 98, 25)
-                    self.my_setDriver('GV5', 98, 25)
 
 
                 self.my_setDriver('BATLVL', bat_lvl, 25, type=message_type)

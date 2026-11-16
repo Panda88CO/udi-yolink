@@ -14,15 +14,12 @@
   </editor>
   <editor id="WATT">
     <range uom="73" min="-1" max="2000" prec="2" />
-    <range uom="25" subset="0,98,99" nls="nosupport" />
   </editor>
   <editor id="ENERGY">
     <range uom="119" min="-1" max="2000" prec="2" />
-    <range uom="25" subset="0,98,99" nls="nosupport" />
   </editor>
   <editor id="WATERLEVEL">
     <range uom="56" min="0" max="1000" prec="0" />
-    <range uom="25" subset="0,97,99" nls="wlstate" />
   </editor>
   <editor id="DELAY">
     <range uom="57" min="0" max="86400" prec="0" />
@@ -33,23 +30,20 @@
   <editor id="TRAVELTIME">
     <range uom="57" min="1" max="60" prec="0" />
   </editor>
-    <editor id="CELSIUS">
+  <editor id="CELSIUS">
     <range uom="4" min="-40" max="105" prec="1" />
-    <range uom="25" subset="98,99" nls="wlstate" />
   </editor>
-    <editor id="CELSIUSSET">
+  <editor id="CELSIUSSET">
     <range uom="4" min="5" max="38" prec="0" />
   </editor>
   <editor id="FARENHEIT">
     <range uom="17" min="-40" max="221" prec="1" />
-    <range uom="25" subset="98,99" nls="wlstate" />
   </editor>
-    <editor id="FARENHEITSET">
+  <editor id="FARENHEITSET">
     <range uom="17" min="40" max="100" prec="0" />
   </editor>
   <editor id="HUMIDITY">
     <range uom="51" min="0" max="100" prec="1" />
-    <range uom="25" subset="0,98,99" nls="nosupport" />
   </editor>
   <editor id="BATLEVEL">
     <range uom="25" subset="0,1,2,3,4,98,99" nls="batlevel" />
@@ -221,50 +215,36 @@
   </editor>
   <editor id="STHOUR">
     <range uom="19" min="0" max="24" />
-    <range uom="25" subset="98,99" nls="notdefined" />
   </editor>
   <editor id="STMIN">
     <range uom="44" min="0" max="59" />
-    <range uom="25" subset="98,99" nls="notdefined" />
   </editor>
   <editor id="STSEC">
     <range uom="57" min="0" max="59" />
-    <range uom="25" subset="0,99" nls="notdefined" />
   </editor>
   <editor id="STHOURI">
     <range uom="19" min="0" max="24" />
-    <range uom="25" subset="98" nls="notdefined" />
   </editor>
   <editor id="STMINI">
     <range uom="44" min="0" max="59" />
-    <range uom="25" subset="98" nls="notdefined" />
   </editor>
   <editor id="STSECI">
     <range uom="57" min="0" max="59" />
-    <range uom="25" subset="0" nls="notdefined" />
   </editor>
   <editor id="BINDAYS">
     <range uom="25" subset="0-127" nls="bindays" />
   </editor>
   <editor id="UNIXTIME">
     <range uom="151" min="1737400000" max="9999999999" prec="0" />
-    <range uom="25" subset="0,99" nls="error" />
   </editor>
   <editor id="READY">
     <range uom="25" subset="0,1" nls="ready" />
   </editor>
   <editor id="LEAKLIMIT">
     <range uom="69" min="0" max="100" prec="0" />
-    <range uom="6" min="0" max="100" prec="0" />
-    <range uom="8" min="0" max="10" prec="1" />
-    <range uom="35" min="0" max="400" prec="0" />
   </editor>
   <editor id="FLOW">
     <range uom="69" min="0" max="10000" prec="1" />
-    <range uom="6" min="0" max="10000" prec="1" />
-    <range uom="8" min="0" max="10000" prec="2" />
-    <range uom="35" min="0" max="100000" prec="1" />
-    <range uom="25" subset="0,99" nls="error" />
   </editor>
   <editor id="ENABLE">
     <range uom="25" subset="0,1,99" nls="enable" />
@@ -277,18 +257,15 @@
   </editor>
   <editor id="MINUTES">
     <range uom="44" min="0" max="1440" />
-    <range uom="25" subset="0,99" nls="error" />
   </editor>
   <editor id="MINUTESSET">
     <range uom="44" min="0" max="1440" />
   </editor>  
   <editor id="COUNT">
     <range uom="70" min="0" max="1440" />
-    <range uom="25" subset="0,99" nls="error" />
   </editor>  
   <editor id="CONDUCTIVITY">
     <range uom="70" min="0" max="20" prec="1" />
-    <range uom="25" subset="0,99" nls="error" />
   </editor>  
   <editor id="STARTSTOP">
     <range uom="25" subset="0,1" nls="running" />
@@ -301,9 +278,7 @@
   </editor>
    <editor id="RUNNINGVALUE">
       <range uom="44" min="0" max="1440" />
-      <range uom="35" min="0" max="2000" />
       <range uom="69" min="0" max="600" />
-      <range uom="25" subset="0,99" nls="error" />  
     </editor>   
   <editor id="RUNNINGMODE">
     <range uom="25" subset="0,1,99" nls="runningmode" />
@@ -355,7 +330,6 @@
   </editor>
   <editor id="IHUMIDITY">
     <range uom="51" min="0" max="100" prec="1" />
-    <range uom="25" subset="98,99" nls="error" />
   </editor>
   <editor id="IAUXHEAT">
     <range uom="25" subset="0,1,99" nls="auxheat" />

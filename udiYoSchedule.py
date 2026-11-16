@@ -41,7 +41,7 @@ class BaseScheduleNode(udi_interface.Node):
     - Manage schedule activation/deactivation
     """
     
-    from  udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names
+    from  udiYolinkLib import my_setDriver, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, runCmd
 
     def _schedule_actions(self):
         return (
@@ -619,12 +619,12 @@ class OnOffScheduleNode(BaseScheduleNode):
         {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},     # Schedule index
         {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'},    # Active (enabled)
         {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Total Schedules'},     # Total schedules
-        {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'},    # On hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'},    # On minute
-        {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'},    # On second
-        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'},    # Off hour
-        {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'},    # Off minute
-        {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'},    # Off second
+        {'driver': 'GV15', 'value': 0, 'uom': 19, 'name': 'On Hour'},    # On hour
+        {'driver': 'GV16', 'value': 0, 'uom': 44, 'name': 'On Minute'},    # On minute
+        {'driver': 'GV21', 'value': 0, 'uom': 57, 'name': 'On Sec'},    # On second
+        {'driver': 'GV17', 'value': 0, 'uom': 19, 'name': 'Off Hour'},    # Off hour
+        {'driver': 'GV18', 'value': 0, 'uom': 44, 'name': 'Off Minute'},    # Off minute
+        {'driver': 'GV22', 'value': 0, 'uom': 57, 'name': 'Off Sec'},    # Off second
         {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'},     # Weekday mask
     ]
 
@@ -712,16 +712,16 @@ class KeyScheduleNode(BaseScheduleNode):
     id = 'YOIRSCHEDULE'
     
     drivers = [
-        {'driver': 'GV12', 'value': 99, 'uom': 25, 'name': 'Selected code/port'},     # Infrared key/channel
+        {'driver': 'GV12', 'value': 0, 'uom': 56, 'name': 'Selected code/port'},     # Infrared key/channel
         {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},      # Schedule index
         {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'},     # Active (enabled)
         {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Total Schedules'},      # Total schedules
-        {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'},     # On hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'},     # On minute
-        {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'},     # On second
-        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'},     # Off hour
-        {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'},     # Off minute
-        {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'},     # Off second
+        {'driver': 'GV15', 'value': 0, 'uom': 19, 'name': 'On Hour'},     # On hour
+        {'driver': 'GV16', 'value': 0, 'uom': 44, 'name': 'On Minute'},     # On minute
+        {'driver': 'GV21', 'value': 0, 'uom': 57, 'name': 'On Sec'},     # On second
+        {'driver': 'GV17', 'value': 0, 'uom': 19, 'name': 'Off Hour'},     # Off hour
+        {'driver': 'GV18', 'value': 0, 'uom': 44, 'name': 'Off Minute'},     # Off minute
+        {'driver': 'GV22', 'value': 0, 'uom': 57, 'name': 'Off Sec'},     # Off second
         {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'},      # Weekday mask
     ]
 
@@ -832,12 +832,12 @@ class MultiOutletScheduleNode(BaseScheduleNode):
         {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},      # Schedule index
         {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'},     # Active (enabled)
         {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Total Schedules'},      # Total schedules
-        {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'},     # On hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'},     # On minute
-        {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'},     # On second
-        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'},     # Off hour
-        {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'},     # Off minute
-        {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'},     # Off second
+        {'driver': 'GV15', 'value': 0, 'uom': 19, 'name': 'On Hour'},     # On hour
+        {'driver': 'GV16', 'value': 0, 'uom': 44, 'name': 'On Minute'},     # On minute
+        {'driver': 'GV21', 'value': 0, 'uom': 57, 'name': 'On Sec'},     # On second
+        {'driver': 'GV17', 'value': 0, 'uom': 19, 'name': 'Off Hour'},     # Off hour
+        {'driver': 'GV18', 'value': 0, 'uom': 44, 'name': 'Off Minute'},     # Off minute
+        {'driver': 'GV22', 'value': 0, 'uom': 57, 'name': 'Off Sec'},     # Off second
         {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'},      # Weekday mask
     ]
 
@@ -1133,16 +1133,16 @@ class WaterMeterScheduleNode(OnOffScheduleNode):
     id = 'YOWMSCHEDULE'
 
     drivers = [
-        {'driver': 'GV12', 'value': 99, 'uom': 56, 'name': 'Leak Limit'},    # Leak limit (or repurposed for data)
+        {'driver': 'GV12', 'value': 0, 'uom': 70, 'name': 'Leak Limit'},    # Leak limit (or repurposed for data)
         {'driver': 'GV13', 'value': 0, 'uom': 25, 'name': 'Schedule Index'},     # Schedule index
         {'driver': 'GV14', 'value': 99, 'uom': 25, 'name': 'Activated'},    # Active (enabled)
         {'driver': 'GV23', 'value': 0, 'uom': 70, 'name': 'Total Schedules'},     # Total schedules
-        {'driver': 'GV15', 'value': 99, 'uom': 25, 'name': 'On Hour'},    # On hour
-        {'driver': 'GV16', 'value': 99, 'uom': 25, 'name': 'On Minute'},    # On minute
-        {'driver': 'GV21', 'value': 99, 'uom': 25, 'name': 'On Sec'},    # On second
-        {'driver': 'GV17', 'value': 99, 'uom': 25, 'name': 'Off Hour'},    # Off hour
-        {'driver': 'GV18', 'value': 99, 'uom': 25, 'name': 'Off Minute'},    # Off minute
-        {'driver': 'GV22', 'value': 99, 'uom': 25, 'name': 'Off Sec'},    # Off second
+        {'driver': 'GV15', 'value': 0, 'uom': 19, 'name': 'On Hour'},    # On hour
+        {'driver': 'GV16', 'value': 0, 'uom': 44, 'name': 'On Minute'},    # On minute
+        {'driver': 'GV21', 'value': 0, 'uom': 57, 'name': 'On Sec'},    # On second
+        {'driver': 'GV17', 'value': 0, 'uom': 19, 'name': 'Off Hour'},    # Off hour
+        {'driver': 'GV18', 'value': 0, 'uom': 44, 'name': 'Off Minute'},    # Off minute
+        {'driver': 'GV22', 'value': 0, 'uom': 57, 'name': 'Off Sec'},    # Off second
         {'driver': 'GV19', 'value': 0, 'uom': 25, 'name': 'Active Days'},     # Weekday mask
     ]
 

@@ -23,7 +23,7 @@ from yolinkTHsensorV2 import YoLinkTHSensor
 
 
 class udiYoTHsensor(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOTHSENS'
     
@@ -270,15 +270,6 @@ class udiYoTHsensor(udi_interface.Node):
                             self.my_setDriver('GV14', round(tempMeasMin*9/5+32,1),  17, type=message_type)
                         if isinstance(tempMeasMax, (int, float)):   
                             self.my_setDriver('GV15', round(tempMeasMax*9/5+32,1),  17, type=message_type)      
-                else:
-                    self.my_setDriver('CLITEMP', 99,  25)
-                    self.my_setDriver('ST', 99,  25)
-                    self.my_setDriver('GV10', 99, 25)
-                    self.my_setDriver('GV11', 99, 25)
-                    self.my_setDriver('GV14', 99, 25)
-                    self.my_setDriver('GV15', 99, 25)
-   
-                
             
                 self.my_setDriver('GV1', sensor.bool2Nbr(lowTempAlarm), type=message_type)
                 self.my_setDriver('GV2', sensor.bool2Nbr(highTempAlarm), type=message_type)
@@ -295,14 +286,6 @@ class udiYoTHsensor(udi_interface.Node):
                     self.my_setDriver('GV5', sensor.bool2Nbr(highHumAlarm), type=message_type)
                     if alarm_det or lowHumAlarm or highHumAlarm:
                         alarm_det = True
-                else:
-                    self.my_setDriver('CLIHUM', 98, 25)
-                    self.my_setDriver('GV12', 98, 25)
-                    self.my_setDriver('GV13', 98, 25)
-                    self.my_setDriver('GV16', 98, 25)
-                    self.my_setDriver('GV17', 98, 25)   
-                    self.my_setDriver('GV4', 98, 25)
-                    self.my_setDriver('GV5', 98, 25)
 
 
                 self.my_setDriver('BATLVL', bat_lvl, 25, type=message_type)

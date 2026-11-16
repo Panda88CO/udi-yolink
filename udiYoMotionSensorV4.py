@@ -23,7 +23,7 @@ from yolinkMotionSensorV3 import YoLinkMotionSensor
 
 
 class udiYoMotionSensor(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOMOTIONSENS'
     
@@ -206,8 +206,6 @@ class udiYoMotionSensor(udi_interface.Node):
                         self.my_setDriver('CLITEMP', round(devTemp*9/5+32,0), 17, type=message_type)
                     #elif self.temp_unit == 2:
                     #    self.my_setDriver('CLITEMP', round(devTemp+273.15,0), 26)
-                else:
-                    self.my_setDriver('CLITEMP', 99, 25)
                 if sensor.suspended:
                     self.my_setDriver('GV20', 1)
                 else:
@@ -242,15 +240,9 @@ class udiYoMotionSensor(udi_interface.Node):
         sensor.refreshDevice()
        
 
-    def noop(self, command = None):
-        pass
-
     commands = {
                 'SETCMD': set_cmd,
                 'UPDATE': update,
-    
-                #'DON'   : noop,
-                #'DOF'   : noop
                 }
 
 

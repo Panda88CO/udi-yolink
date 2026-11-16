@@ -21,7 +21,7 @@ from yolinkVibrationSensorV3 import YoLinkVibrationSensor
 
 
 class udiYoVibrationSensor(udi_interface.Node):
-    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online
+    from udiYolinkLib import my_setDriver, start_done, configDoneHandler,  save_cmd_state, retrieve_cmd_state, node_queue, wait_for_node_done, checkNameSync, apply_profile_driver_names, set_offline_notice, clear_offline_notice, wait_for_device_online, runCmd
 
     id = 'YOVIBRASENS'
     
@@ -181,13 +181,11 @@ class udiYoVibrationSensor(udi_interface.Node):
 
                 self.my_setDriver('GV30', 1)
                 devTemp =  sensor.get_data('devTemperature', 'state')
-                if devTemp != 'NA':
+                if isinstance(devTemp, (int, float)):
                     if self.temp_unit == 0:
                         self.my_setDriver('CLITEMP', round(devTemp,0), 4, type=message_type)
                     elif self.temp_unit == 1:
                         self.my_setDriver('CLITEMP', round(devTemp*9/5+32,0), 17, type=message_type)
-                else:
-                    self.my_setDriver('CLITEMP', 99,  25)
                 if sensor.suspended:
                     self.my_setDriver('GV20', 1)
                 else:
@@ -224,9 +222,6 @@ class udiYoVibrationSensor(udi_interface.Node):
             return
         sensor.refreshSensor()
        
-
-    def noop(self, command = None):
-        pass
 
     commands = {
                 'SETCMD': set_cmd,        
