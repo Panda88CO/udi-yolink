@@ -46,7 +46,7 @@ class udiYoThermostat(udi_interface.Node):
 
         {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},       # Suspended state (UoM 25: 0=not suspended, 1=suspended, 2=error)
         {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},       # Online status (UoM 25: 0=offline, 1=online)
-        {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last Update'},  # Last update time (UoM 151=Unix Timestamp)
+        {'driver': 'TIME', 'value': 0, 'uom': 151, 'name': 'Last Update'},  # Last update time (UoM 151=Unix Timestamp)
     ]
 
     def __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):

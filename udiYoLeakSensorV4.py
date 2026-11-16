@@ -34,7 +34,7 @@ class udiYoLeakSensor(udi_interface.Node):
             {'driver': 'BATLVL', 'value': 99, 'uom': 25, 'name': 'Battery Level'}, #batlvl  GV1 - remember to notify
             {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Command Setting'}, #Command state
             {'driver': 'CLITEMP', 'value': 99, 'uom': 4, 'name': 'Sensor Temperature'}, # dev temp
-            {'driver': 'GV3', 'value': int(time.time()), 'uom': 151, 'name': 'Last State Change'}, #latest change 
+            {'driver': 'GV3', 'value': 0, 'uom': 151, 'name': 'Last State Change'}, #latest change 
 
             {'driver': 'GV4', 'value': 0, 'uom': 25, 'name': 'Sensor Sound'}, #Beeping
             {'driver': 'GV5', 'value': 0, 'uom': 25, 'name': 'Operating Mode'}, #Operation Mode
@@ -49,7 +49,7 @@ class udiYoLeakSensor(udi_interface.Node):
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},   
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
 
-             {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last device update'},
+             {'driver': 'TIME', 'value': 0, 'uom': 151, 'name': 'Last device update'},
 
             ]
 

@@ -46,7 +46,7 @@ class udiYoSprinkler2(udi_interface.Node):
            
             {'driver': 'ST', 'value': 99, 'uom': 25, 'name': 'Current State'}, #Water running 
             {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Current No Water Alarm'}, #no Water When running 
-            {'driver': 'GV10', 'value': 99, 'uom': 151, 'name': 'Time for Latest operation Update'}, #Time for lateest operatiowaterdelay type
+            {'driver': 'GV10', 'value': 0, 'uom': 151, 'name': 'Time for Latest operation Update'}, #Time for lateest operatiowaterdelay type
 
             #{'driver': 'GV2', 'value': 99, 'uom': 25}, #water mode attrib
             #{'driver': 'GV3', 'value': 99, 'uom': 25},  #Water Method attrib 

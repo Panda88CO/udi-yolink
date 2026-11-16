@@ -235,7 +235,7 @@
     <range uom="25" subset="0-127" nls="bindays" />
   </editor>
   <editor id="UNIXTIME">
-    <range uom="151" min="1737400000" max="9999999999" prec="0" />
+    <range uom="151" min="0" max="9999999999" prec="0" />
   </editor>
   <editor id="READY">
     <range uom="25" subset="0,1" nls="ready" />

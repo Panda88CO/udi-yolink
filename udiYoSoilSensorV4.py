@@ -67,7 +67,7 @@ class udiYoSoilSensor(udi_interface.Node):
             {'driver': 'GV15', 'value': 0, 'uom': 70, 'name': 'High Conductivity Alarm Limit (mS/cm)'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},            
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'},            
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},    
+             {'driver': 'TIME', 'value' :0, 'uom': 151, 'name': 'Last device update'},    
             ]
 
 

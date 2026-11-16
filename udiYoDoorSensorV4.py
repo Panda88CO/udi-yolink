@@ -36,11 +36,11 @@ class udiYoDoorSensor(udi_interface.Node):
     drivers = [ {'driver': 'GV0', 'value': 99, 'uom': 25, 'name': 'Door State (Legacy)'}, 
             {'driver': 'GV1', 'value': 99, 'uom': 25, 'name': 'Sensor Battery Level'}, 
             {'driver': 'GV2', 'value': 0, 'uom': 25, 'name': 'Command Setting'},     
-            {'driver': 'GV3', 'value': int(time.time()), 'uom': 151, 'name': 'Last State Change'},
+            {'driver': 'GV3', 'value': 0, 'uom': 151, 'name': 'Last State Change'},
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Door State'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'}, 
-            {'driver': 'TIME', 'value': int(time.time()), 'uom': 151, 'name': 'Last device update'}, ]
+            {'driver': 'TIME', 'value': 0, 'uom': 151, 'name': 'Last device update'}, ]
 
 
     def  __init__(self, polyglot, primary, address, name, yoAccess, deviceInfo):

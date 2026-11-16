@@ -49,7 +49,7 @@ class udiYoPowerFailSenor(udi_interface.Node):
             {'driver': 'ST', 'value': 0, 'uom': 25, 'name': 'Unit State'},
             {'driver': 'GV30', 'value': 99, 'uom': 25, 'name': 'Online State'},
             {'driver': 'GV20', 'value': 99, 'uom': 25, 'name': 'Connection State'}, 
-             {'driver': 'TIME', 'value' :int(time.time()), 'uom': 151, 'name': 'Last device update'},
+             {'driver': 'TIME', 'value' :0, 'uom': 151, 'name': 'Last device update'},
 
             ]
 
