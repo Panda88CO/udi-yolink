@@ -670,18 +670,21 @@ class YoLinkSetup (udi_interface.Node):
                     self.poly.Notices['mode'] = 'Missing MODE parameter'
 
             logging.debug('Access mode set to: {}'.format(self.access_mode))
-            if 'LOCAL_CLIENT_ID' in userParam:
-                self.local_client_id = userParam['LOCAL_CLIENT_ID']
+            if 'LOCAL_CLIENT_ID' in userParam and userParam['LOCAL_CLIENT_ID'] is not None:
+                val = str(userParam['LOCAL_CLIENT_ID']).strip()
+                self.local_client_id = val if val else None
             else:
                 self.local_client_id = None
         
-            if 'LOCAL_CLIENT_SECRET' in userParam:
-                self.local_client_secret = userParam['LOCAL_CLIENT_SECRET']
+            if 'LOCAL_CLIENT_SECRET' in userParam and userParam['LOCAL_CLIENT_SECRET'] is not None:
+                val = str(userParam['LOCAL_CLIENT_SECRET']).strip()
+                self.local_client_secret = val if val else None
             else:
                 self.local_client_secret = None
 
-            if 'SUBNET_ID' in userParam:
-                self.subnet_id = userParam['SUBNET_ID']
+            if 'SUBNET_ID' in userParam and userParam['SUBNET_ID'] is not None:
+                val = str(userParam['SUBNET_ID']).strip()
+                self.subnet_id = val if val else None
             else:
                 self.subnet_id = None
             if 'LOCAL_IP' in  userParam:

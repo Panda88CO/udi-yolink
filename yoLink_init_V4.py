@@ -101,6 +101,49 @@ def _summarize_device_list(device_list):
     return {'count': len(devices), 'devices': devices}
 
 
+_LOCK_TYPE = type(Lock())
+
+
+def _is_stopped(yoAccess):
+    stop_event = getattr(yoAccess, 'STOP', None)
+    return isinstance(stop_event, Event) and stop_event.is_set()
+
+
+def _acquire_reconnect_lock(yoAccess):
+    lock = getattr(yoAccess, '_reconnect_lock', None)
+    if isinstance(lock, _LOCK_TYPE):
+        lock.acquire()
+        return lock
+    return None
+
+
+def _build_local_subnet_candidates(subnet_id):
+    if subnet_id is None:
+        return []
+    raw = str(subnet_id).strip()
+    if not raw:
+        return []
+
+    hex_chars = '0123456789abcdefABCDEF'
+    if len(raw) == 6 and raw[0] in ('c', 'C') and raw[1] == '0' and all(ch in hex_chars for ch in raw):
+        canonical = 'C0' + raw[2:].lower()
+        if raw[0] == 'c':
+            raw_candidates = [canonical, raw.upper(), raw]
+        else:
+            raw_candidates = [raw, canonical, raw.upper(), raw.lower()]
+    else:
+        raw_candidates = [raw]
+        if len(raw) >= 2:
+            raw_candidates.append(raw[0].upper() + raw[1:].lower())
+        raw_candidates.extend([raw.upper(), raw.lower()])
+
+    candidates = []
+    for candidate in raw_candidates:
+        if candidate not in candidates:
+            candidates.append(candidate)
+    return candidates
+
+
 class YoLinkInitPAC(object):
     def __init__(yoAccess, ID, secret, tokenURL='https://api.yosmart.com/open/yolink/token' , apiURL='https://api.yosmart.com/open/yolink/v2/api', mqttURL= 'api.yosmart.com', mqttPort = 8003, home_id = None):
         yoAccess.RETRY_STEP = 15
@@ -111,6 +154,15 @@ class YoLinkInitPAC(object):
         yoAccess.TimeTableLock = Lock()
         yoAccess.processing_access = Lock()
         yoAccess.retryLock = Lock()
+        yoAccess._reconnect_lock = Lock()
+        yoAccess._last_connect_time = 0.0
+        yoAccess._consecutive_rapid_disconnects = 0
+        yoAccess._subscribed_since_connect = False
+        yoAccess._suback_received = False
+        yoAccess._subnet_verified = False
+        yoAccess._just_rotated_subnet = False
+        yoAccess._subnet_candidates = []
+        yoAccess._subnet_candidate_idx = 0
         yoAccess.publishQueue = Queue()
         yoAccess.finishQueue = Queue()
         yoAccess.retryQueue = Queue()
@@ -139,7 +191,6 @@ class YoLinkInitPAC(object):
             yoAccess.access_mode = ['cloud']
             yoAccess.local = False
             yoAccess.client_id = None
-            yoAccess.QoS = 1
         else:
             yoAccess.access_mode = ['local']
             yoAccess.local = True
@@ -148,7 +199,15 @@ class YoLinkInitPAC(object):
             yoAccess.local_URL = ''
             yoAccess.local_port_str = ':1080'
             yoAccess.client_id = str(uuid.uuid4())
-            yoAccess.QoS = 0
+            yoAccess._subnet_candidates = _build_local_subnet_candidates(home_id)
+            yoAccess._subnet_candidate_idx = 0
+            if yoAccess._subnet_candidates:
+                yoAccess.homeID = yoAccess._subnet_candidates[0]
+                if yoAccess.homeID != str(home_id).strip():
+                    logging.info(
+                        f"{yoAccess.access_mode} Normalized SUBNET_ID '{home_id}' -> '{yoAccess.homeID}' "
+                        f"(candidates: {yoAccess._subnet_candidates})"
+                    )
         yoAccess.tokenExpTime = 0
         yoAccess.timeExpMarging = 1800 # 30 min margin for proactive token refresh
         yoAccess.lastTransferTime = int(time.time())
@@ -226,9 +285,16 @@ class YoLinkInitPAC(object):
                 yoAccess.mqtt_str = 'ylsubnet/'
                 if not getattr(yoAccess, 'client_id', None):
                     yoAccess.client_id = str(uuid.uuid4())
-                yoAccess.QoS = 0
             logging.debug(f'initialize MQTT client_id={yoAccess.client_id} (homeID={yoAccess.homeID})' )
-            yoAccess.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, yoAccess.client_id,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+            yoAccess.client = mqtt.Client(
+                mqtt.CallbackAPIVersion.VERSION1,
+                yoAccess.client_id,
+                clean_session=True,
+                userdata=None,
+                protocol=mqtt.MQTTv311,
+                transport="tcp",
+                reconnect_on_failure=False,
+            )
             logging.debug(
                 'MQTT info: home_id=%s mqtt=%s:%s keepalive=%s token=%s',
                 yoAccess.homeID,
@@ -533,9 +599,11 @@ class YoLinkInitPAC(object):
         """
         try: 
             logging.info(f"{yoAccess.access_mode} Connecting to broker...")
-            while yoAccess.token_needs_refresh() and not yoAccess.refresh_token():
+            while yoAccess.token_needs_refresh() and not yoAccess.refresh_token() and not _is_stopped(yoAccess):
                 time.sleep(35) # Wait 35 sec and try again (35sec ensure less than 10 attempts in 5 min)
                 logging.log(OFFLINE, 'Trying to obtain new token - network or YoLink connection may be down')
+            if _is_stopped(yoAccess):
+                return(False)
             logging.info('Retrieving YoLink API info')
             #yoAccess.retrieve_device_list()
             #yoAccess.retrieve_homeID()
@@ -562,16 +630,24 @@ class YoLinkInitPAC(object):
                 yoAccess.keepAlive,
                 _redact_log_value(yoAccess.token),
             )
+            try:
+                yoAccess.client.loop_stop()
+            except Exception:
+                pass
+            yoAccess.loopRunning = False
+            yoAccess.connectedToBroker = False
+
             temp = yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= yoAccess.keepAlive)
             logging.debug(f'yoAccess.client.connect: {temp}' )  
 
-            if not yoAccess.loopRunning:
-                yoAccess.client.loop_start()
-                yoAccess.loopRunning = True 
-            time.sleep(1)
-            yoAccess.connectedToBroker = True   
+            yoAccess.client.loop_start()
+            yoAccess.loopRunning = True 
+            for _ in range(25):
+                if yoAccess.connectedToBroker or _is_stopped(yoAccess):
+                    break
+                time.sleep(0.2)
             # Device subscriptions are handled via on_connect -> _resubscribe_devices
-            return(True)
+            return(bool(yoAccess.connectedToBroker))
 
         except Exception as e:
             logging.error(f'Exception {yoAccess.access_mode}  - connect_to_broker: {e}')
@@ -632,6 +708,7 @@ class YoLinkInitPAC(object):
         if not deviceId in yoAccess.mqttList :
             # Do NOT subscribe to the device request topic to avoid receiving our own published requests.
             # Subscribe only to responses and reports from the device.
+            yoAccess._subscribed_since_connect = True
             yoAccess.client.subscribe(topicResp, yoAccess.QoS)
             yoAccess.client.subscribe(topicReport,  yoAccess.QoS)
 
@@ -956,6 +1033,41 @@ class YoLinkInitPAC(object):
     #        yoAccess.client.connect(yoAccess.mqttURL, yoAccess.mqttPort, keepalive= 30) # ping server every 30 sec                    
     #        time.sleep(5)
 
+    def _advance_local_subnet_candidate(yoAccess):
+        candidates = getattr(yoAccess, '_subnet_candidates', None)
+        if not isinstance(candidates, list) or len(candidates) <= 1:
+            return False
+        idx = getattr(yoAccess, '_subnet_candidate_idx', 0)
+        if not isinstance(idx, int):
+            idx = 0
+        if idx + 1 >= len(candidates):
+            logging.error(
+                f"{yoAccess.access_mode} All SUBNET_ID candidates ({candidates}) were rejected by the local MQTT broker. "
+                "Please verify the exact case-sensitive Net ID under YoLink App -> Local Hub -> Local Network -> General."
+            )
+            return False
+
+        old_id = getattr(yoAccess, 'homeID', None)
+        new_idx = idx + 1
+        new_id = candidates[new_idx]
+        yoAccess._subnet_candidate_idx = new_idx
+        yoAccess.homeID = new_id
+        yoAccess._just_rotated_subnet = True
+        logging.warning(
+            f"{yoAccess.access_mode} Local broker rejected SUBNET_ID '{old_id}' on subscribe; rotating to '{new_id}' ({new_idx + 1}/{len(candidates)})"
+        )
+        mqtt_list = getattr(yoAccess, 'mqttList', None)
+        if isinstance(mqtt_list, dict):
+            mqtt_str = getattr(yoAccess, 'mqtt_str', 'ylsubnet/')
+            if not isinstance(mqtt_str, str):
+                mqtt_str = 'ylsubnet/'
+            for dev_id, info in mqtt_list.items():
+                if isinstance(info, dict):
+                    info['request'] = f"{mqtt_str}{new_id}/{dev_id}/request"
+                    info['response'] = f"{mqtt_str}{new_id}/{dev_id}/response"
+                    info['report'] = f"{mqtt_str}{new_id}/{dev_id}/report"
+        return True
+
     def _resubscribe_devices(yoAccess):
         """
         Resubscribe all registered devices to MQTT topics in the background with rate limiting
@@ -973,6 +1085,7 @@ class YoLinkInitPAC(object):
                     break
                 info = yoAccess.mqttList.get(dev_id)
                 if info and 'response' in info and 'report' in info:
+                    yoAccess._subscribed_since_connect = True
                     yoAccess.client.subscribe(info['response'], yoAccess.QoS)
                     yoAccess.client.subscribe(info['report'], yoAccess.QoS)
                 if (idx + 1) % 5 == 0:
@@ -998,7 +1111,7 @@ class YoLinkInitPAC(object):
                 refreshed = False
                 backoff = 2
                 for attempt in range(5):
-                    if yoAccess.STOP.is_set():
+                    if _is_stopped(yoAccess):
                         return
                     logging.info(f'{yoAccess.access_mode} Attempting token refresh (attempt {attempt + 1}/5)...')
                     if yoAccess.refresh_token():
@@ -1030,21 +1143,35 @@ class YoLinkInitPAC(object):
         except Exception as e:
             logging.error(f'Exception in _async_auth_reconnect: {e}')
         finally:
-            if not yoAccess.connectedToBroker:
+            lock = _acquire_reconnect_lock(yoAccess)
+            try:
                 yoAccess._reconnecting = False
+            finally:
+                if lock is not None:
+                    lock.release()
 
     def _async_reconnect(yoAccess):
         """
         Asynchronously reconnects to broker with exponential backoff.
         Refreshes token if needed before reconnecting.
         """
-        backoff = 2
+        if getattr(yoAccess, '_just_rotated_subnet', False) is True:
+            backoff = 2
+            yoAccess._just_rotated_subnet = False
+        else:
+            rapid = getattr(yoAccess, '_consecutive_rapid_disconnects', 0)
+            rapid = rapid if isinstance(rapid, int) else 0
+            backoff = min(2 * (2 ** min(rapid, 5)), 60)
         max_backoff = 60
+        verified_connected = False
         try:
-            while not yoAccess.STOP.is_set() and not yoAccess.connectedToBroker:
+            while not _is_stopped(yoAccess) and not yoAccess.connectedToBroker:
                 logging.info(f'{yoAccess.access_mode} Reconnecting to broker in {backoff}s...')
-                time.sleep(backoff)
-                if yoAccess.STOP.is_set() or yoAccess.connectedToBroker:
+                for _ in range(max(1, int(backoff / 0.5))):
+                    if _is_stopped(yoAccess) or yoAccess.connectedToBroker:
+                        break
+                    time.sleep(0.5)
+                if _is_stopped(yoAccess) or yoAccess.connectedToBroker:
                     break
 
                 if 'cloud' in yoAccess.access_mode:
@@ -1070,16 +1197,31 @@ class YoLinkInitPAC(object):
                         logging.debug(f'local username_pw_set in _async_reconnect: {e}')
 
                 try:
+                    try:
+                        yoAccess.client.loop_stop()
+                    except Exception:
+                        pass
+                    yoAccess.loopRunning = False
                     logging.info(f'{yoAccess.access_mode} Attempting client.reconnect()...')
                     rc = yoAccess.client.reconnect()
                     if rc == 0:
-                        for _ in range(10):
-                            if yoAccess.connectedToBroker or yoAccess.STOP.is_set():
+                        yoAccess.client.loop_start()
+                        yoAccess.loopRunning = True
+                        for _ in range(20):
+                            if yoAccess.connectedToBroker or _is_stopped(yoAccess):
                                 break
-                            time.sleep(0.5)
+                            time.sleep(0.25)
                         if yoAccess.connectedToBroker:
-                            logging.info(f'{yoAccess.access_mode} client.reconnect() successful and verified connected')
-                            break
+                            for _ in range(6):
+                                if not yoAccess.connectedToBroker or _is_stopped(yoAccess):
+                                    break
+                                time.sleep(0.25)
+                            if yoAccess.connectedToBroker:
+                                verified_connected = True
+                                logging.info(f'{yoAccess.access_mode} client.reconnect() successful and verified connected')
+                                break
+                            else:
+                                logging.warning(f'{yoAccess.access_mode} client.reconnect() connected briefly then dropped')
                         else:
                             logging.warning(f'{yoAccess.access_mode} client.reconnect() initiated but connection dropped or not established')
                     else:
@@ -1087,19 +1229,36 @@ class YoLinkInitPAC(object):
                 except Exception as e:
                     logging.warning(f'{yoAccess.access_mode} client.reconnect() failed: {e}; trying connect_to_broker()')
                     if yoAccess.connect_to_broker():
-                        for _ in range(10):
-                            if yoAccess.connectedToBroker or yoAccess.STOP.is_set():
+                        for _ in range(6):
+                            if not yoAccess.connectedToBroker or _is_stopped(yoAccess):
                                 break
-                            time.sleep(0.5)
+                            time.sleep(0.25)
                         if yoAccess.connectedToBroker:
+                            verified_connected = True
                             break
 
-                backoff = min(backoff * 2, max_backoff)
+                if getattr(yoAccess, '_just_rotated_subnet', False) is True:
+                    backoff = 2
+                    yoAccess._just_rotated_subnet = False
+                else:
+                    backoff = min(backoff * 2, max_backoff)
         except Exception as e:
             logging.error(f'Exception in _async_reconnect: {e}')
         finally:
-            if not yoAccess.connectedToBroker:
+            lock = _acquire_reconnect_lock(yoAccess)
+            try:
                 yoAccess._reconnecting = False
+                if (
+                    verified_connected
+                    and not yoAccess.connectedToBroker
+                    and not getattr(yoAccess, 'disconnect', False)
+                    and not _is_stopped(yoAccess)
+                ):
+                    yoAccess._reconnecting = True
+                    Thread(target=yoAccess._async_reconnect, daemon=True).start()
+            finally:
+                if lock is not None:
+                    lock.release()
 
     #@measure_time
     def on_connect(yoAccess, client, userdata, flags, rc):
@@ -1112,7 +1271,9 @@ class YoLinkInitPAC(object):
             if (rc == 0):
                 yoAccess.online = True
                 yoAccess.connectedToBroker = True
-                yoAccess._reconnecting = False
+                yoAccess._last_connect_time = time.time()
+                yoAccess._subscribed_since_connect = False
+                yoAccess._suback_received = False
                 logging.info('Successfully connected to broker {} '.format(yoAccess.mqttURL))
                 if yoAccess.mqttList:
                     logging.debug('Re-subscribing devices after connect in background')
@@ -1123,17 +1284,27 @@ class YoLinkInitPAC(object):
                 logging.error(f'Authentication error {rc} - Token or client ID invalid - triggering auth reconnect')
                 yoAccess.connectedToBroker = False
                 yoAccess.online = False
-                if not yoAccess._reconnecting:
-                    yoAccess._reconnecting = True
-                    Thread(target=yoAccess._async_auth_reconnect, daemon=True).start()
+                lock = _acquire_reconnect_lock(yoAccess)
+                try:
+                    if not yoAccess._reconnecting and not _is_stopped(yoAccess):
+                        yoAccess._reconnecting = True
+                        Thread(target=yoAccess._async_auth_reconnect, daemon=True).start()
+                finally:
+                    if lock is not None:
+                        lock.release()
 
             elif (rc >= 4):
                 logging.error(f'Authentication error {rc} - credentials rejected - triggering auth reconnect')
                 yoAccess.connectedToBroker = False
                 yoAccess.online = False
-                if not yoAccess._reconnecting:
-                    yoAccess._reconnecting = True
-                    Thread(target=yoAccess._async_auth_reconnect, daemon=True).start()
+                lock = _acquire_reconnect_lock(yoAccess)
+                try:
+                    if not yoAccess._reconnecting and not _is_stopped(yoAccess):
+                        yoAccess._reconnecting = True
+                        Thread(target=yoAccess._async_auth_reconnect, daemon=True).start()
+                finally:
+                    if lock is not None:
+                        lock.release()
 
             else:
                 logging.error('Broker connection failed with result code {}'.format(rc))
@@ -1149,21 +1320,55 @@ class YoLinkInitPAC(object):
         yoAccess.disconnect_occured = True
         yoAccess.online = False
         yoAccess.connectedToBroker = False
+        yoAccess.loopRunning = False
         if yoAccess.disconnect:
             logging.debug('Disconnect requested - stop loop')
             yoAccess.client.loop_stop()
-            yoAccess.loopRunning = False
+            return
+
+        last_conn = getattr(yoAccess, '_last_connect_time', 0.0)
+        rapid = getattr(yoAccess, '_consecutive_rapid_disconnects', 0)
+        if not isinstance(rapid, int):
+            rapid = 0
+        if isinstance(last_conn, (int, float)) and last_conn > 0 and (time.time() - last_conn) < 10.0:
+            yoAccess._consecutive_rapid_disconnects = rapid + 1
         else:
-            logging.log(OFFLINE, f'Unintentional disconnect (rc={rc}) - triggering async reconnect')
-            if not yoAccess._reconnecting:
+            yoAccess._consecutive_rapid_disconnects = 0
+
+        if (
+            'local' in yoAccess.access_mode
+            and getattr(yoAccess, '_subscribed_since_connect', False) is True
+            and getattr(yoAccess, '_suback_received', False) is False
+            and getattr(yoAccess, '_subnet_verified', False) is False
+        ):
+            yoAccess._advance_local_subnet_candidate()
+
+        logging.log(OFFLINE, f'Unintentional disconnect (rc={rc}) - triggering async reconnect')
+        lock = _acquire_reconnect_lock(yoAccess)
+        try:
+            if not yoAccess._reconnecting and not _is_stopped(yoAccess):
                 yoAccess._reconnecting = True
                 t = Thread(target=yoAccess._async_reconnect, daemon=True)
                 t.start()
+        finally:
+            if lock is not None:
+                lock.release()
 
     #@measure_time
     def on_subscribe(yoAccess, client, userdata, mID, granted_QoS):     
 
         logging.debug(f'{yoAccess.access_mode} on_subscribe {client} {userdata} {mID} {granted_QoS}')
+        qos_values = granted_QoS if isinstance(granted_QoS, (tuple, list)) else (granted_QoS,)
+        if any(isinstance(q, int) and q >= 128 for q in qos_values):
+            logging.error(f'{yoAccess.access_mode} Subscription rejected by broker (mID={mID}, granted_QoS={granted_QoS})')
+            if 'local' in yoAccess.access_mode and getattr(yoAccess, '_subnet_verified', False) is not True:
+                if yoAccess._advance_local_subnet_candidate() and yoAccess.connectedToBroker:
+                    Thread(target=yoAccess._resubscribe_devices, daemon=True).start()
+        else:
+            yoAccess._suback_received = True
+            if 'local' in yoAccess.access_mode:
+                yoAccess._subnet_verified = True
+                yoAccess._consecutive_rapid_disconnects = 0
         #logging.debug('client = ' + str(client))
         #logging.debug('userdata = ' + str(userdata))
         #logging.debug('mID = '+str(mID))
@@ -1528,7 +1733,15 @@ class YoLinkInitPAC(object):
                     logging.debug('rc = {}'.format(result.rc))
                     yoAccess.online = False
                     if result.rc == 4:
-                        yoAccess.client.reconnect()
+                        yoAccess.connectedToBroker = False
+                        lock = _acquire_reconnect_lock(yoAccess)
+                        try:
+                            if not getattr(yoAccess, '_reconnecting', False) and not _is_stopped(yoAccess):
+                                yoAccess._reconnecting = True
+                                Thread(target=yoAccess._async_reconnect, daemon=True).start()
+                        finally:
+                            if lock is not None:
+                                lock.release()
             else:
                 yoAccess.lastTransferTime = int(time.time())
                 yoAccess.online = True

@@ -522,7 +522,7 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
             mock_thread_cls.assert_called_once_with(target=yoAccess._async_reconnect, daemon=True)
             mock_thread_instance.start.assert_called_once()
 
-    def test_local_mode_initializes_unique_client_id_and_qos_0(self):
+    def test_local_mode_initializes_unique_client_id_normalizes_subnet_and_disables_paho_autoreconnect(self):
         import yoLink_init_V4
         import uuid
         with patch.object(yoLink_init_V4.YoLinkInitPAC, 'connect_to_broker', return_value=True), \
@@ -533,13 +533,16 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
                 home_id='c0020b'
             )
             self.assertTrue(local_pac.local)
-            self.assertEqual(local_pac.QoS, 0)
+            self.assertEqual(local_pac.QoS, 1)
             self.assertIsNotNone(local_pac.client_id)
-            # Verify client_id is a valid UUID
             parsed = uuid.UUID(local_pac.client_id)
             self.assertEqual(str(parsed), local_pac.client_id)
+            self.assertEqual(local_pac.homeID, 'C0020b')
+            self.assertEqual(local_pac._subnet_candidates, ['C0020b', 'C0020B', 'c0020b'])
+            self.assertTrue(mock_mqtt.called)
+            self.assertIs(mock_mqtt.call_args.kwargs.get('reconnect_on_failure'), False)
 
-    def test_on_connect_success_resets_reconnecting_flag(self):
+    def test_on_connect_does_not_clear_reconnecting_flag_while_reconnect_thread_owns_it(self):
         import yoLink_init_V4
         yoAccess = MagicMock()
         yoAccess.access_mode = ['local']
@@ -552,7 +555,7 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
 
         self.assertTrue(yoAccess.online)
         self.assertTrue(yoAccess.connectedToBroker)
-        self.assertFalse(yoAccess._reconnecting)
+        self.assertTrue(yoAccess._reconnecting)
 
     def test_async_reconnect_sets_local_credentials(self):
         import yoLink_init_V4
@@ -563,6 +566,10 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
         yoAccess.STOP = threading.Event()
         yoAccess.connectedToBroker = False
         yoAccess._reconnecting = True
+        yoAccess._reconnect_lock = threading.Lock()
+        yoAccess._consecutive_rapid_disconnects = 0
+        yoAccess._just_rotated_subnet = False
+        yoAccess.disconnect = False
 
         def fake_reconnect():
             yoAccess.connectedToBroker = True
@@ -577,6 +584,125 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
             username='test-client-id',
             password='test-secret'
         )
+        self.assertTrue(yoAccess.client.loop_start.called)
+        self.assertFalse(yoAccess._reconnecting)
+
+    def test_local_post_subscribe_disconnect_rotates_subnet_candidate_and_updates_topics(self):
+        import yoLink_init_V4
+        import types
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['local']
+        yoAccess.mqtt_str = 'ylsubnet/'
+        yoAccess.disconnect = False
+        yoAccess.connectedToBroker = True
+        yoAccess.online = True
+        yoAccess._reconnecting = False
+        yoAccess._reconnect_lock = threading.Lock()
+        yoAccess.STOP = threading.Event()
+        yoAccess._last_connect_time = 0.0
+        yoAccess._consecutive_rapid_disconnects = 0
+        yoAccess.homeID = 'C0020B'
+        yoAccess._subnet_candidates = ['C0020B', 'C0020b', 'c0020b']
+        yoAccess._subnet_candidate_idx = 0
+        yoAccess._subscribed_since_connect = True
+        yoAccess._suback_received = False
+        yoAccess._subnet_verified = False
+        yoAccess._just_rotated_subnet = False
+        yoAccess.mqttList = {
+            'd88b4c010003281d': {
+                'request': 'ylsubnet/C0020B/d88b4c010003281d/request',
+                'response': 'ylsubnet/C0020B/d88b4c010003281d/response',
+                'report': 'ylsubnet/C0020B/d88b4c010003281d/report',
+            }
+        }
+        yoAccess._advance_local_subnet_candidate = types.MethodType(
+            yoLink_init_V4.YoLinkInitPAC._advance_local_subnet_candidate,
+            yoAccess,
+        )
+
+        with patch('yoLink_init_V4.Thread') as mock_thread_cls:
+            mock_thread_cls.return_value = MagicMock()
+            yoLink_init_V4.YoLinkInitPAC.on_disconnect(yoAccess, None, None, rc=7)
+
+        self.assertEqual(yoAccess.homeID, 'C0020b')
+        self.assertEqual(yoAccess._subnet_candidate_idx, 1)
+        self.assertTrue(yoAccess._just_rotated_subnet)
+        self.assertEqual(
+            yoAccess.mqttList['d88b4c010003281d']['request'],
+            'ylsubnet/C0020b/d88b4c010003281d/request',
+        )
+        self.assertEqual(
+            yoAccess.mqttList['d88b4c010003281d']['response'],
+            'ylsubnet/C0020b/d88b4c010003281d/response',
+        )
+        self.assertEqual(
+            yoAccess.mqttList['d88b4c010003281d']['report'],
+            'ylsubnet/C0020b/d88b4c010003281d/report',
+        )
+
+    def test_on_subscribe_valid_marks_subnet_verified_and_0x80_rotates(self):
+        import yoLink_init_V4
+        import types
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['local']
+        yoAccess.mqtt_str = 'ylsubnet/'
+        yoAccess.connectedToBroker = True
+        yoAccess.homeID = 'C0020B'
+        yoAccess._subnet_candidates = ['C0020B', 'C0020b', 'c0020b']
+        yoAccess._subnet_candidate_idx = 0
+        yoAccess._suback_received = False
+        yoAccess._subnet_verified = False
+        yoAccess._consecutive_rapid_disconnects = 3
+        yoAccess.mqttList = {'dev1': {'request': 'r', 'response': 's', 'report': 'p'}}
+        yoAccess._advance_local_subnet_candidate = types.MethodType(
+            yoLink_init_V4.YoLinkInitPAC._advance_local_subnet_candidate,
+            yoAccess,
+        )
+
+        # Verify 0x80 (128) rotates subnet candidate and triggers resubscribe
+        with patch('yoLink_init_V4.Thread') as mock_thread_cls:
+            mock_thread_instance = MagicMock()
+            mock_thread_cls.return_value = mock_thread_instance
+            yoLink_init_V4.YoLinkInitPAC.on_subscribe(yoAccess, None, None, 1, (128,))
+
+            self.assertEqual(yoAccess.homeID, 'C0020b')
+            self.assertFalse(yoAccess._suback_received)
+            self.assertFalse(yoAccess._subnet_verified)
+            mock_thread_cls.assert_called_once_with(target=yoAccess._resubscribe_devices, daemon=True)
+            mock_thread_instance.start.assert_called_once()
+
+        # Verify valid QoS (1,) marks verified and resets rapid disconnect counter
+        yoLink_init_V4.YoLinkInitPAC.on_subscribe(yoAccess, None, None, 2, (1,))
+        self.assertTrue(yoAccess._suback_received)
+        self.assertTrue(yoAccess._subnet_verified)
+        self.assertEqual(yoAccess._consecutive_rapid_disconnects, 0)
+
+    def test_repeated_on_disconnect_while_reconnecting_spawns_only_one_thread(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['local']
+        yoAccess.disconnect = False
+        yoAccess.connectedToBroker = True
+        yoAccess.online = True
+        yoAccess._reconnecting = False
+        yoAccess._reconnect_lock = threading.Lock()
+        yoAccess.STOP = threading.Event()
+        yoAccess._last_connect_time = 0.0
+        yoAccess._consecutive_rapid_disconnects = 0
+        yoAccess._subscribed_since_connect = False
+        yoAccess._suback_received = False
+        yoAccess._subnet_verified = True
+
+        with patch('yoLink_init_V4.Thread') as mock_thread_cls:
+            mock_thread_instance = MagicMock()
+            mock_thread_cls.return_value = mock_thread_instance
+
+            yoLink_init_V4.YoLinkInitPAC.on_disconnect(yoAccess, None, None, rc=7)
+            yoLink_init_V4.YoLinkInitPAC.on_disconnect(yoAccess, None, None, rc=7)
+
+            self.assertTrue(yoAccess._reconnecting)
+            self.assertEqual(mock_thread_cls.call_count, 1)
+            mock_thread_instance.start.assert_called_once()
 
 
 class TestPublishDataAndBrokerResilience(unittest.TestCase):

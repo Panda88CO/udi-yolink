@@ -1,4 +1,4 @@
-# udi-yolink (Local / Hybrid) (v1.8.83)
+# udi-yolink (Local / Hybrid) (v1.8.84)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x) and IoX / eisy / Polisy with Local Hub (YS1606) and Cloud support.
 
 Suggested installation is on PG3x from version 1.1.x going forward. PG3x is updated to Python 3.11+. It still runs under PG3, but PG3x is strongly recommended.
@@ -51,7 +51,7 @@ To connect the node server to your YoLink cloud account, you need your **UAID** 
 
 From the YoLink Mobile App with your YoLink Local Hub (YS1606):
 1. **Local Client ID & Local Client Secret**: Select your Local Hub -> tap **Local Network** -> select **Integrations**. Copy `client_id` to `LOCAL_CLIENT_ID` and `client_secret` to `LOCAL_CLIENT_SECRET`.
-2. **Subnet ID**: Select your Local Hub -> tap **Local Network** -> select **General**. Copy **Net ID** to `SUBNET_ID`.
+2. **Subnet ID**: Select your Local Hub -> tap **Local Network** -> select **General**. Copy **Net ID** verbatim (case-sensitive, e.g., `C0020b`) to `SUBNET_ID`.
 3. **Local IP**: Select your Local Hub -> tap the **`|`** details menu (top-right corner). Copy the IP address to `LOCAL_IP`.
 
 ### 3. Configuring the Node Server in Polyglot (PG3 / PG3x)
@@ -67,7 +67,7 @@ In your browser, open the Polyglot (PG3/PG3x) dashboard:
 | **`SECRET_KEY`** | For cloud/hybrid | — | Secret Key obtained from YoLink app. |
 | **`LOCAL_CLIENT_ID`** | For local/hybrid | — | Local Client ID from Local Hub Integrations. |
 | **`LOCAL_CLIENT_SECRET`** | For local/hybrid | — | Local Client Secret from Local Hub Integrations. |
-| **`SUBNET_ID`** | For local/hybrid | — | Subnet / Net ID from Local Hub General settings. |
+| **`SUBNET_ID`** | For local/hybrid | — | Subnet / Net ID from Local Hub General settings (case-sensitive, e.g., `C0020b`). |
 | **`LOCAL_IP`** | For local/hybrid | — | Local IP address of the YoLink Local Hub. |
 | **`TEMP_UNIT`** | Optional | `C` | Temperature display unit: `F` for Fahrenheit (UOM 17) or `C` for Celsius (UOM 4). |
 | **`WATER_UNIT`** | Optional | `G` | Water volume unit: `G` or `0` for Gallons (UOM 69), `C` or `1` for CCF (UOM 6), `M` or `2` for M³ (UOM 8), `L` or `3` for Liters (UOM 35). |
