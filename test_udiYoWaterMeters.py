@@ -96,6 +96,40 @@ class TestWaterMeterController(unittest.TestCase):
         # Total meter: 3785.41 Liters * 0.001 = 3.8 m^3
         self.node.node.setDriver.assert_any_call('GV1', 3.8, True, False, uom=8)
 
+    def test_initialization_drivers_and_uoms_liters(self):
+        liter_node, _, _ = test_helper.create_test_node(
+            udiYoWaterMeterController,
+            model_name='YS5008',
+            dev_type='WaterMeterController',
+            temp_unit=0,  # Celsius
+            water_unit=3  # Liters
+        )
+        self.assertEqual(liter_node.water_unit, 3)
+        driver_map = {d['driver']: d for d in liter_node.drivers}
+        self.assertEqual(driver_map['GV1']['uom'], 35)
+        self.assertEqual(driver_map['GV10']['uom'], 35)
+        self.assertEqual(driver_map['GV2']['uom'], 35)
+        self.assertEqual(driver_map['GV22']['uom'], 35)
+
+    def test_update_data_volume_conversions_liters(self):
+        self.node.meter_unit = 3  # Device measures in Liters
+        self.node.ISYwater_unit = 3  # User wants Liters
+        self.node.ISYmeter_uom = 35
+        self.yo_access.set_water_unit(3)
+        self.node.updateData()
+
+        # Check total meter: 3785.41 Liters -> 3785.4 Liters
+        self.node.node.setDriver.assert_any_call('GV1', 3785.4, True, False, uom=35)
+        # Daily usage: 378.541 Liters -> 378.5 Liters
+        self.node.node.setDriver.assert_any_call('GV10', 378.5, True, False, uom=35)
+        # Recent usage: 37.8541 Liters -> 37.9 Liters
+        self.node.node.setDriver.assert_any_call('GV2', 37.9, True, False, uom=35)
+        # Ensure GV10 is not called with supplyType (which would have no uom or wrong value)
+        for c in self.node.node.setDriver.call_args_list:
+            if c[0][0] == 'GV10':
+                self.assertEqual(c[0][1], 378.5)
+                self.assertEqual(c[1].get('uom'), 35)
+
     def test_set_attributes_leak_limit_and_overrun_limit(self):
         # Setting 100 Gallons leak limit (uom69) on a meter with water_unit = 0
         cmd = {
@@ -255,6 +289,36 @@ class TestSprinkler2(unittest.TestCase):
         self.node.updateData()
         # 100 Liters * 0.264172 = 26.4 Gallons
         self.node.node.setDriver.assert_any_call('GV8', 26.4, True, False, uom=69)
+
+
+class TestWaterUnitControllerDefaults(unittest.TestCase):
+    """Test WATER_UNIT defaulting to Liters in controller parameter handling."""
+
+    def test_parameter_handler_defaults_to_liters_and_updates_yo_access(self):
+        from udiYoLinkLocal import YoLinkSetup
+        mock_poly = test_helper.MockPolyglot()
+        with patch.object(YoLinkSetup, 'apply_profile_driver_names', return_value=None):
+            controller = YoLinkSetup(mock_poly, 'primary', 'ctl', 'Controller')
+        controller.yoAccess = test_helper.MockYoAccess(water_unit=0)
+        controller.yoLocal = test_helper.MockYoAccess(water_unit=0)
+
+        # Call handleParams with empty params (defaulting case)
+        controller.handleParams({})
+        self.assertEqual(controller.water_unit, 3)
+        self.assertEqual(controller.yoAccess.get_water_unit(), 3)
+        self.assertEqual(controller.yoLocal.get_water_unit(), 3)
+
+        # Call handleParams with explicit Gallons
+        controller.handleParams({'WATER_UNIT': 'G'})
+        self.assertEqual(controller.water_unit, 0)
+        self.assertEqual(controller.yoAccess.get_water_unit(), 0)
+        self.assertEqual(controller.yoLocal.get_water_unit(), 0)
+
+        # Call handleParams with explicit Liters
+        controller.handleParams({'WATER_UNIT': 'L'})
+        self.assertEqual(controller.water_unit, 3)
+        self.assertEqual(controller.yoAccess.get_water_unit(), 3)
+        self.assertEqual(controller.yoLocal.get_water_unit(), 3)
 
 
 if __name__ == '__main__':

@@ -410,7 +410,6 @@ class udiYoWaterMeterController(udi_interface.Node):
                     if self.ValveSupported:
                         supply_type = water_ctrl.get_data('supplyType')   #supplyType
                         logging.debug(f'supply type : {supply_type}')     
-                        self.my_setDriver('GV10', self.w_unit2ISY(supply_type), type=message_type)
                         open_reminder = water_ctrl.get_data('openReminder', 'alarm') #openReminder
                         logging.debug(f'open reminder : {open_reminder}')
                         self.my_setDriver('GV11', self.state2ISY(open_reminder), type=message_type)

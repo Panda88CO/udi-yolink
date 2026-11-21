@@ -64,6 +64,9 @@ class MockPolyglot:
         self.ADDNODEDONE = 'addnodedone'
         self.CONFIGDONE = 'configdone'
         self.STARTDONE = 'startdone'
+        self.LOGLEVEL = 'loglevel'
+        self.CUSTOMPARAMS = 'customparams'
+        self.DISCOVER = 'discover'
 
     def getValidAddress(self, addr):
         return str(addr)[:14].lower()
@@ -89,6 +92,12 @@ class MockPolyglot:
         pass
 
     def updateJsonProfile(self, payload, options=None):
+        pass
+
+    def ready(self):
+        pass
+
+    def setCustomParamsDoc(self, *args, **kwargs):
         pass
 
 

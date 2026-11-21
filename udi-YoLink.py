@@ -189,7 +189,7 @@ class YoLinkSetup (udi_interface.Node):
             logging.debug('WATER_UNIT: {}'.format(self.water_unit ))
 
         else:
-            self.water_unit = 0  
+            self.water_unit = 3  
             self.Parameters['WATER_UNIT'] = 'L'
             logging.debug('WATER_UNIT: {}'.format(self.water_unit ))
         if self.yoAccess:
@@ -472,6 +472,10 @@ class YoLinkSetup (udi_interface.Node):
                 self.water_unit = self.convert_water_unit(userParam['WATER_UNIT'])
             else:
                 self.water_unit = 3
+
+            if self.yoAccess:
+                self.yoAccess.set_temp_unit(self.temp_unit)
+                self.yoAccess.set_water_unit(self.water_unit)
 
             if 'UAID' in userParam:
                 self.uaid = str(userParam['UAID'])
