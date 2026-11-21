@@ -522,6 +522,62 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
             mock_thread_cls.assert_called_once_with(target=yoAccess._async_reconnect, daemon=True)
             mock_thread_instance.start.assert_called_once()
 
+    def test_local_mode_initializes_unique_client_id_and_qos_0(self):
+        import yoLink_init_V4
+        import uuid
+        with patch.object(yoLink_init_V4.YoLinkInitPAC, 'connect_to_broker', return_value=True), \
+             patch('yoLink_init_V4.mqtt.Client') as mock_mqtt:
+            local_pac = yoLink_init_V4.YoLinkInitPAC(
+                'local-client-id',
+                'local-secret',
+                home_id='c0020b'
+            )
+            self.assertTrue(local_pac.local)
+            self.assertEqual(local_pac.QoS, 0)
+            self.assertIsNotNone(local_pac.client_id)
+            # Verify client_id is a valid UUID
+            parsed = uuid.UUID(local_pac.client_id)
+            self.assertEqual(str(parsed), local_pac.client_id)
+
+    def test_on_connect_success_resets_reconnecting_flag(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['local']
+        yoAccess.connectedToBroker = False
+        yoAccess.online = False
+        yoAccess._reconnecting = True
+        yoAccess.mqttList = {}
+
+        yoLink_init_V4.YoLinkInitPAC.on_connect(yoAccess, None, None, None, 0)
+
+        self.assertTrue(yoAccess.online)
+        self.assertTrue(yoAccess.connectedToBroker)
+        self.assertFalse(yoAccess._reconnecting)
+
+    def test_async_reconnect_sets_local_credentials(self):
+        import yoLink_init_V4
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['local']
+        yoAccess.local_client_id = 'test-client-id'
+        yoAccess.local_client_secret = 'test-secret'
+        yoAccess.STOP = threading.Event()
+        yoAccess.connectedToBroker = False
+        yoAccess._reconnecting = True
+
+        def fake_reconnect():
+            yoAccess.connectedToBroker = True
+            return 0
+
+        yoAccess.client.reconnect.side_effect = fake_reconnect
+
+        with patch('time.sleep', return_value=None):
+            yoLink_init_V4.YoLinkInitPAC._async_reconnect(yoAccess)
+
+        yoAccess.client.username_pw_set.assert_called_with(
+            username='test-client-id',
+            password='test-secret'
+        )
+
 
 class TestPublishDataAndBrokerResilience(unittest.TestCase):
     """Test publish_data bounded wait, transfer_data lock safety, and start() single execution."""

@@ -227,6 +227,7 @@ class udiYoDoorSensor(udi_interface.Node):
 
 
                 self.my_setDriver('GV30', 1)
+                self.clear_offline_notice()
                 if sensor.suspended:
                     self.my_setDriver('GV20', 1)
                 else:

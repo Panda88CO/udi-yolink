@@ -2,6 +2,7 @@
 import requests
 import time
 import json
+import uuid
 try:
     import psutil
 except ImportError:
@@ -137,6 +138,8 @@ class YoLinkInitPAC(object):
         if home_id is None:
             yoAccess.access_mode = ['cloud']
             yoAccess.local = False
+            yoAccess.client_id = None
+            yoAccess.QoS = 1
         else:
             yoAccess.access_mode = ['local']
             yoAccess.local = True
@@ -144,8 +147,8 @@ class YoLinkInitPAC(object):
             yoAccess.local_client_secret = secret
             yoAccess.local_URL = ''
             yoAccess.local_port_str = ':1080'
-            yoAccess.local_client_id = ID
-            yoAccess.local_client_secret = secret
+            yoAccess.client_id = str(uuid.uuid4())
+            yoAccess.QoS = 0
         yoAccess.tokenExpTime = 0
         yoAccess.timeExpMarging = 1800 # 30 min margin for proactive token refresh
         yoAccess.lastTransferTime = int(time.time())
@@ -218,14 +221,14 @@ class YoLinkInitPAC(object):
                 if yoAccess.token != None:
                     yoAccess.retrieve_homeID()                    
                     yoAccess.retrieve_device_list()
+                yoAccess.client_id = yoAccess.homeID
             else:
-                yoAccess.mqtt_str = 'ylsubnet/'   
-            logging.debug(f'initialize MQTT {yoAccess.homeID}' )
-            #try:
-            yoAccess.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
-            #except Exception as e:
-            #    logging.debug('Using non pG3x code {e}')
-            #    yoAccess.client = mqtt.Client(yoAccess.homeID,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
+                yoAccess.mqtt_str = 'ylsubnet/'
+                if not getattr(yoAccess, 'client_id', None):
+                    yoAccess.client_id = str(uuid.uuid4())
+                yoAccess.QoS = 0
+            logging.debug(f'initialize MQTT client_id={yoAccess.client_id} (homeID={yoAccess.homeID})' )
+            yoAccess.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, yoAccess.client_id,  clean_session=True, userdata=None,  protocol=mqtt.MQTTv311, transport="tcp")
             logging.debug(
                 'MQTT info: home_id=%s mqtt=%s:%s keepalive=%s token=%s',
                 yoAccess.homeID,
@@ -1016,11 +1019,19 @@ class YoLinkInitPAC(object):
                 else:
                     logging.error(f'{yoAccess.access_mode} Failed to refresh token during auth reconnect')
             else:
+                try:
+                    yoAccess.client.username_pw_set(
+                        username=yoAccess.local_client_id,
+                        password=yoAccess.local_client_secret
+                    )
+                except Exception as e:
+                    logging.debug(f'local username_pw_set in _async_auth_reconnect: {e}')
                 yoAccess.connect_to_broker()
         except Exception as e:
             logging.error(f'Exception in _async_auth_reconnect: {e}')
         finally:
-            yoAccess._reconnecting = False
+            if not yoAccess.connectedToBroker:
+                yoAccess._reconnecting = False
 
     def _async_reconnect(yoAccess):
         """
@@ -1049,25 +1060,46 @@ class YoLinkInitPAC(object):
                         )
                     except Exception as e:
                         logging.debug(f'username_pw_set in _async_reconnect: {e}')
+                elif 'local' in yoAccess.access_mode:
+                    try:
+                        yoAccess.client.username_pw_set(
+                            username=yoAccess.local_client_id,
+                            password=yoAccess.local_client_secret
+                        )
+                    except Exception as e:
+                        logging.debug(f'local username_pw_set in _async_reconnect: {e}')
 
                 try:
                     logging.info(f'{yoAccess.access_mode} Attempting client.reconnect()...')
                     rc = yoAccess.client.reconnect()
                     if rc == 0:
-                        logging.info(f'{yoAccess.access_mode} client.reconnect() successful')
-                        break
+                        for _ in range(10):
+                            if yoAccess.connectedToBroker or yoAccess.STOP.is_set():
+                                break
+                            time.sleep(0.5)
+                        if yoAccess.connectedToBroker:
+                            logging.info(f'{yoAccess.access_mode} client.reconnect() successful and verified connected')
+                            break
+                        else:
+                            logging.warning(f'{yoAccess.access_mode} client.reconnect() initiated but connection dropped or not established')
                     else:
                         logging.warning(f'{yoAccess.access_mode} client.reconnect() returned rc={rc}')
                 except Exception as e:
                     logging.warning(f'{yoAccess.access_mode} client.reconnect() failed: {e}; trying connect_to_broker()')
                     if yoAccess.connect_to_broker():
-                        break
+                        for _ in range(10):
+                            if yoAccess.connectedToBroker or yoAccess.STOP.is_set():
+                                break
+                            time.sleep(0.5)
+                        if yoAccess.connectedToBroker:
+                            break
 
                 backoff = min(backoff * 2, max_backoff)
         except Exception as e:
             logging.error(f'Exception in _async_reconnect: {e}')
         finally:
-            yoAccess._reconnecting = False
+            if not yoAccess.connectedToBroker:
+                yoAccess._reconnecting = False
 
     #@measure_time
     def on_connect(yoAccess, client, userdata, flags, rc):
@@ -1080,6 +1112,7 @@ class YoLinkInitPAC(object):
             if (rc == 0):
                 yoAccess.online = True
                 yoAccess.connectedToBroker = True
+                yoAccess._reconnecting = False
                 logging.info('Successfully connected to broker {} '.format(yoAccess.mqttURL))
                 if yoAccess.mqttList:
                     logging.debug('Re-subscribing devices after connect in background')
