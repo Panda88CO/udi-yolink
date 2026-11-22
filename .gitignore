@@ -83,3 +83,4 @@ profile/OLD/udiYoSwitchV2Org.py
 *.zip
 udiCommonLib-AMDMini1.py
 profile_payload_*.json
+*.gz
