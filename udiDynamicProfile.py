@@ -26,6 +26,10 @@ _raw_nodedefs_cache = None
 _raw_editors_cache = None
 _dynamic_editors_cache = {}
 
+# PG3x MQTT dynamic JSON profile packet ceiling is 32 KB (32,768 bytes).
+# Reserve ~4.7 KB headroom for MQTT framing and envelope overhead.
+MAX_SAFE_PROFILE_BYTES = 28000
+
 # Known fallback labels for driver IDs not explicitly declared in primary nodeDef
 DRIVER_FALLBACK_LABELS = {
     'GV21': 'On Sec',
@@ -855,36 +859,209 @@ def apply_profile_driver_names(node, node_id=None):
                     d['uom'] = target_uom
 
 
+def _measure_wire_profile_bytes(payload):
+    """Measure UTF-8 wire size matching udi_interface.Interface._send() MQTT JSON serialization."""
+    envelope = dict(payload) if isinstance(payload, dict) else {}
+    envelope['requestId'] = '00000000-0000-0000-0000-000000000000'
+    return len(json.dumps({'updateprofile': envelope}).encode('utf-8'))
+
+
+def _apply_range_attrs(elem, range_spec):
+    """Update <range> XML element attributes from a unit editor range spec."""
+    changed = False
+    for attr in ('uom', 'min', 'max', 'prec'):
+        if attr in range_spec and range_spec[attr] is not None:
+            val_str = str(range_spec[attr])
+            if elem.get(attr) != val_str:
+                elem.set(attr, val_str)
+                changed = True
+    return changed
+
+
+def sync_static_profile_units(water_unit=None, profile_dir=None):
+    """
+    Sync water-volume editors (FLOW, LEAKLIMIT, RUNNINGVALUE) in static profile/editor/editors.xml
+    to match the configured water_unit before falling back to static updateProfile().
+    Preserves single-UOM per measurement editor. Returns True if editors.xml was modified.
+    """
+    if not isinstance(water_unit, (int, str)) or isinstance(water_unit, bool):
+        return False
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    target_profile_dir = profile_dir or os.path.join(base_dir, 'profile')
+    xml_path = os.path.join(target_profile_dir, 'editor', 'editors.xml')
+    if not os.path.exists(xml_path):
+        return False
+
+    try:
+        water_norm = normalize_water_unit(water_unit)
+        unit_map = _build_dynamic_unit_editors(0, water_norm)
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        changed = False
+
+        for ed in root.findall('editor'):
+            eid = ed.get('id')
+            if eid in ('FLOW', 'LEAKLIMIT'):
+                ranges = ed.findall('range')
+                if ranges and eid in unit_map and unit_map[eid]:
+                    if _apply_range_attrs(ranges[0], unit_map[eid][0]):
+                        changed = True
+            elif eid == 'RUNNINGVALUE':
+                ranges = ed.findall('range')
+                vol_spec = unit_map.get('RUNNINGVALUE', [None, None])[1]
+                if vol_spec is not None:
+                    for r in ranges:
+                        if r.get('uom') != '44':
+                            if _apply_range_attrs(r, vol_spec):
+                                changed = True
+                            break
+
+        if changed:
+            tree.write(xml_path, encoding='utf-8', xml_declaration=True)
+            logging.info(f"Synced static editors.xml water unit ranges to water_norm={water_norm}")
+        return changed
+    except Exception as e:
+        logging.warning(f"Could not sync static editors.xml water units: {e}")
+        return False
+
+
+def split_dynamic_profile_payload(payload, max_bytes=MAX_SAFE_PROFILE_BYTES):
+    """
+    Split a dynamic JSON profile payload into ordered chunks whose wire size stays within
+    max_bytes (under PG3x's 32KB MQTT ceiling).
+    Places optional 'delete' on the first chunk and sends all 'editors' chunks before any
+    'nodedefs' or 'linkdefs' chunks so referenced editors exist before nodeDefs arrive.
+    """
+    if _measure_wire_profile_bytes(payload) <= max_bytes:
+        return [dict(payload)]
+
+    chunks = []
+    pending_delete = payload.get('delete')
+
+    if pending_delete is not None:
+        delete_only = {
+            'delete': pending_delete,
+            'editors': [],
+            'nodedefs': [],
+            'linkdefs': [],
+        }
+        if _measure_wire_profile_bytes(delete_only) > max_bytes:
+            raise ValueError(f"Dynamic profile delete section exceeds max_bytes ({max_bytes})")
+
+    def _make_chunk(section_name=None, items=None, with_delete=False):
+        chunk = {'editors': [], 'nodedefs': [], 'linkdefs': []}
+        if with_delete and pending_delete is not None:
+            chunk['delete'] = pending_delete
+        if section_name is not None and items is not None:
+            chunk[section_name] = list(items)
+        return chunk
+
+    for section in ('editors', 'nodedefs', 'linkdefs'):
+        items = payload.get(section) or []
+        if not items:
+            continue
+
+        batch = []
+        for item in items:
+            attach_delete = (pending_delete is not None)
+            candidate = _make_chunk(section, batch + [item], with_delete=attach_delete)
+            if _measure_wire_profile_bytes(candidate) <= max_bytes:
+                batch.append(item)
+                continue
+
+            if not batch:
+                if attach_delete:
+                    chunks.append(_make_chunk(with_delete=True))
+                    pending_delete = None
+                    single = _make_chunk(section, [item], with_delete=False)
+                    if _measure_wire_profile_bytes(single) <= max_bytes:
+                        batch = [item]
+                        continue
+                item_id = item.get('id', 'unknown')
+                raise ValueError(f"Single {section} item '{item_id}' exceeds max_bytes ({max_bytes})")
+
+            chunks.append(_make_chunk(section, batch, with_delete=attach_delete))
+            if attach_delete:
+                pending_delete = None
+
+            single = _make_chunk(section, [item], with_delete=False)
+            if _measure_wire_profile_bytes(single) > max_bytes:
+                item_id = item.get('id', 'unknown')
+                raise ValueError(f"Single {section} item '{item_id}' exceeds max_bytes ({max_bytes})")
+            batch = [item]
+
+        if batch:
+            attach_delete = (pending_delete is not None)
+            chunks.append(_make_chunk(section, batch, with_delete=attach_delete))
+            if attach_delete:
+                pending_delete = None
+
+    if not chunks:
+        if pending_delete is not None:
+            return [_make_chunk(with_delete=True)]
+        return [_make_chunk()]
+
+    return chunks
+
+
 def update_dynamic_profile(controller, include_variants=False):
     """
     Push dynamic JSON profile to IoX/PG3 via updateJsonProfile once nodes are done initializing.
-    Falls back to static updateProfile if updateJsonProfile is unavailable or fails.
-    Provides detailed debug metrics (size, editor count, nodedef count) and writes
-    payload debug dumps to disk.
-    If the full payload exceeds safe MQTT/PG3 packet limits (60KB), automatically sends
-    or retries with an active-node pruned profile (~20-25KB).
+    Automatically prunes to active nodeDefs when available and splits payloads into ordered
+    chunks under MAX_SAFE_PROFILE_BYTES (for PG3x's 32KB MQTT ceiling).
+    Falls back to static updateProfile (syncing editors.xml water units first) if
+    updateJsonProfile is unavailable, cannot chunk an atomic entry, or fails.
     """
     base_dir = os.path.dirname(os.path.abspath(__file__))
     profile_dir = os.path.join(base_dir, 'profile')
 
+    def _clear_profile_notice():
+        if controller is None:
+            return
+        if hasattr(controller, 'remove_notice'):
+            try:
+                controller.remove_notice("profile")
+                return
+            except Exception:
+                pass
+        poly = getattr(controller, 'poly', None)
+        if poly is not None and hasattr(poly, 'Notices') and 'profile' in poly.Notices:
+            try:
+                poly.Notices.delete('profile')
+            except Exception:
+                pass
+
+    def _fallback_to_static_profile():
+        poly = getattr(controller, 'poly', None) if controller is not None else None
+        water_unit = _resolve_controller_unit(controller, 'water_unit', 'get_water_unit')
+        sync_static_profile_units(water_unit=water_unit, profile_dir=profile_dir)
+        static_updater = getattr(poly, 'updateProfile', None) if poly is not None else None
+        if os.path.isdir(profile_dir) and callable(static_updater):
+            try:
+                static_updater()
+                logging.info("Static profile updated successfully via updateProfile fallback")
+                return True
+            except Exception as e:
+                logging.error(f"updateProfile fallback failed: {e}")
+                return False
+        return False
+
     updater = getattr(controller.poly, "updateJsonProfile", None) if controller and hasattr(controller, 'poly') else None
     if not callable(updater):
         logging.info("updateJsonProfile is not available; falling back to static updateProfile")
-        if os.path.isdir(profile_dir) and hasattr(controller.poly, "updateProfile"):
-            try:
-                controller.poly.updateProfile()
-                logging.info("Static profile updated successfully via updateProfile fallback")
-            except Exception as e:
-                logging.error(f"updateProfile fallback failed: {e}")
+        _fallback_to_static_profile()
+        _clear_profile_notice()
         return
 
     # 1. Generate full dynamic JSON profile payload
     payload = get_dynamic_profile_payload(controller=controller, include_variants=include_variants)
     payload_json = json.dumps(payload, separators=(',', ':'))
     payload_bytes = len(payload_json.encode('utf-8'))
+    payload_wire_bytes = _measure_wire_profile_bytes(payload)
 
     logging.info(
-        f"Dynamic JSON profile payload generated: {payload_bytes} bytes "
+        f"Dynamic JSON profile payload generated: {payload_bytes} bytes compact / {payload_wire_bytes} wire bytes "
         f"({len(payload.get('nodedefs', []))} nodedefs, "
         f"{len(payload.get('editors', []))} editors, "
         f"{len(payload.get('linkdefs', []))} linkdefs)"
@@ -899,8 +1076,7 @@ def update_dynamic_profile(controller, include_variants=False):
     except Exception as err:
         logging.debug(f"Could not write {debug_file}: {err}")
 
-    # 2. Check payload size vs MQTT/PG3 threshold (~60KB)
-    MAX_SAFE_PROFILE_BYTES = 60000
+    # 2. Generate active-node pruned profile when available
     active_ids = get_active_nodedef_ids(controller)
     pruned_payload = None
 
@@ -908,8 +1084,9 @@ def update_dynamic_profile(controller, include_variants=False):
         pruned_payload = get_dynamic_profile_payload(controller=controller, active_only=True)
         pruned_json = json.dumps(pruned_payload, separators=(',', ':'))
         pruned_bytes = len(pruned_json.encode('utf-8'))
+        pruned_wire_bytes = _measure_wire_profile_bytes(pruned_payload)
         logging.info(
-            f"Active-node pruned profile generated: {pruned_bytes} bytes "
+            f"Active-node pruned profile generated: {pruned_bytes} bytes compact / {pruned_wire_bytes} wire bytes "
             f"({len(pruned_payload.get('nodedefs', []))} nodedefs, "
             f"{len(pruned_payload.get('editors', []))} editors)"
         )
@@ -921,86 +1098,57 @@ def update_dynamic_profile(controller, include_variants=False):
         except Exception:
             pass
 
-    # If active-node profile was generated and still exceeds safe size, fall back directly to static updateProfile
-    if pruned_payload is not None and pruned_bytes > MAX_SAFE_PROFILE_BYTES:
-        logging.warning(
-            f"Active-node pruned profile ({pruned_bytes} bytes) exceeds safe PG3 threshold ({MAX_SAFE_PROFILE_BYTES} bytes); "
-            "skipping updateJsonProfile and falling back directly to static updateProfile to avoid MQTT packet rejection"
-        )
-        if hasattr(controller, 'poly') and hasattr(controller.poly, 'updateProfile'):
-            try:
-                controller.poly.updateProfile()
-                logging.info("Static profile updated successfully via updateProfile fallback")
-                return True
-            except Exception as e:
-                logging.error(f"updateProfile fallback failed: {e}")
-                return False
-        return False
+    target_payload = pruned_payload if pruned_payload is not None else payload
 
-    # Select target payload: if full payload > 60KB and pruned is available, send pruned payload
-    if payload_bytes > MAX_SAFE_PROFILE_BYTES and pruned_payload is not None:
-        logging.info(
-            f"Full dynamic profile ({payload_bytes} bytes) exceeds safe size threshold ({MAX_SAFE_PROFILE_BYTES} bytes); "
-            f"using active-node profile ({len(pruned_json.encode('utf-8'))} bytes)"
-        )
-        target_payload = pruned_payload
-    else:
-        target_payload = payload
-
-    target_bytes = len(json.dumps(target_payload, separators=(',', ':')).encode('utf-8'))
-    json_ok = False
-
+    # 3. Split payload into chunks under PG3x's 32KB MQTT ceiling
     try:
-        logging.info(f"Sending dynamic JSON profile to PG3 via updateJsonProfile ({target_bytes} bytes)...")
-        updater(target_payload, {"waitResponse": True})
-        logging.info("Dynamic JSON profile updated successfully via updateJsonProfile")
-        json_ok = True
-    except TypeError:
-        try:
-            updater(target_payload)
-            logging.info("Dynamic JSON profile updated successfully via updateJsonProfile")
-            json_ok = True
-        except Exception as e:
-            logging.warning(f"updateJsonProfile failed: {e}; size was {target_bytes} bytes")
-    except Exception as e:
-        logging.warning(f"updateJsonProfile failed: {e}; size was {target_bytes} bytes")
+        chunks = split_dynamic_profile_payload(target_payload, max_bytes=MAX_SAFE_PROFILE_BYTES)
+    except ValueError as e:
+        logging.warning(
+            f"Dynamic profile could not be split under {MAX_SAFE_PROFILE_BYTES} wire bytes ({e}); "
+            "skipping updateJsonProfile and falling back directly to static updateProfile"
+        )
+        ok = _fallback_to_static_profile()
+        _clear_profile_notice()
+        return ok
 
-    # If first attempt failed and we haven't tried the pruned payload yet, retry with pruned payload
-    if not json_ok and target_payload is not pruned_payload and pruned_payload is not None:
-        retry_bytes = len(json.dumps(pruned_payload, separators=(',', ':')).encode('utf-8'))
-        logging.info(f"Retrying updateJsonProfile with active-node pruned payload ({retry_bytes} bytes)...")
+    # 4. Send chunks sequentially via updateJsonProfile
+    json_ok = True
+    total_chunks = len(chunks)
+    for idx, chunk in enumerate(chunks, start=1):
+        chunk_wire_bytes = _measure_wire_profile_bytes(chunk)
+        logging.info(
+            f"Sending dynamic JSON profile chunk {idx}/{total_chunks} to PG3 via updateJsonProfile "
+            f"({chunk_wire_bytes} wire bytes, {len(chunk.get('editors', []))} editors, "
+            f"{len(chunk.get('nodedefs', []))} nodedefs)..."
+        )
         try:
-            updater(pruned_payload, {"waitResponse": True})
-            logging.info("Dynamic JSON profile updated successfully with active-node pruned profile")
-            json_ok = True
+            updater(dict(chunk), {"waitResponse": True})
         except TypeError:
             try:
-                updater(pruned_payload)
-                logging.info("Dynamic JSON profile updated successfully with active-node pruned profile")
-                json_ok = True
+                updater(dict(chunk))
             except Exception as e:
-                logging.warning(f"updateJsonProfile (pruned retry) failed: {e}; size was {retry_bytes} bytes")
+                logging.warning(
+                    f"updateJsonProfile failed on chunk {idx}/{total_chunks}: {e}; "
+                    f"size was {chunk_wire_bytes} wire bytes"
+                )
+                json_ok = False
+                break
         except Exception as e:
-            logging.warning(f"updateJsonProfile (pruned retry) failed: {e}; size was {retry_bytes} bytes")
+            logging.warning(
+                f"updateJsonProfile failed on chunk {idx}/{total_chunks}: {e}; "
+                f"size was {chunk_wire_bytes} wire bytes"
+            )
+            json_ok = False
+            break
 
-    # Fallback to static profile if dynamic update failed
-    if not json_ok:
+    if json_ok:
+        logging.info(f"Dynamic JSON profile updated successfully via updateJsonProfile ({total_chunks} chunk(s))")
+    else:
         logging.warning(
-            f"Dynamic JSON profile was rejected by PG3 (payload size: {target_bytes} bytes); "
-            f"falling back to static updateProfile"
+            f"Dynamic JSON profile update failed (chunked into {total_chunks} chunk(s)); "
+            "falling back to static updateProfile"
         )
-        if os.path.isdir(profile_dir) and hasattr(controller.poly, "updateProfile"):
-            try:
-                controller.poly.updateProfile()
-                logging.info("Static profile updated successfully via updateProfile fallback")
-            except Exception as e:
-                logging.error(f"updateProfile fallback failed: {e}")
+        _fallback_to_static_profile()
 
-    # Clear profile notice
-    if hasattr(controller, 'remove_notice'):
-        controller.remove_notice("profile")
-    elif hasattr(controller.poly, 'Notices') and 'profile' in controller.poly.Notices:
-        try:
-            controller.poly.Notices.delete('profile')
-        except Exception:
-            pass
+    _clear_profile_notice()

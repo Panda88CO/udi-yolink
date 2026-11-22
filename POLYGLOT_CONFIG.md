@@ -1,4 +1,4 @@
-# udi-yolink (v1.8.85)
+# udi-yolink (v1.8.86)
 Support for YoLink devices in Universal Devices Polyglot (PG3 / PG3x).
 
 ## Supported YoLink Devices
@@ -20,7 +20,7 @@ The node server supports monitoring and controlling the following YoLink device 
 ## Code & Architecture
 
 - Uses V2 of the YoLink OpenAPI with PAC/UAC (User Access Credentials) authentication. Each node server instance supports 1 home.
-- Uses dynamic JSON profile generation (`updateJsonProfile`) with automatic active-node payload pruning (<60 KB) and fallback to static profile updates.
+- Uses dynamic JSON profile generation (`updateJsonProfile`) with automatic active-node payload pruning and chunking under PG3x's 32 KB limit, with fallback to static profile updates.
 - Coded in Python 3 with standard MIT license.
 
 ## Installation & Configuration

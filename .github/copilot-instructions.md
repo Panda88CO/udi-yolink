@@ -9,7 +9,7 @@ Key files to read first
 - `yoLink_init_V4.py` - YoLinkInitPAC: core auth, MQTT client, queues, token refresh, cloud vs local modes.
 - `yolink_mqtt_classV4.py` - per-device MQTT message handling, helper methods and device API request patterns.
 - `udiYolinkLib.py` - common helpers used by nodes (driver helpers, persistence, time and unit conversions).
-- `udiDynamicProfile.py` - dynamic JSON profile generator (`updateJsonProfile`), payload pruning (<60KB MQTT safety threshold), and debug dumps.
+- `udiDynamicProfile.py` - dynamic JSON profile generator (`updateJsonProfile`), payload pruning and chunking under PG3x's 32KB MQTT limit, and debug dumps.
 - `dynamic_profile_data.py` - base profile metadata, node definitions, editors, and NLS mappings used by dynamic profile generation.
 - `udiYo*.py` - per-device node implementations (many files, one per supported device).
 - `run_tests.py` - test suite runner (`python3 -m unittest discover` or `python3 run_tests.py`, 160 tests).
@@ -21,7 +21,7 @@ Big-picture architecture (short)
 - Device-specific wrappers (instances of classes from `yolink_mqtt_classV4.py` and `udiYo*.py`) subscribe via yoAccess to device MQTT topics and expose Polyglot nodes/drivers.
 - The main Polyglot node server (`udi-YoLink.py`) creates device nodes by iterating the list returned from YoLink API and choosing the appropriate `udiYo*` class by `type` and sometimes by `modelName`.
 - Thread synchronization: `_start_lock` and `_start_executed` prevent duplicate concurrent executions of `start()` when Polyglot emits multiple startup events across worker threads.
-- Dynamic JSON profile: on startup, `udiDynamicProfile.py` compiles an active profile containing only installed device nodes, pruning uninstalled definitions to stay under 60KB for safe MQTT delivery via `updateJsonProfile`.
+- Dynamic JSON profile: on startup, `udiDynamicProfile.py` compiles an active profile containing only installed device nodes, pruning uninstalled definitions and chunking payloads under PG3x's 32KB limit for safe MQTT delivery via `updateJsonProfile`.
 
 Important dataflows and message formats
 - Authentication: YoLinkInitPAC.refresh_token() talks to TOKEN_URL (default `https://api.yosmart.com/open/yolink/token`) and stores a token with `expirationTime`.

@@ -400,11 +400,17 @@ class TestDeferredProfileLoading(unittest.TestCase):
 
         udiDynamicProfile.update_dynamic_profile(controller)
 
-        controller.poly.updateJsonProfile.assert_called_once()
-        args, kwargs = controller.poly.updateJsonProfile.call_args
-        self.assertIsInstance(args[0], dict)
-        self.assertIn('nodedefs', args[0])
-        self.assertEqual(args[1], {"waitResponse": True})
+        self.assertGreaterEqual(controller.poly.updateJsonProfile.call_count, 1)
+        for c in controller.poly.updateJsonProfile.call_args_list:
+            args, _kwargs = c
+            self.assertIsInstance(args[0], dict)
+            self.assertIn('nodedefs', args[0])
+            self.assertIn('editors', args[0])
+            self.assertLessEqual(
+                udiDynamicProfile._measure_wire_profile_bytes(args[0]),
+                udiDynamicProfile.MAX_SAFE_PROFILE_BYTES,
+            )
+            self.assertEqual(args[1], {"waitResponse": True})
         # Static profile upload should NOT be called when dynamic JSON update succeeds
         controller.poly.updateProfile.assert_not_called()
 
@@ -419,7 +425,7 @@ class TestDeferredProfileLoading(unittest.TestCase):
         controller.poly.updateProfile.assert_called_once()
 
     def test_update_dynamic_profile_fallback_when_pruned_exceeds_safe_limit(self):
-        """When active-node pruned profile exceeds MAX_SAFE_PROFILE_BYTES, fall back directly to updateProfile."""
+        """When an atomic entry exceeds MAX_SAFE_PROFILE_BYTES (28KB / 32KB ceiling), fall back directly to updateProfile."""
         controller = MagicMock()
         controller.poly = MagicMock()
         controller.poly.updateJsonProfile = MagicMock()
@@ -427,7 +433,7 @@ class TestDeferredProfileLoading(unittest.TestCase):
 
         with patch.object(udiDynamicProfile, 'get_active_nodedef_ids', return_value={'SETUP', 'YOTHSENS'}), \
              patch.object(udiDynamicProfile, 'get_dynamic_profile_payload') as mock_payload:
-            # Return a payload that serializes to > 60KB
+            # Return a payload with an oversized single editor > 28KB
             mock_payload.return_value = {'nodedefs': [{'id': 'BIG'}], 'editors': [{'id': 'ED', 'desc': 'x' * 65000}]}
             udiDynamicProfile.update_dynamic_profile(controller)
 
@@ -525,7 +531,7 @@ class TestDeferredProfileLoading(unittest.TestCase):
         self.assertNotIn('YOWATERMETERSUB', ids_fg)
 
     def test_large_hybrid_installation_pruned_profile_under_60kb_with_liters(self):
-        """28-nodeDef hybrid installation stays well under 60KB and sends Liter FLOW editor."""
+        """28-nodeDef hybrid installation chunks cleanly under 28KB wire bytes and sends Liter FLOW editor."""
         user_nodedefs = [
             'SETUP', 'SMREMOTEKEYDUAL', 'YODIMMER', 'YODOORSENS', 'YOGARAGE', 'YOHUB',
             'YOHUBBAT', 'YOLOCKV2', 'YOMANIPU', 'YOMOTIONSENS', 'YOMSCHEDULE', 'YOMULTIOUT',
@@ -566,23 +572,47 @@ class TestDeferredProfileLoading(unittest.TestCase):
 
         udiDynamicProfile.update_dynamic_profile(controller)
 
-        controller.poly.updateJsonProfile.assert_called_once()
+        self.assertEqual(controller.poly.updateJsonProfile.call_count, 3)
         controller.poly.updateProfile.assert_not_called()
 
-        sent_payload = controller.poly.updateJsonProfile.call_args[0][0]
-        editors_by_id = {e['id']: e for e in sent_payload['editors']}
+        sent_chunks = [c[0][0] for c in controller.poly.updateJsonProfile.call_args_list]
+        for ch in sent_chunks:
+            wire_bytes = udiDynamicProfile._measure_wire_profile_bytes(ch)
+            self.assertLessEqual(wire_bytes, udiDynamicProfile.MAX_SAFE_PROFILE_BYTES)
+            self.assertLess(wire_bytes, 32768)
+
+        # Editors must all arrive before any nodeDef is sent
+        seen_nodedef = False
+        all_editors = []
+        all_nodedefs = []
+        for ch in sent_chunks:
+            if ch.get('editors'):
+                self.assertFalse(seen_nodedef, "Editors arrived after nodeDefs")
+                all_editors.extend(ch['editors'])
+            if ch.get('nodedefs'):
+                seen_nodedef = True
+                all_nodedefs.extend(ch['nodedefs'])
+
+        editors_by_id = {e['id']: e for e in sent_chunks[0]['editors']}
         self.assertIn('FLOW', editors_by_id)
         self.assertEqual(editors_by_id['FLOW']['ranges'], [
             {'uom': '35', 'min': 0, 'max': 10000000, 'prec': 1}
         ])
         self.assertGreaterEqual(editors_by_id['FLOW']['ranges'][0]['max'], 390264.7)
-        nodedefs_by_id = {nd['id']: nd for nd in sent_payload['nodedefs']}
+        self.assertEqual(editors_by_id['LEAKLIMIT']['ranges'], [
+            {'uom': '35', 'min': 0, 'max': 400, 'prec': 0}
+        ])
+
+        self.assertEqual({e['id'] for e in all_editors}, {e['id'] for e in pruned['editors']})
+        self.assertEqual({nd['id'] for nd in all_nodedefs}, set(user_nodedefs))
+
+        nodedefs_by_id = {nd['id']: nd for nd in all_nodedefs}
         self.assertIn('YOWATERMETERCTRL', nodedefs_by_id)
         wm_props = {p['id']: p['editor'] for p in nodedefs_by_id['YOWATERMETERCTRL']['properties']}
         self.assertEqual(wm_props['GV1'], 'FLOW')
 
     def test_active_only_payload_reduces_size(self):
-        """Active-only dynamic profile payload must be well below 60KB and retain required editors."""
+        """Active-only dynamic profile payload for small installs fits within one 28KB wire chunk."""
         controller = MagicMock()
         node_setup = MagicMock()
         node_setup.id = 'SETUP'
@@ -601,16 +631,16 @@ class TestDeferredProfileLoading(unittest.TestCase):
         controller.temp_unit = 1
         controller.water_unit = 0
 
-        # Full payload
+        # Full payload exceeds a single safe chunk
         full_payload = udiDynamicProfile.get_dynamic_profile_payload(controller=controller, active_only=False)
-        full_bytes = len(json.dumps(full_payload).encode('utf-8'))
-        self.assertGreater(full_bytes, 60000)
+        full_wire_bytes = udiDynamicProfile._measure_wire_profile_bytes(full_payload)
+        self.assertGreater(full_wire_bytes, udiDynamicProfile.MAX_SAFE_PROFILE_BYTES)
 
-        # Active-only pruned payload
+        # Active-only pruned payload fits in one chunk
         pruned_payload = udiDynamicProfile.get_dynamic_profile_payload(controller=controller, active_only=True)
-        pruned_bytes = len(json.dumps(pruned_payload).encode('utf-8'))
-        self.assertLess(pruned_bytes, 60000)
-        self.assertLess(pruned_bytes, full_bytes)
+        pruned_wire_bytes = udiDynamicProfile._measure_wire_profile_bytes(pruned_payload)
+        self.assertLessEqual(pruned_wire_bytes, udiDynamicProfile.MAX_SAFE_PROFILE_BYTES)
+        self.assertLess(pruned_wire_bytes, full_wire_bytes)
 
         # NodeDefs in pruned payload must include active nodes
         pruned_nids = {nd['id'] for nd in pruned_payload['nodedefs']}
@@ -624,6 +654,112 @@ class TestDeferredProfileLoading(unittest.TestCase):
             for prop in nd.get('properties', []):
                 if prop.get('editor'):
                     self.assertIn(prop['editor'], pruned_eids)
+
+    def test_split_dynamic_profile_payload_small_single_chunk(self):
+        """Payloads already within MAX_SAFE_PROFILE_BYTES remain a single chunk."""
+        payload = {
+            'editors': [{'id': 'STATUS', 'ranges': [{'uom': '25', 'subset': '0,1'}]}],
+            'nodedefs': [{'id': 'SETUP', 'name': 'Setup', 'icon': 'GenericCtl', 'properties': [], 'cmds': {'sends': [], 'accepts': []}}],
+            'linkdefs': [],
+        }
+        chunks = udiDynamicProfile.split_dynamic_profile_payload(payload)
+        self.assertEqual(len(chunks), 1)
+        self.assertEqual(chunks[0]['editors'][0]['id'], 'STATUS')
+        self.assertEqual(chunks[0]['nodedefs'][0]['id'], 'SETUP')
+
+    def test_split_dynamic_profile_payload_preserves_delete_on_first_chunk_only(self):
+        """When multi-chunk split occurs, optional 'delete' section is sent only on chunk 1."""
+        full_payload = udiDynamicProfile.get_dynamic_profile_payload(
+            temp_unit=0,
+            water_unit=3,
+            include_variants=False,
+            delete={'nodedefs': ['OLDNODE']},
+        )
+        chunks = udiDynamicProfile.split_dynamic_profile_payload(full_payload)
+        self.assertGreater(len(chunks), 1)
+        self.assertEqual(chunks[0].get('delete'), {'nodedefs': ['OLDNODE']})
+        for idx, ch in enumerate(chunks):
+            self.assertLessEqual(
+                udiDynamicProfile._measure_wire_profile_bytes(ch),
+                udiDynamicProfile.MAX_SAFE_PROFILE_BYTES,
+            )
+            if idx > 0:
+                self.assertNotIn('delete', ch)
+
+    def test_update_dynamic_profile_mid_chunk_failure_falls_back_to_static(self):
+        """If chunk 2 fails during updateJsonProfile, abort remaining chunks and fall back cleanly."""
+        controller = MagicMock()
+        controller.temp_unit = 0
+        controller.water_unit = 3
+        controller.poly = MagicMock()
+        controller.poly.updateProfile = MagicMock()
+
+        call_counter = {'count': 0}
+        def fail_on_second(payload, options=None):
+            call_counter['count'] += 1
+            if call_counter['count'] == 2:
+                raise RuntimeError("MQTT timeout on chunk 2")
+
+        controller.poly.updateJsonProfile.side_effect = fail_on_second
+
+        with patch.object(udiDynamicProfile, 'get_active_nodedef_ids', return_value=None), \
+             patch.object(udiDynamicProfile, 'sync_static_profile_units', return_value=True) as mock_sync:
+            udiDynamicProfile.update_dynamic_profile(controller)
+
+        self.assertEqual(controller.poly.updateJsonProfile.call_count, 2)
+        mock_sync.assert_called_once()
+        controller.poly.updateProfile.assert_called_once()
+
+    def test_sync_static_profile_units_updates_water_editors_in_temp_dir(self):
+        """sync_static_profile_units updates FLOW, LEAKLIMIT, RUNNINGVALUE while keeping single-UOM invariant."""
+        import tempfile
+        import shutil
+
+        src_ed = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'profile', 'editor', 'editors.xml')
+        with tempfile.TemporaryDirectory() as tmpdir:
+            ed_dir = os.path.join(tmpdir, 'editor')
+            os.makedirs(ed_dir, exist_ok=True)
+            dst_ed = os.path.join(ed_dir, 'editors.xml')
+            shutil.copy2(src_ed, dst_ed)
+
+            # Liter (3) -> UOM 35
+            self.assertTrue(udiDynamicProfile.sync_static_profile_units(water_unit=3, profile_dir=tmpdir))
+            # Idempotent second call
+            self.assertFalse(udiDynamicProfile.sync_static_profile_units(water_unit='L', profile_dir=tmpdir))
+
+            tree = ET.parse(dst_ed)
+            editors = {e.get('id'): e.findall('range') for e in tree.getroot().findall('editor')}
+            self.assertEqual(len(editors['FLOW']), 1)
+            self.assertEqual(editors['FLOW'][0].attrib['uom'], '35')
+            self.assertEqual(editors['FLOW'][0].attrib['max'], '10000000')
+            self.assertEqual(editors['FLOW'][0].attrib['prec'], '1')
+
+            self.assertEqual(len(editors['LEAKLIMIT']), 1)
+            self.assertEqual(editors['LEAKLIMIT'][0].attrib['uom'], '35')
+            self.assertEqual(editors['LEAKLIMIT'][0].attrib['max'], '400')
+            self.assertEqual(editors['LEAKLIMIT'][0].attrib['prec'], '0')
+
+            self.assertEqual([r.attrib['uom'] for r in editors['RUNNINGVALUE']], ['44', '35'])
+            self.assertEqual(editors['RUNNINGVALUE'][1].attrib['max'], '2000')
+
+            # CCF (1) and m3 (2) and Gallon (0)
+            self.assertTrue(udiDynamicProfile.sync_static_profile_units(water_unit=1, profile_dir=tmpdir))
+            tree = ET.parse(dst_ed)
+            flow_r = tree.getroot().find("./editor[@id='FLOW']/range")
+            self.assertEqual(flow_r.attrib['uom'], '6')
+            self.assertEqual(flow_r.attrib['max'], '1000000')
+
+            self.assertTrue(udiDynamicProfile.sync_static_profile_units(water_unit=2, profile_dir=tmpdir))
+            tree = ET.parse(dst_ed)
+            flow_r = tree.getroot().find("./editor[@id='FLOW']/range")
+            self.assertEqual(flow_r.attrib['uom'], '8')
+            self.assertEqual(flow_r.attrib['prec'], '2')
+
+            self.assertTrue(udiDynamicProfile.sync_static_profile_units(water_unit=0, profile_dir=tmpdir))
+            tree = ET.parse(dst_ed)
+            flow_r = tree.getroot().find("./editor[@id='FLOW']/range")
+            self.assertEqual(flow_r.attrib['uom'], '69')
+            self.assertEqual(flow_r.attrib['max'], '10000000')
 
     def test_update_dynamic_profile_writes_debug_dump_files(self):
         """update_dynamic_profile must write debug json file and log size metrics."""
@@ -832,7 +968,7 @@ class TestProfileSchemaAndValidation(unittest.TestCase):
         self.assertEqual(missing_keys, [], f"Missing NLS keys in en_us.txt: {missing_keys}")
 
     def test_dynamic_profile_compact_size(self):
-        """Dynamic profile pruned payload with typical devices should stay comfortably under 60KB."""
+        """Dynamic profile pruned payload chunks with typical devices must stay strictly under 32KB."""
         class MockController:
             temp_unit = 1
             water_unit = 0
@@ -843,9 +979,12 @@ class TestProfileSchemaAndValidation(unittest.TestCase):
             ]
         c = MockController()
         pruned = udiDynamicProfile.get_dynamic_profile_payload(controller=c, active_only=True)
-        compact_json = json.dumps(pruned, separators=(',', ':'))
-        byte_len = len(compact_json.encode('utf-8'))
-        self.assertLess(byte_len, 60000, f"Pruned dynamic profile size {byte_len} exceeds 60KB limit")
+        chunks = udiDynamicProfile.split_dynamic_profile_payload(pruned)
+        self.assertGreaterEqual(len(chunks), 1)
+        for ch in chunks:
+            wire_bytes = udiDynamicProfile._measure_wire_profile_bytes(ch)
+            self.assertLessEqual(wire_bytes, udiDynamicProfile.MAX_SAFE_PROFILE_BYTES)
+            self.assertLess(wire_bytes, 32768, f"Dynamic profile chunk {wire_bytes} exceeds 32KB limit")
 
 
 if __name__ == '__main__':
