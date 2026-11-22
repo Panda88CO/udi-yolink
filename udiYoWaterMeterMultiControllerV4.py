@@ -79,6 +79,8 @@ class udiYoWaterMeterMulti(udi_interface.Node):
         self.system_ready=False
         self._update_lock = threading.Lock()
         self.last_state = ''
+        self.meter_unit = None
+        self.ISYwater_unit = None
         self.ISYmeter_uom= None
         known_meters = ['']
         self.onDelay = 0
@@ -377,6 +379,8 @@ class udiYoSubWaterMeter(udi_interface.Node):
         self.system_ready=False
         self.last_state = ''
         self._last_reported_state = None
+        self.meter_unit = None
+        self.ISYwater_unit = None
         self.ISYmeter_uom= None
         self.meter_correction_factor = 1.0
         self.valveState = 99 # needed as class c device - keep value until online again 

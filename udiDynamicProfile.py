@@ -333,28 +333,28 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
     # Water volume editors: 0 = Gallon (69), 1 = CCF (6), 2 = m^3 (8), 3 = Liter (35)
     if water_norm == 3:  # Liter
         w_uom = '35'
-        w_max = 100000
+        w_max = 10000000
         w_prec = 1
         leak_max = 400
         leak_prec = 0
         run_max = 2000
     elif water_norm == 1:  # CCF
         w_uom = '6'
-        w_max = 10000
+        w_max = 1000000
         w_prec = 1
         leak_max = 100
         leak_prec = 0
         run_max = 600
     elif water_norm == 2:  # m3
         w_uom = '8'
-        w_max = 10000
+        w_max = 1000000
         w_prec = 2
         leak_max = 10
         leak_prec = 1
         run_max = 60
     else:  # Gallon (0)
         w_uom = '69'
-        w_max = 10000
+        w_max = 10000000
         w_prec = 1
         leak_max = 100
         leak_prec = 0
@@ -388,18 +388,50 @@ def _build_dynamic_unit_editors(temp_norm, water_norm):
     return unit_editors
 
 
+def _resolve_controller_unit(controller, attr_name, getter_name):
+    """Resolve temperature or water unit from controller attribute or yoAccess/yoLocal."""
+    if controller is None:
+        return None
+    val = getattr(controller, attr_name, None)
+    if val is not None:
+        return val
+    for access_attr in ('yoAccess', 'yoLocal'):
+        access = getattr(controller, access_attr, None)
+        getter = getattr(access, getter_name, None) if access is not None else None
+        if callable(getter):
+            try:
+                val = getter()
+                if val is not None:
+                    return val
+            except Exception:
+                pass
+    return None
+
+
+def _extract_node_id(node):
+    """Extract normalized nodeDef ID from an instantiated node object or dict."""
+    if isinstance(node, dict):
+        nid = node.get('nodeDefId') or node.get('id')
+    else:
+        nid = getattr(node, 'id', None)
+    if isinstance(nid, str) and nid.strip():
+        return nid.strip().upper()
+    return None
+
+
 def get_active_nodedef_ids(controller=None):
     """
     Extract the set of active nodeDef IDs for nodes instantiated or managed by controller.
-    Always includes 'SETUP'. Expands with known variant IDs and family members.
+    Always includes 'SETUP'.
+    Prefers exact instantiated node IDs (Tier 1) or DB node IDs (Tier 2) without
+    expanding unused variants. Falls back to unit-aware deviceList mapping (Tier 3).
     Returns None if controller is None or has no identifiable active nodes beyond 'SETUP'.
     """
     if controller is None:
         return None
 
-    active_ids = {'SETUP'}
-
-    # 1. Inspect live nodes in polyglot
+    # Tier 1: Exact IDs from instantiated live nodes
+    live_ids = {'SETUP'}
     poly = getattr(controller, 'poly', None)
     if poly is not None:
         get_nodes = getattr(poly, 'getNodes', None)
@@ -413,93 +445,86 @@ def get_active_nodedef_ids(controller=None):
                 else:
                     nodes_iterable = []
                 for node in nodes_iterable:
-                    nid = getattr(node, 'id', None)
+                    nid = _extract_node_id(node)
                     if nid:
-                        active_ids.add(str(nid).upper())
+                        live_ids.add(nid)
             except Exception as e:
                 logging.debug(f"Could not inspect poly.getNodes(): {e}")
 
-    # 2. Inspect controller.yolink_nodes if present
     yolink_nodes = getattr(controller, 'yolink_nodes', None)
     if isinstance(yolink_nodes, dict):
         for node in yolink_nodes.values():
-            nid = getattr(node, 'id', None)
+            nid = _extract_node_id(node)
             if nid:
-                active_ids.add(str(nid).upper())
+                live_ids.add(nid)
 
-    # 3. Inspect controller.nodes_in_db if present
+    if len(live_ids) > 1:
+        return live_ids
+
+    # Tier 2: Exact IDs from persisted DB nodes
+    db_ids = {'SETUP'}
     nodes_in_db = getattr(controller, 'nodes_in_db', None)
     if isinstance(nodes_in_db, (list, tuple)):
         for entry in nodes_in_db:
-            if isinstance(entry, dict) and 'nodeDefId' in entry:
-                active_ids.add(str(entry['nodeDefId']).upper())
+            if isinstance(entry, dict):
+                nid = entry.get('nodeDefId')
+                if isinstance(nid, str) and nid.strip():
+                    db_ids.add(nid.strip().upper())
 
-    # 4. Inspect controller.deviceList if present
+    if len(db_ids) > 1:
+        return db_ids
+
+    # Tier 3: Unit-aware mapping from discovered deviceList
     device_list = getattr(controller, 'deviceList', None)
     if isinstance(device_list, (list, tuple)):
+        temp_norm = normalize_temp_unit(_resolve_controller_unit(controller, 'temp_unit', 'get_temp_unit'))
+        water_norm = normalize_water_unit(_resolve_controller_unit(controller, 'water_unit', 'get_water_unit'))
+        f_suffix = 'F' if temp_norm == 1 else ''
+        sub_wm_id = 'YOWATERMETERSUBG' if water_norm == 0 else 'YOWATERMETERSUB'
         type_to_nodedef = {
-            'THSensor': ['YOTHSENS', 'YOTHSENSF'],
-            'MotionSensor': ['YOMOTIONSENS', 'YOMOTIONSENSF'],
-            'LeakSensor': ['YOLEAKSENS', 'YOLEAKSENSF'],
-            'COSmokeSensor': ['YOCOSMOKESENS', 'YOCOSMOKESENSF'],
-            'VibrationSensor': ['YOVIBRASENS', 'YOVIBRASENSF'],
+            'THSensor': [f'YOTHSENS{f_suffix}', f'YOTSENS{f_suffix}'],
+            'MotionSensor': [f'YOMOTIONSENS{f_suffix}'],
+            'LeakSensor': [f'YOLEAKSENS{f_suffix}'],
+            'COSmokeSensor': [f'YOCOSMOKESENS{f_suffix}'],
+            'VibrationSensor': [f'YOVIBRASENS{f_suffix}'],
             'DoorSensor': ['YODOORSENS'],
-            'Switch': ['YOSWITCH', 'YOSWITCHPWR', 'YOSWITCHBAT'],
-            'Outlet': ['YOOUTLET', 'YOOUTLETPWR'],
-            'MultiOutlet': ['YOMULTIOUT', 'YOSUBOUT', 'YOSUBUSB'],
-            'Dimmer': ['YODIMMER'],
-            'SmartRemoter': ['YOSMREMOTE', 'SMREMOTEKEY', 'SMREMOTEKEYDUAL', 'SMREMOTEKEYSINGLE'],
-            'InfraredRemoter': ['YOIRREMOTE', 'YOIRCODE'],
+            'Switch': ['YOSWITCH', 'YOSWITCHPWR', 'YOSWITCHBAT', 'YOSCHEDULE'],
+            'Outlet': ['YOOUTLET', 'YOOUTLETPWR', 'YOSCHEDULE'],
+            'MultiOutlet': ['YOMULTIOUT', 'YOSUBOUT', 'YOSUBUSB', 'YOMSCHEDULE'],
+            'Dimmer': ['YODIMMER', 'YOSCHEDULE'],
+            'SmartRemoter': [f'YOSMREMOTE{f_suffix}', 'SMREMOTEKEY', 'SMREMOTEKEYDUAL', 'SMREMOTEKEYSINGLE'],
+            'InfraredRemoter': ['YOIRREMOTE', 'YOIRCODE', 'YOIRSCHEDULE'],
             'Hub': ['YOHUB', 'YOHUBBAT'],
             'SpeakerHub': ['YOSPEAKERH'],
-            'Lock': ['YOLOCK', 'YOLOCKV2'],
-            'Manipulator': ['YOMANIPU'],
+            'Lock': ['YOLOCK'],
+            'LockV2': ['YOLOCKV2'],
+            'Manipulator': ['YOMANIPU', 'YOSCHEDULE'],
             'GarageDoor': ['YOGARAGE'],
             'Finger': ['YOFINGER', 'YOGARAGE'],
             'GarageFinger': ['YOFINGER', 'YOGARAGE'],
             'PowerFailureAlarm': ['YOPWRALARM'],
             'Siren': ['YOSIREN'],
-            'Sprinkler': ['YOSPRINKLER'],
-            'Sprinkler2': ['YOSPRINKLERV2'],
-            'Thermostat': ['YOTHERMOSTAT', 'YOTHERMPROP', 'YOTHERMOSTATF', 'YOTHERMPROPF'],
-            'SoilThcSensor': ['YOSOILSENSOR', 'YOSOILSENSORF'],
-            'WaterMeterController': ['YOWATERMETERCTRL', 'YOWATERMETERCTRLF'],
-            'WaterMeterMultiController': ['YOWATERMETERMULTI', 'YOWATERMETERMULTIF', 'YOWATERMETERSUB', 'YOWATERMETERSUBG', 'YOWATERMETERSUBL'],
-            'WaterMeterOnly': ['YOWATERMETERONLY', 'YOWATERMETERONLYF'],
+            'Sprinkler': ['YOSPRINKLER', 'YOSPRINKLERSCHEDULE'],
+            'Sprinkler2': ['YOSPRINKLERV2', 'YOSPRINKLERSCHEDULE'],
+            'SprinklerV2': ['YOSPRINKLERV2', 'YOSPRINKLERSCHEDULE'],
+            'Thermostat': [f'YOTHERMOSTAT{f_suffix}', f'YOTHERMPROP{f_suffix}'],
+            'SoilThcSensor': [f'YOSOILSENSOR{f_suffix}'],
+            'WaterMeterController': [f'YOWATERMETERCTRL{f_suffix}', 'YOWMVLSCHEDULE', 'YOWMLKSCHEDULE'],
+            'WaterMeterMultiController': ['YOWATERMETERMULTI', sub_wm_id, 'YOWMVLSCHEDULE', 'YOWMLKSCHEDULE'],
+            'WaterMeterOnly': [f'YOWATERMETERONLY{f_suffix}'],
             'WaterDept': ['YOWATERDEPT'],
+            'WaterDepthSensor': ['YOWATERDEPT'],
         }
+        active_ids = {'SETUP'}
         for dev in device_list:
             if isinstance(dev, dict):
                 dtype = dev.get('type')
                 if dtype in type_to_nodedef:
                     active_ids.update(type_to_nodedef[dtype])
+        if len(active_ids) > 1:
+            return active_ids
 
-    # If only 'SETUP' is found, we don't have enough information to prune safely
-    if len(active_ids) <= 1:
-        return None
-
-    expanded_ids = set(active_ids)
-    for aid in list(active_ids):
-        # Base <-> variant bidirectional mapping
-        for var_id, base_id in VARIANT_TO_BASE_NODEDEF.items():
-            if base_id == aid:
-                expanded_ids.add(var_id)
-            elif var_id == aid:
-                expanded_ids.add(base_id)
-        if aid.startswith('YOSWITCH'):
-            expanded_ids.update(['YOSWITCH', 'YOSWITCHPWR', 'YOSWITCHBAT'])
-        if aid.startswith('YOOUTLET'):
-            expanded_ids.update(['YOOUTLET', 'YOOUTLETPWR'])
-        if aid.startswith('SMREMOTE'):
-            expanded_ids.update(['SMREMOTEKEY', 'SMREMOTEKEYDUAL', 'SMREMOTEKEYSINGLE', 'YOSMREMOTE'])
-        if 'SCHEDULE' in aid or aid in ('YOSWITCH', 'YOOUTLET', 'YODIMMER', 'YOMULTIOUT'):
-            expanded_ids.update(['YOSCHEDULE', 'YOSCHEDULESEC'])
-        if 'WATERMETER' in aid:
-            expanded_ids.update(['YOWMSCHEDULE', 'YOWMSCHEDULESEC'])
-        if 'SPRINKLER' in aid:
-            expanded_ids.update(['YOSPRINKLERSCHEDULE', 'YOSPRINKLERSCHEDULESEC'])
-
-    return expanded_ids
+    return None
 
 
 def get_dynamic_profile_editors(temp_unit=None, water_unit=None, active_nodedefs=None, tts_messages=None):
@@ -657,19 +682,9 @@ def get_dynamic_profile_payload(
     If active_only is True, filters nodeDefs and editors to only active nodes when controller is available.
     """
     if temp_unit is None and controller is not None:
-        temp_unit = getattr(controller, 'temp_unit', None)
-        if temp_unit is None and hasattr(controller, 'yoAccess') and hasattr(controller.yoAccess, 'get_temp_unit'):
-            try:
-                temp_unit = controller.yoAccess.get_temp_unit()
-            except Exception:
-                temp_unit = None
+        temp_unit = _resolve_controller_unit(controller, 'temp_unit', 'get_temp_unit')
     if water_unit is None and controller is not None:
-        water_unit = getattr(controller, 'water_unit', None)
-        if water_unit is None and hasattr(controller, 'yoAccess') and hasattr(controller.yoAccess, 'get_water_unit'):
-            try:
-                water_unit = controller.yoAccess.get_water_unit()
-            except Exception:
-                water_unit = None
+        water_unit = _resolve_controller_unit(controller, 'water_unit', 'get_water_unit')
 
     tts_messages = None
     if controller is not None:

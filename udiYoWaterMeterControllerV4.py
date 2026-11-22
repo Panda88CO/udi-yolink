@@ -123,6 +123,7 @@ class udiYoWaterMeterController(udi_interface.Node):
         self.onDelay = 0
         self.offDelay = 0
         self.valveState = 99 # needed as class c device - keep value until online again 
+        self.meter_unit = None
         self.ISYmeter_uom = None
         self.ISYwater_unit = None
         self.meter_correction_factor = 1.0

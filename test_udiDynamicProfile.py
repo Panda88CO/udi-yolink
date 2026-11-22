@@ -163,6 +163,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertEqual(by_id['LEAKLIMIT']['ranges'][0]['uom'], '69')
         self.assertEqual(len(by_id['LEAKLIMIT']['ranges']), 1)
         self.assertEqual(by_id['FLOW']['ranges'][0]['uom'], '69')
+        self.assertEqual(by_id['FLOW']['ranges'][0]['max'], 10000000)
         self.assertEqual(len(by_id['FLOW']['ranges']), 1)
 
     def test_dynamic_editors_celsius_and_liters(self):
@@ -186,10 +187,11 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertEqual(by_id['GALLON']['ranges'][0]['uom'], '35')
         self.assertEqual(len(by_id['GALLON']['ranges']), 1)
         self.assertEqual(by_id['LITERSET']['ranges'][0]['uom'], '35')
-        self.assertEqual(by_id['LITER']['ranges'][0]['max'], 100000)
+        self.assertEqual(by_id['LITER']['ranges'][0]['max'], 10000000)
         self.assertEqual(by_id['LEAKLIMIT']['ranges'][0]['uom'], '35')
         self.assertEqual(len(by_id['LEAKLIMIT']['ranges']), 1)
         self.assertEqual(by_id['FLOW']['ranges'][0]['uom'], '35')
+        self.assertEqual(by_id['FLOW']['ranges'][0]['max'], 10000000)
         self.assertEqual(len(by_id['FLOW']['ranges']), 1)
 
     def test_dynamic_editors_ccf_and_m3(self):
@@ -198,6 +200,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertEqual(ed_ccf['GALLON']['ranges'][0]['uom'], '6')
         self.assertEqual(ed_ccf['LEAKLIMIT']['ranges'][0]['uom'], '6')
         self.assertEqual(ed_ccf['FLOW']['ranges'][0]['uom'], '6')
+        self.assertEqual(ed_ccf['FLOW']['ranges'][0]['max'], 1000000)
 
         ed_m3 = {e['id']: e for e in udiDynamicProfile.get_dynamic_profile_editors(water_unit=2)}
         self.assertEqual(ed_m3['LITER']['ranges'][0]['uom'], '8')
@@ -205,6 +208,7 @@ class TestDynamicProfileGeneration(unittest.TestCase):
         self.assertEqual(ed_m3['LITER']['ranges'][0]['prec'], 2)
         self.assertEqual(ed_m3['LEAKLIMIT']['ranges'][0]['uom'], '8')
         self.assertEqual(ed_m3['FLOW']['ranges'][0]['uom'], '8')
+        self.assertEqual(ed_m3['FLOW']['ranges'][0]['max'], 1000000)
 
     def test_dynamic_profile_payload_resolves_controller_units(self):
         mock_controller = MagicMock()
@@ -431,7 +435,7 @@ class TestDeferredProfileLoading(unittest.TestCase):
         controller.poly.updateProfile.assert_called_once()
 
     def test_get_active_nodedef_ids_extraction(self):
-        """Test extraction of active nodeDef IDs from mock controller with live nodes."""
+        """Test exact extraction of active nodeDef IDs from live nodes without variant bloat."""
         controller = MagicMock()
         node_setup = MagicMock()
         node_setup.id = 'SETUP'
@@ -449,13 +453,133 @@ class TestDeferredProfileLoading(unittest.TestCase):
         controller.deviceList = None
 
         active_ids = udiDynamicProfile.get_active_nodedef_ids(controller)
-        self.assertIsNotNone(active_ids)
-        self.assertIn('SETUP', active_ids)
-        self.assertIn('YOTHSENS', active_ids)
-        self.assertIn('YOTHSENSF', active_ids)  # Expanded variant
-        self.assertIn('YOSWITCH', active_ids)
-        self.assertIn('YOSWITCHPWR', active_ids)  # Family expansion
-        self.assertIn('YOSCHEDULE', active_ids)   # Schedule expansion for switch
+        self.assertEqual(active_ids, {'SETUP', 'YOTHSENS', 'YOSWITCH'})
+        self.assertNotIn('YOTHSENSF', active_ids)
+        self.assertNotIn('YOSWITCHPWR', active_ids)
+        self.assertNotIn('YOSCHEDULE', active_ids)
+
+    def test_get_active_nodedef_ids_nodes_in_db_fallback(self):
+        """When only SETUP is live, fall back to exact nodes_in_db nodeDefIds without expanding variants."""
+        controller = MagicMock()
+        node_setup = MagicMock()
+        node_setup.id = 'SETUP'
+        controller.poly.getNodes.return_value = {'setup': node_setup}
+        controller.yolink_nodes = None
+        controller.nodes_in_db = [
+            {'address': 'setup', 'nodeDefId': 'SETUP'},
+            {'address': 'wm1', 'nodeDefId': 'YOWATERMETERCTRL'},
+            {'address': 'th1', 'nodeDefId': 'YOTHSENS'},
+            {'address': 'sw1', 'nodeDefId': 'YOSWITCH'},
+        ]
+        controller.deviceList = [{'type': 'THSensor'}, {'type': 'WaterMeterController'}]
+
+        active_ids = udiDynamicProfile.get_active_nodedef_ids(controller)
+        self.assertEqual(active_ids, {'SETUP', 'YOWATERMETERCTRL', 'YOTHSENS', 'YOSWITCH'})
+        self.assertNotIn('YOWATERMETERCTRLF', active_ids)
+        self.assertNotIn('YOTHSENSF', active_ids)
+        self.assertNotIn('YOSCHEDULESEC', active_ids)
+
+    def test_get_active_nodedef_ids_devicelist_unit_aware(self):
+        """When only deviceList is available, select matching temp and water variants only."""
+        class LocalOnlyAccess:
+            def __init__(self, t, w):
+                self._t = t
+                self._w = w
+            def get_temp_unit(self):
+                return self._t
+            def get_water_unit(self):
+                return self._w
+
+        class DeviceListController:
+            def __init__(self, t, w):
+                self.poly = None
+                self.yolink_nodes = None
+                self.nodes_in_db = None
+                self.yoAccess = None
+                self.yoLocal = LocalOnlyAccess(t, w)
+                self.deviceList = [
+                    {'type': 'THSensor'},
+                    {'type': 'WaterMeterController'},
+                    {'type': 'WaterMeterMultiController'},
+                    {'type': 'LockV2'},
+                    {'type': 'SprinklerV2'},
+                ]
+
+        ids_cl = udiDynamicProfile.get_active_nodedef_ids(DeviceListController('C', 'Liter'))
+        self.assertIn('YOTHSENS', ids_cl)
+        self.assertNotIn('YOTHSENSF', ids_cl)
+        self.assertIn('YOWATERMETERCTRL', ids_cl)
+        self.assertNotIn('YOWATERMETERCTRLF', ids_cl)
+        self.assertIn('YOWATERMETERSUB', ids_cl)
+        self.assertNotIn('YOWATERMETERSUBG', ids_cl)
+        self.assertIn('YOLOCKV2', ids_cl)
+        self.assertNotIn('YOLOCK', ids_cl)
+        self.assertIn('YOSPRINKLERV2', ids_cl)
+
+        ids_fg = udiDynamicProfile.get_active_nodedef_ids(DeviceListController(1, 0))
+        self.assertIn('YOTHSENSF', ids_fg)
+        self.assertNotIn('YOTHSENS', ids_fg)
+        self.assertIn('YOWATERMETERCTRLF', ids_fg)
+        self.assertNotIn('YOWATERMETERCTRL', ids_fg)
+        self.assertIn('YOWATERMETERSUBG', ids_fg)
+        self.assertNotIn('YOWATERMETERSUB', ids_fg)
+
+    def test_large_hybrid_installation_pruned_profile_under_60kb_with_liters(self):
+        """28-nodeDef hybrid installation stays well under 60KB and sends Liter FLOW editor."""
+        user_nodedefs = [
+            'SETUP', 'SMREMOTEKEYDUAL', 'YODIMMER', 'YODOORSENS', 'YOGARAGE', 'YOHUB',
+            'YOHUBBAT', 'YOLOCKV2', 'YOMANIPU', 'YOMOTIONSENS', 'YOMSCHEDULE', 'YOMULTIOUT',
+            'YOOUTLET', 'YOOUTLETPWR', 'YOSCHEDULE', 'YOSIREN', 'YOSMREMOTE', 'YOSPEAKERH',
+            'YOSPRINKLERSCHEDULE', 'YOSPRINKLERV2', 'YOSUBOUT', 'YOSUBUSB', 'YOSWITCH',
+            'YOTHSENS', 'YOTSENS', 'YOWATERMETERCTRL', 'YOWMLKSCHEDULE', 'YOWMVLSCHEDULE',
+        ]
+        live_nodes = {}
+        for idx, nid in enumerate(user_nodedefs):
+            n = MagicMock()
+            n.id = nid
+            live_nodes[f'addr_{idx}'] = n
+
+        controller = MagicMock()
+        controller.temp_unit = 0  # Celsius
+        controller.water_unit = 3  # Liter
+        controller.yoAccess.TtsMessages = None
+        controller.poly.getNodes.return_value = live_nodes
+        controller.nodes_in_db = [{'nodeDefId': nid} for nid in user_nodedefs]
+        controller.deviceList = [
+            {'type': 'THSensor'}, {'type': 'Switch'}, {'type': 'Outlet'},
+            {'type': 'MultiOutlet'}, {'type': 'Dimmer'}, {'type': 'DoorSensor'},
+            {'type': 'MotionSensor'}, {'type': 'GarageDoor'}, {'type': 'Hub'},
+            {'type': 'LockV2'}, {'type': 'Manipulator'}, {'type': 'Siren'},
+            {'type': 'SmartRemoter'}, {'type': 'SpeakerHub'}, {'type': 'SprinklerV2'},
+            {'type': 'WaterMeterController'},
+        ]
+        controller.poly.updateJsonProfile = MagicMock()
+        controller.poly.updateProfile = MagicMock()
+
+        active_ids = udiDynamicProfile.get_active_nodedef_ids(controller)
+        self.assertEqual(active_ids, set(user_nodedefs))
+        self.assertEqual(len(active_ids), 28)
+
+        pruned = udiDynamicProfile.get_dynamic_profile_payload(controller=controller, active_only=True)
+        pruned_bytes = len(json.dumps(pruned, separators=(',', ':')).encode('utf-8'))
+        self.assertLess(pruned_bytes, 50000)
+
+        udiDynamicProfile.update_dynamic_profile(controller)
+
+        controller.poly.updateJsonProfile.assert_called_once()
+        controller.poly.updateProfile.assert_not_called()
+
+        sent_payload = controller.poly.updateJsonProfile.call_args[0][0]
+        editors_by_id = {e['id']: e for e in sent_payload['editors']}
+        self.assertIn('FLOW', editors_by_id)
+        self.assertEqual(editors_by_id['FLOW']['ranges'], [
+            {'uom': '35', 'min': 0, 'max': 10000000, 'prec': 1}
+        ])
+        self.assertGreaterEqual(editors_by_id['FLOW']['ranges'][0]['max'], 390264.7)
+        nodedefs_by_id = {nd['id']: nd for nd in sent_payload['nodedefs']}
+        self.assertIn('YOWATERMETERCTRL', nodedefs_by_id)
+        wm_props = {p['id']: p['editor'] for p in nodedefs_by_id['YOWATERMETERCTRL']['properties']}
+        self.assertEqual(wm_props['GV1'], 'FLOW')
 
     def test_active_only_payload_reduces_size(self):
         """Active-only dynamic profile payload must be well below 60KB and retain required editors."""

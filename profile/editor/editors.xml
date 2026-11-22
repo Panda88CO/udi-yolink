@@ -244,7 +244,7 @@
     <range uom="69" min="0" max="100" prec="0" />
   </editor>
   <editor id="FLOW">
-    <range uom="69" min="0" max="10000" prec="1" />
+    <range uom="69" min="0" max="10000000" prec="1" />
   </editor>
   <editor id="ENABLE">
     <range uom="25" subset="0,1,99" nls="enable" />

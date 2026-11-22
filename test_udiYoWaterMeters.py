@@ -150,6 +150,47 @@ class TestWaterMeterController(unittest.TestCase):
         self.assertTrue(payload['attributes']['autoCloseValve'])
         self.assertEqual(payload['attributes']['overrunAmount'], 50.0)
 
+    def test_large_total_meter_initial_none_meter_unit(self):
+        """Controller starts with meter_unit=None and reports large Liter GV1 totals with UOM 35."""
+        node, _, _ = test_helper.create_test_node(
+            udiYoWaterMeterController,
+            model_name='YS5018-UC',
+            dev_type='WaterMeterController',
+            temp_unit=0,
+            water_unit=3,
+        )
+        self.assertIsNone(node.meter_unit)
+        self.assertIsNone(node.ISYwater_unit)
+        self.assertIsNone(node.ISYmeter_uom)
+
+        mock_ctrl = MagicMock()
+        mock_ctrl.check_system_online.return_value = True
+        mock_ctrl.emptyData.return_value = False
+        mock_ctrl.suspended = False
+        mock_ctrl.get_message_type.return_value = ('Report', 'report')
+        mock_ctrl.get_report_time.return_value = 1795298254
+        mock_ctrl.getMeterUnit.return_value = 3  # Liters
+        mock_ctrl.get_data.side_effect = lambda key, cat=None, idx=None: (
+            10 if key == 'meterStepFactor' and cat == 'attributes' else
+            3902647 if key == 'meter' and cat == 'state' else
+            1500 if key == 'amount' and cat == 'dailyUsage' else
+            2 if key == 'amount' and cat == 'recentUsage' else
+            1 if key == 'duration' and cat == 'recentUsage' else
+            'open' if key == 'valve' and cat == 'state' else
+            False if key == 'waterFlowing' and cat == 'state' else
+            None
+        )
+        node.yoWaterCtrl = mock_ctrl
+
+        node.updateData()
+
+        self.assertEqual(node.meter_unit, 3)
+        self.assertEqual(node.ISYwater_unit, 3)
+        self.assertEqual(node.ISYmeter_uom, 35)
+        node.node.setDriver.assert_any_call('GV1', 390264.7, True, False, uom=35)
+        node.node.setDriver.assert_any_call('GV10', 150.0, True, False, uom=35)
+        node.node.setDriver.assert_any_call('GV2', 0.2, True, False, uom=35)
+
 
 class TestWaterMeterOnly(unittest.TestCase):
     """Tests for udiYoWaterMeterOnly (meter without valve)."""
