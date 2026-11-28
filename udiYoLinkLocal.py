@@ -8,7 +8,7 @@ import sys
 import time
 #from apscheduler.schedulers.background import BackgroundScheduler
 from threading import Thread, Lock
-from yoLink_init_V4 import YoLinkInitPAC
+from yoLink_init_V4 import YoLinkInitPAC, _acquire_reconnect_lock, _is_stopped
 
 try:
     import udi_interface
@@ -266,6 +266,53 @@ class YoLinkSetup (udi_interface.Node):
                     self.subnet_id,
                 )
                 self.yoLocal = YoLinkInitPAC (self.local_client_id, self.local_client_secret, tokenURL, apiURL, self.local_ip, self.local_MQTT_port, self.subnet_id  )
+
+        if self.yoLocal is not None and not getattr(self.yoLocal, 'connectedToBroker', False):
+            auth_rc = getattr(self.yoLocal, 'last_auth_error', None)
+            if self.yoAccess:
+                if auth_rc in (2, 4, 5):
+                    notice_msg = (
+                        f'Local Hub MQTT authentication failed (rc={auth_rc}) at {self.local_ip}:{self.local_MQTT_port}. '
+                        'Falling back to Cloud mode. Verify Local API MQTT settings/credentials in the YoLink app or reboot the Local Hub.'
+                    )
+                else:
+                    notice_msg = (
+                        f'Local Hub MQTT connection failed at {self.local_ip}:{self.local_MQTT_port}. '
+                        'Falling back to Cloud mode.'
+                    )
+                logging.error(notice_msg)
+                self.poly.Notices['local'] = notice_msg
+                try:
+                    self.yoLocal.shut_down()
+                except Exception as e:
+                    logging.debug(f'Error shutting down failed yoLocal instance: {e}')
+                self.yoLocal = None
+            else:
+                if auth_rc in (2, 4, 5):
+                    notice_msg = (
+                        f'Local Hub MQTT authentication failed (rc={auth_rc}) at {self.local_ip}:{self.local_MQTT_port}. '
+                        'Background reconnect continues. Verify Local API MQTT settings/credentials in the YoLink app or reboot the Local Hub.'
+                    )
+                else:
+                    notice_msg = (
+                        f'Local Hub MQTT connection failed at {self.local_ip}:{self.local_MQTT_port}. '
+                        'Background reconnect continues.'
+                    )
+                logging.error(notice_msg)
+                self.poly.Notices['local'] = notice_msg
+                lock = _acquire_reconnect_lock(self.yoLocal)
+                try:
+                    if not getattr(self.yoLocal, '_reconnecting', False) and not _is_stopped(self.yoLocal):
+                        self.yoLocal._reconnecting = True
+                        target = (
+                            self.yoLocal._async_auth_reconnect
+                            if auth_rc in (2, 4, 5)
+                            else self.yoLocal._async_reconnect
+                        )
+                        Thread(target=target, daemon=True).start()
+                finally:
+                    if lock is not None:
+                        lock.release()
    
 
         if self.yoAccess or self.yoLocal:

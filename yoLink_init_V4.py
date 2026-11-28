@@ -144,6 +144,97 @@ def _build_local_subnet_candidates(subnet_id):
     return candidates
 
 
+_LOCAL_AUTH_MODES = ('client_secret', 'client_id_token', 'access_token')
+
+
+def _get_local_auth_mode(yoAccess):
+    modes = getattr(yoAccess, '_local_auth_modes', None)
+    idx = getattr(yoAccess, '_local_auth_mode_idx', 0)
+    if isinstance(modes, (list, tuple)) and modes and isinstance(idx, int) and 0 <= idx < len(modes):
+        return modes[idx]
+    return 'client_secret'
+
+
+def _local_uses_token_auth(yoAccess):
+    access_mode = getattr(yoAccess, 'access_mode', ())
+    try:
+        is_local = 'local' in access_mode
+    except Exception:
+        is_local = False
+    return is_local and _get_local_auth_mode(yoAccess) in ('client_id_token', 'access_token')
+
+
+def _advance_local_auth_mode(yoAccess, rc=None):
+    modes = getattr(yoAccess, '_local_auth_modes', None)
+    if not isinstance(modes, (list, tuple)) or len(modes) <= 1:
+        return False
+    idx = getattr(yoAccess, '_local_auth_mode_idx', 0)
+    if not isinstance(idx, int):
+        idx = 0
+    if idx + 1 >= len(modes):
+        return False
+    old_mode = modes[idx] if 0 <= idx < len(modes) else 'client_secret'
+    new_idx = idx + 1
+    new_mode = modes[new_idx]
+    yoAccess._local_auth_mode_idx = new_idx
+    logging.warning(
+        f"{yoAccess.access_mode} Local MQTT auth mode '{old_mode}' rejected (rc={rc}); "
+        f"switching to '{new_mode}' ({new_idx + 1}/{len(modes)})"
+    )
+    return True
+
+
+def _apply_mqtt_credentials(yoAccess, ensure_token=False):
+    access_mode = getattr(yoAccess, 'access_mode', ())
+    if 'cloud' in access_mode:
+        token = getattr(yoAccess, 'token', None)
+        if ensure_token and (
+            not isinstance(token, dict)
+            or 'access_token' not in token
+            or yoAccess.token_needs_refresh()
+        ):
+            yoAccess.refresh_token()
+            token = getattr(yoAccess, 'token', None)
+        if isinstance(token, dict) and 'access_token' in token:
+            logging.debug('cloud connect using access token')
+            yoAccess.client.username_pw_set(username=token['access_token'], password=None)
+            return True
+        return False
+
+    if 'local' in access_mode:
+        mode = _get_local_auth_mode(yoAccess)
+        if mode == 'client_secret':
+            logging.debug('local connect using configured client credentials (mode=client_secret)')
+            yoAccess.client.username_pw_set(
+                username=yoAccess.local_client_id,
+                password=yoAccess.local_client_secret,
+            )
+            return True
+
+        token = getattr(yoAccess, 'token', None)
+        if ensure_token or not (isinstance(token, dict) and 'access_token' in token) or yoAccess.token_needs_refresh():
+            yoAccess.refresh_token()
+            token = getattr(yoAccess, 'token', None)
+        if not (isinstance(token, dict) and 'access_token' in token):
+            logging.warning(f"{yoAccess.access_mode} Cannot apply local auth mode '{mode}': no access_token available")
+            return False
+        if mode == 'client_id_token':
+            logging.debug('local connect using client_id + access_token (mode=client_id_token)')
+            yoAccess.client.username_pw_set(
+                username=yoAccess.local_client_id,
+                password=token['access_token'],
+            )
+        else:
+            logging.debug('local connect using access_token bearer (mode=access_token)')
+            yoAccess.client.username_pw_set(
+                username=token['access_token'],
+                password=None,
+            )
+        return True
+
+    return False
+
+
 class YoLinkInitPAC(object):
     def __init__(yoAccess, ID, secret, tokenURL='https://api.yosmart.com/open/yolink/token' , apiURL='https://api.yosmart.com/open/yolink/v2/api', mqttURL= 'api.yosmart.com', mqttPort = 8003, home_id = None):
         yoAccess.RETRY_STEP = 15
@@ -185,6 +276,13 @@ class YoLinkInitPAC(object):
         yoAccess.connectedToBroker = False
         yoAccess.loopRunning = False
         yoAccess._reconnecting = False
+        yoAccess._initializing = False
+        yoAccess._connect_event = Event()
+        yoAccess._last_connect_rc = None
+        yoAccess.last_auth_error = None
+        yoAccess._local_auth_modes = list(_LOCAL_AUTH_MODES)
+        yoAccess._local_auth_mode_idx = 0
+        yoAccess._local_auth_verified = False
         yoAccess.uaID = ID
         yoAccess.secID = secret
         if home_id is None:
@@ -310,11 +408,51 @@ class YoLinkInitPAC(object):
             yoAccess.client.on_publish = yoAccess.on_publish
             #logging.debug('finish subscribing ')
 
-            while not yoAccess.connect_to_broker() and not yoAccess.STOP.is_set():
-                time.sleep(2)
+            yoAccess._initializing = True
+            try:
+                if 'local' in yoAccess.access_mode:
+                    network_retries = 0
+                    while not yoAccess.STOP.is_set():
+                        if yoAccess.connect_to_broker():
+                            break
+                        last_rc = getattr(yoAccess, '_last_connect_rc', None)
+                        if last_rc in (4, 5):
+                            if _advance_local_auth_mode(yoAccess, rc=last_rc):
+                                time.sleep(0.5)
+                                continue
+                            yoAccess.last_auth_error = last_rc
+                            yoAccess._local_auth_mode_idx = 0
+                            logging.error(
+                                f"{yoAccess.access_mode} Local Hub MQTT rejected all authentication modes "
+                                f"{yoAccess._local_auth_modes} with rc={last_rc} at {yoAccess.mqttURL}:{yoAccess.mqttPort}. "
+                                "Verify Local API MQTT settings/credentials in the YoLink app or reboot the Local Hub."
+                            )
+                            break
+                        elif last_rc == 2:
+                            yoAccess.last_auth_error = last_rc
+                            logging.error(
+                                f"{yoAccess.access_mode} Local Hub MQTT rejected client_id with rc=2 at {yoAccess.mqttURL}:{yoAccess.mqttPort}"
+                            )
+                            break
+                        else:
+                            network_retries += 1
+                            if network_retries >= 3:
+                                logging.error(
+                                    f"{yoAccess.access_mode} Local Hub MQTT failed to connect after {network_retries} attempts "
+                                    f"at {yoAccess.mqttURL}:{yoAccess.mqttPort} (last_rc={last_rc})"
+                                )
+                                break
+                            time.sleep(2)
+                else:
+                    while not yoAccess.connect_to_broker() and not yoAccess.STOP.is_set():
+                        if getattr(yoAccess, '_last_connect_rc', None) in (2, 4, 5):
+                            yoAccess.refresh_token()
+                        time.sleep(2)
+            finally:
+                yoAccess._initializing = False
             yoAccess.stop_queues = False    
             yoAccess.start_retry_queue()
-            if 'cloud' in yoAccess.access_mode:
+            if not yoAccess.STOP.is_set():
                 yoAccess._token_monitor_thread = Thread(target=yoAccess._token_monitor, daemon=True)
                 yoAccess._token_monitor_thread.start()
   
@@ -419,59 +557,47 @@ class YoLinkInitPAC(object):
             logging.info(f'{yoAccess.access_mode} Refreshing token; token_present={yoAccess.token is not None}')
             now = int(time.time())
             
-            if yoAccess.token != None:
-                if now < yoAccess.token.get('expirationTime', 0):
-                    yoAccess.time_tracking('global')
-                    response = requests.post( yoAccess.tokenURL,
-                        data={"grant_type": "refresh_token",
-                            "client_id" :  yoAccess.uaID,
-                            "refresh_token":yoAccess.token['refresh_token'], 
-                            }, timeout= 5
-                    )
-                else:
-                    yoAccess.time_tracking('global')
-                    response = requests.post( yoAccess.tokenURL,
-                        data={"grant_type": "client_credentials",
-                            "client_id" : yoAccess.uaID,
-                            "client_secret" : yoAccess.secID }, timeout= 5
-                )
-                logging.debug('Refresh response: %s', _response_log_summary(response))
-                if response.ok:
-                    token_data = response.json()
-                    if 'access_token' not in token_data:
-                        logging.error(f'Auth failed from YoLink API: {token_data}')
-                        return False
-                    yoAccess.token = token_data
-                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
-                    return True
-                else:
-                    logging.error('Was not able to refresh token')
-                    return(False)
-            else:
+            if yoAccess.token != None and now < yoAccess.token.get('expirationTime', 0) and yoAccess.token.get('refresh_token'):
                 yoAccess.time_tracking('global')
                 response = requests.post( yoAccess.tokenURL,
-                    data={"grant_type": "client_credentials",
-                        "client_id" : yoAccess.uaID,
-                        "client_secret" : yoAccess.secID }, timeout= 5
+                    data={"grant_type": "refresh_token",
+                        "client_id" :  yoAccess.uaID,
+                        "refresh_token":yoAccess.token['refresh_token'], 
+                        }, timeout= 5
                 )
                 logging.debug('Refresh response: %s', _response_log_summary(response))
                 if response.ok:
                     token_data = response.json()
-                    if 'access_token' not in token_data:
-                        logging.error(f'Auth failed from YoLink API: {token_data}')
-                        return False
-                    yoAccess.token = token_data
-                    yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
-                    return True
+                    if 'access_token' in token_data:
+                        yoAccess.token = token_data
+                        yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
+                        return True
+                    logging.warning(f'Refresh token grant did not return access_token: {token_data}; falling back to client_credentials')
                 else:
-                    logging.error('Was not able to refresh token')
+                    logging.warning('Refresh token grant failed; falling back to client_credentials')
+
+            yoAccess.time_tracking('global')
+            response = requests.post( yoAccess.tokenURL,
+                data={"grant_type": "client_credentials",
+                    "client_id" : yoAccess.uaID,
+                    "client_secret" : yoAccess.secID }, timeout= 5
+            )
+            logging.debug('Refresh response: %s', _response_log_summary(response))
+            if response.ok:
+                token_data = response.json()
+                if 'access_token' not in token_data:
+                    logging.error(f'Auth failed from YoLink API: {token_data}')
                     return False
-
-
+                yoAccess.token = token_data
+                yoAccess.token['expirationTime'] = int(yoAccess.token['expires_in']) + now
+                return True
+            else:
+                logging.error('Was not able to refresh token')
+                return False
 
         except Exception as e:
             logging.error(f'Exception occcured during refresh_token {yoAccess.access_mode} : {e}')
-            #return(yoAccess.request_new_token())
+            return False
 
    
 
@@ -574,17 +700,19 @@ class YoLinkInitPAC(object):
                         return
                     time.sleep(1)
 
-                if 'cloud' in yoAccess.access_mode and yoAccess.token_needs_refresh():
+                should_monitor = (
+                    'cloud' in yoAccess.access_mode
+                    or _local_uses_token_auth(yoAccess)
+                    or ('local' in yoAccess.access_mode and yoAccess.token is not None)
+                )
+                if should_monitor and yoAccess.token_needs_refresh():
                     logging.info(f'{yoAccess.access_mode} Token approaching expiration, proactively refreshing...')
                     if yoAccess.refresh_token():
                         logging.info(f'{yoAccess.access_mode} Token successfully refreshed proactively')
-                        if yoAccess.client and yoAccess.token and 'access_token' in yoAccess.token:
+                        if yoAccess.client:
                             try:
-                                yoAccess.client.username_pw_set(
-                                    username=yoAccess.token['access_token'],
-                                    password=None
-                                )
-                                logging.debug('Updated MQTT client credentials with new access token')
+                                if _apply_mqtt_credentials(yoAccess, ensure_token=False):
+                                    logging.debug('Updated MQTT client credentials with new access token')
                             except Exception as e:
                                 logging.debug(f'username_pw_set update exception: {e}')
                     else:
@@ -599,9 +727,18 @@ class YoLinkInitPAC(object):
         """
         try: 
             logging.info(f"{yoAccess.access_mode} Connecting to broker...")
-            while yoAccess.token_needs_refresh() and not yoAccess.refresh_token() and not _is_stopped(yoAccess):
-                time.sleep(35) # Wait 35 sec and try again (35sec ensure less than 10 attempts in 5 min)
-                logging.log(OFFLINE, 'Trying to obtain new token - network or YoLink connection may be down')
+            if 'local' in yoAccess.access_mode and getattr(yoAccess, '_initializing', False) is True:
+                token_attempts = 0
+                while yoAccess.token_needs_refresh() and not _is_stopped(yoAccess) and token_attempts < 2:
+                    token_attempts += 1
+                    if yoAccess.refresh_token():
+                        break
+                    if token_attempts < 2 and not _is_stopped(yoAccess):
+                        time.sleep(2)
+            else:
+                while yoAccess.token_needs_refresh() and not yoAccess.refresh_token() and not _is_stopped(yoAccess):
+                    time.sleep(35) # Wait 35 sec and try again (35sec ensure less than 10 attempts in 5 min)
+                    logging.log(OFFLINE, 'Trying to obtain new token - network or YoLink connection may be down')
             if _is_stopped(yoAccess):
                 return(False)
             logging.info('Retrieving YoLink API info')
@@ -616,12 +753,12 @@ class YoLinkInitPAC(object):
                 yoAccess.keepAlive,
                 _redact_log_value(yoAccess.token),
             )
-            if 'cloud' in yoAccess.access_mode:
-                logging.debug('cloud connect using access token')
-                yoAccess.client.username_pw_set(username=yoAccess.token['access_token'], password=None)
-            elif 'local' in yoAccess.access_mode:
-                logging.debug('local connect using configured client credentials')
-                yoAccess.client.username_pw_set(username=yoAccess.local_client_id, password=yoAccess.local_client_secret)
+            connect_event = getattr(yoAccess, '_connect_event', None)
+            if isinstance(connect_event, Event):
+                connect_event.clear()
+            yoAccess._last_connect_rc = None
+            if not _apply_mqtt_credentials(yoAccess, ensure_token=False):
+                return(False)
 
             logging.debug(
                 'Connect 2 info: mqtt=%s:%s keepalive=%s token=%s',
@@ -645,7 +782,15 @@ class YoLinkInitPAC(object):
             for _ in range(25):
                 if yoAccess.connectedToBroker or _is_stopped(yoAccess):
                     break
+                if isinstance(connect_event, Event) and connect_event.is_set():
+                    break
                 time.sleep(0.2)
+            if not yoAccess.connectedToBroker:
+                try:
+                    yoAccess.client.loop_stop()
+                except Exception:
+                    pass
+                yoAccess.loopRunning = False
             # Device subscriptions are handled via on_connect -> _resubscribe_devices
             return(bool(yoAccess.connectedToBroker))
 
@@ -1122,24 +1267,49 @@ class YoLinkInitPAC(object):
 
                 if refreshed:
                     try:
-                        yoAccess.client.username_pw_set(
-                            username=yoAccess.token['access_token'],
-                            password=None
-                        )
+                        _apply_mqtt_credentials(yoAccess, ensure_token=False)
                     except Exception as e:
                         logging.debug(f'username_pw_set update in _async_auth_reconnect: {e}')
                     yoAccess.connect_to_broker()
                 else:
                     logging.error(f'{yoAccess.access_mode} Failed to refresh token during auth reconnect')
             else:
-                try:
-                    yoAccess.client.username_pw_set(
-                        username=yoAccess.local_client_id,
-                        password=yoAccess.local_client_secret
-                    )
-                except Exception as e:
-                    logging.debug(f'local username_pw_set in _async_auth_reconnect: {e}')
-                yoAccess.connect_to_broker()
+                backoff = 5
+                max_backoff = 300
+                while not _is_stopped(yoAccess) and not yoAccess.connectedToBroker:
+                    if getattr(yoAccess, '_local_auth_verified', False) is not True:
+                        if not _advance_local_auth_mode(yoAccess, rc=getattr(yoAccess, '_last_connect_rc', None)):
+                            yoAccess._local_auth_mode_idx = 0
+                            logging.error(
+                                f"{yoAccess.access_mode} All local MQTT auth modes rejected; waiting {backoff}s before retry cycle"
+                            )
+                            for _ in range(max(1, int(backoff / 0.5))):
+                                if _is_stopped(yoAccess) or yoAccess.connectedToBroker:
+                                    break
+                                time.sleep(0.5)
+                            backoff = min(backoff * 2, max_backoff)
+                            if _is_stopped(yoAccess) or yoAccess.connectedToBroker:
+                                break
+                    if _local_uses_token_auth(yoAccess):
+                        for attempt in range(3):
+                            if _is_stopped(yoAccess) or yoAccess.refresh_token():
+                                break
+                            time.sleep(2)
+                    try:
+                        _apply_mqtt_credentials(yoAccess, ensure_token=False)
+                    except Exception as e:
+                        logging.debug(f'local username_pw_set in _async_auth_reconnect: {e}')
+                    if yoAccess.connect_to_broker():
+                        break
+                    last_rc = getattr(yoAccess, '_last_connect_rc', None)
+                    if getattr(yoAccess, '_local_auth_verified', False) is True or last_rc not in (4, 5):
+                        for _ in range(max(1, int(backoff / 0.5))):
+                            if _is_stopped(yoAccess) or yoAccess.connectedToBroker:
+                                break
+                            time.sleep(0.5)
+                        backoff = min(backoff * 2, max_backoff)
+                    else:
+                        time.sleep(1)
         except Exception as e:
             logging.error(f'Exception in _async_auth_reconnect: {e}')
         finally:
@@ -1174,27 +1344,16 @@ class YoLinkInitPAC(object):
                 if _is_stopped(yoAccess) or yoAccess.connectedToBroker:
                     break
 
-                if 'cloud' in yoAccess.access_mode:
+                if 'cloud' in yoAccess.access_mode or _local_uses_token_auth(yoAccess):
                     if yoAccess.token_needs_refresh():
                         logging.info(f'{yoAccess.access_mode} Refreshing token before reconnect...')
                         if not yoAccess.refresh_token():
                             backoff = min(backoff * 2, max_backoff)
                             continue
-                    try:
-                        yoAccess.client.username_pw_set(
-                            username=yoAccess.token['access_token'],
-                            password=None
-                        )
-                    except Exception as e:
-                        logging.debug(f'username_pw_set in _async_reconnect: {e}')
-                elif 'local' in yoAccess.access_mode:
-                    try:
-                        yoAccess.client.username_pw_set(
-                            username=yoAccess.local_client_id,
-                            password=yoAccess.local_client_secret
-                        )
-                    except Exception as e:
-                        logging.debug(f'local username_pw_set in _async_reconnect: {e}')
+                try:
+                    _apply_mqtt_credentials(yoAccess, ensure_token=False)
+                except Exception as e:
+                    logging.debug(f'username_pw_set in _async_reconnect: {e}')
 
                 try:
                     try:
@@ -1267,13 +1426,21 @@ class YoLinkInitPAC(object):
         """
         try:
             logging.debug(f'{yoAccess.access_mode} on_connect - Connected with result code {rc}')
+            yoAccess._last_connect_rc = rc
+            connect_event = getattr(yoAccess, '_connect_event', None)
 
             if (rc == 0):
                 yoAccess.online = True
                 yoAccess.connectedToBroker = True
+                yoAccess.last_auth_error = None
+                if 'local' in yoAccess.access_mode:
+                    yoAccess._local_auth_verified = True
+                    logging.info(f"{yoAccess.access_mode} Local MQTT auth succeeded with mode='{_get_local_auth_mode(yoAccess)}'")
                 yoAccess._last_connect_time = time.time()
                 yoAccess._subscribed_since_connect = False
                 yoAccess._suback_received = False
+                if isinstance(connect_event, Event):
+                    connect_event.set()
                 logging.info('Successfully connected to broker {} '.format(yoAccess.mqttURL))
                 if yoAccess.mqttList:
                     logging.debug('Re-subscribing devices after connect in background')
@@ -1284,6 +1451,12 @@ class YoLinkInitPAC(object):
                 logging.error(f'Authentication error {rc} - Token or client ID invalid - triggering auth reconnect')
                 yoAccess.connectedToBroker = False
                 yoAccess.online = False
+                yoAccess.last_auth_error = rc
+                if isinstance(connect_event, Event):
+                    connect_event.set()
+                if getattr(yoAccess, '_initializing', False) is True:
+                    logging.debug(f'{yoAccess.access_mode} Auth error rc={rc} during initial connect; handled by startup loop')
+                    return
                 lock = _acquire_reconnect_lock(yoAccess)
                 try:
                     if not yoAccess._reconnecting and not _is_stopped(yoAccess):
@@ -1297,6 +1470,12 @@ class YoLinkInitPAC(object):
                 logging.error(f'Authentication error {rc} - credentials rejected - triggering auth reconnect')
                 yoAccess.connectedToBroker = False
                 yoAccess.online = False
+                yoAccess.last_auth_error = rc
+                if isinstance(connect_event, Event):
+                    connect_event.set()
+                if getattr(yoAccess, '_initializing', False) is True:
+                    logging.debug(f'{yoAccess.access_mode} Auth error rc={rc} during initial connect; handled by startup loop')
+                    return
                 lock = _acquire_reconnect_lock(yoAccess)
                 try:
                     if not yoAccess._reconnecting and not _is_stopped(yoAccess):
@@ -1310,6 +1489,8 @@ class YoLinkInitPAC(object):
                 logging.error('Broker connection failed with result code {}'.format(rc))
                 yoAccess.connectedToBroker = False
                 yoAccess.online = False
+                if isinstance(connect_event, Event):
+                    connect_event.set()
          
         except Exception as e:
             logging.error(f'Exception {yoAccess.access_mode} -  on_connect: {e}')       
@@ -1324,6 +1505,15 @@ class YoLinkInitPAC(object):
         if yoAccess.disconnect:
             logging.debug('Disconnect requested - stop loop')
             yoAccess.client.loop_stop()
+            return
+
+        if getattr(yoAccess, '_initializing', False) is True:
+            logging.debug(f'{yoAccess.access_mode} Disconnect during initial connect; skipping async reconnect')
+            return
+
+        last_connect_rc = getattr(yoAccess, '_last_connect_rc', None)
+        if last_connect_rc in (2, 4, 5):
+            logging.debug(f'{yoAccess.access_mode} Disconnect following auth error rc={last_connect_rc}; skipping duplicate async reconnect')
             return
 
         last_conn = getattr(yoAccess, '_last_connect_time', 0.0)

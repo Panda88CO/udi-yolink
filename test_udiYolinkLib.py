@@ -704,6 +704,274 @@ class TestMqttResilienceAndTokenManagement(unittest.TestCase):
             self.assertEqual(mock_thread_cls.call_count, 1)
             mock_thread_instance.start.assert_called_once()
 
+    def test_local_auth_rotates_to_client_id_token_on_rc5_and_verifies(self):
+        import yoLink_init_V4
+
+        mock_resp = MagicMock()
+        mock_resp.ok = True
+        mock_resp.json.return_value = {
+            'access_token': 'local-access-tok',
+            'refresh_token': 'local-refresh-tok',
+            'expires_in': 7200,
+        }
+
+        pac = None
+        with patch('yoLink_init_V4.requests.post', return_value=mock_resp), \
+             patch('yoLink_init_V4.mqtt.Client') as mock_mqtt_cls, \
+             patch('yoLink_init_V4.time.sleep', return_value=None):
+            client = MagicMock()
+            mock_mqtt_cls.return_value = client
+            attempts = {'count': 0}
+            pac_ref = {}
+            original_apply = yoLink_init_V4._apply_mqtt_credentials
+
+            def capture_apply(obj, ensure_token=False):
+                pac_ref['obj'] = obj
+                return original_apply(obj, ensure_token=ensure_token)
+
+            def fake_connect(*args, **kwargs):
+                attempts['count'] += 1
+                if attempts['count'] == 1:
+                    yoLink_init_V4.YoLinkInitPAC.on_connect(pac_ref['obj'], client, None, None, 5)
+                    yoLink_init_V4.YoLinkInitPAC.on_disconnect(pac_ref['obj'], client, None, rc=0)
+                else:
+                    yoLink_init_V4.YoLinkInitPAC.on_connect(pac_ref['obj'], client, None, None, 0)
+                return 0
+
+            client.connect.side_effect = fake_connect
+            with patch('yoLink_init_V4._apply_mqtt_credentials', side_effect=capture_apply):
+                pac = yoLink_init_V4.YoLinkInitPAC(
+                    'local-id',
+                    'local-secret',
+                    'http://10.0.0.2:1080/open/yolink/token',
+                    'http://10.0.0.2:1080/open/yolink/v2/api',
+                    '10.0.0.2',
+                    18080,
+                    'C0033c',
+                )
+            try:
+                self.assertEqual(attempts['count'], 2)
+                self.assertTrue(pac.connectedToBroker)
+                self.assertTrue(pac._local_auth_verified)
+                self.assertEqual(yoLink_init_V4._get_local_auth_mode(pac), 'client_id_token')
+                self.assertIsNone(pac.last_auth_error)
+                self.assertFalse(pac._initializing)
+                self.assertEqual(
+                    client.username_pw_set.call_args_list,
+                    [
+                        unittest.mock.call(username='local-id', password='local-secret'),
+                        unittest.mock.call(username='local-id', password='local-access-tok'),
+                    ],
+                )
+            finally:
+                if pac is not None:
+                    pac.shut_down()
+
+    def test_local_auth_rotates_to_access_token_bearer_when_first_two_fail(self):
+        import yoLink_init_V4
+
+        mock_resp = MagicMock()
+        mock_resp.ok = True
+        mock_resp.json.return_value = {
+            'access_token': 'local-access-tok',
+            'refresh_token': 'local-refresh-tok',
+            'expires_in': 7200,
+        }
+
+        pac = None
+        with patch('yoLink_init_V4.requests.post', return_value=mock_resp), \
+             patch('yoLink_init_V4.mqtt.Client') as mock_mqtt_cls, \
+             patch('yoLink_init_V4.time.sleep', return_value=None):
+            client = MagicMock()
+            mock_mqtt_cls.return_value = client
+            attempts = {'count': 0}
+            pac_ref = {}
+            original_apply = yoLink_init_V4._apply_mqtt_credentials
+
+            def capture_apply(obj, ensure_token=False):
+                pac_ref['obj'] = obj
+                return original_apply(obj, ensure_token=ensure_token)
+
+            def fake_connect(*args, **kwargs):
+                attempts['count'] += 1
+                if attempts['count'] <= 2:
+                    yoLink_init_V4.YoLinkInitPAC.on_connect(pac_ref['obj'], client, None, None, 5)
+                    yoLink_init_V4.YoLinkInitPAC.on_disconnect(pac_ref['obj'], client, None, rc=0)
+                else:
+                    yoLink_init_V4.YoLinkInitPAC.on_connect(pac_ref['obj'], client, None, None, 0)
+                return 0
+
+            client.connect.side_effect = fake_connect
+            with patch('yoLink_init_V4._apply_mqtt_credentials', side_effect=capture_apply):
+                pac = yoLink_init_V4.YoLinkInitPAC(
+                    'local-id',
+                    'local-secret',
+                    'http://10.0.0.2:1080/open/yolink/token',
+                    'http://10.0.0.2:1080/open/yolink/v2/api',
+                    '10.0.0.2',
+                    18080,
+                    'C0033c',
+                )
+            try:
+                self.assertEqual(attempts['count'], 3)
+                self.assertTrue(pac.connectedToBroker)
+                self.assertTrue(pac._local_auth_verified)
+                self.assertEqual(yoLink_init_V4._get_local_auth_mode(pac), 'access_token')
+                self.assertEqual(
+                    client.username_pw_set.call_args_list[-1],
+                    unittest.mock.call(username='local-access-tok', password=None),
+                )
+            finally:
+                if pac is not None:
+                    pac.shut_down()
+
+    def test_local_startup_bounded_when_all_auth_modes_rejected(self):
+        import yoLink_init_V4
+
+        mock_resp = MagicMock()
+        mock_resp.ok = True
+        mock_resp.json.return_value = {
+            'access_token': 'local-access-tok',
+            'refresh_token': 'local-refresh-tok',
+            'expires_in': 7200,
+        }
+
+        pac = None
+        with patch('yoLink_init_V4.requests.post', return_value=mock_resp), \
+             patch('yoLink_init_V4.mqtt.Client') as mock_mqtt_cls, \
+             patch('yoLink_init_V4.time.sleep', return_value=None):
+            client = MagicMock()
+            mock_mqtt_cls.return_value = client
+            attempts = {'count': 0}
+            pac_ref = {}
+            original_apply = yoLink_init_V4._apply_mqtt_credentials
+
+            def capture_apply(obj, ensure_token=False):
+                pac_ref['obj'] = obj
+                return original_apply(obj, ensure_token=ensure_token)
+
+            def fake_connect(*args, **kwargs):
+                attempts['count'] += 1
+                yoLink_init_V4.YoLinkInitPAC.on_connect(pac_ref['obj'], client, None, None, 5)
+                yoLink_init_V4.YoLinkInitPAC.on_disconnect(pac_ref['obj'], client, None, rc=0)
+                return 0
+
+            client.connect.side_effect = fake_connect
+            with patch('yoLink_init_V4._apply_mqtt_credentials', side_effect=capture_apply), \
+                 patch.object(yoLink_init_V4.YoLinkInitPAC, '_async_auth_reconnect') as mock_auth_rec:
+                pac = yoLink_init_V4.YoLinkInitPAC(
+                    'local-id',
+                    'local-secret',
+                    'http://10.0.0.2:1080/open/yolink/token',
+                    'http://10.0.0.2:1080/open/yolink/v2/api',
+                    '10.0.0.2',
+                    18080,
+                    'C0033c',
+                )
+            try:
+                self.assertEqual(attempts['count'], 3)
+                self.assertFalse(pac.connectedToBroker)
+                self.assertEqual(pac.last_auth_error, 5)
+                self.assertFalse(pac._initializing)
+                mock_auth_rec.assert_not_called()
+            finally:
+                if pac is not None:
+                    pac.shut_down()
+
+    def test_refresh_token_falls_back_to_client_credentials_and_updates_local_mqtt_creds(self):
+        import time
+        import yoLink_init_V4
+
+        yoAccess = MagicMock()
+        yoAccess.access_mode = ['local']
+        yoAccess.uaID = 'local-id'
+        yoAccess.secID = 'local-secret'
+        yoAccess.local_client_id = 'local-id'
+        yoAccess.local_client_secret = 'local-secret'
+        yoAccess.tokenURL = 'http://10.0.0.2:1080/open/yolink/token'
+        yoAccess.timeExpMarging = 1800
+        yoAccess._local_auth_modes = ['client_secret', 'client_id_token', 'access_token']
+        yoAccess._local_auth_mode_idx = 1
+        yoAccess.token = {
+            'access_token': 'old-tok',
+            'refresh_token': 'old-refresh',
+            'expirationTime': int(time.time()) + 500,
+        }
+        yoAccess.token_needs_refresh = lambda: yoLink_init_V4.YoLinkInitPAC.token_needs_refresh(yoAccess)
+
+        bad_refresh_resp = MagicMock()
+        bad_refresh_resp.ok = False
+        good_cc_resp = MagicMock()
+        good_cc_resp.ok = True
+        good_cc_resp.json.return_value = {
+            'access_token': 'fresh-tok',
+            'refresh_token': 'fresh-refresh',
+            'expires_in': 7200,
+        }
+
+        with patch('yoLink_init_V4.requests.post', side_effect=[bad_refresh_resp, good_cc_resp]) as mock_post:
+            res = yoLink_init_V4.YoLinkInitPAC.refresh_token(yoAccess)
+
+        self.assertTrue(res)
+        self.assertEqual(mock_post.call_count, 2)
+        self.assertEqual(yoAccess.token['access_token'], 'fresh-tok')
+        applied = yoLink_init_V4._apply_mqtt_credentials(yoAccess, ensure_token=False)
+        self.assertTrue(applied)
+        yoAccess.client.username_pw_set.assert_called_once_with(
+            username='local-id',
+            password='fresh-tok',
+        )
+
+    def test_hybrid_start_falls_back_to_cloud_when_local_mqtt_auth_fails(self):
+        import udiYoLinkLocal
+
+        ctrl = MagicMock()
+        ctrl._started = False
+        ctrl._start_lock = threading.Lock()
+        ctrl.nodeDefineDone = True
+        ctrl.configDone = True
+        ctrl.handleParamsDone = True
+        ctrl.access_mode = ['local', 'cloud']
+        ctrl.uaid = 'cloud_uaid'
+        ctrl.secretKey = 'cloud_secret'
+        ctrl.local_client_id = 'local_id'
+        ctrl.local_client_secret = 'local_secret'
+        ctrl.local_ip = '10.158.1.221'
+        ctrl.local_URL = 'http://10.158.1.221:1080'
+        ctrl.local_MQTT_port = 18080
+        ctrl.subnet_id = 'C0033c'
+        ctrl.Parameters = {'TEMP_UNIT': 'C', 'WATER_UNIT': 'L', 'DEBUG_EN': False}
+        ctrl.poly = MagicMock()
+        ctrl.poly.Notices = {}
+        ctrl.yoAccess = None
+        ctrl.yoLocal = None
+        ctrl.nbrTTS = 0
+        ctrl.nbr_API_calls = 100
+        ctrl.nbr_dev_API_calls = 10
+        ctrl.convert_temp_unit = MagicMock(return_value=0)
+        ctrl.convert_water_unit = MagicMock(return_value=3)
+        ctrl.parse_device_lists = MagicMock(return_value=[])
+        ctrl.addNodes = MagicMock(return_value=[])
+
+        cloud_pac = MagicMock()
+        cloud_pac.connectedToBroker = True
+        cloud_pac.getDeviceList.return_value = []
+
+        local_pac = MagicMock()
+        local_pac.connectedToBroker = False
+        local_pac.last_auth_error = 5
+
+        with patch.object(udiYoLinkLocal, 'YoLinkInitPAC', side_effect=[cloud_pac, local_pac]):
+            udiYoLinkLocal.YoLinkSetup.start(ctrl)
+
+        self.assertIsNone(ctrl.yoLocal)
+        local_pac.shut_down.assert_called_once()
+        local_pac.retrieve_device_list.assert_not_called()
+        cloud_pac.retrieve_device_list.assert_called_once()
+        self.assertIn('local', ctrl.poly.Notices)
+        self.assertIn('rc=5', ctrl.poly.Notices['local'])
+        self.assertIn('Cloud', ctrl.poly.Notices['local'])
+
 
 class TestPublishDataAndBrokerResilience(unittest.TestCase):
     """Test publish_data bounded wait, transfer_data lock safety, and start() single execution."""
